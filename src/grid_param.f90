@@ -40,13 +40,13 @@
  real(dp),allocatable :: xh(:),yh(:),zh(:),dx1h(:),dy1h(:),dz1h(:)
  real(dp),allocatable :: loc_rg(:,:,:),r(:),rh(:),dr1(:),dr1h(:),dvr(:)
  integer,allocatable :: str_indx(:,:)
- real(dp),allocatable :: yim(:),zim(:)
  real(dp),allocatable :: rpt(:),wgp(:)
  real(dp) :: xtot,xmax,xmin,ymax,ymin,zmax,zmin
  real(dp) :: Lx_box,Ly_box,Lz_box
  real(dp) :: dx,dx_inv,dxi_inv,dy,dz,dy_inv,dyi_inv,dz_inv,dzi_inv
  real(dp) :: aph,L_s,Lx_s,dxi,dyi,dzi,sy_rat,sz_rat,sx_rat
  integer :: loc_ygr_max,loc_zgr_max,loc_xgr_max
+
  !--------------------------
 
  contains
@@ -393,19 +393,6 @@
  subroutine set_str_ind(npey,npez,ndm)
  integer,intent(in) :: npey,npez,ndm
  integer :: p,q,ip(4)
-!================
-! For each (pey,pez) a str_indx=[1,8] labels the MPI domain where 
-! stretched (x,y) coordinates  are present. In the (y,z) plane
-!=====================
-! str_indx=1   y<0 z<0
-! str_indx=2       z<0  no y-stretched
-! str_indx=3   y>0 z<0
-! str_indx=4   y>0      no z-stretched
-! str_indx=5   y>0 z>0
-! str_indx=6       z>0  no y-stretched
-! str_indx=7   y<0 z>0
-! str_indx=8   y<0      no z-stretched
-!==========================
 
  str_indx(0:npey-1,0:npez-1)=0
  ip=0
@@ -461,8 +448,8 @@
  end do
  end subroutine set_str_ind
  !--------------------------
- subroutine set_grid(n1,n2,n3,x_stretch,y_stretch,xres,yxres,zxres)
- integer,intent(in) :: n1,n2,n3,x_stretch,y_stretch
+ subroutine set_grid(n1,n2,n3,ib,x_stretch,y_stretch,xres,yxres,zxres)
+ integer,intent(in) :: n1,n2,n3,ib,x_stretch,y_stretch
  real,intent(in) :: xres,yxres,zxres
  integer :: i,ns1
  real :: yy,yyh,sm,sp
@@ -510,6 +497,7 @@
  xw=x
  xmax=x(n1)
  xmin=x(1)
+ if(ib==2)xmax=x(n1+1)
  Lx_box=xmax-xmin
 
  dy=1.

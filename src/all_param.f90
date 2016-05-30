@@ -150,7 +150,7 @@
 
  subroutine param
  ! sets general parameters and grid depending on initial conditions
- integer :: i, sh_t
+ integer :: i, sh_t,pml_size
  real(dp) :: b_charge_den,gvol,gvol_inv,a_ch,k_ch,nm_fact
 
  a_lpf(1:4)=1.
@@ -197,7 +197,6 @@
  if(n_over_nc < 0.5)Wake=.true.
  if(n_over_nc >1.)Solid_target=.true.
  !=================================
- PML=.false. ! FIX SERVE O LO RIMUOVIAMO?
  Stretch=.false.
  pml_size=0
  ny_stretch=0
@@ -212,7 +211,7 @@
   nx_stretch=nint(real(nx,dp)*size_of_stretch_along_x)
  endif
  call grid_alloc(nx,nx_loc,ny,ny_loc,nz,nz_loc,ny_targ,&
-  pml_size,nprocy,nprocz,nprocx)
+                               pml_size,nprocy,nprocz,nprocx)
  loc_nyc_max=loc_ygr_max
  loc_nzc_max=loc_zgr_max
  loc_nxc_max=loc_xgr_max
@@ -281,7 +280,6 @@
    ratio_mpc(i)=real(mp_per_cell(1),dp)/real(mp_per_cell(i),dp)
   enddo
  endif
- !================================
  if(w_speed < 0.0)then
   vbeam=-w_speed
   Comoving=.true.
@@ -302,7 +300,7 @@
    curr_ndim=ndim
   endif
   dx=1./k0
-  call set_grid(nx,ny,nz,nx_stretch,ny_stretch,k0,yx_rat,zx_rat)
+  call set_grid(nx,ny,nz,ibx,nx_stretch,ny_stretch,k0,yx_rat,zx_rat)
   dt=cfl*dx
   select case(ndim)
   case(1)
@@ -364,6 +362,13 @@
   lpvol=el_lp*el_lp*el_lp
 
  endif
+!=============================
+ nx_alloc=nint(dx_inv*sum(lpx(1:5)))
+ nx_alloc=min(nx_loc,nx_alloc)
+ npt_buffer=nx_alloc*ny_loc*nz_loc*nref
+ npt_buffer=npt_buffer+npt_buffer/8
+ if(Ionization)allocate(el_ionz_count(npt_buffer))
+!===================================
 
 
  if(model_id> 4)then !  e-Beams section
@@ -414,7 +419,7 @@
    dx=1./k0
    jb_norm=1.
    bvol=1.
-   call set_grid(nx,ny,nz,nx_stretch,ny_stretch,k0,yx_rat,zx_rat)
+   call set_grid(nx,ny,nz,ibx,nx_stretch,ny_stretch,k0,yx_rat,zx_rat)
    dt=cfl/sqrt(dx_inv*dx_inv+dy_inv*dy_inv+dz_inv*dz_inv)
    do i=1,nsb
     bvol(i)=pi2*sqrt(pi2)*sxb(i)*syb(i)*syb(i)    !the bunch volume (mu^3)
@@ -477,7 +482,7 @@
    mod_ord=4
    dx=1./k0
    jb_norm=1.
-   call set_grid(nx,ny,nz,nx_stretch,ny_stretch,k0,yx_rat,zx_rat)
+   call set_grid(nx,ny,nz,ibx,nx_stretch,ny_stretch,k0,yx_rat,zx_rat)
    dt=cfl/sqrt(dx_inv*dx_inv+dy_inv*dy_inv+dz_inv*dz_inv)
    !====================
    ! i=1 only one beam: enters rhob= bunch number density/np

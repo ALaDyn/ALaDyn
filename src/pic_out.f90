@@ -31,7 +31,7 @@
 
  real(sp),allocatable :: wdata(:),gwdata(:)
 
- real(dp) :: tloc(1000),tsp(1:500),eavg(10,1001),&
+ real(dp) :: tloc(1000),tsp(1:1001),eavg(10,1001),&
   pavg(15,1001,4),favg(30,1001),bavg(50,1001)
  integer,parameter :: par_dim=20,ne=100
  real(dp) :: nde0(ne),nde1(ne),nde2(ne)
@@ -1020,7 +1020,7 @@
   kk=0
   do iq=1,ny,jump
    kk=kk+1
-   gwdata(kk)=real(r(iq),sp)
+   gwdata(kk)=real(y(iq),sp)
   end do
   write(10)gwdata(1:kk)
   kk=0
@@ -1387,7 +1387,7 @@
 
  integer,intent(in) :: nst
  integer :: i1,j1,k1,i2,nyp,nzp,jj,kk
- integer :: k,ik,ix,iy,iz,i0_lp
+ integer :: k,ik,ix,iy,iz,i01,i02,i0_lp
  real(dp) :: ekt(7),ekm(7),ef(6)
  real(dp) :: dvol
  real(dp) :: dgvol,sgz,sg
@@ -1411,14 +1411,18 @@
   ! env(1)=Re[A], env(2)=Im[A] A in adimensional form
   aph1=0.5*dx_inv
   aph2=0.0
+  i01=i1+1
+  i02=i2-1
   if(der_ord==4)then
    aph1=4.*dx_inv/3.
    aph2=-dx_inv/6.
+   i01=i01+1
+   i02=i02-1
   endif
   kk=0
   do iz=k1,nzp
    do iy=j1,nyp
-    do ix=i0_lp-1,i2-1
+    do ix=i01,i02
      ik=ix-2
      dar=aph1*(env(ix+1,iy,iz,1)-env(ix-1,iy,iz,1))+aph2*(&
       env(ix+2,iy,iz,1)-env(ix-2,iy,iz,1))
@@ -1430,7 +1434,8 @@
      ekt(1)=ekt(1)+x(ik)*a2         ! Centroid
      ekt(2)=ekt(2)+a2               ! !A|^2
      ekt(6)=dai*env(ix,iy,iz,1)-dar*env(ix,iy,iz,2)
-     ekt(3)=ekt(3)+oml*oml*a2+ 2.*oml*ekt(6)+dar*dar+dai*dai ! |Z|^2
+     ekt(3)=ekt(3)+oml*oml*a2+ 2.*oml*ekt(6)+dar*dar+dai*dai 
+                                          !|Z|^2=(Ey^2+Bz^2)/2= field energy
      ekt(4)=ekt(4)+oml*a2+ekt(6)    ! Action
      ekt(5)=max(ekt(5),sqrt(a2))    ! Max |A|
      kk=kk+1
@@ -1440,7 +1445,8 @@
   dvol=1./real(kk,dp)
   call allreduce_dpreal(SUMV,ekt,ekm,4)
   if(ekm(2)> 0.0)eavg(2,nst)=ekm(1)/ekm(2)  !Centroid
-  eavg(3:4,nst)=dvol*ekm(3:4)/real(npe,dp)    !Energy and Action
+  eavg(3,nst)=field_energy*dgvol*ekm(3)   !Energy 
+  eavg(4,nst)=dvol*ekm(4)    !Action
   ekt(1)=ekt(5)
   if(ekt(1) > giant_field)then
    write(6,*)' WARNING: Env field too big ',ekt(1)
@@ -1930,7 +1936,7 @@
   'Bx2(J)        ','By2(J)        ','Bz2(J)        '/)
 
  character(12),dimension(4), parameter:: enspect=(/&
-  'Electron NdE',' A1-ion NdE ',' A2-ion NdE ',' Lion NdE   '/)
+  'Electron NdE',' A1-ion NdE ',' A2-ion NdE ',' A3-ion NdE '/)
 
  integer :: ik,ic,nfv,npv,t_ord,nt,ne
  integer,parameter :: lun=10
@@ -2109,12 +2115,12 @@
    do nt=1,nst
     write(lun,*)' time   emax'
     write(lun,'(2e13.5)')tsp(nt),eksp_max(nt,ik)
-    write(lun,*)'     spectral  data  '
+    write(lun,*)'Global  spectral  data  '
     write(lun,'(6e13.5)')nde(1:ne,nt,ik)
     if(Solid_target)then
-     write(lun,*)'     selected spectral  data  '
+     write(lun,*)'Front side  selected spectral  data  '
      write(lun,'(6e13.5)')nde_sm(1:ne,nt,ik)
-     write(lun,*)'     selected spectral  data  '
+     write(lun,*)'Rear side   selected spectral  data  '
      write(lun,'(6e13.5)')nde_sp(1:ne,nt,ik)
     endif
    end do
@@ -2123,6 +2129,75 @@
  endif
  end subroutine en_data
  !--------------------------
+ subroutine beam_selection(nst,tnow)
+
+ integer,intent(in) :: nst
+ real(dp),intent(in) :: tnow
+
+ integer :: ik,ic,kk,np
+ real(dp) :: np_norm,gmb,pp(3),mu(7,5),ekt(9),ekm(9)
+ real(dp) :: corr2(8,5),emy(5),emz(5),dgam(5)
+ !=====================
+ mu=0.0
+ corr2=0.0
+ do ic=1,nsb
+  np=loc_nbpart(imody,imodz,imodx,ic)
+  ekt(1)=real(np,dp)
+  call allreduce_dpreal(SUMV,ekt,ekm,1)
+  np_norm=1.
+  if(ekm(1) >0.0)np_norm=1./ekm(1)
+  ekm=0.0
+  ekt=0.0
+  !USES real to sum big integers
+  if(np>0)then
+   do ik=1,6
+    ekt(ik)=sum(bunch(ic)%part(1:np,ik))
+   enddo
+   do kk=1,np
+    pp(1:3)=bunch(ic)%part(kk,4:6)
+    gmb=sqrt(1.+pp(1)*pp(1)+pp(2)*pp(2)+pp(3)*pp(3))
+    ekt(7)=ekt(7)+gmb
+   end do
+  endif
+  call allreduce_dpreal(SUMV,ekt,ekm,7)
+  mu(1:7,ic)=np_norm*ekm(1:7) !Averages <(x,y,z,Px,Py,Pz,gamma)>
+  !=========== 2th moments
+  ekm=0.0
+  ekt=0.0
+  if(np>0)then
+   do ik=1,6
+    do kk=1,np
+     ekt(ik)=ekt(ik)+(bunch(ic)%part(kk,ik)-mu(ik,ic))**2
+    end do
+   enddo
+   !================mixed corr
+   do kk=1,np
+    ekt(7)=ekt(7)+bunch(ic)%part(kk,5)*bunch(ic)%part(kk,2)
+    ekt(8)=ekt(8)+bunch(ic)%part(kk,6)*bunch(ic)%part(kk,3)
+    pp(1:3)=bunch(ic)%part(kk,4:6)
+    gmb=1.+pp(1)*pp(1)+pp(2)*pp(2)+pp(3)*pp(3)
+    ekt(9)=ekt(9)+gmb       !<(gam**2>
+   end do
+  endif
+  call allreduce_dpreal(SUMV,ekt,ekm,9)
+  corr2(1:8,ic)=np_norm*ekm(1:8)
+  ekm(9)=np_norm*ekm(9)
+  !    emy^2= corr2_y*corr2_py -mixed
+  !<yy><p_yp_y>-(<yp_y>-<y><p_y>)^2
+  emy(ic)=corr2(2,ic)*corr2(5,ic)-(corr2(7,ic)-mu(2,ic)*mu(5,ic))**2
+  emz(ic)=corr2(3,ic)*corr2(6,ic)-(corr2(8,ic)-mu(3,ic)*mu(6,ic))**2
+  if(emy(ic)>0.0)emy(ic)=sqrt(emy(ic))
+  if(emz(ic)>0.0)emz(ic)=sqrt(emz(ic))
+
+
+  gmb=mu(7,ic)*mu(7,ic)
+  dgam(ic)=ekm(9)/gmb -1.0
+  if(dgam(ic) >0.0)dgam(ic)=sqrt(dgam(ic))   !Dgamm/gamma
+ end do
+ if(pe0)call enbdata(nst,nsb,mu,corr2,emy,emz,dgam,tnow)
+ !==========================
+ end subroutine beam_selection
+!=====================================
  subroutine enbvar(nst,tnow)
 
  integer,intent(in) :: nst

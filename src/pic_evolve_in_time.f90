@@ -236,23 +236,18 @@
   np_new=np_old+npt_inj
   !=========================
   if(npt_inj >0)then
-   if(np_old==0)then
-    deallocate(spec(ic)%part,STAT=DeallocStatus)
-    if(DeallocStatus==0)allocate(spec(ic)%part(np_new,ndv),STAT=AllocStatus)
-    if(ic==1)then
-     deallocate(ebfp,STAT=DeallocStatus)
-     if(DeallocStatus==0)allocate(ebfp(np_new,ndv),STAT=AllocStatus)
-    endif
-   else
-    if(size(spec(ic)%part,1) <np_new)then
-     do n=1,np_old
-      ebfp(n,1:ndv)=spec(ic)%part(n,1:ndv)
-     end do
-     call p_realloc(spec(ic),np_new,ndv)
-     do n=1,np_old
-      spec(ic)%part(n,1:ndv)=ebfp(n,1:ndv)
-     end do
-     call v_realloc(ebfp,np_new,ndv)
+   if(size(spec(ic)%part,1) <np_new)then
+    do n=1,np_old
+     ebfp(n,1:ndv)=spec(ic)%part(n,1:ndv)
+    end do
+    deallocate(spec(ic)%part)
+    allocate(spec(ic)%part(np_new,ndv))
+    do n=1,np_old
+     spec(ic)%part(n,1:ndv)=ebfp(n,1:ndv)
+    end do
+    if(size(ebfp,1)< np_new)then
+     deallocate(ebfp)
+     allocate(ebfp(np_new,ndv))
     endif
    endif
    q=np_old
@@ -272,59 +267,100 @@
  real(sp) :: ch(2)
  real(dp) :: wgh
  equivalence(wgh,ch)
+ real :: u,temp
 
- integer :: n,i,ii
+ integer :: n,i,ii,new_np_alloc
 
  id_ch=nd2+1
  ndp=curr_ndim
+ temp=t0_pl(1)
 
  np_el=loc_npart(imody,imodz,imodx,1)
- if(np_el >0)then
-  do n=1,np_el
-   ebfp(n,1:id_ch)=spec(1)%part(n,1:id_ch)
-  end do
-  call p_realloc(spec(1),np_el+new_np_el,id_ch)
-  do n=1,np_el
-   spec(1)%part(n,1:id_ch)=ebfp(n,1:id_ch)
-  end do
- else
-  if(.not.allocated(spec(1)%part))then
-   allocate(spec(1)%part(new_np_el,id_ch))
-  endif
- endif
- ii=np_el
- do n=1,np
-  inc=ion_ch_inc(n)
-  if(inc>0)then
-   wgh=spec(ic)%part(n,id_ch)
-   ch(2)=-1.
-   do i=1,inc
-    ii=ii+1
-    spec(1)%part(ii,1:nd2)=spec(ic)%part(n,1:nd2)
-    spec(1)%part(ii,id_ch)=wgh
+ new_np_alloc=np_el+new_np_el
+ if(allocated(spec(1)%part))then
+  if(size(spec(1)%part,1) < new_np_alloc)then
+   do n=1,np_el
+    ebfp(n,1:id_ch)=spec(1)%part(n,1:id_ch)
    end do
-   np_el=np_el+inc
+   deallocate(spec(1)%part)
+   allocate(spec(1)%part(new_np_alloc,id_ch))
+   do n=1,np_el
+    spec(1)%part(n,1:id_ch)=ebfp(n,1:id_ch)
+   end do
   endif
- end do
- call v_realloc(ebfp,np_el,id_ch)
+ else 
+  allocate(spec(1)%part(new_np_alloc,id_ch))
+  write(6,'(a37,2I6)')'warning, electron array not allocated',imody,imodz
+ endif
+ call v_realloc(ebfp,new_np_alloc,id_ch)
+ !call p_realloc(spec(1),np_el+new_np_el,id_ch)
+ ii=np_el
+ if(ii>0)then
+  wgh=spec(1)%part(ii,id_ch)
+ else
+  ch(1)=j0_norm
+  ch(2)=-1
+  write(6,'(a33,2I6)')'warning, no electrons before ionz',imody,imodz
+ endif
+ select case(curr_ndim)
+ case(2)
+  do n=1,np
+   inc=ion_ch_inc(n)
+   if(inc>0)then
+    do i=1,inc
+     ii=ii+1
+     spec(1)%part(ii,1:2)=spec(ic)%part(n,1:2)
+     call random_number(u)
+     u=2.*u-1.
+     spec(1)%part(ii,3)=temp*u
+     call random_number(u)
+     u=2.*u-1.
+     spec(1)%part(ii,4)=temp*u
+     spec(1)%part(ii,id_ch)=wgh
+    end do
+    np_el=np_el+inc
+   endif
+  end do
+ case(3)
+  do n=1,np
+   inc=ion_ch_inc(n)
+   if(inc>0)then
+    do i=1,inc
+     ii=ii+1
+     spec(1)%part(ii,1:3)=spec(ic)%part(n,1:3)
+     call random_number(u)
+     u=2.*u-1.
+     spec(1)%part(ii,4)=temp*u
+     call random_number(u)
+     u=2.*u-1.
+     spec(1)%part(ii,5)=temp*u
+     call random_number(u)
+     u=2.*u-1.
+     spec(1)%part(ii,6)=temp*u
+     spec(1)%part(ii,id_ch)=wgh
+    end do
+    np_el=np_el+inc
+   endif
+  end do
+ end select
  loc_npart(imody,imodz,imodx,1)=np_el
  !============ Now create new_np_el electrons
  end subroutine ionization_electrons_inject
  !===============================
  subroutine part_ionize(sp_loc,sp_aux,&
-  np,ic,kk,new_np_el,ion_ch_inc)
+                               np,ic,new_np_el,ion_ch_inc)
 
  type(species),intent(inout) :: sp_loc
  real(dp),intent(inout) :: sp_aux(:,:)
 
  integer,intent(in) :: np,ic
- integer,intent(inout) :: kk,new_np_el
+ integer,intent(inout) :: new_np_el
  integer,intent(inout) :: ion_ch_inc(:)
  real(dp),allocatable :: wpr(:)
  real(sp) :: ch(2)
  real(dp) :: ion_wch,p, p1,p2,ep(3)
  equivalence (ion_wch,ch)
- integer :: n,nk
+ integer :: n,nk,kk
  integer :: kf,z0,loc_zmax,z1,inc,id_ch,sp_ion
  real(dp) :: energy_norm,ef2_ion
  !=====================
@@ -341,6 +377,7 @@
  if(ndim < 3)id_ch=5
  kf=curr_ndim
  sp_ion=ic-1
+ kk=0
  !===========================
  select case(ionz_lev)
  case(1)
@@ -441,37 +478,36 @@
  real(dp),intent(inout) :: sp_aux(:,:)
  integer,intent(in) :: np,ic,itloc
  real(dp),intent(in) :: def_inv
- integer :: id_ch,new_np_el,ionz_count,n,nk
- integer,allocatable :: ion_z_inc(:)
+ integer :: id_ch,new_np_el,n,nk
  real(dp) :: ef2_ion
 
  new_np_el=0
- ionz_count=0
- id_ch=7
- if(ndim < 3)id_ch=5
+ id_ch= nd2+1
  if(itloc==0)then
   call init_random_seed(mype)
  endif
  !==================
  ! Assigns the |E| field on each ion
  if(np >0)then
-  allocate(ion_z_inc(np))
-  ion_z_inc(:)=0
+  if(size(el_ionz_count,1)< np)then
+   deallocate(el_ionz_count)
+   allocate(el_ionz_count(np+100))
+  endif
+  el_ionz_count(1:np)=0
 
   do n=1,np
    ef2_ion=sp_aux(n,id_ch)   !the interpolated E^2 field
    if(ef2_ion >0.)then
     nk=nint(def_inv*sqrt(ef2_ion))
-    ion_z_inc(n)=nk
+    el_ionz_count(n)=nk
    endif
   end do
   call part_ionize(&
-   sp_loc,sp_aux,np,ic,ionz_count,new_np_el,ion_z_inc)
+             sp_loc,sp_aux,np,ic,new_np_el,el_ionz_count)
   !if(ionz_count >0)call ionization_energy(ef,jc,sp_aux,ionz_count,ndim,xm,ym,zm)
   !===========
   if(new_np_el >0)then
-   call ionization_electrons_inject(ion_z_inc,ic,np,new_np_el)
-   if(allocated(ion_z_inc))deallocate(ion_z_inc)
+   call ionization_electrons_inject(el_ionz_count,ic,np,new_np_el)
   endif
  endif
  !Ionization energy to be added to the plasma particles current
@@ -629,6 +665,8 @@
  end do
  xmin=xmin+dx*shx
  xmax=xmax+dx*shx
+ xp0_out=xp0_out+dx*shx
+ xp1_out=xp1_out+dx*shx
  loc_xgrid(imodx)%gmin=loc_xgrid(imodx)%gmin+dx*shx
  loc_xgrid(imodx)%gmax=loc_xgrid(imodx)%gmax+dx*shx
  wi2=n1p-shx
@@ -1592,8 +1630,9 @@
  ! =================================
  end subroutine advance_rk4_fields
  ! =================================
- subroutine advance_lpf_envelope(dt_loc,i1,nxp,j1,nyp,k1,nzp)
+ subroutine advance_lpf_envelope(curr,evf,evf0,dt_loc,i1,nxp,j1,nyp,k1,nzp)
 
+ real(dp),intent(inout) :: curr(:,:,:,:),evf(:,:,:,:),evf0(:,:,:,:)
  real(dp),intent(in) :: dt_loc
  integer,intent(in) :: i1,nxp,j1,nyp,k1,nzp
  integer :: i,j,k,ic
@@ -1615,20 +1654,24 @@
   str=1
   stl=1
   call fill_ebfield_yzxbdsdata(&
-                               env,i1,nxp,j1,nyp,k1,nzp,1,2,str,stl)
+                              evf,i1,nxp,j1,nyp,k1,nzp,1,2,str,stl)
  endif
- ! enters jc(1)=<rho/gamp> < 0
+ ! enters jc(1)=rho/<gamp> < 0
  do k=k1,nzp
   do j=j1,nyp
    do i=i1,nxp
-    jc(i,j,k,2)=-ompe*jc(i,j,k,1)*env(i,j,k,2)
-    jc(i,j,k,1)=-ompe*jc(i,j,k,1)*env(i,j,k,1)
+    curr(i,j,k,2)=-ompe*curr(i,j,k,1)*evf(i,j,k,2)
+    curr(i,j,k,1)=-ompe*curr(i,j,k,1)*evf(i,j,k,1)
+    curr(i,j,k,3)=evf0(i,j,k,1)
+    curr(i,j,k,4)=evf0(i,j,k,2)
    end do
   end do
  end do
  !  jc(1:2)=ompe*rho/<gamp>*env(1:2)  the source term
- call env0_field(jc,ib,i1,nxp,j1,nyp,k1,nzp,ap,&
-                       dtx,dty,dtz,dt_loc)
+   call env_lpf_solve(jc,evf,ib,i1,nxp,j1,nyp,k1,nzp,ap,&
+                      dtx,dty,dtz,dt_loc)
+!===================
+ evf0(i1:nxp,j1:nyp,k1:nzp,1:2)=curr(i1:nxp,j1:nyp,k1:nzp,3:4)
  do ic=1,2
   jc(:,:,:,ic)=0.0
  end do
@@ -2316,14 +2359,14 @@
    pp(1:3)=sp_loc%part(p,4:6)  !p^{n+1/2}
    vp(1:3)=F_pt(p,1:3)              !grad[F]
    !=============================
-   gam2=1.+dot_product(pp(1:3),pp(1:3))+F_pt(p,4)  !gam^2= 1+p^2 +|A|^2/2 
+   gam2=1.+dot_product(pp(1:3),pp(1:3))+F_pt(p,4)
    b2=0.25*dot_product(pp(1:3),vp(1:3))
    !--------------------
    gam_new=sqrt(gam2)+dt_lp*b2/gam2
    gam_inv=1./gam_new
    vp(1:3)=dt_lp*gam_inv*pp(1:3)
    F_pt(p,4:6)=sp_loc%part(p,1:3) !old positions
-   F_pt(p,7)=dt_lp*gam_inv             ! dt/gam
+   F_pt(p,7)=dt_lp*gam_inv             ! dt*gam_inv
    sp_loc%part(p,1:3)=sp_loc%part(p,1:3)+vp(1:3)
    F_pt(p,1:3)=sp_loc%part(p,1:3)   ! new positions
   end do
@@ -2354,7 +2397,7 @@
   call fill_curr_yzxbdsdata(eden,i1,n1p,j1,n2p,k1,n3p,ic)
  endif
  call den_zyxbd(eden,i1,n1p,j1,n2p,k1,n3p,ic)
- !=======Enters normalized <w*q*n/gam> < 0 to compute
+ !=======Enters normalized <w*q*n/gam> < 0
  ! Jc(1:2)=ompe<w*q*n/gam>*env(1:2) the source in env equation
  !==================================
  if(Stretch)then
@@ -2448,14 +2491,13 @@
  ! all the time for t^{n-1} levels ==========
  !===========================
  jc(:,:,:,:)=0.0
- if(Part)then
+ np=loc_npart(imody,imodz,imodx,ic)
+ if(np >0)then
   call pfields_prepare(ebf,i1,i2,j1,nyf,k1,nzf,nfield,1,1)
   call env_pfields_prepare(env,env0,jc,i1,i2,j1,nyf,k1,nzf,2,1,1)
   ! exit jc(1)=|a|^2/2 at t^n
   ! exit jc(2:4)=grad|a|^2/4 at t^n
   !======================================
-  np=loc_npart(imody,imodz,imodx,ic)
-  if(np >0)then
    call set_env_acc(ebf,jc,spec(ic),ebfp,np,curr_ndim,dt_loc,xm,ym,zm)
    !exit ebfp(1:3)=[E+F] ebfp(4:6)=B/gamp, ebfp(7)=wgh*q/gamp at t^n
    !Fields already multiplied by particle charge
@@ -2465,13 +2507,13 @@
    ! stores in ebfp(1:3)=(x,y,z)^n ebfp(7)=wgh*q/gamp
    !======================
    jc(:,:,:,1)=0.0
-   call set_env_density(ebfp,jc,np,curr_ndim,xm,ym,zm) 
-   ! jc(1)=<w*q*n/gamp> at level t^n 
+   call set_env_density(ebfp,jc,np,curr_ndim,1,xm,ym,zm)
+
   endif
+  ! Jc(1:2)=ompe*<qn/gamp>*A at level t^n
   ! in the envelope equation (A^{n-1},A^n)==> (A^n,A^{n+1})
   call env_den_collect(jc,i1,i2,j1,nyf,k1,nzf)
-  ! enters jc(1)=<w*q*n/gamp> at level t^n 
-  call advance_lpf_envelope(dt_loc,i1,i2,j1,nyf,k1,nzf)
+  call advance_lpf_envelope(jc,env,env0,dt_loc,i1,i2,j1,nyf,k1,nzf)
   !(A^n, J^n) => A^{n+1}, A^{n-1}=> A^n
   call env_pfields_prepare(env,env0,jc,i1,i2,j1,nyf,k1,nzf,1,1,1)
   !exit jc(1)=|A|^2/2 at t^{n+1/2}
@@ -2480,7 +2522,7 @@
    !=============================
    ! exit ebfp(1:3)=grad|A|^2/2 ebfp(4)=|A|^2/2 in 3D
    ! exit ebfp(1:2)=grad|A|^2/2 ebfp(3)=|A|^2/2 in 2D
-   ! at time level t^{n+1/2} and positions at time t^n=> A(t^{n+1/2},x^n)
+   ! at time level t^{n+1/2} and positions at time t^n
    !=====================================
    call lpf_env_positions(spec(ic),ebfp,np,dt_loc,-vbeam)
    !===========================
@@ -2493,12 +2535,9 @@
   !===========================
   call curr_mpi_collect(i1,i2,j1,nyf,k1,nzf)
   ! Jc(1:3) for curr J^{n+1/2}
- else
-  call advance_lpf_envelope(dt_loc,i1,i2,j1,nyf,k1,nzf)
- endif
- lp_in=lp_in+dt_loc
- call advance_lpf_fields(ebf,jc,dt_loc,vbeam,&
-                                       i1,i2,j1,nyf,k1,nzf,1)
+  lp_in=lp_in+dt_loc
+  call advance_lpf_fields(ebf,jc,dt_loc,vbeam,&
+            i1,i2,j1,nyf,k1,nzf,1)
  ! (E,B) fields at time t^{n+1}
  !-----------------------------
  end subroutine env_lpf2_evolve
@@ -2605,7 +2644,7 @@
     endif
    endif
    call ionization_cycle(&
-    spec(ic),ebfp,np,ic,iter_loc,deb_inv)
+                     spec(ic),ebfp,np,ic,iter_loc,deb_inv)
   end do
   !======== injects electrons and adds ionization energy
  endif

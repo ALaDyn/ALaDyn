@@ -1157,7 +1157,7 @@
     if(np_rs >0)then
      call v_realloc(ebfp, np_new,ndv)
      call part_prl_exchange(spec(ic),ebfp,ymm,ymx,lbd_min,rbd_max,&
-      pe0y,pe1y,iby,2,ndv,np,n_sr,npout)
+                                     pe0y,pe1y,iby,2,ndv,np,n_sr,npout)
      if(npout/=np_new)then
       write(6,*)'error in y-part count',mype,npout,np_new
       ier=99

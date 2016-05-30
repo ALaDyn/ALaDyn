@@ -57,7 +57,6 @@
   k2b=size(ebf_bunch,3)
   nbf=size(ebf_bunch,4)
  endif
- if(allocated(pot))nd_pot=size(pot,4)
  !=========================
  ndata=0
  rdata=0.0
@@ -75,7 +74,7 @@
  ndata(5)=nf
  ndata(6)=nptx_max
  ndata(7)=npty
- ndata(8)=nptz
+ ndata(8)=npt_buffer
  ndata(9)=size(x)
  !==============
  open (10,file='dumpRestart/'//fname//'.bin',form='unformatted')
@@ -108,9 +107,6 @@
   if(Pbeam)write(10)ebf0_bunch(1:i2b,1:j2b,1:k2b,1:3)
   if(L_Bpoloidal)write(10)ebf0_bunch(1:i2b,1:j2b,1:k2b,1:3)
  endif
- if(nd_pot>0)then
-  write(10)pot(1:nxf,1:nyf,1:nzf,1:nd_pot)
- endif
  !========================================Particle section
  if(Part)then
   write(10)loc_npart(0:npe_yloc-1,0:npe_zloc-1,0:npe_xloc-1,1:nsp)
@@ -141,8 +137,8 @@
  character(13) :: fname='             '
  integer :: np,nps_loc(4),np_max,ic
  integer :: n1_old
- integer :: nxf,nyf,nzf,nf
- integer :: i2b,j2b,k2b,nbf,nd_pot
+ integer :: nxf,nyf,nzf,nf,npt_max
+ integer :: i2b,j2b,k2b,nbf
  integer :: n1_loc,n2_loc,n3_loc,nf_loc
  real(dp) :: rdata(10)
  integer :: ndata(10)
@@ -170,8 +166,10 @@
  nf_loc=ndata(5)
  nptx_max=ndata(6)
  npty=ndata(7)
- nptz=ndata(8)
+ nptz=npty
+ npt_max=ndata(8)
  n1_old=ndata(9)
+ !=======================================
  !=======================================
  allocate(xx(n1_old))
  read(10)xx(1:n1_old) !xx is the x grid modified my the moving window
@@ -222,10 +220,6 @@
  endif
  !=================
  read(10)ebf(1:nxf,1:nyf,1:nzf,1:nf)
- if(allocated(pot))then
-  nd_pot=size(pot,4)
-  read(10)pot(1:nxf,1:nyf,1:nzf,1:nd_pot)
- endif
  if(Envelope)then
   read(10)env(1:nxf,1:nyf,1:nzf,1:2)
   read(10)env0(1:nxf,1:nyf,1:nzf,1:2)
@@ -240,8 +234,8 @@
  if(Part)then
   read(10)loc_npart(0:npe_yloc-1,0:npe_zloc-1,0:npe_xloc-1,1:nsp)
   nps_loc(1:nsp)=loc_npart(imody,imodz,imodx,1:nsp)
-  np_max=maxval(nps_loc(1:nsp))
-  np_max=max(np_max,1)
+  nps_loc(1)=max(nps_loc(1),npt_max)
+  np_max=nps_loc(1)
   call p_alloc(np_max,nd2+1,nps_loc,nsp,LPf_ord,1,1,mem_psize)
   !=========================
   do ic=1,nsp

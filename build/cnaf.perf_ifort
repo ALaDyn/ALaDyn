@@ -1,5 +1,6 @@
 module purge
 
+module load compilers/gcc-4.9.0
 module load compilers/intel-parallel-studio-2016
 module load boost_1_56_0_gcc4_9_0
 

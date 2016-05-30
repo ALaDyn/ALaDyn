@@ -36,11 +36,12 @@
 
  integer :: last_iter,ngout
  logical :: Diag
- real(dp) :: tdia,dtdia,tout,dtout,tstart
+ real(dp) :: tdia,dtdia,tout,dtout,tstart,mem_max_addr
  real(dp) :: dt_loc
  integer :: t_ind,ic
 
  mem_psize_max=0.0
+ mem_max_addr=0.0
 
  call create_initial_folders
 
@@ -84,7 +85,7 @@
  dt_loc=dt
  t_ind=0
  if(Ionization)then
-  lp_max=1.1*lp_max
+  lp_max=2.*lp_max
   do ic=2,nsp_ionz
    call set_field_ioniz_wfunction(ion_min(ic-1),atomic_number(ic-1),ic,ionz_lev,ionz_model,lp_max,dt)
   end do
@@ -537,7 +538,7 @@
 
 
  subroutine timing
- integer,parameter :: write_every=50
+ integer,parameter :: write_every=100
  if (mod(iter,write_every)==0) then
   if (Part) then
    if (prl) then
@@ -556,6 +557,7 @@
      write(6,'(a20,i10,a1,i10)')'part min/max distr. ',np_min,' ',np_max
      write(6,'(a20,2i8)')'   where pmin/pmax  ',pe_npmin,pe_npmax
      write(6,'(a24,e12.5)')' max part memory in MB= ',mem_psize_max
+     write(6,'(a20,e12.5)')' Max part  address= ',mem_max_addr
     endif
    endif
    write(6,'(a13,2E11.4)')' xmin/xmax   ',xmin,xmax
@@ -1145,12 +1147,14 @@
    write(6,*)' Particle min/max distr. '
    write(6,'(i10,a1,i10)')np_min,' ',np_max
    write(6,'(a20,2i8)')'   where pmin/pmax  ',pe_npmin,pe_npmax
+   write(6,'(a14,i10)')'buffer memory ',npt_buffer
   endif
  endif
  write(6,*)'********** ALLOCATED MEMORY (MB) *********************'
  write(6,'(a28,e12.5)')' Pe0 allocated grid memory= ',1.e-06*real(mem_size,dp)*kind(electron_charge_norm)
  write(6,'(a28,e12.5)')' Pe0 allocated part memory= ',1.e-06*real(mem_psize,dp)*kind(electron_charge_norm)
  write(6,'(a24,e12.5)')' Max part memory (MB) = ',mem_psize_max
+ write(6,'(a20,e12.5)')' Max part  address= ',mem_max_addr
  write(6,*)'******************************************************'
  end  subroutine initial_run_info
 
@@ -1173,7 +1177,7 @@
  real(dp), allocatable :: am(:)
 
  allocate( am(100) )
- !call memaddr( am, addr )
+ call memaddr( am, addr )
  deallocate(am)
  rmem=addr
  end subroutine submem
@@ -1184,7 +1188,7 @@
  integer :: ndv1,ndv2
  !integer :: np
  real(dp) :: mem_loc(1),max_mem(1)
- !real(dp) :: adr
+ real(dp) :: adr
 
  mem_loc=0.
  max_mem=0.
@@ -1227,10 +1231,10 @@
  call allreduce_dpreal(MAXV,mem_loc,max_mem,1)
  mem_psize_max=kind(electron_charge_norm)*1.e-06*max_mem(1)
 
- !call submem(adr)
- !mem_loc(1)=adr
- !call allreduce_dpreal(MAXV,mem_loc,max_mem,1)
- !mem_max_addr=1.e-06*max_mem(1)
+ call submem(adr)
+ mem_loc(1)=adr
+ call allreduce_dpreal(MAXV,mem_loc,max_mem,1)
+ mem_max_addr=1.e-06*max_mem(1)
 
  end subroutine max_pmemory_check
 

@@ -26,11 +26,12 @@
 
  integer,parameter :: Ref_nlayer=6
  integer(kind=8) :: nptot_global
- integer :: nx,ny,nz,nx_loc,nx1_loc,ny_loc,nz_loc
+ integer,allocatable :: el_ionz_count(:)
+ integer :: nx,ny,nz,nx_loc,nx1_loc,ny_loc,nz_loc,npt_buffer,nx_alloc
  integer :: nxcell,nycell,nzcell,ny_targ,npty,nptz,nptx_max
  integer :: ibx,iby,ibz
  integer :: loc_npty(8),loc_nptz(8),nptx(8),loc_nptx(8)
- integer :: pml_size,nx_stretch,ny_stretch,nz_stretch
+ integer :: nx_stretch,ny_stretch,nz_stretch
  integer :: mp_per_cell(6),nref
  integer :: np_per_xc(Ref_nlayer),np_per_yc(Ref_nlayer),np_per_zc(Ref_nlayer),ppc(Ref_nlayer)
  integer :: ion_min(3),ion_max(3),atomic_number(3),ionz_lev,ionz_model

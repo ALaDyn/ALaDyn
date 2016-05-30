@@ -142,7 +142,6 @@
  call mpi_comm_split(comm,color(3),imodx,comm_col(3),error)
  call mpi_comm_rank(comm_col(3),coor(3),error)
  !============ for diagnostic
- !call processor_grid_diag
  !===========================
  ! Logical idensification of mpi boundary coordinates
  !====================
@@ -202,6 +201,7 @@
    xp_prev(ipe)=pen
   end do
  endif
+ !call processor_grid_diag
 
  end subroutine start_parallel
 

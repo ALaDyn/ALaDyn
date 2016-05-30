@@ -258,7 +258,7 @@
  integer :: npmax
  real(dp) :: uu,yy,zz,dxip,dpy,dpz,np1,np2
  real(dp) :: zp_min,zp_max,yp_min,yp_max,xp_min,xp_max
- real(dp) :: xfsh
+ real(dp) :: xfsh,un(3)
  integer :: nxl(5)
  real(dp),allocatable :: wy(:,:),wz(:,:)
  integer :: loc_nptx(4),nps_loc(4),np_per_zcell(4),last_particle_index(4)
@@ -421,6 +421,12 @@
  select case(layer_mod)
  case(1)
   !================ first linear ramp =================
+  un(1:nsp)=1.
+  if(nsp==2)then
+   ic=2
+   un(2)=ratio_mpc(ic)/real(ion_min(1),dp) !float(mp_per_cell(1))/float(mp_per_cell(ic))
+                                        !for charge normaliz.
+  endif
   if(nxl(1)>0)then
    do ic=1,nsp
     n_peak=nxl(1)*np_per_xc(ic)
@@ -429,6 +435,7 @@
      i1=nptx(ic)+i
      xpt(i1,ic)=xfsh+lpx(1)*uu
      wghpt(i1,ic)=np1*j0_norm
+     if(ic==2)wghpt(i1,ic)=wghpt(i1,ic)*un(ic)
     end do
     nptx(ic)=nptx(ic)+n_peak
    end do
@@ -442,6 +449,7 @@
      i1=nptx(ic)+i
      xpt(i1,ic)=xfsh+lpx(2)*uu
      wghpt(i1,ic)=(np1+uu*(1.-np1))*j0_norm
+     if(ic==2)wghpt(i1,ic)=wghpt(i1,ic)*un(ic)
     end do
     nptx(ic)=nptx(ic)+n_peak
    end do
@@ -456,6 +464,7 @@
      i1=nptx(ic)+i
      xpt(i1,ic)=xfsh+lpx(3)*uu
      wghpt(i1,ic)=j0_norm
+     if(ic==2)wghpt(i1,ic)=wghpt(i1,ic)*un(ic)
     end do
     nptx(ic)=nptx(ic)+n_peak
    end do
@@ -470,6 +479,7 @@
      i1=nptx(ic)+i
      xpt(i1,ic)=xfsh+lpx(4)*uu
      wghpt(i1,ic)=(1.-uu*(1.-np2))*j0_norm
+     if(ic==2)wghpt(i1,ic)=wghpt(i1,ic)*un(ic)
     end do
     nptx(ic)=nptx(ic)+n_peak
    end do
@@ -483,6 +493,7 @@
      i1=nptx(ic)+i
      xpt(i1,ic)=xfsh+lpx(5)*uu
      wghpt(i1,ic)=np2*j0_norm
+     if(ic==2)wghpt(i1,ic)=wghpt(i1,ic)*un(ic)
     end do
     nptx(ic)=nptx(ic)+n_peak
    end do
@@ -622,8 +633,12 @@
  !=============================
  nps_loc(1:nsp)=loc_imax(imodx,1:nsp)*loc_jmax(imody,1:nsp)*loc_kmax(imodz,1:nsp)
  !===================================
+ loc_npart(imody,imodz,imodx,1:nsp)=nps_loc(1:nsp)
+! Alocation using a large buffer npt_max=mp_per_cell(1)*nx_loc*ny_loc*nz_loc
+ 
  npmax=maxval(nps_loc(1:nsp))
- npmax=max(npmax,1)
+ npmax=max(npt_buffer,npmax)
+ nps_loc(1:nsp)=npmax
  call p_alloc(npmax,nd2+1,nps_loc,nsp,LPf_ord,1,1,mem_psize)
  !===========================
  last_particle_index=0
@@ -632,10 +647,8 @@
   p=0
   i2=loc_nptx(ic)
   if (i2>0) call pspecies_distribute(spec(ic),t0_pl(ic),unit_charge(ic),&
-   p,ic,i2,last_particle_index(ic))
+               p,ic,i2,last_particle_index(ic))
  enddo
-
- loc_npart(imody,imodz,imodx,1:nsp)=nps_loc(1:nsp)
 
  end subroutine one_layer_multisp
  !=============================
@@ -1776,7 +1789,7 @@
   do ic=1,2
    npty_ne=nlpy*npyc(ic)    !number of yp points in a dlpy layer
    i2=0
-   loc_ymp=yp_min+0.4*tot_lpy
+   loc_ymp=yp_min+lpy(2)
    do i1=1,nwires                     !layers of lpy=dlpy(1+rat) length
     dpy=dlpy/real(npty_ne,dp)
     do i=1,npty_ne
@@ -1785,6 +1798,22 @@
     i2=i2+npty_ne
     loc_ymp=loc_ymp+tot_lpy
    end do
+   npty_layer(ic)=i2
+  end do
+  do ic=3,4
+   npty_ne=nholes*npyc(ic)    !number of yp points in a lpy(2) layer
+   i2=0
+   loc_ymp=yp_min
+   do i1=1,nwires
+    dpy=lpy(2)/real(npty_ne,dp)
+    do i=1,npty_ne
+     ypt(i+i2,ic)=loc_ymp+dpy*(real(i,dp)-0.1)
+    end do
+    i2=i2+npty_ne
+    loc_ymp=loc_ymp+tot_lpy
+   enddo
+   npty_layer(ic)=i2
+  !===========================
   end do
  else                  !two nanowires filled with n1_over_nc (el+Z1) plasma
   do ic=1,2
@@ -1805,7 +1834,6 @@
    !====================
    npty_layer(ic)=i2
   end do
- endif
  do ic=3,4
   npty_ne=nholes*npyc(ic)    !number of yp points in a lpy(2) layer
   loc_ymp= -0.5*lpy(2)
@@ -1816,6 +1844,7 @@
   npty_layer(ic)=npty_ne
   !===========================
  end do
+ endif
  !============= Uniform y-z distribution
  npyc(5:6)=np_per_yc(3:4)  ! bulk target
  do ic=5,6

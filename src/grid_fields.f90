@@ -1351,12 +1351,12 @@
  endif
  end subroutine env_grad
  !==============================
- subroutine env0_field(curr,ib,i1,n1p,j1,n2p,k1,n3p,&
+ subroutine env_lpf_solve(curr,evf,ib,i1,n1p,j1,n2p,k1,n3p,&
   om0,dhx,dhy,dhz,dt_loc)
- real(dp),intent(inout) :: curr(:,:,:,:)
+ real(dp),intent(inout) :: curr(:,:,:,:),evf(:,:,:,:)
  integer,intent(in) :: ib,i1,n1p,j1,n2p,k1,n3p
  real(dp),intent(in) :: om0,dhx,dhy,dhz,dt_loc
- integer :: i,j,k,ii,ic,n1
+ integer :: i,j,k,ii,ic,ic1,n1
  real(dp) :: dx1_inv,om2,aph1
  real(dp) :: adv,a,c,b1,c1,an,bn,der2_norm
  !==========================
@@ -1379,7 +1379,7 @@
  ! Computes the transverse Laplacian of A^{0}=env(3:4) components
  !======== in jc(1:2)= <n/gam_p> density *env(1:2) or *env(3,4)
  ic=2
- call pp_lapl(env,curr,1,ic,i1,n1p,j1,n2p,k1,n3p,dhy,dhz)
+ call pp_lapl(evf,curr,1,ic,i1,n1p,j1,n2p,k1,n3p,dhy,dhz)
  !=====================
  ! jc(1:2)= F(A)=[D^2_{pp}+omp^2*chi]A chi=<rho/gam_p> <0 for electrons
  !=================
@@ -1430,13 +1430,13 @@
    an=-adv
    bn=1.+adv
    !implicit centered advection term
-   do ic=1,2
+   do ic=3,4
     do k=k1,n3p
      do j=j1,n2p
       i=i1
-      env0(i-1,j,k,ic)=2.*env0(i,j,k,ic)-env0(i+1,j,k,ic)
+      curr(i-1,j,k,ic)=2.*curr(i,j,k,ic)-curr(i+1,j,k,ic)
       i=n1p
-      env0(i+1,j,k,ic)=env0(i,j,k,ic)
+      curr(i+1,j,k,ic)=curr(i,j,k,ic)
      end do
     end do
    end do
@@ -1444,18 +1444,18 @@
     do j=j1,n2p
      do i=i1,n1p
       ii=i-2
-      ww0(ii,1)=curr(i,j,k,1)+env0(i,j,k,1)-adv*(&
-       env0(i+1,j,k,1)-env0(i-1,j,k,1))
-      ww0(ii,2)=curr(i,j,k,2)+env0(i,j,k,2)-adv*(&
-       env0(i+1,j,k,2)-env0(i-1,j,k,2))
+      ww0(ii,1)=curr(i,j,k,1)+curr(i,j,k,3)-adv*(&
+       curr(i+1,j,k,3)-curr(i-1,j,k,3))
+      ww0(ii,2)=curr(i,j,k,2)+curr(i,j,k,4)-adv*(&
+       curr(i+1,j,k,4)-curr(i-1,j,k,4))
      end do
      call trid_der1(adv,b1,c1,an,bn,n1,1,2,0)
      do i=i1,n1p
       ii=i-2
-      env0(i,j,k,1)=env(i,j,k,1)
-      env0(i,j,k,2)=env(i,j,k,2)
-      env(i,j,k,1)=ww0(ii,1)
-      env(i,j,k,2)=ww0(ii,2)
+      curr(i,j,k,3)=evf(i,j,k,1)
+      curr(i,j,k,4)=evf(i,j,k,2)
+      evf(i,j,k,1)=ww0(ii,1)
+      evf(i,j,k,2)=ww0(ii,2)
      end do
     end do
    end do
@@ -1466,29 +1466,30 @@
    bn=0.5*adv*(1.-an)
    an=an*adv
    do ic=1,2
+    ic1=ic+2
     do k=k1,n3p
      do j=j1,n2p
       i=i1
-      env(i-1,j,k,ic)=2.*env(i,j,k,ic)-env(i+1,j,k,ic)
+      evf(i-1,j,k,ic)=2.*evf(i,j,k,ic)-evf(i+1,j,k,ic)
       ii=i-2
-      ww0(ii,1)=curr(i,j,k,ic)+env0(i,j,k,ic)-adv*(&
-       env(i+1,j,k,ic)-env(i-1,j,k,ic))
+      ww0(ii,1)=curr(i,j,k,ic)+curr(i,j,k,ic1)-adv*(&
+                evf(i+1,j,k,ic)-evf(i-1,j,k,ic))
       i=n1p
-      env(i+1,j,k,ic)=env(i,j,k,ic)
+      evf(i+1,j,k,ic)=evf(i,j,k,ic)
       do i=i1+1,n1p-1
        ii=i-2
-       ww0(ii,1)=curr(i,j,k,ic)+env0(i,j,k,ic)-an*(&
-        env(i+1,j,k,ic)-env(i-1,j,k,ic))-bn*(&
-        env(i+2,j,k,ic)-env(i-2,j,k,ic))
+       ww0(ii,1)=curr(i,j,k,ic)+curr(i,j,k,ic1)-an*(&
+        evf(i+1,j,k,ic)-evf(i-1,j,k,ic))-bn*(&
+        evf(i+2,j,k,ic)-evf(i-2,j,k,ic))
       end do
       i=n1p
       ii=i-2
-      ww0(ii,1)=curr(i,j,k,ic)+env0(i,j,k,ic)-adv*(&
-       env(i+1,j,k,ic)-env(i-1,j,k,ic))
+      ww0(ii,1)=curr(i,j,k,ic)+curr(i,j,k,ic1)-adv*(&
+       evf(i+1,j,k,ic)-evf(i-1,j,k,ic))
       do i=i1,n1p
        ii=i-2
-       env0(i,j,k,ic)=env(i,j,k,ic)
-       env(i,j,k,ic)=ww0(ii,1)
+       curr(i,j,k,ic1)=evf(i,j,k,ic)
+       evf(i,j,k,ic)=ww0(ii,1)
       end do
      end do
     end do
@@ -1496,19 +1497,20 @@
   end select
  else                   !ib=0 comoving coordinate system
   do ic=1,2
+   ic1=ic+1
    do k=k1,n3p
     do j=j1,n2p
      do i=i1,n1p
-      curr(i,j,k,ic)=curr(i,j,k,ic)+env0(i,j,k,ic)
-      env0(i,j,k,ic)=env(i,j,k,ic)
-      env(i,j,k,ic)=curr(i,j,k,ic)
+      curr(i,j,k,ic)=curr(i,j,k,ic)+curr(i,j,k,ic1)
+      curr(i,j,k,ic1)=evf(i,j,k,ic)
+      evf(i,j,k,ic)=curr(i,j,k,ic)
      end do
     end do
    end do
   end do
  endif
  !===========================
- end subroutine env0_field
+ end subroutine env_lpf_solve
 
  subroutine env0_rk_field(&
   curr,d2_ord,ib,i1,n1p,j1,n2p,k1,n3p,om0,dhx,dhy,dhz)

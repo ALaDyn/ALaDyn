@@ -2440,8 +2440,11 @@
  !   Fields data[1:n1+2,1:n2+2,1:n3+2] ax(0)=> data(i), ax(1)=> data(i+1)
  !                                     ax(2)=>data(i+2)
  !===================================================
- ! enters av(1)=|a|^2/2 envelope at integer grid nodes
- ! exit total Lorentz force and velocities
+ ! enter ef(1:6) wake fields
+ ! enters av(1)=F=|a|^2/2 envelope at integer grid nodes 
+ ! and av(2:4)=grad[F] at staggered points
+ ! exit total Lorentz force and velocities at particle positions
+ !========================================
  ax1(0:2)=0.0;ay1(0:2)=0.0
  az1(0:2)=0.0
  axh(0:2)=0.0;ayh(0:2)=0.0
@@ -2607,22 +2610,22 @@
      dvol=ay1(j1)*az1(k1)
      do i1=0,2
       i2=i1+i
-      ap(10)=ap(10)+ax1(i1)*dvol*av(i2,j2,k2,1)!t^n p-assigned a!^2/2 field
+      ap(10)=ap(10)+ax1(i1)*dvol*av(i2,j2,k2,1)!t^n p-assigned F=a^2/2 field
      end do
      do i1=0,1
       i2=i1+ih
       dvol1=dvol*axh(i1)
-      ap(1)=ap(1)+dvol1*ef(i2,j2,k2,1)
-      ap(7)=ap(7)+dvol1*av(i2,j2,k2,2)
+      ap(1)=ap(1)+dvol1*ef(i2,j2,k2,1)    !Ex and Dx[F] (i+1/2,j,k))
+      ap(7)=ap(7)+dvol1*av(i2,j2,k2,2)  
      end do
     end do
     do j1=0,1
-     j2=jh+jh
+     j2=jh+j1
      dvol=ayh(j1)*az1(k1)
      do i1=0,2
       i2=i+i1
       dvol1=dvol*ax1(i1)
-      ap(2)=ap(2)+dvol1*ef(i2,j2,k2,2)
+      ap(2)=ap(2)+dvol1*ef(i2,j2,k2,2)  !Ey and Dy[F] (i,j+1/2,k)
       ap(8)=ap(8)+dvol1*av(i2,j2,k2,3)
      end do
      do i1=0,1
@@ -2652,14 +2655,15 @@
      do i1=0,2
       i2=i1+i
       dvol1=dvol*ax1(i1)
-      ap(3)=ap(3)+dvol1*ef(i2,j2,k2,3)      !Ez(i,j,k=1/2)
+      ap(3)=ap(3)+dvol1*ef(i2,j2,k2,3)      !Ez and Dz[F} (i,j,k=1/2) 
       ap(9)=ap(9)+dvol1*av(i2,j2,k2,4)
      end do
     end do
    end do
    !=================================
    gam2=1.+up(1)*up(1)+up(2)*up(2)+up(3)*up(3)+ap(10)   !gamma^{n-1/2}
-   !==================== solves a cubic equation gam^3=Agam+B
+!  ap(1:3)=(Ex,ey,Ez)   ap(7:9)=[Dx,Dy,Dz]F
+   !==================== solves a cubic equation x^3=A*x+B
    a1=-dot_product(ap(1:3),up(1:3))
    b1=-dot_product(ap(7:9),up(1:3))
    gam=sqrt(gam2)
@@ -2675,24 +2679,23 @@
  end subroutine set_env_acc
  !-------------------------
  !=============================
- subroutine set_env_density(efp,av,np,ndm,xmn,ymn,zmn)
+ subroutine set_env_density(efp,av,np,ndm,ic,xmn,ymn,zmn)
 
  real(dp),intent(inout) :: efp(:,:)
  real(dp),intent(inout) :: av(:,:,:,:)
- integer,intent(in) :: np,ndm
+ integer,intent(in) :: np,ndm,ic
  real(dp),intent(in) :: xmn,ymn,zmn
 
  real(dp) :: xx,sx,sx2,dvol,dvol1,wgh
  real(dp) :: xp1(3)
  real(dp) :: ax1(0:2),ay1(0:2),az1(0:2)
- integer :: i,j,i1,j1,i2,j2,k,k1,k2,n,ic
+ integer :: i,j,i1,j1,i2,j2,k,k1,k2,n
  !===============================================
  ! enter efp(1:4) positions and wgh*q/gamp at time level n
  ! exit av(:,:,:,ic) the envelope induced <q*n*wgh/gamp> density source
  ax1(0:2)=0.0;ay1(0:2)=0.0
  az1(0:2)=0.0
 
- ic=1
  select case(ndm)
  case(2)
   k2=1
