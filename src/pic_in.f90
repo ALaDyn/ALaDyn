@@ -1494,7 +1494,7 @@
  !composition)
 !======================================
  nptx_loc(1:2)=nxl(1)*np_per_xc(5:6)
- nptx_loc(3:5)=nxl(3)*np_per_xc(1:3)
+ nptx_loc(3:5)=(nxl(2)+nxl(3))*np_per_xc(1:3)
  nptx_loc(6:7)=nxl(5)*np_per_xc(5:6)
 !============ nptx(nsp)  distribution
  nptx(1)=nptx_loc(1)+nptx_loc(3)+nptx_loc(6)  !electrons
@@ -1579,20 +1579,30 @@
 
  endif
  !------------------------------
- ! Electrons and (Z1+Z3)_ions : central layer
+ ! Electrons and (Z1+Z3)_ions : central layer with lpx(2) preplasma
  ! x distribution
  !====================
+ np1_loc=0.005
+ l_inv=log(1./np1_loc)
  do ic=3,5
-  n_peak=nptx_loc(ic)
+  n_peak=nptx_loc(ic)  !central target
   do i=1,n_peak
-   xpt(i,ic)=xfsh+(lpx(2)+lpx(3))*(real(i,dp)-0.5)/real(n_peak,dp)
+   uu=(real(i,dp)-0.5)/real(n_peak,dp)
+   xpt(i,ic)=xfsh+(lpx(2)+lpx(3))*uu
    wghpt(i,ic)=j0_norm
   end do
+  if(nxl(2) >0)then
+   n_peak=nxl(2)*np_per_xc(ic-2)  !preplasma
+   do i=1,n_peak
+    uu=(real(i,dp)-0.5)/real(n_peak,dp)
+    wghpt(i,ic)=j0_norm*np1_loc*exp(uu*l_inv)
+   end do
+  endif
  end do
+ xfsh=xfsh+lpx(3)+lpx(2)
 !=============================
 ! Charge equilibria mp_per_cell(4)*Z1 +mp_per_cell(5)*Z3= mp_per_cell(1)
 !==========================
- xfsh=xfsh+lpx(3)+lpx(2)
  !=========== Distributes on x-MPI tasks
  do ic=3,5
   i1=0
@@ -1950,6 +1960,7 @@
     xpt(i,ic)=xfsh+lpx(3)*uu
     wghpt(i,ic)=j0_norm
    end do
+!========================= a low density  interwire plasma
    do i=1,n_peak
     xpt(i,ic+2)=xpt(i,ic)
     wghpt(i,ic+2)=np1*j0_norm
@@ -2411,7 +2422,7 @@
  case(5)
   call multisp_target(ny_targ,xf0) 
   !(e+Z2) coating
-  !(e+Z1+Z3) central layer
+  !(e+Z1+Z3) central layer with lpx(2) preplasma
   !+ (e+Z2)coating
  case(6)
   call one_layer_nano_wires(ny_targ,xf0)  

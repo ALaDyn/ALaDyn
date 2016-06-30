@@ -220,12 +220,13 @@
  integer,intent(in) :: cmp_loc,jump
  character(9) :: fname='         '
 
- integer :: ix,iy,iz,iq
+ integer :: ix,iy,iz,ip,iq,ipe
  integer :: lenw,kk,nx1,ny1,nz1
  integer :: i_end,i1,j1,k1,nxp,nyp,nzp
  integer :: lun,gr_dim(3)
  character(4) :: folderName
  integer,parameter :: file_version = 2
+ logical :: sd
 
  write (folderName,'(i4.4)') iout
 
@@ -289,7 +290,35 @@
   write(10)wdata(1:lenw)
  endif
 
- if(prl)call serial_fwrite(wdata,lun)
+ if(prl) then
+  if(mype >0)then
+   gr_dim(1)=nxh(imodx+1)
+   gr_dim(2)=nyh(imody+1)
+   gr_dim(3)=nzh(imodz+1)
+   lenw=gr_dim(1)*gr_dim(2)*gr_dim(3)
+   sd=.true.
+   call exchange_pdata(sd,wdata,lenw,pe_min,mype+100)
+  else
+   sd=.false.
+   do ix=0,npe_xloc-1
+    gr_dim(1)=nxh(ix+1)
+    do ip=0,npe_zloc-1
+     gr_dim(3)=nzh(ip+1)
+     do iq=0,npe_yloc-1
+      gr_dim(2)=nyh(iq+1)
+      ipe=iq+npe_yloc*(ip+npe_zloc*ix)
+      if(ipe >0)then
+       lenw=gr_dim(1)*gr_dim(2)*gr_dim(3)
+       call exchange_pdata(sd,wdata,lenw,ipe,ipe+100)
+       write(lun)gr_dim
+       write(lun)wdata(1:lenw)
+      endif
+     end do
+    end do
+   end do
+  endif
+ endif
+
  if(pe0)then
   kk=0
   do iq=1,nx,jump
@@ -1080,6 +1109,7 @@
    endif
   end do
  else
+  zz=1.
   do p=1,np,jmp
    yy=spec(pid)%part(p,2)
    if(abs(yy)<=ym)then
@@ -1434,8 +1464,8 @@
      ekt(1)=ekt(1)+x(ik)*a2         ! Centroid
      ekt(2)=ekt(2)+a2               ! !A|^2
      ekt(6)=dai*env(ix,iy,iz,1)-dar*env(ix,iy,iz,2)
-     ekt(3)=ekt(3)+oml*oml*a2+ 2.*oml*ekt(6)+dar*dar+dai*dai 
-                                          !|Z|^2=(Ey^2+Bz^2)/2= field energy
+     ekt(3)=ekt(3)+oml*oml*a2+ 2.*oml*ekt(6)+dar*dar+dai*dai
+     !|Z|^2=(Ey^2+Bz^2)/2= field energy
      ekt(4)=ekt(4)+oml*a2+ekt(6)    ! Action
      ekt(5)=max(ekt(5),sqrt(a2))    ! Max |A|
      kk=kk+1
@@ -1445,7 +1475,7 @@
   dvol=1./real(kk,dp)
   call allreduce_dpreal(SUMV,ekt,ekm,4)
   if(ekm(2)> 0.0)eavg(2,nst)=ekm(1)/ekm(2)  !Centroid
-  eavg(3,nst)=field_energy*dgvol*ekm(3)   !Energy 
+  eavg(3,nst)=field_energy*dgvol*ekm(3)   !Energy
   eavg(4,nst)=dvol*ekm(4)    !Action
   ekt(1)=ekt(5)
   if(ekt(1) > giant_field)then
@@ -1963,7 +1993,7 @@
   write(lun,'(4e12.4)')a0,lp_intensity,lp_pow, energy_in_targ
   write(lun,*)' targ_x1  targ_x2     n/nc       el_lp        '
   write(lun,'(4e12.4)')targ_in,targ_end,n_over_nc,el_lp
-  if(dmodel_id > 4)then
+  if(dmodel_id > 5)then
    write(lun,*)'  lx2        lx3        lx4         dw         lw '
    write(lun,'(5e12.4)')lpx(2:4),lpy(1:2)
   else
@@ -2197,7 +2227,7 @@
  if(pe0)call enbdata(nst,nsb,mu,corr2,emy,emz,dgam,tnow)
  !==========================
  end subroutine beam_selection
-!=====================================
+ !=====================================
  subroutine enbvar(nst,tnow)
 
  integer,intent(in) :: nst

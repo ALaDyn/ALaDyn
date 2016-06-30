@@ -26,7 +26,7 @@
  implicit none
 
  integer,parameter :: major_version = 5
- integer,parameter :: minor_version = 5
+ integer,parameter :: minor_version = 6
  integer,parameter :: MAXV=1,SUMV=0,MINV=-1
  integer,parameter :: LEFT=-1,RIGHT=1
  integer,parameter :: FIELD=0,CURR=1
@@ -63,5 +63,6 @@
  logical :: L_read_input_data
  logical :: L_first_output_on_restart
  logical :: L_use_unique_dumps
+ logical :: L_disable_rng_seed
 
  end module code_util

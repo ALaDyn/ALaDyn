@@ -195,7 +195,7 @@
  integer :: ic,ix,npt_inj,np_old,np_new
  integer :: i1,i2,n,q
  integer :: j2,k2,ndv
- integer :: j,k,DeallocStatus,AllocStatus
+ integer :: j,k
 
  !========== inject particles from the right x_p >= x(nx)
  !   xmx is the box xmax

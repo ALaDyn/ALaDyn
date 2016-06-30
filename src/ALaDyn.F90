@@ -556,8 +556,10 @@
     if(Part)then
      write(6,'(a20,i10,a1,i10)')'part min/max distr. ',np_min,' ',np_max
      write(6,'(a20,2i8)')'   where pmin/pmax  ',pe_npmin,pe_npmax
-     write(6,'(a24,e12.5)')' max part memory in MB= ',mem_psize_max
-     write(6,'(a20,e12.5)')' Max part  address= ',mem_max_addr
+     if (prl) then
+      write(6,'(a24,e12.5)')' max part memory in MB= ',mem_psize_max
+      write(6,'(a20,e12.5)')' Max part  address= ',mem_max_addr
+     endif
     endif
    endif
    write(6,'(a13,2E11.4)')' xmin/xmax   ',xmin,xmax
@@ -1153,8 +1155,10 @@
  write(6,*)'********** ALLOCATED MEMORY (MB) *********************'
  write(6,'(a28,e12.5)')' Pe0 allocated grid memory= ',1.e-06*real(mem_size,dp)*kind(electron_charge_norm)
  write(6,'(a28,e12.5)')' Pe0 allocated part memory= ',1.e-06*real(mem_psize,dp)*kind(electron_charge_norm)
- write(6,'(a24,e12.5)')' Max part memory (MB) = ',mem_psize_max
- write(6,'(a20,e12.5)')' Max part  address= ',mem_max_addr
+ if (prl) then
+  write(6,'(a24,e12.5)')' Max part memory (MB) = ',mem_psize_max
+  write(6,'(a20,e12.5)')' Max part  address= ',mem_max_addr
+ endif
  write(6,*)'******************************************************'
  end  subroutine initial_run_info
 

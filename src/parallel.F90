@@ -32,7 +32,9 @@
  use fft_lib
  implicit none
  include 'mpif.h'
+ !include 'mpiof.h'
 #endif
+
 
  integer, parameter :: offset_kind = MPI_OFFSET_KIND
 
@@ -237,12 +239,14 @@
  integer :: ierr,thefile
 
  call mpi_file_open(comm, fout, &
-  IOR(MPI_MODE_WRONLY, MPI_MODE_CREATE), &
+  mpi_mode_wronly + mpi_mode_create, &
   mpi_INFO_NULL,thefile,ierr)
 
+ !mpi_file_set_view is broken on Windows 10 with Intel MPI 5 (don't have money to upgrade MPI-Lib and check)
+ !please disable any binary output in Windows/IFORT if it doesn't work for you
  call mpi_file_set_view(thefile, disp, mpi_real, &
-  mpi_real, 'native', &
-  mpi_info_null, ierr)
+  mpi_real, 'native', mpi_info_null, ierr)
+
  call mpi_file_write(thefile,loc_np,1, mpi_integer, &
   mpi_status_ignore, ierr)
  call mpi_file_write(thefile, buf, bufsize, mpi_real, &
@@ -261,9 +265,11 @@
  integer :: ierr,thefile
 
  call mpi_file_open(comm_col(1), fout, &
-  IOR(MPI_MODE_WRONLY, MPI_MODE_CREATE), &
+  mpi_mode_wronly + mpi_mode_create, &
   mpi_INFO_NULL,thefile,ierr)
 
+ !mpi_file_set_view is broken on Windows 10 with Intel MPI 5 (don't have money to upgrade MPI-Lib and check)
+ !please disable any binary output in Windows/IFORT if it doesn't work for you
  call mpi_file_set_view(thefile, disp, mpi_real, &
   mpi_real, 'native', &
   mpi_info_null, ierr)
@@ -288,6 +294,8 @@
   mpi_mode_wronly + mpi_mode_create, &
   mpi_INFO_NULL,thefile,ierr)
 
+ !mpi_file_set_view is broken on Windows 10 with Intel MPI 5 (don't have money to upgrade MPI-Lib and check)
+ !please disable any binary output in Windows/IFORT if it doesn't work for you
  call mpi_file_set_view(thefile, disp, mpi_real, &
   mpi_real, 'native', &
   mpi_info_null, ierr)
@@ -316,6 +324,8 @@
   mpi_mode_wronly + mpi_mode_create, &
   mpi_INFO_NULL,thefile,ierr)
 
+ !mpi_file_set_view is broken on Windows 10 with Intel MPI 5 (don't have money to upgrade MPI-Lib and check)
+ !please disable any binary output in Windows/IFORT if it doesn't work for you
  call mpi_file_set_view(thefile, disp, mpi_real, &
   mpi_real, 'native', &
   mpi_info_null, ierr)
@@ -329,77 +339,6 @@
  call mpi_file_close(thefile, ierr)
  end subroutine mpi_write_field_col
  !========================
- subroutine serial_fwrite(fdata,lun)
- real(sp) :: fdata(:)
- integer,intent(in) :: lun
- integer :: lenw
- integer :: ix,ip,iq,ipe
- integer :: g_dim(3)
- logical :: sd
-
- if(mype >0)then
-  g_dim(1)=nxh(imodx+1)
-  g_dim(2)=nyh(imody+1)
-  g_dim(3)=nzh(imodz+1)
-  lenw=g_dim(1)*g_dim(2)*g_dim(3)
-  sd=.true.
-  call exchange_pdata(sd,fdata,lenw,pe_min,mype+100)
- else
-  sd=.false.
-  do ix=0,npe_xloc-1
-   g_dim(1)=nxh(ix+1)
-   do ip=0,npe_zloc-1
-    g_dim(3)=nzh(ip+1)
-    do iq=0,npe_yloc-1
-     g_dim(2)=nyh(iq+1)
-     ipe=iq+npe_yloc*(ip+npe_zloc*ix)
-     if(ipe >0)then
-      lenw=g_dim(1)*g_dim(2)*g_dim(3)
-      call exchange_pdata(sd,fdata,lenw,ipe,ipe+100)
-      write(lun)g_dim
-      write(lun)fdata(1:lenw)
-     endif
-    end do
-   end do
-  end do
- endif
- end subroutine serial_fwrite
- !======================================
- subroutine serial_pwrite(pdata,ip_loc,ndv,fname)
- real(sp) :: pdata(:)
- integer,intent(in) :: ip_loc(:),ndv
- character(12),intent(in) :: fname
- integer :: ipe,ip,lenw,tag
-
- if(mype >0)then
-  ip=ip_loc(mype+1)
-  tag=mype+100
-  lenw=ndv*ip
-  if(ip>0)call mpi_send(pdata(1),lenw,mpi_real,pe_min,tag, &
-   comm,error)
- else
-
-  open(20,file=fname,form='unformatted',access='stream')
-  ip=ip_loc(1)
-  lenw=ndv*ip
-  write(20)ip
-  write(20)pdata(1:lenw)
-  do ipe=1,npe-1
-   ip=ip_loc(ipe+1)
-   tag=ipe+100
-   lenw=ndv*ip
-   write(20)ip
-   if(ip>0)then
-    call mpi_recv(pdata(1),lenw,mpi_real,ipe,tag, &
-     comm,status,error)
-    write(20)pdata(1:lenw)
-   endif
-  end do
-  close(20)
- endif
- end subroutine serial_pwrite
-
- !======================
  subroutine mpi_xinv_data_alloc(n1_loc,n2_loc,n3_loc,nf)
  integer,intent(in) :: n1_loc,n2_loc,n3_loc,nf
 

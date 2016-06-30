@@ -44,7 +44,7 @@
   dmodel_id,ibx,iby,ibz,ibeam
  NAMELIST/TARGET_DESCRIPTION/nsp,nsb,ion_min,ion_max,atomic_number,&
   mass_number,ionz_lev,ionz_model,t0_pl,ppc,np_per_xc,np_per_yc,np_per_zc,lpx,lpy,&
-  n_over_nc,n1_over_n,n2_over_n
+  n_over_nc,n1_over_n,n2_over_n,L_disable_rng_seed
  NAMELIST/LASER/t0_lp,xc_lp,w0_x,w0_y,a0,lam0
  NAMELIST/MOVING_WINDOW/w_sh,wi_time,wf_time,w_speed
  NAMELIST/OUTPUT/nouts,iene,nvout,nden,npout,nbout,jump,pjump,xp0_out,xp1_out,yp_out,tmax,cfl, &
@@ -80,6 +80,7 @@
  np_per_xc=-1
  np_per_yc=-1
  np_per_zc=-1
+ L_disable_rng_seed = .false.
  open(1,file='input.nml', status='old')
  read(1,TARGET_DESCRIPTION,ERR=19,END=19)
 19 continue
