@@ -1190,6 +1190,11 @@
   write(10,'(4e14.5)')real_par
   write(10,*)' Number of particles'
   write(10,'(4i20)')nptot_global_reduced
+  write(10,'(A)')'PS output domain :'
+  write(10,'(A,f11.3)')'x_min (um): ',x0
+  write(10,'(A,f11.3)')'x_max (um): ',x1
+  write(10,'(A,f11.3)')'y_max (um): ',ym
+  write(10,'(A,f11.3)')'z_max (um): ',ym
   close(10)
   write(6,*)'Particles param written on file: '//foldername//'/'//fname//'.dat'
  else
