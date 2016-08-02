@@ -26,7 +26,7 @@
  implicit none
 
  integer,parameter :: major_version = 5
- integer,parameter :: minor_version = 6
+ integer,parameter :: minor_version = 7
  integer,parameter :: MAXV=1,SUMV=0,MINV=-1
  integer,parameter :: LEFT=-1,RIGHT=1
  integer,parameter :: FIELD=0,CURR=1

@@ -1,0 +1,11 @@
+module purge
+
+module load gnu
+module load intel
+module load intelmpi
+module load boost
+#module load fftw
+module load mkl
+
+make marconi
+

@@ -37,8 +37,8 @@
 
 
  subroutine create_initial_folders
- call create_folder("dumpRestart")
- call create_folder("diagnostics")
+ if(pe0) call create_folder("dumpRestart")
+ if(pe0) call create_folder("diagnostics")
  end subroutine create_initial_folders
 
 

@@ -147,6 +147,19 @@ cnaf_scal: CC = scalasca -instrument mpic++
 cnaf_scal: EXE = ALaDyn.scal
 cnaf_scal: all
 
+marconi: intel
+marconi: BOOST_LIB = /cineca/prod/opt/libraries/boost/1.61.0/intelmpi--5.1--binary/lib
+marconi: BOOST_INC = /cineca/prod/opt/libraries/boost/1.61.0/intelmpi--5.1--binary/include
+marconi: FFTW_LIB = /cineca/prod/opt/compilers/intel/pe-xe-2016/binary/mkl/lib/intel64_lin
+marconi: FFTW_INC = /cineca/prod/opt/compilers/intel/pe-xe-2016/binary/mkl/include/fftw
+marconi: all
+
+marconi_gnu: BOOST_LIB = /cineca/prod/opt/libraries/boost/1.61.0/gnu--6.1.0/lib
+marconi_gnu: BOOST_INC = /cineca/prod/opt/libraries/boost/1.61.0/gnu--6.1.0/include
+marconi_gnu: FFTW_LIB = /cineca/prod/opt/libraries/fftw/3.3.4/openmpi--1-10.3--gnu--6.1.0/lib
+marconi_gnu: FFTW_INC = /cineca/prod/opt/libraries/fftw/3.3.4/openmpi--1-10.3--gnu--6.1.0/include
+marconi_gnu: all
+
 fermi: FC = mpixlf90
 fermi: CC = mpixlcxx
 fermi: FFTW_DEF = -WF,-DUSE_OLD_FFTW_INTERFACE
