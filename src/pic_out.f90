@@ -1073,7 +1073,7 @@
  character(17) :: fname_out='                 '
  character(12) :: fnamel='            '
  character(21) :: fname_outl='                     '
- real(dp),intent(in) :: tnow,xmin_out,xmin_out,ymax_out
+ real(dp),intent(in) :: tnow,xmin_out,xmax_out,ymax_out
  integer,intent(in) :: pid,jmp
  real(sp),allocatable :: pdata(:)
  integer(dp) :: nptot_global_reduced
@@ -1100,7 +1100,7 @@
    zz=spec(pid)%part(p,3)
    if(abs(yy)<=ymax_out.and.abs(zz)<=ymax_out)then
     xx=spec(pid)%part(p,1)
-    if(xx>=xmin_out.and.xx <=xmin_out)then
+    if(xx>=xmin_out.and.xx <=xmax_out)then
      ip=ip+1
      do q=1,nd2+1
       ebfp(ip,q)=spec(pid)%part(p,q)
@@ -1114,7 +1114,7 @@
    yy=spec(pid)%part(p,2)
    if(abs(yy)<=ymax_out)then
     xx=spec(pid)%part(p,1)
-    if(xx>=xmin_out.and.xx<=xmin_out)then
+    if(xx>=xmin_out.and.xx<=xmax_out)then
      ip=ip+1
      do q=1,nd2+1
       ebfp(ip,q)=spec(pid)%part(p,q)
@@ -1191,7 +1191,7 @@
   write(10,*)' Number of particles in the output box'
   write(10,'(4i20)')nptot_global_reduced
   write(10,'(A)')' Particle output box size (x_min,x_max,y_max)'
-  write(10,'(3e14.5)') xmin_out,xmin_out,ymax_out
+  write(10,'(3e14.5)') xmin_out,xmax_out,ymax_out
   close(10)
   write(6,*)'Particles param written on file: '//foldername//'/'//fname//'.dat'
  else
