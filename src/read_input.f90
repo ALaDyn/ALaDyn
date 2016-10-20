@@ -159,11 +159,16 @@
  !--- *** namelist *** ---!
  NAMELIST/NUMBER_BUNCHES/ n_bunches, L_particles, L_intdiagnostics_pwfa, &
   L_intdiagnostics_classic,number_of_slices
- NAMELIST/BUNCH1/rho_b_1,gamma_1,xb_1,yb_1,zb_1,sx_1,sy_1,epsy_1,epsz_1,dg_1,np_1,bunch_type_1
- NAMELIST/BUNCH2/rho_b_2,gamma_2,xb_2,yb_2,zb_2,sx_2,sy_2,epsy_2,epsz_2,dg_2,np_2,bunch_type_2
- NAMELIST/BUNCH3/rho_b_3,gamma_3,xb_3,yb_3,zb_3,sx_3,sy_3,epsy_3,epsz_3,dg_3,np_3,bunch_type_3
- NAMELIST/BUNCH4/rho_b_4,gamma_4,xb_4,yb_4,zb_4,sx_4,sy_4,epsy_4,epsz_4,dg_4,np_4,bunch_type_4
- NAMELIST/BUNCH5/rho_b_5,gamma_5,xb_5,yb_5,zb_5,sx_5,sy_5,epsy_5,epsz_5,dg_5,np_5,bunch_type_5
+ NAMELIST/BUNCH1/rho_b_1,gamma_1,xb_1,yb_1,zb_1,sx_1,sy_1,epsy_1,epsz_1,dg_1,np_1,&
+                                    bunch_type_1,bunch_shape_1,Charge_right_1,Charge_left_1
+ NAMELIST/BUNCH2/rho_b_2,gamma_2,xb_2,yb_2,zb_2,sx_2,sy_2,epsy_2,epsz_2,dg_2,np_2,&
+                                    bunch_type_2,bunch_shape_2,Charge_right_2,Charge_left_2
+ NAMELIST/BUNCH3/rho_b_3,gamma_3,xb_3,yb_3,zb_3,sx_3,sy_3,epsy_3,epsz_3,dg_3,np_3,&
+                                    bunch_type_3,bunch_shape_3,Charge_right_3,Charge_left_3
+ NAMELIST/BUNCH4/rho_b_4,gamma_4,xb_4,yb_4,zb_4,sx_4,sy_4,epsy_4,epsz_4,dg_4,np_4,&
+                                    bunch_type_4,bunch_shape_4,Charge_right_4,Charge_left_4
+ NAMELIST/BUNCH5/rho_b_5,gamma_5,xb_5,yb_5,zb_5,sx_5,sy_5,epsy_5,epsz_5,dg_5,np_5,&
+                                    bunch_type_5,bunch_shape_5,Charge_right_5,Charge_left_5
 
  !--- reading number of bunches ---!
  open(nml_iounit,file=input_namelist_filename, status='old')
@@ -181,6 +186,12 @@
  !--> initialization
  yb_1 = 0.0
  zb_1 = 0.0
+ bunch_shape_1=1 !shape 1: bi-giassian
+                                !shape 2: trapezoidal (linear in Z, uniform with cutoff in R)
+                                !shape 3: trapezoidal-gaussian (linear in Z, gaussian in R)
+                                !shape 4: cylinder
+Charge_right_1=-1.0
+Charge_left_1  =-1.0
  !-->
  IF( 1 .le. n_bunches) then
   open(nml_iounit,file=input_namelist_filename, status='old')
@@ -191,6 +202,7 @@
   !passing values to ALaDyn's parameter
   nb_tot(1)     = np_1
   bunch_type(1) = bunch_type_1
+  bunch_shape(1)=bunch_shape_1
   rhob(1)       = rho_b_1
   xc_bunch(1)   = xb_1
   yc_bunch(1)   = yb_1
@@ -201,6 +213,8 @@
   epsy(1)       = epsy_1
   epsz(1)       = epsz_1
   dg(1)         = dg_1
+  Charge_right(1) = Charge_right_1
+  Charge_left(1)=Charge_left_1
  END IF
 
 
@@ -209,6 +223,9 @@
  !--> initialization
  yb_2 = 0.0
  zb_2 = 0.0
+ bunch_shape_2=1 !bi-giassian
+ Charge_right_2=-1.0
+ Charge_left_2  =-1.0
  !-->
  IF( 2 .le. n_bunches) then
   open(nml_iounit,file=input_namelist_filename, status='old')
@@ -219,6 +236,7 @@
   !passing values to ALaDyn's parameter
   nb_tot(2)     = np_2
   bunch_type(2) = bunch_type_2
+  bunch_shape(2)=bunch_shape_2
   rhob(2)       = rho_b_2
   xc_bunch(2)   = xb_2
   yc_bunch(2)   = yb_2
@@ -229,6 +247,8 @@
   epsy(2)       = epsy_2
   epsz(2)       = epsz_2
   dg(2)         =dg_2
+  Charge_right(2) = Charge_right_2
+  Charge_left(2)=Charge_left_2
  END IF
 
 
@@ -237,6 +257,9 @@
  !--> initialization
  yb_3 = 0.0
  zb_3 = 0.0
+ bunch_shape_3=1 !bi-giassian
+ Charge_right_3=-1.0
+ Charge_left_3  =-1.0
  !-->
  IF( 3 .le. n_bunches) then
   open(nml_iounit,file=input_namelist_filename, status='old')
@@ -247,6 +270,7 @@
   !passing values to ALaDyn's parameter
   nb_tot(3)     = np_3
   bunch_type(3) = bunch_type_3
+  bunch_shape(3)=bunch_shape_3
   rhob(3)       = rho_b_3
   xc_bunch(3)   = xb_3
   yc_bunch(3)   = yb_3
@@ -257,6 +281,8 @@
   epsy(3)       = epsy_3
   epsz(3)       = epsz_3
   dg(3)         = dg_3
+  Charge_right(3) = Charge_right_3
+  Charge_left(3)=Charge_left_3
  END IF
 
 
@@ -265,6 +291,9 @@
  !--> initialization
  yb_4 = 0.0
  zb_4 = 0.0
+ bunch_shape_4=1 !bi-giassian
+ Charge_right_4=-1.0
+ Charge_left_4  =-1.0
  !-->
  IF( 4 .le. n_bunches) then
   open(nml_iounit,file=input_namelist_filename, status='old')
@@ -275,6 +304,7 @@
   !passing values to ALaDyn's parameter
   nb_tot(4)     = np_4
   bunch_type(4) = bunch_type_4
+  bunch_shape(4)=bunch_shape_4
   rhob(4)       = rho_b_4
   xc_bunch(4)   = xb_4
   yc_bunch(4)   = yb_4
@@ -285,6 +315,8 @@
   epsy(4)       = epsy_4
   epsz(4)       = epsz_4
   dg(4)         = dg_4
+  Charge_right(4) = Charge_right_4
+  Charge_left(4)=Charge_left_4
  END IF
 
 
@@ -293,6 +325,9 @@
  !--> initialization
  yb_5 = 0.0
  zb_5 = 0.0
+ bunch_shape_5=1 !bi-giassian
+ Charge_right_5=-1.0
+ Charge_left_5  =-1.0
  !-->
  IF( 5 .le. n_bunches) then
   open(nml_iounit,file=input_namelist_filename, status='old')
@@ -303,6 +338,7 @@
   !passing values to ALaDyn's parameter
   nb_tot(5)     = np_5
   bunch_type(5) = bunch_type_5
+  bunch_shape(5)=bunch_shape_5
   rhob(5)       = rho_b_5
   xc_bunch(5)   = xb_5
   yc_bunch(5)   = yb_5
@@ -313,6 +349,8 @@
   epsy(5)       = epsy_5
   epsz(5)       = epsz_5
   dg(5)         = dg_5
+  Charge_right(5) = Charge_right_5
+  Charge_left(5)=Charge_left_5
  END IF
 
  end subroutine read_bunch_namelist
@@ -379,11 +417,16 @@
  NAMELIST/MPIPARAMS/nprocx,nprocy,nprocz
  NAMELIST/NUMBER_BUNCHES/ n_bunches, L_particles, L_intdiagnostics_pwfa, &
   L_intdiagnostics_classic,number_of_slices
- NAMELIST/BUNCH1/rho_b_1,gamma_1,xb_1,yb_1,zb_1,sx_1,sy_1,epsy_1,epsz_1,dg_1,np_1,bunch_type_1
- NAMELIST/BUNCH2/rho_b_2,gamma_2,xb_2,yb_2,zb_2,sx_2,sy_2,epsy_2,epsz_2,dg_2,np_2,bunch_type_2
- NAMELIST/BUNCH3/rho_b_3,gamma_3,xb_3,yb_3,zb_3,sx_3,sy_3,epsy_3,epsz_3,dg_3,np_3,bunch_type_3
- NAMELIST/BUNCH4/rho_b_4,gamma_4,xb_4,yb_4,zb_4,sx_4,sy_4,epsy_4,epsz_4,dg_4,np_4,bunch_type_4
- NAMELIST/BUNCH5/rho_b_5,gamma_5,xb_5,yb_5,zb_5,sx_5,sy_5,epsy_5,epsz_5,dg_5,np_5,bunch_type_5
+  NAMELIST/BUNCH1/rho_b_1,gamma_1,xb_1,yb_1,zb_1,sx_1,sy_1,epsy_1,epsz_1,dg_1,np_1,&
+                                     bunch_type_1,bunch_shape_1,Charge_right_1,Charge_left_1
+  NAMELIST/BUNCH2/rho_b_2,gamma_2,xb_2,yb_2,zb_2,sx_2,sy_2,epsy_2,epsz_2,dg_2,np_2,&
+                                     bunch_type_2,bunch_shape_2,Charge_right_2,Charge_left_2
+  NAMELIST/BUNCH3/rho_b_3,gamma_3,xb_3,yb_3,zb_3,sx_3,sy_3,epsy_3,epsz_3,dg_3,np_3,&
+                                     bunch_type_3,bunch_shape_3,Charge_right_3,Charge_left_3
+  NAMELIST/BUNCH4/rho_b_4,gamma_4,xb_4,yb_4,zb_4,sx_4,sy_4,epsy_4,epsz_4,dg_4,np_4,&
+                                     bunch_type_4,bunch_shape_4,Charge_right_4,Charge_left_4
+  NAMELIST/BUNCH5/rho_b_5,gamma_5,xb_5,yb_5,zb_5,sx_5,sy_5,epsy_5,epsz_5,dg_5,np_5,&
+                                     bunch_type_5,bunch_shape_5,Charge_right_5,Charge_left_5
  NAMELIST/TWISS/L_TWISS,alpha_twiss,beta_twiss
  NAMELIST/BPOLOIDAL/L_Bpoloidal,B_ex_poloidal,radius_poloidal
 

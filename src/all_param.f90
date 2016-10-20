@@ -151,7 +151,7 @@
  subroutine param
  ! sets general parameters and grid depending on initial conditions
  integer :: i, sh_t,pml_size
- real(dp) :: b_charge_den,gvol,gvol_inv,a_ch,k_ch,nm_fact
+ real(dp) :: bunch_charge_density,gvol,gvol_inv,a_ch,k_ch,nm_fact
 
  a_lpf(1:4)=1.
  b_lpf(1:4)=1.
@@ -432,26 +432,60 @@
    mod_ord=3
    dx=1./k0
    jb_norm=1.
-   bvol=1.
+   bunch_volume=1.
    call set_grid(nx,ny,nz,ibx,nx_stretch,ny_stretch,k0,yx_rat,zx_rat)
    dt=cfl/sqrt(dx_inv*dx_inv+dy_inv*dy_inv+dz_inv*dz_inv)
    do i=1,nsb
-    bvol(i)=pi2*sqrt(pi2)*sxb(i)*syb(i)*syb(i)    !the bunch volume (mu^3)
-    b_charge_den=rhob(i)*n_over_nc*nm_fact*e_charge  !pC/mu^3
-    bcharge(i)=b_charge_den*bvol(i)  !bunch charge in [pC]
-    Qbch(i)=rhob(i)*bvol(i)/lpvol
-   end do
+    !bunch_volume(i)=pi2*sqrt(pi2)*sxb(i)*syb(i)*syb(i)    !the bunch volume (mu^3) !ciao
+    !bunch_charge_density=rhob(i)*n_over_nc*nm_fact*e_charge  !pC/mu^3
+    !bunch_charge(i)=bunch_charge_density*bunch_volume(i)  !bunch charge in [pC]
+    !reduced_charge(i)=rhob(i)*bunch_volume(i)/lpvol
+
+    !---------------------------!
+    if(bunch_shape(i)==1) then !--- nomi da verificare e aggiungere
+      bunch_volume(i) = pi2*sqrt(pi2)*sxb(i)*syb(i)*syb(i) !the bunch volume (mu^3)
+      bunch_charge_density   = rhob(i)*n_over_nc*nm_fact*e_charge  !pC/mu^3
+      bunch_charge(i) = bunch_charge_density*bunch_volume(i)
+      reduced_charge(i)=rhob(i)*bunch_volume(i)/lpvol
+    endif
+
+    if(bunch_shape(i)==2) then
+      bunch_volume(i) = pi*syb(i)*syb(i) * sxb(i)
+      bunch_charge_density   = (Charge_left(i)+Charge_right(i))/2.0*n_over_nc*nm_fact*e_charge  !pC/mu^3
+      bunch_charge(i) = bunch_charge_density*bunch_volume(i)
+      reduced_charge(i)=(Charge_left(i)+Charge_right(i))/2.0*bunch_volume(i)/lpvol
+    endif
+
+    if(bunch_shape(i)==3) then
+      bunch_volume(i) = pi2*syb(i)*syb(i) * sxb(i)
+      bunch_charge_density   = (Charge_left(i)+Charge_right(i))/2.0*n_over_nc*nm_fact*e_charge  !pC/mu^3
+      bunch_charge(i) = bunch_charge_density*bunch_volume(i)
+      reduced_charge(i)=(Charge_left(i)+Charge_right(i))/2.0*bunch_volume(i)/lpvol
+    endif
+
+    if(bunch_shape(i)==4) then
+      bunch_volume(i) = pi*syb(i)*syb(i) * sxb(i)
+      bunch_charge_density   = rhob(i)*n_over_nc*nm_fact*e_charge  !pC/mu^3
+      bunch_charge(i) = bunch_charge_density*bunch_volume(i)
+      reduced_charge(i)=rhob(i)*bunch_volume(i)/lpvol
+    endif
+
+   enddo
+
    gvol_inv=dx_inv*dy_inv*dz_inv
    gvol=1./gvol_inv
    if(L_particles)then
     do i=1,nsb
-     nb_tot(i) = nint(gvol_inv* bvol(i)/j0_norm)
+     nb_tot(i) = nint(gvol_inv* bunch_volume(i)/j0_norm)
     end do
    endif
    do i=1,nsb
-    jb_norm(i)=rhob(i)*gvol_inv*bvol(i)/(nb_tot(i)*j0_norm)
+      if(bunch_shape(i)==1) jb_norm(i)=rhob(i)*gvol_inv*bunch_volume(i)/(nb_tot(i)*j0_norm)
+      if(bunch_shape(i)==2) jb_norm(i)=(Charge_left(i)+Charge_right(i))/2.0*gvol_inv*bunch_volume(i)/(nb_tot(i)*j0_norm)
+      if(bunch_shape(i)==3) jb_norm(i)=(Charge_left(i)+Charge_right(i))/2.0*gvol_inv*bunch_volume(i)/(nb_tot(i)*j0_norm)
+      if(bunch_shape(i)==4) jb_norm(i)=rhob(i)*gvol_inv*bunch_volume(i)/(nb_tot(i)*j0_norm)
    end do
-   b_charge=bcharge(1)
+   b_charge=bunch_charge(1)
 
   case(6) !  Proton one-beam section
    ! uses l0=1mm
@@ -501,19 +535,19 @@
    !====================
    ! i=1 only one beam: enters rhob= bunch number density/np
    i=1
-   bvol(i)=pi2*syb(i)*syb(i)    !the volume (mm^3)
-   b_charge_den=rhob(i)*n_over_nc*nm_fact*e_charge  !pC/mm^3
-   bcharge(i)=b_charge_den*bvol(i)  !unit length bunch charge in [pC]
-   Qbch(i)=rhob(i)*bvol(i)/lpvol
+   bunch_volume(i)=pi2*syb(i)*syb(i)    !the volume (mm^3)
+   bunch_charge_density=rhob(i)*n_over_nc*nm_fact*e_charge  !pC/mm^3
+   bunch_charge(i)=bunch_charge_density*bunch_volume(i)  !unit length bunch charge in [pC]
+   reduced_charge(i)=rhob(i)*bunch_volume(i)/lpvol
    gvol_inv=dx_inv*dy_inv*dz_inv
    gvol=1./gvol_inv
    nb_over_np=rhob(1)
    !========== Normalization
-   jb_norm(i)=rhob(i)*gvol_inv*bvol(i)*sxb(i)/real(nb_tot(i),dp)
-   !====bvol*gvol_inv/nb_tot = the beam cell number/beam macroparticles number
+   jb_norm(i)=rhob(i)*gvol_inv*bunch_volume(i)*sxb(i)/real(nb_tot(i),dp)
+   !====bunch_volume*gvol_inv/nb_tot = the beam cell number/beam macroparticles number
    ! jb_norm = weight= 1/beam macroparticles per cell
    ! j0_norm = 1/plasma macroparticles per cell
-   b_charge=b_charge_den
+   b_charge=bunch_charge_density
    !==================
   end select
  endif
@@ -537,7 +571,7 @@
 
  !===============================================================
  !charge per macroparticle: np_per_nmacro=nm_fact*n_over_nc/nmacro
- !Qbch=bvol/lpvol
+ !reduced_charge=bunch_volume/lpvol
 
  !np_per_nmacro= electron density over el_macro density
  !multiplied by nb_over_np gives the bunch elecron density over bunch macro

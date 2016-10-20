@@ -2016,7 +2016,7 @@
   write(lun,'(2e12.3)')lpvol,lambda_p
   do ik=1,nsb
    write(lun,*)' Qcharge    b_charge     sigmx      sigmy'
-   write(lun,'(4e12.3)')Qbch(ik),bcharge(ik),sxb(ik),syb(ik)
+   write(lun,'(4e12.3)')reduced_charge(ik),bunch_charge(ik),sxb(ik),syb(ik)
    write(lun,*)' eps_y       eps_z       gamma      dg/g'
    write(lun,'(4e12.3)')epsy(ik),epsz(ik),gam(ik),dg(ik)
   end do

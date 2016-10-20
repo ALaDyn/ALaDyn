@@ -26,12 +26,15 @@
 
  implicit none
 
- integer :: n_bunches,bunch_type(5),nb_tot(5),number_of_slices(4)
+ integer :: n_bunches,bunch_type(5),nb_tot(5),number_of_slices(4),bunch_shape(5)
 
  integer :: np_1,np_2,np_3,np_4,np_5
  integer :: bunch_type_1,bunch_type_2,bunch_type_3,bunch_type_4,bunch_type_5
+ integer :: bunch_shape_1,bunch_shape_2,bunch_shape_3,&
+                bunch_shape_4,bunch_shape_5
 
- real(dp) :: bcharge(5),bvol(5),jb_norm(5),Qbch(5),Lorentz_bfact(5)
+ real(dp) :: bunch_charge(5),bunch_volume(5),jb_norm(5),reduced_charge(5),Lorentz_bfact(5)
+ real(dp) :: Charge_right(5), Charge_left(5)
  real(dp) :: gam(5),rhob(5)
  real(dp) :: xc_bunch(5),yc_bunch(5),zc_bunch(5)
  real(dp) :: sxb(5),syb(5)
@@ -49,6 +52,11 @@
  real(dp) :: epsy_1,epsy_2,epsy_3,epsy_4,epsy_5
  real(dp) :: epsz_1,epsz_2,epsz_3,epsz_4,epsz_5
  real(dp) :: dg_1,dg_2,dg_3,dg_4,dg_5
+ real(dp) :: Charge_right_1,Charge_right_2,Charge_right_3,&
+                  Charge_right_4,Charge_right_5
+ real(dp) :: Charge_left_1,Charge_left_2,Charge_left_3,&
+                  Charge_left_4,Charge_left_5
+
 
  logical :: L_particles,L_Twiss,L_Bpoloidal
 

@@ -497,7 +497,7 @@
    xfsh=xfsh+lpx(5)
   endif
   !=========================================
- case(2)            
+ case(2)
 !                 two bumps  (n1/n_c, n2/n_c) of length x_1 and x_2
 !                 n_over_nc enters as average n_over nc= (n1* x_1+n2*x_2)/(x_1+x_2)
 !                 weight j0_norm =>> j0_norm*np1 in x_1       =>> j0_norm*np2 in x_2
@@ -578,12 +578,12 @@
    end do
    xfsh=xfsh+lpx(5)
   endif
- case(3)            
+ case(3)
 !                 three layer
 !                 lpx(1)[ramp]+lpx(2)[plateau]  with a (A1-Z1) dopant with % density
 !                 n_ion/n_0=mp_per_cell(2)/mp_per_cell(1)
 !                 and electronic density n_e=n_0+Z1*n_ion  n0=n_H(+)
-!---------------  
+!---------------
 !                 lpx(4)[plateau +lpx(5)[downramp] with mp_per_cell(1) electrons
 !                 of density n_e/n_0=1
 !================================================
@@ -726,7 +726,7 @@
  !===================================
  loc_npart(imody,imodz,imodx,1:nsp)=nps_loc(1:nsp)
 ! Alocation using a large buffer npt_max=mp_per_cell(1)*nx_loc*ny_loc*nz_loc
- 
+
  npmax=maxval(nps_loc(1:nsp))
  npmax=max(npt_buffer,npmax)
  nps_loc(1:nsp)=npmax
@@ -1495,8 +1495,8 @@
  ! Multispecies     nsp=4 required
  ! Particles distribution np_per_yc(1:3) and np_per_xc(1:3) central target
  ! (El+Z1+ Z3)
- !                        np_per_yc(5:6) and np_per_xc(5:6) 
- !                        contaminants (El+Z2) in front and rear layers                        
+ !                        np_per_yc(5:6) and np_per_xc(5:6)
+ !                        contaminants (El+Z2) in front and rear layers
  !=============================================
  !WARNING  nm_per_cell(1:3) and mp_per_cell(5:6) have to be set in a way global
  !zero charge per cell is assured
@@ -1527,7 +1527,7 @@
  allocate(loc_imax(0:npe_xloc-1,1:7))
  !====================
  npyc(1:2)=np_per_yc(5:6)       !contaminants
- npyc(3:5)=np_per_yc(1:3)  ! central target (El + two(Z1-Z3) ion species 
+ npyc(3:5)=np_per_yc(1:3)  ! central target (El + two(Z1-Z3) ion species
  npyc(6:7)=npyc(1:2)
  do ic=1,7
   npty_layer(ic)=nyh*npyc(ic)
@@ -1580,7 +1580,7 @@
  targ_in=xfsh
  targ_end=targ_in+xtot
  ! Species x-distribution
- !=  np_per_xc(1:3) electrons and Z1-Z3 ions in central layer 
+ !=  np_per_xc(1:3) electrons and Z1-Z3 ions in central layer
  !=  np_per_xc(5:6) electrons and Z2-ions front and rear side contaminants (same
  !composition)
 !======================================
@@ -1621,7 +1621,7 @@
  call mpi_yz_part_distrib(7,loc_npty,loc_nptz,npty_layer,npty_layer,&
                           ymin_t,zmin_t,wy,wz)
  !==================
- ! nsp ordering: electrons+ Z1 ions + Z2 ions 
+ ! nsp ordering: electrons+ Z1 ions + Z2 ions
  ! first and last layers: electrons and Z3 (protons) ions
  loc_imax(imodx,1:7)=nptx_loc(1:7)
  nps_loc=0
@@ -2501,17 +2501,17 @@
  if(Wake)then
                !nps_run =1
                !if nsp > 1 ions active only for ionization
-  call multi_layer_gas_target(id,ny_targ,xf0) 
-!======================  
-  !id=1  
-   !lpx(1) first plateau np1 density 
+  call multi_layer_gas_target(id,ny_targ,xf0)
+!======================
+  !id=1
+   !lpx(1) first plateau np1 density
    !ramp lpx(2)+ plateau lpx(3) + downramp lpx(4)] density 1
-   !lpx(5) last plateau np2 density 
+   !lpx(5) last plateau np2 density
    !all densities normalized to n_0=n_over_nc
   !====================================
   !id=2  target with two central plateau (for shocked gas-jet)
    !lpx(1) first ramp up to lpx(2) first plateau density np1
-   !lpx(3) downramp to 
+   !lpx(3) downramp to
    !lpx(4) second plateau density np2 and to final downramp lpx(5)
    !n_0=n_over_nc can be an average, or n1_over_nc or n2_over_nc
   !====================================
@@ -2520,7 +2520,7 @@
   ! of length [lpx(1) a ramp +lpx(2) a plateau] contain a dopant (A1,Z1) with
   ! density n_ion=w_ion*mp_per_cell(2), background (H+) electrons with density
   ! n_0=w_el*mp_per_cell(1) and Z1 electrons of ions. The total electron density
-  ! is then: 
+  ! is then:
   ! n_e=n_0+Z1*n_ion=w_el*(mp_per_cell(1)+Z1*mp_per_cell(2)), and normalized
   ! density:
   ! n_e/n_0=(1+Z1*mp_per_cell(2)/mp_per_cell(2))
@@ -2529,7 +2529,7 @@
   !------------------
   ! layer 2) of length lpx(3) is a transition between layer 1) and 3).
   !
-  ! In layer 2): 
+  ! In layer 2):
   ![lpx(4) a plateau lpx(5) a downramp] contains only electrons with reference density n_e
   ! (n_e/n_0=1)
   !===================================
@@ -2542,22 +2542,22 @@
                  !flag id=1,2 allowed not even implemented
   select case(id)
   case(3)
-   call preplasma_multisp(ny_targ,xf0) 
+   call preplasma_multisp(ny_targ,xf0)
    ! (e+Z1) preplasma and central target
    !+ (e+Z2)coating
   case(4)
-   call multi_layer_multisp(ny_targ,xf0) 
+   call multi_layer_multisp(ny_targ,xf0)
    !(e+Z2) foam
    !(e+Z1) central layer
    !(e+Z2)coating
    !============warning exponential ramp (in layer 2) always using (e+Z1) species
   case(5)
-   call multisp_target(ny_targ,xf0) 
+   call multisp_target(ny_targ,xf0)
    !(e+Z2) coating
    !(e+Z1+Z3) central layer with lpx(2) preplasma
    !+ (e+Z2)coating
   case(6)
-   call one_layer_nano_wires(ny_targ,xf0)  
+   call one_layer_nano_wires(ny_targ,xf0)
            !e+Z1 wires, e+Z2 bulk. interwire low density (e+Z1) plasma allowed
   case(7)
    call one_layer_nano_tubes(ny_targ,xf0)
@@ -2790,7 +2790,7 @@
  integer,intent(in) :: ic,btype
  integer,intent(out) :: np_tot
  integer :: i,i1,i2,ip
- real(dp) :: cut,xh(5),bch
+ real(dp) :: cut,xh(5),bch,temporary
  real(sp) :: ch(2)
  equivalence(bch,ch)
  integer :: nch
@@ -2827,22 +2827,28 @@
    !    bpart(nch,i)=bch
    !   end do
    !---Alternative simplified version---!
-   if(L_TWISS) then
-    call bunch_gen_twissshifting(i1,i2,&
+   if(L_TWISS .and. bunch_shape(ip)==1)  call bunch_gen_twissshifting(i1,i2,&
      sxb(ip),xc_bunch(ip),&
      syb(ip),yc_bunch(ip),&
      syb(ip),zc_bunch(ip),&
      gam(ip),&
      epsy(ip),epsz(ip),dg(ip),bpart,bch,&
      alpha_twiss(ip),beta_twiss(ip))
-   else
-    call bunch_gen_alternative(ic,i1,i2,&
+   if(.not. L_TWISS .and. bunch_shape(ip)==1)  call bunch_gen_alternative(ic,i1,i2,&
      sxb(ip),xc_bunch(ip),&
      syb(ip),yc_bunch(ip),&
      syb(ip),zc_bunch(ip),&
      gam(ip),&
      epsy(ip),epsz(ip),cut,dg(ip),bpart,bch)
-   endif
+   if(.not. L_TWISS .and. bunch_shape(ip)==2) call generate_triangularZ_uniformR_bunch(i1,i2,&
+   xc_bunch(ip),yc_bunch(ip),zc_bunch(ip),sxb(ip),syb(ip),syb(ip),gam(ip),epsy(ip),epsz(ip),dg(ip),&
+   bpart,Charge_right(ip),Charge_left(ip),bch)
+   if(.not. L_TWISS .and. bunch_shape(ip)==3) call generate_triangularZ_normalR_bunch(i1,i2,&
+   xc_bunch(ip),yc_bunch(ip),zc_bunch(ip),sxb(ip),syb(ip),syb(ip),gam(ip),epsy(ip),epsz(ip),dg(ip),&
+   bpart,Charge_right(ip),Charge_left(ip),bch)
+   if(.not. L_TWISS .and. bunch_shape(ip)==4) call generate_cylindrical_bunch(i1,i2,&
+   xc_bunch(ip),yc_bunch(ip),zc_bunch(ip),sxb(ip),syb(ip),syb(ip),gam(ip),epsy(ip),epsz(ip),dg(ip),&
+   bpart,Charge_right(ip),Charge_left(ip),bch)
    !---end simplified version---!
    i1=i2+1
   end do
@@ -3232,7 +3238,7 @@
    write(16,'(a17,3e11.4)')' sizes and gamma ',sxb(i1),syb(i1),gam(i1)
    write(16,'(a23,2e11.4)')' Transverse emittances=',epsy(i1),epsz(i1)
    write(16,'(a21,e11.4)')' Initial xc-position=',xc_bunch(i1)
-   write(16,'(a20,2e11.4)')' b charge [pC],Qch =',bcharge(i1),Qbch(i1)
+   write(16,'(a20,2e11.4)')' b charge [pC],Qch =',bunch_charge(i1),reduced_charge(i1)
    write(16,'(a22,e11.4)')' bcharge_over_pcharge ', rhob(i1)
   end do
   close(16)
@@ -3343,7 +3349,7 @@
   write(16,'(a17,3e11.4)')' sizes and gamma ',sxb(i1),syb(i1),gam(i1)
   write(16,'(a23,2e11.4)')' Transverse emittances=',epsy(i1),epsz(i1)
   write(16,'(a20,e11.4)')' Longitudinal beta =',bet0
-  write(16,'(a20,2e11.4)')' b charge [pC],Qch =',bcharge(i1),Qbch(i1)
+  write(16,'(a20,2e11.4)')' b charge [pC],Qch =',bunch_charge(i1),reduced_charge(i1)
   write(16,'(a22,e11.4)')' bcharge_over_pcharge ', rhob(i1)
   close(16)
  endif

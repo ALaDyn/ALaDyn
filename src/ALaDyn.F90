@@ -354,14 +354,14 @@
     call den_ene_mom_out(tnow,i,ic,ic,jump)
     if (nden>1) then
      ic=2
-     call den_ene_mom_out(tnow,i,ic,ic,jump) 
+     call den_ene_mom_out(tnow,i,ic,ic,jump)
      if (nden>2) then
       call prl_momenta_interp(i)
       do ic=1,curr_ndim
        call den_ene_mom_out(tnow,i,ic+2,ic,jump)
       end do
      endif
-    endif 
+    endif
    enddo
   endif
   if(nbout> 0)then
@@ -1156,7 +1156,7 @@
    end do
    write(6,*)'  nb_over_np  b_charge   Qcharge '
    do i=1,nsb
-    write(6,'(3e11.4)')rhob(i),bcharge(i),Qbch(i)
+    write(6,'(3e11.4)')rhob(i),bunch_charge(i),reduced_charge(i)
    end do
   else
    write(6,*)' unit length is 1mm, unit density is n0=10^14/cc'
@@ -1277,4 +1277,3 @@
  !---------------------------
 
  end program ALaDyn
-
