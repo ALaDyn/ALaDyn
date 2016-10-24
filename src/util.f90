@@ -909,11 +909,11 @@
        call random_number(a)
      enddo
 
-     y=random_number_range(-1.d0,1.d0)
-     z=random_number_range(-1.d0,1.d0)
-     Do while(sqrt(y**2+z**2)>1.d0)
-       y=random_number_range(-1.d0,1.d0)
-       z=random_number_range(-1.d0,1.d0)
+     y=random_number_range(-1.0,1.0)
+     z=random_number_range(-1.0,1.0)
+     Do while(sqrt(y**2+z**2)>1.0)
+       y=random_number_range(-1.0,1.0)
+       z=random_number_range(-1.0,1.0)
      enddo
      generated_bunch(1,i)=x*s_x+x_cm-s_x
      generated_bunch(2,i)=y*s_y+y_cm
@@ -981,12 +981,12 @@
  real(dp) :: z,y,x,a,intercept,slope
 
   do i=n1,n2+1
-    x=random_number_range( 0.d0,1.d0)
-    y=random_number_range(-1.d0,1.d0)
-    z=random_number_range(-1.d0,1.d0)
-    Do while(sqrt(y**2+z**2)>1.d0)
-      y=random_number_range(-1.d0,1.d0)
-      z=random_number_range(-1.d0,1.d0)
+    x=random_number_range( 0.0,1.0)
+    y=random_number_range(-1.0,1.0)
+    z=random_number_range(-1.0,1.0)
+    Do while(sqrt(y**2+z**2)>1.0)
+      y=random_number_range(-1.0,1.0)
+      z=random_number_range(-1.0,1.0)
     enddo
     generated_bunch(1,i)=x*s_x+x_cm-s_x
     generated_bunch(2,i)=y*s_y+y_cm
