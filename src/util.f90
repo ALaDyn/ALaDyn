@@ -1049,9 +1049,9 @@
 
 
  !--- function: uniform distribution between 'min' and 'max' ---!
-  real(8) function random_number_range(minimum,maximum)
-  real(8), intent(in) :: minimum,maximum
-  real(8) :: x
+  real(dp) function random_number_range(minimum,maximum)
+  real(dp), intent(in) :: minimum,maximum
+  real(dp) :: x
     call random_number(x)
     random_number_range = (maximum-minimum)*x+minimum
   end function random_number_range
