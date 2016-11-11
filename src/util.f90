@@ -902,9 +902,7 @@
  do i=n1,n2+1
   call random_number(x)
   call random_number(a)
-  intercept=Charge_left
-  slope=(Charge_right-Charge_left)
-  Do while(a*max(Charge_right,Charge_left)>intercept+slope*x)
+  Do while(a>shape(x,Charge_left,Charge_right))
    call random_number(x)
    call random_number(a)
   enddo
@@ -939,8 +937,7 @@
  real(dp),intent(inout)   :: generated_bunch(:,:)
  real(dp) :: rnumber(n2-n1+1)
  integer :: i
- real(dp) :: x,a,intercept,slope
- !real(dp) :: z,y
+ real(dp) :: z,y,x,a,intercept,slope
 
  do i=n1,n2+1
   call random_number(x)
@@ -975,21 +972,19 @@
  integer,intent(in)   :: n1,n2
  real(dp),intent(in)    :: x_cm,y_cm,z_cm
  real(dp),intent(in)    :: s_x,s_y,s_z,gamma_m,eps_y,eps_z,dgamma
- real(dp),intent(in)    :: weight
- real(dp),intent(in)    :: Charge_right,Charge_left
+ real(dp),intent(in)    :: Charge_right,Charge_left,weight
  real(dp),intent(inout)   :: generated_bunch(:,:)
  real(dp) :: rnumber(n2-n1+1)
  integer :: i
- real(dp) :: x,y,z
- !real(dp) :: a,intercept,slope
+ real(dp) :: z,y,x,a,intercept,slope
 
  do i=n1,n2+1
-  x=random_number_range( 0.0,1.0)
-  y=random_number_range(-1.0,1.0)
-  z=random_number_range(-1.0,1.0)
-  Do while(sqrt(y**2+z**2)>1.0)
-   y=random_number_range(-1.0,1.0)
-   z=random_number_range(-1.0,1.0)
+    x=random_number_range( 0.0,1.0)
+    y=random_number_range(-1.0,1.0)
+    z=random_number_range(-1.0,1.0)
+    Do while(sqrt(y**2+z**2)>1.d0)
+      y=random_number_range(-1.0,1.0)
+      z=random_number_range(-1.0,1.0)
   enddo
   generated_bunch(1,i)=x*s_x+x_cm-s_x
   generated_bunch(2,i)=y*s_y+y_cm
@@ -1058,6 +1053,26 @@
  call random_number(x)
  random_number_range = (maximum-minimum)*x+minimum
  end function random_number_range
+
+ !--- shape for triangular bunch shapes ---!
+ real(dp) function shape(x,Charge_left,Charge_Right)
+	real(dp), intent(in) :: x,Charge_left,Charge_right
+	real(dp) :: intercept, slope, edge, sigma
+	edge=0.1
+	sigma=edges/4.0
+
+	if( x>edge .and. x<1.0-edge) then
+      intercept=Charge_left
+      slope=(Charge_right-Charge_left)/(1.0-2.0*edge)
+      shape = intercept+slope*(x-edge)
+	endif
+	if( x<edge ) then
+		shape = Charge_left*exp(-(x-edge)**2/(2.0*edge/sigma)**2)
+	endif
+	if( x>1.0-edge ) then
+		shape = Charge_right*exp(-(x-1.0+edge)**2/(2.0*edge/sigma)**2)
+	endif
+end function shape
 
 
 

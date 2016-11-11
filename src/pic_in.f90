@@ -665,6 +665,87 @@
     xfsh=xfsh+lpx(5)
    end do
   endif
+ 
+ !--- Case:4
+ !--- shock injection profile
+ !--- one linear ramp up to shock_over_n
+ !--- one decreasing ramp from shock_over_n to n_ober_nc
+ case(4)
+    if(nxl(1)>0) then
+      do ic=1,nsp
+        n_peak=nxl(1)*np_per_xc(ic)
+          do i=1,n_peak
+            uu=(real(i,dp)-0.5)/real(n_peak,dp)
+            i1=nptx(ic)+i
+            xpt(i1,ic)=xfsh+lpx(1)*uu
+            wghpt(i1,ic)=j1_norm
+            wghpt(i1,ic)=wghpt(i1,ic)*un(ic)
+          end do
+        nptx(ic)=nptx(ic)+n_peak
+      end do
+    xfsh=xfsh+lpx(1)
+  endif
+  !================ first linear ramp from 0(=np1) to 1*shock_over_n =================
+  if(nxl(2)>0)then
+    do ic=1,nsp
+      n_peak=nxl(2)*np_per_xc(ic)
+        do i=1,n_peak
+          uu=(real(i,dp)-0.5)/real(n_peak,dp)
+          i1=nptx(ic)+i
+          xpt(i1,ic)=xfsh+lpx(2)*uu
+          wghpt(i1,ic)=(np1+uu*(shock_over_n-np1))*j0_norm
+          wghpt(i1,ic)=wghpt(i1,ic)*un(ic)
+        end do
+      nptx(ic)=nptx(ic)+n_peak
+    end do
+  xfsh=xfsh+lpx(2)
+  endif
+  !================ second linear ramp from 1*shock_over_n to n_over_nc============
+  if(nxl(3)>0)then
+    do ic=1,nsp
+      n_peak=nxl(3)*np_per_xc(ic)
+        do i=1,n_peak
+          uu=(real(i,dp)-0.5)/real(n_peak,dp)
+          i1=nptx(ic)+i
+          xpt(i1,ic)=xfsh+lpx(3)*uu
+          wghpt(i1,ic)=(shock_over_n-uu*(shock_over_n-1.0))*j0_norm
+          wghpt(i1,ic)=wghpt(i1,ic)*un(ic)
+        end do
+      nptx(ic)=nptx(ic)+n_peak
+    end do
+  xfsh=xfsh+lpx(3)
+  endif
+ !================ Central layer=================
+  if(nxl(4)>0)then
+    do ic=1,nsp
+      n_peak=nxl(4)*np_per_xc(ic)
+        do i=1,n_peak
+          uu=(real(i,dp)-0.5)/real(n_peak,dp)
+          i1=nptx(ic)+i
+          xpt(i1,ic)=xfsh+lpx(4)*uu
+          wghpt(i1,ic)=j0_norm
+          wghpt(i1,ic)=wghpt(i1,ic)*un(ic)
+        end do
+      nptx(ic)=nptx(ic)+n_peak
+    end do
+  xfsh=xfsh+lpx(4)
+  endif
+ !================ third linear ramp from 1 (n_over_nc) to np2=0 ============
+  if(nxl(5)>0)then
+    do ic=1,nsp
+      n_peak=nxl(5)*np_per_xc(ic)
+        do i=1,n_peak
+          uu=(real(i,dp)-0.5)/real(n_peak,dp)
+          i1=nptx(ic)+i
+          xpt(i1,ic)=xfsh+lpx(5)*uu
+          wghpt(i1,ic)=(1.-uu*(1.-np2))*j0_norm
+          wghpt(i1,ic)=wghpt(i1,ic)*un(ic)
+        end do
+      nptx(ic)=nptx(ic)+n_peak
+    end do
+  xfsh=xfsh+lpx(5)
+ endif
+  
  case(5)
   !                 three layers: dopant in first layer
   !                 lpx(1)[ramp]+lpx(2)[plateau]  with a (A1-Z1) dopant with % density np1=n1_per_nc/n_per_nc

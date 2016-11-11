@@ -44,7 +44,7 @@
  real(dp) :: gam0,bet0,u0_b, nb_over_np,b_charge
  real(dp) :: t0_lp,xc_lp,xf,w0_x,w0_y
  real(dp) :: t0_b,lp_rad,el_lp,el_D,lambda_p,omega_p,chann_rad,lpvol
- real(dp) :: nc0,nc,n_over_nc,n1_over_n,n2_over_n,np_per_cell,nmacro
+ real(dp) :: nc0,nc,n_over_nc,n1_over_n,n2_over_n,shock_over_n,np_per_cell,nmacro
  real(dp) :: lam0,oml,ZR,E0,lp_pow,lp_intensity,lp_xsize
  real(dp) :: lp_amp,lp_max,eb_max,lp_energy
  real(dp) :: lpx(7),lpy(3),targ_in,targ_end,alp_HM,lx_FWHM,tau_FWHM,a0
