@@ -902,7 +902,7 @@
  do i=n1,n2+1
   call random_number(x)
   call random_number(a)
-  Do while(a>shape(x,Charge_left,Charge_right))
+  Do while(a*Charge_right>shape(x,Charge_left,Charge_right))
    call random_number(x)
    call random_number(a)
   enddo
@@ -1056,22 +1056,22 @@
 
  !--- shape for triangular bunch shapes ---!
  real(dp) function shape(x,Charge_left,Charge_Right)
-	real(dp), intent(in) :: x,Charge_left,Charge_right
-	real(dp) :: intercept, slope, edge, sigma
-	edge=0.1
-	sigma=edges/4.0
+ real(dp), intent(in) :: x,Charge_left,Charge_right
+ real(dp) :: intercept, slope, edge, sigma
+ edge=0.2
+ sigma=edge/3.0
 
-	if( x>edge .and. x<1.0-edge) then
-      intercept=Charge_left
-      slope=(Charge_right-Charge_left)/(1.0-2.0*edge)
-      shape = intercept+slope*(x-edge)
-	endif
-	if( x<edge ) then
-		shape = Charge_left*exp(-(x-edge)**2/(2.0*edge/sigma)**2)
-	endif
-	if( x>1.0-edge ) then
-		shape = Charge_right*exp(-(x-1.0+edge)**2/(2.0*edge/sigma)**2)
-	endif
+ if( x>edge .and. x<1.0-edge) then
+   intercept=Charge_left
+   slope=(Charge_right-Charge_left)/(1.0-2.0*edge)
+   shape = intercept+slope*(x-edge)
+ endif
+ if( x<edge ) then
+   shape = Charge_left*exp(-(x-edge)**2/(2.0*sigma)**2)
+ endif
+ if( x>1.0-edge ) then
+   shape = Charge_right*exp(-(x-1.0+edge)**2/(2.0*sigma)**2)
+ endif
 end function shape
 
 
