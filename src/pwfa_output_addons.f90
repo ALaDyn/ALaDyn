@@ -128,11 +128,15 @@
    ic=1
    call den_ene_mom_out(tnow,i,ic,ic,jump)
    if(nden >1)then
-    call prl_momenta_interp(i)
-    do ic=1,curr_ndim
-     call den_ene_mom_out(tnow,i,ic+2,ic,jump)
-    end do
+     ic=2
+     call den_ene_mom_out(tnow,i,ic,ic,jump)
+     if (nden>2) then
+      call prl_momenta_interp(i)
+      do ic=1,curr_ndim
+       call den_ene_mom_out(tnow,i,ic+2,ic,jump)
+      end do
    endif
+ endif
   enddo
  endif
  if(nbout> 0)then
