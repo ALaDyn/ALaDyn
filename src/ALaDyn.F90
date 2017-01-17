@@ -595,6 +595,7 @@
 
  !Read parameters from input.nml file
  call read_main_input
+ call read_nml_integrated_background_diagnostic
  if (model_id > 4) then
   call read_bunch_namelist
   call read_bunch_TWISS_namelist

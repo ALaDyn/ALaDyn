@@ -47,6 +47,7 @@
  !---scalar diagnostic output---!
  if (tnow>=tdia) then
   call diagnostic_integrated_output
+  call diagnostic_integrated_background
   tdia=tdia+dtdia
  endif
 

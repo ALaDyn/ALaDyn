@@ -56,6 +56,7 @@
  real(dp) :: a_rk(6),b_rk(6),c_rk(0:6)
  real(dp) :: a_lpf(4),b_lpf(4),c_lpf(4)
  real(dp) :: energy_in_targ
+ real(dp) :: gamma_cut_min,weights_cut_min,weights_cut_max
  logical :: Part,part_dcmp,cmp,Lp_active,test,PML,Stretch
  logical :: Plane_wave,Lin_lp,Circ_lp,Relativistic,Envelope,Ions,Beam,Pbeam
  logical :: Cyl_coord,Lp_inject,Ionization,Wake,Solid_target,Charge_cons
@@ -66,5 +67,6 @@
  logical :: L_first_output_on_restart
  logical :: L_use_unique_dumps
  logical :: L_disable_rng_seed
+ logical :: L_intdiagnostics_background
 
  end module code_util

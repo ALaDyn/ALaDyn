@@ -396,6 +396,32 @@
 
 
 
+ SUBROUTINE read_nml_integrated_background_diagnostic
+ !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+ !C
+ !C Reads nml for BACKGROUND particle online DIAGNOSTIC
+ !C
+ !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+
+ !--- *** namelist *** ---!
+ NAMELIST/integrated_background_diagnostic/L_intdiagnostics_background, &
+                                       gamma_cut_min,weights_cut_min,weights_cut_max
+
+ !--- reading nml ---!
+ open(nml_iounit,file=input_namelist_filename, status='old')
+      L_intdiagnostics_background =.false.
+      gamma_cut_min=0.0
+      weights_cut_min=0.0
+      weights_cut_max=1.0
+ read(nml_iounit,integrated_background_diagnostic,iostat=nml_ierr)
+ nml_error_message='integrated_background_diagnostic'
+ close(nml_iounit)
+ if(nml_ierr>0) call print_at_screen_nml_error
+
+end subroutine read_nml_integrated_background_diagnostic
+
+
+
  subroutine write_read_nml
  character(len=12) :: output_filename
  !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
