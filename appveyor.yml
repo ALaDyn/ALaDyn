@@ -1,13 +1,12 @@
 install:
 #  - choco install mingw
-  - choco install mingw-get
-  - refreshenv
   - mingw-get install fortran 
 #  - if [%tbs_arch%]==[x86] SET PATH=C:\MinGW\bin;%PATH%
 #  - if [%tbs_arch%]==[x64] SET PATH=C:\mingw64\bin;%PATH%
   - SET PATH=C:\MinGW\bin;%PATH%
 # Remove C:/Program Files/Git/usr/bin from the path, CMake is incompatible with the sh.exe found inside
   - set PATH=%PATH:C:\Program Files\Git\usr\bin;=%
+
 build_script:
   - mkdir build
   - cd build

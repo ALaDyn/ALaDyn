@@ -88,14 +88,14 @@ target_link_libraries(ALaDyn
 	${Boost_LIBRARIES}
 ) 
 
-set_target_properties(ALaDyn PROPERTIES LINKER_LANGUAGE Fortran)
+set_target_properties(ALaDyn PROPERTIES HAS_CXX TRUE LINKER_LANGUAGE Fortran)
 
 install (TARGETS ALaDyn DESTINATION ${CMAKE_SOURCE_DIR}/bin/)
 
-add_library(cpp_folder_tree src/cpp_folder_tree.cpp)
+add_library(cpp_folder_tree STATIC src/cpp_folder_tree.cpp)
 set_target_properties(cpp_folder_tree PROPERTIES HAS_CXX TRUE)
 set_property(TARGET ${cpp_folder_tree} PROPERTY LINKER_LANGUAGE CXX)
 
-add_library(find_last_addr src/find_last_addr.cpp)
+add_library(find_last_addr STATIC src/find_last_addr.cpp)
 set_target_properties(find_last_addr PROPERTIES HAS_CXX TRUE)
 set_property(TARGET ${find_last_addr} PROPERTY LINKER_LANGUAGE CXX)
