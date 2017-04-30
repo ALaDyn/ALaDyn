@@ -1,14 +1,23 @@
+environment:
+  matrix:
+  - COMPILER: msys2
+    PLATFORM: x64
+    MSYS2_ARCH: x86_64
+    MSYS2_DIR: msys64
+    MSYSTEM: MINGW64
+    BIT: 64
+
 install:
-#  - choco install mingw
-  - mingw-get install fortran 
-#  - if [%tbs_arch%]==[x86] SET PATH=C:\MinGW\bin;%PATH%
-#  - if [%tbs_arch%]==[x64] SET PATH=C:\mingw64\bin;%PATH%
-  - SET PATH=C:\MinGW\bin;%PATH%
+  - SET "PATH=C:\%MSYS2_DIR%\%MSYSTEM%\bin;C:\%MSYS2_DIR%\usr\bin;%PATH%"
 # Remove C:/Program Files/Git/usr/bin from the path, CMake is incompatible with the sh.exe found inside
   - set PATH=%PATH:C:\Program Files\Git\usr\bin;=%
+# Setup pacman (MSYS2 package manager) to enable mirrors and download appropriate toolchain 
+  - bash -lc "pacman -S --needed --noconfirm pacman-mirrors"
+  - bash -lc "pacman -Syu --noconfirm"
+  - bash -lc "pacman -S --needed --noconfirm mingw-w64-x86_64-toolchain make"
 
 build_script:
   - mkdir build
   - cd build
-  - cmake .. -G "MinGW Makefiles"
+  - cmake .. -G "MSYS Makefiles"
   - cmake --build . --target install
