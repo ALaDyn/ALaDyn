@@ -5,7 +5,7 @@ install:
   - SET PATH=C:\MinGW\bin;%PATH%
 # Remove C:/Program Files/Git/usr/bin from the path, CMake is incompatible with the sh.exe found inside
   - set PATH=%PATH:C:\Program Files\Git\usr\bin;=%
--build_script:
+build_script:
   - mkdir build
   - cd build
   - cmake .. -G "MinGW Makefiles"
