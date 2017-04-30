@@ -44,7 +44,6 @@ set(CMAKE_Fortran_LINK_FLAGS "${CMAKE_CXX_LINK_FLAGS} ${MPI_LINK_FLAGS} ${MPI_Fo
 #message("FFTW and MKL not found, unable to build")
 #endif()
 
-link_directories(${MPI_Fortran_LIBRARIES} ${FFTW_LIBRARIES} ${MKL_LIBRARIES} ${Boost_LIBRARY_DIR})
 include_directories(${MPI_INCLUDE_PATH} ${MPI_Fortran_INCLUDE_PATH} ${FFTW_INCLUDES} ${MKL_INCLUDE_DIRS} ${Boost_INCLUDE_DIR})
 
 add_executable (ALaDyn 

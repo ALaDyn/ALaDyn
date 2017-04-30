@@ -29,10 +29,11 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx"   ]]; then brew install fftw                                                                         ;fi
 
 install:
-  # OSX Setup 
+  # OSX Setup
   - if [[ "$TRAVIS_OS_NAME" == "osx"   ]]; then export CMAKE_Fortran_COMPILER=/usr/local/Cellar/gcc/6.3.0_1/bin/gfortran-6                ;fi
   - if [[ "$TRAVIS_OS_NAME" == "osx"   ]]; then export CMAKE_C_COMPILER=/usr/local/Cellar/gcc/6.3.0_1/bin/gcc-6                           ;fi
   - if [[ "$TRAVIS_OS_NAME" == "osx"   ]]; then export CMAKE_CXX_COMPILER=/usr/local/Cellar/gcc/6.3.0_1/bin/g++-6                         ;fi 
+  - if [[ "$TRAVIS_OS_NAME" == "osx"   ]]; then export CMAKE_LINKER=/usr/local/Cellar/gcc/6.3.0_1/bin/g++-6                               ;fi 
   - if [[ "$TRAVIS_OS_NAME" == "osx"   ]]; then export FC="/usr/local/Cellar/gcc/6.3.0_1/bin/gfortran-6"                                  ;fi
   - if [[ "$TRAVIS_OS_NAME" == "osx"   ]]; then export CC="/usr/local/Cellar/gcc/6.3.0_1/bin/gcc-6"                                       ;fi
   - if [[ "$TRAVIS_OS_NAME" == "osx"   ]]; then export CXX="/usr/local/Cellar/gcc/6.3.0_1/bin/g++-6"                                      ;fi
