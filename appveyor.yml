@@ -28,12 +28,23 @@ install:
   - ps: (new-object net.webclient).DownloadFile("https://download.microsoft.com/download/D/7/B/D7BBA00F-71B7-436B-80BC-4D22F2EE9862/MSMpiSetup.exe","C:\projects\deps\MSMpiSetup.exe")
   - C:\projects\deps\MSMpiSetup.exe -unattend -minimal
   - set PATH=C:\Program Files\Microsoft MPI\Bin;%PATH%
-  - ps: cp "$MSMPI_LIB64/msmpi.lib" .                 # copy msmpi.lib here
-  - ps: cp "$WINDIR/system32/msmpi.dll" .             # copy msmpi.dll here
-  - gendef msmpi.dll                                  # generate msmpi.def
-  - dlltool -d msmpi.def -D msmpi.dll -l libmsmpi.a   # generate the (static) library file libmsmpi.a
-  - ps: cp libmsmpi.a /mingw64/lib                    # copy the new library file to where g++ looks for them;
-  - ps: cp "$MSMPI_INC/mpi.h" /mingw64/include        # copy the header file to the default include folder           # copy the header file mpi.h to ~/msmpi/
+  - set cmake_38_url="https://cmake.org/files/v3.8/cmake-3.8.0-win32-x86.zip"
+  - appveyor DownloadFile %cmake_38_url% -FileName cmake.zip
+  - 7z x cmake.zip -oC:\projects\deps > nul
+  - move C:\projects\deps\cmake-* C:\projects\deps\cmake
+  - set PATH=C:\projects\deps\cmake\bin;%PATH%
+  - cmake --version
+  - git clone https://github.com/Microsoft/vcpkg
+  - cd vcpkg
+  - .\bootstrap-vcpkg.bat
+  - vcpkg integrate install
+  - vcpkg install msmpi
+  #- ps: cp "$MSMPI_LIB64/msmpi.lib" .                 # copy msmpi.lib here
+  #- ps: cp "$WINDIR/system32/msmpi.dll" .             # copy msmpi.dll here
+  #- gendef msmpi.dll                                  # generate msmpi.def
+  #- dlltool -d msmpi.def -D msmpi.dll -l libmsmpi.a   # generate the (static) library file libmsmpi.a
+  #- ps: cp libmsmpi.a /mingw64/lib                    # copy the new library file to where g++ looks for them;
+  #- ps: cp "$MSMPI_INC/mpi.h" /mingw64/include        # copy the header file to the default include folder           # copy the header file mpi.h to ~/msmpi/
   - ps: if($env:COMPILER -eq "cygwin") { Invoke-WebRequest $env:cygwin_url -OutFile C:\projects\deps\cygwin-setup.exe }
   - if [%COMPILER%]==[cygwin] C:\projects\deps\cygwin-setup.exe --quiet-mode --no-shortcuts --no-startmenu --no-desktop --upgrade-also --root C:\projects\deps\cygwin --local-package-dir C:\projects\deps\cygwin-downloads --packages gcc-g++,gfortran,openmpi-devel,fftw3-devel
   - cd ..
