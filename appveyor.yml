@@ -13,14 +13,14 @@ environment:
 install:
   - call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
 #  - call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" amd64
-  - if [%COMPILER%]==[MSYS2] SET "PATH=C:\%MSYS2_DIR%\%MSYSTEM%\bin;C:\%MSYS2_DIR%\usr\bin;%PATH%"
+  - if [%COMPILER%]==[msys2] SET "PATH=C:\%MSYS2_DIR%\%MSYSTEM%\bin;C:\%MSYS2_DIR%\usr\bin;%PATH%"
 # Remove C:/Program Files/Git/usr/bin from the path, CMake is incompatible with the sh.exe found inside
   - set PATH=%PATH:C:\Program Files\Git\usr\bin;=%
 # Setup pacman (MSYS2 package manager) to enable mirrors and download appropriate toolchain 
-  - if [%COMPILER%]==[MSYS2] bash -lc "pacman -S --needed --noconfirm pacman-mirrors"
-  - if [%COMPILER%]==[MSYS2] bash -lc "pacman -Syu --noconfirm"
-  - if [%COMPILER%]==[MSYS2] bash -lc "pacman -S --needed --noconfirm mingw-w64-x86_64-toolchain make mingw-w64-x86_64-boost"
-  - if [%COMPILER%]==[MSYS2] bash -lc "wget http://www.fftw.org/fftw-3.3.6-pl2.tar.gz && tar zxvf fftw-3.3.6-pl2.tar.gz && cd fftw-3.3.6-pl2 && ./configure && make && make install"
+  - if [%COMPILER%]==[msys2] bash -lc "pacman -S --needed --noconfirm pacman-mirrors"
+  - if [%COMPILER%]==[msys2] bash -lc "pacman -Syu --noconfirm"
+  - if [%COMPILER%]==[msys2] bash -lc "pacman -S --needed --noconfirm mingw-w64-x86_64-toolchain make mingw-w64-x86_64-boost"
+  - if [%COMPILER%]==[msys2] bash -lc "wget http://www.fftw.org/fftw-3.3.6-pl2.tar.gz && tar zxvf fftw-3.3.6-pl2.tar.gz && cd fftw-3.3.6-pl2 && ./configure && make && make install"
 # Install MS-MPI
   - cd ..
   - mkdir C:\projects\deps
@@ -54,6 +54,7 @@ install:
 build_script:
   - mkdir build
   - cd build
-  - if [%COMPILER%]==[MSYS2] cmake .. -G "MSYS Makefiles"
-  - if [%COMPILER%]==[cygwin] cmake .. -G "Unix Makefiles"
+  - cmake .. -G "MSYS Makefiles"
+#  - if [%COMPILER%]==[msys2] cmake .. -G "MSYS Makefiles"
+#  - if [%COMPILER%]==[cygwin] cmake .. -G "Unix Makefiles"
   - cmake --build . --target install
