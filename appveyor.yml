@@ -14,7 +14,8 @@ install:
 # Setup pacman (MSYS2 package manager) to enable mirrors and download appropriate toolchain 
   - bash -lc "pacman -S --needed --noconfirm pacman-mirrors"
   - bash -lc "pacman -Syu --noconfirm"
-  - bash -lc "pacman -S --needed --noconfirm mingw-w64-x86_64-toolchain make mingw-w64-x86_64-boost fftw"
+  - bash -lc "pacman -S --needed --noconfirm mingw-w64-x86_64-toolchain make mingw-w64-x86_64-boost"
+  - bash -lc "wget http://www.fftw.org/fftw-3.3.6-pl2.tar.gz && tar zxvf fftw-3.3.6-pl2.tar.gz && cd fftw-3.3.6-pl2 && ./configure && make && make install"
 
 build_script:
   - mkdir build
