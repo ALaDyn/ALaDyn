@@ -25,7 +25,7 @@ install:
   - cd ..
   - mkdir C:\projects\deps
   - cd C:\projects\deps
-  - ps: (new-object net.webclient).DownloadFile("https://download.microsoft.com/download/D/7/B/D7BBA00F-71B7-436B-80BC-4D22F2EE9862/MSMpiSetup.exe","C:\projects\deps\MSMpiSetup.exe")
+  - ps: (new-object net.webclient).DownloadFile("https://download.microsoft.com/download/B/2/E/B2EB83FE-98C2-4156-834A-E1711E6884FB/MSMpiSetup.exe","C:\projects\deps\MSMpiSetup.exe")
   - C:\projects\deps\MSMpiSetup.exe -unattend -minimal
   - set PATH=C:\Program Files\Microsoft MPI\Bin;%PATH%
   - set cmake_38_url="https://cmake.org/files/v3.8/cmake-3.8.0-win32-x86.zip"
@@ -39,6 +39,7 @@ install:
   - .\bootstrap-vcpkg.bat
   - vcpkg integrate install
   - vcpkg install msmpi
+  #still need some fixes!
   #- ps: cp "$MSMPI_LIB64/msmpi.lib" .                 # copy msmpi.lib here
   #- ps: cp "$WINDIR/system32/msmpi.dll" .             # copy msmpi.dll here
   #- gendef msmpi.dll                                  # generate msmpi.def
