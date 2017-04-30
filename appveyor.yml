@@ -1,0 +1,10 @@
+install:
+#  - choco install mingw
+#  - if [%tbs_arch%]==[x86] SET PATH=C:\MinGW\bin;%PATH%
+#  - if [%tbs_arch%]==[x64] SET PATH=C:\mingw64\bin;%PATH%
+  - SET PATH=C:\MinGW\bin;%PATH%
+build_script:
+  - mkdir build
+  - cd build
+  - cmake .. -G "MinGW Makefiles"
+  - cmake --build . --target install
