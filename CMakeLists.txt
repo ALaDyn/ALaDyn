@@ -5,8 +5,11 @@ enable_language(CXX)
 set (CMAKE_CXX_STANDARD 11)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 
-set(Boost_USE_STATIC_LIBS ON)
-set(Boost_USE_STATIC_RUNTIME ON)
+if (MSVC)
+  set(Boost_USE_STATIC_LIBS ON)
+  set(Boost_USE_STATIC_RUNTIME ON)
+endif()
+
 find_package(Boost COMPONENTS system filesystem REQUIRED)
 find_package(MPI REQUIRED)
 #find_package(MKL)
