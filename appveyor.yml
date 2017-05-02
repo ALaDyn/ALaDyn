@@ -1,3 +1,5 @@
+clone_folder: c:\projects\aladyn
+
 environment:
     CYGWIN_NOWINPATH: yes
     matrix:
@@ -17,7 +19,7 @@ install:
   - ps: if($env:COMPILER -eq "cygwin") { Invoke-WebRequest $env:cygwin_url -OutFile C:\projects\deps\cygwin-setup.exe }
   - if [%COMPILER%]==[cygwin] C:\projects\deps\cygwin-setup.exe --quiet-mode --no-shortcuts --no-startmenu --no-desktop --upgrade-also --root C:\cygwin64 --local-package-dir C:\projects\deps\cygwin-downloads --packages gcc-g++,libopenmpi-devel,gcc-fortran,cmake,libfftw3-devel,libboost-devel
   - cd ..
-  - cd C:\projects\ALaDyn
+  - cd C:\projects\aladyn
 
 build_script:
   - mkdir build
