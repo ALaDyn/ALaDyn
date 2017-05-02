@@ -4,7 +4,17 @@
 
 This newer version, in part rewritten from scratch, is released as an alpha version as is, without any warranty, and will be maintained here on GitHub. A new publication is currently underway to describe progresses on this new code. If you use `ALaDyn`, you're kindly required to cite the Zenodo DOI of the latest release.
 
-## Useful links
+[Papers published using ALaDyn](doc/PAPERS.md)  
+[Code description](doc/DESCRIPTION.md)
+
+Copyright on the code is by P. Londrillo, A. Sgattoni, S. Sinigardi, A. Marocchino.   
+http://www.physycom.unibo.it/aladyn_pic
+
+## How to build
+`ALaDyn` is best built using cmake.
+We support building ALaDyn on almost all sane systems, a guide will be published soon, in the meantime the appveyor and travis recipes should be clear enough on how to build the code on Windows (cygwin/WSL), Mac and Linux (all the systems that we use daily)
+
+## Releases
 
 latest release:  [![DOI](https://zenodo.org/badge/4711/ALaDyn/ALaDyn.svg)](https://zenodo.org/badge/latestdoi/4711/ALaDyn/ALaDyn)
 
@@ -12,8 +22,3 @@ OLD releases:
 v1.0.0-alpha2: [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.48933.svg)](http://dx.doi.org/10.5281/zenodo.48933)   
 v1.0.0-alpha: [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.47467.svg)](http://dx.doi.org/10.5281/zenodo.47467)
 
-[Papers published using ALaDyn](doc/PAPERS.md)  
-[Code description](doc/DESCRIPTION.md)
-
-Copyright on the code is by P. Londrillo, A. Sgattoni, S. Sinigardi, A. Marocchino.   
-http://www.physycom.unibo.it/aladyn_pic
