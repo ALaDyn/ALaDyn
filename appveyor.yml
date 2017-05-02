@@ -3,37 +3,24 @@ environment:
     matrix:
         - cygwin_url: https://cygwin.com/setup-x86_64.exe
           COMPILER: cygwin
-        - COMPILER: msys2
-          PLATFORM: x64
-          MSYS2_ARCH: x86_64
-          MSYS2_DIR: msys64
-          MSYSTEM: MINGW64
-          BIT: 64
 
 install:
   - call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
-  - if [%COMPILER%]==[msys2] SET "PATH=C:\%MSYS2_DIR%\%MSYSTEM%\bin;C:\%MSYS2_DIR%\usr\bin;%PATH%"
   - if [%COMPILER%]==[cygwin] SET "PATH=C:\cygwin64\bin;C:\cygwin64\usr\bin;%PATH%"
 # Remove C:/Program Files/Git/usr/bin from the path, CMake is incompatible with the sh.exe found inside
   - set PATH=%PATH:C:\Program Files\Git\usr\bin;=%
-# Setup pacman (MSYS2 package manager) to enable mirrors and download appropriate toolchain 
-  - if [%COMPILER%]==[msys2] bash -lc "pacman -S --needed --noconfirm pacman-mirrors"
-  - if [%COMPILER%]==[msys2] bash -lc "pacman -Syu --noconfirm"
-  - if [%COMPILER%]==[msys2] bash -lc "pacman -S --needed --noconfirm mingw-w64-x86_64-toolchain make mingw-w64-x86_64-boost mingw-w64-x86_64-fftw"
-  - if [%COMPILER%]==[msys2] bash -lc "wget https://www.open-mpi.org/software/ompi/v2.1/downloads/openmpi-2.1.0.tar.gz && tar zxvf openmpi-2.1.0.tar.gz && cd openmpi-2.1.0 && ./configure --disable-java && make && make install"
+# update and add packages to cygwin (already installed on appveyor, easily portable to a completely new installation)
   - cd ..
   - mkdir C:\projects\deps
   - cd C:\projects\deps
   - mkdir cygwin-downloads
-# Setup cygwin to download appropriate toolchain 
   - ps: if($env:COMPILER -eq "cygwin") { Invoke-WebRequest $env:cygwin_url -OutFile C:\projects\deps\cygwin-setup.exe }
-  - if [%COMPILER%]==[cygwin] C:\projects\deps\cygwin-setup.exe --quiet-mode --no-shortcuts --no-startmenu --no-desktop --upgrade-also --root C:\cygwin64 --local-package-dir C:\projects\deps\cygwin-downloads --packages gcc-g++,gfortran,openmpi-devel,fftw3-devel,cmake
+  - if [%COMPILER%]==[cygwin] C:\projects\deps\cygwin-setup.exe --quiet-mode --no-shortcuts --no-startmenu --no-desktop --upgrade-also --root C:\cygwin64 --local-package-dir C:\projects\deps\cygwin-downloads --packages gcc-g++,gcc-gfortran,openmpi-devel,fftw3-devel,cmake
   - cd ..
   - cd C:\projects\ALaDyn
 
 build_script:
   - mkdir build
   - cd build
-  - if [%COMPILER%]==[msys2] cmake .. -G "MSYS Makefiles"
-  - if [%COMPILER%]==[cygwin] cmake .. -G "Unix Makefiles"
+  - cmake .. -G "Unix Makefiles"
   - cmake --build . --target install
