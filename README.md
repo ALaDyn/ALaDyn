@@ -1,4 +1,5 @@
 [![Build Status Master](https://travis-ci.org/ALaDyn/ALaDyn.png?branch=master)](https://travis-ci.org/ALaDyn/ALaDyn "master")
+[![Build status](https://ci.appveyor.com/api/projects/status/evol3yvpqqfyxi7p?svg=true)](https://ci.appveyor.com/project/cenit/aladyn-kul79)
 
 `ALaDyn` (**A**cceleration by **La**ser and **Dyn**amics of charged particles) is a PIC code firstly described in *ALaDyn: A High-Accuracy PIC code for the Maxwell-Vlasov Equations*, by C. Benedetti et al., published on IEEE Transactions on Plasma Science, **36** 4, 1790-1798 (2008) and then again in the update *Charge preserving high order PIC schemes*, by P. Londrillo et al., published on Nucl. Instrum. Meth. A, **620** 1, 28-35 (2010). PWFA modules have been presented in *Numerical investigation of beam-driven PWFA in quasi-nonlinear regime*, by P. Londrillo et al., published on Nucl. Instrum. Meth. A, **740** (2014).
 
@@ -11,8 +12,9 @@ Copyright on the code is by P. Londrillo, A. Sgattoni, S. Sinigardi, A. Marocchi
 http://www.physycom.unibo.it/aladyn_pic
 
 ## How to build
-`ALaDyn` is best built using cmake.
-We support building ALaDyn on almost all sane systems, a guide will be published soon, in the meantime the appveyor and travis recipes should be clear enough on how to build the code on Windows (cygwin or WSL, only gcc toolchain), Mac (only gcc tolchain) and Linux (only gcc toolchain).
+`ALaDyn` is best built using cmake.  
+We support building ALaDyn on almost all sane systems, a guide will be published soon, in the meantime the appveyor and travis recipes should be clear enough on how to build the code on Windows (cygwin or WSL, only gcc toolchain), Mac (only gcc tolchain) and Linux (only gcc toolchain).  
+There is also a makefile, which is now deprecated and will be removed soon.
 
 ## Releases
 
