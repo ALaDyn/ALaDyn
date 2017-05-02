@@ -12,7 +12,7 @@ http://www.physycom.unibo.it/aladyn_pic
 
 ## How to build
 `ALaDyn` is best built using cmake.
-We support building ALaDyn on almost all sane systems, a guide will be published soon, in the meantime the appveyor and travis recipes should be clear enough on how to build the code on Windows (cygwin/WSL), Mac and Linux (all the systems that we use daily)
+We support building ALaDyn on almost all sane systems, a guide will be published soon, in the meantime the appveyor and travis recipes should be clear enough on how to build the code on Windows (cygwin or WSL, only gcc toolchain), Mac (only gcc tolchain) and Linux (only gcc toolchain).
 
 ## Releases
 
