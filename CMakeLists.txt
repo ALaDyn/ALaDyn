@@ -10,6 +10,10 @@ if (MSVC)
   set(Boost_USE_STATIC_RUNTIME ON)
 endif()
 
+if(APPLE)
+  set(CMAKE_CXX_FLAGS "-std=c++11 -stdlib=libc++")
+endif() 
+
 find_package(Boost COMPONENTS system filesystem REQUIRED)
 find_package(MPI REQUIRED)
 #find_package(MKL)
