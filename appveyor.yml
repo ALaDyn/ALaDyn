@@ -13,6 +13,9 @@ environment:
 install:
   - call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
   - if [%COMPILER%]==[msys2] SET "PATH=C:\%MSYS2_DIR%\%MSYSTEM%\bin;C:\%MSYS2_DIR%\usr\bin;%PATH%"
+  - if [%COMPILER%]==[msys2] pacman -Ss java
+  - if [%COMPILER%]==[msys2] pacman -Ss mpi
+  - if [%COMPILER%]==[msys2] pacman -Ss fftw  
   - if [%COMPILER%]==[cygwin] SET "PATH=C:\cygwin64\bin;C:\cygwin64\usr\bin;%PATH%"
 # Remove C:/Program Files/Git/usr/bin from the path, CMake is incompatible with the sh.exe found inside
   - set PATH=%PATH:C:\Program Files\Git\usr\bin;=%
@@ -25,9 +28,10 @@ install:
   - cd ..
   - mkdir C:\projects\deps
   - cd C:\projects\deps
+  - mkdir cygwin-downloads
 # Setup cygwin to download appropriate toolchain 
   - ps: if($env:COMPILER -eq "cygwin") { Invoke-WebRequest $env:cygwin_url -OutFile C:\projects\deps\cygwin-setup.exe }
-  - if [%COMPILER%]==[cygwin] C:\projects\deps\cygwin-setup.exe --quiet-mode --no-shortcuts --no-startmenu --no-desktop --upgrade-also --root C:\projects\deps\cygwin --local-package-dir C:\projects\deps\cygwin-downloads --packages gcc-g++,gfortran,openmpi-devel,fftw3-devel
+  - if [%COMPILER%]==[cygwin] C:\projects\deps\cygwin-setup.exe --quiet-mode --no-shortcuts --no-startmenu --no-desktop --upgrade-also --root C:\cygwin64 --local-package-dir C:\projects\deps\cygwin-downloads --packages gcc-g++,gfortran,openmpi-devel,fftw3-devel,cmake
   - cd ..
   - cd C:\projects\ALaDyn
 
