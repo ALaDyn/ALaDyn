@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 2.8.10)
+cmake_minimum_required (VERSION 2.8.7)
 project(ALaDyn)
 enable_language(Fortran)
 enable_language(CXX)
