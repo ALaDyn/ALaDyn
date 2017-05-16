@@ -2957,7 +2957,7 @@ case(6)
        if(pe0) write(*,'(A,1I1,A)') 'bunch(',i,') :: changing total number of particles :: equal number of ppc'
        if(pe0) write(*,'(A,1I1,A,1I3,A,1I10)') 'bunch(',i,') :: ppc =',ppcb,' :: total number of bunch particles =',nb_tot(i)
    endif
-   if(particle_weight(i)=='equal') then
+   if(TRIM(particle_weight(i))=='equal') then
        if(pe0) write(*,'(A,1I1,A)') 'bunch(',i,') :: equal :: option (all particle have the same weight)'
    endif
   np_tot=np_tot+nb_tot(i)
