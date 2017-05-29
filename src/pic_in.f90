@@ -2950,11 +2950,11 @@ case(6)
  np_tot=0
  do i=1,nsb
    if(ppc_bunch(i)>0 .and. nb_tot(i)==-1) then
-       effecitve_cell_number=bunch_volume_incellnumber(bunch_shape(i),sxb(i),syb(i),syb(i),dx,dy,dz)
-       nb_tot(i)=ppc_bunch(i)*effecitve_cell_number
-       if(pe0) write(*,'(A,1I1,A)') 'bunch(',i,') :: weighted :: option'
-       if(pe0) write(*,'(A,1I1,A)') 'bunch(',i,') :: changing total number of particles :: equal number of ppc'
-       if(pe0) write(*,'(A,1I1,A,1I3,A,1I10)') 'bunch(',i,') :: ppc =',ppc_bunch(i),' :: total number of bunch particles =',nb_tot(i)
+      effecitve_cell_number=bunch_volume_incellnumber(bunch_shape(i),sxb(i),syb(i),syb(i),dx,dy,dz)
+      nb_tot(i)=ppc_bunch(i)*effecitve_cell_number
+      if(pe0) write(*,'(A,1I1,A)') 'bunch(',i,') :: weighted :: option'
+      if(pe0) write(*,'(A,1I1,A)') 'bunch(',i,') :: changing total number of particles :: equal number of ppc'
+      if(pe0) write(*,'(A,1I1,A,1I3,A,1I10)') 'bunch(',i,') :: ppc =',ppc_bunch(i),' :: total number of bunch particles =',nb_tot(i)
    endif
    if(ppc_bunch(i)==-1 .and. nb_tot(i)>0) then
        if(pe0) write(*,'(A,1I1,A)') 'bunch(',i,') :: equal :: option (all particle have the same weight)'
