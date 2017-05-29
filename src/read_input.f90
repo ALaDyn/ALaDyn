@@ -256,7 +256,7 @@
   dg(2)         =dg_2
   Charge_right(2) = Charge_right_2
   Charge_left(2)=Charge_left_2
-  call select_number_of_bunch_particles(ppc_bunch_1,np_1,ppc_bunch(2),nb_tot(2))
+  call select_number_of_bunch_particles(ppc_bunch_2,np_2,ppc_bunch(2),nb_tot(2))
  END IF
 
 
@@ -294,7 +294,7 @@
   Charge_right(3) = Charge_right_3
   Charge_left(3)=Charge_left_3
   ! ppc_bunch(3)=ppc_bunch_3
-  call select_number_of_bunch_particles(ppc_bunch_1,np_1,ppc_bunch(3),nb_tot(3))
+  call select_number_of_bunch_particles(ppc_bunch_3,np_3,ppc_bunch(3),nb_tot(3))
  END IF
 
 
@@ -332,7 +332,7 @@
   Charge_right(4) = Charge_right_4
   Charge_left(4)=Charge_left_4
   ! ppc_bunch(4)=ppc_bunch_4
-  call select_number_of_bunch_particles(ppc_bunch_1,np_1,ppc_bunch(4),nb_tot(4))
+  call select_number_of_bunch_particles(ppc_bunch_4,np_4,ppc_bunch(4),nb_tot(4))
  END IF
 
 
@@ -370,7 +370,7 @@
   Charge_right(5) = Charge_right_5
   Charge_left(5)=Charge_left_5
   ! ppc_bunch(5)=ppc_bunch_5
-  call select_number_of_bunch_particles(ppc_bunch_1,np_1,ppc_bunch(5),nb_tot(5))
+  call select_number_of_bunch_particles(ppc_bunch_5,np_5,ppc_bunch(5),nb_tot(5))
  END IF
 
  end subroutine read_bunch_namelist
