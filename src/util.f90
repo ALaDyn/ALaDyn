@@ -1202,15 +1202,17 @@ end function shape
  integer(dp_int) function bunch_volume_incellnumber(bunch_shape,s_x,s_y,s_z,dx,dy,dz)
    integer, intent(in) :: bunch_shape
    real(dp),intent(in) :: s_x,s_y,s_z,dx,dy,dz
+   real(dp) :: sigma_cut
    integer :: ix,iy,iz
 
    bunch_volume_incellnumber=0
+   sigma_cut=3
 
    if(bunch_shape==1) then
-     do ix=-int(4.*s_x/dx),int(4.*s_x/dx)
-       do iy=-int(4.*s_y/dy),int(4.*s_y/dy)
-         do iz=-int(4.*s_y/dz),int(4.*s_y/dz)
-           if( (ix*dx/4./s_x)**2+(iy*dy/4./s_y)**2+(iz*dz/4./s_z)**2<1.) then
+     do ix=-int(sigma_cut*s_x/dx),int(sigma_cut*s_x/dx)
+       do iy=-int(sigma_cut*s_y/dy),int(sigma_cut*s_y/dy)
+         do iz=-int(sigma_cut*s_y/dz),int(sigma_cut*s_y/dz)
+           if( (ix*dx/sigma_cut/s_x)**2+(iy*dy/sigma_cut/s_y)**2+(iz*dz/sigma_cut/s_z)**2<1.) then
              bunch_volume_incellnumber=bunch_volume_incellnumber+1
            endif
          enddo
@@ -1232,9 +1234,9 @@ end function shape
 
    if(bunch_shape==3) then
      do ix=1,int(s_x/dx)
-       do iy=-int(4.*s_y/dy),int(4.*s_y/dy)
-         do iz=-int(4.*s_y/dz),int(4.*s_y/dz)
-           if( (iy*dy)**2+(iz*dz)**2<(4.*s_y)**2 ) then
+       do iy=-int(sigma_cut*s_y/dy),int(sigma_cut*s_y/dy)
+         do iz=-int(sigma_cut*s_y/dz),int(sigma_cut*s_y/dz)
+           if( (iy*dy)**2+(iz*dz)**2<(sigma_cut*s_y)**2 ) then
              bunch_volume_incellnumber=bunch_volume_incellnumber+1
            endif
          enddo

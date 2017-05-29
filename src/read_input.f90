@@ -160,15 +160,15 @@
  NAMELIST/NUMBER_BUNCHES/ n_bunches, L_particles, L_intdiagnostics_pwfa, &
   L_intdiagnostics_classic,L_EMBunchEvolution,number_of_slices
  NAMELIST/BUNCH1/rho_b_1,gamma_1,xb_1,yb_1,zb_1,sx_1,sy_1,epsy_1,epsz_1,dg_1,np_1,&
-  bunch_type_1,bunch_shape_1,Charge_right_1,Charge_left_1,particle_weight_1
+  bunch_type_1,bunch_shape_1,Charge_right_1,Charge_left_1,ppc_bunch_1
  NAMELIST/BUNCH2/rho_b_2,gamma_2,xb_2,yb_2,zb_2,sx_2,sy_2,epsy_2,epsz_2,dg_2,np_2,&
-  bunch_type_2,bunch_shape_2,Charge_right_2,Charge_left_2,particle_weight_2
+  bunch_type_2,bunch_shape_2,Charge_right_2,Charge_left_2,ppc_bunch_2
  NAMELIST/BUNCH3/rho_b_3,gamma_3,xb_3,yb_3,zb_3,sx_3,sy_3,epsy_3,epsz_3,dg_3,np_3,&
-  bunch_type_3,bunch_shape_3,Charge_right_3,Charge_left_3,particle_weight_3
+  bunch_type_3,bunch_shape_3,Charge_right_3,Charge_left_3,ppc_bunch_3
  NAMELIST/BUNCH4/rho_b_4,gamma_4,xb_4,yb_4,zb_4,sx_4,sy_4,epsy_4,epsz_4,dg_4,np_4,&
-  bunch_type_4,bunch_shape_4,Charge_right_4,Charge_left_4,particle_weight_4
+  bunch_type_4,bunch_shape_4,Charge_right_4,Charge_left_4,ppc_bunch_4
  NAMELIST/BUNCH5/rho_b_5,gamma_5,xb_5,yb_5,zb_5,sx_5,sy_5,epsy_5,epsz_5,dg_5,np_5,&
-  bunch_type_5,bunch_shape_5,Charge_right_5,Charge_left_5,particle_weight_5
+  bunch_type_5,bunch_shape_5,Charge_right_5,Charge_left_5,ppc_bunch_5
 
  !--- reading number of bunches ---!
  open(nml_iounit,file=input_namelist_filename, status='old')
@@ -193,7 +193,8 @@
  !shape 4: cylinder
  Charge_right_1=-1.0
  Charge_left_1  =-1.0
- particle_weight_1='weighted'
+ ppc_bunch_1=-1 !number of particle per cell :: for the bunch :: this implies weighted option
+ np_1=-1 !total number of bunch particles :: implies particle with same weight
  !-->
  IF( 1 .le. n_bunches) then
   open(nml_iounit,file=input_namelist_filename, status='old')
@@ -202,7 +203,7 @@
   close(nml_iounit)
   if(nml_ierr>0) call print_at_screen_nml_error
   !passing values to ALaDyn's parameter
-  nb_tot(1)     = np_1
+  ! nb_tot(1)     = np_1
   bunch_type(1) = bunch_type_1
   bunch_shape(1)=bunch_shape_1
   rhob(1)       = rho_b_1
@@ -217,7 +218,8 @@
   dg(1)         = dg_1
   Charge_right(1) = Charge_right_1
   Charge_left(1)=Charge_left_1
-  particle_weight(1)=particle_weight_1
+  ! ppc_bunch(1)=ppc_bunch_1
+  call select_number_of_bunch_particles(ppc_bunch_1,np_1,ppc_bunch(1),nb_tot(1))
  END IF
 
 
@@ -229,7 +231,8 @@
  bunch_shape_2=1 !bi-giassian
  Charge_right_2=-1.0
  Charge_left_2  =-1.0
- particle_weight_2='weighted'
+ ppc_bunch_2=-1
+ np_2=-1
  !-->
  IF( 2 .le. n_bunches) then
   open(nml_iounit,file=input_namelist_filename, status='old')
@@ -238,7 +241,7 @@
   close(nml_iounit)
   if(nml_ierr>0) call print_at_screen_nml_error
   !passing values to ALaDyn's parameter
-  nb_tot(2)     = np_2
+  ! nb_tot(2)     = np_2
   bunch_type(2) = bunch_type_2
   bunch_shape(2)=bunch_shape_2
   rhob(2)       = rho_b_2
@@ -253,7 +256,7 @@
   dg(2)         =dg_2
   Charge_right(2) = Charge_right_2
   Charge_left(2)=Charge_left_2
-  particle_weight(2)=particle_weight_2
+  call select_number_of_bunch_particles(ppc_bunch_1,np_1,ppc_bunch(2),nb_tot(2))
  END IF
 
 
@@ -264,8 +267,9 @@
  zb_3 = 0.0
  bunch_shape_3=1 !bi-giassian
  Charge_right_3=-1.0
- Charge_left_3  =-1.0
- !particle_weight_3='weighted'
+ Charge_left_3=-1.0
+ ppc_bunch_3=-1
+ np_3=-1
  !-->
  IF( 3 .le. n_bunches) then
   open(nml_iounit,file=input_namelist_filename, status='old')
@@ -274,7 +278,7 @@
   close(nml_iounit)
   if(nml_ierr>0) call print_at_screen_nml_error
   !passing values to ALaDyn's parameter
-  nb_tot(3)     = np_3
+  ! nb_tot(3)     = np_3
   bunch_type(3) = bunch_type_3
   bunch_shape(3)=bunch_shape_3
   rhob(3)       = rho_b_3
@@ -289,7 +293,8 @@
   dg(3)         = dg_3
   Charge_right(3) = Charge_right_3
   Charge_left(3)=Charge_left_3
-  particle_weight(4)=particle_weight_3
+  ! ppc_bunch(3)=ppc_bunch_3
+  call select_number_of_bunch_particles(ppc_bunch_1,np_1,ppc_bunch(3),nb_tot(3))
  END IF
 
 
@@ -301,7 +306,8 @@
  bunch_shape_4=1 !bi-giassian
  Charge_right_4=-1.0
  Charge_left_4  =-1.0
- particle_weight_4='weighted'
+ ppc_bunch_4=-1
+ np_4=-1
  !-->
  IF( 4 .le. n_bunches) then
   open(nml_iounit,file=input_namelist_filename, status='old')
@@ -310,7 +316,7 @@
   close(nml_iounit)
   if(nml_ierr>0) call print_at_screen_nml_error
   !passing values to ALaDyn's parameter
-  nb_tot(4)     = np_4
+  ! nb_tot(4)     = np_4
   bunch_type(4) = bunch_type_4
   bunch_shape(4)=bunch_shape_4
   rhob(4)       = rho_b_4
@@ -325,7 +331,8 @@
   dg(4)         = dg_4
   Charge_right(4) = Charge_right_4
   Charge_left(4)=Charge_left_4
-  particle_weight(4)=particle_weight_4
+  ! ppc_bunch(4)=ppc_bunch_4
+  call select_number_of_bunch_particles(ppc_bunch_1,np_1,ppc_bunch(4),nb_tot(4))
  END IF
 
 
@@ -337,7 +344,8 @@
  bunch_shape_5=1 !bi-giassian
  Charge_right_5=-1.0
  Charge_left_5  =-1.0
- particle_weight_5='weighted'
+ ppc_bunch_5=-1
+ np_5=-1
  !-->
  IF( 5 .le. n_bunches) then
   open(nml_iounit,file=input_namelist_filename, status='old')
@@ -361,7 +369,8 @@
   dg(5)         = dg_5
   Charge_right(5) = Charge_right_5
   Charge_left(5)=Charge_left_5
-  particle_weight(5)=particle_weight_5
+  ! ppc_bunch(5)=ppc_bunch_5
+  call select_number_of_bunch_particles(ppc_bunch_1,np_1,ppc_bunch(5),nb_tot(5))
  END IF
 
  end subroutine read_bunch_namelist
@@ -455,15 +464,15 @@ end subroutine read_nml_integrated_background_diagnostic
  NAMELIST/NUMBER_BUNCHES/ n_bunches, L_particles, L_intdiagnostics_pwfa, &
   L_intdiagnostics_classic,L_EMBunchEvolution,number_of_slices
  NAMELIST/BUNCH1/rho_b_1,gamma_1,xb_1,yb_1,zb_1,sx_1,sy_1,epsy_1,epsz_1,dg_1,np_1,&
-  bunch_type_1,bunch_shape_1,Charge_right_1,Charge_left_1,particle_weight_1
+  bunch_type_1,bunch_shape_1,Charge_right_1,Charge_left_1,ppc_bunch_1
  NAMELIST/BUNCH2/rho_b_2,gamma_2,xb_2,yb_2,zb_2,sx_2,sy_2,epsy_2,epsz_2,dg_2,np_2,&
-  bunch_type_2,bunch_shape_2,Charge_right_2,Charge_left_2,particle_weight_2
+  bunch_type_2,bunch_shape_2,Charge_right_2,Charge_left_2,ppc_bunch_2
  NAMELIST/BUNCH3/rho_b_3,gamma_3,xb_3,yb_3,zb_3,sx_3,sy_3,epsy_3,epsz_3,dg_3,np_3,&
-  bunch_type_3,bunch_shape_3,Charge_right_3,Charge_left_3,particle_weight_3
+  bunch_type_3,bunch_shape_3,Charge_right_3,Charge_left_3,ppc_bunch_3
  NAMELIST/BUNCH4/rho_b_4,gamma_4,xb_4,yb_4,zb_4,sx_4,sy_4,epsy_4,epsz_4,dg_4,np_4,&
-  bunch_type_4,bunch_shape_4,Charge_right_4,Charge_left_4,particle_weight_4
+  bunch_type_4,bunch_shape_4,Charge_right_4,Charge_left_4,ppc_bunch_4
  NAMELIST/BUNCH5/rho_b_5,gamma_5,xb_5,yb_5,zb_5,sx_5,sy_5,epsy_5,epsz_5,dg_5,np_5,&
-  bunch_type_5,bunch_shape_5,Charge_right_5,Charge_left_5,particle_weight_5
+  bunch_type_5,bunch_shape_5,Charge_right_5,Charge_left_5,ppc_bunch_5
  NAMELIST/TWISS/L_TWISS,alpha_twiss,beta_twiss
  NAMELIST/BPOLOIDAL/L_Bpoloidal,B_ex_poloidal,radius_poloidal
 
@@ -713,5 +722,24 @@ end subroutine read_nml_integrated_background_diagnostic
  !stop
  end subroutine print_at_screen_nml_error
 
+ !--- *** *** *** ---!
+ subroutine select_number_of_bunch_particles(ppc_bunch,np_tot,fill_ppc_bunch,fill_nb_tot)
+   integer, intent(in) :: ppc_bunch,np_tot
+   integer, intent(inout) :: fill_ppc_bunch,fill_nb_tot
+
+   if(ppc_bunch==-1 .and. np_tot==-1) then
+     fill_ppc_bunch=1
+     fill_nb_tot=-1
+   elseif(ppc_bunch>=1 .and. np_tot==-1) then
+     fill_ppc_bunch=ppc_bunch
+     fill_nb_tot=-1
+   elseif(ppc_bunch==-1 .and. np_tot>=1) then
+     fill_ppc_bunch=-1
+     fill_nb_tot=np_tot
+   elseif(ppc_bunch>=1 .and. np_tot>=1) then
+     fill_ppc_bunch=ppc_bunch
+     fill_nb_tot=-1
+   endif
+ end subroutine select_number_of_bunch_particles
 
  end module read_input

@@ -2949,15 +2949,14 @@ case(6)
  !=======================
  np_tot=0
  do i=1,nsb
-   if(particle_weight(i)=='weighted') then
+   if(ppc_bunch(i)>0 .and. nb_tot(i)==-1) then
        effecitve_cell_number=bunch_volume_incellnumber(bunch_shape(i),sxb(i),syb(i),syb(i),dx,dy,dz)
-       ppcb=max(nb_tot(i)/effecitve_cell_number,1)
-       nb_tot(i)=ppcb*effecitve_cell_number
+       nb_tot(i)=ppc_bunch(i)*effecitve_cell_number
        if(pe0) write(*,'(A,1I1,A)') 'bunch(',i,') :: weighted :: option'
        if(pe0) write(*,'(A,1I1,A)') 'bunch(',i,') :: changing total number of particles :: equal number of ppc'
-       if(pe0) write(*,'(A,1I1,A,1I3,A,1I10)') 'bunch(',i,') :: ppc =',ppcb,' :: total number of bunch particles =',nb_tot(i)
+       if(pe0) write(*,'(A,1I1,A,1I3,A,1I10)') 'bunch(',i,') :: ppc =',ppc_bunch(i),' :: total number of bunch particles =',nb_tot(i)
    endif
-   if(TRIM(particle_weight(i))=='equal') then
+   if(ppc_bunch(i)==-1 .and. nb_tot(i)>0) then
        if(pe0) write(*,'(A,1I1,A)') 'bunch(',i,') :: equal :: option (all particle have the same weight)'
    endif
   np_tot=np_tot+nb_tot(i)
@@ -2976,14 +2975,14 @@ case(6)
    ch(1)=real(j0_norm*jb_norm(ip),sp) !the bunch particles weights
    i2=i1+nb_tot(ip)-1
 
-   if(bunch_shape(ip)==1 .and. particle_weight(ip)=='weighted') &
+   if(bunch_shape(ip)==1 .and. ppc_bunch(i)>0) & !weighted-option
                           call generate_bunch_bigaussian_weighted(i1,i2,&
                                sxb(ip),xc_bunch(ip),&
                                syb(ip),yc_bunch(ip),&
                                syb(ip),zc_bunch(ip),&
                                gam(ip),&
                       epsy(ip),epsz(ip),cut,dg(ip),bpart,bch,dx,dy,dz,rhob(ip))
-   if(bunch_shape(ip)==1 .and. particle_weight(ip)=='equal') &
+   if(bunch_shape(ip)==1 .and. ppc_bunch(i)==-1) & !equal-weight
                           call generate_bunch_bigaussian_equal(i1,i2,&
                                sxb(ip),xc_bunch(ip),&
                                syb(ip),yc_bunch(ip),&
@@ -2991,13 +2990,13 @@ case(6)
                                gam(ip),&
                       epsy(ip),epsz(ip),cut,dg(ip),bpart,bch,dx,dy,dz,rhob(ip))
 
-   if(bunch_shape(ip)==2 .and. particle_weight(ip)=='weighted') &
+   if(bunch_shape(ip)==2 .and. ppc_bunch(i)>0) & !weighted-option
                           call generate_bunch_triangularZ_uniformR_weighted(i1,i2,&
                                xc_bunch(ip),yc_bunch(ip),zc_bunch(ip),&
                                sxb(ip),syb(ip),syb(ip),gam(ip),&
                                epsy(ip),epsz(ip),dg(ip),&
                                bpart,Charge_right(ip),Charge_left(ip),bch,dx,dy,dz)
-   if(bunch_shape(ip)==2 .and. particle_weight(ip)=='equal') &
+   if(bunch_shape(ip)==2 .and. ppc_bunch(i)==-1) & !equal-weight
                            call generate_bunch_triangularZ_uniformR_equal(i1,i2,&
                                 xc_bunch(ip),yc_bunch(ip),zc_bunch(ip),&
                                 sxb(ip),syb(ip),syb(ip),gam(ip),&
@@ -3005,13 +3004,13 @@ case(6)
                                 bpart,Charge_right(ip),Charge_left(ip),bch)
 
 
-   if(bunch_shape(ip)==3 .and. particle_weight(ip)=='weighted') &
+   if(bunch_shape(ip)==3 .and. ppc_bunch(i)>0) & !weighted-option
                            call generate_bunch_triangularZ_normalR_weighted(i1,i2,&
                                 xc_bunch(ip),yc_bunch(ip),zc_bunch(ip),&
                                 sxb(ip),syb(ip),syb(ip),&
                                 gam(ip),epsy(ip),epsz(ip),dg(ip),&
                                 bpart,Charge_right(ip),Charge_left(ip),bch,dx,dy,dz)
-   if(bunch_shape(ip)==3 .and. particle_weight(ip)=='equal') &
+   if(bunch_shape(ip)==3 .and. ppc_bunch(i)==-1) & !equal-weight
                            call generate_bunch_triangularZ_normalR_equal(i1,i2,&
                                 xc_bunch(ip),yc_bunch(ip),zc_bunch(ip),&
                                 sxb(ip),syb(ip),syb(ip),&

@@ -29,6 +29,9 @@
  integer :: n_bunches,bunch_type(5),nb_tot(5),number_of_slices(4),bunch_shape(5)
 
  integer :: np_1,np_2,np_3,np_4,np_5
+ integer :: ppc_bunch(5)
+ integer :: ppc_bunch_1,ppc_bunch_2,ppc_bunch_3,&
+                  ppc_bunch_4,ppc_bunch_5
  integer :: bunch_type_1,bunch_type_2,bunch_type_3,bunch_type_4,bunch_type_5
  integer :: bunch_shape_1,bunch_shape_2,bunch_shape_3,&
                 bunch_shape_4,bunch_shape_5
@@ -57,11 +60,6 @@
  real(dp) :: Charge_left_1,Charge_left_2,Charge_left_3,&
                   Charge_left_4,Charge_left_5
 
-
  logical :: L_particles,L_Twiss(5),L_Bpoloidal,L_EMBunchEvolution
-
- character(len=8) :: particle_weight(5)
- character(len=8) :: particle_weight_1,particle_weight_2,particle_weight_3, &
-                     particle_weight_4,particle_weight_5
 
  end module control_bunch_input
