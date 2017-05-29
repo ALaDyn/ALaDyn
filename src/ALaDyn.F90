@@ -20,6 +20,8 @@
  !  along with ALaDyn.  If not, see <http://www.gnu.org/licenses/>.                                    !
  !*****************************************************************************************************!
 
+!#define ENABLE_GDB_ATTACH
+
  program ALaDyn
 
  use precision_def
@@ -592,6 +594,12 @@
  subroutine start
 
  integer :: nxp,nyp,nzp,ns_ioniz
+
+ !enable loop to attach with gdb only if really needed
+ !WARNING if enabled without needed, the program sleeps at start without doing nothing!
+#ifdef ENABLE_GDB_ATTACH
+ call gdbattach
+#endif
 
  !Read parameters from input.nml file
  call read_main_input

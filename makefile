@@ -25,6 +25,7 @@ FILES       = ALaDyn.F90 \
               control_bunch_input.f90 \
               cpp_folder_tree.cpp \
               find_last_addr.cpp \
+              enable_gdb_attach.cpp \
               der_lib.f90 \
               fft_lib.f90 \
               fstruct_data.f90 \
@@ -71,12 +72,21 @@ osminopedrillo: BOOST_LIB = /disk01/boost/boost_1.60_gcc_5.1/lib/
 osminopedrillo: BOOST_INC = /disk01/boost/boost_1.60_gcc_5.1/include/
 osminopedrillo: all
 
-brew: FFTW_LIB = /usr/local/Cellar/fftw/3.3.6-pl1/lib
-brew: FFTW_INC = /usr/local/Cellar/fftw/3.3.6-pl1/include
-brew: BOOST_LIB = /usr/local/Cellar/boost/1.63.0/lib
-brew: BOOST_INC = /usr/local/Cellar/boost/1.63.0/include
+brew: FFTW_LIB = /usr/local/Cellar/fftw/3.3.6-pl2/lib
+brew: FFTW_INC = /usr/local/Cellar/fftw/3.3.6-pl2/include
+brew: BOOST_LIB = /usr/local/Cellar/boost/1.64.0/lib
+brew: BOOST_INC = /usr/local/Cellar/boost/1.64.0/include
 brew: FFTW_DEF =
 brew: all
+
+brew-debug: FFTW_LIB = /usr/local/Cellar/fftw/3.3.6-pl2/lib
+brew-debug: FFTW_INC = /usr/local/Cellar/fftw/3.3.6-pl2/include
+brew-debug: BOOST_LIB = /usr/local/Cellar/boost/1.64.0/lib
+brew-debug: BOOST_INC = /usr/local/Cellar/boost/1.64.0/include
+brew-debug: FFTW_DEF =
+brew-debug: OPTFC = -fdefault-real-8 -O0 -g -Wall -Wextra -fbacktrace -fbounds-check
+brew-debug: OPTCC = -O0 -g -Wall -Wextra -fbounds-check
+brew-debug: all
 
 perf: OPTFC += -march=native
 perf: OPTCC += -march=native
@@ -269,6 +279,11 @@ $(OBJ_FOLDER)/cpp_folder_tree.mod: $(SRC_FOLDER)/cpp_folder_tree.cpp $(OBJ_FOLDE
 $(OBJ_FOLDER)/find_last_addr.o: $(SRC_FOLDER)/find_last_addr.cpp
 	$(CC) $(OPTCC) -I$(BOOST_INC) -c -o $@ $< $(REDIRECT)
 $(OBJ_FOLDER)/find_last_addr.mod: $(SRC_FOLDER)/find_last_addr.cpp $(OBJ_FOLDER)/find_last_addr.o
+	@true
+
+$(OBJ_FOLDER)/enable_gdb_attach.o: $(SRC_FOLDER)/enable_gdb_attach.cpp
+	$(CC) $(OPTCC) -I$(BOOST_INC) -c -o $@ $< $(REDIRECT)
+$(OBJ_FOLDER)/enable_gdb_attach.mod: $(SRC_FOLDER)/enable_gdb_attach.cpp $(OBJ_FOLDER)/enable_gdb_attach.o
 	@true
 
 $(OBJ_FOLDER)/system_utilities.o: $(SRC_FOLDER)/system_utilities.f90 $(OBJ_FOLDER)/mpi_var.mod

@@ -53,6 +53,8 @@ src/My Advisor XE Results - ALaDyn/
 build_gcc/
 build/
 bin/
+.vs/
+.vscode/
 
 .project
 *.nml

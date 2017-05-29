@@ -2508,24 +2508,22 @@
  !===========================
  jc(:,:,:,:)=0.0
  np=loc_npart(imody,imodz,imodx,ic)
- if(np >0)then
-  call pfields_prepare(ebf,i1,i2,j1,nyf,k1,nzf,nfield,1,1)
-  call env_pfields_prepare(env,jc,i1,i2,j1,nyf,k1,nzf,1,1)
-  ! exit jc(1)=|a|^2/2 at t^n
-  ! exit jc(2:4)=grad|a|^2/2 at t^n
-  !======================================
-  call set_env_acc(ebf,jc,spec(ic),ebfp,np,curr_ndim,dt_loc,xm,ym,zm)
-  !exit ebfp(1:3)=[E+F] ebfp(4:6)=B/gamp, ebfp(7)=wgh*q/gamp at t^n
-  !Fields already multiplied by particle charge
-  !====================
-  call lpf_env_momenta(spec(ic),ebfp,np,dt_loc,Ltz)
-  ! P^{n-1/2} => P^{n+1/2}
-  ! stores in ebfp(1:3)=(x,y,z)^n ebfp(7)=wgh/gamp >0
-  !======================
-  jc(:,:,:,1)=0.0
-  call set_env_density(ebfp,jc,np,curr_ndim,1,xm,ym,zm)
+ call pfields_prepare(ebf,i1,i2,j1,nyf,k1,nzf,nfield,1,1)
+ call env_pfields_prepare(env,jc,i1,i2,j1,nyf,k1,nzf,1,1)
+ ! exit jc(1)=|a|^2/2 at t^n
+ ! exit jc(2:4)=grad|a|^2/2 at t^n
+ !======================================
+ call set_env_acc(ebf,jc,spec(ic),ebfp,np,curr_ndim,dt_loc,xm,ym,zm)
+ !exit ebfp(1:3)=[E+F] ebfp(4:6)=B/gamp, ebfp(7)=wgh*q/gamp at t^n
+ !Fields already multiplied by particle charge
+ !====================
+ call lpf_env_momenta(spec(ic),ebfp,np,dt_loc,Ltz)
+ ! P^{n-1/2} => P^{n+1/2}
+ ! stores in ebfp(1:3)=(x,y,z)^n ebfp(7)=wgh/gamp >0
+ !======================
+ jc(:,:,:,1)=0.0
+ call set_env_density(ebfp,jc,np,curr_ndim,1,xm,ym,zm)
 
- endif
  call env_den_collect(jc,i1,i2,j1,nyf,k1,nzf)
  ! in the envelope equation (A^{n-1},A^n)==> (A^n,A^{n+1})
  ! Jc(1:2)=ompe*<qn/gamp>*A at level t^n
@@ -2533,21 +2531,19 @@
  !(A^n, J^n) => A^{n+1}, A^{n-1}=> A^n
  call env_fields_average(env,jc,i1,i2,j1,nyf,k1,nzf,1,1)
  !exit jc(1)=|A|^2/2 at t^{n+1/2}
- if(np >0)then
-  call set_env_interp(jc,spec(ic),ebfp,np,curr_ndim,xm,ym,zm)
-  !=============================
-  ! exit ebfp(1:3)=grad|A|^2/2 ebfp(4)=|A|^2/2 in 3D
-  ! exit ebfp(1:2)=grad|A|^2/2 ebfp(3)=|A|^2/2 in 2D
-  ! at time level t^{n+1/2} and positions at time t^n
-  !=====================================
-  call lpf_env_positions(spec(ic),ebfp,np,dt_loc,-vbeam)
-  !===========================
-  ! ebfp(1:6) new and old positions for curr J^{n+1/2}
-  ! ebfp(7)=dt*wgh*gam_inv
-  !==============================
-  jc(:,:,:,:)=0.0
-  call curr_accumulate(spec(ic),ebfp,1,np,iform,n_st,xm,ym,zm)
- endif
+ call set_env_interp(jc,spec(ic),ebfp,np,curr_ndim,xm,ym,zm)
+ !=============================
+ ! exit ebfp(1:3)=grad|A|^2/2 ebfp(4)=|A|^2/2 in 3D
+ ! exit ebfp(1:2)=grad|A|^2/2 ebfp(3)=|A|^2/2 in 2D
+ ! at time level t^{n+1/2} and positions at time t^n
+ !=====================================
+ call lpf_env_positions(spec(ic),ebfp,np,dt_loc,-vbeam)
+ !===========================
+ ! ebfp(1:6) new and old positions for curr J^{n+1/2}
+ ! ebfp(7)=dt*wgh*gam_inv
+ !==============================
+ jc(:,:,:,:)=0.0
+ call curr_accumulate(spec(ic),ebfp,1,np,iform,n_st,xm,ym,zm)
  !===========================
  call curr_mpi_collect(jc,i1,i2,j1,nyf,k1,nzf)
  ! Jc(1:3) for curr J^{n+1/2}
