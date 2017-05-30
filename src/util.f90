@@ -807,12 +807,12 @@
 
  !---*** BIGAUSSIAN bunch, same number of particle per cell :: different weights ***---!
  subroutine generate_bunch_bigaussian_weighted( &
-  n1,n2,s_x,x_cm,s_y,y_cm,s_z,z_cm,gm,eps_y,eps_z,cut,dg,bunch,weight,dx,dy,dz,alpha)
- integer,intent(in) :: n1,n2
+  n1,n2,s_x,x_cm,s_y,y_cm,s_z,z_cm,gm,eps_y,eps_z,cut,dg,bunch,weight,dx,dy,dz,alpha,ppcb)
+ integer,intent(in) :: n1,n2,ppcb
  real(dp),intent(in) :: s_x,s_y,s_z,gm,eps_y,eps_z,cut,dg,weight,alpha
  real(dp),intent(in) :: x_cm,y_cm,z_cm,dx,dy,dz
  real(dp),intent(inout) :: bunch(:,:)
- integer :: i,j,np,effecitve_cell_number,npart,ppcb,idx,ix,iy,iz
+ integer :: i,j,np,effecitve_cell_number,npart,idx,ix,iy,iz
  real(dp) :: sigs(6),rnumber(n2-n1+1)
  real(dp) :: v1,rnd,a,xm,pxm,bch,x,y,z
  real(sp) :: ch(2)
@@ -822,7 +822,8 @@
  bch=weight
 
    effecitve_cell_number=bunch_volume_incellnumber(1,s_x,s_y,s_z,dx,dy,dz)
-   ppcb=max((n2-n1+1)/effecitve_cell_number,1)
+   !ppcb=max((n2-n1+1)/effecitve_cell_number,1)
+   write(*,*) 'ppcb calculate',ppcb
 
    allocate(ppcb_positions(ppcb,3))
    do npart=1,ppcb
@@ -832,10 +833,10 @@
     enddo
 
     idx=n1
-     do ix=-int(4.*s_x/dx),int(4.*s_x/dx)
-       do iy=-int(4.*s_y/dy),int(4.*s_y/dy)
-         do iz=-int(4.*s_z/dz),int(4.*s_z/dz)
-           if( (ix*dx/4./s_x)**2+(iy*dy/4./s_y)**2+(iz*dz/4./s_z)**2<1.) then
+     do ix=-int(3.*s_x/dx),int(3.*s_x/dx)
+       do iy=-int(3.*s_y/dy),int(3.*s_y/dy)
+         do iz=-int(3.*s_z/dz),int(3.*s_z/dz)
+           if( (ix*dx/3./s_x)**2+(iy*dy/3./s_y)**2+(iz*dz/3./s_z)**2<1.) then
              do npart=1,ppcb
                x=ppcb_positions(npart,1)+(ix*dx)+x_cm
                y=ppcb_positions(npart,2)+(iy*dy)+y_cm

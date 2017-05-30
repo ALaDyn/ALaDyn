@@ -2957,7 +2957,7 @@ case(6)
       if(pe0) write(*,'(A,1I1,A,1I3,A,1I10)') 'bunch(',i,') :: ppc =',ppc_bunch(i),' :: total number of bunch particles =',nb_tot(i)
    endif
    if(ppc_bunch(i)==-1 .and. nb_tot(i)>0) then
-       if(pe0) write(*,'(A,1I1,A)') 'bunch(',i,') :: equal :: option (all particle have the same weight)'
+       if(pe0) write(*,'(A,1I1,A,1I10)') 'bunch(',i,') :: equal :: option (all particle have the same weight) =',nb_tot(i)
    endif
   np_tot=np_tot+nb_tot(i)
  end do
@@ -2975,14 +2975,17 @@ case(6)
    ch(1)=real(j0_norm*jb_norm(ip),sp) !the bunch particles weights
    i2=i1+nb_tot(ip)-1
 
-   if(bunch_shape(ip)==1 .and. ppc_bunch(i)>0) & !weighted-option
+   write(*,*) ip,bunch_shape(ip),ppc_bunch(ip),nb_tot(ip)
+   if(bunch_shape(ip)==1 .and. ppc_bunch(ip)>0) & !weighted-option
+                          write(*,*) 'weighted-option'
                           call generate_bunch_bigaussian_weighted(i1,i2,&
                                sxb(ip),xc_bunch(ip),&
                                syb(ip),yc_bunch(ip),&
                                syb(ip),zc_bunch(ip),&
                                gam(ip),&
-                      epsy(ip),epsz(ip),cut,dg(ip),bpart,bch,dx,dy,dz,rhob(ip))
-   if(bunch_shape(ip)==1 .and. ppc_bunch(i)==-1) & !equal-weight
+                      epsy(ip),epsz(ip),cut,dg(ip),bpart,bch,dx,dy,dz,rhob(ip),ppc_bunch(ip))
+   write(*,*) 'fatto'
+   if(bunch_shape(ip)==1 .and. ppc_bunch(ip)==-1) & !equal-weight
                           call generate_bunch_bigaussian_equal(i1,i2,&
                                sxb(ip),xc_bunch(ip),&
                                syb(ip),yc_bunch(ip),&
@@ -2990,13 +2993,13 @@ case(6)
                                gam(ip),&
                       epsy(ip),epsz(ip),cut,dg(ip),bpart,bch,dx,dy,dz,rhob(ip))
 
-   if(bunch_shape(ip)==2 .and. ppc_bunch(i)>0) & !weighted-option
+   if(bunch_shape(ip)==2 .and. ppc_bunch(ip)>0) & !weighted-option
                           call generate_bunch_triangularZ_uniformR_weighted(i1,i2,&
                                xc_bunch(ip),yc_bunch(ip),zc_bunch(ip),&
                                sxb(ip),syb(ip),syb(ip),gam(ip),&
                                epsy(ip),epsz(ip),dg(ip),&
                                bpart,Charge_right(ip),Charge_left(ip),bch,dx,dy,dz)
-   if(bunch_shape(ip)==2 .and. ppc_bunch(i)==-1) & !equal-weight
+   if(bunch_shape(ip)==2 .and. ppc_bunch(ip)==-1) & !equal-weight
                            call generate_bunch_triangularZ_uniformR_equal(i1,i2,&
                                 xc_bunch(ip),yc_bunch(ip),zc_bunch(ip),&
                                 sxb(ip),syb(ip),syb(ip),gam(ip),&
@@ -3004,13 +3007,13 @@ case(6)
                                 bpart,Charge_right(ip),Charge_left(ip),bch)
 
 
-   if(bunch_shape(ip)==3 .and. ppc_bunch(i)>0) & !weighted-option
+   if(bunch_shape(ip)==3 .and. ppc_bunch(ip)>0) & !weighted-option
                            call generate_bunch_triangularZ_normalR_weighted(i1,i2,&
                                 xc_bunch(ip),yc_bunch(ip),zc_bunch(ip),&
                                 sxb(ip),syb(ip),syb(ip),&
                                 gam(ip),epsy(ip),epsz(ip),dg(ip),&
                                 bpart,Charge_right(ip),Charge_left(ip),bch,dx,dy,dz)
-   if(bunch_shape(ip)==3 .and. ppc_bunch(i)==-1) & !equal-weight
+   if(bunch_shape(ip)==3 .and. ppc_bunch(ip)==-1) & !equal-weight
                            call generate_bunch_triangularZ_normalR_equal(i1,i2,&
                                 xc_bunch(ip),yc_bunch(ip),zc_bunch(ip),&
                                 sxb(ip),syb(ip),syb(ip),&
