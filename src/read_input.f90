@@ -580,7 +580,7 @@ end subroutine read_nml_integrated_background_diagnostic
  subroutine consistency_check_number_of_particles_comp
  if(all(ppc>=1)) then
   call from_ppc_to_npx_npy_npz
- elseif(all(np_per_zc)==-1) then
+ elseif(all(np_per_zc==-1)) then
    np_per_zc=np_per_yc
  endif
  end subroutine consistency_check_number_of_particles_comp
