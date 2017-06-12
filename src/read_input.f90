@@ -580,8 +580,8 @@ end subroutine read_nml_integrated_background_diagnostic
  subroutine consistency_check_number_of_particles_comp
  if(all(ppc>=1)) then
   call from_ppc_to_npx_npy_npz
- else
-  np_per_zc=np_per_yc
+ elseif(all(np_per_zc)==-1) then
+   np_per_zc=np_per_yc
  endif
  end subroutine consistency_check_number_of_particles_comp
 
@@ -726,7 +726,7 @@ end subroutine read_nml_integrated_background_diagnostic
  subroutine select_number_of_bunch_particles(ppc_bunch,np_tot,fill_ppc_bunch,fill_nb_tot)
    integer, intent(in) :: ppc_bunch,np_tot
    integer, intent(inout) :: fill_ppc_bunch,fill_nb_tot
-   
+
    if(ppc_bunch==-1 .and. np_tot==-1) then
      fill_ppc_bunch=1
      fill_nb_tot=-1
