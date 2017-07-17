@@ -820,7 +820,7 @@
  real(dp), allocatable :: ppcb_positions(:,:)
 
  bch=weight
- sigma_cut=3.0
+ sigma_cut=4.0
 
    allocate(ppcb_positions(ppcb,3))
    do npart=1,ppcb
@@ -1001,7 +1001,7 @@ idx=n1
  equivalence(bch,ch)
  real(dp), allocatable :: ppcb_positions(:,:)
  bch=weight
- sigma_cut=3.0
+ sigma_cut=4.0
 
 allocate(ppcb_positions(ppcb,3))
 do npart=1,ppcb
@@ -1200,7 +1200,7 @@ end function shape
    integer :: ix,iy,iz
 
    bunch_volume_incellnumber=0
-   sigma_cut=3
+   sigma_cut=4.0
 
    if(bunch_shape==1) then
      do ix=-int(sigma_cut*s_x/dx),int(sigma_cut*s_x/dx)
