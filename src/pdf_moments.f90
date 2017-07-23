@@ -1288,7 +1288,7 @@ nInside_loc=0
  do ip=1,np_local
         if(mask(ip)) then
                wgh=spec(1)%part(ip,7)
-                mu_gamma_local  = mu_gamma_local + sqrt(   1.0 + spec(1)%part(ip,4)**2 + &
+                mu_gamma_local  = mu_gamma_local + sqrt(1.0 + spec(1)%part(ip,4)**2 + &
                                                   spec(1)%part(ip,5)**2 + &
                                                   spec(1)%part(ip,6)**2 )*charge(1)
         endif
@@ -1301,9 +1301,10 @@ nInside_loc=0
  do ip=1,np_local
         if(mask(ip)) then
                wgh=spec(1)%part(ip,7)
-               s_gamma_local  = s_gamma_local+ (sqrt(1.0 + spec(1)%part(ip,4)**2 + &
+               s_gamma_local  = s_gamma_local + (sqrt(1.0 + spec(1)%part(ip,4)**2 + &
                                              spec(1)%part(ip,5)**2 + &
-                                             spec(1)%part(ip,6)**2 )-mu_gamma(1))**2
+                                             spec(1)%part(ip,6)**2 )-mu_gamma(1))**2 &
+                                             *charge(1)
          endif
  enddo
  !---
