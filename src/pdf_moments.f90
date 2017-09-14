@@ -1179,7 +1179,7 @@ ENDDO
  real(dp) :: corr_y_py_local(1), corr_z_pz_local(1), corr_x_px_local(1) !correlation transverse plane
  real(dp) :: corr_y_py(1), corr_z_pz(1), corr_x_px(1) !correlation transverse plane
  real(dp) :: emittance_y(1), emittance_z(1) !emittance variables
- real(dp) :: weights_local(1),weights(1)
+ real(dp) :: weights_local(1),weights(1),total_charge(1)
  real(dp) :: np_inv
  real(sp) :: charge(2)
  equivalence(charge,wgh)
@@ -1338,15 +1338,17 @@ enddo
  !---
  emittance_y = sqrt( s_y(1)**2 *s_py(1)**2 - corr_y_py(1)**2 )
  emittance_z = sqrt( s_z(1)**2 *s_pz(1)**2 - corr_z_pz(1)**2 )
+ !---
+ total_charge = real(np_per_cell,sp) * weights
 
 
  !--- output ---!
  if(pe0) then
   open(11,file='diagnostics/diagnostic_integrated_background.dat',form='formatted', position='append')
-  !1  2   3   4   5    6    7     8      9      10     11      12      13     14    15    16     17       18       19       20
-  !t,<X>,<Y>,<Z>,<Px>,<Py>,<Pz>,<rmsX>,<rmsY>,<rmsZ>,<rmsPx>,<rmsPy>,<rmsPz>,<Emy>,<Emz>,<Gam>,DGam/Gam,cov<xPx>,cov<yPy>,cov<zPz>
+  !1  2   3   4   5    6    7     8      9      10     11      12      13     14    15    16     17       18       19       20         21
+  !t,<X>,<Y>,<Z>,<Px>,<Py>,<Pz>,<rmsX>,<rmsY>,<rmsZ>,<rmsPx>,<rmsPy>,<rmsPz>,<Emy>,<Emz>,<Gam>,DGam/Gam,cov<xPx>,cov<yPy>,cov<zPz>,total_charge
   write(11,'(100e14.5)') tnow,mu_x,mu_y,mu_z,mu_px,mu_py,mu_pz,s_x,s_y,s_z,s_px,s_py, &
-   s_pz,emittance_y,emittance_z,mu_gamma,s_gamma,corr_x_px,corr_y_py,corr_z_pz
+   s_pz,emittance_y,emittance_z,mu_gamma,s_gamma,corr_x_px,corr_y_py,corr_z_pz,total_charge
   close(11)
  endif
 
