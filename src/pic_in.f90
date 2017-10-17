@@ -2921,8 +2921,7 @@
   np_tot=np_tot+nb_tot(i)
  end do
  cut=3.
- nch=7
- if(ndm==2)nch=5
+ nch=2*ndm+1
  allocate(bpart(nch,np_tot))
  select case(btype)
  case(1)
@@ -3249,7 +3248,7 @@
  nzp=loc_zgrid(imodz)%p_ind(2)
  i2b=i2
  !=======================
- call beam_data(ndim,2,nptot) !cazzo
+ call beam_data(ndim,1,nptot) !cazzo
  ! Generates phase space coordinateis for all beams on bpart(7,np_tot)
  ! bpart in common to all MPI tasks
  xm=loc_xgrid(imodx)%gmin
