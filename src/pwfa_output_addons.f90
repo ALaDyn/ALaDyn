@@ -25,6 +25,7 @@
  use precision_def
  use pic_in
  use pic_out
+ use pic_out_util
  use pic_dump
  use pic_evolve_in_time
  use read_input
@@ -113,8 +114,7 @@
   endif
   do i=1,nvout
    if(L_force_singlefile_output) then
-    if(ibeam==0)call bfields_out(ebf_bunch,ebf_bunch,tnow,i,jump)
-    if(ibeam==1)call bfields_out(ebf_bunch,ebf1_bunch,tnow,i,jump)
+    call bfields_out(ebf_bunch,ebf1_bunch,tnow,i,jump)
    else
     call fields_out_new(ebf_bunch,tnow,i,i+6,jump)
    endif
@@ -123,20 +123,20 @@
  if(nden> 0)then
   ic=0
   call prl_bden_energy_interp(ic)
-  call bden_ene_mom_out(tnow,1,jump)
+  call bden_energy_out(tnow,1,jump)
   do i=1,nsp
    call prl_den_energy_interp(i)
    ic=1
-   call den_ene_mom_out(tnow,i,ic,ic,jump)
+   call den_energy_out(tnow,i,ic,ic,jump)
    if(nden >1)then
      ic=2
-     call den_ene_mom_out(tnow,i,ic,ic,jump)
-     if (nden>2) then
-      call prl_momenta_interp(i)
-      do ic=1,curr_ndim
-       call den_ene_mom_out(tnow,i,ic+2,ic,jump)
-      end do
-   endif
+     call den_energy_out(tnow,i,ic,ic,jump)
+!      if (nden>2) then
+!       call prl_momenta_interp(i)
+!       do ic=1,curr_ndim
+!        call den_energy_out(tnow,i,ic+2,ic,jump)
+!       end do
+!    endif
  endif
   enddo
  endif

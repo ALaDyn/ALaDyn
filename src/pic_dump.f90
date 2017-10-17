@@ -35,27 +35,25 @@
  real(dp),intent(in) :: tloc
  character(13) :: fname='             '
  integer :: np,ic,lun,i,j
- integer :: nxf,nyf,nzf,nf
- integer :: i2b,j2b,k2b,nbf,env_cp
+ integer :: nxf_loc,nyf_loc,nzf_loc,nf
+ integer :: nxfl,i2b,j2b,k2b,nbf,env_cp
  real(dp) :: rdata(10)
- integer :: ndata(10)
+ integer :: ndata(10),nps_loc(4),nbs_loc(5)
  !==============
  write (fname,'(a7,i6.6)') 'dumpout',mype
 
- nxf=size(ebf,1)
- nyf=size(ebf,2)
- nzf=size(ebf,3)
+ nxf_loc=size(ebf,1)
+ nyf_loc=size(ebf,2)
+ nzf_loc=size(ebf,3)
  nf=size(ebf,4)
- i2b=nxf
- j2b=nyf
- k2b=nzf
- nbf=nf
  if(Beam)then
   i2b=size(ebf_bunch,1)
   j2b=size(ebf_bunch,2)
   k2b=size(ebf_bunch,3)
   nbf=size(ebf_bunch,4)
  endif
+ nxfl=0
+ if(Hybrid)nxfl=size(fluid_x_profile)
  !=========================
  ndata=0
  rdata=0.0
@@ -64,29 +62,34 @@
  rdata(3)=ompe
  rdata(4)=targ_in
  rdata(5)=targ_end
- rdata(6)=lp_in
+ rdata(6)=lp_in(1)
  rdata(7)=xp0_out
  rdata(8)=xp1_out
 
  ndata(1)=it_loc
- ndata(2)=nxf
- ndata(3)=nyf
- ndata(4)=nzf
+ ndata(2)=nxf_loc
+ ndata(3)=nyf_loc
+ ndata(4)=nzf_loc
  ndata(5)=nf
  ndata(6)=nptx_max
  ndata(7)=npty
- ndata(8)=npt_buffer
+ ndata(8)=npt_buffer(1)
  ndata(9)=size(x)
+ ndata(10)=nxfl
  !==============
  lun=10
  open (lun,file='dumpRestart/'//fname//'.bin',form='unformatted',status='unknown')
  write(lun)rdata(1:10)
  write(lun)ndata(1:10)
  write(lun)nptx(1:nsp)
+ write(lun)sptx_max(1:nsp)
  i=ndata(9)
  write(lun)x(1:i)
  !-----------------------------
  if(targ_end > xmax)then
+  if(Hybrid)then
+   write(lun)fluid_x_profile(1:nxfl)
+  endif
   do i=1,nsp
    write(lun)loc_npty(i),loc_nptz(i)
   end do
@@ -112,6 +115,11 @@
  if(Envelope)then
   env_cp=size(env,4)
   write(lun)env(:,:,:,:)
+  if(Two_color)write(lun)env1(:,:,:,:)
+ endif
+ if(Hybrid)then
+  write(lun)up(:,:,:,:)
+  write(lun)up0(:,:,:,:)
  endif
  if(Beam)then
   write(lun)ebf_bunch(1:i2b,1:j2b,1:k2b,1:nbf)
@@ -121,6 +129,10 @@
  endif
  !========================================Particle section
  if(Part)then
+  do i=1,nsp
+   nps_loc(i)=size(spec(i)%part,1)
+  end do
+  write(lun)nps_loc(1:nsp)
   write(lun)loc_npart(0:npe_yloc-1,0:npe_zloc-1,0:npe_xloc-1,1:nsp)
   do ic=1,nsp
    np=loc_npart(imody,imodz,imodx,ic)
@@ -131,6 +143,10 @@
   end do
  endif
  if(Beam)then
+  do i=1,nsb
+   nbs_loc(i)=size(bunch(i)%part,1)
+  end do
+  write(lun)nbs_loc(1:nsb)
   write(lun)loc_nbpart(0:npe_yloc-1,0:npe_zloc-1,0:npe_xloc-1,1:nsb)
   do ic=1,nsb
    np=loc_nbpart(imody,imodz,imodx,ic)
@@ -149,10 +165,10 @@
  integer,intent(out) :: it_loc
  real(dp),intent(out) :: tloc
  character(13) :: fname='             '
- integer :: np,nps_loc(4),np_max
+ integer :: np,nps_loc(4),nbs_loc(5),np_max
  integer :: n1_old,lun,i,j,ic
- integer :: nxf,nyf,nzf,nf,npt_max
- integer :: i2b,j2b,k2b,nbf,env_cp
+ integer :: nxf_loc,nyf_loc,nzf_loc,nf,npt_max
+ integer :: i2b,j2b,k2b,nbf,env_cp,nxfl
  integer :: n1_loc,n2_loc,n3_loc,nf_loc
  real(dp) :: rdata(10)
  integer :: ndata(10)
@@ -167,13 +183,14 @@
  read(lun)rdata(1:10)
  read(lun)ndata(1:10)
  read(lun)nptx(1:nsp)
+ read(lun)sptx_max(1:nsp)
  !=============================
  tloc=rdata(1)
  j0_norm=rdata(2)
  ompe=rdata(3)
  targ_in=rdata(4)
  targ_end=rdata(5)
- lp_in=rdata(6)
+ lp_in(1)=rdata(6)
 
  it_loc=ndata(1)
  n1_loc=ndata(2)
@@ -185,6 +202,7 @@
  nptz=npty
  npt_max=ndata(8)
  n1_old=ndata(9)
+ nxfl=ndata(10)
  !=======================================
  !=======================================
  allocate(xx(n1_old))
@@ -204,6 +222,10 @@
  endif
  !===================
  if(targ_end > xmax)then
+  if(nxfl>0)then
+   allocate(fluid_x_profile(nxfl))
+   read(lun)fluid_x_profile(1:nxfl)
+  endif
   do i=1,nsp
    read(lun)loc_npty(i),loc_nptz(i)
   end do
@@ -231,14 +253,10 @@
  endif
  !=========================
  !=============== field dimensions
- nxf=size(ebf,1)
- nyf=size(ebf,2)
- nzf=size(ebf,3)
+ nxf_loc=size(ebf,1)
+ nyf_loc=size(ebf,2)
+ nzf_loc=size(ebf,3)
  nf=size(ebf,4)
- i2b=nxf
- j2b=nyf
- k2b=nzf
- nbf=nf
  if(Beam)then
   i2b=size(ebf_bunch,1)
   j2b=size(ebf_bunch,2)
@@ -250,6 +268,11 @@
  if(Envelope)then
   env_cp=size(env,4)
   read(lun)env(:,:,:,:)
+  if(Two_color)read(lun)env1(:,:,:,:)
+ endif
+ if(Hybrid)then
+  read(lun)up(:,:,:,:)
+  read(lun)up0(:,:,:,:)
  endif
  if(Beam)then
   read(lun)ebf_bunch(1:i2b,1:j2b,1:k2b,1:nbf)
@@ -259,9 +282,8 @@
  endif
  !=========== end field section
  if(Part)then
+  read(lun)nps_loc(1:nsp)
   read(lun)loc_npart(0:npe_yloc-1,0:npe_zloc-1,0:npe_xloc-1,1:nsp)
-  nps_loc(1:nsp)=loc_npart(imody,imodz,imodx,1:nsp)
-  nps_loc(1)=max(nps_loc(1),npt_max)
   np_max=nps_loc(1)
   call p_alloc(np_max,nd2+1,nps_loc,nsp,LPf_ord,1,1,mem_psize)
   !=========================
@@ -273,10 +295,10 @@
    endif
   end do
   if(Beam)then
+   read(lun)nbs_loc(1:nsb)
    read(lun)loc_nbpart(0:npe_yloc-1,0:npe_zloc-1,0:npe_xloc-1,1:nsb)
-   nps_loc(1:nsb)=loc_nbpart(imody,imodz,imodx,1:nsb)
-   np_max=maxval(nps_loc(1:nsb))
-   if(np_max >0)call p_alloc(np_max,nd2+1,nps_loc,nsb,LPf_ord,1,2,mem_psize)
+   np_max=maxval(nbs_loc(1:nsb))
+   if(np_max >0)call p_alloc(np_max,nd2+1,nbs_loc,nsb,LPf_ord,1,2,mem_psize)
    !========================
    do ic=1,nsb
     np=loc_nbpart(imody,imodz,imodx,ic)

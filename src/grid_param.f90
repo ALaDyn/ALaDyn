@@ -31,9 +31,9 @@
  type(grid),allocatable :: loc_rgrid(:),loc_ygrid(:),loc_zgrid(:),loc_xgrid(:)
  type(sgrid) :: str_xgrid,str_ygrid,str_zgrid
  !fft grid
- real(dp),allocatable :: akx(:),aky(:),akz(:),sty(:)
- real(dp),allocatable :: ak2x(:),ak2y(:),ak2z(:),kern(:),kern2(:,:)
- real(dp),allocatable :: skx(:),sky(:),skz(:)
+ real(dp),allocatable :: akx(:,:),aky(:,:),akz(:,:),sty(:,:)
+ real(dp),allocatable :: ak2x(:,:),ak2y(:,:),ak2z(:,:),kern(:),kern2(:,:)
+ real(dp),allocatable :: skx(:,:),sky(:,:),skz(:,:)
  !==================
  real(dp),allocatable :: loc_yg(:,:,:),loc_zg(:,:,:),loc_xg(:,:,:)
  real(dp),allocatable :: x(:),xw(:),y(:),z(:),dx1(:),dy1(:),dz1(:)
@@ -617,114 +617,110 @@
  end subroutine set_grid
 
  !--------------------------
-
- subroutine set_ftgrid(n1,n2,n3,ksh,lxbox,lybox)
- integer,intent(in) :: n1,n2,n3,ksh
+ subroutine set_ftgrid(n1,n2,n3,lxbox,lybox)
+ integer,intent(in) :: n1,n2,n3
  real(dp),intent(in) :: lxbox,lybox
  integer :: i
  real(dp) :: wkx,wky,wkz
 
+
+ allocate(aky(n2+2,0:2),akz(n3+2,0:2))
+ allocate(sky(n2+2,0:2),skz(n3+2,0:2))
+ allocate(ak2y(n2+2,0:2),ak2z(n3+2,0:2),ak2x(n1+1,0:2))
+ allocate(akx(1:n1+1,0:2),skx(1:n1+1,0:2))
+  akx(:,0:2)=0.0
+  ak2x(:,0:2)=0.0
+  aky(:,0:2)=0.0
+  ak2y(:,0:2)=0.0
+  akz(:,0:2)=0.0
+  ak2z(:,0:2)=0.0
+  skx(:,0:2)=0.0
+  sky(:,0:2)=0.0
+  skz(:,0:2)=0.0
+!================
+!  Sets wave number grid for all configurations
+!=============================================
+                    !case(0)  ! staggered k-grid
  wkx=2.*acos(-1.)/lxbox !lxbox=x(n1+1)-x(1)
  wky=2.*acos(-1.)/lybox !lybox=y(n2+1)-y(1)
 
  wkz=wky
-
- allocate(aky(n2+2),akz(n3+2))
- allocate(sky(n2+2),skz(n3+2))
- allocate(ak2y(n2+2),ak2z(n3+2),ak2x(n1+1))
- allocate(akx(1:n1+1),skx(1:n1+1))
-
- ak2x=0.0
- select case(ksh)
- case(0)  ! staggered k-grid
-  akx=0.0
   do i=1,n1/2
-   akx(i)=wkx*(real(i,dp)-0.5)
-   skx(i)=2.*sin(0.5*dx*akx(i))/dx
+   akx(i,0)=wkx*(real(i,dp)-0.5)
+   skx(i,0)=2.*sin(0.5*dx*akx(i,0))/dx
   end do
-  aky=0.0
-  ak2y=0.0
+  ak2x(1:n1,0)=akx(1:n1,0)*akx(1:n1,0)
   if(n2>1)then
    do i=1,n2/2
-    aky(i)=wky*(real(i,dp)-0.5)
-    aky(n2+1-i)=-aky(i)
+    aky(i,0)=wky*(real(i,dp)-0.5)
+    aky(n2+1-i,0)=-aky(i,0)
    end do
+   ak2y(1:n2,0)=aky(1:n2,0)*aky(1:n2,0)
    do i=1,n2
-    sky(i)=2.*sin(0.5*dy*aky(i))/dy
+    sky(i,0)=2.*sin(0.5*dy*aky(i,0))/dy
    end do
-   ak2y=aky*aky
   endif
-  akz=0.0
-  ak2z=0.0
   if(n3 >1)then
    do i=1,n3/2
-    akz(i)=wkz*(real(i,dp)-0.5)
-    akz(n3+1-i)=-akz(i)
+    akz(i,0)=wkz*(real(i,dp)-0.5)
+    akz(n3+1-i,0)=-akz(i,0)
    end do
    do i=1,n3
-    skz(i)=2.*sin(0.5*dz*akz(i))/dz
+    skz(i,0)=2.*sin(0.5*dz*akz(i,0))/dz
    end do
-   ak2z=akz*akz
+   ak2z(1:n3,0)=akz(1:n3,0)*akz(1:n3,0)
   endif
 
- case(1)    !standard FT k-grid
+                      !case(1)    !standard FT k-grid
   do i=1,n1/2
-   akx(i)=wkx*real(i-1,dp)
-   akx(n1+2-i)=-akx(i)
+   akx(i,1)=wkx*real(i-1,dp)
+   akx(n1+2-i,1)=-akx(i,1)
   end do
+  ak2x(1:n1,1)=akx(1:n1,1)*akx(1:n1,1)
   do i=1,n1+1
-   skx(i)=2.*sin(0.5*dx*akx(i))/dx
+   skx(i,1)=2.*sin(0.5*dx*akx(i,1))/dx
   end do
-  aky=0.0
-  ak2y=0.0
   if(n2 > 1)then
    do i=1,n2/2
-    aky(i)=wky*real(i-1,dp)
-    aky(n2+2-i)=-aky(i)
-    sky(i)=2.*sin(0.5*dy*aky(i))/dy
+    aky(i,1)=wky*real(i-1,dp)
+    aky(n2+2-i,1)=-aky(i,1)
+    sky(i,1)=2.*sin(0.5*dy*aky(i,1))/dy
    end do
-   ak2y=aky*aky
+   ak2y(1:n2,1)=aky(1:n2,1)*aky(1:n2,1)
   endif
-  akz=0.0
-  ak2z=0.0
   if(n3 > 1)then
    do i=1,n3/2
-    akz(i)=wkz*real(i-1,dp)
-    akz(n3+2-i)=-akz(i)
+    akz(i,1)=wkz*real(i-1,dp)
+    akz(n3+2-i,1)=-akz(i,1)
    end do
    do i=1,n3
-    skz(i)=2.*sin(0.5*dz*akz(i))/dz
+    skz(i,1)=2.*sin(0.5*dz*akz(i,1))/dz
    end do
-   ak2z=akz*akz
+   ak2z(1:n3,1)=akz(1:n3,1)*akz(1:n3,1)
   endif
 
- case(2)  ! for the sine/cosine transform
+                         !case(2)  ! for the sine/cosine transform
   wkx=acos(-1.0)/lxbox
   wky=acos(-1.0)/lybox
   wkz=wky
   do i=1,n1+1
-   akx(i)=wkx*real(i-1,dp)
-   skx(i)=2.*sin(0.5*dx*akx(i))/dx
+   akx(i,2)=wkx*real(i-1,dp)
+   skx(i,2)=2.*sin(0.5*dx*akx(i,2))/dx
   end do
-  aky=0.0
-  ak2y=0.0
   if(n2>1)then
    do i=1,n2+1
-    aky(i)=wky*real(i-1,dp)
-    sky(i)=2.*sin(0.5*dy*aky(i))/dy
+    aky(i,2)=wky*real(i-1,dp)
+    sky(i,2)=2.*sin(0.5*dy*aky(i,2))/dy
    end do
-   ak2y=aky*aky
+   ak2y(1:n2,2)=aky(1:n2,2)*aky(1:n2,2)
   endif
-  akz=0.0
-  ak2z=0.0
   if(n3 >1)then
    do i=1,n3+1
-    akz(i)=wkz*real(i-1,dp)
-    skz(i)=2.*sin(0.5*dz*akz(i))/dz
+    akz(i,2)=wkz*real(i-1,dp)
+    skz(i,2)=2.*sin(0.5*dz*akz(i,2))/dz
    end do
-   ak2z=akz*akz
+   ak2z(1:n3,2)=akz(1:n3,2)*akz(1:n3,2)
   endif
- end select
  end subroutine set_ftgrid
 
  end module grid_param

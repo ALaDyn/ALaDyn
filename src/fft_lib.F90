@@ -66,7 +66,6 @@
    cfhy(i)=cos(real(i-1,dp)*wk)
    sfhy(i)=sin(real(i-1,dp)*wk)
   end do
-  if(n3>2)then
    allocate(w3(n3+2),cfhz(n3),sfhz(n3))
    w3=0.0
    call dfftw_plan_dft_r2c_1d(plan3,n3,w3,w3,FFTW_ESTIMATE)
@@ -76,7 +75,6 @@
     cfhz(i)=cos(real(i-1,dp)*wk)
     sfhz(i)=sin(real(i-1,dp)*wk)
    end do
-  endif
  case(1)
   allocate(w1(n1+2))
   w1=0.0
@@ -87,12 +85,10 @@
   w2=0.0
   call dfftw_plan_dft_r2c_1d(plan2,n2,w2,w2,FFTW_ESTIMATE)
   call dfftw_plan_dft_c2r_1d(iplan2,n2,w2,w2,FFTW_ESTIMATE)
-  if(n3>1)then
    allocate(w3(n3+2))
    w3=0.0
    call dfftw_plan_dft_r2c_1d(plan3,n3,w3,w3,FFTW_ESTIMATE)
    call dfftw_plan_dft_c2r_1d(iplan3,n3,w3,w3,FFTW_ESTIMATE)
-  endif
  case(2) !for sin/cos transforms
   allocate(w1(2*n1+2))
   w1=0.0
@@ -104,12 +100,10 @@
    call dfftw_plan_dft_r2c_1d(plan2,2*n2,w2,w2,FFTW_ESTIMATE)
    call dfftw_plan_dft_c2r_1d(iplan2,2*n2,w2,w2,FFTW_ESTIMATE)
   endif
-  if(n3>1)then
    allocate(w3(2*n3+2))
    w3=0.0
    call dfftw_plan_dft_r2c_1d(plan3,2*n3,w3,w3,FFTW_ESTIMATE)
    call dfftw_plan_dft_c2r_1d(iplan3,2*n3,w3,w3,FFTW_ESTIMATE)
-  endif
  end select
  end subroutine ftw_init
  !----------------------
@@ -561,7 +555,7 @@
  endif
  end subroutine ft_kern
  !==========================
- subroutine ftw1d_sin(w,n1,n2,n3,is,dir,sym)
+ subroutine ftw1d_sc(w,n1,n2,n3,is,dir,sym)
  real(dp),intent(inout) :: w(:,:,:)
 
  integer,intent(in) :: n1,n2,n3,is,dir,sym
@@ -722,7 +716,7 @@
   endif
   if(allocated(cw))deallocate(cw)
  end select
- end subroutine ftw1d_sin
+ end subroutine ftw1d_sc
 
 
 #else
@@ -773,7 +767,6 @@
    sfhy(i)=sin(real(i-1,dp)*wk)
   end do
 
-  if(n3>2)then
    allocate(w3(n3+2),cfhz(n3),sfhz(n3))
    allocate(w3c(n3+2))
    w3=0.0
@@ -785,8 +778,6 @@
     cfhz(i)=cos(real(i-1,dp)*wk)
     sfhz(i)=sin(real(i-1,dp)*wk)
    end do
-  endif
-
  case(1)
   allocate(w1(n1+2))
   allocate(w1c(n1+2))
@@ -802,16 +793,14 @@
   plan2 = fftw_plan_dft_r2c_1d(n2,w2,w2c,FFTW_ESTIMATE)
   iplan2 = fftw_plan_dft_c2r_1d(n2,w2c,w2,FFTW_ESTIMATE)
 
-  if(n3>1)then
    allocate(w3(n3+2))
    allocate(w3c(n3+2))
    w3=0.0
    w3c=0.0
    plan3 = fftw_plan_dft_r2c_1d(n3,w3,w3c,FFTW_ESTIMATE)
    iplan3 = fftw_plan_dft_c2r_1d(n3,w3c,w3,FFTW_ESTIMATE)
-  endif
 
- case(2)
+ case(2)              !for sin/cosine transforms
   allocate(w1(2*n1+2))
   allocate(w1c(2*n1+2))
   w1=0.0
@@ -826,14 +815,12 @@
   plan2 = fftw_plan_dft_r2c_1d(2*n2,w2,w2c,FFTW_ESTIMATE)
   iplan2 = fftw_plan_dft_c2r_1d(2*n2,w2c,w2,FFTW_ESTIMATE)
 
-  if(n3>2)then
    allocate(w3(2*n3+2))
    allocate(w3c(2*n3+2))
    w3=0.0
    w3c=0.0
    plan3 = fftw_plan_dft_r2c_1d(2*n3,w3,w3c,FFTW_ESTIMATE)
    iplan3 = fftw_plan_dft_c2r_1d(2*n3,w3c,w3,FFTW_ESTIMATE)
-  endif
  end select
  end subroutine ftw_init
 
@@ -1091,6 +1078,8 @@
  integer,intent(in) :: n1,n2,n3,is,dir
  integer :: ix,iy,iz,i1,i2,n1_tr,n2_tr
  real(dp) :: sc,wrr,wir,wri,wii
+!============
+! 1D fft along one of the dir=x,y,z coordinate
 
  select case(dir)
  case(1)
@@ -1318,13 +1307,18 @@
 
  !==========================
 
- subroutine ftw1d_sin(w,n1,n2,n3,is,dir,sym)
+ subroutine ftw1d_sc(w,n1,n2,n3,is,dir,sym)
  real(dp),intent(inout) :: w(:,:,:)
 
  integer,intent(in) :: n1,n2,n3,is,dir,sym
  integer :: ix,iy,iz,i2,n1_tr,n2_tr
  real(dp) :: sc
  integer :: ndb
+!======================================
+!  1D sin/cos transform along a dir=x,y,z coordinate
+! sym =1 is for sin transform
+! else is for cosine transform
+!========================================
 
  select case(dir)
  case(1)
@@ -1487,7 +1481,7 @@
   endif
   if(allocated(cw))deallocate(cw)
  end select
- end subroutine ftw1d_sin
+ end subroutine ftw1d_sc
 
 
 #endif

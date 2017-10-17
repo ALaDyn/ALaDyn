@@ -43,6 +43,7 @@
 
  integer :: mpi_err
  integer,allocatable :: loc_npart(:,:,:,:),loc_nbpart(:,:,:,:)
+ integer,allocatable :: loc_ne_ionz(:,:,:)
  integer,allocatable :: yp_next(:),yp_prev(:)
  integer,allocatable :: zp_next(:),zp_prev(:)
  integer,allocatable :: xp_next(:),xp_prev(:)
@@ -163,6 +164,9 @@
  !========================================
  allocate(loc_npart(0:npe_yloc-1,0:npe_zloc-1,0:npe_xloc-1,1:pkind))
  loc_npart(0:npe_yloc-1,0:npe_zloc-1,0:npe_xloc-1,1:pkind)=0
+ allocate(loc_ne_ionz(0:npe_yloc-1,0:npe_zloc-1,0:npe_xloc-1))
+ loc_ne_ionz(0:npe_yloc-1,0:npe_zloc-1,0:npe_xloc-1)=0
+!============================
  if(model >4)then
   allocate(loc_nbpart(0:npe_yloc-1,0:npe_zloc-1,0:npe_xloc-1,1:bkind))
   loc_nbpart(0:npe_yloc-1,0:npe_zloc-1,0:npe_xloc-1,1:bkind)=0
@@ -1317,39 +1321,35 @@
  !
  end subroutine processor_grid_diag
  !====================================
- subroutine pftw3d_sin(w,n1,n2,n2_loc,n3,n3_loc,is,ft_mod)
+ subroutine pftw2d_sc(w,n1,n2,n2_loc,n3,n3_loc,is,sym)
  real(dp),intent(inout) :: w(:,:,:)
- integer,intent(in) :: n1,n2,n2_loc,n3,n3_loc,is,ft_mod
- integer :: n1_loc,sym
+ integer,intent(in) :: n1,n2,n2_loc,n3,n3_loc,is,sym
+ integer :: n1_loc
+ !performs a 2D FFT sin/cosine`on the (y,z) coordinates for a 3D data (x,y,z)
+ !sym=1 for a sine transform
+ !sym=2 for a cosine transform
 
- sym=1
  select case(is)
- case(-1)
-  if(ft_mod==1)then
-   call ftw1d_sin(w,n1,n2_loc,n3_loc,is,1,sym)
-  else
-   call ftw1d_sin(w,n1,n2_loc,n3_loc,is,1,ft_mod)
-  endif
-
+ case(-1)         !
   if(n2 <=2)return
   if(prly)then
    n1_loc=n1/npe_yloc
    call swap_xy_3data_inv(w,fp1,n1_loc,n2_loc,n3_loc)
 
-   call ftw1d_sin(fp1,n1_loc,n2,n3_loc,is,2,sym)
+   call ftw1d_sc(fp1,n1_loc,n2,n3_loc,is,2,sym)
    call swap_xy_3data(fp1,w,n1_loc,n2_loc,n3_loc)
   else
-   call ftw1d_sin(w,n1,n2,n3_loc,is,2,sym)
+   call ftw1d_sc(w,n1,n2,n3_loc,is,2,sym)
   endif
   !=====================
   if(n3<=2)return
   if(npe_zloc >1) then
    n1_loc=n1/npe_zloc
    call swap_xz_3data_inv(w,fp2,n1_loc,n2_loc,n3_loc)
-   call ftw1d_sin(fp2,n1_loc,n2_loc,n3,is,3,sym)
+   call ftw1d_sc(fp2,n1_loc,n2_loc,n3,is,3,sym)
    call swap_xz_3data(fp2,w,n1_loc,n2_loc,n3_loc)
   else
-   call ftw1d_sin(w,n1,n2_loc,n3,is,3,sym)
+   call ftw1d_sc(w,n1,n2_loc,n3,is,3,sym)
   endif
   !======== exit w(loc)
  case(1)
@@ -1359,10 +1359,10 @@
    if(npe_zloc >1)then
     n1_loc=n1/npe_zloc
     call swap_xz_3data_inv(w,fp2,n1_loc,n2_loc,n3_loc)
-    call ftw1d_sin(fp2,n1_loc,n2_loc,n3,is,3,sym)
+    call ftw1d_sc(fp2,n1_loc,n2_loc,n3,is,3,sym)
     call swap_xz_3data(fp2,w,n1_loc,n2_loc,n3_loc)
    else
-    call ftw1d_sin(w,n1,n2_loc,n3,is,3,sym)
+    call ftw1d_sc(w,n1,n2_loc,n3,is,3,sym)
    endif
   endif
   !=================
@@ -1370,22 +1370,96 @@
    if(prly)then
     n1_loc=n1/npe_yloc
     call swap_xy_3data_inv(w,fp1,n1_loc,n2_loc,n3_loc)
-    call ftw1d_sin(fp1,n1_loc,n2,n3_loc,is,2,sym)
+    call ftw1d_sc(fp1,n1_loc,n2,n3_loc,is,2,sym)
     call swap_xy_3data(fp1,w,n1_loc,n2_loc,n3_loc)
    else
-    call ftw1d_sin(w,n1,n2,n3_loc,is,2,sym)
+    call ftw1d_sc(w,n1,n2,n3_loc,is,2,sym)
    endif
-  endif
-  if(ft_mod==1)then
-   call ftw1d_sin(w,n1,n2_loc,n3_loc,is,1,sym)
-  else
-   call ftw1d_sin(w,n1,n2_loc,n3_loc,is,1,ft_mod)
   endif
  end select
  !===================
  !exit w(loc)
- end subroutine pftw3d_sin
+ end subroutine pftw2d_sc
+!========================
+ subroutine pftw3d_sc(w,n1,n2,n2_loc,n3,n3_loc,is,sym)
+ real(dp),intent(inout) :: w(:,:,:)
+ integer,intent(in) :: n1,n2,n2_loc,n3,n3_loc,is,sym
+ integer :: n1_loc
+
+ select case(is)
+ case(-1)
+  call ftw1d_sc(w,n1,n2_loc,n3_loc,is,1,sym)
+  call pftw2d_sc(w,n1,n2,n2_loc,n3,n3_loc,is,sym)
+ case(1)
+  ! enters w(loc)
+  call pftw2d_sc(w,n1,n2,n2_loc,n3,n3_loc,is,sym)
+  !========================
+   call ftw1d_sc(w,n1,n2_loc,n3_loc,is,1,sym)
+ end select
+ !===================
+ !exit w(loc)
+ end subroutine pftw3d_sc
  !============================
+ subroutine pftw2d(w,n1,n2,n2_loc,n3,n3_loc,is)
+ real(dp),intent(inout) :: w(:,:,:)
+ integer,intent(in) :: n1,n2,n2_loc,n3,n3_loc,is
+ integer :: n1_loc,dir
+
+ select case(is)
+ case(-1)
+  if(n2 <=2)return
+  dir=2
+  if(prly)then
+   n1_loc=n1/npe_yloc
+   call swap_xy_3data_inv(w,fp1,n1_loc,n2_loc,n3_loc)
+   call ftw1d(fp1,n1_loc,n2,n3_loc,is,dir)
+   call swap_xy_3data(fp1,w,n1_loc,n2_loc,n3_loc)
+  else
+   call ftw1d(w,n1,n2,n3_loc,is,dir)
+  endif
+  !=====================
+  if(n3<=2)return
+  dir=3
+  if(npe_zloc >1) then
+   n1_loc=n1/npe_zloc
+   call swap_xz_3data_inv(w,fp2,n1_loc,n2_loc,n3_loc)
+   call ftw1d(fp2,n1_loc,n2_loc,n3,is,dir)
+   call swap_xz_3data(fp2,w,n1_loc,n2_loc,n3_loc)
+  else
+   call ftw1d(w,n1,n2_loc,n3,is,dir)
+  endif
+  !======== exit w(loc)
+ case(1)
+  ! enters w(loc)
+  !========================
+  if(n3>1)then
+   dir=3
+   if(npe_zloc >1)then
+    n1_loc=n1/npe_zloc
+    call swap_xz_3data_inv(w,fp2,n1_loc,n2_loc,n3_loc)
+    call ftw1d(fp2,n1_loc,n2_loc,n3,is,dir)
+    call swap_xz_3data(fp2,w,n1_loc,n2_loc,n3_loc)
+   else
+    call ftw1d(w,n1,n2_loc,n3,is,dir)
+   endif
+  endif
+  !=================
+  if(n2 >1)then
+   dir=2
+   if(prly)then
+    n1_loc=n1/npe_yloc
+    call swap_xy_3data_inv(w,fp1,n1_loc,n2_loc,n3_loc)
+    call ftw1d(fp1,n1_loc,n2,n3_loc,is,dir)
+    call swap_xy_3data(fp1,w,n1_loc,n2_loc,n3_loc)
+   else
+    call ftw1d(w,n1,n2,n3_loc,is,dir)
+   endif
+  endif
+ end select
+ !===================
+ !exit w(loc)
+ end subroutine pftw2d
+!====================================
  subroutine pftw3d(w,n1,n2,n2_loc,n3,n3_loc,is)
  real(dp),intent(inout) :: w(:,:,:)
  integer,intent(in) :: n1,n2,n2_loc,n3,n3_loc,is
@@ -1396,51 +1470,11 @@
 
   call ftw1d(w,n1,n2_loc,n3_loc,is,1)
 
-  if(n2 <=2)return
-  if(prly)then
-   n1_loc=n1/npe_yloc
-   call swap_xy_3data_inv(w,fp1,n1_loc,n2_loc,n3_loc)
+  call pftw2d(w,n1,n2,n2_loc,n3,n3_loc,is)
 
-   call ftw1d(fp1,n1_loc,n2,n3_loc,is,2)
-   call swap_xy_3data(fp1,w,n1_loc,n2_loc,n3_loc)
-  else
-   call ftw1d(w,n1,n2,n3_loc,is,2)
-  endif
-  !=====================
-  if(n3<=2)return
-  if(npe_zloc >1) then
-   n1_loc=n1/npe_zloc
-   call swap_xz_3data_inv(w,fp2,n1_loc,n2_loc,n3_loc)
-   call ftw1d(fp2,n1_loc,n2_loc,n3,is,3)
-   call swap_xz_3data(fp2,w,n1_loc,n2_loc,n3_loc)
-  else
-   call ftw1d(w,n1,n2_loc,n3,is,3)
-  endif
-  !======== exit w(loc)
  case(1)
-  ! enters w(loc)
-  !========================
-  if(n3>1)then
-   if(npe_zloc >1)then
-    n1_loc=n1/npe_zloc
-    call swap_xz_3data_inv(w,fp2,n1_loc,n2_loc,n3_loc)
-    call ftw1d(fp2,n1_loc,n2_loc,n3,is,3)
-    call swap_xz_3data(fp2,w,n1_loc,n2_loc,n3_loc)
-   else
-    call ftw1d(w,n1,n2_loc,n3,is,3)
-   endif
-  endif
-  !=================
-  if(n2 >1)then
-   if(prly)then
-    n1_loc=n1/npe_yloc
-    call swap_xy_3data_inv(w,fp1,n1_loc,n2_loc,n3_loc)
-    call ftw1d(fp1,n1_loc,n2,n3_loc,is,2)
-    call swap_xy_3data(fp1,w,n1_loc,n2_loc,n3_loc)
-   else
-    call ftw1d(w,n1,n2,n3_loc,is,2)
-   endif
-  endif
+  call pftw2d(w,n1,n2,n2_loc,n3,n3_loc,is)
+
   call ftw1d(w,n1,n2_loc,n3_loc,is,1)
  end select
  !===================

@@ -29,6 +29,7 @@
  use pic_out
  use pic_dump
  use pic_evolve_in_time
+ use pic_out_util
  use read_input
  use pdf_moments
  use pwfa_output_addons
@@ -65,8 +66,6 @@
   call ENV_cycle
  case(3)
   call BUNCH_cycle
- case(4)
-  call PBUNCH_cycle
  end select
 
  call timing
@@ -120,6 +119,13 @@
  call data_out(jump)
  dt_loc=dt
  t_ind=0
+ if(Ionization)then
+  !lp_max=1.2*oml*a0
+  do ic=2,nsp_ionz
+   call set_field_ioniz_wfunction(ion_min(ic-1),atomic_number(ic-1),ic,ionz_lev,ionz_model,lp_max,dt)
+  end do
+  if(Pe0) call Ioniz_data(lp_max,ion_min,atomic_number,ionz_lev,ionz_model)
+ endif
  do while (tnow < tmax)
   call ENV_run(tnow,dt_loc,iter,LPf_ord)
 
@@ -146,7 +152,7 @@
  dt_loc=dt
  t_ind=0
  if(Ionization)then
-  eb_max=1.1*eb_max !0.8   !max beam field in atomic unit 514GV/m
+  eb_max=0.8   !max beam field in atomic unit 0.514[TV/m] => here Ef_{max}=410[GV/m]
   do ic=2,nsp_ionz
    call set_field_ioniz_wfunction(ion_min(ic-1),atomic_number(ic-1),ic,ionz_lev,ionz_model,eb_max,dt)
   end do
@@ -172,30 +178,6 @@
 
  end subroutine BUNCH_cycle
  !======================
- subroutine PBUNCH_cycle
-
- call pbdata_out(jump)
- dt_loc=dt
- t_ind=0
-
- do while (tnow < tmax)
-  call PBUNCH_run(tnow,dt_loc)
-
-  call timing
-  call pbdata_out(jump)
-
-  if (ier /= 0) then
-   call error_message
-   exit
-  endif
-  if (tnow+dt_loc >= tmax) dt_loc=tmax-tnow
- end do
- if (dump>0) call dump_data(iter,tnow)
-
- end subroutine PBUNCH_cycle
-
- !--------------------------
-
  subroutine data_out(jump)
  integer,intent(in) :: jump
  integer :: i,ic,idata
@@ -221,9 +203,21 @@
 
   if(nvout>0)then
    if (mod_ord==2) then
+    if(L_env_modulus)then
+     i=0
+     call env_fields_out(env,tnow,i,jump)
+     if(Two_color)call env_fields_out(env1,tnow,-1,jump)
+    else
+     if(Two_color)then
+      do i=1,2
+       call env_two_fields_out(env,env1,tnow,i,jump)
+      end do
+     else
     do i=1,2
      call env_fields_out(env,tnow,i,jump)
     end do
+   endif
+    endif
    endif
    do i=1,nvout
     if(L_force_singlefile_output) then
@@ -232,31 +226,26 @@
      call fields_out_new(ebf,tnow,i,i,jump)
     endif
    end do
-   if(L_print_J_on_grid) then
-    if(L_force_singlefile_output) then
-     call fields_out(jc,tnow,1,0,jump)       !0 for Jx current
-    else
-     call fields_out_new(jc,tnow,1,0,jump)
-    endif
-   endif
   endif
   if (nden>0) then
    do i=1,nsp
     call prl_den_energy_interp(i)
-    ic=1
-    call den_ene_mom_out(tnow,i,ic,ic,jump)
-    if (nden>1) then
-     ic=2
-     call den_ene_mom_out(tnow,i,ic,ic,jump)
-    endif
-    if (nden>2) then
-     call prl_momenta_interp(i)
-     do ic=1,curr_ndim
-      call den_ene_mom_out(tnow,i,ic+2,ic,jump)
+    do ic=1,min(2,nden)
+     call den_energy_out(tnow,i,ic,ic,jump)
      end do
-    endif
    enddo
+   if(nden > 2)then
+    call set_wake_potential
+    call den_energy_out(tnow,0,nden,1,jump)  !data on jc(1) for wake potential 
+    endif
   endif
+  if(Hybrid)then
+   do i=1,nfcomp
+    call fluid_den_mom_out(up,tnow,i,nfcomp,jump)
+   end do
+  endif
+  if(Ionization)call part_ionz_out(tnow)
+  if(gam_min >1.)call part_high_gamma_out(gam_min,tnow)
   if (npout>0) then
    if (npout<=nsp) then
     call part_pdata_out(tnow,xp0_out,xp1_out,yp_out,npout,pjump)
@@ -297,12 +286,9 @@
    !---> lineout total density
    if(L_intdiagnostics_pwfa) then
     call collect_bunch_and_plasma_density(0,1)
-    do i=1,nsb
-     call bunch_diagnostics(i)
-    enddo
    endif
    !---!
-   if(L_intdiagnostics_classic) call enbvar(ienout,tnow)
+   call enbvar(ienout,tnow)
    !---!
    call envar(ienout,tnow)
    tdia=tdia+dtdia
@@ -318,7 +304,10 @@
   call create_timestep_folder(iout)
 
   if(Diag)then
-   if(pe0)call en_data(ienout,iter,idata)
+   if(pe0)then
+    call en_data(ienout,iter,idata)
+    call en_bdata(ienout,iter,idata)
+   endif
   endif
 
   if(nvout>0)then
@@ -348,30 +337,27 @@
   if(nden>0)then
    ic=0
    call prl_bden_energy_interp(ic)
-   call bden_ene_mom_out(tnow,1,jump)
+   call bden_energy_out(tnow,1,jump)
    !============= bunch density
    do i=1,nsp
     call prl_den_energy_interp(i)
-    ic=1
-    call den_ene_mom_out(tnow,i,ic,ic,jump)
-    if (nden>1) then
-     ic=2
-     call den_ene_mom_out(tnow,i,ic,ic,jump)
-     if (nden>2) then
-      call prl_momenta_interp(i)
-      do ic=1,curr_ndim
-       call den_ene_mom_out(tnow,i,ic+2,ic,jump)
+    do ic=1,min(2,nden)
+     call den_energy_out(tnow,i,ic,ic,jump)
       end do
+   enddo
+   if(nden>2)then
+    call set_wake_potential
+    call den_energy_out(tnow,0,nden,1,jump)  !data on jc(1) for wake potential 
      endif
     endif
-   enddo
-  endif
   if(nbout> 0)then
    do i=1,nsb
     call part_bdata_out(tnow,i,pjump)
    end do
   endif
   if(Part)then
+   if(Ionization)call part_ionz_out(tnow)
+   if(gam_min >1.)call part_high_gamma_out(gam_min,tnow)
    if(npout> 0)then
     if(npout<=nsp)then
      call part_pdata_out(tnow,xp0_out,xp1_out,yp_out,npout,pjump)
@@ -397,109 +383,6 @@
 
 
  end subroutine bdata_out
-
- subroutine pbdata_out(jump)
-
- integer,intent(in) :: jump
- integer :: i,ic,idata
-
- idata=iout
-
- if(Diag)then
-  if (tnow>=tdia) then
-   ienout=ienout+1
-   call enbvar(ienout,tnow)
-   !---!
-   call envar(ienout,tnow)
-   tdia=tdia+dtdia
-   if (pe0) then
-    write(6,'(a9,i3,a10,e11.4)')'rms data ',ienout,' at time =',tnow
-   endif
-  endif
- endif
-
- if (tnow>=tout) then
-  call create_timestep_folder(iout)
-
-  tout=tout+dtout
-  if(Diag)then
-   if(pe0)call en_data(ienout,iter,idata)
-  endif
-
-  if(iter==0)then
-   do i=1,3
-    call ext_bfield_out(ebf0_bunch,tnow,i,jump) ! 0 means it's usual fields
-   end do
-  endif
-  if(nvout> 0)then
-   do i=1,nvout
-    if(L_force_singlefile_output) then
-     call fields_out(ebf,tnow,i,i,jump)
-    else
-     call fields_out_new(ebf,tnow,i,i,jump) ! 0 means it's usual fields
-    endif
-   end do
-   do i=1,nvout
-    if(L_force_singlefile_output) then
-     if(ibeam==0)call bfields_out(ebf_bunch,ebf_bunch,tnow,i,jump)
-     if(ibeam==1)call bfields_out(ebf_bunch,ebf1_bunch,tnow,i,jump)
-    else
-     if(ibeam==0)call fields_out_new(ebf_bunch,tnow,i,i+6,jump)
-     if(ibeam==1)call fields_out_new(ebf_bunch+ebf1_bunch,tnow,i,i+6,jump)
-    endif
-   end do
-  endif
-  if(nden> 0)then
-   ic=0
-   call prl_bden_energy_interp(ic)
-   call bden_ene_mom_out(tnow,1,jump)
-   do i=1,nsp
-    call prl_den_energy_interp(i)
-    ic=1
-    call den_ene_mom_out(tnow,i,ic,ic,jump)
-    if(nden >1)then
-     ic=2
-     call den_ene_mom_out(tnow,i,ic,ic,jump)
-    endif
-    if(nden >2)then
-     call prl_momenta_interp(i)
-     do ic=1,curr_ndim
-      call den_ene_mom_out(tnow,i,ic+2,ic,jump)
-     end do
-    endif
-   enddo
-  endif
-  if(nbout> 0)then
-   do i=1,nsb
-    call part_bdata_out(tnow,i,pjump)
-   end do
-  endif
-  if(Part)then
-   if(npout> 0)then
-    if(npout<=nsp)then
-     call part_pdata_out(tnow,xp0_out,xp1_out,yp_out,npout,pjump)
-    else
-     do i=1,nsp
-      call part_pdata_out(tnow,xp0_out,xp1_out,yp_out,i,pjump)
-     end do
-    endif
-   endif
-  endif
-  if(dump>0 .and. time_interval_dumps < 0.0)then
-   if(iter>0)call dump_data(iter,tnow)
-  endif
-  iout=iout+1
- endif
-
- call cpu_time(unix_time_now)
-
- if((unix_time_now - unix_time_last_dump) > time_interval_dumps .and. time_interval_dumps > 0.0) then
-  if(pe0) write(6,*) '3D dump data being written'
-  call dump_data(iter,tnow)
- endif
-
- end subroutine pbdata_out
-
  !--------------------------
 
  subroutine diag_part_dist
@@ -557,11 +440,11 @@
    write(6,'(a10,i6,a10,e11.4,a10,e11.4)') 'iter = ',iter,' t = ',tnow,' dt = ',dt_loc
    call tot_num_part(nptot_global)
    call cpu_time(unix_time_now)
-   write(6,'(a15,f12.3,a10,i15)') 'Time elapsed = ',unix_time_now-unix_time_begin,', nptot = ', nptot_global
+   write(6,'(a16,f12.3,a10,i15)')' Time elapsed = ',unix_time_now-unix_time_begin,', nptot = ', nptot_global
    if(prl)then
     if(Part)then
-     write(6,'(a20,i10,a1,i10)')'part min/max distr. ',np_min,' ',np_max
-     write(6,'(a20,2i8)')'   where pmin/pmax  ',pe_npmin,pe_npmax
+     write(6,'(a21,i10,a1,i10)')' part min/max distr. ',np_min,' ',np_max
+     write(6,'(a18,2i8)')' where pmin/pmax  ',pe_npmin,pe_npmax
      if (prl) then
       write(6,'(a24,e12.5)')' max part memory in MB= ',mem_psize_max
       write(6,'(a20,e12.5)')' Max part  address= ',mem_max_addr
@@ -614,6 +497,7 @@
  spl_ord=2
  RK_ord=0
  xf=xc_lp+t0_lp
+ xf1=xc1_lp+t1_lp
  ngout=max(1,nz/jump)*nx*ny/(jump*jump)
  part_dcmp=.false.
  call check_grid_size
@@ -639,10 +523,6 @@
  call param
  !=========================
  if(ndim==1) Stretch=.false.
- if(Ionization)then
-  if(iform==1)iform=0
-  if(ibeam==0)ibeam=1
- endif
  call set_fyzxgrid(npe_yloc,npe_zloc,npe_xloc,sh_ix)
  if (Stretch) call set_str_ind(npe_yloc,npe_zloc,ndim)
  if(Impact_ioniz)ns_ioniz=nsp              !only for collisional ionization
@@ -659,20 +539,18 @@
   endif
  endif
  !============
+ !                              The local grid right boundary
  nyp=loc_ygrid(imody)%p_ind(2)  !Ny_loc+2
  nzp=loc_zgrid(imodz)%p_ind(2)  !Nz_loc+2
  nxp=loc_xgrid(imodx)%p_ind(2)  !Nx_loc+2
  !====== Fields and current arrays allocated on [1: N_loc+5]
  !==========================
  call v_alloc(nxp,nyp,nzp,nfield,nj_dim,&
-  ndim,ns_ioniz,ibeam,LPf_ord,Envelope,mem_size)
+             ndim,ns_ioniz,ibeam,LPf_ord,der_ord,Envelope,Two_color,mem_size)
+ if(Hybrid)call fluid_alloc(nxp,nyp,nzp,nfcomp,ndim,LPF_ord,mem_size)
  if (Beam) then
-  if(Pbeam)then
-   call pbv_alloc(nx+2,nyp,nzp,nbfield,ndim,mem_size)
-  else
    call bv_alloc(nxp,nyp,nzp,nbfield,ndim,ibeam,mem_size)
   endif
- endif
  if (Stretch) then
   if (pe0) call str_grid_data
  endif
@@ -752,21 +630,28 @@
  integer,intent(in) :: z0(:),An(:),zlev,zmod
  integer :: i,ic,k,zmax,zm_loc
  if(zlev==1)open(10,file='diag_one_level_ionz.dat')
- if(zlev==2)open(10,file='diag_multi_level_ionz.dat')
+ if(zlev==2)open(10,file='diag_two_level_ionz.dat')
  write(10,*)'nsp_ionz-1,zlev,zmod,N_ge '
  write(10,'(4i8)')nsp_ionz-1,zlev,zmod,N_ge
  write(10,*)'  Max Ef       dt      Omega_au  '
- write(10,'(3E11.4)')Ef_max,dt,omega_a
+ write(10,'(3E11.4)')Ef_max,dt_fs,omega_a    
+ if(Two_color)then
+ write(10,*)' a0        lam0,      om0,      a1,      lam1,         om1'
+ write(10,'(6E11.4)')a0,lam0,oml,a1,lam1,om1   
+ else
+ write(10,*)' a0        lam0,      om0'
+ write(10,'(6E11.4)')a0,lam0,oml   
+ endif
  do ic=1,nsp_ionz-1
   write(10,*)' z0,     zmax'
   write(10,'(2i6)')z0(ic),An(ic)
   write(10,*)' E_c       E_b           V_norm(a.u.)  '
   zmax=An(ic)
   do i=1,zmax
-   write(10,'(4E12.4)')E_c(i,ic),E_b(i,ic),V_norm(i,ic)
+   write(10,'(3E12.4)')E_c(i,ic),E_b(i,ic),V_norm(i,ic)
   end do
   zm_loc=zmax-z0(ic)
-  write(10,*)'ionization rate :Wi(Ef,1:zmax-z0,ic)'
+  write(10,*)'ionization rate :Wi(Ef,1:zmax-z0,ic) in fs^{-1}'
   do i=1,zm_loc
    write(10,*)i
    write(10,'(6e12.4)')wi(1:N_ge,i,ic)
@@ -956,242 +841,307 @@
  subroutine initial_run_info(nw)
  integer,intent(in) :: nw
  integer :: i
+ character(len=21) :: output_data_in
+
+ write(output_data_in,'(a15,i2.2,a4)')'init_data_info_',id_new,'.dat'
 
  write(6,*)'***********************************************'
  write(6,*)'Start: new = ',nw
+ if(nw==0)then
+  write(6,'(a18,3i8)')'  total grid size ',nx,ny,nz
+  write(6,'(a18,3i8)')'  local grid size ',nx_loc,ny_loc,nz_loc
+  write(6,'(a27,i3)')'  Cartesian grid dimension ',ndim
+ endif
  if(nw==1)then
   write(6,'(a13,e11.4)')' restart time',tstart
   write(6,*)' diag ienout',ienout
-  write(6,*)' window bound.'
-  write(6,'(2i8)')nptx_max,nptx(1)
  endif
- write(6,'(a26,i3)')' Cartesian grid dimension ',ndim
- write(6,'(a18,i3)')' Field components ',nfield
- write(6,'(a20,i3)')' Current components ',curr_ndim
- write(6,'(a42,3i4)')' Species numbers (tot, running): ',nsp,nsp_run
- write(6,*)' charge       charge_tomass'
- do i=1,nsp
-  write(6,'(a2,2e11.4)')' ',unit_charge(i),charge_to_mass(i)
- enddo
- if(Charge_cons)then
-  write(6,*)'Charge conserving scheme'
- else
-  write(6,*)'No charge conserving '
-  if(ibeam==2)write(6,*)'Enforces Poisson equation,  curr_dim= ',nj_dim
- endif
- write(6,*)'***********************************************'
- write(6,'(a17,3i8)')' total grid size ',nx,ny,nz
- write(6,'(a17,3i8)')' local grid size ',nx_loc,ny_loc,nz_loc
- write(6,*)'***********************************************'
- if(der_ord==2)write(6,'(a22)')' Explicit Deriv. ord 2'
- if(der_ord==3)write(6,'(a26)')' Opt Explicit Deriv. ord 2'
- if(der_ord==4)write(6,'(a22)')' Explicit Deriv. ord 4'
- if(LPf_ord >0)then
-  if(LPf_ord==2)write(6,'(a22)')' lpf2 one step scheme '
-  if(LPf_ord>2)write(6,'(a22)')' RK multi-step scheme '
- endif
- write(6,'(a13,i3)')' Spline order',spl_ord
- if(ibeam>1)then
-  write(6,'(a35,i3)')' Maxwell equations using potentials',ibeam
- endif
- write(6,*)'***********************************************'
- if(Stretch)then
-  write(6,'(a32,2e11.4)')' tang stretched layer with size=',y(ny_stretch+1),y(ny+1-ny_stretch)
-  if(str_flag==2) write(6,'(a40,e11.4)')' tang stretched right-x layer with size=',x(nx+1-nx_stretch)
- endif
- write(6,*)'Staggered grid Yee-module'
+!======================================
 
- write(6,*)'***********************************************'
- write(6,*)' Box sizes '
- write(6,*)' xmin,      xmax     '
- write(6,'(2e11.4)')xmin,xmax
+ open(60,file=output_data_in)
+ if(nw==0)then
+  write(60,*)'********** INITIAL DATA INFO************* '
+ else
+  write(60,*)'*********  RESTART DATA INFO*************'
+ endif
+  write(60,'(a12,f6.2)')'  Start time=',tstart
+  write(60,'(a20,i4,a4)')'  ALaDyn running on ',npe,' cpu'
+  write(60,'(a30,3i4)')'  (x-y-z) MPI decomposition : ',npe_xloc,npe_yloc,npe_zloc
+  write(60,'(a26,i4)')'  Data output initial id= ',id_new
+
+ write(60,*)'*************IMPLEMENTATION TOOLS********************'
+  write(60,*)'  Field collocation on the Yee-module staggered grid'
+  write(60,*)'  B-spline shapes of alternating first-second order '
+ if(LPf_ord >0)then
+   if(LPf_ord==2)write(60,*)'  One-step leap-frog time integration '
+   if(der_ord==2)write(60,*)'  Explicit second order space derivative '
+   if(der_ord==3)write(60,*)'  Optmal Explicit second order space derivative'
+   if(der_ord==4)write(60,*)'  Forth-order Mawvell solver only for (E,B) fields'
+   if(LPf_ord>2)then
+    write(60,*)'  RK multi-step fourth order time scheme '
+    write(60,*)'  Explicit fourth order Space Derivative'
+   endif
+ endif
+  if(Charge_cons)then
+   write(60,*)'  Continuity equation enforced by Esirkepov scheme'
+  else
+   write(60,*)'  No charge preserving scheme activated'
+ endif
+  write(60,*)'***************GRID**********************'
+  write(60,'(a18,3i8)')'  total grid size ',nx,ny,nz
+  write(60,'(a18,3i8)')'  local grid size ',nx_loc,ny_loc,nz_loc
+  write(60,'(a27,i3)')'  Cartesian grid dimension ',ndim
+  if(curr_ndim==2)then
+   write(60,*)' Current components: [Jx,Jy] '
+   write(60,*)' Field components: [Ex,Ey,Bz] '
+  else
+   write(60,*)' Current components: [Jx,Jyi,Jz] '
+   write(60,*)' Field components: [Ex,Ey,Ez,Bx,By,Bz] '
+ endif
+  write(60,*)'   Box sizes'
+  write(60,*)'     xmin,      xmax     '
+  write(60,'(a1,2e11.4)')' ',xmin,xmax
  if (ndim > 1) then
-  write(6,*)' ymin       ymax     '
-  write(6,'(2e11.4)')ymin,ymax
+   write(60,*)'    ymin       ymax     '
+   write(60,'(a1,2e11.4)')' ',ymin,ymax
   if (ndim > 2) then
-   write(6,*)' zmin       zmax     '
-   write(6,'(2e11.4)')zmin,zmax
+    write(60,*)'    zmin       zmax     '
+    write(60,'(a1,2e11.4)')' ',zmin,zmax
   endif
  endif
- write(6,*)' Boundary conditions '
- if(ibx==0)write(6,*)' Open boundaries on x axis'
- if(ibx==1)write(6,*)' Reflecting boundary on right x '
- if(ibx==2)write(6,*)' Periodic boundaries on x axis'
- if(ibx >2)write(6,*)' Invalid x-boundary flag'
+  write(60,*)'   Cell sizes'
+  if(ndim <3)then
+   write(60,'(a6,e11.4,a6,e11.4)')'  Dx =',dx,'  Dy =',dy
+  else
+   write(60,'(a6,e11.4,a6,e11.4,a6,e11.4)')'  Dx =',dx,'  Dy =',dy,'  Dz =',dz
+  endif
+ if(Stretch)then
+  write(60,*)'  y=tang(a*xi) stretched layers on the transverse coordinates'
+  write(60,'(a20,i6,2e11.4)')'  stretched grid size=',ny_stretch,y(ny_stretch+1)
+ endif
+ write(60,*)'***************PHYSICAL MODEL**********************'
+ if(model_id <4)then
+  write(60,*)'  Laser field injected '
+  if(model_id==1)write(60,*)'  P-polarization on y-axis'
+  if(model_id==2)write(60,*)'  S-polarization on z-axis'
+  if(model_id==3)write(60,*)'  Circular polarization on y-z plane'
+  write(60,*)'***************** Laser pulse structure***************'
+  if(model_id==0)then
+   write(60,*)'  A plane wave model'
+  else
+   write(60,*)'  Gaussian profile exp(-[r/w0_y]^2) on radial coordinate'
+  endif
+  if(G_prof)then
+   write(60,*)'  Gaussian profile exp(-[(x-t)/w0_x]^2) on longitudinal (x-t) coordinate'
+  else
+   write(60,*)'  Cos^2[Pi(x-t)/w0_x] profile on longitudinal (x-t) coordinate'
+  endif
+ else
+  select case(model_id)
+  case(4)
+  write(60,*)'  LP(P-pol) laser field injected using ENVELOPE integration model'
+  case(5)
+  write(60,*)'  Electron bunch injected'
+  end select
+ endif
+ write(60,*)'***********FIELD BOUNDARY CONDITIONS*************************'
+ if(ibx==0)write(60,*)' Open boundaries on x axis'
+ if(ibx==1)write(60,*)' Reflecting boundary on right x '
+ if(ibx==2)write(60,*)' Periodic boundaries on x axis'
+ if(ibx >2)write(60,*)' Invalid x-boundary flag'
  if(ndim >1)then
-  if(iby==0)write(6,*)' Open boundaries on y axis'
-  if(iby==1)write(6,*)' Reflecting boundaries on y axis'
-  if(iby==2)write(6,*)' Periodic boundaries on y axis'
-  if(iby >2)write(6,*)' Invalid y-boundary flag'
+  if(iby==0)write(60,*)' Open boundaries on y axis'
+  if(iby==1)write(60,*)' Reflecting boundaries on y axis'
+  if(iby==2)write(60,*)' Periodic boundaries on y axis'
+  if(iby >2)write(60,*)' Invalid y-boundary flag'
  endif
  if(ndim >2)then
-  if(ibz==0)write(6,*)' Open boundaries on z axis'
-  if(ibz==1)write(6,*)' Reflecting boundaries on z axis'
-  if(ibz==2)write(6,*)' Periodic boundaries on z axis'
-  if(ibz >2)write(6,*)' Invalid z-boundary flag'
+  if(ibz==0)write(60,*)' Open boundaries on z axis'
+  if(ibz==1)write(60,*)' Reflecting boundaries on z axis'
+  if(ibz==2)write(60,*)' Periodic boundaries on z axis'
+  if(ibz >2)write(60,*)' Invalid z-boundary flag'
  endif
  if (w_speed > 0.0) then
-  write(6,'(a23,e11.4)')' MOVING WINDOW w_speed= ',w_speed
+  write(60,'(a23,f5.2)')'  Moving window speed= ',w_speed
  endif
  if (w_speed < 0.0) then
-  write(6,'(a29,e11.4)')'MOVING COORDINATE SYSTEM V_b=',vbeam
+  write(60,'(a35,f5.2)')'  Comoving x-coordinate system V_b=',vbeam
  endif
  if(model_id < 5)then
-  write(6,*)'******LP data *****************'
-  write(6,*)' LP energy parameters: '
-  write(6,'(a24,f7.2)')' initial focus (micron) ',xf
-  write(6,'(a25,e13.3)')' Vect pot amplitude  a0= ',a0
-  write(6,'(a25,e13.3)')' Intensity [10^18 W/cm2] ',lp_intensity
-  write(6,'(a13,e13.3)')' Power [TW]  ',lp_pow
-  write(6,'(a13,e13.3)')' Energy [J]  ',lp_energy
-  write(6,*)' Shape parameters: '
-  write(6,*)'   lbd0 ,  wo_x,     FWHM(fs)  '
-  write(6,'(3e11.4)')lam0,w0_x,tau_FWHM
-  if(.not.Plane_wave)then
-   write(6,*)'   wo_y,   focal spot ZRayl '
-   write(6,'(3e11.4)')w0_y,lp_rad,ZR
+  write(60,*)'******LASER PHYSICAL PARAMETERS *****************'
+  write(60,*)'     Main pulse parameters '
+  write(60,*)' Transverse scales'
+  write(60,'(a8,f5.2,a18,f5.2)')'  w0_y= ',w0_y,'   focal spot =   ',lp_rad
+  write(60,*)' Longitudinal scales'
+  write(60,'(a8,f5.2,a18,f5.2)')'  w0_x= ',w0_x,'   tau_fwhm(fs) = ',tau_FWHM
+  write(60,'(a13,f5.2,a13,f5.2)')'  wavelength=',lam0,'   frequency=',oml
+  write(60,'(a17,f6.2,a17,f6.2)')'  Initial focus =',xf,'   Pulse center= ',xc_lp
+  write(60,'(a29,e11.4)')'  Diffraction length Z_Rayl= ',ZR
+  write(60,'(a25,f5.2)')'  Strength parameter a0= ',a0
+  write(60,'(a33,f5.2,a6)')'  Max transverse field at focus= ',E0*a0*oml,'(TV/m)'
+  write(60,'(a13,e13.3,a10)')'  Intensity= ',lp_intensity,'(e18W/cm2)'
+  write(60,'(a9,e13.3,a4)')'  Power = ',lp_pow,'(TW)'
+  write(60,'(a10,e13.3,a3)')'  Energy= ',lp_energy,'(J)'
+  write(60,'(a30,i4)')'  Number of main laser pulses= ',nb_laser 
+  if(nb_laser >1)write(60,'(a29,f5.2)')'  Distance among lp centers= ',lp_delay
+  write(60,*)'-----------------------------------'
+  if(Two_color)then
+   write(60,*)'     Injected pulse parameters '
+   write(60,'(a20,f5.2)')'  Offset distance = ',lp_offset
+   write(60,*)' Transverse scales'
+   write(60,'(a8,f5.2,a18,f5.2)')'  w1_y= ',w1_y,'   focal spot =   ',lp1_rad
+   write(60,*)' Longitudinal scales'
+   write(60,'(a8,f5.2,a18,f5.2)')'  w0_x= ',w1_x,'   tau_fwhm(fs) = ',tau1_FWHM
+   write(60,'(a13,f5.2,a13,f5.2)')'  wavelength=',lam1,'   frequency=',om1
+   write(60,'(a17,f6.2,a17,f6.2)')'  Initial focus =',xf1,'   Pulse center= ',xc1_lp
+   write(60,'(a29,e11.4)')'  Diffraction length Z_Rayl= ',ZR1
+   write(60,'(a25,f5.2)')'  Strength parameter a0= ',a1
+   write(60,'(a33,f5.2,a6)')'  Max transverse field at focus= ',E0*a1*om1,'(TV/m)'
   endif
-  write(6,*)'******Particle data *****************'
-  if(Part)then
-   write(6,*)'   n/nc    el_sk      el_Debye  n_c[10^21] '
-   write(6,'(4e11.4)')n_over_nc,el_lp, el_D,nc
-   write(6,*)' Target sizes '
-   write(6,*)' xmin_t        xmax_t'
-   write(6,'(2e11.4)')targ_in,targ_end
-   write(6,*)' ymin_t       ymax_t     '
-   write(6,'(2e11.4)')ymin_t,ymax_t
-   if (ndim > 2) then
-    write(6,*)' zmin_t       zmax_t     '
-    write(6,'(2e11.4)')zmin_t,zmax_t
+ endif
+ if(Hybrid)then
+  write(60,*)'************** FLUID DATA *****************'
+  write(60,*)'Fluid density-momenta components',nfcomp
+ endif
+ write(60,*)'**************PARTICLE DATA *****************'
+ write(60,'(a18,i4)')'  Species number =',nsp
+ write(60,'(a32,i4)')'  Id number of running species: ',nsp_run
+ write(60,*)'============================='
+ write(60,*)' Species name:',species_name(0)
+ write(60,'(a29,i4)')'  Macropart number per cell =',mp_per_cell(1)
+ write(60,'(a34,e11.4)')'  Reference macroparticle weight =',j0_norm
+ write(60,*)' Initial electron thermal speed V_T/c'
+ write(60,'(a2,1E12.4)')'  ',t0_pl(1)
+ write(60,*)'============================='
+ if(nsp > 1)then
+  do i=2,nsp
+   write(60,*)' Ion species name:',species_name(atomic_number(i-1))
+   write(60,'(a23,i4)')'  Ion number per cell =',mp_per_cell(i)
+   write(60,'(a34,e11.4)')'  Reference macroparticle weight= ',wgh_ion
+   write(60,*)' Initial charge, atomic number , mass number'
+   write(60,'(a4,i8,a4,i8,a6,e11.4)')'    ',ion_min(i-1),'    ',&
+         atomic_number(i-1),'      ',mass_number(i-1)
+   write(60,*)' Initial ion thermal speed V_T/c'
+   write(60,'(a2,1E12.4)')'  ',t0_pl(i)
+  end do
    endif
+ write(60,*)'-----------------------------------'
    if(Ionization)then
-    if(ionz_model==1)write(6,*)' ADK field ionization active '
-    if(ionz_model > 1)write(6,*)' ADK+BSI field ionization active '
-    write(6,*)'ionization active in ion species ',nsp_ionz-1
-    write(6,*)' Z_in,  A_numb,  Mass_numb '
+  write(60,*)' Field ionization model:'
+  if(ionz_model==1)write(60,*)' W_DC ADK  '
+  if(ionz_model==2)write(60,*)' W_AC= <W_DC>  ADK '
+  if(ionz_model==4)write(60,*)' W_AC ADK +BSI '
+  if(Beam)write(60,'(a24,e11.4,a6)')'  Reference max E_field ',eb_max,'(TV/m)'
+  if(Lp_active)write(60,'(a24,e11.4,a6)')'  Reference max E_field ',lp_max,'(TV/m)'
     do i=1,nsp_ionz-1
-     write(6,'(2i6,f4.1)')ion_min(i),atomic_number(i),mass_number(i)
+   write(60,*)' Ionization active on ion species:',species_name(atomic_number(i))
     end do
    end if
-   write(6,*)'Target configuration'
-   write(6,'(a16,i4)')'Running species ',nsp_run
+ write(6,*)'**********TARGET PLASMA PARAMETERS***********'
+  if(Part)then
+   write(60,'(a26,e11.4,a10)')'  Electron number density ',n0_ref,'[10^18/cc]'
+   write(60,'(a21,f5.2)')'  Plasma wavelength= ',lambda_p
+   if(model_id < 5)then
+    write(60,'(a20,f5.2,a10)')'  Critical density= ',ncrit,'[10^21/cc]'
+    write(60,'(a18,e11.4,a4)')'  Critical power= ',P_c,'(TW)'
+   endif
+   write(60,*)'     Target sizes '
+   write(60,*)'  xmin_t        xmax_t'
+   write(60,'(a2,2e11.4)')'  ',targ_in,targ_end
+   write(60,*)' ymin_t       ymax_t     '
+   write(60,'(a2,2e11.4)')'  ',ymin_t,ymax_t
+   if (ndim > 2) then
+    write(60,*)' zmin_t       zmax_t     '
+    write(60,'(a2,2e11.4)')'  ',zmin_t,zmax_t
+   endif
+   write(6,*)'********** TARGET CONFIGURATION***********'
    if(Wake)then
     select case(dmodel_id)
     case(1)
-     write(6,*)' Five layer x-profile with one central lpx(3) plateau '
-     write(6,*)' Initial electron-ion thermal speed V_T/c'
-     write(6,'(3E12.4)')t0_pl(1:3)
-     if(nsp >1)then
-      write(6,*)'ratio of electron/ion numbers per cell'
-      write(6,'(3i6)')mp_per_cell(1:3)
-     endif
+     write(60,*)' Multispecies five-layer x-profile with one central plateau '
     case(2)
-     write(6,*)' Five layer x-profile with two lpx(2) lpx(4) plateau '
-     write(6,*)' Initial electron-ion thermal speed V_T/c'
-     write(6,'(3E12.4)')t0_pl(1:3)
-     if(nsp >1)then
-      write(6,*)'ratio of electron/ion numbers per cell'
-      if(nsp==2)write(6,'(i6)')ratio_mpc(1)
-      if(nsp==3)write(6,'(2i6)')ratio_mpc(1:2)
-      if(nsp==4)write(6,'(3i6)')ratio_mpc(1:3)
-     endif
+     write(60,*)' Multispecie five-layer x-profile with one central lpx(3) downrump'
+     write(6,*) '        connecting two lpx(2) lpx(4) plateau '
     case(3)
-     write(6,*)' Five layer x-profile with two lpx(2) lpx(4) plateau '
-     write(6,*)' Ionizing dopant added in ramp[lpx(1)]+plateau[lpx(2)]'
-     write(6,*)' Initial electron-ion thermal speed V_T/c'
-     write(6,'(3E12.4)')t0_pl(1:3)
-     if(nsp >1)then
-      write(6,*)'ratio of electron/ion numbers per cell'
-      write(6,'(3i6)')mp_per_cell(1:3)
-     endif
+     write(60,*)' Five-layer x-profile with two lpx(2) lpx(4) plateau and'
+     write(60,*)' a ionizing dopant added in lpx(3) layer'
     end select
    endif
    if(Solid_target)then
     select case(dmodel_id)
     case(3)
-     write(6,*)' Target Preplasma-enabled '
-     if(lpx(1)>0.0)write(6,'(a21,e11.4)')' Preplasma size ',lpx(1)
-     if(lpx(2)>0.0)write(6,'(a21,e11.4)')' Ramp size ',lpx(2)
-     if(lpx(5)>0.0)write(6,*)' post-layer H contaminants attached'
+     write(60,*)' Target preplasma-enabled '
+     if(lpx(1)>0.0)write(60,'(a17,e11.4)')'  Preplasma size ',lpx(1)
+     if(lpx(2)>0.0)write(60,'(a12,e11.4)')'  Ramp size ',lpx(2)
+     if(lpx(3)>0.0)write(60,'(a21,e11.4)')'  Central layer size ',lpx(3)
+     if(lpx(5)>0.0)write(60,'(a33,e11.4)')'  Post-layer H contaminants size ',lpx(5)
     case(4)
-     write(6,*)' Target H-foam-enabled '
-     if(lpx(1)>0.0)write(6,'(a21,e11.4)')' Foam size ',lpx(1)
-     if(lpx(2)>0.0)write(6,'(a21,e11.4)')' Ramp size ',lpx(2)
-     if(lpx(5)>0.0)write(6,*)' post-layer H contaminants attached'
+     write(60,*)' Target H-foam-enabled '
+     if(lpx(1)>0.0)write(60,'(a12,e11.4)')'  Foam size ',lpx(1)
+     if(lpx(2)>0.0)write(60,'(a12,e11.4)')'  Ramp size ',lpx(2)
+     if(lpx(5)>0.0)write(60,'(a33,e11.4)')'  Post-layer H contaminants size ',lpx(5)
     case(5)
-     write(6,*)' Three species [El,Z1,Z3] target +[El,Z2] contaminants '
-     write(6,*)'x-layer sizes'
-     write(6,'(3e11.4)')lpx(1),lpx(3),lpx(5)
-     write(6,*)'Layer density'
-     write(6,'(3e11.4)')n1_over_n,n_over_nc,n2_over_n
+     write(60,*)' Three species [El,Z1,Z3] target +[El,Z2] contaminants '
+     write(60,*)'x-layer sizes'
+     write(60,'(3e11.4)')lpx(1),lpx(3),lpx(5)
+     write(60,*)'Layer density'
+     write(60,'(3e11.4)')n1_over_n,n_over_nc,n2_over_n
     case(6)
-     write(6,*)' Three species [El,Z]nanowires+ bulk '
-     write(6,*)'wire size,interwire distance filling fact'
+     write(60,*)' Three species [El,Z]nanowires+ bulk '
+     write(60,*)'wire size,interwire distance filling fact'
      if(ndim <3)then
-      write(6,'(3e11.4)')lpy(1),lpy(2),(lpy(1)/(lpy(1)+lpy(2)))
+      write(60,'(3e11.4)')lpy(1),lpy(2),(lpy(1)/(lpy(1)+lpy(2)))
      else
-      write(6,'(3e11.4)')lpy(1),lpy(2),(lpy(1)/(lpy(1)+lpy(2)))**2
+      write(60,'(3e11.4)')lpy(1),lpy(2),(lpy(1)/(lpy(1)+lpy(2)))**2
      endif
-     write(6,*)'Boundaries',ibx,iby
+     write(60,*)'Boundaries',ibx,iby
     case(7)
-     write(6,*)' One layer [El,Z] nano-tubes'
-     write(6,*)' 2R_ext    2dr       filling fact '
-     write(6,'(3e11.4)')lpy(1)+lpy(2),lpy(1),lpy(3)
-     write(6,*)'Boundaries',ibx,iby
+     write(60,*)' One layer [El,Z] nano-tubes'
+     write(60,*)' 2R_ext    2dr       filling fact '
+     write(60,'(3e11.4)')lpy(1)+lpy(2),lpy(1),lpy(3)
+     write(60,*)'Boundaries',ibx,iby
     end select
    endif
-   write(6,*)'============================'
-   write(6,*)' n/n_c density distribution'
-   write(6,'(3e11.4)')n_over_nc,n1_over_n,n2_over_n
-   write(6,*)' Electron number per cell '
-   write(6,'(i4)')nref
-   write(6,*)' Density norm  '
-   write(6,'(e11.4)')j0_norm
-   write(6,*)' Particle min/max distr. '
-   write(6,'(i10,a1,i10)')np_min,' ',np_max
-  endif
- endif
+  write(60,*)'Fully kinetic PIC schemes'
  if(model_id >4)then
-  write(6,*)'******Beam+plasma data *****************'
-  write(6,*)'Fully kinetic PIC schemes'
-  write(6,*)' Beam parameters: '
-  if(model_id==5)then
-   write(6,*)' unit length is 1mu, unit density is n0=10^18/cc'
-   write(6,*)'  Lambda , Omega_p,  n_over_n0 '
-   write(6,'(3e11.4)')lambda_p,omega_p,n_over_nc
-   write(6,*)'  gamma ,  sigma_x ,     sigma_y,   eps_y       eps_z '
+   write(60,*)'******Beam+plasma data *****************'
+   write(60,*)' nbfield components',nbfield
+   if(ibeam>0)then
+    write(60,*)' Bunch fields described by two arrays: ebf_bunch,ebf1_bunch'
+   endif
+   write(60,*)' Beam parameters: '
+   write(60,*)' unit length is 1mu, unit density is n0=10^18/cc'
+   write(60,*)'  Lambda , Omega_p,  n_over_n0 '
+   write(60,'(3e11.4)')lambda_p,omega_p,n_over_nc
+   write(60,*)'  gamma ,  sigma_x ,     sigma_y,   eps_y       eps_z '
    do i=1,nsb
-    write(6,'(5e11.4)')gam(i),sxb(i),syb(i),epsy(i),epsz(i)
+    write(60,'(5e11.4)')gam(i),sxb(i),syb(i),epsy(i),epsz(i)
    end do
-   write(6,*)'  nb_over_np  b_charge   Qcharge '
+   write(60,*)'  nb_over_np  b_charge   Qcharge '
    do i=1,nsb
-    write(6,'(3e11.4)')rhob(i),bunch_charge(i),reduced_charge(i)
+    write(60,'(3e11.4)')rhob(i),bunch_charge(i),reduced_charge(i)
    end do
   else
-   write(6,*)' unit length is 1mm, unit density is n0=10^14/cc'
-   write(6,*)'  Lambda , Omega_p    n_over_n0  '
-   write(6,'(3e11.4)')lambda_p,omega_p,n_over_nc
-   write(6,*)'  gamma   bet0        Lx       sigma_y,   eps_y       eps_z '
+   write(60,*)' unit length is 1mm, unit density is n0=10^14/cc'
+   write(60,*)'  Lambda , Omega_p    n_over_n0  '
+   write(60,'(3e11.4)')lambda_p,omega_p,n_over_nc
+   write(60,*)'  gamma   bet0        Lx       sigma_y,   eps_y       eps_z '
    i=1
-   write(6,'(6e11.4)')gam(i),bet0,sxb(i),syb(i),epsy(i),epsz(i)
-   write(6,*)' jb_norm     nb_o_np    b_charge_den  '
-   write(6,'(3e11.4)')jb_norm(i),rhob(i),b_charge
+   write(60,'(6e11.4)')gam(i),bet0,sxb(i),syb(i),epsy(i),epsz(i)
+   write(60,*)' jb_norm     nb_o_np    b_charge_den  '
+   write(60,'(3e11.4)')jb_norm(i),rhob(i),b_charge
   endif
-  if(Part)then
-   write(6,*)' target in  target_end'
-   write(6,'(2e11.4)')targ_in,targ_end
-   write(6,*)' ymin_t       ymax_t     '
-   write(6,'(2e11.4)')ymin_t,ymax_t
-   write(6,*)' Electron number per cell '
-   write(6,'(i4)')nref
-   write(6,*)' Density norm  '
-   write(6,'(e11.4)')j0_norm
-   write(6,*)' Particle min/max distr. '
-   write(6,'(i10,a1,i10)')np_min,' ',np_max
-   write(6,'(a20,2i8)')'   where pmin/pmax  ',pe_npmin,pe_npmax
-   write(6,'(a14,i10)')'buffer memory ',npt_buffer
-  endif
+  write(60,*)' target in  target_end'
+  write(60,'(2e11.4)')targ_in,targ_end
+  write(60,*)' ymin_t       ymax_t     '
+  write(60,'(2e11.4)')ymin_t,ymax_t
+  write(60,*)' Electron number per cell '
+  write(60,'(i4)')nref
+  write(60,*)' Particle density normalization  '
+  write(60,'(e11.4)')j0_norm
  endif
+ write(60,*)'*******  END INITIAL DATA INFO***********'
+ close(60)
  write(6,*)'********** ALLOCATED MEMORY (MB) *********************'
  write(6,'(a28,e12.5)')' Pe0 allocated grid memory= ',1.e-06*real(mem_size,dp)*kind(electron_charge_norm)
  write(6,'(a28,e12.5)')' Pe0 allocated part memory= ',1.e-06*real(mem_psize,dp)*kind(electron_charge_norm)
@@ -1199,6 +1149,9 @@
   write(6,'(a24,e12.5)')' Max part memory (MB) = ',mem_psize_max
   write(6,'(a20,e12.5)')' Max part  address= ',mem_max_addr
  endif
+ write(6,*)' Particle min/max distr. '
+ write(6,'(i10,a1,i10)')np_min,' ',np_max
+ write(6,'(a18,2i8)')' where pmin/pmax  ',pe_npmin,pe_npmax
  write(6,*)'******************************************************'
  end  subroutine initial_run_info
 

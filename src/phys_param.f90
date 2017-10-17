@@ -23,7 +23,7 @@
  use precision_def
  implicit none
  real(dp),parameter :: epsilon = 1.0e-8
- real(dp),parameter :: pi = 3.141592653589793
+ real(dp),parameter :: pi = 3.141592653589793, pi2 = 6.283185307179586
  real(dp),parameter :: giant_field = 1.0e4
  real(dp),parameter :: electron_charge_norm = -1.0
  real(dp),parameter :: electron_mass_norm = 1.0

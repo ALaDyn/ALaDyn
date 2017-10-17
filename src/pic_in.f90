@@ -21,15 +21,17 @@
 
  module pic_in
  use precision_def
+ use util
  use particles
  use pic_rutil
  use fft_lib
  use grid_fields
+ use psolv
  use control_bunch_input
 
  implicit none
 
- real(dp),allocatable :: wa(:,:,:,:),wb(:,:,:),xpb(:),ypb(:),zpb(:)
+ real(dp),allocatable :: wa(:,:,:,:),xpb(:),ypb(:),zpb(:)
  real(dp),allocatable :: bpart(:,:)
  integer,allocatable :: loc_imax(:,:),loc_jmax(:,:),loc_kmax(:,:)
 
@@ -255,13 +257,13 @@
  integer :: i,j,i1,i2,ic
  integer :: n_peak,nyl1,nzl1
  integer :: npyc(4),npzc(4),npty_ne,nptz_ne
- integer :: npmax
- real(dp) :: uu,yy,zz,dxip,dpy,dpz,np1,np2
+ integer :: npmax,nxtot
+ real(dp) :: uu,yy,zz,dxip,dpy,dpz,u2
  real(dp) :: zp_min,zp_max,yp_min,yp_max,xp_min,xp_max
- real(dp) :: xfsh,un(4),j1_norm,j2_norm
+ real(dp) :: xfsh,un(2),wgh_sp(3)
  integer :: nxl(5)
  real(dp),allocatable :: wy(:,:),wz(:,:)
- integer :: loc_nptx(4),nps_loc(4),np_per_zcell(4),last_particle_index(4)
+ integer :: loc_nptx(4),nps_loc(4),np_per_zcell(4),last_particle_index(4),nptx_alloc(4)
  !==========================
  p=0
  i=0
@@ -278,23 +280,19 @@
  np_per_zcell(1:nsp)=1
  !==========================
  nxl=0
- np1=n1_over_n
- np2=n2_over_n
- if(n_over_nc > 0.0)then
-  np1=np1/n_over_nc
-  np2=np2/n_over_nc
- endif
  nyl1=1+ny/2-nyh/2  !=1 if nyh=ny
  nzl1=1+nz/2-nyh/2
  !============================
  ! Parameters for particle distribution along the x-coordinate
  !============================
- ! Layers nxl(1:5) all contain the same species
+ ! Layers nxl(1:5) all containing the same ion species
  xtot=0.0
+ nxtot=0
  do i=1,5
   nxl(i)=nint(dx_inv*lpx(i))
   lpx(i)=nxl(i)*dx
   xtot=xtot+lpx(i)
+  nxtot=nxtot+nxl(i)
  end do
  xfsh=xf0+lpx(7)
  targ_in=xfsh
@@ -335,8 +333,10 @@
  allocate(loc_kmax(0:npe_zloc-1,nsp))
  allocate(loc_imax(0:npe_xloc-1,nsp))
  !==================
+ !  UNIFORM y-z particle distribution for all models
  !========================
  wghpt=1.0
+ un=one_dp
  !===================================
  ! Distributes particles on y-z coordinates
  do ic=1,nsp
@@ -413,20 +413,15 @@
  !===========================
  ! WARNING for charge distribution
  !====================================
- ! wgh(1)=1/mp_per_cell(1) for electron
- ! For nsp =2):
- ! if mp_per_cell(2)=mp_per_cell(1)/ion_min(1)  => wgh(2)=wgh(1)  same weight
- ! otherwise  if mp_per_cell(2)*ion_min(1) < mp_per_cell(1) :
- !           wgh(2)=1/(ion_min(1)*mp_per_cell(2)) > wgh(1)
- ! mp_per_cell have to be set in a way total charge is zero:
- ! For nsp > 2 mp_per_cell(2:nsp) have to be set in a way
- ! Z1*mp_per_cell(Z1)+Z2*mp_per_cell(Z2)=mp_per_cell(El)
- !====================
+ ! wgh_sp(1:nsp) already set by initial conditions
+ !=====================================================
  ! Longitudinal distribution
  nptx=0
- un(1:nsp)=1.
+ !Weights for mulpispecies target
+ wgh_sp(1:3)=j0_norm
  if(nsp==2)then
-  if(ion_min(2)>0)un(2)=ratio_mpc(2)/real(ion_min(1),dp)   !float(mp_per_cell(1))/float(mp_per_cell(2))
+  wgh_sp(2)=1./(real(mp_per_cell(2),dp))
+  if(ion_min(1)>1)wgh_sp(2)=1./(real(ion_min(1),dp)*real(mp_per_cell(2),dp))
  endif
  select case(layer_mod)
   !================ first uniform layer np1=================
@@ -438,8 +433,7 @@
      uu=(real(i,dp)-0.5)/real(n_peak,dp)
      i1=nptx(ic)+i
      xpt(i1,ic)=xfsh+lpx(1)*uu
-     wghpt(i1,ic)=j1_norm
-     wghpt(i1,ic)=wghpt(i1,ic)*un(ic)
+     wghpt(i1,ic)=np1*wgh_sp(ic)
     end do
     nptx(ic)=nptx(ic)+n_peak
    end do
@@ -453,8 +447,7 @@
      uu=(real(i,dp)-0.5)/real(n_peak,dp)
      i1=nptx(ic)+i
      xpt(i1,ic)=xfsh+lpx(2)*uu
-     wghpt(i1,ic)=(np1+uu*(1.-np1))*j0_norm
-     wghpt(i1,ic)=wghpt(i1,ic)*un(ic)
+     wghpt(i1,ic)=(np1+uu*(1.-np1))*wgh_sp(ic)
     end do
     nptx(ic)=nptx(ic)+n_peak
    end do
@@ -468,8 +461,7 @@
      uu=(real(i,dp)-0.5)/real(n_peak,dp)
      i1=nptx(ic)+i
      xpt(i1,ic)=xfsh+lpx(3)*uu
-     wghpt(i1,ic)=j0_norm
-     wghpt(i1,ic)=wghpt(i1,ic)*un(ic)
+     wghpt(i1,ic)=wgh_sp(ic)
     end do
     nptx(ic)=nptx(ic)+n_peak
    end do
@@ -483,8 +475,7 @@
      uu=(real(i,dp)-0.5)/real(n_peak,dp)
      i1=nptx(ic)+i
      xpt(i1,ic)=xfsh+lpx(4)*uu
-     wghpt(i1,ic)=(1.-uu*(1.-np2))*j0_norm
-     wghpt(i1,ic)=wghpt(i1,ic)*un(ic)
+     wghpt(i1,ic)=(1.-uu*(1.-np2))*wgh_sp(ic)
     end do
     nptx(ic)=nptx(ic)+n_peak
    end do
@@ -497,13 +488,15 @@
      uu=(real(i,dp)-0.5)/real(n_peak,dp)
      i1=nptx(ic)+i
      xpt(i1,ic)=xfsh+lpx(5)*uu
-     wghpt(i1,ic)=np2*j0_norm
-     wghpt(i1,ic)=wghpt(i1,ic)*un(ic)
+     wghpt(i1,ic)=np2*wgh_sp(ic)
     end do
     nptx(ic)=nptx(ic)+n_peak
    end do
    xfsh=xfsh+lpx(5)
   endif
+  do ic=1,nsp
+   nptx_alloc(ic)=min(nptx(ic)+10,nx*np_per_xc(ic))
+  end do
   !=========================================
  case(2)
   !                 two bumps  (n1/n_c, n2/n_c) of length x_1 and x_2
@@ -512,8 +505,6 @@
   !                 particle per cell uniform
   !================================================
   !================ first linear ramp to first plateau n1/n_c =================
-  j1_norm=np1*j0_norm
-  j2_norm=np2*j0_norm
   if(nxl(1)>0)then
    do ic=1,nsp
     n_peak=nxl(1)*np_per_xc(ic)
@@ -521,8 +512,7 @@
      uu=(real(i,dp)-0.5)/real(n_peak,dp)
      i1=nptx(ic)+i
      xpt(i1,ic)=xfsh+lpx(1)*uu
-     wghpt(i1,ic)=uu*j1_norm
-     wghpt(i1,ic)=wghpt(i1,ic)*un(ic)
+     wghpt(i1,ic)=uu*np1*wgh_sp(ic)
     end do
     nptx(ic)=nptx(ic)+n_peak
    end do
@@ -535,8 +525,7 @@
      uu=(real(i,dp)-0.5)/real(n_peak,dp)
      i1=nptx(ic)+i
      xpt(i1,ic)=xfsh+lpx(2)*uu
-     wghpt(i1,ic)=j1_norm
-     wghpt(i1,ic)=wghpt(i1,ic)*un(ic)
+     wghpt(i1,ic)=np1*wgh_sp(ic)
     end do
     nptx(ic)=nptx(ic)+n_peak
    end do
@@ -550,8 +539,7 @@
      uu=(real(i,dp)-0.5)/real(n_peak,dp)
      i1=nptx(ic)+i
      xpt(i1,ic)=xfsh+lpx(3)*uu
-     wghpt(i1,ic)=j1_norm+uu*(j2_norm-j1_norm)
-     wghpt(i1,ic)=wghpt(i1,ic)*un(ic)
+     wghpt(i1,ic)=wgh_sp(ic)*(np1+uu*(np2-np1))
     end do
     nptx(ic)=nptx(ic)+n_peak
    enddo
@@ -565,8 +553,7 @@
      uu=(real(i,dp)-0.5)/real(n_peak,dp)
      i1=nptx(ic)+i
      xpt(i1,ic)=xfsh+lpx(4)*uu
-     wghpt(i1,ic)=j2_norm
-     wghpt(i1,ic)=wghpt(i1,ic)*un(ic)
+     wghpt(i1,ic)=np2*wgh_sp(ic)
     end do
     nptx(ic)=nptx(ic)+n_peak
    end do
@@ -579,13 +566,16 @@
      uu=(real(i)-0.5)/real(n_peak,dp)
      i1=nptx(ic)+i
      xpt(i1,ic)=xfsh+lpx(5)*uu
-     wghpt(i1,ic)=(1.-uu)*j2_norm
-     wghpt(i1,ic)=wghpt(i1,ic)*un(ic)
+     wghpt(i1,ic)=(1.-uu)*wgh_sp(ic)
     end do
     nptx(ic)=nptx(ic)+n_peak
    end do
    xfsh=xfsh+lpx(5)
   endif
+  do ic=1,nsp
+   nptx_alloc(ic)=min(nptx(ic)+10,nx*np_per_xc(ic))
+  end do
+!======================================
  case(3)
   !                 three layers
   !                 lpx(1)[ramp]+lpx(2)[plateau]  and lpx(4) plateu lpx(5) downramp n_ion=0 n_e=n_0
@@ -593,10 +583,10 @@
   !                 and electronic density n_e=n_0+Z1*n_ion  n0=n_H(+)
   !---------------
   !================================================
-  un(2)=np1*ratio_mpc(2)          !float(mp_per_cell(1))/float(mp_per_cell(ic))
-  if(ion_min(2)>1)un(2)=un(2)/real(ion_min(1),dp) !float(mp_per_cell(1))/Z1*float(mp_per_cell(ic))
   !Z1 electrons are accounted for by a larger electron weight
   un(1)=1.+ion_min(1)*np1
+  un(2)=np1        !float(mp_per_cell(1))/float(mp_per_cell(ic))
+
   if(nxl(1)>0)then
    do ic=1,nsp_run
     n_peak=nxl(1)*np_per_xc(ic)
@@ -604,7 +594,7 @@
      uu=(real(i,dp)-0.5)/real(n_peak,dp)
      i1=nptx(ic)+i
      xpt(i1,ic)=xfsh+lpx(1)*uu
-     wghpt(i1,ic)=uu*j0_norm
+     wghpt(i1,ic)=uu*wgh_sp(ic)
     end do
     nptx(ic)=nptx(ic)+n_peak
    end do
@@ -617,22 +607,21 @@
      uu=(real(i,dp)-0.5)/real(n_peak,dp)
      i1=nptx(ic)+i
      xpt(i1,ic)=xfsh+lpx(2)*uu
-     wghpt(i1,ic)=j0_norm
+     wghpt(i1,ic)=wgh_sp(ic)
     end do
     nptx(ic)=nptx(ic)+n_peak
    end do
    xfsh=xfsh+lpx(2)
   endif
   !================
-  if(nxl(3)>0)then              !H(+) + dopant
+  if(nxl(3)>0)then !el+H(+) + dopant un(1:2) correct (electron,Z1) weights
    do ic=1,nsp
     n_peak=nxl(3)*np_per_xc(ic)
     do i=1,n_peak
      uu=(real(i,dp)-0.5)/real(n_peak,dp)
      i1=nptx(ic)+i
      xpt(i1,ic)=xfsh+lpx(3)*uu
-     wghpt(i1,ic)=j0_norm
-     wghpt(i1,ic)=wghpt(i1,ic)*un(ic)
+     wghpt(i1,ic)=un(ic)*wgh_sp(ic)
     end do
     nptx(ic)=nptx(ic)+n_peak
    end do
@@ -646,11 +635,11 @@
      uu=(real(i,dp)-0.5)/real(n_peak,dp)
      i1=nptx(ic)+i
      xpt(i1,ic)=xfsh+lpx(4)*uu
-     wghpt(i1,ic)=j0_norm
+     wghpt(i1,ic)=wgh_sp(ic)
     end do
     nptx(ic)=nptx(ic)+n_peak
-    xfsh=xfsh+lpx(4)
    enddo
+    xfsh=xfsh+lpx(4)
   endif
   if(nxl(5)>0)then     !second down-ramp ==> 0
    do ic=1,nsp_run
@@ -659,126 +648,25 @@
      uu=(real(i)-0.5)/real(n_peak,dp)
      i1=nptx(ic)+i
      xpt(i1,ic)=xfsh+lpx(5)*uu
-     wghpt(i1,ic)=(1.-uu)*j0_norm
+     wghpt(i1,ic)=(1.-uu)*wgh_sp(ic)
     end do
     nptx(ic)=nptx(ic)+n_peak
+   end do
     xfsh=xfsh+lpx(5)
-   end do
   endif
- case(5)
-  !                 three layers: dopant in first layer
-  !                 lpx(1)[ramp]+lpx(2)[plateau]  with a (A1-Z1) dopant with % density np1=n1_per_nc/n_per_nc
-  !                 and electronic density n_e=n_0+Z1*n_ion  n0=n_H(+)
-  !---------------
-  !                 lpx(4)[plateau +lpx(5)[downramp] with mp_per_cell(1) electrons
-  !                 of density n_e/n_0=1
-  !================================================
-  un(2)=np1*ratio_mpc(2)                     !float(mp_per_cell(1))/float(mp_per_cell(ic))
-  if(ion_min(2)>1)un(2)=un(2)/real(ion_min(1),dp) !float(mp_per_cell(1))/Z1*float(mp_per_cell(ic))
-  !Z1 electrons are accounted for by a larger electron weight
-  un(1)=1.+ion_min(1)*np1
-  if(nxl(1)>0)then
    do ic=1,nsp
-    n_peak=nxl(1)*np_per_xc(ic)
-    do i=1,n_peak
-     uu=(real(i,dp)-0.5)/real(n_peak,dp)
-     i1=nptx(ic)+i
-     xpt(i1,ic)=xfsh+lpx(1)*uu
-     wghpt(i1,ic)=uu*j0_norm
-     wghpt(i1,ic)=wghpt(i1,ic)*un(ic)
+   nptx_alloc(ic)=min(nptx(ic)+10,nx*np_per_xc(ic))
     end do
-    nptx(ic)=nptx(ic)+n_peak
-   end do
-   xfsh=xfsh+lpx(1)
-  endif
-  if(nxl(2)>0)then              !first plateau
-   do ic=1,nsp
-    n_peak=nxl(2)*np_per_xc(ic)
-    do i=1,n_peak
-     uu=(real(i,dp)-0.5)/real(n_peak,dp)
-     i1=nptx(ic)+i
-     xpt(i1,ic)=xfsh+lpx(2)*uu
-     wghpt(i1,ic)=j0_norm
-     wghpt(i1,ic)=wghpt(i1,ic)*un(ic)
-    end do
-    nptx(ic)=nptx(ic)+n_peak
-   end do
-   xfsh=xfsh+lpx(2)
-  endif
-  !================
-  if(nxl(3)>0)then
-   do ic=1, nsp_run
-    n_peak=nxl(3)*np_per_xc(ic)
-    do i=1,n_peak
-     uu=(real(i,dp)-0.5)/real(n_peak,dp)
-     i1=nptx(ic)+i
-     xpt(i1,ic)=xfsh+lpx(3)*uu
-     wghpt(i1,ic)=j1_norm+uu*(j2_norm-j1_norm)
-     wghpt(i1,ic)=wghpt(i1,ic)*un(ic)
-    end do
-    nptx(ic)=nptx(ic)+n_peak
-    xfsh=xfsh+lpx(3)
-   enddo
-  endif
-  !================ second plateau only electrons =================
-  if(nxl(4)>0)then
-   do ic=1,nsp_run
-    n_peak=nxl(4)*np_per_xc(ic)
-    do i=1,n_peak
-     uu=(real(i,dp)-0.5)/real(n_peak,dp)
-     i1=nptx(ic)+i
-     xpt(i1,ic)=xfsh+lpx(4)*uu
-     wghpt(i1,ic)=j0_norm
-    end do
-    nptx(ic)=nptx(ic)+n_peak
-    xfsh=xfsh+lpx(4)
-   enddo
-  endif
-  if(nxl(5)>0)then     !second down-ramp ==> 0
-   do ic=1,nsp_run
-    n_peak=nxl(5)*np_per_xc(ic)
-    do i=1,n_peak
-     uu=(real(i)-0.5)/real(n_peak,dp)
-     i1=nptx(ic)+i
-     xpt(i1,ic)=xfsh+lpx(5)*uu
-     wghpt(i1,ic)=(1.-uu)*j0_norm
-    end do
-    nptx(ic)=nptx(ic)+n_peak
-    xfsh=xfsh+lpx(5)
-   end do
-  endif
-
-!---------------------------------------------------------------!
-!------ Cos-sinusoidal background modulation  ---!
-!---------------------------------------------------------------!
-case(6)
- j1_norm=np1*j0_norm
- j2_norm=np2*j0_norm
- !================ Cos-sinusoidal background modulation =================
- if(nxl(4)>0)then
-  do ic=1,nsp
-   n_peak=nxl(4)*np_per_xc(ic)
-   do i=1,n_peak
-    uu=(real(i,dp)-0.5)/real(n_peak,dp)
-    i1=nptx(ic)+i
-    xpt(i1,ic)=xfsh+lpx(4)*uu !lab-X position in um
-    wghpt(i1,ic)=j0_norm*(1.0+n1_over_n*cos(xpt(i1,ic)*2.*pi/lpx(2)))
-    wghpt(i1,ic)=wghpt(i1,ic)*un(ic)
-   end do
-   nptx(ic)=nptx(ic)+n_peak
-  end do
-  xfsh=xfsh+lpx(4)
- endif
-!----------------------------!
-
-
  end select
+   do ic=1,nsp
+  sptx_max(ic)=nptx(ic)
+    end do
  !================================
  ! END of section setting global coordinates
  !=================================
  ! LOCAL to mpi domains particle representation
  ! NO dependence of (y,z) coordinates on x coordinate
- !=====loc_npty,loc_nptz allocated to (6) yz-layers or components
+ !=====loc_npty,loc_nptz allocated to (nsp) yz-layers or components
  loc_npty(1:nsp)=loc_jmax(imody,1:nsp)
  loc_nptz(1:nsp)=loc_kmax(imodz,1:nsp)
  !===========================
@@ -804,45 +692,57 @@ case(6)
   ymin_t,zmin_t,wy,wz)
  ! Restricts to the computational box
  !=================================
- do ic=1,nsp
-  do j=1,nptx(ic)
-   if(xpt(j,ic)>xmax)exit
-  end do
-  nptx(ic)=j-1
- end do
  if(pe0)then
-  write(6,*)'last particle coordinate',nptx(1:nsp)
+  open(12,file='Initial_gas_target_x-profiles',form='formatted')
+ do ic=1,nsp
+   write(12,*)'species',ic,sptx_max(ic)
+   write(12,*)'particle x-coordinate'
+   write(12,'(6e11.4)')xpt(1:sptx_max(ic),ic)
+   write(12,*)'particle weight'
+   write(12,'(6e11.4)')wghpt(1:sptx_max(ic),ic)
+  end do
+ close(12)
  endif
+!========== PARICLE ALLOCATION ==============
+ do ic=1,nsp
+  nps_loc(ic)=nptx_alloc(ic)*loc_jmax(imody,ic)*loc_kmax(imodz,ic)
+ end do
+ npmax=maxval(nps_loc(1:nsp))
+ nps_loc(1)=npmax
+ call p_alloc(npmax,nd2+1,nps_loc,nsp,LPf_ord,1,1,mem_psize)
  !=========== Local x-distribution
  allocate(loc_wghx(nptx_max,nsp))
  do ic=1,nsp
   call set_pgrid_xind(nptx(ic),ic)
  end do
- if(pe0)write(6,*)'imax on each mpi task',loc_imax(0:npe_xloc-1,1)
+ if(pe0)write(6,*)'imax on each mpi task',loc_imax(0,1:nsp)
  loc_nptx(1:nsp)=loc_imax(imodx,1:nsp)
  !==================
+!=====================
+ !Resets nptx(ic)=last particle coordinate inside the computational box
+ !in the initial condition: for t>0  nptx(ic) updated by mowing window 
  do ic=1,nsp
   i1=0
-  do i=1,nptx(ic)
-   if(xpt(i,ic)>=loc_xgrid(imodx)%gmin&
-    .and.xpt(i,ic)<loc_xgrid(imodx)%gmax)then
-   i1=i1+1
-   loc_xpt(i1,ic)=xpt(i,ic)
-   loc_wghx(i1,ic)=wghpt(i,ic)
-   endif
+  do j=1,nptx(ic)
+   if(xpt(j,ic)< xmax)i1=i1+1
   end do
-  if(i1 /= loc_nptx(ic))write(6,*)'wrong part numbers',imodx,i1
+  nptx(ic)=i1
+  loc_nptx(ic)=i1
+ end do
+ if(pe0)then
+  do ic=1,nsp
+  write(6,*)'last particle coordinate in initial computationalbox',nptx(ic)
+  end do
+ endif
+ do ic=1,nsp
+  do i=1,nptx(ic)
+   loc_xpt(i,ic)=xpt(i,ic)
+   loc_wghx(i,ic)=wghpt(i,ic)
+  end do
  end do
  !=============================
- nps_loc(1:nsp)=loc_imax(imodx,1:nsp)*loc_jmax(imody,1:nsp)*loc_kmax(imodz,1:nsp)
- !===================================
- loc_npart(imody,imodz,imodx,1:nsp)=nps_loc(1:nsp)
  ! Alocation using a large buffer npt_max=mp_per_cell(1)*nx_loc*ny_loc*nz_loc
 
- npmax=maxval(nps_loc(1:nsp))
- npmax=max(npt_buffer,npmax)
- nps_loc(1)=npmax
- call p_alloc(npmax,nd2+1,nps_loc,nsp,LPf_ord,1,1,mem_psize)
  !===========================
  last_particle_index=0
  !============
@@ -851,6 +751,7 @@ case(6)
   i2=loc_nptx(ic)
   if (i2>0) call pspecies_distribute(spec(ic),t0_pl(ic),unit_charge(ic),&
    p,ic,i2,last_particle_index(ic))
+  loc_npart(imody,imodz,imodx,ic)=last_particle_index(ic)
  enddo
 
  end subroutine multi_layer_gas_target
@@ -866,7 +767,7 @@ case(6)
  integer :: nptx_loc(6)
  integer :: npty_layer(6),npty_ne,nptz_ne
  integer :: npmax,nps_loc(4)
- real(dp) :: uu,yy,dxip,dpy,np1,np2,np1_loc
+ real(dp) :: uu,yy,dxip,dpy,np1_loc
  real(dp) :: zp_min,zp_max,yp_min,yp_max,xp_min,xp_max
  real(dp) :: xfsh,l_inv
  integer :: nxl(6),nyl1
@@ -878,12 +779,6 @@ case(6)
  np_per_zcell(1:6)=1
  !!+++++++++++++++++++++++++++++++
  nxl=0
- np1=n1_over_n
- np2=n2_over_n
- if(n_over_nc >0.0)then
-  np1=np1/n_over_nc
-  np2=np2/n_over_nc
- endif
  !========= gridding the transverese target size
  nyl1=1+ny/2-nyh/2  !=1 if nyh=ny
  yp_min=ymin_t
@@ -1211,7 +1106,7 @@ case(6)
  !============
  end subroutine preplasma_multisp
  !=====================
- subroutine multi_layer_multisp(nyh,xf0)
+ subroutine multi_layer_twosp_target(nyh,xf0)
 
  integer,intent(in) :: nyh
  real(dp),intent(in) :: xf0
@@ -1221,9 +1116,9 @@ case(6)
  integer :: nptx_loc(6)
  integer :: npty_layer(6),npty_ne,nptz_ne
  integer :: npmax,nps_loc(4)
- real(dp) :: uu,yy,dxip,dpy,np1,np2,np1_loc
+ real(dp) :: uu,yy,dxip,dpy,np1_loc
  real(dp) :: zp_min,zp_max,yp_min,yp_max,xp_min,xp_max
- real(dp) :: xfsh,l_inv
+ real(dp) :: xfsh,l_inv,wgh_sp(6)
  integer :: nxl(6),nyl1
  integer :: ip_ion,ip_el,ip_pr,npyc(6)
  real(dp),allocatable :: wy(:,:),wz(:,:)
@@ -1233,12 +1128,6 @@ case(6)
  np_per_zcell(1:6)=1
  !!+++++++++++++++++++++++++++++++
  nxl=0
- np1=n1_over_n
- np2=n2_over_n
- if(n_over_nc >0.0)then
-  np1=np1/n_over_nc
-  np2=np2/n_over_nc
- endif
  !========= gridding the transverese target size
  nyl1=1+ny/2-nyh/2  !=1 if nyh=ny
  yp_min=ymin_t
@@ -1377,22 +1266,23 @@ case(6)
  !x distribution
  loc_imax(imodx,1:6)=nptx_loc(1:6)
  nps_loc=0
+ !Weights for multilayer multisp targets
+ wgh_sp(1)=1./real(mp_per_cell(3),dp)                   
+ wgh_sp(2)=1./(real(ion_min(2),dp)*real(mp_per_cell(4),dp))
+ wgh_sp(3)= j0_norm
+ wgh_sp(4)=1./(real(ion_min(1),dp)*real(mp_per_cell(2),dp))
+ wgh_sp(5)=1./real(mp_per_cell(5),dp)                   
+ wgh_sp(6)=1./(real(ion_min(2),dp)*real(mp_per_cell(6),dp))
+ !================================================
  if(nxl(1) >0)then
   do ic=1,2
    n_peak=nptx_loc(ic)
    do i=1,n_peak
     uu=(real(i,dp)-0.5)/real(n_peak,dp)
     xpt(i,ic)=xfsh+lpx(1)*uu
+    wghpt(i,ic)=np1*wgh_sp(ic)
    end do
   end do
-  wghpt(1:nptx_loc(1),1)=np1*j0_norm
-  wghpt(1:nptx_loc(2),2)=np1*j0_norm
-  if(mp_per_cell(3) >0)then
-   uu=ratio_mpc(3)   !float(mp_per_cell(1))/float(mp_per_cell(3))
-   wghpt(1:nptx_loc(1),1)=wghpt(1:nptx_loc(1),1)*uu
-   uu=ratio_mpc(4)/unit_charge(3) !float(mp_per_cell(1))/float(mp_per_cell(4))
-   wghpt(1:nptx_loc(2),2)=wghpt(1:nptx_loc(2),2)*uu
-  endif
   xfsh=xfsh+lpx(1)
   !=========== Distributes on x-MPI tasks
   do ic=1,2
@@ -1428,16 +1318,12 @@ case(6)
   n_peak=nptx_loc(ic)
   do i=1,n_peak
    xpt(i,ic)=xfsh+(lpx(2)+lpx(3))*(real(i,dp)-0.5)/real(n_peak,dp)
-   wghpt(i,ic)=j0_norm
+   wghpt(i,ic)=wgh_sp(ic)
   end do
  end do
- uu=ratio_mpc(2)/real(ion_min(1),dp)
- ic=4
- n_peak=nptx_loc(ic)
- wghpt(1:n_peak,ic)=j0_norm*uu
  !================================
  ! WARNING : electrons and Z1 ions have the same weight
- ! The Z1 ion mp_per_cell(2)=mp_per_cell(1)/Z1_ion
+ ! if mp_per_cell(1)=Z1*mp_per_cell(2)
  !=================================
  xfsh=xfsh+lpx(3)+lpx(2)
  if(np1> 0.0) then
@@ -1489,20 +1375,11 @@ case(6)
    n_peak=nptx_loc(ic)
    do i=1,n_peak
     xpt(i,ic)=xfsh+lpx(5)*(real(i,dp)-0.5)/real(n_peak,dp)
+    wghpt(i,ic)=np2*wgh_sp(ic)
    end do
-   wghpt(1:n_peak,ic)=np2*j0_norm
-  end do
-  do ic=5,6
-   if(mp_per_cell(ic) >0)then
-    uu=ratio_mpc(ic)       !float(mp_per_cell(1))/float(mp_per_cell(ic))
-    n_peak=nptx_loc(ic)
-    wghpt(1:n_peak,ic)=wghpt(1:n_peak,ic)*uu
-   endif
   end do
   xfsh=xfsh+lpx(5)
-  !===============================
-  ! Warning : holds for Z2_ion=1
-  !===============================
+!===================================
   do ic=5,6
    i1=0
    do i=1,nptx_loc(ic)
@@ -1569,9 +1446,9 @@ case(6)
  end do
 
  !============
- end subroutine multi_layer_multisp
+ end subroutine multi_layer_twosp_target
  !=======================
- subroutine multisp_target(nyh,xf0)
+ subroutine multi_layer_threesp_target(nyh,xf0)
 
  integer,intent(in) :: nyh
  real(dp),intent(in) :: xf0
@@ -1580,10 +1457,10 @@ case(6)
  integer :: np_per_zcell(6),n_peak
  integer :: nptx_loc(7)
  integer :: npty_layer(7),npty_ne,nptz_ne
- integer :: npmax,nps_loc(4)
- real(dp) :: uu,yy,dxip,dpy,np1,np2,np1_loc
+ integer :: npmax,nps_loc(4),np1_loc
+ real(dp) :: uu,yy,dxip,dpy
  real(dp) :: zp_min,zp_max,yp_min,yp_max,xp_min,xp_max
- real(dp) :: xfsh,l_inv
+ real(dp) :: xfsh,l_inv,wgh_sp(7)
  integer :: nxl(6),nyl1
  integer :: ip_ion,ip_el,ip_pr,npyc(7)
  real(dp),allocatable :: wy(:,:),wz(:,:)
@@ -1592,28 +1469,24 @@ case(6)
  xp_max=xmax
  np_per_zcell(1:6)=1
  !!+++++++++++++++++++++++++++++++
+ ! weights in central layer are wgh_sp(1:3)
  nxl=0
- np1=n1_over_n
- np2=n2_over_n
- if(n_over_nc >0.0)then
-  np1=np1/n_over_nc
-  np2=np2/n_over_nc
- endif
  !========= gridding the transverese target size
  nyl1=1+ny/2-nyh/2  !=1 if nyh=ny
  yp_min=ymin_t
  yp_max=ymax_t
  !=============================
- ! Multispecies     nsp=4 required
+ ! Multispecies  designed for nsp >2
  ! Particles distribution np_per_yc(1:3) and np_per_xc(1:3) central target
- ! (El+Z1+ Z3)
+ ! (El+Z1+ Z2
  !                        np_per_yc(5:6) and np_per_xc(5:6)
- !                        contaminants (El+Z2) in front and rear layers
+ !                        contaminants (El+Z3) in front and rear layers
+ !                        if contaminants: nsp=4(Z3/= Z2) if nps=3 Z3=Z2
  !=============================================
  !WARNING  nm_per_cell(1:3) and mp_per_cell(5:6) have to be set in a way global
  !zero charge per cell is assured
  ! In central layer:
- ! Electron number mp_per_cell(1)= Z1*mp_per_cell(2) +Z3*mp_per_cell(3)
+ ! Electron number mp_per_cell(1)= Z1*mp_per_cell(2) +Z2*mp_per_cell(3)
  !=============================
  npty=maxval(np_per_yc(1:6))
  npty=nyh*npty
@@ -1639,7 +1512,7 @@ case(6)
  allocate(loc_imax(0:npe_xloc-1,1:7))
  !====================
  npyc(1:2)=np_per_yc(5:6)       !contaminants
- npyc(3:5)=np_per_yc(1:3)  ! central target (El + two(Z1-Z3) ion species
+ npyc(3:5)=np_per_yc(1:3)  ! central target (El + two (Z1-Z2) ion species
  npyc(6:7)=npyc(1:2)
  do ic=1,7
   npty_layer(ic)=nyh*npyc(ic)
@@ -1692,9 +1565,9 @@ case(6)
  targ_in=xfsh
  targ_end=targ_in+xtot
  ! Species x-distribution
- !=  np_per_xc(1:3) electrons and Z1-Z3 ions in central layer
- !=  np_per_xc(5:6) electrons and Z2-ions front and rear side contaminants (same
- !composition)
+ !=  np_per_xc(1:3) electrons, Z1and Z2 ions in central layer lpx(2)+lpx(3)
+ !=  np_per_xc(5:6) electrons and Z3-ions front and rear side contaminants (same
+ !composition) If nsp=3 Z3=Z2
  !======================================
  nptx_loc(1:2)=nxl(1)*np_per_xc(5:6)
  nptx_loc(3:5)=(nxl(2)+nxl(3))*np_per_xc(1:3)
@@ -1702,8 +1575,8 @@ case(6)
  !============ nptx(nsp)  distribution
  nptx(1)=nptx_loc(1)+nptx_loc(3)+nptx_loc(6)  !electrons
  nptx(2)=nptx_loc(4)                          !Z1-A1 species
- nptx(3)=nptx_loc(2)+nptx_loc(6)              !Z2-A2  species in nxl(1) and nxl(5) layer
- nptx(4)=nptx_loc(5)                          !Z3-A3 species (for nsp=4)
+ nptx(3)=nptx_loc(5)                          !Z2-A2 species 
+ nptx(4)=nptx_loc(2)+nptx_loc(6)              !Z3-A3  species in nxl(1) and nxl(5) layer
  nptx_max=maxval(nptx_loc(1:7))
  !=======================
  allocate(xpt(nptx_max,7))
@@ -1738,22 +1611,19 @@ case(6)
  loc_imax(imodx,1:7)=nptx_loc(1:7)
  nps_loc=0
  !==========================================
- if(nxl(1) >0)then                  !first contaminant layer
+ wgh_sp(1)=j0_norm*ratio_mpc(5)
+ wgh_sp(2)=j0_norm*ratio_mpc(6)/real(ion_min(nsp-1),dp)
+ wgh_sp(3:5)=j0_norm
+ !===================================
+ if(nxl(1) >0)then                  !first contaminant layer El+Z(nsp-1)
   do ic=1,2
    n_peak=nptx_loc(ic)
    do i=1,n_peak
     uu=(real(i,dp)-0.5)/real(n_peak,dp)
     xpt(i,ic)=xfsh+lpx(1)*uu
+    wghpt(i,ic)=np1*wgh_sp(ic)        !pp weights using mp_per_cell(5:6)
    end do
   end do
-  wghpt(1:nptx_loc(1),1)=np1*j0_norm    !El
-  wghpt(1:nptx_loc(2),2)=np1*j0_norm    !Z2-A2
-  if(mp_per_cell(5) >0)then
-   uu=ratio_mpc(5)   !float(mp_per_cell(1))/float(mp_per_cell(5))
-   wghpt(1:nptx_loc(1),1)=wghpt(1:nptx_loc(1),1)*uu
-   uu=ratio_mpc(6)/real(ion_min(2),dp)    !float(mp_per_cell(1))/Z2*float(mp_per_cell(6))
-   wghpt(1:nptx_loc(2),2)=wghpt(1:nptx_loc(2),2)*uu
-  endif
   xfsh=xfsh+lpx(1)
   !=========== Distributes on x-MPI tasks
   do ic=1,2
@@ -1773,32 +1643,33 @@ case(6)
   p=imodx
   l=imody
   ip=imodz
-  ! Counts particles (e+Z2 ions)
+  ! Counts particles (e+Z3 ions)
 
   nps_loc(1)=nps_loc(1)+&
    loc_imax(p,1)*loc_jmax(l,1)*loc_kmax(ip,1)
-  nps_loc(3)=nps_loc(3)+&
+  nps_loc(nsp)=nps_loc(nsp)+&
    loc_imax(p,2)*loc_jmax(l,2)*loc_kmax(ip,2)
 
  endif
  !------------------------------
- ! Electrons and (Z1+Z3)_ions : central layer with lpx(2) preplasma
+ ! Electrons and (Z1+Z2)_ions : central layer with lpx(2) preplasma
  ! x distribution
  !====================
  np1_loc=0.005
+ if(np1>0.0)np1_loc=np1
  l_inv=log(1./np1_loc)
  do ic=3,5
   n_peak=nptx_loc(ic)  !central target
   do i=1,n_peak
    uu=(real(i,dp)-0.5)/real(n_peak,dp)
    xpt(i,ic)=xfsh+(lpx(2)+lpx(3))*uu
-   wghpt(i,ic)=j0_norm
+   wghpt(i,ic)=wgh_sp(ic)       !weights usig mp_per_cell(1:3)  (El, Z1, Z2) ions
   end do
   if(nxl(2) >0)then
    n_peak=nxl(2)*np_per_xc(ic-2)  !preplasma
    do i=1,n_peak
     uu=(real(i,dp)-0.5)/real(n_peak,dp)
-    wghpt(i,ic)=j0_norm*np1_loc*exp(uu*l_inv)
+    wghpt(i,ic)=wghpt(i,ic)*np1_loc*exp(uu*l_inv)
    end do
   endif
  end do
@@ -1827,25 +1698,17 @@ case(6)
   loc_imax(p,3)*loc_jmax(l,3)*loc_kmax(ip,3)
  nps_loc(2)=nps_loc(2)+&
   loc_imax(p,4)*loc_jmax(l,4)*loc_kmax(ip,4)
- if(nsp >3)then
-  nps_loc(4)=nps_loc(4)+&
+  nps_loc(3)=nps_loc(3)+&
    loc_imax(p,5)*loc_jmax(l,5)*loc_kmax(ip,5)
- endif
  !============================
  if(lpx(5) >0.0)then
   do ic=6,7
    n_peak=nptx_loc(ic)
    do i=1,n_peak
     xpt(i,ic)=xfsh+lpx(5)*(real(i,dp)-0.5)/real(n_peak,dp)
+    wghpt(i,ic)=np2*wgh_sp(ic-5)  !weights using mp_per_cell(5:6) as in layer lpx(1)
    end do
-   wghpt(1:n_peak,ic)=np2*j0_norm
   end do
-  if(mp_per_cell(5) >0)then
-   uu=ratio_mpc(5)   !float(mp_per_cell(1))/float(mp_per_cell(5))
-   wghpt(1:nptx_loc(6),6)=wghpt(1:nptx_loc(6),6)*uu
-   uu=ratio_mpc(6)/real(ion_min(2),dp)         !float(mp_per_cell(1))/(Z2*float(mp_per_cell(6))
-   wghpt(1:nptx_loc(7),7)=wghpt(1:nptx_loc(7),7)*uu
-  endif
   xfsh=xfsh+lpx(5)
   !===============================
   do ic=6,7
@@ -1866,7 +1729,7 @@ case(6)
 
   nps_loc(1)=nps_loc(1)+&
    loc_imax(p,6)*loc_jmax(l,6)*loc_kmax(ip,6)
-  nps_loc(3)=nps_loc(3)+&
+  nps_loc(nsp)=nps_loc(nsp)+&
    loc_imax(p,7)*loc_jmax(l,7)*loc_kmax(ip,7)
 
  endif
@@ -1879,28 +1742,28 @@ case(6)
  ip_pr=0
  ip_ion=0
  !============
- ! The first electron-H1 layer
+ ! The first electron-Z3 layer
  if(nxl(1) >0)then
   p=0
   i2=loc_imax(imodx,1)
   call pspecies_distribute(spec(1),t0_pl(1),unit_charge(1),p,1,i2,ip_el)
   p=0
   i2=loc_imax(imodx,2)
-  call pspecies_distribute(spec(3),t0_pl(3),unit_charge(3),p,2,i2,ip_pr)
+  call pspecies_distribute(spec(nsp),t0_pl(nsp),unit_charge(nsp),p,2,i2,ip_pr)
+                              !Z3 for nsp=4  Z3=Z2 for nsp=3
  endif
  !=========================
- ! The second solid electron-Z1-Z3 layer
+ ! The second solid electron-Z1-Z2 layer
  p=ip_el
  i2=loc_imax(imodx,3)
  call pspecies_distribute(spec(1),t0_pl(1),unit_charge(1),p,3,i2,ip_el)
  p=0
  i2=loc_imax(imodx,4)
  call pspecies_distribute(spec(2),t0_pl(2),unit_charge(2),p,4,i2,ip_ion)
- if(nsp >3)then
   p=0
+ if(nsp==3)p=ip_pr
   i2=loc_imax(imodx,5)
-  call pspecies_distribute(spec(4),t0_pl(4),unit_charge(4),p,5,i2,ip_ion)
- endif
+ call pspecies_distribute(spec(3),t0_pl(3),unit_charge(3),p,5,i2,ip_ion)
  !============
  ! The third electron-proton layer
  !=========================
@@ -1909,8 +1772,9 @@ case(6)
   i2=loc_imax(imodx,6)
   call pspecies_distribute(spec(1),t0_pl(1),unit_charge(1),p,6,i2,ip)
   p=ip_pr
+  if(nsp==3)p=ip_ion
   i2=loc_imax(imodx,7)
-  call pspecies_distribute(spec(3),t0_pl(3),unit_charge(3),p,7,i2,ip)
+  call pspecies_distribute(spec(nsp),t0_pl(nsp),unit_charge(nsp),p,7,i2,ip)
  endif
 
  do ic=1,nsp
@@ -1918,7 +1782,7 @@ case(6)
  end do
 
  !============
- end subroutine multisp_target
+ end subroutine multi_layer_threesp_target
  !=====================
  subroutine one_layer_nano_wires(nyh,xf0)
 
@@ -1930,7 +1794,7 @@ case(6)
  integer :: nptx_loc(8)
  integer :: npty_layer(8),npyc(8),npty_ne,nptz_ne
  integer :: npmax,nps_loc(4),nps_bulk
- real(dp) :: uu,yy,dxip,dpy,np1,np2
+ real(dp) :: uu,yy,dxip,dpy
  real(dp) :: zp_min,zp_max,yp_min,yp_max,xp_min,xp_max
  real(dp) :: xfsh,dlpy,tot_lpy,loc_ymp
  integer :: z2,nxl(6),nyl1,nlpy,nholes
@@ -1947,12 +1811,6 @@ case(6)
  !!+++++++++++++++++++++++++++++++
  nxl=0
  z2=ion_min(nsp-1)
- np1=n1_over_n
- np2=n2_over_n
- if(n_over_nc >0.0)then
-  np1=np1/n_over_nc
-  np2=np2/n_over_nc
- endif
  !========= gridding the transverese target size
  nyl1=1+ny/2-nyh/2  !=1 if nyh=ny
  yp_min=ymin_t
@@ -2165,21 +2023,12 @@ case(6)
    do i=1,n_peak
     uu=(real(i,dp)-0.5)/real(n_peak,dp)
     xpt(i,ic)=xfsh+lpx(3)*uu
-    wghpt(i,ic)=j0_norm
+    wghpt(i,ic)=ratio_mpc(ic)*j0_norm
+    xpt(i,ic+2)=xpt(i,ic)
+    wghpt(i,ic+2)=np1*wghpt(i,ic)
    end do
    !========================= np1>0 a low density  interwire plasma
-   do i=1,n_peak
-    xpt(i,ic+2)=xpt(i,ic)
-    wghpt(i,ic+2)=np1*j0_norm
-   end do
   end do
-  ic=2
-  n_peak=nptx_loc(ic)
-  if(mp_per_cell(ic) >0)then
-   uu=ratio_mpc(ic)/real(ion_min(1),dp) !float(mp_per_cell(1))/float(mp_per_cell(ic))
-   wghpt(1:n_peak,ic)=wghpt(1:n_peak,ic)*uu
-   wghpt(1:n_peak,ic+2)=wghpt(1:n_peak,ic+2)*uu
-  endif
   xfsh=xfsh+lpx(3)
   !============= first x-layer distributed on locx mpi tasks
   do ic=1,2
@@ -2229,9 +2078,11 @@ case(6)
     wghpt(i,ic)=uu
    end do
   end do
+  if(nps_bulk >2)then
   ic=6
   n_peak=nptx_loc(ic)
   wghpt(1:n_peak,ic)=wghpt(1:n_peak,ic)/real(ion_min(nps_bulk-1),dp)
+ endif
  endif
  xfsh=xfsh+lpx(4)
  !  Electrons and Z3_ions contaminants
@@ -2310,7 +2161,8 @@ case(6)
   i2=loc_imax(imodx,5)
   call pspecies_distribute(spec(1),t0_pl(1),unit_charge(1),p,5,i2,ip_el)
 
-  p=0
+  p=ip_ion
+  if(nps_bulk==3)p=0
   i2=loc_imax(imodx,6)
   call pspecies_distribute(spec(nps_bulk),t0_pl(nps_bulk),unit_charge(nps_bulk),p,6,i2,ip_ion)
  endif
@@ -2649,40 +2501,29 @@ case(6)
   !if nsp > 1 ions active only for ionization
   call multi_layer_gas_target(id,ny_targ,xf0)
   !======================
-  !id=1
+  !model id=1
   !lpx(1) first plateau np1 density
   !ramp lpx(2)+ plateau lpx(3) + downramp lpx(4)] density 1
   !lpx(5) last plateau np2 density
   !all densities normalized to n_0=n_over_nc
   !====================================
-  !id=2  target with two central plateau (for shocked gas-jet)
-  !lpx(1) first ramp up to lpx(2) first plateau density np1
+  !model id=2  target with two central plateau (for shocked gas-jet)
+  !lpx(1) first ramp up to lpx(2) first plateau at density np1
   !lpx(3) downramp to
   !lpx(4) second plateau density np2 and to final downramp lpx(5)
-  !n_0=n_over_nc can be an average, or n1_over_nc or n2_over_nc
+  !n_0=n_over_nc can be an average, or n0_=n1_over_nc or n0_=n2_over_nc
+  !Multispecies implementation
+  ! target in models id=1 and id=2 contain (implicitely) an ion species id_sp=1 
+  !as a neutralizing background. If ionization is on, nsp=2 and ionizing species
+  !is loaded and activated for ionization.
   !====================================
-  !id=3 as id=2, but multispecies is allowed:
-  ! The layer 1):
-  ! of length [lpx(1) a ramp +lpx(2) a plateau] contain a dopant (A1,Z1) with
-  ! density n_ion=w_ion*mp_per_cell(2), background (H+) electrons with density
-  ! n_0=w_el*mp_per_cell(1) and Z1 electrons of ions. The total electron density
-  ! is then:
-  ! n_e=n_0+Z1*n_ion=w_el*(mp_per_cell(1)+Z1*mp_per_cell(2)), and normalized
-  ! density:
-  ! n_e/n_0=(1+Z1*mp_per_cell(2)/mp_per_cell(2))
+  !model id=3 as id=2, with two ion species, one as local dopant and the other
+  !as a neutralizing background:
+  ! layer(1) + layer(2) only electrons and H+ with ne=n0=n_over_nc
+  ! layer(3) is a plateau with an added dopant (A1,Z1) with density
+  ! np1=n1_over_n/n0 (few %) 
+  ! layer(4)+layer(5) as layer(1)+layer(2)
   !----------
-  ! Layer 3) of length [lpx(4) a plateau lpx(5) a downramp] has density n_e=n_0
-  !------------------
-  ! layer 2) of length lpx(3) is a transition between layer 1) and 3).
-  !
-  ! In layer 2):
-  ![lpx(4) a plateau lpx(5) a downramp] contains only electrons with reference density n_e
-  ! (n_e/n_0=1)
-  !===================================
-  !id=4 as  id=1 along the x-coordinate but (y-z profile is a matched parabolic
-  !channel defined by lpy(1) and lpy(2) scale length parameters.
-  !======================================
-
  else
   !SOLID MULTISPECIES TARGETS
   !flag id=1,2 allowed not even implemented
@@ -2692,16 +2533,16 @@ case(6)
    ! (e+Z1) preplasma and central target
    !+ (e+Z2)coating
   case(4)
-   call multi_layer_multisp(ny_targ,xf0)
+   call multi_layer_twosp_target(ny_targ,xf0)
    !(e+Z2) foam
    !(e+Z1) central layer
    !(e+Z2)coating
    !============warning exponential ramp (in layer 2) always using (e+Z1) species
   case(5)
-   call multisp_target(ny_targ,xf0)
-   !(e+Z2) coating
-   !(e+Z1+Z3) central layer with lpx(2) preplasma
-   !+ (e+Z2)coating
+   call multi_layer_threesp_target(ny_targ,xf0)
+   !(e+Z3) coating
+   !(e+Z1+Z2) central multispecies layer with lpx(2) preplasma
+   !+ (e+Z3)coating
   case(6)
    call one_layer_nano_wires(ny_targ,xf0)
    !e+Z1 wires, e+Z2 bulk. interwire low density (e+Z1) plasma allowed
@@ -2747,19 +2588,88 @@ case(6)
  end do
 
  end subroutine clean_field
+ !+++++++++++++++++++++
+ subroutine init_fluid_density_momenta(uf,uf0,xf0,nfluid,dmodel,i1,i2,j1,j2,k1,k2)
+  real(dp),intent(inout) :: uf(:,:,:,:),uf0(:,:,:,:)
+  real(dp),intent(in) :: xf0
+  integer,intent(in) :: nfluid,dmodel,i1,i2,j1,j2,k1,k2
+  integer :: i,i0,j,k,ic,nxl(5),i0_targ
+  real(dp) :: uu,xtot,l_inv,np1_loc,peak_fluid_density
 
+ do i=1,5
+  nxl(i)=nint(dx_inv*lpx(i))
+  lpx(i)=nxl(i)*dx
+  xtot=xtot+lpx(i)
+ end do
+ targ_in=xf0+lpx(7)
+ targ_end=targ_in+xtot
+ i0_targ=nint(dx_inv*targ_in)
+ peak_fluid_density=1.-ratio_mpfluid
+ !=============================
+ nxf=i0_targ+nxl(1)+nxl(2)+nxl(3)+nxl(4)+nxl(5)
+ allocate(fluid_x_profile(nxf))
+ fluid_x_profile(1:i0_targ)=0.0
+ i0=i0_targ
+ np1_loc=0.005
+ if(np1>0.0)np1_loc=np1
+ l_inv=log(1./np1_loc)
+ select case(dmodel)
+  case(1)
+   if(nxl(1) >0)then
+    do i=1,nxl(1)
+     i0=i0+1
+     fluid_x_profile(i0)=peak_fluid_density*np1
+    end do
+   endif
+   if(nxl(2) >0)then    !sigma=nxl(2)/3
+    do i=1,nxl(2)
+     i0=i0+1
+     uu=(float(i)-float(nxl(2)))/float(nxl(2))
+     fluid_x_profile(i0)=peak_fluid_density*exp(-4.5*uu*uu)
+    end do
+   endif
+   do i=1,nxl(3)
+    i0=i0+1
+    fluid_x_profile(i0)=peak_fluid_density
+   end do
+   if(nxl(4) >0)then
+    do i=1,nxl(4)
+     i0=i0+1
+     uu=peak_fluid_density*float(i)/nxl(4)
+     fluid_x_profile(i0)=peak_fluid_density-uu*(1.-np2)
+    end do
+   endif
+   if(nxl(5) >0)then
+    do i=1,nxl(5)
+     i0=i0+1
+     fluid_x_profile(i0)=peak_fluid_density*np2
+    end do
+   endif
+  end select
+  ic=nfluid     !the particle number density
+  do k=k1,k2
+   do j=j1,j2
+    do i=i1,i2
+     uf(i,j,k,ic)=fluid_x_profile(i)
+     uf0(i,j,k,ic)=uf(i,j,k,ic)
+    end do
+   end do
+  end do
+  if(pe0)then
+   write(6,*)'Fluid density',maxval(uf(i1:i2,j1:j2,k1:k2,ic))
+  endif
  !========================
+ end subroutine init_fluid_density_momenta
+
  subroutine LP_pulse(lp_mod)
 
  integer,intent(in) :: lp_mod
- integer :: i1,i2,j1,j2,k1,k2,lp_ind
- real(dp) :: angle,shx_lp,sigm,eps,xm,tt,tau,lp_end
+ integer :: ic,i1,i2,j1,j2,k1,k2,lp_ind
+ real(dp) :: angle,shx_lp,sigm,eps,xm,tt,tau,tau1
+ 
 
  lp_amp=oml*a0
- alp_HM=2.*acos(sqrt(0.5*sqrt(2.0)))/pi
- lp_xsize=w0_x
- lx_FWHM=alp_HM*w0_x     !The FWHM in microns
- tau_FWHM=10.*lx_FWHM/3. !The FWHM in fs
+ lp1_amp=om1*a1
  !===========================
  ! field grid index defined on set_pgrid
 
@@ -2772,50 +2682,65 @@ case(6)
  k2=loc_zgrid(imodz)%p_ind(2)
 
  tt=0.0
- tau=0.5*w0_x
- lp_in=xc_lp-tau     !centroid xc_lp=xf-ts at time t=0 lp_in=xc-tau
- lp_end=lp_in+w0_x
+ if(G_prof)then
+  tau=w0_x*sqrt(2.)
+  tau1=w1_x*sqrt(2.)
+ else
+  tau=0.5*w0_x   !cos^2() profile_
+  tau1=0.5*w1_x   !cos^2() profile_
+ endif
+ lp_in(1)=xc_lp-tau
+ lp_end(1)=xc_lp+tau
  eps=1./(oml*w0_y)
  sigm=lam0/w0_x
  angle=lpx(6)
  xf=xc_lp+t0_lp
- if(lp_amp >0.0)then
   !=======================
   lp_ind=lp_mod
   shx_lp=0.0
-  if(angle >0.0)shx_lp=lpx(7)
+ xc_loc(1)=xc_lp
+ xf_loc(1)=xf
   if(Plane_wave)lp_ind=0
-  call init_lp_fields(ebf,lp_amp,tt,t0_lp,tau,w0_y,xf,&
+ if(angle >0.0)then
+   shx_lp=lpx(7)
+  if(lp_end(1) > xm)then
+   call init_lp_fields(ebf,lp_amp,tt,t0_lp,w0_x,w0_y,xf,oml,&
    angle,shx_lp,lp_ind,i1,i2)
-  !call divA(ebf,jc,i1,i2,j1,j2,k1,k2,1,1,dx_inv,dy_inv,dz_inv)
-  !+++++++++++++++
-  !  Holds a Plane wave pulse (lp_mod=0) and LP Gaussian pulses
-  !=======================
-  if(pe0)then
-   write(6,*)'LP injected '
-   write(6,'(a21,e11.4)')' Focal x-position xf=',xf
-   write(6,'(a21,e11.4)')' Centr x-position xc=',xc_lp
-   write(6,'(a20,e11.4)')' FWHM (microns) lsz=',lx_FWHM
-   write(6,'(a14,e11.4)')' FWHM (fs) lx=',tau_FWHM
-   write(6,'(a23,e11.4)')' Max Ey field(TV/m)  = ',E0*lp_amp
-   if(Plane_wave)then
-    write(6,'(a12)')' Plane wave '
-    if(angle >0.0)write(6,'(a17,e11.4)')' Polarization angle ',angle
-   else
-    if(lp_mod==1)  write(6,'(a16)')' P Polarization '
-    if(lp_mod==2)  write(6,'(a16)')' S Polarization '
-    write(6,'(a19,e11.4)')' Waist(microns) ly=',w0_y
-    write(6,'(a17,e11.4)')' FWHM(microns) = ',lp_rad
-    if(angle >0.0)write(6,'(a17,e11.4)')' Incidence angle ',angle
    endif
+ else         !normal incidence
+  if(lp_end(1) > xm)then
+   call init_lp_inc0_fields(ebf,lp_amp,tt,t0_lp,w0_x,w0_y,xf,oml,lp_ind,i1,i2)
   endif
- else
-  lp_end=xm
-  if(pe0)write(6,*)' NO INJECTED LASER PULSE'
  endif
+ if(nb_laser >1)then
+  do ic=2,nb_laser
+   lp_in(ic)=lp_in(ic-1)-lp_delay
+   lp_end(ic)=lp_end(ic-1)-lp_delay
+   xc_loc(ic)=xc_loc(ic-1)-lp_delay
+   xf_loc(ic)=xc_loc(ic)+t0_lp
+   if(lp_end(ic) > xm)call init_lp_inc0_fields(ebf,lp_amp,tt,t0_lp,w0_x,w0_y,xf_loc(ic),oml,&
+                                              lp_ind,i1,i2)
+  end do
+ endif
+!=================TWO-COLOR
+ if(Two_color)then
+  xc1_lp=xc_loc(nb_laser)-lp_offset
+  xf1=xc1_lp+t1_lp
+  
+  lp_ionz_in=xc1_lp-tau1
+  lp_ionz_end=xc1_lp+tau1
+  call init_lp_inc0_fields(ebf,lp1_amp,tt,t1_lp,w1_x,w1_y,xf1,om1,&
+                                              lp_ind,i1,i2)
+  if(pe0)write(6,'(a30,e11.4)')'two-color activated at xc1_lp=',xc1_lp
+  endif
+  
+!==================================
  !==================== inject particles
+ if(Hybrid)then
+  call init_fluid_density_momenta(up,up0,lp_end(1),nfcomp,dmodel_id,i1,i2,j1,j2,k1,k2)
+ endif
  if(Part)then
-  call part_distribute(dmodel_id,lp_end)
+  if(ny_targ>0)call part_distribute(dmodel_id,lp_end(1))
  endif
  !=================def part distr points
  end subroutine LP_pulse
@@ -2827,18 +2752,14 @@ case(6)
  real(dp) :: angle,shx_cp,eps,sigm,xm,tau,tt
 
  lp_amp=oml*a0/sqrt(2.)
- alp_HM=2.*acos(sqrt(0.5*sqrt(2.0)))/pi
- lp_xsize=w0_x
- lx_FWHM=alp_HM*w0_x     !The FWHM in microns
- tau_FWHM=10.*lx_FWHM/3. !The FWHM in fs
  !-------------------------
  i1=loc_xgrid(imodx)%p_ind(1)
  i2=loc_xgrid(imodx)%p_ind(2)
  xm=loc_xgrid(imodx)%gmin  ! => field index i1
  tt=0.0
  tau=0.5*w0_x
- lp_in=xc_lp-tau          !LP centroid xc_lp=xf-ts at time t=0 lp_in=xc-tau
- lp_end=lp_in+w0_x
+ lp_in(1)=xc_lp-tau          !Pulse centroid xc_lp=xf-ts at time t=0 lp_in=xc-tau
+ lp_end(1)=lp_in(1)+w0_x
  eps=1./(oml*w0_y)
  sigm=lam0/w0_x
  angle=lpx(6)
@@ -2849,45 +2770,24 @@ case(6)
   cp_ind=cp_mod
   if(Plane_wave)cp_ind=0
   !=======================
-  call init_cp_fields(ebf,lp_amp,tt,t0_lp,tau,w0_y,xf,&
+  call init_cp_fields(ebf,lp_amp,tt,t0_lp,w0_x,w0_y,xf,&
    angle,shx_cp,cp_ind,i1,i2)
   !=================def part distr points
-  if(pe0)then
-   write(6,*)'CP injected '
-   write(6,'(a21,e11.4)')' Focal x-position x0=',xf
-   write(6,'(a21,e11.4)')' Pulse centroid xc = ',xc_lp
-   write(6,'(a20,e11.4)')' Size (microns) lsz=',lp_xsize
-   write(6,'(a14,e11.4)')' FWHM (fs) lx=',tau_FWHM
-   write(6,'(a23,e11.4)')' Max Ey field(TV/m)  = ',E0*lp_amp
-   write(6,'(a17,2e11.4)')'pulse x_in x_end ',lp_in,lp_end
-   if(Plane_wave)then
-    write(6,*)' Plane wave  '
-   else
-    write(6,'(a23,2e11.4)')'Model eps-sigma param. ',eps,sigm
-    write(6,'(a19,e11.4)')' Waist(microns) ly=',w0_y
-    write(6,'(a17,e11.4)')' FWHM(microns) = ',lp_rad
-   endif
-  endif
- else
   lp_end=xm
-  if(pe0)write(6,*)'NO  CP laser pulse injected'
  endif
+!======================
  if(Part)then
-  call part_distribute(dmodel_id,lp_end)
+  call part_distribute(dmodel_id,lp_end(1))
  endif
  end subroutine CP_pulse
  !-------------------------
- subroutine set_envelope(ts)
+ subroutine set_envelope
 
- real(dp),intent(in) :: ts
- integer :: nyp,nzp,i1,i2,j1,k1
- real(dp) :: eps,sigm,xm,ym,zm,tt,tau
+ integer :: ic,nyp,nzp,i1,i2,j1,k1
+ real(dp) :: eps,sigm,xm,ym,zm,tt,tau,tau1,lp1_amp
 
  lp_amp=a0
- alp_HM=2.*acos(sqrt(0.5*sqrt(2.0)))/pi
- lp_xsize=w0_x
- lx_FWHM=alp_HM*w0_x     !The FWHM in microns
- tau_FWHM=10.*lx_FWHM/3. !The FWHM in fs
+ lp1_amp=a1
  !===========================
  ! field grid index defined on set_pgrid
 
@@ -2902,41 +2802,99 @@ case(6)
  xm=loc_xgrid(imodx)%gmin
  !=========================
  tt=0.0
- tau=0.5*w0_x
- lp_in=xc_lp-tau     !centroid xc_lp=xf-ts at time t=0 lp_in=xc-tau
- lp_end=lp_in+w0_x
- ilp_in=nint(dx_inv*lp_in)-8
- ilp_end=nint(dx_inv*lp_end)+2
+ if(G_prof)then
+  tau=w0_x*sqrt(2.)
+  tau1=w1_x*sqrt(2.)
+ else
+  tau=0.5*w0_x   !cos^2() profile_
+  tau1=0.5*w1_x   !cos^2() profile_
+ endif
+ lp_in(1)=xc_lp-tau
+ lp_end(1)=xc_lp+tau
  eps=1./(oml*w0_y)
  sigm=lam0/w0_x
+ xf=xc_lp+t0_lp
  !=======================
- if(lp_end >xm)then
+ xc_loc(1)=xc_lp
+ xf_loc(1)=xf
+ env(:,:,:,:)=0.0
+ if(lp_end(1) > xm)then
+  if(G_prof)then
+   call init_gprof_envelope_field(&
+              env,a0,dt,tt,t0_lp,w0_x,w0_y,xf,oml,i1,i2)
+  else
   call init_envelope_field(&
-   env,lp_amp,dt,tt,ts,tau,w0_y,xf,i1,i2)
+              env,a0,dt,tt,t0_lp,w0_x,w0_y,xf,oml,i1,i2)
  endif
+ endif
+ if(nb_laser >1)then
+  do ic=2,nb_laser
+   lp_in(ic)=lp_in(ic-1)-lp_delay
+   lp_end(ic)=lp_end(ic-1)-lp_delay
+   xc_loc(ic)=xc_loc(ic-1)-lp_delay
+   xf_loc(ic)=xc_loc(ic)+t0_lp
+   if(lp_end(ic) > xm)then
+    if(G_prof)then
+     call init_gprof_envelope_field(&
+              env,a0,dt,tt,t0_lp,w0_x,w0_y,xf_loc(ic),oml,i1,i2)
+    else
+     call init_envelope_field(&
+              env,a0,dt,tt,t0_lp,w0_x,w0_y,xf_loc(ic),oml,i1,i2)
+    endif
+   endif
+  end do
+ endif
+!=================TWO-COLOR
+ if(Two_color)then
+  env1(:,:,:,:)=0.0
+  xc1_lp=xc_loc(nb_laser)-lp_offset
+  xf1=xc1_lp+t1_lp
+   
+  lp_ionz_in=xc1_lp-tau1
+  lp_ionz_end=xc1_lp+tau1
+  if(lp_ionz_end > xm)then
+   if(G_prof)then
+    call init_gprof_envelope_field(&
+              env1,a1,dt,tt,t1_lp,w1_x,w1_y,xf1,om1,i1,i2)
+   else
+    call init_envelope_field(&
+              env1,a1,dt,tt,t1_lp,w1_x,w1_y,xf1,om1,i1,i2)
+   endif
+  endif 
+ endif
+ !=======================
  !==========================
  ebf=0.0
  !=====================
- if(Part)then
-  call part_distribute(dmodel_id,lp_end)
- endif
  if(pe0)then
-  write(6,*)'LP envelope injected '
+  write(6,*)'number ',nb_laser,'LP envelope injected '
+  write(6,*)' First pulse parameters'
   write(6,'(a21,e11.4)')' Focal x-position xf=',xf
   write(6,'(a21,e11.4)')' Centr x-position xc=',xc_lp
-  write(6,'(a20,e11.4)')' Size (microns) lsz=',lp_xsize
+  write(6,'(a20,e11.4)')' Size (microns) lx=',w0_x
   write(6,'(a14,e11.4)')' FWHM (fs) lx=',tau_FWHM
   write(6,'(a19,e11.4)')' Waist(microns) ly=',w0_y
   write(6,'(a17,e11.4)')' FWHM(microns) = ',lp_rad
+  if(Two_color)then
+   write(6,*)' Injection pulse parameters'
+   write(6,'(a16,e11.4)')' amplitude  a1 =',a1
+   write(6,'(a21,e11.4)')' Focal x-position xf=',xf1
+   write(6,'(a21,e11.4)')' Centr x-position xc=',xc1_lp
+   write(6,'(a20,e11.4)')' Size (microns) lx=',w1_x
+   write(6,'(a19,e11.4)')' Waist(microns) ly=',w1_y
+  endif
  endif
+ if(Hybrid)then
+  call init_fluid_density_momenta(up,up0,lp_end(1),nfcomp,dmodel_id,i1,i2,j1,nyp,k1,nzp)
+ endif
+ if(ny_targ>0)call part_distribute(dmodel_id,lp_end(1))
  !=================def part distr points
  end subroutine set_envelope
  !=========================
- subroutine beam_data(ic,btype,np_tot)  !generates bpart(7,np_tot)
- integer,intent(in) :: ic,btype
+ subroutine beam_data(ndm,np_tot)  !generates bpart(7,np_tot)
+ integer,intent(in) :: ndm
  integer,intent(out) :: np_tot
- integer :: i,i1,i2,ip,ppcb,ix,iy,iz
- integer(dp_int) :: effecitve_cell_number
+ integer :: i,i1,i2,ip
  real(dp) :: cut,xh(5),bch
  real(sp) :: ch(2)
  equivalence(bch,ch)
@@ -2949,121 +2907,46 @@ case(6)
  !=======================
  np_tot=0
  do i=1,nsb
-   if(ppc_bunch(i)>0 .and. nb_tot(i)==-1) then
-      effecitve_cell_number=bunch_volume_incellnumber(bunch_shape(i),sxb(i),syb(i),syb(i),dx,dy,dz)
-      nb_tot(i)=ppc_bunch(i)*effecitve_cell_number
-      if(pe0) write(*,'(A,1I1,A)') 'bunch(',i,') :: weighted :: option'
-      if(pe0) write(*,'(A,1I1,A)') 'bunch(',i,') :: changing total number of particles :: equal number of ppc'
-      if(pe0) write(*,'(A,1I1,A,1I3,A,1I10)') 'bunch(',i,') :: ppc =',ppc_bunch(i),' :: total number of bunch particles =',nb_tot(i)
-   endif
-   if(ppc_bunch(i)==-1 .and. nb_tot(i)>0) then
-       if(pe0) write(*,'(A,1I1,A,1I10)') 'bunch(',i,') :: equal :: option (all particle have the same weight) =',nb_tot(i)
-   endif
   np_tot=np_tot+nb_tot(i)
  end do
  cut=3.
- nch=7
- if(ic==2)nch=5
+ nch=2*ndm+1
  allocate(bpart(nch,np_tot))
- select case(btype)
- case(1)
   !---!
   i1=1
   ch(2)=real(unit_charge(1),sp)      !nsb electron bunches
+  select case(ndm)
+  case(2)
   do ip=1,nsb
    xh(ip)=xc_bunch(ip)
    ch(1)=real(j0_norm*jb_norm(ip),sp) !the bunch particles weights
    i2=i1+nb_tot(ip)-1
-
-   if(bunch_shape(ip)==1 .and. ppc_bunch(ip)>0) & !weighted-option
-                          call generate_bunch_bigaussian_weighted(i1,i2,&
-                               sxb(ip),xc_bunch(ip),&
-                               syb(ip),yc_bunch(ip),&
-                               syb(ip),zc_bunch(ip),&
-                               gam(ip),&
-                      epsy(ip),epsz(ip),cut,dg(ip),bpart,bch,dx,dy,dz,rhob(ip),ppc_bunch(ip))
-   if(bunch_shape(ip)==1 .and. ppc_bunch(ip)==-1) & !equal-weight
-                          call generate_bunch_bigaussian_equal(i1,i2,&
-                               sxb(ip),xc_bunch(ip),&
-                               syb(ip),yc_bunch(ip),&
-                               syb(ip),zc_bunch(ip),&
-                               gam(ip),&
-                      epsy(ip),epsz(ip),cut,dg(ip),bpart,bch,dx,dy,dz,rhob(ip))
-
-   if(bunch_shape(ip)==2 .and. ppc_bunch(ip)>0) & !weighted-option
-                          call generate_bunch_triangularZ_uniformR_weighted(i1,i2,&
-                               xc_bunch(ip),yc_bunch(ip),zc_bunch(ip),&
-                               sxb(ip),syb(ip),syb(ip),gam(ip),&
-                               epsy(ip),epsz(ip),dg(ip),&
-                               bpart,Charge_right(ip),Charge_left(ip),bch,dx,dy,dz, &
-                               ppc_bunch(ip))
-   if(bunch_shape(ip)==2 .and. ppc_bunch(ip)==-1) & !equal-weight
-                           call generate_bunch_triangularZ_uniformR_equal(i1,i2,&
-                                xc_bunch(ip),yc_bunch(ip),zc_bunch(ip),&
-                                sxb(ip),syb(ip),syb(ip),gam(ip),&
-                                epsy(ip),epsz(ip),dg(ip),&
-                                bpart,Charge_right(ip),Charge_left(ip),bch)
-
-
-   if(bunch_shape(ip)==3 .and. ppc_bunch(ip)>0) & !weighted-option
-                           call generate_bunch_triangularZ_normalR_weighted(i1,i2,&
-                                xc_bunch(ip),yc_bunch(ip),zc_bunch(ip),&
-                                sxb(ip),syb(ip),syb(ip),&
-                                gam(ip),epsy(ip),epsz(ip),dg(ip),&
-                                bpart,Charge_right(ip),Charge_left(ip),bch,dx,dy,dz, &
-                                ppc_bunch(ip))
-   if(bunch_shape(ip)==3 .and. ppc_bunch(ip)==-1) & !equal-weight
-                           call generate_bunch_triangularZ_normalR_equal(i1,i2,&
-                                xc_bunch(ip),yc_bunch(ip),zc_bunch(ip),&
-                                sxb(ip),syb(ip),syb(ip),&
-                                gam(ip),epsy(ip),epsz(ip),dg(ip),&
-                                bpart,Charge_right(ip),Charge_left(ip),bch)
-
-
-    !--- Twiss Rotation ---!
-    if(L_TWISS(ip)) call bunch_twissrotation(i1,i2,bpart, &
-      alpha_twiss(ip),beta_twiss(ip),alpha_twiss(ip),beta_twiss(ip), &
-      syb(ip),syb(ip),epsy(ip),epsz(ip),xc_bunch(ip),yc_bunch(ip),zc_bunch(ip))
-
-  !  if(L_TWISS .and. bunch_shape(ip)==1)  call bunch_gen_twissshifting(i1,i2,&
-  !   sxb(ip),xc_bunch(ip),&
-  !   syb(ip),yc_bunch(ip),&
-  !   syb(ip),zc_bunch(ip),&
-  !   gam(ip),&
-  !   epsy(ip),epsz(ip),dg(ip),bpart,bch,&
-  !   alpha_twiss(ip),beta_twiss(ip))
-  !  if(.not. L_TWISS .and. bunch_shape(ip)==1)  call bunch_gen_alternative(i1,i2,&
-  !   sxb(ip),xc_bunch(ip),&
-  !   syb(ip),yc_bunch(ip),&
-  !   syb(ip),zc_bunch(ip),&
-  !   gam(ip),&
-  !   epsy(ip),epsz(ip),cut,dg(ip),bpart,bch,dx,dy,dz,rhob(ip))
-  !  if(.not. L_TWISS .and. bunch_shape(ip)==2) call generate_triangularZ_uniformR_bunch(i1,i2,&
-  !   xc_bunch(ip),yc_bunch(ip),zc_bunch(ip),sxb(ip),syb(ip),syb(ip),gam(ip),epsy(ip),epsz(ip),dg(ip),&
-  !   bpart,Charge_right(ip),Charge_left(ip),bch,dx,dy,dz)
-  !  if(.not. L_TWISS .and. bunch_shape(ip)==3) call generate_triangularZ_normalR_bunch(i1,i2,&
-  !   xc_bunch(ip),yc_bunch(ip),zc_bunch(ip),sxb(ip),syb(ip),syb(ip),gam(ip),epsy(ip),epsz(ip),dg(ip),&
-  !   bpart,Charge_right(ip),Charge_left(ip),bch,dx,dy,dz)
-  !  if(.not. L_TWISS .and. bunch_shape(ip)==4) call generate_cylindrical_bunch(i1,i2,&
-  !   xc_bunch(ip),yc_bunch(ip),zc_bunch(ip),sxb(ip),syb(ip),syb(ip),gam(ip),epsy(ip),epsz(ip),dg(ip),&
-  !   bpart,Charge_right(ip),Charge_left(ip),bch)
-   !---end simplified version---!
+   !---Original Version---!
+    call bunch_gen(ndm,i1,i2,sxb(ip),syb(ip),syb(ip),gam(ip),&
+                   epsy(ip),epsz(ip),cut,dg(ip),bpart)
+    do i=i1,i2
+     bpart(1,i)=bpart(1,i)+xh(ip)       !x-shifting
+     bpart(2,i)=bpart(2,i)+yc_bunch(ip) !y-shifting
+     bpart(nch,i)=bch
+    end do
    i1=i2+1
   end do
-
- case(2)         !x-uniform proton bunch on length sx(1)
-  i1=1
-  ch(2)= 1.           !one proton  bunch starting at xc_bunch
-  ip=1
+ ! Pe0 p data are copied to all MPI tasks
+  case(3)
+  do ip=1,nsb
   xh(ip)=xc_bunch(ip)
-  ch(1)=real(jb_norm(ip),sp) !the bunch particles weights
+   ch(1)=real(j0_norm*jb_norm(ip),sp) !the bunch particles weights
   i2=i1+nb_tot(ip)-1
-  !========= a iproton beam starting at xc_bunc(1) of length sxb(ip)
-  call pbunch_gen(2,i1,i2,sxb(ip),syb(ip),syb(ip),&
-   epsy(ip),epsz(ip),bet0,bpart)
+   !---Original Version---!
+    call bunch_gen(ndm,i1,i2,sxb(ip),syb(ip),syb(ip),gam(ip),&
+    epsy(ip),epsz(ip),cut,dg(ip),bpart)
   do i=i1,i2
-   bpart(1,i)=bpart(1,i)+xh(ip)
+     bpart(1,i)=bpart(1,i)+xh(ip)       !x-shifting
+     bpart(2,i)=bpart(2,i)+yc_bunch(ip) !y-shifting
+     bpart(3,i)=bpart(3,i)+zc_bunch(ip) !z-shifting
    bpart(nch,i)=bch
+  end do
+   i1=i2+1
   end do
  end select
 
@@ -3080,7 +2963,9 @@ case(6)
  !==============================
  end subroutine beam_data
  !===================
- subroutine MPI_beam_distribute
+ subroutine MPI_beam_distribute(ndm)
+ 
+ integer,intent(in) :: ndm
 
  integer :: i,ii,i1,j
  integer :: ic,p,ip,ipp,nb_loc
@@ -3089,14 +2974,72 @@ case(6)
  !========= count particles on each (yz) MPI domain
  np_tot=sum(nb_tot(1:nsb))
  ! ALL MPI tasks do
- if(model_id==5)then
   x1=loc_xgrid(imodx)%gmin
   x2=loc_xgrid(imodx)%gmax
- else
-  x1=xc_bunch(1)       !the bunch starting x-position
-  x2=x(nx)            !the beam max position
- endif
  i1=0
+ select case(ndm)
+ case(2)
+ ip=npe_zloc-1
+ do ic=1,nsb
+  do p=0,npe_xloc-1
+   do ipp=0,npe_yloc-1
+    y1=loc_ygrid(ipp)%gmin
+    y2=loc_ygrid(ipp)%gmax
+    loc_nbpart(ipp,ip,p,ic)=0
+    do j=1,nb_tot(ic)
+     i=i1+j
+     if(bpart(2,i) >y1.and.bpart(2,i) <=y2)then
+      if(bpart(1,i) >x1.and.bpart(1,i) <=x2)then
+        loc_nbpart(ipp,ip,p,ic)=loc_nbpart(ipp,ip,p,ic)+1
+      endif
+ endif
+    end do
+   end do
+  end do
+  i1=i1+nb_tot(ic)
+ end do
+ nb_max=maxval(loc_nbpart(0:npe_yloc-1,0:npe_zloc-1,0:npe_xloc-1,1:nsb))
+ nb_min=minval(loc_nbpart(0:npe_yloc-1,0:npe_zloc-1,0:npe_xloc-1,1:nsb))
+ do ic=1,nsb
+  do p=0,npe_xloc-1
+   do ipp=0,npe_yloc-1
+    i=ipp+npe_yloc*(ip+p*npe_zloc)
+    if(loc_nbpart(ipp,ip,p,ic)==nb_max)pe_nbmax=i
+    if(loc_nbpart(ipp,ip,p,ic)==nb_min)pe_nbmin=i
+   end do
+  end do
+ end do
+ !==================
+ ! The local MPI task
+ nps_loc(1:nsb)=loc_nbpart(imody,imodz,imodx,1:nsb)
+ npmax=maxval(nps_loc(1:nsb))
+ !++++++++++++++++++++++++++++++++++++++
+ if(npmax >0)call p_alloc(npmax,nd2+1,nps_loc,nsb,LPf_ord,1,2,mem_psize)
+ !=================================
+ nb_loc=nps_loc(1)
+ p=imodx
+ ip=imodz
+ ipp=imody
+ y1=loc_ygrid(ipp)%gmin
+ y2=loc_ygrid(ipp)%gmax
+ !=========================
+ ! Here 2D MPI decomp. allowed
+ !===================================
+ i1=0
+ do ic=1,nsb
+  ii=0
+  do i=1,nb_tot(ic)
+   j=i+i1
+   if(bpart(2,j) >y1.and.bpart(2,j) <=y2)then
+    if(bpart(1,j) >x1.and.bpart(1,j) <=x2)then
+     ii=ii+1
+     bunch(ic)%part(ii,1:nd2+1)=bpart(1:nd2+1,j)
+    endif
+   endif
+  end do
+  i1=i1+nb_tot(ic)
+ enddo
+ case(3)
  do ic=1,nsb
   do p=0,npe_xloc-1
    do ip=0,npe_zloc-1
@@ -3161,13 +3104,14 @@ case(6)
     if(bpart(3,j) >z1.and.bpart(3,j) <=z2)then
      if(bpart(1,j) >x1.and.bpart(1,j) <=x2)then
       ii=ii+1
-      bunch(ic)%part(ii,1:7)=bpart(1:7,j)
+      bunch(ic)%part(ii,1:nd2+1)=bpart(1:nd2+1,j)
      endif
     endif
    endif
   end do
   i1=i1+nb_tot(ic)
  enddo
+ end select
  !=================================
  !=================================
  !============
@@ -3206,151 +3150,12 @@ case(6)
  end do
  end subroutine beam_model_pot
  !=========================
- !=========================
- subroutine pwfa_density(wp,kp,i2,j2,k2,dir)
- real(dp),intent(inout) :: wp(:,:,:)
- real(dp),intent(in) :: kp
- integer,intent(in) :: i2,j2,k2,dir
- integer :: ii,ik,i,j,k
- real(dp) :: kpx,sum0(2),skx
-
- ! in wp enters the beam charge density at staggered x-coordinate
- select case(dir)
- case(1)
-  allocate(kern(i2))
-  kpx=kp*dx
-  kern=0.0
-  do i=1,i2
-   kern(i)=kpx*sin(kp*x(i))
-  end do
-  call ft_kern(kern,i2,-1)
-  call ftw1d_sin(wp,i2,j2,k2,-1,1,1)
-  do k=1,k2
-   do j=1,j2
-    do i=2,i2
-     wp(i,j,k)=wp(i,j,k)*kern(i)
-    end do
-   end do
-  end do
-  call ftw1d_sin(wp,i2,j2,k2,1,1,1)
-  !=============== use n(x)=sin(kp*x)*sum_y<x[cos(kp*y)*nb(y)]
-  !                         +cos(kp*x)*sum_y>x[sin(kp*y)*nb(y)]
- case(2)
-  kpx=kp*dx
-  skx=kp*sin(0.5*kpx)/(0.5*kpx)
-  allocate(kern2(i2,2))
-  do i=1,i2
-   kern2(i,1)=sin(kp*x(i))
-   kern2(i,2)=cos(kp*x(i))
-  end do
-  do k=1,k2
-   do j=1,j2
-    w1(1:i2)=skx*wp(1:i2,j,k)
-    wp(1:i2,j,k)=0.0
-    do i=1,i2
-     sum0=0.0
-     ik=max(i,i2/2)
-     do ii=ik,i2
-      sum0(1)=sum0(1)+kern2(ii,1)*w1(ii)
-      sum0(2)=sum0(2)+kern2(ii,2)*w1(ii)
-     end do
-     wp(i,j,k)=sum0(1)*kern2(i,2)-sum0(2)*kern2(i,1)
-    end do
-   end do
-  end do
- end select
- end subroutine pwfa_density
- !======================
- subroutine beam_potential(pot,gam2,nxf,n2_loc,n3_loc)
- real(dp),intent(inout) :: pot(:,:,:)
- real(dp),intent(in) :: gam2
- integer,intent(in) :: nxf,n2_loc,n3_loc
- real(dp) :: ak2,ak2p
- integer :: ix,iy,iy1,iz,iz1
- !_________________________________
- ! Solves Poisson equation in Fourier speca
- do iz=1,n3_loc
-  iz1=iz+imodz*n3_loc
-  do iy=1,n2_loc
-   iy1=iy+imody*n2_loc
-   ak2p=skz(iz1)*skz(iz1)+sky(iy1)*sky(iy1)
-   if(ak2p >0.0)then
-    do ix=1,nxf
-     ak2=ak2p+skx(ix)*skx(ix)/gam2
-     pot(ix,iy,iz)=pot(ix,iy,iz)/ak2    !pot_b
-    end do
-   else
-    do ix=2,nxf
-     ak2=skx(ix)*skx(ix)/gam2
-     pot(ix,iy,iz)=pot(ix,iy,iz)/ak2    !pot_b
-    end do
-   endif
-  end do
- end do
- !=================
- end subroutine beam_potential
- !======================================
- subroutine FFT_Psolv(rho,g2,lxb,lyb,n1,n1_loc,n2,n2_loc,n3,n3_loc,&
-  i1,i2,j1,j2,k1,k2,ft_mod)
- real(dp),intent(inout) :: rho(:,:,:,:)
- real(dp),intent(in) :: g2,lxb,lyb
- integer,intent(in) :: n1,n1_loc,n2,n2_loc,n3,n3_loc
- integer,intent(in) :: i1,i2,j1,j2,k1,k2,ft_mod
- integer :: i,ii,j,k
-
- allocate(wb(n1,n2_loc,n3_loc))
- call ftw_init(n1,n2,n3,2)
- call set_ftgrid(n1,n2,n3,2,lxb,lyb)   !sin/cos transf k=integer
- call mpi_ftw_alloc(n1,n2,n2_loc,n3,n3_loc)
- wb=0.0
- if(prlx)then
-  do k=k1,k2
-   do j=j1,j2
-    aux1(1:n1)=0.0
-    do i=i1,i2
-     ii=i-2
-     aux1(ii)=rho(i,j,k,1)
-    end do
-    call all_gather_dpreal(aux1,aux2,3,n1_loc)
-    do i=1,n1
-     wb(i,j-2,k-2)=aux2(i)
-    end do
-   end do
-  end do
- else
-  wb(1:n1,1:n2_loc,1:n3_loc)=rho(i1:i2,j1:j2,k1:k2,1)
- endif
- call pftw3d_sin(wb,n1,n2,n2_loc,n3,n3_loc,-1,ft_mod)
- !sin transform in (y,z) cos transform in x
- wb(1:n1,1:n2_loc,1:n3_loc)=ompe*wb(1:n1,1:n2_loc,1:n3_loc)
- !+++++++++++++++++++++++++++
- call beam_potential(wb,g2,n1,n2_loc,n3_loc)
- !exit fourier components for beam potential
- call pftw3d_sin(wb,n1,n2,n2_loc,n3,n2_loc,1,ft_mod)
- if(prlx)then
-  do k=k1,k2
-   do j=j1,j2
-    do i=i1,i2
-     ii=i-2+imodx*n1_loc
-     rho(i,j,k,1)=wb(ii,j-2,k-2)
-    end do
-   end do
-  end do
- else
-  rho(i1:i2,j1:j2,k1:k2,1)=wb(1:n1,1:n2_loc,1:n3_loc)
- endif
- call ftw_end
- if(allocated(wb))deallocate(wb)
- call mpi_ftw_dalloc
- end subroutine FFT_Psolv
- !========================================
  subroutine Bpulse
 
  integer :: i1,i2,i2b,j1,k1,nyp,nzp
- integer :: nptot,np,n_st,ic
+ integer :: nptot,np,n_st,ic,ft_mod,ft_sym
  real(dp) :: gam2
  real(dp) :: xm,ym,zm
- real(dp) :: lxb,lyb
 
  gam2=gam0*gam0
  !!!!!!!!!!!!!!
@@ -3368,14 +3173,14 @@ case(6)
  nzp=loc_zgrid(imodz)%p_ind(2)
  i2b=i2
  !=======================
- call beam_data(1,1,nptot)
+ call beam_data(ndim,nptot)
  ! Generates phase space coordinateis for all beams on bpart(7,np_tot)
  ! bpart in common to all MPI tasks
  xm=loc_xgrid(imodx)%gmin
  ym=loc_ygrid(imody)%gmin
  zm=loc_zgrid(imodz)%gmin
  !=======================
- call MPI_beam_distribute !bpart are loaded on bunc() struct for each MPI task
+ call MPI_beam_distribute(ndim) !bpart are loaded on bunc() struct for each MPI task
  !==================== Computes the total bunches density
  jc(:,:,:,1)=0.0
  n_st=0
@@ -3390,36 +3195,36 @@ case(6)
  ! BUNCH grid DENSITY already normalized
  ! index=3 for bunch current: a same bet0 assumed for all bunches
  !===========================================
- ebf_bunch(i1:i2b,j1:nyp,k1:nzp,1)=jc(i1:i2b,j1:nyp,k1:nzp,1)
- ebf_bunch(i1:i2b,j1:nyp,k1:nzp,2)=bet0*jc(i1:i2b,j1:nyp,k1:nzp,1)
+ jc(i1:i2b,j1:nyp,k1:nzp,2)=bet0*jc(i1:i2b,j1:nyp,k1:nzp,1)
+ !Beam Ax potential in jc(2)    Ay=Az=0 assumed
+ !In jc(1) beam density  in jc(2) beam Jx current
  !=====================================================
  ! UNIFORM GRIDS ASSUMED
  !======================
  if(allocated(bpart))deallocate(bpart)
- lxb=x(nx)-x(1)
- lyb=y(ny)-y(1)
- call FFT_Psolv(ebf_bunch,gam2,lxb,lyb,nx,nx_loc,ny,ny_loc,nz,nz_loc,&
-  i1,i2b,j1,nyp,k1,nzp,1)
- !Beam potential in ebf_bunch(1)
+ ft_mod=2       !A sine transform along each coordinate
+ ft_sym=1
+ if(ndim==2)call FFT_2D_Psolv(jc,ompe,nx,nx_loc,ny,ny_loc,nz,nz_loc,&
+                i1,i2b,j1,nyp,k1,nzp,ft_mod,ft_sym)
+ if(ndim==3)call FFT_Psolv(jc,gam2,ompe,nx,nx_loc,ny,ny_loc,nz,nz_loc,&
+                i1,i2b,j1,nyp,k1,nzp,ft_mod,ft_sym)
+ !Solves Laplacian[pot]=ompe*rho
+ !Beam potential in jc(1) 
  !===================
  !====================
- call fill_ebfield_yzxbdsdata(ebf_bunch,i1,i2b,j1,nyp,k1,nzp,1,2,1,1)
- if(ibeam <2)then
-  call initial_beam_fields(ebf_bunch,i1,i2b,j1,nyp,k1,nzp,gam2,bet0)
-  ! generates (Ex,Ey,Ez,By,Bz) bunch fields stencils
- else
-  call initial_beam_potential_and_fields(ebf_bunch,ebf1_bunch,ebf,&
-   i1,i2b,j1,nyp,k1,nzp,dt,gam2,bet0)
-  ! in ebf1_bunch ebf_bunch(1:4) (A)(t=-Dt/2,Dt/2,phi (t=-Dt, t=0)
-  ! ebf(1:6) (Ex,Ey,Ez,Bx,By,Bz) bunch initial fields
+ call fill_ebfield_yzxbdsdata(jc,i1,i2b,j1,nyp,k1,nzp,1,2,1,1)
+  call initial_beam_fields(jc,ebf_bunch,i1,i2b,j1,nyp,k1,nzp,gam2,bet0)
+  ! generates (Ex,Ey,Ez,By,Bz) bunch fields
+  if(ibeam>0)then
+   ebf1_bunch(:,:,:,:)=0.0
  endif
  !========================================
- lp_end=xc_bunch(1)+sxb(1)
+ lp_end(1)=xc_bunch(1)+2.*sxb(1)
  !=====================================
  if(L_Bpoloidal) call set_poloidal_ex_fields( &
   ebf0_bunch,i1,i2b,j1,nyp,k1,nzp,B_ex_poloidal*T_unit,radius_poloidal)
  !=====================================
- call part_distribute(dmodel_id,lp_end)
+ call part_distribute(dmodel_id,lp_end(1))
  !============================
  !----------------------
  if(pe0)then
@@ -3443,117 +3248,6 @@ case(6)
  endif
  end subroutine Bpulse
  !========================
- subroutine Prbeam
-
- integer :: i1,i2,i2b,j1,k1,nyp,nzp,ib_xdistr
- integer :: nptot,np,n_st,ic
- real(dp) :: gam2,x0b
- real(dp) :: xm,ym,zm
- real(dp) :: lxb,lyb
- real(dp) :: S_scale(3,2),B_s(2)
-
- gam2=gam0*gam0
- !!!!!!!!!!!!!!
- !=============================
- ! The fields of a uniform moving bunche in vacuum
- ! E_x=0      , E_y=-DPhi/Dy   E_z=-DPhi/Dz
- ! Poisson eq.  D_xE_x+D_yE_y+D_zE_z=omp^2\rho (x-V_b*t_0,y,z)
- ! B_x=0   B_y=-V_b*E_z    B_z= V_b*E_y
- !=========================================
- i1=loc_xgrid(imodx)%p_ind(1)
- i2=loc_xgrid(imodx)%p_ind(2)
- j1=loc_ygrid(imody)%p_ind(1)
- nyp=loc_ygrid(imody)%p_ind(2)
- k1=loc_zgrid(imodz)%p_ind(1)
- nzp=loc_zgrid(imodz)%p_ind(2)
- i2b=i2
- lxb=xmax  !the p_beam size
- lyb=y(ny)-y(1)
- ib_xdistr =2     !uniform beam
- !=======================
- if(pe0)call system("date")
- call beam_data(1,ib_xdistr,nptot)
- ! Generates phase space coordinateis for a beam on bpart(7,np_tot)
- ! bpart in common to all MPI tasks
- ! the beam has length sxb(1) and starts at xc_bunch(1) position
- xm=loc_xgrid(imodx)%gmin
- ym=loc_ygrid(imody)%gmin
- zm=loc_zgrid(imodz)%gmin
- !=============================
- call MPI_beam_distribute
- !=============================
- !bpart are loaded on bunc() struct for each MPI task
- ! inside the computational box
- !========================
- jc(:,:,:,1)=0.0
- n_st=0
- ic=1
- np=loc_nbpart(imody,imodz,imodx,ic)
- call set_grid_charge(bunch(ic),ebfb,jc,np,ndim,n_st,1,xm,ym,zm)
- !=========== extend uniform x-distribution
- !on extended computational grid[i2b,nyp,nzb]
- if(prl)call fill_curr_yzxbdsdata(jc,i1,i2b,j1,nyp,k1,nzp,1)
- !============================
- ! BUNCH grid DENSITY already normalized
- ! index=3 for bunch current: a same bet0 assumed for all particles
- !===========================================
- ebf_bunch(i1:i2b,j1:nyp,k1:nzp,1)=jc(i1:i2b,j1:nyp,k1:nzp,1)
- ebf_bunch(i1:i2b,j1:nyp,k1:nzp,3)=bet0*ebf_bunch(i1:i2b,j1:nyp,k1:nzp,1)
- !=====================================================
- ! UNIFORM GRIDS ASSUMED
- !======================
- if(allocated(bpart))deallocate(bpart)
- !=====================
- !=======================
- call FFT_Psolv(ebf_bunch,gam2,lxb,lyb,nx,nx_loc,ny,ny_loc,nz,nz_loc,&
-  i1,i2b,j1,nyp,k1,nzp,2)
- !Beam potential in ebf_bunch(1)
- !===================
- !====================
- call fill_ebfield_yzxbdsdata(ebf_bunch,i1,i2b,j1,nyp,k1,nzp,1,1,1,1)
- call initial_beam_fields(ebf_bunch,i1,i2b,j1,nyp,k1,nzp,gam2,bet0)
- !======================
- lp_end=xc_bunch(1)+sxb(1)
- S_scale(1,1)=600.
- S_scale(1,2)=600.
- S_scale(2,1)=300.
- S_scale(2,2)=250.
- S_scale(3,1)=30.
- S_scale(3,2)=50.
- B_s(1)=-0.2*T_unit
- B_s(2)=-0.28*T_unit
- x0b=x(i2b/2)
- ! generates (Ex,Ey,Ez,By,Bz) bunch fields stencils
- ! in ebf_bunch(4) the bunch current Jbx[i+1/2,j,k] at t=0
- ebf=0.0
- if(xmax > 1000.)call set_solenoid_fields(&
-  ebf0_bunch,i1,i2b,j1,nyp,k1,nzp,x0b,S_scale,B_s)
- !========================================
- !=====================================
- call part_distribute(dmodel_id,lp_end+lpx(7))
- !============================
- !----------------------
- if(pe0)then
-  !==================
-  open(16,file='Initial_bunch_info.dat')
-  write(16,'(a33,e11.4)')' A uniform p-beam of length (mm) ',sxb(1)
-  write(16,'(a27,e11.4)')' Initial plasma x-position=',targ_in
-  write(16,'(a20,e11.4)')' Plasma wave-length=',lambda_p
-  write(16,*) '-------------------------------------'
-  i1=1
-  write(16,'(a13,i4)')' Bunch number',i1
-  write(16,'(a31,e11.4)')' relative bunch/particle weights',jb_norm(i1)/j0_norm
-  write(16,'(a23,i8)')' bunch particles number ',nb_tot(i1)
-  write(16,'(a17,3e11.4)')' sizes and gamma ',sxb(i1),syb(i1),gam(i1)
-  write(16,'(a23,2e11.4)')' Transverse emittances=',epsy(i1),epsz(i1)
-  write(16,'(a20,e11.4)')' Longitudinal beta =',bet0
-  write(16,'(a20,2e11.4)')' b charge [pC],Qch =',bunch_charge(i1),reduced_charge(i1)
-  write(16,'(a22,e11.4)')' bcharge_over_pcharge ', rhob(i1)
-  close(16)
- endif
- end subroutine Prbeam
- !=======================
- ! END for 3D BUNCHES in PBWA===============
  !==========================
  subroutine init
 
@@ -3567,14 +3261,11 @@ case(6)
   case(3)
    call CP_pulse(model_id)          !Circular polarization
   case(4)
-   call set_envelope(t0_lp)      !Envelope  approximation for Ay
+   call set_envelope      !Envelope  approximation for Ay
   case(5)
    !Plasma Wakefield Acceleration
    !Comb: nsb-1 equal driving buches +witness
-   call Bpulse                      !3D-cartesian PBWA
-  case(6)
-   ! Proton bunch propagation in uniform plasma
-   call Prbeam                      !3D-cartesian PBWA
+   call Bpulse                      !2D-3D-cartesian PBWA
   end select
  endif
  end subroutine init

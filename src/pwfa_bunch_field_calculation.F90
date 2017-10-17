@@ -98,18 +98,20 @@
  if(allocated(bpart))deallocate(bpart)
  lxb=x(nx)-x(1)
  lyb=y(ny)-y(1)
- call FFT_Psolv(ebf_bunch_gammarange,(twohundred_dp)**2,lxb,lyb, &
-  nx,nx_loc,ny,ny_loc,nz,nz_loc,i1,i2b,j1,nyp,k1,nzp,1)
+!  call FFT_Psolv(ebf_bunch_gammarange,(twohundred_dp)**2,lxb,lyb, &
+!   nx,nx_loc,ny,ny_loc,nz,nz_loc,i1,i2b,j1,nyp,k1,nzp,1)
+ call FFT_Psolv(ebf_bunch_gammarange,(twohundred_dp)**2,ompe,nx,nx_loc,ny,ny_loc,nz,nz_loc,&
+                i1,i2b,j1,nyp,k1,nzp,2,1)  
+                !I have forced ft_mod=2 for cosine transform  
+                !I have forced ft_sym=1
+  
  call fill_ebfield_yzxbdsdata(ebf_bunch_gammarange,i1,i2b,j1,nyp,k1,nzp,1,2,1,1)
 
- !  if(ibeam <2)then
- call initial_beam_fields(ebf_bunch_gammarange,i1,i2b,j1,nyp,k1,nzp,gam2,beta_eff)
- !  else
- !   call initial_beam_potential_and_fields(ebf_bunch_gammarange,ebf1_bunch_gammarange,&
- !    ebf_gammarange,i1,i2b,j1,nyp,k1,nzp,dt,gam2,beta_eff)
- !   ! in ebf1_bunch ebf_bunch(1:4) (A)(t=-Dt/2,Dt/2,phi (t=-Dt, t=0)
- !   ! ebf(1:6) (Ex,Ey,Ez,Bx,By,Bz) bunch initial fields
- !  endif
+ call initial_beam_potential_and_fields &
+      (ebf_bunch_gammarange, &
+      ebf1_bunch_gammarange, &
+      ebf_gammarange,        &
+      i1,i2b,j1,nyp,k1,nzp,dt,gam2,beta_eff)
 
  lp_end=xc_bunch(1)+sxb(1)
  !---sum up fields

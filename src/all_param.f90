@@ -28,7 +28,7 @@
  use code_util
  use grid_param
  use control_bunch_input
- use ionize
+ use ionz_data
 
  implicit none
 
@@ -152,10 +152,11 @@
  ! sets general parameters and grid depending on initial conditions
  integer :: i, sh_t,pml_size
  real(dp) :: bunch_charge_density,gvol,gvol_inv,a_ch,k_ch,nm_fact
+ real(dp) :: aph_fwhm
 
  a_lpf(1:4)=1.
  b_lpf(1:4)=1.
- if(LPf_ord >2)call rk_tsch_coeff(LPf_ord)
+!================== grid==============
 
  nxcell=nx
  nycell=ny
@@ -164,162 +165,44 @@
  ndim=1
  if(ny>1)ndim=2
  if(nz>1)ndim=3
+ cmp=.false.
+ ifilt=0
+ if(der_ord >3)cmp=.true.
+ t_ord=LPf_ord
+ RK_ord=LPf_ord
+ if(LPf_ord >2)then
+  call rk_tsch_coeff(LPf_ord)
+ else
+  if(cmp)call rk_tsch_coeff(der_ord)
+ endif
 
  nx_loc=nx/nprocx
  nx1_loc=nx/nprocy
  ny_loc=ny/nprocy
  nz_loc=nz/nprocz
  sh_t=ny/2-ny_targ/2
- Lp_inject=.false.
- Cyl_coord=.false.
- Ionization=.false.
- Impact_ioniz=.false.
- !===============================
- ! Multispecies target with max 3 ionic species (nsp=4)
- !=================
- Charge_cons=.true.
- if(iform>1)Charge_cons=.false.
- !===============================
- ! Set ionization param
- ! WARNING  ion ordering in input data must set ionizing species first
- !==========================================================
- do i=1, nsp-1          !index of ionizing ion species 1,2,.. nsp_ionz <= nsp
-  if(ion_min(i)< ion_max(i))nsp_ionz=i+1
- enddo
- nsp_ionz=min(nsp_ionz,nsp)
- do i=1,3
-  if(mass_number(i)< 1.0d0)call set_atomic_weight(atomic_number(i),mass_number(i))
- end do
- if(ionz_lev >0)Ionization=.true.
- if(Ionization) call set_ionization_coeff(atomic_number,nsp_ionz)
- !==========================
- Wake=.false.
- Solid_target=.false.
- if(n_over_nc >1.)then
-  Solid_target=.true.
- else
-  Wake=.true.
- endif
- !==========================
- Stretch=.false.
- pml_size=0
- ny_stretch=0
  nx_stretch=0
- if(str_flag==1)then
+ pml_size=0
+ Stretch=.false.
+ ny_stretch=0
+ if(model_id >4)str_flag=0
+ if(str_flag==1)then           !size_of_stretch defined in phys_param module
   Stretch=.true.
   ny_stretch=nint(real(ny,dp)*size_of_stretch_along_y)
  endif
  if(str_flag==2)then
   Stretch=.true.
   ny_stretch=nint(real(ny,dp)*size_of_stretch_along_y)
-  nx_stretch=nint(real(nx,dp)*size_of_stretch_along_x)
  endif
  call grid_alloc(nx,nx_loc,ny,ny_loc,nz,nz_loc,ny_targ,&
   pml_size,nprocy,nprocz,nprocx)
  loc_nyc_max=loc_ygr_max
  loc_nzc_max=loc_zgr_max
  loc_nxc_max=loc_xgr_max
-
- pi2=2.0*pi
- test=.false.
- Part=.false.
-
- if(np_per_xc(1) > 0)Part=.true.
-
- np_per_cell=1
- cmp=.false.
- Lin_lp=.false.
- Relativistic=.false.
- Ions=.false.
- Beam=.false.
- Pbeam=.false.
- Envelope=.false.
- Circ_lp=.false.
- Plane_wave=.false.
- if(iby==2)Plane_wave=.true.
-
- ifilt=0
- if(der_ord >3)cmp=.true.
- t_ord=LPf_ord
- RK_ord=LPf_ord
- Lp_active=.false.
-
- ! mass-charge parameters four species: three ion species+ electrons
- ! Ions charges defined by initial conditions. ion_min=0 allowed
- unit_charge(1)=electron_charge_norm
- unit_charge(2)=ion_min(1)*proton_charge_norm
- unit_charge(3)=ion_min(2)*proton_charge_norm
- unit_charge(4)=ion_min(3)*proton_charge_norm
- !=================================
- mass(1)=electron_mass_norm
- mass(2)=mass_number(1)*proton_mass_norm
- mass(3)=mass_number(2)*proton_mass_norm
- mass(4)=mass_number(3)*proton_mass_norm
- do i=1,4
-  mass_rat(i)=1./mass(i)
-  charge_to_mass(i)=unit_charge(i)*mass_rat(i)
- end do
- !======================================
- Lorentz_fact(1:4)=mass_rat(1:4)
- !to be multiplied by the particle charge in the equation of motion
- !==========================================
- nm_fact=1.
- gvol_inv=1.
- gvol=1.
- j0_norm=1.
- jb_norm=1.
- E0=electron_mass !E=in unit mc^2/(e*l0)=[TV/m]/E0; E0*E in [TV/m]=[MV/mu] unit
-
- !do not remove following initialization, not required outside of PWFA but needed to avoid NaN ops
- nb_over_np=1.
- b_charge=1.
- gam0=1.
-
-
- do i=1,6
-  mp_per_cell(i)=np_per_xc(i)*np_per_yc(i)
-  if(ndim==3) mp_per_cell(i)=np_per_xc(i)*np_per_yc(i)*np_per_zc(i)
- end do
- ratio_mpc=1.
- nref=mp_per_cell(1)
- if(mp_per_cell(1) >0)then
-  j0_norm=1./real(nref,dp)
-  do i=1,6
-   ratio_mpc(i)=0.0
-   if (mp_per_cell(i) > 0) ratio_mpc(i)=real(mp_per_cell(1),dp)/real(mp_per_cell(i),dp)
-  enddo
- endif
- if(w_speed < 0.0)then
-  vbeam=-w_speed
-  Comoving=.true.
- else
-  Comoving=.false.
-  vbeam=0.0
- endif
- mod_ord=1
- if(model_id < 3) Lin_lp = .true.
- if(model_id == 3) Circ_lp = .true.
- if(model_id == 4) then
-  mod_ord=2
-  Envelope=.true.
- endif
-
- if(model_id < 5)then
-  ifilt=0
-  Relativistic=.true.
-  part_dcmp=.false.
-  nfield=3
-  curr_ndim=2
-  if(ndim > 2)then
-   nfield=6
-   curr_ndim=ndim
-  endif
-  if(Circ_lp)then
-   nfield=6
-   curr_ndim=3
-  endif
-
-  dx=1.0d0/k0
+! i========Sets grid data=============
+  gvol_inv=1.
+  gvol=1.
+  dx=1./k0
   call set_grid(nx,ny,nz,ibx,nx_stretch,ny_stretch,k0,yx_rat,zx_rat)
   dt=cfl*dx
   select case(ndim)
@@ -334,79 +217,242 @@
    gvol_inv=dx_inv*dy_inv*dz_inv
   end select
   gvol=1./gvol_inv
+  djc(1)=dx
+  djc(2:3)=0.0
+  if(ndim==2)then
+   djc(1)=0.5*dx
+   djc(2)=0.5*dy
+  endif
+  if(ndim==3)then
+   djc(1)=dx/3.
+   djc(2)=dy/3.
+   djc(3)=dz/3.
+  endif
+  ymin_t=y(1)
+  ymax_t=y(ny+1)
+  zmin_t=z(1)
+  zmax_t=z(nz+1)
+  if(ndim >1)then
+   ymin_t=y(sh_t+1)
+   ymax_t=y(ny+1-sh_t)
+  endif
+  if(ndim >2 )then
+   zmin_t=z(1+sh_t)
+   zmax_t=z(nz+1-sh_t)
+  endif
+!======================================
+ Hybrid= .false.
+ test=.false.
+ Part=.false.
+ Lp_active=.false.
+ Lp_inject=.false.
+ Ionization=.false.
+ Impact_ioniz=.false.
+ Charge_cons=.false.
+ Beam=.false.
+ Relativistic=.false.
+ Ions=.false.
+ Envelope=.false.
+ Circ_lp=.false.
+ Plane_wave=.false.
+ Two_color = .false.
+ Wake=.false.
+ Solid_target=.false.
+ if(iform <2)Charge_cons=.true.
+ if(np_per_xc(1) > 0)Part=.true.
+ if(nsp > 1)Part=.true.
+ if(nsp >1)Ions=.true.
+ if(model_id <5)then
   Lp_active=.true.
-
+ else
+  Beam=.true.
+ endif
+ if(ibeam==2)Hybrid=.true.
+ !===============================
+ ! Multispecies target with max 3 ionic species (nsp=4)
+ !=================
+ !========================== particle on cells
+ do i=1,6
+  mp_per_cell(i)=np_per_xc(i)*np_per_yc(i)
+  if(ndim==3) mp_per_cell(i)=np_per_xc(i)*np_per_yc(i)*np_per_zc(i)
+ end do
+ nref=mp_per_cell(1)
+ ratio_mpc=1.
+ if(mp_per_cell(1) >0)then
+  j0_norm=1./real(nref,dp)
+  do i=1,6
+   ratio_mpc(i)=0.0
+   if (mp_per_cell(i) > 0) ratio_mpc(i)=real(mp_per_cell(1),dp)/real(mp_per_cell(i),dp)
+  enddo
+ endif
+ ratio_mpfluid=1.0
+ if(Hybrid)then
+   ratio_mpfluid=0.1
+  if(mp_per_cell(1)==0)ratio_mpfluid=0.0
+  if(ny_targ==0)ratio_mpfluid=0.0
+ endif
+ j0_norm=j0_norm*ratio_mpfluid
+ !========================== multispecies
+ ! mass-charge parameters four species: three ion species+ electrons
+ ! Ions charges defined by initial conditions.
+ unit_charge(1)=electron_charge_norm
+ unit_charge(2)=ion_min(1)*proton_charge_norm
+ unit_charge(3)=ion_min(2)*proton_charge_norm
+ unit_charge(4)=ion_min(3)*proton_charge_norm
+ !=================================
+ mass(1)=electron_mass_norm
+ mass(2)=mass_number(1)*proton_mass_norm
+ mass(3)=mass_number(2)*proton_mass_norm
+ mass(4)=mass_number(3)*proton_mass_norm
+ do i=1,4
+  mass_rat(i)=1./mass(i)
+  charge_to_mass(i)=unit_charge(i)*mass_rat(i)
+ end do
+  Lorentz_fact(1:4)=mass_rat(1:4)  !for (E,B) fields in mc2/e/l0(mu) unit
+  E0=electron_mass
+ !======================================
+ ! Set ionization param
+ ! WARNING  ion ordering in input data must set ionizing species first
+ !==========================================================
+ wgh_ion=j0_norm
+ nsp_ionz=1
+ if(nsp > 1)then
+  do i=1, nsp-1          !index of ionizing ion species 2,.. nsp_ionz <= nsp
+   if(ion_min(i)< ion_max(i))nsp_ionz=i+1
+  enddo
+  nsp_ionz=min(nsp_ionz,nsp)
+  do i=1,3
+   if(mass_number(i)< 1.)call set_atomic_weight(atomic_number(i),mass_number(i))
+ end do
+  if(ionz_lev >0)Ionization=.true.
+  if(Ionization) call set_ionization_coeff(atomic_number,nsp_ionz) 
+  !uses ion index 1,2,,,nsp-1
+  wgh_ion=1./(real(mp_per_cell(2),dp))
+  if(ion_min(1)>1)wgh_ion=1./(real(ion_min(1),dp)*real(mp_per_cell(2),dp))
+ endif
+!=======Moving window
+ if(w_speed < 0.0)then
+  vbeam=-w_speed
+  Comoving=.true.
+ else
+  Comoving=.false.
+  vbeam=0.0
+ endif
+ !==========================
+ ! Target parameters  enter n_over_nc
+ if(Lp_active)then
+  if(iby==2)Plane_wave=.true.
+ mod_ord=1
+ if(model_id < 3) Lin_lp = .true.
+ if(model_id == 3) Circ_lp = .true.
+ if(model_id == 4) then
+  mod_ord=2
+  Envelope=.true.
+   L_env_modulus= .true.
+  endif
+  if(n_over_nc >1.)then
+   Solid_target=.true.
+  else
+   Wake=.true.
+ endif
+  Relativistic=.true.
+  nfield=3
+  curr_ndim=2
+  if(ndim > 2)then
+   nfield=6
+   curr_ndim=ndim
+  endif
+  if(Circ_lp)then
+   nfield=6
+   curr_ndim=3
+  endif
+  if(lp_offset /=0.0)Two_color=.true.
+!====================
+  !to be multiplied by the particle charge in the equation of motion
+  !E=in unit mc^2/(e*l0)=[TV/m]/E0; E0*E in [TV/m]=[MV/mu] unit
+  !E0(A,phi) in MV unit
+ !==========================================
+  np_per_cell=1
+  nm_fact=1.
+!====================================
   !=======================
   ! Code Units for laser fields
-  nc=pi/(rc0*lam0*lam0)    !critical density in units n0=10^21/cm^3=10^9/mu^3
-  nm_fact=nc*(1.e+9)       ! critical density (1/mu^3)
+  ncrit=pi/(rc0*lam0*lam0)      !critical density in units n0=10^21/cm^3=10^9/mu^3
+  n0_ref= 1.e03*ncrit*n_over_nc !initial density in e18/cc unit
+  nm_fact=ncrit*(1.e+9)         ! critical density (1/mu^3)
   oml=pi2/lam0             !laser frequency in unit c/l0
+  om1=pi2/lam1               !laser frequency in unit c/l0
   lp_amp=a0*oml
+  lp1_amp=a1*om1             !field in unit 0.51 MV/m
   lp_max=lp_amp
+  if(Two_color)lp_max=max(lp_amp,lp1_amp)
+!=============================
   nc0=oml*oml              !nc0=(2*pi/lam0)** 2
   ompe=nc0*n_over_nc       !squared adimensional plasma frequency :
-
+!========== Laser parameters
   lp_intensity=1.37*(a0/lam0)*(a0/lam0)  !in units 10^18 W/cm^2
-  if(Plane_wave)then        !plane LP wave
-   lp_pow=0.01*lp_intensity*Ly_box*Lz_box  !in TW = 10^{-3}J/fs
-   ZR=0.0
-  else
    lp_rad=w0_y*sqrt(2.*log(2.))           !FWHM focal spot
    ZR=pi*w0_y*w0_y/lam0
+  lp1_rad=w1_y*sqrt(2.*log(2.))           !FWHM focal spot
+  ZR1=pi*w1_y*w1_y/lam1
    lp_pow=0.5*pi*lp_intensity*w0_y*w0_y   !in units 10^10 W
    if(ndim==2)lp_pow=0.5*dy*lp_intensity*w0_y   !in units 10^10 W
    lp_pow=0.01*lp_pow                     !in TW= 1.e-03[J/fs]  units
+  if(Plane_wave)then        !plane LP wave
+   lp_pow=0.01*lp_intensity*Ly_box*Lz_box  !in TW = 10^{-3}J/fs
+   ZR=0.0
   endif
-  lx_FWHM=2.*w0_x*acos(sqrt(0.5*sqrt(2.)))/pi !FWHM llength in microns
-  tau_FWHM=lx_FWHM/speed_of_light
+!======= Defines scales (w0_x,w1_x) in longitudinal (t-x) pulse profile
+  if(G_prof)then
+   aph_fwhm= sqrt(2.*log(2.))
+  else
+   aph_fwhm=2.*acos(sqrt(0.5*sqrt(2.)))/pi
+  endif
+  lx_fwhm=tau_fwhm*speed_of_light ! In micron unit
+  w0_x=lx_fwhm/aph_fwhm
+  w1_x=speed_of_light*tau1_fwhm/aph_fwhm
+!=================
   lp_energy=1.e-03*tau_FWHM*lp_pow
   energy_in_targ=0.0
   el_lp=lam0
-  chann_rad=0.0
   if(n_over_nc > 0.0)then
-   el_lp=lam0/(pi2*sqrt(n_over_nc))
+   P_c= 0.0174/n_over_nc       !Critical power in TW
+   lambda_p=lam0/sqrt(n_over_nc)
+   el_lp=lambda_p/pi2
    el_D=t0_pl(1)*el_lp         !Debye length t0_pl(1)= V_T/c at t=0
    omega_p=1./el_lp
-   k_ch=8.*13.5*1000.*n_over_nc/(17.*pi*pi)
-   a_ch=(k_ch*lp_pow)**(1./3.)
-   if(n_over_nc >1.)chann_rad=pi*lpx(3)*n_over_nc/(a0*lam0)
   endif
   bet0=0.0
-  lambda_p=pi2*el_lp
   lpvol=el_lp*el_lp*el_lp
  endif
-
- !=============================
- nx_alloc=nint(dx_inv*sum(lpx(1:5)))
- nx_alloc=min(nx_loc,nx_alloc)
- npt_buffer=nx_alloc*ny_loc*nz_loc*nref
- npt_buffer=npt_buffer+npt_buffer/8
- if(Ionization)allocate(el_ionz_count(npt_buffer))
  !===================================
- if(model_id> 4)then !  e-Beams section
-  select case(model_id)
+ if(Beam)then !  e-Beams section
    !========================================
    ! uses l0=1mu
-   ! for fields E_u=GV/m = 1.e-03*mc^2/(l0*e*E0)
+   ! for fields E_u=GV/m = 1.e-03*mc^2/(l0*e*E0)  (A,phi) in kVolt unit
    ! n0= 10^18/cc =10^6/mu^3
    !========================================
    ! the electron radius r_c=rc0*10^{-8}mu
    !the squared adimensional plasma frequency on n0 density
    !   r_c*l0*l0*n0= 10^{-3}*rc0
-   !omp^2=   4*pi*l0*l0*rc*n0=4*pi*rc0*1.e-03*E0/1.e-03
+   !omp^2=   4*pi*l0*l0*rc*n0=4*pi*rc0*1.e-03*E0/
    !=============================
-  case(5)
    nm_fact=1.e+06      !electron density[mu^{-3}] in the n0=10^18/cm^3 plasma
-   nc=1.0
+   ncrit=1.0
    Wake=.true.
    Solid_target=.false.
+   n0_ref=n_over_nc
    !======================
    eb_max=0.0
    nc0=2.*E0*pi2*rc0
    !======================
    ompe=nc0*n_over_nc
+   !======================
+   jb_norm=1.
+   b_charge=1.
+   gam0=1.
    Lorentz_fact(1:4)=1.e-03*Lorentz_fact(1:4)/E0
-   omega_p=0.02*sqrt(10.*pi*rc0*n_over_nc)
+   omega_p=0.02*sqrt(10.*pi*rc0*n0_ref)
    el_lp=1./omega_p
    nb_over_np=rhob(1)
    lam0=1.             !Is the unit of length
@@ -416,7 +462,6 @@
    Lorentz_bfact(1:5)=Lorentz_fact(1)
    lambda_p=pi2*el_lp
    lpvol=el_lp*el_lp*el_lp
-   Beam=.true.
    nfield=3
    nbfield=4
    if(ndim ==3)then
@@ -428,11 +473,7 @@
     if(bunch_type(i)==3)Lorentz_bfact(i)=Lorentz_fact(1)/proton_mass_norm
    end do
    mod_ord=3
-   dx=1./k0
-   jb_norm=1.
    bunch_volume=1.
-   call set_grid(nx,ny,nz,ibx,nx_stretch,ny_stretch,k0,yx_rat,zx_rat)
-   dt=cfl/sqrt(dx_inv*dx_inv+dy_inv*dy_inv+dz_inv*dz_inv)
    do i=1,nsb
     !bunch_volume(i)=pi2*sqrt(pi2)*sxb(i)*syb(i)*syb(i)    !the bunch volume (mu^3) !ciao
     !bunch_charge_density=rhob(i)*n_over_nc*nm_fact*e_charge  !pC/mu^3
@@ -441,7 +482,11 @@
 
     !---------------------------!
     if(bunch_shape(i)==1) then !--- nomi da verificare e aggiungere
-     bunch_volume(i) = pi2*sqrt(pi2)*sxb(i)*syb(i)*syb(i) !the bunch volume (mu^3)
+     if(ndim==3)then
+      bunch_volume(i) = pi2*sqrt(pi2)*sxb(i)*syb(i)*syb(i) !the bunch volume (mu^3) in 3D Gussian
+     else
+      bunch_volume(i) = pi2*sxb(i)*syb(i)*dy !the bunch volume (mu^3) in 2D Gaussian
+     endif
      bunch_charge_density   = rhob(i)*n_over_nc*nm_fact*e_charge  !pC/mu^3
      bunch_charge(i) = bunch_charge_density*bunch_volume(i)
      reduced_charge(i)=rhob(i)*bunch_volume(i)/lpvol
@@ -469,9 +514,6 @@
     endif
 
    enddo
-
-   gvol_inv=dx_inv*dy_inv*dz_inv
-   gvol=1./gvol_inv
    if(L_particles)then
     do i=1,nsb
      nb_tot(i) = nint(gvol_inv* bunch_volume(i)/j0_norm)
@@ -484,78 +526,20 @@
     if(bunch_shape(i)==4) jb_norm(i)=rhob(i)*gvol_inv*bunch_volume(i)/(nb_tot(i)*j0_norm)
    end do
    b_charge=bunch_charge(1)
-
-  case(6) !  Proton one-beam section
-   ! uses l0=1mm
-   ! for fields E_u=GV/m = mc^2/(l0*e*E0)
-   ! n0= 10^11/cc =10^8/mm^3
-   !==============================
-   !  n_over_nc = initial plasma density/n0= ne/n0
-   !=======================
-   lam0=1.             !n [mm] is the unit of length
-   nm_fact=1.e+08      !electron density[mm^{-3}]
-   nc=1.0              !the plasma ref density is n0=10^11/cm^3=10^8/mm^3
-   nc0=2.*pi2*rc0*1.e-03
-   Wake=.true.
-   Solid_target=.false.
-   !=============================
-   !the squared adimensional plasma frequency on n0 density
-   ! the electron radius r_c=rc0*10^{-11}mm
-   !   r_c*l0*l0*n0= 10^{-3}*rc0
-   !omp^2=   4*pi*l0*l0*rc*n0=4*pi*rc0*10^{-3}
-   !=======================
-   omega_p=n_over_nc*nc0
-   ompe=E0*omega_p        ! the source term in Maxw.eqs: E0*omega_p^2
-   omega_p=sqrt(omega_p)
-   !======================
-   !============================
-   el_lp=1./omega_p    !skin depth in l0[mm] unit
-   lambda_p=pi2*el_lp  ! the plasma wavelength in l0 unit
-   lpvol=el_lp*el_lp*el_lp
-   gam0=gam(1)
-   u0_b=sqrt(gam0*gam0-1.)   !the beam x-momentum
-   bet0=u0_b/gam0            !the beam v_b/c norm velocity
-   w_speed=bet0
-   vbeam=0.0
-   Beam=.true.
-   Pbeam=.true.
-   Lorentz_fact(1)=Lorentz_fact(1)/E0
-   Lorentz_bfact(1)=Lorentz_fact(1)/proton_mass_norm
-   !==================================
-   nfield=6
-   nbfield=nfield
-   curr_ndim=ndim
-   mod_ord=4
-   dx=1./k0
-   jb_norm=1.
-   call set_grid(nx,ny,nz,ibx,nx_stretch,ny_stretch,k0,yx_rat,zx_rat)
-   dt=cfl/sqrt(dx_inv*dx_inv+dy_inv*dy_inv+dz_inv*dz_inv)
-   !====================
-   ! i=1 only one beam: enters rhob= bunch number density/np
-   i=1
-   bunch_volume(i)=pi2*syb(i)*syb(i)    !the volume (mm^3)
-   bunch_charge_density=rhob(i)*n_over_nc*nm_fact*e_charge  !pC/mm^3
-   bunch_charge(i)=bunch_charge_density*bunch_volume(i)  !unit length bunch charge in [pC]
-   reduced_charge(i)=rhob(i)*bunch_volume(i)/lpvol
-   gvol_inv=dx_inv*dy_inv*dz_inv
-   gvol=1./gvol_inv
-   nb_over_np=rhob(1)
-   !========== Normalization
-   jb_norm(i)=rhob(i)*gvol_inv*bunch_volume(i)*sxb(i)/real(nb_tot(i),dp)
-   !====bunch_volume*gvol_inv/nb_tot = the beam cell number/beam macroparticles number
-   ! jb_norm = weight= 1/beam macroparticles per cell
-   ! j0_norm = 1/plasma macroparticles per cell
-   b_charge=bunch_charge_density
-   !==================
-  end select
  endif
  !============================
+ !  SET PARAM all cases
+ if(Hybrid)nfcomp=curr_ndim+1
  nsp_run=nsp
- if(Wake)nsp_run=1  !only electrons running
+ if(Wake)then
+  nsp_run=1  !only electrons running
+  if(dmodel_id==3)wgh_ion=np1*wgh_ion
+ endif
  !==============  in 2D dz=dy mp_per_cell =mp_x*mp_y,  mp_z=1
+ np_per_cell=nm_fact*n_over_nc*gvol !here the real particle number per cell
+ !===========================
  if(mp_per_cell(1) >0)then
   nmacro=nref*gvol_inv
-  np_per_cell=nm_fact*n_over_nc*gvol !here the real particle number per cell
   macro_charge=np_per_cell*e_charge  !real charge [in pC units]/cell
   !===========================================
   !all parameters to be multiplied by the macro weight= j0_norm=1/mp_per_cell
@@ -566,9 +550,17 @@
   nmacro=nref*real(nx*ny*nz,dp)
   ! here the total initial nmacro particles
  endif
- !================================
- !  SET PARAM all cases
-
+ !========================= Memory allocation
+ nx_alloc=nint(dx_inv*sum(lpx(1:5)))
+ nx_alloc=min(nx_loc,nx_alloc)
+ npt_buffer=0
+ do i=1,nsp
+  npt_buffer(i)=nx_alloc*ny_loc*nz_loc*mp_per_cell(i)
+ end do
+!===============================
+  lxb=x(nx)-x(1)
+  lyb=y(ny)-y(1)
+  call set_ftgrid(nx,ny,nz,lxb,lyb)
  !===============================================================
  !charge per macroparticle: np_per_nmacro=nm_fact*n_over_nc/nmacro
  !reduced_charge=bunch_volume/lpvol
@@ -583,35 +575,14 @@
  nd2=2*curr_ndim
  nj_dim=curr_ndim
  if(Envelope)nj_dim=curr_ndim+1
+ if(Beam)then
  if(ibeam==2)then
   nj_dim=curr_ndim+1
   pot_ndim=nj_dim+1
  endif
+ endif
 
 
- djc(1)=dx
- djc(2:3)=0.0
- if(ndim==2)then
-  djc(1)=0.5*dx
-  djc(2)=0.5*dy
- endif
- if(ndim==3)then
-  djc(1)=dx/3.
-  djc(2)=dy/3.
-  djc(3)=dz/3.
- endif
- ymin_t=y(1)
- ymax_t=y(ny+1)
- zmin_t=z(1)
- zmax_t=z(nz+1)
- if(ndim >1)then
-  ymin_t=y(sh_t+1)
-  ymax_t=y(ny+1-sh_t)
- endif
- if(ndim >2 )then
-  zmin_t=z(1+sh_t)
-  zmax_t=z(nz+1-sh_t)
- endif
  end subroutine param
  !--------------------------
  end module all_param

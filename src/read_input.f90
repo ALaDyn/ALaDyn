@@ -66,12 +66,13 @@
   dmodel_id,ibx,iby,ibz,ibeam
  NAMELIST/TARGET_DESCRIPTION/nsp,nsb,ion_min,ion_max,atomic_number,&
   mass_number,ionz_lev,ionz_model,t0_pl,ppc,np_per_xc,np_per_yc,np_per_zc,lpx,lpy,&
-  n_over_nc,n1_over_n,n2_over_n,L_disable_rng_seed
- NAMELIST/LASER/t0_lp,xc_lp,w0_x,w0_y,a0,lam0
+  n_over_nc,np1,np2,L_disable_rng_seed
+ NAMELIST/LASER/G_prof,nb_laser,t0_lp,xc_lp,tau_fwhm,w0_y,a0,lam0,lp_delay,&
+ lp_offset,t1_lp,tau1_fwhm,w1_y,a1,lam1
  NAMELIST/MOVING_WINDOW/w_sh,wi_time,wf_time,w_speed
- NAMELIST/OUTPUT/nouts,iene,nvout,nden,npout,nbout,jump,pjump,xp0_out,xp1_out,yp_out,tmax,cfl, &
+  NAMELIST/OUTPUT/nouts,iene,nvout,nden,npout,nbout,jump,pjump,gam_min,xp0_out,xp1_out,yp_out,tmax,cfl, &
   new_sim,id_new,dump,L_force_singlefile_output,time_interval_dumps,L_print_J_on_grid, &
-  L_first_output_on_restart
+  L_first_output_on_restart,L_env_modulus
  NAMELIST/MPIPARAMS/nprocx,nprocy,nprocz
 
  !--- reading grid parameters ---!
@@ -454,12 +455,13 @@ end subroutine read_nml_integrated_background_diagnostic
   dmodel_id,ibx,iby,ibz,ibeam
  NAMELIST/TARGET_DESCRIPTION/nsp,nsb,ion_min,ion_max,atomic_number,&
   mass_number,ionz_lev,ionz_model,t0_pl,ppc,np_per_xc,np_per_yc,np_per_zc,lpx,lpy,&
-  n_over_nc,n1_over_n,n2_over_n
- NAMELIST/LASER/t0_lp,xc_lp,w0_x,w0_y,a0,lam0
+  n_over_nc,np1,np2
+ NAMELIST/LASER/G_prof,nb_laser,t0_lp,xc_lp,tau_fwhm,w0_y,a0,lam0,lp_delay,&
+  lp_offset,t1_lp,tau1_fwhm,w1_y,a1,lam1
  NAMELIST/MOVING_WINDOW/w_sh,wi_time,wf_time,w_speed
- NAMELIST/OUTPUT/nouts,iene,nvout,nden,npout,nbout,jump,pjump,xp0_out,xp1_out,yp_out,tmax,cfl, &
+ NAMELIST/OUTPUT/nouts,iene,nvout,nden,npout,nbout,jump,pjump,gam_min,xp0_out,xp1_out,yp_out,tmax,cfl, &
   new_sim,id_new,dump,L_force_singlefile_output,time_interval_dumps,L_print_J_on_grid, &
-  L_first_output_on_restart
+  L_first_output_on_restart,L_env_modulus
  NAMELIST/MPIPARAMS/nprocx,nprocy,nprocz
  NAMELIST/NUMBER_BUNCHES/ n_bunches, L_particles, L_intdiagnostics_pwfa, &
   L_intdiagnostics_classic,L_EMBunchEvolution,number_of_slices

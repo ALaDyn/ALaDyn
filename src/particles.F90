@@ -1,5 +1,6 @@
- !4*****************************************************************************************************!
+ !4****************************************************************************************************!
  !             Copyright 2008-2016 Pasquale Londrillo, Stefano Sinigardi, Andrea Sgattoni              !
+ !                                 Alberto Marocchino												   !
  !*****************************************************************************************************!
 
  !*****************************************************************************************************!
@@ -326,6 +327,68 @@
  !     Computes particle density charge on grid integer points
  !==============================================
  !DIR$ ATTRIBUTES INLINE :: qq_interpolate
+!====================
+ subroutine qq_density_spline(sh,x0,x1,a0,a1,ix0,ix1)
+ real(sp),intent(in)  :: sh
+ real(dp),intent(in)  :: x0,x1
+ real(dp),intent(inout) :: a0(3),a1(3)
+ integer, intent(out) :: ix0,ix1
+ real(dp) :: xx,sx,sx2
+
+ xx=sh+x0
+ ix0=int(xx+0.5)
+ sx=xx-real(ix0,dp)
+ sx2=sx*sx
+ a0(2)=0.75-sx2
+ a0(3)=0.5*(0.25+sx2+sx)
+ a0(1)=1.-a0(2)-a0(3)
+ xx=sh+x1
+ ix1=int(xx+0.5)
+ sx=xx-real(ix1,dp)
+ sx2=sx*sx
+ a1(2)=0.75-sx2
+ a1(3)=0.5*(0.25+sx2+sx)
+ a1(1)=1.-a1(2)-a1(3)
+ ix0=ix0-2
+ ix1=ix1-2
+ end subroutine qq_density_spline
+!==========================================
+ subroutine qlql_density_spline(sh,x0,x1,a0,a1,ah0,ah1,ix0,ix1,ih0,ih1)
+ real(sp),intent(in)  :: sh
+ real(dp),intent(in)  :: x0,x1
+ real(dp),intent(inout) :: a0(3),a1(3),ah0(2),ah1(2)
+ integer, intent(out) :: ix0,ix1,ih0,ih1
+ real(dp) :: xx,sx,sx2
+
+ xx=sh+x0
+ ix0=int(xx+0.5)
+ sx=xx-real(ix0,dp)
+ sx2=sx*sx
+ a0(2)=0.75-sx2
+ a0(3)=0.5*(0.25+sx2+sx)
+ a0(1)=1.-a0(2)-a0(3)
+
+ ah0(2)=sx+0.5
+ ah0(1)=1.-ah0(2)
+
+ xx=sh+x1
+ ix1=int(xx+0.5)
+ sx=xx-real(ix1,dp)
+ sx2=sx*sx
+ a1(2)=0.75-sx2
+ a1(3)=0.5*(0.25+sx2+sx)
+ a1(1)=1.-a1(2)-a1(3)
+
+ ah1(2)=sx+0.5
+ ah1(1)=1.-ah1(2)
+
+ ix0=ix0-2
+ ih0=ix0
+ ix1=ix1-2
+ ih1=ix1
+ end subroutine qlql_density_spline
+!==========================================
+!
  subroutine qq_interpolate(xp,ax1,axh,ay1,ayh,ix,iy,ixh,iyh)
  real(dp),intent(in)  :: xp(:)
  real(dp),intent(inout) :: ax1(:),axh(:),ay1(:),ayh(:)
@@ -406,12 +469,15 @@
  end subroutine ql_interpolate
 
  !DIR$ ATTRIBUTES INLINE :: set_local_positions
+!================================
  subroutine set_local_positions(pt_loc,n1,np,ns,ndm,xmn,ymn,zmn)
  real(dp),intent(inout) :: pt_loc(:,:)
  integer,intent(in) :: n1,np,ns,ndm
  real(dp),intent(in) :: xmn,ymn,zmn
  integer :: n
  !=========================
+ ! for ic=1  computes gamma
+ ! for ic=2  computes velocities
  do n=n1,np
   pt_loc(n,1)=dx_inv*(pt_loc(n,1)-xmn)
  end do
@@ -435,6 +501,55 @@
   endif
  end select
  end subroutine set_local_positions
+!================ 
+ subroutine set_part_gamma(pt_loc,n1,np,njc)
+ real(dp),intent(inout) :: pt_loc(:,:)
+ integer,intent(in) :: n1,np,njc
+ integer :: n
+ real(dp) :: gam2,gam_inv
+ 
+ 
+  select case(njc)
+  case(2)
+   do n=n1,np
+    gam2=pt_loc(n,3)*pt_loc(n,3)+pt_loc(n,4)*pt_loc(n,4)
+    pt_loc(n,3)=sqrt(1.+gam2)
+   end do
+  case(3)
+   do n=n1,np
+    gam2=pt_loc(n,4)*pt_loc(n,4)+pt_loc(n,5)*pt_loc(n,5)+&
+                                pt_loc(n,6)*pt_loc(n,6)
+    pt_loc(n,4)=sqrt(1.+gam2)
+   end do
+  end select
+!============exit gamma
+ end subroutine set_part_gamma
+!===================
+ subroutine set_part_velocities(pt_loc,n1,np,njc)
+ real(dp),intent(inout) :: pt_loc(:,:)
+ integer,intent(in) :: n1,np,njc
+ integer :: n
+ real(dp) :: gam2,gam_inv
+ 
+  select case(njc)
+  case(2)
+   do n=n1,np
+    gam2=pt_loc(n,3)*pt_loc(n,3)+pt_loc(n,4)*pt_loc(n,4)
+    gam_inv=1./sqrt(1.+gam2)
+    pt_loc(n,3)=gam_inv*pt_loc(n,3)
+    pt_loc(n,4)=gam_inv*pt_loc(n,4)
+   end do
+  case(3)
+   do n=n1,np
+    gam2=pt_loc(n,4)*pt_loc(n,4)+pt_loc(n,5)*pt_loc(n,5)+&
+                                pt_loc(n,6)*pt_loc(n,6)
+    gam_inv=1./sqrt(1.+gam2)
+    pt_loc(n,4)=gam_inv*pt_loc(n,4)
+    pt_loc(n,5)=gam_inv*pt_loc(n,5)
+    pt_loc(n,6)=gam_inv*pt_loc(n,6)
+   end do
+  end select
+ end subroutine set_part_velocities
  !==========================
  subroutine set_grid_charge(sp_loc,pt,den,np,ndm,n_st,ic,xmn,ymn,zmn)
 
@@ -477,12 +592,11 @@
   ch=5
   do n=1,np
    pt(n,1:2)=sp_loc%part(n,1:2)
-   pt(n,3)=sp_loc%part(n,ch)
   end do
   call set_local_positions(pt,1,np,n_st,2,xmn,ymn,zmn)
   do n=1,np
    xp(1:2)=pt(n,1:2)
-   wgh=pt(n,3)
+   wgh=sp_loc%part(n,ch)
    wgh4=charge(1)*charge(2)
    xx=shx+xp(1)
    i=int(xx+0.5)
@@ -564,10 +678,137 @@
   end do
   ! data on [3:n1+2,3:n2+2,3:n3+2,ic]
  end select
- !+++++++++++++++++++++++++++++++
  end subroutine set_grid_charge
+ !+++++++++++++++++++++++++++++++
+ subroutine set_grid_charge_and_Jx(sp_loc,pt,den,np,ndm,n_st,dt_loc,xmn,ymn,zmn)
 
+ type(species),intent(in) :: sp_loc
+ real(dp),intent(inout) :: pt(:,:)
+ real(dp),intent(inout) :: den(:,:,:,:)
+ integer,intent(in) :: np,ndm,n_st
+ real(dp),intent(in) :: dt_loc,xmn,ymn,zmn
+ real(dp) :: dvol,dvol1,dvol2,wgh,gam
+ real(dp) :: axh0(2),axh1(2)
+ real(dp) :: ax0(3),ay0(3),ax1(3),ay1(3),az0(3),az1(3)
+ integer :: i,j,i0,j0,i1,j1,i2,j2,k,k0,k1,k2,n
+ integer :: ch,ih0,ih
+ real(dp) :: xp1(3),xp0(3),pp(3)
+ real(sp) :: charge(2),wgh4
+ equivalence(charge,wgh)
+ !======================
+ ax0=0.0;ay0=0.0 
+ ax1=0.0;ay1=0.0 
+ axh0=0.0; axh1=0.0
+!========
+ ch=size(sp_loc%part,2)
+ select case(ndm)   !only two or three dimensional conf. considered
+ case(2)
+  do n=1,np
+   pt(n,1:2)=sp_loc%part(n,1:2)
+   pp(1:2)=sp_loc%part(n,3:4)
+   gam=sqrt(1.+pp(1)*pp(1)+pp(2)*pp(2))!gamma
+   wgh=sp_loc%part(n,ch)
+   wgh4=0.5*charge(1)*charge(2)
+   pp(1:2)=pp(1:2)/gam                 !velocities
+   pt(n,3)=pt(n,1)-dt_loc*pp(1)           !old positions
+   pt(n,4)=pt(n,2)-dt_loc*pp(2)
+   xp1(1)=dx_inv*(pt(n,1)-xmn)       !new positions
+   xp1(2)=dy_inv*(pt(n,2)-ymn)       !new positions
+   xp0(1)=dx_inv*(pt(n,3)-xmn)       !old positions
+   xp0(2)=dy_inv*(pt(n,4)-ymn)       !old positions
 
+   call qlql_density_spline(shx,xp0(1),xp1(1),ax0,ax1,axh0,axh1,i0,i,ih0,ih)
+   call qq_density_spline(shy,xp0(2),xp1(2),ay0,ay1,j0,j)
+   !=============================
+   do j1=1,3
+    j2=j0+j1
+    dvol=wgh4*ay0(j1)
+    dvol1=dvol*pp(1)
+    do i1=1,3
+     i2=i0+i1
+     den(i2,j2,1,1)=den(i2,j2,1,1)+dvol*ax0(i1)    !density x^n
+   end do
+    do i1=1,2
+     i2=ih0+i1
+     den(i2,j2,1,2)=den(i2,j2,1,2)+dvol1*axh0(i1)  !  Jx
+  end do
+     j2=j+j1
+    dvol=wgh4*ay1(j1)
+    dvol1=dvol*pp(1)
+    do i1=1,3
+      i2=i+i1
+     den(i2,j2,1,1)=den(i2,j2,1,1)+dvol*ax1(i1)    !density x^{n+1}
+    end do
+    do i1=1,2
+     i2=ih+i1
+     den(i2,j2,1,2)=den(i2,j2,1,2)+dvol1*axh1(i1)  ! Jx
+     end do
+    end do
+   end do
+   !=============
+ case(3)
+  ch=7
+  az0=0.0
+  az1=0.0
+   do n=1,np
+   pt(n,1:3)=sp_loc%part(n,1:3)
+   pp(1:3)=sp_loc%part(n,4:6)
+   gam=sqrt(1.+pp(1)*pp(1)+pp(2)*pp(2)+pp(3)*pp(3))!gamma
+   wgh=sp_loc%part(n,ch)
+   wgh4=0.5*charge(1)*charge(2)
+   pp(1:3)=pp(1:3)/gam                 !velocities
+   pt(n,4)=pt(n,1)-dt_loc*pp(1)           !old positions
+   pt(n,5)=pt(n,2)-dt_loc*pp(2)
+   pt(n,6)=pt(n,3)-dt_loc*pp(3)
+   xp1(1)=dx_inv*(pt(n,1)-xmn)       !new positions
+   xp1(2)=dy_inv*(pt(n,2)-ymn)       
+   xp1(3)=dz_inv*(pt(n,3)-zmn)      
+   xp0(1)=dx_inv*(pt(n,4)-xmn)       !old positions
+   xp0(2)=dy_inv*(pt(n,5)-ymn)       
+   xp0(3)=dz_inv*(pt(n,6)-zmn)     
+   call qlql_density_spline(shx,xp0(1),xp1(1),ax0,ax1,axh0,axh1,i0,i,ih0,ih)
+   call qq_density_spline(shy,xp0(2),xp1(2),ay0,ay1,j0,j)
+   call qq_density_spline(shz,xp0(3),xp1(3),az0,az1,k0,k)
+!===================================
+   do k1=1,3
+    k2=k0+k1
+    dvol2=az0(k1)
+    do j1=1,3
+     j2=j0+j1
+     dvol=wgh4*ay0(j1)*dvol2
+     dvol1=dvol*pp(1)
+     do i1=1,3
+      i2=i0+i1
+      den(i2,j2,k2,1)=den(i2,j2,k2,1)+dvol*ax0(i1)    !density x^n
+     end do
+     do i1=1,2
+      i2=ih0+i1
+      den(i2,j2,k2,2)=den(i2,j2,k2,2)+dvol1*axh0(i1)  !Jx
+    end do
+   end do
+  end do
+   do k1=1,3
+    k2=k+k1
+    dvol2=az1(k1)
+    do j1=1,3
+     j2=j+j1
+     dvol=wgh4*ay1(j1)*dvol2
+     dvol1=dvol*pp(1)
+     do i1=1,3
+      i2=i+i1
+      den(i2,j2,k2,1)=den(i2,j2,k2,1)+dvol*ax1(i1)    !density x^{n+1}
+     end do
+     do i1=1,2
+      i2=ih+i1
+      den(i2,j2,k2,2)=den(i2,j2,k2,2)+dvol1*axh1(i1)  !density -Jx
+     end do
+    end do
+   end do
+  end do
+  !  Exit jc(1)=rho(i,j,k) jc(2)=Jx(i+1/2,j,k)
+ end select
+ !+++++++++++++++++++++++++++++++
+ end subroutine set_grid_charge_and_Jx
  !==========================
  subroutine set_grid_den_energy(sp_loc,pt,eden,np,ndm,njc,n_st,xmn,ymn,zmn)
 
@@ -613,17 +854,16 @@
    end do
   end do
  case(2)
-  ch=5
-  if(njc==3)ch=7
+  ch=size(sp_loc%part,2)
   do n=1,np
    pt(n,1:ch)=sp_loc%part(n,1:ch)
   end do
   call set_local_positions(pt,1,np,n_st,ndm,xmn,ymn,zmn)
+  call set_part_gamma(pt,1,np,njc)
   if(njc==2)then
    do n=1,np
     xp(1:2)=pt(n,1:2)
-    pp(1:2)=pt(n,3:4)
-    gam=sqrt(pp(1)*pp(1)+pp(2)*pp(2)+1.)
+    gam=pt(n,3)
     wgh=pt(n,ch)
     xx=shx+xp(1)
     i=int(xx+0.5)
@@ -657,8 +897,7 @@
   if(njc==3)then
    do n=1,np
     xp(1:2)=pt(n,1:2)
-    pp(1:3)=pt(n,4:6)
-    gam=sqrt(pp(1)*pp(1)+pp(2)*pp(2)+pp(3)*pp(3)+1.)
+    gam=pt(n,4)
     wgh=pt(n,ch)
 
     xx=shx+xp(1)
@@ -690,17 +929,18 @@
     end do
    end do
   endif
+
  case(3)
   ch=7
   do n=1,np
    pt(n,1:ch)=sp_loc%part(n,1:ch)
   end do
   call set_local_positions(pt,1,np,n_st,3,xmn,ymn,zmn)
+  call set_part_gamma(pt,1,np,3)
   do n=1,np
    xp(1:3)=pt(n,1:3)
-   pp(1:3)=pt(n,4:6)
    wgh=pt(n,ch)
-   gam=sqrt(pp(1)*pp(1)+pp(2)*pp(2)+pp(3)*pp(3)+1.)
+   gam=pt(n,4)
    xx=shx+xp(1)
    i=int(xx+0.5)
    sx=xx-real(i,dp)
@@ -746,190 +986,6 @@
  !+++++++++++++++++++++++++++++++
  end subroutine set_grid_den_energy
  !==============================================
- subroutine set_grid_momenta(sp_loc,pt,np,ndm,njc,nst,xmn,ymn,zmn)
-
- type(species),intent(in) :: sp_loc
- real(dp),intent(inout) :: pt(:,:)
- integer,intent(in) :: np,ndm,njc,nst
- real(dp),intent(in) :: xmn,ymn,zmn
- real(dp) :: gam,xx,sx,sx2,dvol,dvol1,dvol2,dvol3,wgh
- real(dp) :: ax0(0:3),ay0(0:3),az0(0:3),xp(3),pp(3)
- integer :: spl,i,j,k,i1,j1,k1,i2,j2,k2,n,ch
- !=============================
- real(sp) :: charge(2)
- equivalence(charge,wgh)
- !======================
- spl=2
- ax0(0:3)=0.0;ay0(0:3)=0.0
- az0(0:3)=0.0
- select case(ndm)
- case(1)
-  j2=1
-  ch=5
-  do n=1,np
-   xp(1)=dx_inv*(sp_loc%part(n,1)-xmn)
-   pp(1:2)=sp_loc%part(n,3:4)
-   wgh=sp_loc%part(n,ch)
-   xx=shx+xp(1)
-   i=int(xx+0.5)
-   sx=xx-real(i,dp)
-   sx2=sx*sx
-   ax0(1)=0.75-sx2
-   ax0(2)=0.5*(0.25+sx2+sx)
-   ax0(0)=1.-ax0(1)-ax0(2)
-   ax0(0:2)=charge(1)*ax0(0:2)
-   i=i-1
-   do i1=0,2
-    i2=i+i1
-    dvol=ax0(i1)
-    jc(i2,j2,1,1)=jc(i2,j2,1,1)+pp(1)*dvol
-    jc(i2,j2,1,2)=jc(i2,j2,1,2)+pp(2)*dvol
-   end do
-  end do
- case(2)
-  ch=5
-  if(njc==3)ch=7
-  do n=1,np
-   pt(n,1:ch)=sp_loc%part(n,1:ch)
-  end do
-  call set_local_positions(pt,1,np,nst,2,xmn,ymn,zmn)
-  if(njc==2)then
-   do n=1,np
-    xp(1:2)=pt(n,1:2)
-    pp(1:2)=pt(n,3:4)
-    gam=sqrt(pp(1)*pp(1)+pp(2)*pp(2)+1.)
-    pp(1:2)=pp(1:2)/gam
-    wgh=pt(n,ch)
-    xx=shx+xp(1)
-    i=int(xx+0.5)
-    sx=xx-real(i,dp)
-    sx2=sx*sx
-    ax0(1)=0.75-sx2
-    ax0(2)=0.5*(0.25+sx2+sx)
-    ax0(0)=1.-ax0(1)-ax0(2)
-    ax0(0:2)=charge(1)*ax0(0:2)
-    i=i-1
-
-    xx=shy+xp(2)
-    j=int(xx+0.5)
-    sx=xx-real(j,dp)
-    sx2=sx*sx
-    ay0(1)=0.75-sx2
-    ay0(2)=0.5*(0.25+sx2+sx)
-    ay0(0)=1.-ay0(1)-ay0(2)
-    j=j-1
-    do j1=0,2
-     j2=j+j1
-     do i1=0,2
-      i2=i+i1
-      dvol=ax0(i1)*ay0(j1)
-      jc(i2,j2,1,1)=jc(i2,j2,1,1)+pp(1)*dvol
-      jc(i2,j2,1,2)=jc(i2,j2,1,2)+pp(2)*dvol
-     end do
-    end do
-   end do
-  endif
-  if(njc==3)then
-   do n=1,np
-    xp(1:2)=pt(n,1:2)
-    pp(1:3)=pt(n,4:6)
-    gam=sqrt(pp(1)*pp(1)+pp(2)*pp(2)+pp(3)*pp(3)+1.)
-    pp(1:3)=pp(1:3)/gam
-    wgh=pt(n,ch)
-
-    xx=shx+xp(1)
-    i=int(xx+0.5)
-    sx=xx-real(i,dp)
-    sx2=sx*sx
-    ax0(1)=0.75-sx2
-    ax0(2)=0.5*(0.25+sx2+sx)
-    ax0(0)=1.-ax0(1)-ax0(2)
-    ax0(0:2)=charge(1)*ax0(0:2)
-    i=i-1
-
-    xx=shy+xp(2)
-    j=int(xx+0.5)
-    sx=xx-real(j,dp)
-    sx2=sx*sx
-    ay0(1)=0.75-sx2
-    ay0(2)=0.5*(0.25+sx2+sx)
-    ay0(0)=1.-ay0(1)-ay0(2)
-    j=j-1
-    do j1=0,2
-     j2=j+j1
-     do i1=0,2
-      i2=i+i1
-      dvol=ax0(i1)*ay0(j1)
-      jc(i2,j2,1,1)=jc(i2,j2,1,1)+pp(1)*dvol
-      jc(i2,j2,1,2)=jc(i2,j2,1,2)+pp(2)*dvol
-      jc(i2,j2,1,3)=jc(i2,j2,1,3)+pp(3)*dvol
-     end do
-    end do
-   end do
-  endif
-
- case(3)
-  ch=7
-  do n=1,np
-   pt(n,1:ch)=sp_loc%part(n,1:ch)
-  end do
-  call set_local_positions(pt,1,np,nst,3,xmn,ymn,zmn)
-  do n=1,np
-   xp(1:3)=pt(n,1:3)
-   pp(1:3)=pt(n,4:6)
-   gam=sqrt(1.+pp(1)*pp(1)+pp(2)*pp(2)+pp(3)*pp(3))
-   pp(1:3)=pp(1:3)/gam
-   wgh=pt(n,ch)
-   xx=shx+xp(1)
-   i=int(xx+0.5)
-   sx=xx-real(i,dp)
-   sx2=sx*sx
-   ax0(1)=0.75-sx2
-   ax0(2)=0.5*(0.25+sx2+sx)
-   ax0(0)=1.-ax0(1)-ax0(2)
-   ax0(0:2)=charge(1)*ax0(0:2)
-
-   xx=shy+xp(2)
-   j=int(xx+0.5)
-   sx=xx-real(j,dp)
-   sx2=sx*sx
-   ay0(1)=0.75-sx2
-   ay0(2)=0.5*(0.25+sx2+sx)
-   ay0(0)=1.-ay0(1)-ay0(2)
-
-   xx=shz+xp(3)
-   k=int(xx+0.5)
-   sx=xx-real(k,dp)
-   sx2=sx*sx
-   az0(1)=0.75-sx2
-   az0(2)=0.5*(0.25+sx2+sx)
-   az0(0)=1.-az0(1)-az0(2)
-   !---------------
-   i=i-1
-   j=j-1
-   k=k-1
-   do k1=0,spl
-    k2=k+k1
-    do j1=0,spl
-     j2=j+j1
-     dvol=az0(k1)*ay0(j1)
-     dvol1=pp(1)*dvol
-     dvol2=pp(2)*dvol
-     dvol3=pp(3)*dvol
-     do i1=0,spl
-      i2=i+i1
-      jc(i2,j2,k2,1)=jc(i2,j2,k2,1)+ax0(i1)*dvol1
-      jc(i2,j2,k2,2)=jc(i2,j2,k2,2)+ax0(i1)*dvol2
-      jc(i2,j2,k2,3)=jc(i2,j2,k2,3)+ax0(i1)*dvol3
-     end do
-    end do
-   end do
-  end do
-  ! particles on[1:n1,1:n2,1:n3]===> data on [0:n1+1,0:n2+1,0:n3+1,1:4]
- end select
- !+++++++++++++++++++++++++++++++
- end subroutine set_grid_momenta
- !=============================
  !========= SECTION FOR ACCELERATION FIELDS ASSIGNEMENT
  !==========================================
  subroutine set_part1d_acc(ef,sp_loc,pt,np,ndf,xmn)
@@ -1593,55 +1649,48 @@
  !================================
  end subroutine set_ion_Efield
  !=======================================
- subroutine set_ion_env_field(ef,sp_loc,pt,np,ndm,rionz,dt_loc,xmn,ymn,zmn)
+ subroutine set_ion_env_field(ef,sp_loc,pt,np,ndm,xmn,ymn,zmn,om0)
 
  real(dp),intent(in) :: ef(:,:,:,:)
  type(species),intent(in) :: sp_loc
  real(dp),intent(inout) :: pt(:,:)
- integer,intent(in) :: np,ndm,rionz
- real(dp),intent(in) :: dt_loc,xmn,ymn,zmn
+ integer,intent(in) :: np,ndm
+ real(dp),intent(in) :: xmn,ymn,zmn,om0
 
- real(dp) :: xx,sx,sx2,dvol, gam
- real(dp) :: axh(0:2),ayh(0:2),xp1(3),pp(3)
+ real(dp) :: xx,sx,sx2,dvol, ddx,ddy
+ real(dp) :: axh(0:1),ayh(0:1),xp1(3)
  real(dp) :: ax1(0:2),ay1(0:2),azh(0:2),az1(0:2),ap(6)
  integer :: i,ih,j,jh,i1,j1,i2,j2,k,kh,k1,k2,n
  !==============================
- ! Enter env(1:2)<=  A=(A_R,A_I)
+ ! Enter ef(1:2)<=  A=(A_R,A_I)
  ! Exit interpolated |E|^2= |E_y|^2 + |E_x|^2
  !===========================
- !  Up to O(eplidon)^2:
- ! |E_y|= k_0^2*|A|^2+2*k_0*[A_RD_xA_I-A_ID_xA_R] +(D_x[A_r])^2 +D_x[A_I}^2)
- ! |E_x|= (D_y[A_r])^2 +D_y[A_I}^2)
+ !  Up to O(epsilon)^2:
+ ! |E_y|^2= k_0^2*|A|^2+2*k_0*[A_RDx(A_I)-A_IDx(A_R)] +(Dx[A_R])^2 +Dx[A_I}^2)
+ ! |E_x|^2= (Dy[A_r])^2 +Dy[A_I}^2)
  !===============================================
 
  !===============================================
- ! Linear shape at half-index quadratic shape at integer index
+ ! Only linear shape at half-index and at integer index
  !====================================
  ax1(0:2)=0.0;ay1(0:2)=0.0
- az1(0:2)=0.0;azh(0:2)=0.0
- axh(0:2)=0.0;ayh(0:2)=0.0
+ az1(0:2)=0.0;azh(0:1)=0.0
+ axh(0:1)=0.0;ayh(0:1)=0.0
+ ddx=dx_inv
+ ddy=dy_inv
  !===== enter species positions at t^{n+1} level========
  ! fields are at t^n
  select case(ndm)
  case(2)
   k2=1
-  if(rionz >1)then       !all species running
-   do n=1,np
-    pp(1:2)=sp_loc%part(n,3:4)
-    gam=1.+pp(1)*pp(1)+pp(2)*pp(2)
-    pp(1:2)=pp(1:2)/sqrt(gam)
-    pt(n,1:2)=sp_loc%part(n,1:2)-dt_loc*pp(1:2) ! stores t^n part positions
-    pt(n,1)=dx_inv*(pt(n,1)-xmn)
-   end do
-  else
    do n=1,np
     pt(n,1:2)=sp_loc%part(n,1:2)
     pt(n,1)=dx_inv*(pt(n,1)-xmn)
+   pt(n,2)=dy_inv*(pt(n,2)-ymn)
    end do
-  endif
   !==========================
   do n=1,np
-   ap(1:2)=0.0
+   ap(1:6)=0.0
    xp1(1:2)=pt(n,1:2)
    xx=shx+xp1(1)
    i=int(xx+0.5)
@@ -1650,15 +1699,9 @@
    ax1(1)=0.75-sx2
    ax1(2)=0.5*(0.25+sx2+sx)
    ax1(0)=1.-ax1(1)-ax1(2)
-   ih=int(xx)
-   sx=xx-0.5-real(ih,dp)
-   sx2=sx*sx
-   axh(1)=0.75-sx2
-   axh(2)=0.5*(0.25+sx2+sx)
-   axh(0)=1.-axh(1)-axh(2)
 
-   !axh(1)=sx+0.5
-   !axh(0)=1.-axh(1)
+   axh(1)=sx+0.5
+   axh(0)=1.-axh(1)
 
    xx=shy+xp1(2)
    j=int(xx+0.5)
@@ -1667,64 +1710,59 @@
    ay1(1)=0.75-sx2
    ay1(2)=0.5*(0.25+sx2+sx)
    ay1(0)=1.-ay1(1)-ay1(2)
-   jh=int(xx)
-   sx=xx-0.5-real(jh,dp)
-   sx2=sx*sx
-   ayh(1)=0.75-sx2
-   ayh(2)=0.5*(0.25+sx2+sx)
-   ayh(0)=1.-ayh(1)-ayh(2)
 
-   !ayh(1)=sx+0.5
-   !ayh(0)=1.-ayh(1)
-
+   ayh(1)=sx+0.5
+   ayh(0)=1.-ayh(1)
    i=i-1
    j=j-1
-
-   ih=ih-1
-   jh=jh-1
-   ! Ex(i+1/2,j,k)
-   !==============
-   !==============
-   ! Ey(i,j+1/2,k)
-   !==============
+   ih=i
+   jh=j
    do j1=0,2
     j2=j+j1
     dvol=ay1(j1)
     do i1=0,2
+     i2=i1+i
+     ap(1)=ap(1)+ax1(i1)*dvol*ef(i2,j2,k2,1)        !A_R
+     ap(2)=ap(2)+ax1(i1)*dvol*ef(i2,j2,k2,2)        !A_I
+    end do
+    do i1=0,1
      i2=i1+ih
-     ap(1)=ap(1)+axh(i1)*dvol*ef(i2,j2,k2,1)*ef(i2,j2,k2,1)
+     ap(3)=ap(3)+axh(i1)*dvol*(ef(i2+1,j2,k2,1)-ef(i2,j2,k2,1))        !DxA_R
+     ap(4)=ap(4)+axh(i1)*dvol*(ef(i2+1,j2,k2,2)-ef(i2,j2,k2,2))        !DxA_I
     end do
    end do
-   do j1=0,2
+   do j1=0,1
     j2=jh+j1
     dvol=ayh(j1)
     do i1=0,2
      i2=i+i1
-     ap(1)=ap(1)+ax1(i1)*dvol*ef(i2,j2,k2,2)*ef(i2,j2,k2,2)
+     ap(5)=ap(5)+ax1(i1)*dvol*(ef(i2,j2+1,k2,1)-ef(i2,j2,k2,1))    !DyA_R
+     ap(6)=ap(6)+ax1(i1)*dvol*(ef(i2,j2+1,k2,2)-ef(i2,j2,k2,2))    !DyA_I
     end do
    end do
-   !==============
-   pt(n,5)=ap(1)               !Ex(p)^2 + Ey(p)^2
+!==================
+   pt(n,4)=sqrt(ap(1)*ap(1)+ap(2)*ap(2))   !The interpolated |A| potential
+   ap(1)=om0*ap(1)
+   ap(2)=om0*ap(2)
+   ap(3)=ddx*ap(3)
+   ap(4)=ddx*ap(4)
+   ap(5)=ddy*ap(5)
+   ap(6)=ddy*ap(6)
+   pt(n,5)=ap(1)*ap(1)+ap(2)*ap(2)+ap(3)*ap(3)+ap(4)*ap(4)+ap(5)*ap(5)+ap(6)*ap(6)
+   pt(n,5)=pt(n,5)+2.*(ap(1)*ap(4)-ap(2)*ap(3))
   end do
-
+  !==========================
  case(3)
-  if(rionz >1)then
+
    do n=1,np
-    pp(1:3)=sp_loc%part(n,4:6)
-    gam=1.+pp(1)*pp(1)+pp(2)*pp(2)+pp(3)*pp(3)
-    pt(n,1:3)=sp_loc%part(n,1:3)-dt_loc*pp(1:3) ! stores t^n part positions
-    pp(1:3)=pp(1:3)/sqrt(gam)
+   pt(n,1:3)=sp_loc%part(n,1:3)
     pt(n,1)=dx_inv*(pt(n,1)-xmn)
+   pt(n,2)=dy_inv*(pt(n,2)-ymn)
+   pt(n,3)=dz_inv*(pt(n,3)-zmn)
    end do
-  else
-   do n=1,np
-    pt(n,1)=dx_inv*(sp_loc%part(n,1)-xmn)
-    pt(n,2:3)=sp_loc%part(n,2:3)
-   end do
-  endif
   !==========================
   do n=1,np
-   ap(1:3)=0.0
+   ap(1:6)=0.0
    xp1(1:3)=pt(n,1:3)
    xx=shx+xp1(1)
    i=int(xx+0.5)
@@ -1748,13 +1786,6 @@
    ayh(1)=sx+0.5
    ayh(0)=1.-ayh(1)
 
-   !kh=int(xx)
-   !sx=xx-0.5-real(kh,dp)
-   !sx2=sx*sx
-   !azh(1)=0.75-sx2
-   !azh(2)=0.5*(0.25+sx2+sx)
-   !azh(0)=1.-azh(1)-azh(2)
-   !kh=kh-1
    xx=shz+xp1(3)
    k=int(xx+0.5)
    sx=xx-real(k,dp)
@@ -1773,19 +1804,21 @@
    ih=i
    jh=j
    kh=k
-   ! Ex(i+1/2,j,k)
-   !==============
-   !==============
-   ! Ey(i,j+1/2,k)
-   !==============
+!=============== Quadratic/linear assignements
    do k1=0,2
     k2=k+k1
     do j1=0,2
      j2=j+j1
      dvol=ay1(j1)*az1(k1)
+     do i1=0,2
+      i2=i1+i
+      ap(1)=ap(1)+ax1(i1)*dvol*ef(i2,j2,k2,1)        !A_R
+      ap(2)=ap(2)+ax1(i1)*dvol*ef(i2,j2,k2,2)        !A_I
+     end do
      do i1=0,1
       i2=i1+ih
-      ap(1)=ap(1)+axh(i1)*dvol*ef(i2,j2,k2,1)*ef(i2,j2,k2,1)
+      ap(3)=ap(3)+axh(i1)*dvol*(ef(i2+1,j2,k2,1)-ef(i2,j2,k2,1))        !DxA_R
+      ap(4)=ap(4)+axh(i1)*dvol*(ef(i2+1,j2,k2,2)-ef(i2,j2,k2,2))        !DxA_I
      end do
     end do
     do j1=0,1
@@ -1793,25 +1826,20 @@
      dvol=ayh(j1)*az1(k1)
      do i1=0,2
       i2=i+i1
-      ap(1)=ap(1)+ax1(i1)*dvol*ef(i2,j2,k2,2)*ef(i2,j2,k2,2)
+      ap(5)=ap(5)+ax1(i1)*dvol*(ef(i2,j2+1,k2,1)-ef(i2,j2,k2,1))    !DyA_R
+      ap(6)=ap(6)+ax1(i1)*dvol*(ef(i2,j2+1,k2,2)-ef(i2,j2,k2,2))    !DyA_I
      end do
     end do
    end do
-   !==============
-   ! Ez(i,j,k+1/2)
-   !==============
-   do k1=0,1
-    k2=kh+k1
-    do j1=0,2
-     j2=j+j1
-     dvol=ay1(j1)*azh(k1)
-     do i1=0,2
-      i2=i1+i
-      ap(1)=ap(1)+ax1(i1)*dvol*ef(i2,j2,k2,3)*ef(i2,j2,k2,3)
-     end do
-    end do
-   end do
-   pt(n,7)=ap(1)
+   pt(n,6)=sqrt(ap(1)*ap(1)+ap(2)*ap(2))   !The interpolated |A| potential
+   ap(1)=om0*ap(1)
+   ap(2)=om0*ap(2)
+   ap(3)=ddx*ap(3)
+   ap(4)=ddx*ap(4)
+   ap(5)=ddy*ap(5)
+   ap(6)=ddy*ap(6)
+   pt(n,7)=ap(1)*ap(1)+ap(2)*ap(2)+ap(3)*ap(3)+ap(4)*ap(4)+ap(5)*ap(5)+ap(6)*ap(6)
+   pt(n,7)=pt(n,7)+2.*(ap(1)*ap(4)-ap(2)*ap(3))
   end do
  end select
  !================================
@@ -2055,15 +2083,15 @@
  end subroutine set_ion_Ebfield
  !================================
  subroutine set_ion_two_Ebfield(&
-  ef,ef1,ef2,sp_loc,pt,np,s_ind,ndm,rionz,dt_loc,xmn,ymn,zmn)
+              ef,ef1,ef2,sp_loc,pt,np,s_ind,ndm,xmn,ymn,zmn)
 
  real(dp),intent(in) :: ef(:,:,:,:),ef1(:,:,:,:),ef2(:,:,:,:)
  type(species),intent(in) :: sp_loc
  real(dp),intent(inout) :: pt(:,:)
- integer,intent(in) :: np,s_ind,ndm,rionz
- real(dp),intent(in) :: dt_loc,xmn,ymn,zmn
+ integer,intent(in) :: np,s_ind,ndm
+ real(dp),intent(in) :: xmn,ymn,zmn
 
- real(dp) :: xx,sx,sx2,dvol, gam,eftot
+ real(dp) :: xx,sx,sx2,dvol,eftot
  real(dp) :: axh(0:2),ayh(0:2),xp1(3),pp(3)
  real(dp) :: ax1(0:2),ay1(0:2),azh(0:2),az1(0:2),ap(6)
  integer :: i,ih,j,jh,i1,j1,i2,j2,k,kh,k1,k2,n
@@ -2079,20 +2107,10 @@
  select case(ndm)
  case(2)
   k2=1
-  if(rionz >1)then
-   do n=1,np
-    pp(1:2)=sp_loc%part(n,3:4)
-    gam=1.+pp(1)*pp(1)+pp(2)*pp(2)
-    pp(1:2)=pp(1:2)/sqrt(gam)
-    pt(n,3:4)=sp_loc%part(n,1:2)-dt_loc*pp(1:2) ! stores t^n part positions
-    pt(n,1)=dx_inv*(pt(n,1)-xmn)
-   end do
-  else
    do n=1,np
     pt(n,1)=dx_inv*(sp_loc%part(n,1)-xmn)
     pt(n,2)=sp_loc%part(n,2)
    end do
-  endif
   if(s_ind==0)then
    do n=1,np
     pt(n,2)=dy_inv*(pt(n,2)-ymn)
@@ -2171,20 +2189,10 @@
   end do
 
  case(3)
-  if(rionz >1)then
-   do n=1,np
-    pp(1:3)=sp_loc%part(n,4:6)
-    gam=1.+pp(1)*pp(1)+pp(2)*pp(2)+pp(3)*pp(3)
-    pp(1:3)=pp(1:3)/sqrt(gam)
-    pt(n,1:3)=sp_loc%part(n,1:3) -dt_loc*pp(1:3) ! the part positions
-    pt(n,1)=dx_inv*(pt(n,1)-xmn)
-   end do
-  else
    do n=1,np
     pt(n,1)=dx_inv*(sp_loc%part(n,1)-xmn)
     pt(n,2:3)=sp_loc%part(n,2:3)
    end do
-  endif
   if(s_ind==0)then
    do n=1,np
     xp1(2:3)=pt(n,2:3)
@@ -2467,6 +2475,7 @@
  select case(ndm)
  case(2)
   do n=1,np
+   ap(1:3)=0.0
    xp1(1)=dx_inv*(sp_loc%part(n,1)-xmn) !loc (x) position
    xp1(2)=dy_inv*(sp_loc%part(n,2)-ymn) !loc (y) position
 
@@ -2528,9 +2537,9 @@
     end do
    end do
    !=========================
-   ap(1)=dxe*ap(1)   !p-assigned grad_x
-   ap(2)=dye*ap(2)   !p-assigned grad_y
-   pt(n,1:3)=ap(1:3)
+   pt(n,1)=dxe*ap(1)   !p-assigned grad_x
+   pt(n,2)=dye*ap(2)   !p-assigned grad_y
+   pt(n,3)=ap(3)
   end do
   !========================
  case(3)
@@ -2629,19 +2638,18 @@
      end do
     end do
    end do
-   ap(1)=dxe*ap(1)
-   ap(2)=dye*ap(2)
-   ap(3)=dze*ap(3)
+   pt(n,1)=dxe*ap(1)
+   pt(n,2)=dye*ap(2)
+   pt(n,3)=dze*ap(3)
+   pt(n,4)=ap(4)
    !=================================
-   pt(n,1:4)=ap(1:4)
   end do
  end select
  end subroutine set_env_interp
 
  subroutine set_env_acc(ef,av,sp_loc,pt,np,ndm,dt_loc,xmn,ymn,zmn)
 
- real(dp),intent(in) :: ef(:,:,:,:)
- real(dp),intent(inout) :: av(:,:,:,:)
+ real(dp),intent(in) :: ef(:,:,:,:),av(:,:,:,:)
  type(species),intent(in) :: sp_loc
  real(dp),intent(inout) :: pt(:,:)
  integer,intent(in) :: np,ndm
@@ -2651,7 +2659,7 @@
  real(dp) :: axh(0:2),ayh(0:2),up(3),xp1(3)
  real(dp) :: ax1(0:2),ay1(0:2),azh(0:2),az1(0:2),ap(12)
  integer :: i,ih,j,jh,i1,j1,i2,j2,k,kh,k1,k2,n
- real(dp) :: a1,b1,gam,gamp_new,dth
+ real(dp) :: a1,b1,gam,gamp_new,dth4
  !===============================================
  real(sp) :: charge(2)
  equivalence(charge,wgh)
@@ -2659,15 +2667,20 @@
  ! Linear shape for fields at half-index quadratic shape for fields
  !                         at integer index
  !====================================
- !=============================================================
- !   particle  indexing : i=1,....,nx => weights 1,.....nx+2
- !   Fields data[1:n1+2,1:n2+2,1:n3+2] ax(0)=> data(i), ax(1)=> data(i+1)
- !                                     ax(2)=>data(i+2)
  !===================================================
  ! enter ef(1:6) wake fields
  ! enters av(1)=F=|a|^2/2 envelope at integer grid nodes
  ! and av(2:4)=grad[F] at staggered points
- ! exit total Lorentz force and velocities at particle positions
+ !  COMPUTES
+ !(E,B), F, gradF  assignements to particle positions 
+ ! => ap(1:6)  in 2D 
+ ! => ap(1:10) in 3D
+ ! approximated gamma function:
+ ! gam_new= gam +0.25*charge*Dt(gam*E+0.5*grad[F]).p^{n-1/2}/gam^2
+ ! EXIT
+ ! charge*(E+ 0.5grad[F]/gam_new) charge*B/gam_new, F   and wgh/gam_new  
+ ! pt(1:5)  in 2D
+ ! pt(1:7)  in 3D
  !========================================
  ax1(0:2)=0.0;ay1(0:2)=0.0
  az1(0:2)=0.0
@@ -2675,10 +2688,9 @@
  azh(0:2)=0.0
 
  k2=1
- dth=0.5*dt_loc
+ dth4=0.25*dt_loc
  select case(ndm)
  case(2)
-  !================== Works also for (z,r) Pz,Pr cylindrical coordinates
 
   do n=1,np
    ap=0.0
@@ -2733,7 +2745,7 @@
     do i1=0,2
      i2=i1+ih
      dvol1=dvol*axh(i1)
-     ap(1)=ap(1)+dvol1*ef(i2,j2,k2,1)
+     ap(1)=ap(1)+dvol1*ef(i2,j2,k2,1)   !Ex
      ap(4)=ap(4)+dvol1*av(i2,j2,k2,2)   !D_xF
     end do
     do i1=0,2
@@ -2747,26 +2759,26 @@
     do i1=0,2
      i2=i+i1
      dvol1=dvol*ax1(i1)
-     ap(2)=ap(2)+dvol1*ef(i2,j2,k2,2)
-     ap(5)=ap(5)+dvol1*av(i2,j2,k2,3)
+     ap(2)=ap(2)+dvol1*ef(i2,j2,k2,2) !Ey
+     ap(5)=ap(5)+dvol1*av(i2,j2,k2,3) !D_yF
     end do
     do i1=0,2
      i2=i1+ih
-     ap(3)=ap(3)+axh(i1)*dvol*ef(i2,j2,k2,3)
+     ap(3)=ap(3)+axh(i1)*dvol*ef(i2,j2,k2,3)  !Bz
     end do
    end do
-   !=========================
+   !===============================
    gam2=1.+up(1)*up(1)+up(2)*up(2)+ap(6)
-   !==================== solves a cubic equation gam^3=Agam+B
-   a1=-dot_product(ap(1:2),up(1:2))
-   b1=-dot_product(ap(4:5),up(1:2))
+   ap(4:5)=0.5*ap(4:5)
+   a1=dot_product(ap(1:2),up(1:2))
+   b1=dot_product(ap(4:5),up(1:2))
    gam=sqrt(gam2)
-   gamp_new=gam+dth*(gam*a1+b1)/gam2
-
+   gamp_new=gam+charge(2)*dth4*(gam*a1+b1)/gam2
    ap(3:5)=ap(3:5)/gamp_new
-   pt(n,1)=ap(1)+0.5*ap(4)
-   pt(n,2)=ap(2)+0.5*ap(5)
-   pt(n,3)=ap(3)            !E+F_{env}
+   pt(n,1)=ap(1)+ap(4)     !E+grad[F]/2
+   pt(n,2)=ap(2)+ap(5)
+   pt(n,3)=ap(3)            
+   pt(n,4)=ap(6)            
    pt(n,1:3)=charge(2)*pt(n,1:3)
    pt(n,5)=charge(1)/gamp_new
   end do
@@ -2886,15 +2898,15 @@
    end do
    !=================================
    gam2=1.+up(1)*up(1)+up(2)*up(2)+up(3)*up(3)+ap(10)   !gamma^{n-1/2}
-   !  ap(1:3)=(Ex,Ey,Ez)   ap(4:6)=(Bx,By,Bz),ap(7:9)=[Dx,Dy,Dz]F
-   !==================== solves a cubic equation x^3=A*x+B
-   a1=-dot_product(ap(1:3),up(1:3))
-   b1=-dot_product(ap(7:9),up(1:3))
+   ap(7:9)=0.5*ap(7:9)
+   !  ap(1:3)=(Ex,Ey,Ez)   ap(4:6)=(Bx,By,Bz),ap(7:9)=[Dx,Dy,Dz]F/2
+   a1=dot_product(ap(1:3),up(1:3))
+   b1=dot_product(ap(7:9),up(1:3))
    gam=sqrt(gam2)
-   gamp_new=gam+dth*(gam*a1+b1)/gam2
-   ap(4:9)=ap(4:9)/gamp_new          !ap(4:6)=B/gamp, ap(7:9)= Grad[F]/gamp
+   gamp_new=gam+charge(2)*dth4*(gam*a1+b1)/gam2
+   ap(4:9)=ap(4:9)/gamp_new          !ap(4:6)=B/gamp, ap(7:9)= Grad[F]/2*gamp
 
-   pt(n,1:3)=ap(1:3)+0.5*ap(7:9)
+   pt(n,1:3)=ap(1:3)+ap(7:9)
    pt(n,4:6)=ap(4:6)
    pt(n,1:6)=charge(2)*pt(n,1:6)  !q*F_Lorentz
    pt(n,7)=charge(1)/gamp_new     !weight/gamp
@@ -3180,7 +3192,7 @@
   do n=1,np
    xp1(1)=dx_inv*(efp(n,1)-xmn)                ! local x
    xp1(2)=dy_inv*(efp(n,2)-ymn)                ! local y
-   wgh=efp(n,5)                       !the current particle  q*wgh/gamp
+   wgh=efp(n,5)                       !the particle  q*wgh/gamp at current time
    xx=shx+xp1(1)
    i=int(xx+0.5)
    sx=xx-real(i,dp)
@@ -3216,7 +3228,7 @@
    xp1(1)=dx_inv*(efp(n,1)-xmn)                ! local x
    xp1(2)=dy_inv*(efp(n,2)-ymn)                ! local y
    xp1(3)=dz_inv*(efp(n,3)-zmn)                ! local z
-   wgh=efp(n,7)          !the particle  w/gamp at current time
+   wgh=efp(n,7)          !the particle  wgh/gamp at current time
 
    xx=shx+xp1(1)
    i=int(xx+0.5)
@@ -3355,6 +3367,98 @@
  !================================
  end subroutine set_part2d_twofield_acc
 
+ subroutine set_part2d_two_bfield_acc(ef1,ef2,ef3,sp_loc,pt,np,sind,xmn,ymn)
+
+ real(dp),intent(in) :: ef1(:,:,:,:),ef2(:,:,:,:),ef3(:,:,:,:)
+ type(species),intent(in) :: sp_loc
+ real(dp),intent(inout) :: pt(:,:)
+ integer,intent(in) :: np,sind
+ real(dp),intent(in) :: xmn,ymn
+
+ real(dp) :: wgh,xx,sx,sx2,dvol
+ real(dp) :: axh(0:2),ayh(0:2),xp1(3)
+ real(dp) :: ax1(0:2),ay1(0:2),ap(3),zmn
+ integer :: i,ih,j,jh,i1,j1,i2,j2,k2,n
+
+ real(sp) :: charge(2)
+ equivalence(charge,wgh)
+ !===============================================
+ ! Linear shape at half-index quadratic shape at integer index
+ !====================================
+ !=============================================================
+ ! ef1 plasma wakefield
+ ! ef2 bunch fields
+ !====================
+ ax1(0:2)=0.0;ay1(0:2)=0.0
+ axh(0:2)=0.0;ayh(0:2)=0.0
+ k2=1
+ zmn=0.0
+ pt(1:np,1:3)=sp_loc%part(1:np,1:3)
+ call set_local_positions(pt,1,np,sind,2,xmn,ymn,zmn)
+ do n=1,np
+  ap(1:3)=0.0
+  wgh=sp_loc%part(n,5) ! the particle charge
+  xp1(1:2)=pt(n,1:2)    !the current particle positions
+  xx=shx+xp1(1)
+  i=int(xx+0.5)
+  sx=xx-real(i,dp)
+  sx2=sx*sx
+  ax1(1)=0.75-sx2
+  ax1(2)=0.5*(0.25+sx2+sx)
+  ax1(0)=1.-ax1(1)-ax1(2)
+
+  axh(1)=sx+0.5
+  axh(0)=1.-axh(1)
+
+  xx=shy+xp1(2)
+  j=int(xx+0.5)
+  sx=xx-real(j,dp)
+  sx2=sx*sx
+  ay1(1)=0.75-sx2
+  ay1(2)=0.5*(0.25+sx2+sx)
+  ay1(0)=1.-ay1(1)-ay1(2)
+
+  ayh(1)=sx+0.5
+  ayh(0)=1.-ayh(1)
+
+  i=i-1
+  j=j-1
+
+  ih=i
+  jh=j
+  ! Ex(i+1/2,j,k)
+  !==============
+  !==============
+  ! Ey(i,j+1/2,k)
+  !==============
+  !==============
+  ! Bz(i+1/2,j+1/2,k)
+  !==============
+  do j1=0,2
+   j2=j+j1
+   dvol=ay1(j1)
+   do i1=0,1
+    i2=i1+ih
+    ap(1)=ap(1)+axh(i1)*dvol*(ef1(i2,j2,k2,1)+ef2(i2,j2,k2,1)+ef3(i2,j2,k2,1))
+   end do
+  end do
+  do j1=0,1
+   j2=jh+j1
+   dvol=ayh(j1)
+   do i1=0,2
+    i2=i+i1
+    ap(2)=ap(2)+ax1(i1)*dvol*(ef1(i2,j2,k2,2) +ef2(i2,j2,k2,2)+ef3(i2,j2,k2,2))
+   end do
+   do i1=0,1
+    i2=i1+ih
+    ap(3)=ap(3)+axh(i1)*dvol*(ef1(i2,j2,k2,3)+ef2(i2,j2,k2,3)+ef3(i2,j2,k2,3))
+   end do
+  end do
+  wgh=charge(2)
+  pt(n,1:3)=wgh*ap(1:3)
+ end do
+ end subroutine set_part2d_two_bfield_acc
+!=====================================================
  subroutine set_part3d_two_bfield_acc(ef1,ef2,ef3,&
   sp_loc,pt,n0,np,sind,xmn,ymn,zmn)
 
@@ -3377,7 +3481,7 @@
  ! Fields data[1:n1+2,1:n2+2,1:n3+2] ax(0)=> data(i), ax(1)=> data(i+1) ax(3)=>data(i+2)
  !===================================================
  ! ef1 plasma wakefield
- ! ef2 bunch self-fields
+ ! ef2 , ef3 bunch self-fields  Bx=ef2(4)=0.0
  !====================
  pt(1:np,1:3)=sp_loc%part(1:np,1:3)
  call set_local_positions(pt,n0,np,sind,3,xmn,ymn,zmn)
@@ -3942,10 +4046,10 @@
  !====================================================
  !========= PARTICLE ASSIGNEMENT TO GRID FOR CURRENT DENSITY
  !=============================
- subroutine esirkepov_2d_curr(sp_loc,pt,n0,np,n_st,njc,ndm,xmn,ymn)
+ subroutine esirkepov_2d_curr(sp_loc,pt,jcurr,n0,np,n_st,njc,ndm,xmn,ymn)
 
  type(species),intent(in) :: sp_loc
- real(dp),intent(inout) :: pt(:,:)
+ real(dp),intent(inout) :: pt(:,:),jcurr(:,:,:,:)
  integer,intent(in) :: n0,np,n_st,njc,ndm
  real(dp),intent(in) :: xmn,ymn
  real(dp) :: ax,sx,sx2,dvol,wgh
@@ -4008,7 +4112,7 @@
    ih=i0-1
    do i1=0,4
     i2=ih+i1
-    jc(i2,1,1,1)=jc(i2,1,1,1)+currx(i1)
+    jcurr(i2,1,1,1)=jcurr(i2,1,1,1)+currx(i1)
    end do
    !++++++++++++++
    ! jc(1)=[rho_old-rho_new]=dt*Der_xJ_x
@@ -4016,9 +4120,9 @@
    !=============================
    do i1=0,2
     i2=i0+i1-1
-    jc(i2,1,1,2)=jc(i2,1,1,2)+vyp*ax0(i1)
+    jcurr(i2,1,1,2)=jcurr(i2,1,1,2)+vyp*ax0(i1)
     i2=i+i1-1
-    jc(i2,1,1,2)=jc(i2,1,1,2)+vyp*ax1(i1)
+    jcurr(i2,1,1,2)=jcurr(i2,1,1,2)+vyp*ax1(i1)
    end do
   end do
   !======================
@@ -4122,7 +4226,7 @@
      j2=jh+j1
      do i1=ix0,ix1
       i2=ih+i1
-      jc(i2,j2,1,1)=jc(i2,j2,1,1)+ayh(j1)*currx(i1)
+      jcurr(i2,j2,1,1)=jcurr(i2,j2,1,1)+ayh(j1)*currx(i1)
      end do
     end do
     !================dt*J_y
@@ -4130,7 +4234,7 @@
      j2=jh+j1
      do i1=ix0,ix1
       i2=ih+i1
-      jc(i2,j2,1,2)=jc(i2,j2,1,2)+axh(i1)*curry(j1)
+      jcurr(i2,j2,1,2)=jcurr(i2,j2,1,2)+axh(i1)*curry(j1)
      end do
     end do
    end do
@@ -4244,7 +4348,7 @@
      j2=jh+j1
      do i1=ix0,ix1
       i2=ih+i1
-      jc(i2,j2,1,1)=jc(i2,j2,1,1)+ayh(j1)*currx(i1)
+      jcurr(i2,j2,1,1)=jcurr(i2,j2,1,1)+ayh(j1)*currx(i1)
      end do
     end do
     !================dt*J_y= curry*(Wx^0+Wx^1)
@@ -4252,7 +4356,7 @@
      j2=jh+j1
      do i1=ix0,ix1
       i2=ih+i1
-      jc(i2,j2,1,2)=jc(i2,j2,1,2)+axh(i1)*curry(j1)
+      jcurr(i2,j2,1,2)=jcurr(i2,j2,1,2)+axh(i1)*curry(j1)
      end do
     end do
     !========== dt*J_z Vz*[Wy^0(Wx^0+0.5*Wx^1)+Wy^1*(Wx^1+0.5*Wx^0)]
@@ -4261,13 +4365,13 @@
      dvol=ay0(j1)*vp(3)
      do i1=ix0,ix1
       i2=i1+ih
-      jc(i2,j2,1,3)=jc(i2,j2,1,3)+axh0(i1)*dvol
+      jcurr(i2,j2,1,3)=jcurr(i2,j2,1,3)+axh0(i1)*dvol
      end do
      j2=j+j1
      dvol=ay1(j1)*vp(3)
      do i1=ix0,ix1
       i2=i1+ih
-      jc(i2,j2,1,3)=jc(i2,j2,1,3)+axh1(i1)*dvol
+      jcurr(i2,j2,1,3)=jcurr(i2,j2,1,3)+axh1(i1)*dvol
      end do
     end do
    end do
@@ -4277,10 +4381,10 @@
  end subroutine esirkepov_2d_curr
  !==========================================
  !=============3D=================
- subroutine esirkepov_3d_curr(sp_loc,pt,n0,np,s_ind,xmn,ymn,zmn)
+ subroutine esirkepov_3d_curr(sp_loc,pt,jcurr,n0,np,s_ind,xmn,ymn,zmn)
 
  type(species),intent(in) :: sp_loc
- real(dp),intent(inout) :: pt(:,:)
+ real(dp),intent(inout) :: pt(:,:),jcurr(:,:,:,:)
  integer,intent(in) :: n0,np,s_ind
  real(dp),intent(in) :: xmn,ymn,zmn
  real(dp) :: ax,sx,sx2,dvol,dvolh,wgh
@@ -4458,8 +4562,8 @@
     dvolh=ayh1(j1)*az1(k1)
     do i1=ix0,ix1
      i2=ih+i1
-     jc(i2,j2,k0+k1,1)=jc(i2,j2,k0+k1,1)+dvol*currx(i1)
-     jc(i2,j2,k+k1,1)=jc(i2,j2,k+k1,1)+dvolh*currx(i1)
+     jcurr(i2,j2,k0+k1,1)=jcurr(i2,j2,k0+k1,1)+dvol*currx(i1)
+     jcurr(i2,j2,k+k1,1)=jcurr(i2,j2,k+k1,1)+dvolh*currx(i1)
     end do
    end do
   end do
@@ -4471,8 +4575,8 @@
     dvolh=curry(j1)*az1(k1)
     do i1=ix0,ix1
      i2=ih+i1
-     jc(i2,j2,k0+k1,2)=jc(i2,j2,k0+k1,2)+axh0(i1)*dvol
-     jc(i2,j2,k+k1,2)=jc(i2,j2,k+k1,2)+axh1(i1)*dvolh
+     jcurr(i2,j2,k0+k1,2)=jcurr(i2,j2,k0+k1,2)+axh0(i1)*dvol
+     jcurr(i2,j2,k+k1,2)=jcurr(i2,j2,k+k1,2)+axh1(i1)*dvolh
     end do
    end do
   end do
@@ -4486,8 +4590,8 @@
     dvolh=ay1(j1)*currz(k1)
     do i1=ix0,ix1
      i2=ih+i1
-     jc(i2,j0+j1,k2,3)=jc(i2,j0+j1,k2,3)+axh0(i1)*dvol
-     jc(i2,j+j1,k2,3)=jc(i2,j+j1,k2,3)+axh1(i1)*dvolh
+     jcurr(i2,j0+j1,k2,3)=jcurr(i2,j0+j1,k2,3)+axh0(i1)*dvol
+     jcurr(i2,j+j1,k2,3)=jcurr(i2,j+j1,k2,3)+axh1(i1)*dvolh
     end do
    end do
   end do
@@ -4571,8 +4675,8 @@
      ih2=ih+i1
      i2=i+i1
      emod=ef(ih2,j2,k2,1)*ef(ih2,j2,k2,1)+ef(i2,jh2,k2,2)*ef(i2,j2,k2,2)
-     jc(ih2,j2,k2,1)=jc(ih2,j2,k2,1)+ef(ih2,j2,k2,1)*gx(i1,j1)/emod
-     jc(i2,jh2,k2,2)=jc(i2,jh2,k2,2)+ef(i2,jh2,k2,2)*gy(i1,j1)/emod
+     curr(ih2,j2,k2,1)=curr(ih2,j2,k2,1)+ef(ih2,j2,k2,1)*gx(i1,j1)/emod
+     curr(i2,jh2,k2,2)=curr(i2,jh2,k2,2)+ef(i2,jh2,k2,2)*gy(i1,j1)/emod
     end do
    end do
   end do
@@ -4660,10 +4764,10 @@
  !======================
  ! NO CHARGE PRESERVING SCHEMES
  !=========================
- subroutine ncdef_2d_curr(loc_sp,pt,n0,np,s_ind,njc,ndm,xmn,ymn)
+ subroutine ncdef_2d_curr(loc_sp,pt,jcurr,n0,np,s_ind,njc,ndm,xmn,ymn)
 
  type(species),intent(in) :: loc_sp
- real(dp),intent(inout) :: pt(:,:)
+ real(dp),intent(inout) :: pt(:,:),jcurr(:,:,:,:)
  integer,intent(in) :: n0,np,s_ind,njc,ndm
  ! real(dp),intent(in) :: dt_loc
  real(dp),intent(in) :: xmn,ymn
@@ -4719,23 +4823,23 @@
    ih0=i0
    do i1=1,2
     i2=ih0+i1
-    jc(i2,j2,1,1)=jc(i2,j2,1,1)+vp(1)*axh0(i1)
+    jcurr(i2,j2,1,1)=jcurr(i2,j2,1,1)+vp(1)*axh0(i1)
     i2=ih+i1
-    jc(i2,j2,1,1)=jc(i2,j2,1,1)+vp(1)*axh1(i1)
+    jcurr(i2,j2,1,1)=jcurr(i2,j2,1,1)+vp(1)*axh1(i1)
    end do
 
    do i1=1,3
     i2=i0+i1
-    jc(i2,j2,1,2)=jc(i2,j2,1,2)+vp(2)*ax0(i1)
+    jcurr(i2,j2,1,2)=jcurr(i2,j2,1,2)+vp(2)*ax0(i1)
     i2=i+i1
-    jc(i2,j2,1,2)=jc(i2,j2,1,2)+vp(2)*ax1(i1)
+    jcurr(i2,j2,1,2)=jcurr(i2,j2,1,2)+vp(2)*ax1(i1)
    end do
    if(set_den)then
     do i1=1,3
      i2=i+i1
-     jc(i2,j2,1,3)=jc(i2,j2,1,3)+vp(3)*ax1(i1)
+     jcurr(i2,j2,1,3)=jcurr(i2,j2,1,3)+vp(3)*ax1(i1)
      i2=i0+i1
-     jc(i2,j2,1,3)=jc(i2,j2,1,3)-vp(3)*ax0(i1)
+     jcurr(i2,j2,1,3)=jcurr(i2,j2,1,3)-vp(3)*ax0(i1)
     end do
    endif
   end do
@@ -4778,13 +4882,13 @@
     dvol(1)=vp(1)*ay0(j1)
     do i1=1,2
      i2=ih0+i1
-     jc(i2,j2,1,1)=jc(i2,j2,1,1)+dvol(1)*axh0(i1)
+     jcurr(i2,j2,1,1)=jcurr(i2,j2,1,1)+dvol(1)*axh0(i1)
     end do
     j2=j+j1
     dvol(1)=vp(1)*ay1(j1)
     do i1=1,2
      i2=ih+i1
-     jc(i2,j2,1,1)=jc(i2,j2,1,1)+dvol(1)*axh1(i1)
+     jcurr(i2,j2,1,1)=jcurr(i2,j2,1,1)+dvol(1)*axh1(i1)
     end do
    end do
    !=============
@@ -4793,13 +4897,13 @@
     dvol(2)=vp(2)*ayh0(j1)
     do i1=1,3
      i2=i0+i1
-     jc(i2,j2,1,2)=jc(i2,j2,1,2)+dvol(2)*ax0(i1)
+     jcurr(i2,j2,1,2)=jcurr(i2,j2,1,2)+dvol(2)*ax0(i1)
     end do
     j2=jh+j1
     dvol(2)=vp(2)*ayh1(j1)
     do i1=1,3
      i2=i+i1
-     jc(i2,j2,1,2)=jc(i2,j2,1,2)+dvol(2)*ax1(i1)
+     jcurr(i2,j2,1,2)=jcurr(i2,j2,1,2)+dvol(2)*ax1(i1)
     end do
    end do
    if(set_den)then
@@ -4808,13 +4912,13 @@
      dvol(1)=wgh4*ay1(j1)
      do i1=1,3
       i2=i+i1
-      jc(i2,j2,1,3)=jc(i2,j2,1,3)+dvol(1)*ax1(i1)
+      jcurr(i2,j2,1,3)=jcurr(i2,j2,1,3)+dvol(1)*ax1(i1)
      end do
      j2=j0+j1
      dvol(1)=wgh4*ay0(j1)
      do i1=1,3
       i2=i0+i1
-      jc(i2,j2,1,3)=jc(i2,j2,1,3)-dvol(1)*ax0(i1)
+      jcurr(i2,j2,1,3)=jcurr(i2,j2,1,3)-dvol(1)*ax0(i1)
      end do
     end do
    endif
@@ -4889,17 +4993,17 @@
     dvol(1:3)=vp(1:3)*ay0(j1)
     do i1=1,3
      i2=i0+i1
-     jc(i2,j2,1,1)=jc(i2,j2,1,1)+dvol(1)*ax0(i1)
-     jc(i2,j2,1,2)=jc(i2,j2,1,2)+dvol(2)*ax0(i1)
-     jc(i2,j2,1,3)=jc(i2,j2,1,3)+dvol(3)*ax0(i1)
+     jcurr(i2,j2,1,1)=jcurr(i2,j2,1,1)+dvol(1)*ax0(i1)
+     jcurr(i2,j2,1,2)=jcurr(i2,j2,1,2)+dvol(2)*ax0(i1)
+     jcurr(i2,j2,1,3)=jcurr(i2,j2,1,3)+dvol(3)*ax0(i1)
     end do
     j2=j+j1
     dvol(1:3)=vp(1:3)*ay1(j1)
     do i1=1,3
      i2=i+i1
-     jc(i2,j2,1,1)=jc(i2,j2,1,1)+dvol(1)*ax1(i1)
-     jc(i2,j2,1,2)=jc(i2,j2,1,2)+dvol(2)*ax1(i1)
-     jc(i2,j2,1,3)=jc(i2,j2,1,3)+dvol(3)*ax1(i1)
+     jcurr(i2,j2,1,1)=jcurr(i2,j2,1,1)+dvol(1)*ax1(i1)
+     jcurr(i2,j2,1,2)=jcurr(i2,j2,1,2)+dvol(2)*ax1(i1)
+     jcurr(i2,j2,1,3)=jcurr(i2,j2,1,3)+dvol(3)*ax1(i1)
     end do
    end do
    if(set_den)then
@@ -4908,7 +5012,7 @@
      dvol(1)=wgh4*ay1(j1)
      do i1=1,3
       i2=i+i1
-      jc(i2,j2,1,4)=jc(i2,j2,1,4)+dvol(1)*ax1(i1)
+      jcurr(i2,j2,1,4)=jcurr(i2,j2,1,4)+dvol(1)*ax1(i1)
      end do
     end do
    endif
@@ -4918,10 +5022,10 @@
  end subroutine ncdef_2d_curr
  !===============
  !========================
- subroutine ncdef_3d_curr(sp_loc,pt,n0,np,s_ind,xmn,ymn,zmn)
+ subroutine ncdef_3d_curr(sp_loc,pt,jcurr,n0,np,s_ind,xmn,ymn,zmn)
 
  type(species),intent(in) :: sp_loc
- real(dp),intent(inout) :: pt(:,:)
+ real(dp),intent(inout) :: pt(:,:),jcurr(:,:,:,:)
  integer,intent(in) :: n0,np,s_ind
  ! real(dp),intent(in) :: dt_loc
  real(dp),intent(in) :: xmn,ymn,zmn
@@ -4939,6 +5043,9 @@
  !
  ! WARNING: NO X-stretch allowed
  ! Current densities defined by alternating order (quadratic/linear) shapes
+ ! Enter new and old poaitions. 
+ !WARNING : to be used ONLY within the one cycle partcle integration scheme
+ !=============================================
  ib_ind=size(jc,4)
  set_den=.false.
  if(ib_ind>3)set_den=.true.
@@ -5060,7 +5167,7 @@
     dvol(1)=vp(1)*ay0(j1)*az0(k1)
     do i1=0,1
      i2=ih0+i1
-     jc(i2,j2,k2,1)=jc(i2,j2,k2,1)+dvol(1)*axh0(i1)
+     jcurr(i2,j2,k2,1)=jcurr(i2,j2,k2,1)+dvol(1)*axh0(i1)
     end do
    end do
    do j1=0,1
@@ -5068,7 +5175,7 @@
     dvol(2)=vp(2)*ayh0(j1)*az0(k1)
     do i1=0,2
      i2=i0+i1
-     jc(i2,j2,k2,2)=jc(i2,j2,k2,2)+dvol(2)*ax0(i1)
+     jcurr(i2,j2,k2,2)=jcurr(i2,j2,k2,2)+dvol(2)*ax0(i1)
     end do
    end do
    k2=k+k1
@@ -5077,7 +5184,7 @@
     dvol(1)=vp(1)*ay1(j1)*az1(k1)
     do i1=0,1
      i2=ih+i1
-     jc(i2,j2,k2,1)=jc(i2,j2,k2,1)+dvol(1)*axh1(i1)
+     jcurr(i2,j2,k2,1)=jcurr(i2,j2,k2,1)+dvol(1)*axh1(i1)
     end do
    end do
    do j1=0,1
@@ -5085,7 +5192,7 @@
     dvol(2)=vp(2)*ayh1(j1)*az1(k1)
     do i1=0,2
      i2=i+i1
-     jc(i2,j2,k2,2)=jc(i2,j2,k2,2)+dvol(2)*ax1(i1)
+     jcurr(i2,j2,k2,2)=jcurr(i2,j2,k2,2)+dvol(2)*ax1(i1)
     end do
    end do
   end do
@@ -5096,7 +5203,7 @@
     dvol(3)=vp(3)*ay0(j1)*azh0(k1)
     do i1=0,2
      i2=i0+i1
-     jc(i2,j2,k2,3)=jc(i2,j2,k2,3)+dvol(3)*ax0(i1)
+     jcurr(i2,j2,k2,3)=jcurr(i2,j2,k2,3)+dvol(3)*ax0(i1)
     end do
    end do
    k2=kh+k1
@@ -5105,7 +5212,7 @@
     dvol(3)=vp(3)*ay1(j1)*azh1(k1)
     do i1=0,2
      i2=i+i1
-     jc(i2,j2,k2,3)=jc(i2,j2,k2,3)+dvol(3)*ax1(i1)
+     jcurr(i2,j2,k2,3)=jcurr(i2,j2,k2,3)+dvol(3)*ax1(i1)
     end do
    end do
   end do
@@ -5118,7 +5225,7 @@
      dvol(1)=wgh4*ay1(j1)*az1(k1)
      do i1=0,2
       i2=i+i1
-      jc(i2,j2,k2,ib_ind)=jc(i2,j2,k2,ib_ind)+dvol(1)*ax1(i1)
+      jcurr(i2,j2,k2,ib_ind)=jcurr(i2,j2,k2,ib_ind)+dvol(1)*ax1(i1)
      end do
     end do
     k2=k0+k1
@@ -5127,7 +5234,7 @@
      dvol(1)=wgh4*ay0(j1)*az0(k1)
      do i1=0,2
       i2=i0+i1
-      jc(i2,j2,k2,ib_ind)=jc(i2,j2,k2,ib_ind)-dvol(1)*ax0(i1)
+      jcurr(i2,j2,k2,ib_ind)=jcurr(i2,j2,k2,ib_ind)-dvol(1)*ax0(i1)
      end do
     end do
    end do
