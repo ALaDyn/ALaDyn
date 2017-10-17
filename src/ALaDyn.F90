@@ -569,7 +569,6 @@
   iene=1
  endif
 
-
  select case (new_sim)
 
  case (0) ! Set initial conditions, allocate fields and particles

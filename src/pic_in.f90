@@ -2891,10 +2891,11 @@
  !=================def part distr points
  end subroutine set_envelope
  !=========================
- subroutine beam_data(ndm,np_tot)  !generates bpart(7,np_tot)
- integer,intent(in) :: ndm
+ subroutine beam_data(ndm,btype,np_tot)  !generates bpart(7,np_tot)
+ integer,intent(in) :: ndm,btype
  integer,intent(out) :: np_tot
- integer :: i,i1,i2,ip
+ integer :: i,i1,i2,ip,ppcb,ix,iy,iz
+ integer(dp_int) :: effecitve_cell_number
  real(dp) :: cut,xh(5),bch
  real(sp) :: ch(2)
  equivalence(bch,ch)
@@ -2907,46 +2908,121 @@
  !=======================
  np_tot=0
  do i=1,nsb
+   if(ppc_bunch(i)>0 .and. nb_tot(i)==-1) then
+      effecitve_cell_number=bunch_volume_incellnumber(bunch_shape(i),sxb(i),syb(i),syb(i),dx,dy,dz)
+      nb_tot(i)=ppc_bunch(i)*effecitve_cell_number
+      if(pe0) write(*,'(A,1I1,A)') 'bunch(',i,') :: weighted :: option'
+      if(pe0) write(*,'(A,1I1,A)') 'bunch(',i,') :: changing total number of particles :: equal number of ppc'
+      if(pe0) write(*,'(A,1I1,A,1I3,A,1I10)') 'bunch(',i,') :: ppc =',ppc_bunch(i),' :: total number of bunch particles =',nb_tot(i)
+   endif
+   if(ppc_bunch(i)==-1 .and. nb_tot(i)>0) then
+       if(pe0) write(*,'(A,1I1,A,1I10)') 'bunch(',i,') :: equal :: option (all particle have the same weight) =',nb_tot(i)
+   endif
   np_tot=np_tot+nb_tot(i)
  end do
  cut=3.
- nch=2*ndm+1
+ nch=7
+ if(ndm==2)nch=5
  allocate(bpart(nch,np_tot))
+ select case(btype)
+ case(1)
   !---!
   i1=1
   ch(2)=real(unit_charge(1),sp)      !nsb electron bunches
-  select case(ndm)
-  case(2)
   do ip=1,nsb
    xh(ip)=xc_bunch(ip)
    ch(1)=real(j0_norm*jb_norm(ip),sp) !the bunch particles weights
    i2=i1+nb_tot(ip)-1
-   !---Original Version---!
-    call bunch_gen(ndm,i1,i2,sxb(ip),syb(ip),syb(ip),gam(ip),&
-                   epsy(ip),epsz(ip),cut,dg(ip),bpart)
-    do i=i1,i2
-     bpart(1,i)=bpart(1,i)+xh(ip)       !x-shifting
-     bpart(2,i)=bpart(2,i)+yc_bunch(ip) !y-shifting
-     bpart(nch,i)=bch
-    end do
+
+   if(bunch_shape(ip)==1 .and. ppc_bunch(ip)>0) & !weighted-option
+                          call generate_bunch_bigaussian_weighted(i1,i2,&
+                               sxb(ip),xc_bunch(ip),&
+                               syb(ip),yc_bunch(ip),&
+                               syb(ip),zc_bunch(ip),&
+                               gam(ip),&
+                      epsy(ip),epsz(ip),cut,dg(ip),bpart,bch,dx,dy,dz,rhob(ip),ppc_bunch(ip))
+   if(bunch_shape(ip)==1 .and. ppc_bunch(ip)==-1) & !equal-weight
+                          call generate_bunch_bigaussian_equal(i1,i2,&
+                               sxb(ip),xc_bunch(ip),&
+                               syb(ip),yc_bunch(ip),&
+                               syb(ip),zc_bunch(ip),&
+                               gam(ip),&
+                      epsy(ip),epsz(ip),cut,dg(ip),bpart,bch,dx,dy,dz,rhob(ip))
+
+   if(bunch_shape(ip)==2 .and. ppc_bunch(ip)>0) & !weighted-option
+                          call generate_bunch_triangularZ_uniformR_weighted(i1,i2,&
+                               xc_bunch(ip),yc_bunch(ip),zc_bunch(ip),&
+                               sxb(ip),syb(ip),syb(ip),gam(ip),&
+                               epsy(ip),epsz(ip),dg(ip),&
+                               bpart,Charge_right(ip),Charge_left(ip),bch,dx,dy,dz, &
+                               ppc_bunch(ip))
+   if(bunch_shape(ip)==2 .and. ppc_bunch(ip)==-1) & !equal-weight
+                           call generate_bunch_triangularZ_uniformR_equal(i1,i2,&
+                                xc_bunch(ip),yc_bunch(ip),zc_bunch(ip),&
+                                sxb(ip),syb(ip),syb(ip),gam(ip),&
+                                epsy(ip),epsz(ip),dg(ip),&
+                                bpart,Charge_right(ip),Charge_left(ip),bch)
+
+
+   if(bunch_shape(ip)==3 .and. ppc_bunch(ip)>0) & !weighted-option
+                           call generate_bunch_triangularZ_normalR_weighted(i1,i2,&
+                                xc_bunch(ip),yc_bunch(ip),zc_bunch(ip),&
+                                sxb(ip),syb(ip),syb(ip),&
+                                gam(ip),epsy(ip),epsz(ip),dg(ip),&
+                                bpart,Charge_right(ip),Charge_left(ip),bch,dx,dy,dz, &
+                                ppc_bunch(ip))
+   if(bunch_shape(ip)==3 .and. ppc_bunch(ip)==-1) & !equal-weight
+                           call generate_bunch_triangularZ_normalR_equal(i1,i2,&
+                                xc_bunch(ip),yc_bunch(ip),zc_bunch(ip),&
+                                sxb(ip),syb(ip),syb(ip),&
+                                gam(ip),epsy(ip),epsz(ip),dg(ip),&
+                                bpart,Charge_right(ip),Charge_left(ip),bch)
+
+
+    !--- Twiss Rotation ---!
+    if(L_TWISS(ip)) call bunch_twissrotation(i1,i2,bpart, &
+      alpha_twiss(ip),beta_twiss(ip),alpha_twiss(ip),beta_twiss(ip), &
+      syb(ip),syb(ip),epsy(ip),epsz(ip),xc_bunch(ip),yc_bunch(ip),zc_bunch(ip))
+
+  !  if(L_TWISS .and. bunch_shape(ip)==1)  call bunch_gen_twissshifting(i1,i2,&
+  !   sxb(ip),xc_bunch(ip),&
+  !   syb(ip),yc_bunch(ip),&
+  !   syb(ip),zc_bunch(ip),&
+  !   gam(ip),&
+  !   epsy(ip),epsz(ip),dg(ip),bpart,bch,&
+  !   alpha_twiss(ip),beta_twiss(ip))
+  !  if(.not. L_TWISS .and. bunch_shape(ip)==1)  call bunch_gen_alternative(i1,i2,&
+  !   sxb(ip),xc_bunch(ip),&
+  !   syb(ip),yc_bunch(ip),&
+  !   syb(ip),zc_bunch(ip),&
+  !   gam(ip),&
+  !   epsy(ip),epsz(ip),cut,dg(ip),bpart,bch,dx,dy,dz,rhob(ip))
+  !  if(.not. L_TWISS .and. bunch_shape(ip)==2) call generate_triangularZ_uniformR_bunch(i1,i2,&
+  !   xc_bunch(ip),yc_bunch(ip),zc_bunch(ip),sxb(ip),syb(ip),syb(ip),gam(ip),epsy(ip),epsz(ip),dg(ip),&
+  !   bpart,Charge_right(ip),Charge_left(ip),bch,dx,dy,dz)
+  !  if(.not. L_TWISS .and. bunch_shape(ip)==3) call generate_triangularZ_normalR_bunch(i1,i2,&
+  !   xc_bunch(ip),yc_bunch(ip),zc_bunch(ip),sxb(ip),syb(ip),syb(ip),gam(ip),epsy(ip),epsz(ip),dg(ip),&
+  !   bpart,Charge_right(ip),Charge_left(ip),bch,dx,dy,dz)
+  !  if(.not. L_TWISS .and. bunch_shape(ip)==4) call generate_cylindrical_bunch(i1,i2,&
+  !   xc_bunch(ip),yc_bunch(ip),zc_bunch(ip),sxb(ip),syb(ip),syb(ip),gam(ip),epsy(ip),epsz(ip),dg(ip),&
+  !   bpart,Charge_right(ip),Charge_left(ip),bch)
+   !---end simplified version---!
    i1=i2+1
   end do
- ! Pe0 p data are copied to all MPI tasks
-  case(3)
-  do ip=1,nsb
+
+ case(2)         !x-uniform proton bunch on length sx(1)
+  i1=1
+  ch(2)= 1.           !one proton  bunch starting at xc_bunch
+  ip=1
   xh(ip)=xc_bunch(ip)
-   ch(1)=real(j0_norm*jb_norm(ip),sp) !the bunch particles weights
+  ch(1)=real(jb_norm(ip),sp) !the bunch particles weights
   i2=i1+nb_tot(ip)-1
-   !---Original Version---!
-    call bunch_gen(ndm,i1,i2,sxb(ip),syb(ip),syb(ip),gam(ip),&
-    epsy(ip),epsz(ip),cut,dg(ip),bpart)
+  !========= a iproton beam starting at xc_bunc(1) of length sxb(ip)
+  call pbunch_gen(2,i1,i2,sxb(ip),syb(ip),syb(ip),&
+   epsy(ip),epsz(ip),bet0,bpart)
   do i=i1,i2
-     bpart(1,i)=bpart(1,i)+xh(ip)       !x-shifting
-     bpart(2,i)=bpart(2,i)+yc_bunch(ip) !y-shifting
-     bpart(3,i)=bpart(3,i)+zc_bunch(ip) !z-shifting
+   bpart(1,i)=bpart(1,i)+xh(ip)
    bpart(nch,i)=bch
-  end do
-   i1=i2+1
   end do
  end select
 
@@ -3173,7 +3249,7 @@
  nzp=loc_zgrid(imodz)%p_ind(2)
  i2b=i2
  !=======================
- call beam_data(ndim,nptot)
+ call beam_data(ndim,2,nptot) !cazzo
  ! Generates phase space coordinateis for all beams on bpart(7,np_tot)
  ! bpart in common to all MPI tasks
  xm=loc_xgrid(imodx)%gmin
