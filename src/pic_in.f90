@@ -2908,6 +2908,7 @@
  !=======================
  np_tot=0
  do i=1,nsb
+   nb_tot(i)=-1
    if(ppc_bunch(i)>0 .and. nb_tot(i)==-1) then
       effecitve_cell_number=bunch_volume_incellnumber(bunch_shape(i),sxb(i),syb(i),syb(i),dx,dy,dz)
       nb_tot(i)=ppc_bunch(i)*effecitve_cell_number
@@ -2932,6 +2933,7 @@
    xh(ip)=xc_bunch(ip)
    ch(1)=real(j0_norm*jb_norm(ip),sp) !the bunch particles weights
    i2=i1+nb_tot(ip)-1
+   
 
    if(bunch_shape(ip)==1 .and. ppc_bunch(ip)>0) & !weighted-option
                           call generate_bunch_bigaussian_weighted(i1,i2,&
@@ -2976,7 +2978,6 @@
                                 sxb(ip),syb(ip),syb(ip),&
                                 gam(ip),epsy(ip),epsz(ip),dg(ip),&
                                 bpart,Charge_right(ip),Charge_left(ip),bch)
-
 
     !--- Twiss Rotation ---!
     if(L_TWISS(ip)) call bunch_twissrotation(i1,i2,bpart, &
