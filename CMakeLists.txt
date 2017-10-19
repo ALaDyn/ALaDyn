@@ -76,9 +76,11 @@ add_executable (ALaDyn
 	src/struct_def.f90
 	src/grid_param.f90
 	src/control_bunch_input.f90
+	src/ionz_data.f90
 	src/ionize.f90
 	src/pstruct_data.F90
 	src/fstruct_data.f90
+	src/psolv.f90
 	src/all_param.f90
 	src/particles.F90
 	src/parallel.F90
@@ -88,6 +90,7 @@ add_executable (ALaDyn
 	src/pdf_moments.f90
 	src/pic_in.f90
 	src/pic_out.f90
+	src/pic_out_util.f90
 	src/pic_dump.f90
 	src/pic_evolve_in_time.f90
 	src/pwfa_bunch_field_calculation.F90
