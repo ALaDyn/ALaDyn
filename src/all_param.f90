@@ -325,7 +325,7 @@
    if(mass_number(i)< 1.)call set_atomic_weight(atomic_number(i),mass_number(i))
  end do
   if(ionz_lev >0)Ionization=.true.
-  if(Ionization) call set_ionization_coeff(atomic_number,nsp_ionz) 
+  if(Ionization) call set_ionization_coeff(atomic_number,nsp_ionz)
   !uses ion index 1,2,,,nsp-1
   wgh_ion=1./(real(mp_per_cell(2),dp))
   if(ion_min(1)>1)wgh_ion=1./(real(ion_min(1),dp)*real(mp_per_cell(2),dp))
@@ -525,13 +525,13 @@
     if(bunch_shape(i)==3) jb_norm(i)=(Charge_left(i)+Charge_right(i))/2.0*gvol_inv*bunch_volume(i)/(nb_tot(i)*j0_norm)
     if(bunch_shape(i)==4) jb_norm(i)=rhob(i)*gvol_inv*bunch_volume(i)/(nb_tot(i)*j0_norm)
    end do
-   
+
    !--- I am forcing this part to be again with the correct input values ---!
     do i=1,nsb
-     if(ppc_bunch(i)>0) nb_tot(i)=-1
+     if(ppc_bunch(i,1)>0) nb_tot(i)=-1
     end do
-   !--- *** ---!   
-   
+   !--- *** ---!
+
    b_charge=bunch_charge(1)
  endif
  !============================
