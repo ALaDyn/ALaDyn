@@ -38,8 +38,8 @@
  real(dp) :: nde0(ne),nde1(ne),nde2(ne)
  real(dp) :: nde(ne,500,4),eksp_max(500,4),nde_sm(ne,500,4),nde_sp(ne,500,4)
  real(sp) :: real_par(par_dim),part_real_par(20)
- integer :: int_par(par_dim),part_int_par(20)
- real(dp) :: bavg(1000,16,8),tb(1000)
+ integer :: int_par(par_dim),part_int_par(20),ionz_number(500)
+ real(dp) :: ionz_bavg(500,16),bavg(1000,16,8),tb(1000),tionz(500)
 
  character(12),dimension(20),parameter :: rpar=(/&
  ' time =     ',' xmin =     ',' xmax =     ',' ymin =     ',' ymax =     ',&
@@ -1572,7 +1572,8 @@
   real(ymax,sp),real(zmin,sp),real(zmax,sp),real(w0_x,sp),real(w0_y,sp),&
   real(a0,sp),real(lam0,sp),real(E0,sp),real(n0_ref,sp),&
   real(np_per_cell,sp),real(wgh_ion,sp),real(mass(1),sp),&
-  real(xp0_out,sp),real(xp1_out,sp),real(yp_out,sp),0.0_sp/)
+  real(xp0_out,sp),real(xp1_out,sp),real(yp_out,sp),real(gam_min,sp)/)
+
 
   part_int_par(1:20) = (/npe,nx,ny,nz,&
    model_id,dmodel_id,nsp,curr_ndim,mp_per_cell(1),&
@@ -1713,7 +1714,7 @@
   real(ymax,sp),real(zmin,sp),real(zmax,sp),real(w0_x,sp),real(w0_y,sp),&
   real(a0,sp),real(lam0,sp),real(E0,sp),real(n0_ref,sp),&
   real(np_per_cell,sp),real(j0_norm,sp),real(mass(pid),sp),&
-  real(xmin_out,sp),real(xmax_out,sp),real(ymax_out,sp),0.0_sp/)
+  real(xmin_out,sp),real(xmax_out,sp),real(ymax_out,sp),real(gam_min,sp)/)
 
   part_int_par(1:20) = (/npe,nx,ny,nz,&
    model_id,dmodel_id,nsp,curr_ndim,mp_per_cell(pid),&
@@ -2296,6 +2297,7 @@
    end do
   end do
  endif  ! End of particles section
+ if(Ionization)call enb_ionz(nst,tnow)
  !======================== Field  section
  ekt=0.0
  ekm=0.0
@@ -2552,12 +2554,14 @@
  character(12),dimension(4), parameter:: enspect=(/&
   'Electron NdE',' A1-ion NdE ',' A2-ion NdE ',' A3-ion NdE '/)
 
- integer :: ik,ic,nfv,npv,t_ord,nt,ne
+ integer :: ik,ic,nfv,npv,t_ord,nt,ne,color
  integer,parameter :: lun=10
  nfv=6
  if(curr_ndim==3)nfv=12
  npv=9
  t_ord=max(RK_ord,LPf_ord)
+ color=0
+ if(Two_color)color=1
 
  ! if (iout<100) write (fname,'(a4,i2)') 'diag' ,idata
  ! if (iout< 10) write (fname,'(a5,i1)') 'diag0',idata
@@ -2759,36 +2763,28 @@
  endif
  end subroutine en_data
  !--------------------------
- subroutine enbvar(nst,tnow)
+  subroutine bunch_corr(bch,np_loc,np_norm,bcorr)
+  real(dp),intent(in) :: bch(:,:)
+  integer,intent(in) :: np_loc
+  real(dp),intent(out) :: bcorr(16)
+  real(dp),intent(in) :: np_norm
 
- integer,intent(in) :: nst
- real(dp),intent(in) :: tnow
-
- integer :: ik,ic,kk,np,ndv
- real(dp) :: np_norm,gmb,pp(3),mu(7,5),ekt(9),ekm(9)
- real(dp) :: corr2(8,5),emy(5),emz(5),dgam(5)
+  integer :: ik,ic,kk,ndv
+  real(dp) :: gmb,pp(3),mu(7),ekt(9),ekm(9)
+  real(dp) :: corr2(8),emy,emz,dgam
  !=====================
- mu=0.0
- corr2=0.0
- if(nst==0)bavg=0.0
- tb(nst)=tnow
- ndv=2*curr_ndim
- do ic=1,nsb
-  np=loc_nbpart(imody,imodz,imodx,ic)
-  ekt(1)=real(np,dp)
-  call allreduce_dpreal(SUMV,ekt,ekm,1)
-  np_norm=1.
-  if(ekm(1) >0.0)np_norm=1./ekm(1)
-  ekm=0.0
+  bcorr=0.0
+  mu=0.0
+  corr2=0.0
+  ndv=2*curr_ndim
   ekt=0.0
-  !USES real to sum big integers
-  if(np>0)then
+  if(np_loc>0)then
    do ik=1,ndv
-    ekt(ik)=sum(bunch(ic)%part(1:np,ik))
+    ekt(ik)=sum(bch(1:np_loc,ik)) !averages six phase space coordinates
    enddo
    if(curr_ndim==2)then
-    do kk=1,np
-     pp(1:2)=bunch(ic)%part(kk,3:4)
+    do kk=1,np_loc
+     pp(1:2)=bch(kk,3:4)
      gmb=sqrt(1.+pp(1)*pp(1)+pp(2)*pp(2))
      ekt(ndv+1)=ekt(ndv+1)+gmb
     end do
@@ -2798,71 +2794,138 @@
     ekt(4)=ekt(3)      !<Px>
     ekt(3)=0.0          !<z>
    else    
-   do kk=1,np
-    pp(1:3)=bunch(ic)%part(kk,4:6)
-    gmb=sqrt(1.+pp(1)*pp(1)+pp(2)*pp(2)+pp(3)*pp(3))
-    ekt(7)=ekt(7)+gmb
-   end do
-  endif
+    do kk=1,np_loc
+     pp(1:3)=bch(kk,4:6)
+     gmb=sqrt(1.+pp(1)*pp(1)+pp(2)*pp(2)+pp(3)*pp(3))
+     ekt(7)=ekt(7)+gmb
+    end do
+   endif
   endif
   call allreduce_dpreal(SUMV,ekt,ekm,7)
-  mu(1:7,ic)=np_norm*ekm(1:7) !Averages <(x,y,z,Px,Py,Pz,gamma)>
+  mu(1:7)=np_norm*ekm(1:7) !Averages <(x,y,z,Px,Py,Pz,gamma)>
   !=========== 2th moments
   ekm=0.0
   ekt=0.0
-  if(np>0)then
+  if(np_loc>0)then
    do ik=1,ndv
-    do kk=1,np
-     ekt(ik)=ekt(ik)+(bunch(ic)%part(kk,ik)-mu(ik,ic))**2
+    do kk=1,np_loc
+     ekt(ik)=ekt(ik)+bch(kk,ik)*bch(kk,ik)
     end do
    enddo
    if(curr_ndim==2)then
-    ekt(6)=0.0         !<corr2(Pz)>
-    ekt(5)=ekt(4)      !<corr2(Py)>
-    ekt(4)=ekt(3)      !<corr2(Px)>
-    ekt(3)=0.0          !<corr2(z)>
+    ekt(6)=0.0         !<Pz*Pz>
+    ekt(5)=ekt(4)      !<Py*Py>
+    ekt(4)=ekt(3)      !<Px+Px>
+    ekt(3)=0.0         !<z*z>
    !================mixed corr
-   do kk=1,np
-     ekt(7)=ekt(7)+bunch(ic)%part(kk,4)*bunch(ic)%part(kk,2)  !<y*py>
+    do kk=1,np_loc
+     ekt(7)=ekt(7)+bch(kk,4)*bch(kk,2)  !<y*py>
      ekt(8)=0.0
-     pp(1:2)=bunch(ic)%part(kk,3:4)
+     pp(1:2)=bch(kk,3:4)
      gmb=1.+pp(1)*pp(1)+pp(2)*pp(2)
-    ekt(9)=ekt(9)+gmb       !<(gam**2>
-   end do
+     ekt(9)=ekt(9)+gmb       !<(gam**2>
+    end do
    else
-   do kk=1,np
-    ekt(7)=ekt(7)+bunch(ic)%part(kk,5)*bunch(ic)%part(kk,2)
-    ekt(8)=ekt(8)+bunch(ic)%part(kk,6)*bunch(ic)%part(kk,3)
-    pp(1:3)=bunch(ic)%part(kk,4:6)
-    gmb=1.+pp(1)*pp(1)+pp(2)*pp(2)+pp(3)*pp(3)
-    ekt(9)=ekt(9)+gmb       !<(gam**2>
-   end do
-  endif
+    do kk=1,np_loc
+     ekt(7)=ekt(7)+bch(kk,5)*bch(kk,2)  !<yPy>
+     ekt(8)=ekt(8)+bch(kk,6)*bch(kk,3)  !<zPz>
+     pp(1:3)=bch(kk,4:6)
+     gmb=1.+pp(1)*pp(1)+pp(2)*pp(2)+pp(3)*pp(3)
+     ekt(9)=ekt(9)+gmb                            !<(gam**2>
+    end do
+   endif
   endif
   call allreduce_dpreal(SUMV,ekt,ekm,9)
-  corr2(1:8,ic)=np_norm*ekm(1:8)
-  ekm(9)=np_norm*ekm(9)
+  ekm(1:9)=np_norm*ekm(1:9)
+  do ik=1,6
+   corr2(ik)=ekm(ik)-mu(ik)*mu(ik)
+  end do
   !    emy^2= corr2_y*corr2_py -mixed
   !<yy><p_yp_y>-(<yp_y>-<y><p_y>)^2
-  emy(ic)=corr2(2,ic)*corr2(5,ic)-(corr2(7,ic)-mu(2,ic)*mu(5,ic))**2
-  emz(ic)=corr2(3,ic)*corr2(6,ic)-(corr2(8,ic)-mu(3,ic)*mu(6,ic))**2
-  if(emy(ic)>0.0)emy(ic)=sqrt(emy(ic))
-  if(emz(ic)>0.0)emz(ic)=sqrt(emz(ic))
+  emy=corr2(2)*corr2(5)-(corr2(7)-mu(2)*mu(5))**2
+  emz=corr2(3)*corr2(6)-(corr2(8)-mu(3)*mu(6))**2
+  if(emy>0.0)emy=sqrt(emy)
+  if(emz>0.0)emz=sqrt(emz)
+  gmb=mu(7)*mu(7)
+  dgam=0.0
+  if(gmb >0.0)dgam=ekm(9)/gmb -1.0
+  if(dgam >0.0)dgam=sqrt(dgam)   !Dgamm/gamma
+  bcorr(1:6)=mu(1:6)
+  bcorr(7:12)=corr2(1:6)
+  bcorr(13)=emy
+  bcorr(14)=emz
+  bcorr(15)=mu(7)
+  bcorr(16)=dgam
+ !==========================
+ end subroutine bunch_corr
 
+ subroutine enbvar(nst,tnow)
+ integer,intent(in) :: nst
+ real(dp),intent(in) :: tnow
 
-  gmb=mu(7,ic)*mu(7,ic)
-  dgam(ic)=ekm(9)/gmb -1.0
-  if(dgam(ic) >0.0)dgam(ic)=sqrt(dgam(ic))   !Dgamm/gamma
+ integer :: ic,np,ndv,p
+ real(dp) :: np_norm,bcorr(16),ekt(1),ekm(1)
+ !=====================
+ if(nst==0)bavg=0.0
+ tb(nst)=tnow
+ ndv=size(ebfb,2)
+ do ic=1,nsb
+  np=loc_nbpart(imody,imodz,imodx,ic)
+  do p=1,np
+   ebfb(p,1:ndv)=bunch(ic)%part(p,1:ndv)
+  end do
+  ekt(1)=real(np,dp)
+  call allreduce_dpreal(SUMV,ekt,ekm,1)
+  np_norm=1.
+  if(ekm(1) >0.0)np_norm=1./ekm(1)
+
+  call  bunch_corr(ebfb,np,np_norm,bcorr)
+
+  bavg(nst,1:16,ic)=bcorr(1:16)
  end do
- bavg(nst,1:6,1:nsb)=mu(1:6,1:nsb)
- bavg(nst,7:12,1:nsb)=corr2(1:6,1:nsb)
- bavg(nst,13,1:nsb)=emy(1:nsb)
- bavg(nst,14,1:nsb)=emz(1:nsb)
- bavg(nst,15,1:nsb)=mu(7,1:nsb)
- bavg(nst,16,1:nsb)=dgam(1:nsb)
  !==========================
  end subroutine enbvar
+
  !=====================================
+
+ subroutine enb_ionz(nst,tloc)
+ integer,intent(in) :: nst
+ real(dp),intent(in) :: tloc
+
+ integer :: ik,np,p,q,id_ch
+ real(dp) :: np_norm,bcorr(16),ekt(1),ekm(1)
+ real(dp) :: wgh
+ real(sp) :: ch(2),ch_ion
+ equivalence(wgh,ch)
+
+ ik=0
+ ch_ion=real(wgh_ion,sp)
+ np=loc_npart(imody,imodz,imodx,1)
+ id_ch=size(ebfp,2)
+ if(np > 0)then
+  do p=1,np
+   wgh=spec(1)%part(p,id_ch)
+   if(abs(ch(1)-ch_ion)< 1.e-05)then
+    ik=ik+1
+    do q=1,nd2+1
+     ebfp(ik,q)=spec(1)%part(p,q)
+    end do
+   endif
+  end do
+ endif
+ if(nst==0)ionz_bavg=0.0
+ tionz(nst)=tloc
+!================================
+  ekt(1)=real(ik,dp)
+  call allreduce_dpreal(SUMV,ekt,ekm,1)
+  ionz_number(nst)=nint(ekm(1))
+  np_norm=1.
+  if(ekm(1) >0.0)np_norm=1./ekm(1)
+  call  bunch_corr(ebfp,ik,np_norm,bcorr)
+  ionz_bavg(nst,1:16)=bcorr(1:16)
+ !==========================
+ end subroutine enb_ionz
+ !===============================
  subroutine en_bdata(nst,it,idata)
 
  integer,intent(in) :: nst,it,idata
@@ -2870,8 +2933,8 @@
  character(14),dimension(16), parameter:: fb=(/&
   '     <X>      ','     <Y>      ','     <Z>      ',&
   '     <Px>     ','     <Py>     ','     <Pz>     ',&
-  '   <rmsX>     ','   <rmsY>     ','   <rmsZ>     ',&
-  '  <rmsPx>     ','  <rmsPy>     ','  <rmsPz>     ',&
+  '   <msqX>     ','   <msqY>     ','   <msqZ>     ',&
+  '  <msqPx>     ','  <msqPy>     ','  <msqPz>     ',&
   '   <Emy>      ','   <Emz>      ','   <Gam>      ','   DGam/Gam   '/)
 
 
@@ -2896,6 +2959,66 @@
   end do
   close(lun)
  end subroutine en_bdata
+
+  subroutine en_ionz_data(nst,itrz,data_id)
+
+ integer,intent(in) :: nst,itrz,data_id
+ character(12) :: fname='            '
+ character(14),dimension(16), parameter:: fb=(/&
+  '     <X>      ','     <Y>      ','     <Z>      ',&
+  '     <Px>     ','     <Py>     ','     <Pz>     ',&
+  '   <msqX>     ','   <msqY>     ','   <msqZ>     ',&
+  '  <msqPx>     ','  <msqPy>     ','  <msqPz>     ',&
+  '   <Emy>      ','   <Emz>      ','   <Gam>      ','   DGam/Gam   '/)
+
+
+ integer :: ik,color,npv
+ integer,parameter :: lun=10
+ color=0
+ if(Two_color)color=1
+ npv=16
+ write (fname,'(a10,i2.2)') 'ionz_emitt',data_id
+
+  open (lun,file='diagnostics/'//fname//'.dat',form='formatted')
+  write(lun,*)'mod_id,dmodel_id LP_ord,der_ord, ibeam,  color'
+  write(lun,'(6i8)')model_id,dmodel_id,LPf_ord,der_ord,ibeam,color
+  write(lun,*)'Z1_i,  A1_i,   Z2_i,   A2_i,   iform,    str'
+  write(lun,'(6i6)')ion_min(1),atomic_number(1),ion_min(2),atomic_number(2),iform,str_flag
+  write(lun,*)' xmax       xmin       ymax      ymin      '
+  write(lun,'(4e12.4)')xmax,xmin,ymax,ymin
+  if(model_id <= 4)then
+   write(lun,*)' lam0       w0x       w0y        energy'
+   write(lun,'(4e11.4)')lam0,w0_x,w0_y,lp_energy
+   write(lun,*)' a0        lp_int     lp_pow    energy_on_targ'
+   write(lun,'(4e12.4)')a0,lp_intensity,lp_pow, energy_in_targ
+   write(lun,*)' targ_x1  targ_x2     n/nc       el_lp        '
+   write(lun,'(4e12.4)')targ_in,targ_end,n_over_nc,el_lp
+  endif
+  write(lun,*)' ompe2       nmacro       np_per_cell    '
+  write(lun,'(3e12.4)')ompe,nmacro,np_per_cell
+  write(lun,*)'    Nx      Ny      Nz    n_cell   Nsp  Nb_las'
+  write(lun,'(6i8)')nx,ny,nz,mp_per_cell(1), nsp,  nb_laser
+  write(lun,*)' iter, nst, npvar'
+  write(lun,'(3i6)')itrz,nst,npv
+  write(lun,*)'====================================='
+  write(lun,*)'time'
+  write(lun,'(5e11.4)')tionz(1:nst)
+  write(lun,'(5i8)')ionz_number(1:nst)
+   write(lun,'(6a14)')fb(1:6)
+  do ik=1,nst
+   write(lun,'(6e13.4)')ionz_bavg(ik,1:6)
+  end do
+   write(lun,'(6a14)')fb(7:12)
+  do ik=1,nst
+   write(lun,'(6e13.4)')ionz_bavg(ik,7:12)
+  end do
+   write(lun,'(4a14)')fb(13:16)
+  do ik=1,nst
+   write(lun,'(4e13.4)')ionz_bavg(ik,13:16)
+  end do
+  close(lun)
+ end subroutine en_ionz_data
+
 
 
 

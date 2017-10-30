@@ -1210,15 +1210,7 @@
  !=======================
   ! Inject fields at i=i1-1  for inflow Lp_inject=T
   call wave_field_left_inject(xm)  !(Bz=Ey By=Ez are injected at i1-1 point
-  if(der_ord < 4)then
    call advance_lpf_fields(ebf,jc,dt_loc,vbeam,i1,i2,j1,j2,k1,k2,0)
-  else
-   do lp=1,4
-    jb(i1:i2,j1:j2,k1:k2,1:curr_ndim)=&
-                            b_rk(lp)*jc(i1:i2,j1:j2,k1:k2,1:curr_ndim)
-    call update_rk4_fields(ebf,ebf0,ebf1,jb,vbeam,dt_loc,i1,i2,j1,j2,k1,k2,lp)
-   end do
-  endif
  !============================
  contains
  subroutine wave_field_left_inject(x_left)
@@ -1591,6 +1583,7 @@
  endif
  !===================END IONIZATION MODULE============
  !==========Reallocates aux fields for particles data==========
+ ic=1
  if(Part)then
   np=loc_npart(imody,imodz,imodx,ic)
   if(np>0)then
@@ -1598,7 +1591,7 @@
    call v_realloc(ebfp1,np,ndv)
   endif
  endif
- !== particles number np does no change dunring rk-iterations
+ !== particles number np does no change during rk-iterations
  !==========================
  do lps=1,rk
   jc(:,:,:,:)=0.0
@@ -2322,16 +2315,8 @@
  !====================
  ! Jc(1:3) for total curr Dt*J^{n+1/2}
  lp_in(1)=lp_in(1)+dt_loc
- if(der_ord < 4)then
  call advance_lpf_fields(ebf,jc,dt_loc,vbeam,&
                           i1,i2,j1,nyf,k1,nzf,0)
- else
-  do lp=1,4
-  jb(i1:i2,j1:nyf,k1:nzf,1:curr_ndim)=&
-                            b_rk(lp)*jc(i1:i2,j1:nyf,k1:nzf,1:curr_ndim)
-   call update_rk4_fields(ebf,ebf0,ebf1,jb,vbeam,dt_loc,i1,i2,j1,nyf,k1,nzf,lp)
-  end do
- end if
  ! (E,B) fields at time t^{n+1}
  !-----------------------------
  end subroutine env_lpf2_evolve
