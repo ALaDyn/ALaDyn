@@ -41,15 +41,15 @@
  integer :: int_par(par_dim),part_int_par(20),ionz_number(500)
  real(dp) :: ionz_bavg(500,16),bavg(1000,16,8),tb(1000),tionz(500)
 
- character(12),dimension(20),parameter :: rpar=(/&
- ' time =     ',' xmin =     ',' xmax =     ',' ymin =     ',' ymax =     ',&
- ' zmin =     ',' zmax =     ',' w0_x =     ',' w0_y =     ',' a0 =       ',&
- ' lam0 =     ',' mc2(MeV) = ',' n0(e18/cc)=',' np/cell =  ',' weight=    ',&
- ' mass =     ',' xmin_out = ',' xmax_out = ',' ymax_out = ',' gam_min =  '/)
+ character(13),dimension(20),parameter :: rpar=(/&
+ ' time =      ',' xmin =      ',' xmax =      ',' ymin =      ',' ymax =      ',&
+ ' zmin =      ',' zmax =      ',' w0_x =      ',' w0_y =      ',' a0 =        ',&
+ ' lam0 =      ',' mc2(MeV) =  ',' n0(e18/cc) =',' np/cell =   ',' weight=     ',&
+ ' mass =      ',' xmin_out =  ',' xmax_out =  ',' ymax_out =  ',' gam_min =   '/)
  character(12),dimension(20),parameter :: ipar=(/&
  ' npe =      ',' nx =       ',' ny =       ',' nz =       ',' model =    ',&
  ' dmodel =   ',' nsp =      ',' curr_ndim =',' mp/cell =  ','  ion_ch =  ',&
- ' tsch_ord = ',' der_ord =  ',' iform =    ',' ph_sp_nc = ',' f_version= ',&
+ ' tsch_ord = ',' der_ord =  ',' iform =    ',' ph_sp_nc = ',' f_version =',&
  ' i_end =    ',' nx_loc =   ',' ny_loc =   ',' nz_loc =   ',' null  =    '/)
  !--------------------------
 
@@ -1474,7 +1474,7 @@
   open(10,file=foldername//'/'//fname//'.dat',form='formatted')
   write(10,*)' Real parameters'
   do q=1,20
-   write(10,'(a11,e11.4)')rpar(q),part_real_par(q)
+   write(10,'(a13,e11.4)')rpar(q),part_real_par(q)
   enddo
   write(10,*)' Integer parameters'
   do p=1,20
@@ -1587,7 +1587,7 @@
   open(10,file=foldername//'/'//fname//'.dat',form='formatted')
   write(10,*)' Real parameters'
   do q=1,20
-   write(10,'(a11,e11.4)')rpar(q),part_real_par(q)
+   write(10,'(a13,e11.4)')rpar(q),part_real_par(q)
   enddo
   write(10,*)' Integer parameters'
   do p=1,20
@@ -1731,7 +1731,7 @@
   open(10,file=foldername//'/'//fname//'.dat',form='formatted')
   write(10,*)' Real parameters'
   do q=1,20
-   write(10,'(a11,e11.4)')rpar(q),part_real_par(q)
+   write(10,'(a13,e11.4)')rpar(q),part_real_par(q)
   enddo
   write(10,*)' Integer parameters'
   do p=1,20
