@@ -44,11 +44,11 @@
  character(13),dimension(20),parameter :: rpar=(/&
  ' time =      ',' xmin =      ',' xmax =      ',' ymin =      ',' ymax =      ',&
  ' zmin =      ',' zmax =      ',' w0_x =      ',' w0_y =      ',' a0 =        ',&
- ' lam0 =      ',' mc2(MeV) =  ',' n0(e18/cc) =',' np/cell =   ',' weight=     ',&
+ ' lam0 =      ',' mc2(MeV) =  ',' n0(e18/cc) =',' np/cell =   ',' weight =    ',&
  ' mass =      ',' xmin_out =  ',' xmax_out =  ',' ymax_out =  ',' gam_min =   '/)
  character(12),dimension(20),parameter :: ipar=(/&
  ' npe =      ',' nx =       ',' ny =       ',' nz =       ',' model =    ',&
- ' dmodel =   ',' nsp =      ',' curr_ndim =',' mp/cell =  ','  ion_ch =  ',&
+ ' dmodel =   ',' nsp =      ',' curr_ndim =',' mp/cell =  ',' ion_ch =   ',&
  ' tsch_ord = ',' der_ord =  ',' iform =    ',' ph_sp_nc = ',' f_version =',&
  ' i_end =    ',' nx_loc =   ',' ny_loc =   ',' nz_loc =   ',' null  =    '/)
  !--------------------------
