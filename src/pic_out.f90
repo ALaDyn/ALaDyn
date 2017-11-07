@@ -2565,11 +2565,12 @@
 
  ! if (iout<100) write (fname,'(a4,i2)') 'diag' ,idata
  ! if (iout< 10) write (fname,'(a5,i1)') 'diag0',idata
+ if(Ionization)call en_ionz_data(nst,itr,idata)
  write (fname,'(a4,i2.2)') 'diag',idata
 
  open (lun,file='diagnostics/'//fname//'.dat',form='formatted')
- write(lun,*)'mod_id,dmodel_id LP_ord,der_ord'
- write(lun,'(4i8)')model_id,dmodel_id,LPf_ord,der_ord
+ write(lun,*)'mod_id,dmodel_id LP_ord,der_ord, ibeam, color'
+ write(lun,'(4i8)')model_id,dmodel_id,LPf_ord,der_ord,ibeam,color
  write(lun,*)'Z1_i,  A1_i,   Z2_i,   A2_i,   iform,    str'
  write(lun,'(6i6)')ion_min(1),atomic_number(1),ion_min(2),atomic_number(2),iform,str_flag
  write(lun,*)' xmax       xmin       ymax      ymin      '
