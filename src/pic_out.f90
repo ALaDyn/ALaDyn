@@ -2570,7 +2570,7 @@
 
  open (lun,file='diagnostics/'//fname//'.dat',form='formatted')
  write(lun,*)'mod_id,dmodel_id LP_ord,der_ord, ibeam, color'
- write(lun,'(4i8)')model_id,dmodel_id,LPf_ord,der_ord,ibeam,color
+ write(lun,'(6i8)')model_id,dmodel_id,LPf_ord,der_ord,ibeam,color
  write(lun,*)'Z1_i,  A1_i,   Z2_i,   A2_i,   iform,    str'
  write(lun,'(6i6)')ion_min(1),atomic_number(1),ion_min(2),atomic_number(2),iform,str_flag
  write(lun,*)' xmax       xmin       ymax      ymin      '
