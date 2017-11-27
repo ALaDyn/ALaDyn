@@ -779,7 +779,7 @@
  np_per_zcell(1:6)=1
  !!+++++++++++++++++++++++++++++++
  nxl=0
- !========= gridding the transverese target size
+ !========= gridding the transverse target size
  nyl1=1+ny/2-nyh/2  !=1 if nyh=ny
  yp_min=ymin_t
  yp_max=ymax_t

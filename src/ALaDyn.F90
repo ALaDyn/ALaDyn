@@ -479,7 +479,7 @@
  integer :: nxp,nyp,nzp,ns_ioniz
 
  !enable loop to attach with gdb only if really needed
- !WARNING if enabled without needed, the program sleeps at start without doing nothing!
+ !WARNING if enabled without needed, the program sleeps at start without doing anything!
 #ifdef ENABLE_GDB_ATTACH
  call gdbattach
 #endif
