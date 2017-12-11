@@ -1324,38 +1324,6 @@ DO i=n1,n2
 ENDDO
 end subroutine bunch_twissrotation
 
-!--- this subroutine is used from the version that flags particles  ---!
-!--- it is used to deconvolve particles, it uses the equivalence to ---!
-!--- decompact a double into three numbers of lower precision  --------!
-subroutine read_7thcomponent(seventhcomp,mass,charge,flag)
-  real(dp),intent(in)  :: seventhcomp
-  real(dp),intent(out) :: mass,charge
-  integer, intent(out) :: flag
-	real(kind=8) :: first(2)
-	integer(kind=4) :: second(2)
- 	equivalence(seventhcomp,first)
-	equivalence(first(1),second)
-
-  charge = real(second(1),dp)
-  mass   = real(second(2),dp)
-  flag   = integer(first(2))
-end subroutine read_7thcomponent
-
-
-subroutine write_7thcomponent(seventhcomp,mass,charge,flag)
-  real(dp),intent(out) :: seventhcomp
-  real(dp),intent(in)  :: mass,charge
-  integer, intent(in)  :: flag
-	real(kind=8) :: first(2)
-	integer(kind=4) :: second(2)
- 	equivalence(seventhcomp,first)
-	equivalence(first(1),second)
-
-  second(1) = charge
-  second(2) = mass
-  first(2)  = flag
-end subroutine write_7thcomponent
-
  !=====================
  end module util
  !=====================
