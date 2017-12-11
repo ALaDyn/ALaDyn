@@ -2909,7 +2909,7 @@
  np_tot=0
  do i=1,nsb
    if(ppc_bunch(i,1)>0 .and. nb_tot(i)==-1) then
-      effecitve_cell_number=bunch_volume_incellnumber(bunch_shape(i),sxb(i),syb(i),syb(i),dx,dy,dz)
+      effecitve_cell_number=bunch_volume_incellnumber(bunch_shape(i),sxb(i),syb(i),syb(i),dx,dy,dz,sigma_cut_bunch(i))
       nb_tot(i)=PRODUCT(ppc_bunch(i,:))*effecitve_cell_number
       if(pe0) write(*,'(A,1I1,A)') 'bunch(',i,') :: weighted :: option'
       if(pe0) write(*,'(A,1I1,A)') 'bunch(',i,') :: changing total number of particles :: equal number of ppc'

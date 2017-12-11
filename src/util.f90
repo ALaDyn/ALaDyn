@@ -1238,14 +1238,14 @@ end function shape
 
 
  !--- function: identify the number of cell volume occupied by a bunch ---!
- integer(dp_int) function bunch_volume_incellnumber(bunch_shape,s_x,s_y,s_z,dx,dy,dz)
+ integer(dp_int) function bunch_volume_incellnumber(bunch_shape,s_x,s_y,s_z,dx,dy,dz,sigma_cut)
    integer, intent(in) :: bunch_shape
-   real(dp),intent(in) :: s_x,s_y,s_z,dx,dy,dz
-   real(dp) :: sigma_cut
+   real(dp),intent(in) :: s_x,s_y,s_z,dx,dy,dz,sigma_cut
+   !real(dp) :: sigma_cut
    integer :: ix,iy,iz
 
    bunch_volume_incellnumber=0
-   sigma_cut=4.0
+   !sigma_cut=4.0
 
    if(bunch_shape==1) then
      do ix=-int(sigma_cut*s_x/dx),int(sigma_cut*s_x/dx)
