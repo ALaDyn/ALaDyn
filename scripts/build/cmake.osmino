@@ -1,1 +1,10 @@
-mkdir build_gcc ; cd build_gcc ; cmake .. -DBoost_NO_BOOST_CMAKE=ON -DCMAKE_C_COMPILER=/disk01/gcc/gcc-5.1.0/bin/gcc -DCMAKE_CXX_COMPILER=/disk01/gcc/gcc-5.1.0/bin/g++ -DCMAKE_Fortran_COMPILER=/disk01/gcc/gcc-5.1.0/bin/gfortran ; cmake --build . --target install ; cd ..
+#!/bin/bash
+
+export CC=/disk01/gcc/gcc-5.1.0/bin/gcc
+export CXX=/disk01/gcc/gcc-5.1.0/bin/g++
+export FC=/disk01/gcc/gcc-5.1.0/bin/gfortran
+
+mkdir build ; cd build
+cmake .. -DBoost_NO_BOOST_CMAKE=ON -DCMAKE_Fortran_COMPILER=$FC
+cmake --build . --target install
+cd ..

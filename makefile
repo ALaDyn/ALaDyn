@@ -342,8 +342,7 @@ $(OBJ_FOLDER)/ionz_data.mod: $(SRC_FOLDER)/ionz_data.f90 $(OBJ_FOLDER)/ionz_data
 	@true
 
 $(OBJ_FOLDER)/ionize.o: $(SRC_FOLDER)/ionize.f90 $(OBJ_FOLDER)/precision_def.mod \
-												$(OBJ_FOLDER)/ionz_data.mod \
-												$(OBJ_FOLDER)/pic_rutil.mod
+						$(OBJ_FOLDER)/ionz_data.mod $(OBJ_FOLDER)/pic_rutil.mod
 	$(FC) $(OPTFC) $(MODULE_REDIRECT) -c -o $@ $< $(REDIRECT)
 $(OBJ_FOLDER)/ionize.mod: $(SRC_FOLDER)/ionize.f90 $(OBJ_FOLDER)/ionize.o
 	@true
@@ -422,8 +421,7 @@ $(OBJ_FOLDER)/pdf_moments.mod: $(SRC_FOLDER)/pdf_moments.f90 $(OBJ_FOLDER)/pdf_m
 
 $(OBJ_FOLDER)/pic_in.o: $(SRC_FOLDER)/pic_in.f90 $(OBJ_FOLDER)/particles.mod $(OBJ_FOLDER)/pic_rutil.mod \
                         $(OBJ_FOLDER)/fft_lib.mod $(OBJ_FOLDER)/grid_fields.mod $(OBJ_FOLDER)/precision_def.mod \
-												$(OBJ_FOLDER)/psolv.mod \
-												$(OBJ_FOLDER)/util.mod
+						$(OBJ_FOLDER)/psolv.mod $(OBJ_FOLDER)/util.mod
 	$(FC) $(OPTFC) $(MODULE_REDIRECT) -c -o $@ $< $(REDIRECT)
 $(OBJ_FOLDER)/pic_in.mod: $(SRC_FOLDER)/pic_in.f90 $(OBJ_FOLDER)/pic_in.o
 	@true
@@ -474,7 +472,7 @@ $(OBJ_FOLDER)/pwfa_output_addons.o: $(SRC_FOLDER)/pwfa_output_addons.f90 $(OBJ_F
                                     $(OBJ_FOLDER)/pic_evolve_in_time.mod $(OBJ_FOLDER)/read_input.mod \
                                     $(OBJ_FOLDER)/pdf_moments.mod $(OBJ_FOLDER)/system_utilities.mod \
                                     $(OBJ_FOLDER)/pic_out.mod $(OBJ_FOLDER)/pic_dump.mod $(OBJ_FOLDER)/precision_def.mod \
-																		$(OBJ_FOLDER)/pic_out_util.mod
+									$(OBJ_FOLDER)/pic_out_util.mod
 	$(FC) $(OPTFC) $(MODULE_REDIRECT) -c -o $@ $< $(REDIRECT)
 $(OBJ_FOLDER)/pwfa_output_addons.mod: $(SRC_FOLDER)/pwfa_output_addons.f90 $(OBJ_FOLDER)/pwfa_output_addons.o
 	@true
@@ -482,7 +480,7 @@ $(OBJ_FOLDER)/pwfa_output_addons.mod: $(SRC_FOLDER)/pwfa_output_addons.f90 $(OBJ
 $(OBJ_FOLDER)/ALaDyn.o: $(SRC_FOLDER)/ALaDyn.F90 $(OBJ_FOLDER)/pic_in.mod $(OBJ_FOLDER)/pic_out.mod $(OBJ_FOLDER)/pic_dump.mod \
                         $(OBJ_FOLDER)/read_input.mod $(OBJ_FOLDER)/pdf_moments.mod $(OBJ_FOLDER)/pwfa_output_addons.mod \
                         $(OBJ_FOLDER)/pic_evolve_in_time.mod $(OBJ_FOLDER)/system_utilities.mod $(OBJ_FOLDER)/precision_def.mod \
-												$(OBJ_FOLDER)/pic_out_util.mod
+						$(OBJ_FOLDER)/pic_out_util.mod
 	$(FC) $(OPTFC) $(MODULE_REDIRECT) -c -o $@ $< $(REDIRECT)
 $(OBJ_FOLDER)/ALaDyn.mod: $(SRC_FOLDER)/ALaDyn.F90 $(OBJ_FOLDER)/ALaDyn.o
 	@true

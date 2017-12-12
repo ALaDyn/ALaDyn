@@ -1,3 +1,5 @@
+#!/bin/bash
+
 module purge
 
 module load profile/advanced
@@ -7,5 +9,7 @@ module load fftw/3.3.4--openmpi--1-10.3--gnu--6.1.0
 module load boost/1.61.0--gnu--6.1.0
 module load cmake
 
-mkdir -p build_gnu ; cd build_gnu ; cmake .. -DBoost_NO_BOOST_CMAKE=ON ; cmake --build . --target install ; cd ..
-
+mkdir -p build_gnu ; cd build_gnu
+cmake .. -DBoost_NO_BOOST_CMAKE=ON
+cmake --build . --target install
+cd ..

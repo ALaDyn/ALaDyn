@@ -8,7 +8,7 @@
 ##PBS -e epic.txt
 
 
-cd ${PBS_O_WORKDIR}
+cd "${PBS_O_WORKDIR}" || exit
 
 module purge
 

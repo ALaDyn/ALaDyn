@@ -8,16 +8,14 @@
 ##PBS -e epic.txt
 
 
-cd ${PBS_O_WORKDIR}
+cd "${PBS_O_WORKDIR}" || exit
 
 module purge
 
 module load env-knl
-#module load gnu
 module load intel
 module load intelmpi
 module load boost
-#module load fftw
 module load mkl
 
 

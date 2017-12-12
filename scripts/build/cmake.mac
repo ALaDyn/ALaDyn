@@ -1,1 +1,10 @@
-mkdir build_gcc ; cd build_gcc ; cmake .. -DCMAKE_Fortran_COMPILER=/usr/local/bin/gfortran-7 -DCMAKE_C_COMPILER=/usr/local/bin/gcc-7 -DCMAKE_CXX_COMPILER=/usr/local/bin/g++-7 ; cmake --build . --target install ; cd ..
+#!/bin/bash
+
+export CC=/usr/local/bin/gcc-7
+export CXX=/usr/local/bin/g++-7
+export FC=/usr/local/bin/gfortran-7
+
+mkdir build ; cd build
+cmake .. -DCMAKE_Fortran_COMPILER=$FC
+cmake --build . --target install
+cd ..

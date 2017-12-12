@@ -1,3 +1,5 @@
+#!/bin/bash
+
 module purge
 
 module load intel
@@ -6,5 +8,13 @@ module load boost
 module load mkl
 module load cmake
 
-mkdir -p build_ifort ; cd build_ifort ; cmake .. -DINTELROOT=/cineca/prod/opt/compilers/intel/pe-xe-2017/binary -DCMAKE_LINKER=/cineca/prod/opt/compilers/intel/pe-xe-2017/binary/bin/icpc -DOTHER_INCLUDE_DIR=/cineca/prod/opt/compilers/intel/pe-xe-2017/binary/mkl/include/fftw/ -DBoost_NO_BOOST_CMAKE=ON -DCMAKE_C_COMPILER=/cineca/prod/opt/compilers/intel/pe-xe-2017/binary/bin/icc -DCMAKE_CXX_COMPILER=/cineca/prod/opt/compilers/intel/pe-xe-2017/binary/bin/icpc -DCMAKE_Fortran_COMPILER=/cineca/prod/opt/compilers/intel/pe-xe-2017/binary/bin/ifort ; cmake --build . --target install ; cd ..
+export INTELROOT=/cineca/prod/opt/compilers/intel/pe-xe-2017/binary
+export CC=/cineca/prod/opt/compilers/intel/pe-xe-2017/binary/bin/icc
+export CXX=/cineca/prod/opt/compilers/intel/pe-xe-2017/binary/bin/icpc
+export FC=/cineca/prod/opt/compilers/intel/pe-xe-2017/binary/bin/ifort
+export CLINKER=$CXX
 
+mkdir -p build ; cd build
+cmake .. -DINTELROOT=$INTELROOT -DCMAKE_LINKER=$CLINKER -DOTHER_INCLUDE_DIR=/cineca/prod/opt/compilers/intel/pe-xe-2017/binary/mkl/include/fftw/ -DBoost_NO_BOOST_CMAKE=ON -DCMAKE_Fortran_COMPILER=$FC
+cmake --build . --target install
+cd ..
