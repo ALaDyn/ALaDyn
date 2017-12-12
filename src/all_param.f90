@@ -168,13 +168,18 @@
  cmp=.false.
  ifilt=0
  if(der_ord >3)cmp=.true.
+!===========time integrator schemes
  t_ord=LPf_ord
  RK_ord=LPf_ord
  if(LPf_ord >2)then
-  call rk_tsch_coeff(LPf_ord)
- else
-  if(cmp)call rk_tsch_coeff(der_ord)
+  der_ord=4
+  if(LPf_ord==3)then
+   call lpf_sch_coeff
+  else
+   call rk_tsch_coeff(LPf_ord)
+  endif
  endif
+!===================================
 
  nx_loc=nx/nprocx
  nx1_loc=nx/nprocy
@@ -242,6 +247,8 @@
   endif
 !======================================
  Hybrid= .false.
+ High_gamma= .false.
+ if(gam_min >1.0)High_gamma= .true.
  test=.false.
  Part=.false.
  Lp_active=.false.
@@ -348,7 +355,7 @@
  if(model_id == 4) then
   mod_ord=2
   Envelope=.true.
-  !L_env_modulus= .true.
+   L_env_modulus=.true.
   endif
   if(n_over_nc >1.)then
    Solid_target=.true.
@@ -412,7 +419,7 @@
   w0_x=lx_fwhm/aph_fwhm
   w1_x=speed_of_light*tau1_fwhm/aph_fwhm
 !=================
-  lp_energy=1.e-03*tau_FWHM*lp_pow
+  lp_energy=1.e-03*tau_fwhm*lp_pow
   energy_in_targ=0.0
   el_lp=lam0
   if(n_over_nc > 0.0)then

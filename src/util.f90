@@ -99,7 +99,7 @@
  call random_seed(size = n)
  allocate(seed(n))
 
- if (L_disable_rng_seed .eqv. .false.) then
+ if (.not. L_disable_rng_seed) then
   un=123
   ! First try if the OS provides a random number generator
   open(unit=un, file="/dev/urandom", access="stream", &
@@ -530,8 +530,8 @@
  end subroutine vsort
 
  !--------------------------
- subroutine bunch_gen(stp,n1,n2,sx,sy,sz,gm,ey,ez,cut,dg,bunch)
- integer,intent(in) :: stp,n1,n2
+ subroutine bunch_gen(ndm,n1,n2,sx,sy,sz,gm,ey,ez,cut,dg,bunch)
+ integer,intent(in) :: ndm,n1,n2
  real(dp),intent(in) :: sx,sy,sz,gm,ey,ez,cut,dg
  real(dp),intent(inout) :: bunch(:,:)
  integer :: i,j,np
@@ -548,8 +548,66 @@
 
  !Distribute (x,y,z,px,py,pz) centered on 0; px=> px+gamma
 
- select case(stp)
- case(1)
+ select case(ndm)
+ case(2)
+  sigs(1)=sx
+  sigs(2)=sy
+  sigs(3)=sqrt(3.0)*0.01*dg*gm  !dpz
+  sigs(4)=ey/sy
+  do i=n1,n2
+   j=2
+   do
+    call random_number(v1)
+    call random_number(v2)
+    v1=2.0*v1-1.0
+    v2=2.0*v2-1.0
+    rnd=v1*v1+v2*v2
+    if(rnd < 1.0)exit
+   end do
+   rnd=sqrt(-2.0*log(rnd)/rnd)
+   bunch(j,i)=v1*rnd
+   bunch(j+2,i)=v2*rnd
+   j=1
+   call gasdev(rnd)
+   bunch(j,i)=rnd
+   j=3
+   do
+    call random_number(rnd)
+    rnd=2.*rnd-1.
+    a=cut*rnd
+    if(a*a < 1.)exit
+   end do
+   bunch(j,i)=a
+  end do
+  do i=n1,n2
+   do j=1,4
+    bunch(j,i)=sigs(j)*bunch(j,i)
+   end do
+  end do
+  bunch(3,n1:n2)=bunch(3,n1:n2)+gm
+  xm=0.0
+  ym=0.0
+  pxm=0.0
+  pym=0.0
+  ! Reset centering
+  do i=n1,n2
+   xm=xm+bunch(1,i)
+   ym=ym+bunch(2,i)
+   pxm=pxm+bunch(3,i)
+   pym=pym+bunch(4,i)
+  enddo
+  np=n2+1-n1
+  xm=xm/real(np,dp)
+  ym=ym/real(np,dp)
+  pxm=pxm/real(np,dp)
+  pym=pym/real(np,dp)
+  do i=n1,n2
+   bunch(1,i)=bunch(1,i)-xm
+   bunch(2,i)=bunch(2,i)-ym
+   bunch(3,i)=bunch(3,i)-(pxm-gm)
+   bunch(4,i)=bunch(4,i)-pym
+  enddo
+ case(3)
   sigs(1)=sx
   sigs(2)=sy
   sigs(3)=sz
@@ -619,50 +677,6 @@
    bunch(4,i)=bunch(4,i)-(pxm-gm)
    bunch(5,i)=bunch(5,i)-pym
    bunch(6,i)=bunch(6,i)-pzm
-  end do
- case(2)
-  sigs(1)=sx
-  sigs(2)=sy
-  sigs(3)=sqrt(3.0)*0.01*dg*gm  !dpz
-  sigs(4)=ey/sy
-  do i=n1,n2
-   do j=2,4,2
-    call random_number(v1)
-    rnd=sqrt(-2.0*log(v1))
-    bunch(j,i)=rnd
-   end do
-   j=1
-   call gasdev(rnd)
-   bunch(j,i)=rnd
-   j=3
-   do
-    call random_number(rnd)
-    rnd=2.*rnd-1.
-    a=cut*rnd
-    if(a*a < 1.)exit
-   end do
-   bunch(j,i)=a
-  end do
-  do i=n1,n2
-   do j=1,4
-    bunch(j,i)=sigs(j)*bunch(j,i)
-   end do
-  end do
-  bunch(3,n1:n2)=bunch(3,n1:n2)+gm
-  xm=0.0
-  pxm=0.0
-
-  ! Reset x-px centering
-  do i=n1,n2
-   xm=xm+bunch(1,i)
-   pxm=pxm+bunch(3,i)
-  enddo
-  np=n2+1-n1
-  xm=xm/real(np,dp)
-  pxm=pxm/real(np,dp)
-  do i=n1,n2
-   bunch(1,i)=bunch(1,i)-xm
-   bunch(3,i)=bunch(3,i)-(pxm-gm)
   end do
  end select
  end subroutine bunch_gen

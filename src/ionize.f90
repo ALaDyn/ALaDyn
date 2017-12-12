@@ -250,10 +250,6 @@
  integer,intent(in) :: ic,np,new_np_el
  integer,intent(inout) :: np_el
  integer(sp) :: inc,id_ch
- real(sp) :: ch(2),che(2)
- real(dp) :: wgh,wghe
- equivalence(wgh,ch)
- equivalence(wghe,che)
  real :: u,temp(3)
 
  integer :: n,i,ii
@@ -266,14 +262,13 @@
   temp(1)=t0_pl(1)
   temp(2:3)=temp(1)
   if(ii==0)write(6,'(a33,2I6)')'warning, no electrons before ionz',imody,imodz
-  che(2)=-1
   select case(curr_ndim)
   case(2)
   do n=1,np
    inc=ion_ch_inc(n)
    if(inc>0)then
-    wgh=spec(ic)%part(n,id_ch)
-    che(1)=ch(1)
+    wgh_cmp=spec(ic)%part(n,id_ch)
+    charge=-1
     do i=1,inc
      ii=ii+1
      spec(1)%part(ii,1:2)=spec(ic)%part(n,1:2)
@@ -281,7 +276,7 @@
      spec(1)%part(ii,3)=temp(1)*u
      call gasdev(u)
      spec(1)%part(ii,4)=temp(2)*u
-     spec(1)%part(ii,id_ch)=wghe
+     spec(1)%part(ii,id_ch)=wgh_cmp
     end do
     np_el=np_el+inc
    endif
@@ -290,8 +285,8 @@
   do n=1,np
    inc=ion_ch_inc(n)
    if(inc>0)then
-    wgh=spec(ic)%part(n,id_ch)
-    che(1)=ch(1)
+    wgh_cmp=spec(ic)%part(n,id_ch)
+    charge=-1
     do i=1,inc
      ii=ii+1
      spec(1)%part(ii,1:3)=spec(ic)%part(n,1:3)
@@ -300,7 +295,7 @@
      call gasdev(u)
      spec(1)%part(ii,5)=temp(2)*u
      spec(1)%part(ii,6)=temp(3)*u
-     spec(1)%part(ii,id_ch)=wghe
+     spec(1)%part(ii,id_ch)=wgh_cmp
     end do
     np_el=np_el+inc
    endif
@@ -317,10 +312,6 @@
  integer,intent(in) :: ic,np,new_np_el
  integer,intent(inout) :: np_el
  integer(sp) :: inc,id_ch
- real(sp) :: ch(2),che(2)
- real(dp) :: wgh,wghe
- equivalence(wgh,ch)
- equivalence(wghe,che)
  real :: u,temp(3)
 
  integer :: n,i,ii
@@ -330,7 +321,6 @@
 
   temp(1)=t0_pl(1)
   temp(2:3)=temp(1)
-  che(2)=-1
   ii=np_el
   if(ii==0)write(6,'(a33,2I6)')'warning, no electrons before ionz',imody,imodz
   select case(curr_ndim)
@@ -338,8 +328,8 @@
   do n=1,np
    inc=ion_ch_inc(n)
    if(inc>0)then
-    wgh=spec(ic)%part(n,id_ch)
-    che(1)=ch(1)
+    wgh_cmp=spec(ic)%part(n,id_ch)
+    charge=-1
     do i=1,inc
      ii=ii+1
      spec(1)%part(ii,1:2)=spec(ic)%part(n,1:2)
@@ -347,7 +337,7 @@
      spec(1)%part(ii,3)=temp(1)*u
      call gasdev(u)
      spec(1)%part(ii,4)=sp_field(n,1)*u
-     spec(1)%part(ii,id_ch)=wghe
+     spec(1)%part(ii,id_ch)=wgh_cmp
     end do
     np_el=np_el+inc
    endif
@@ -356,8 +346,8 @@
   do n=1,np
    inc=ion_ch_inc(n)
    if(inc>0)then
-    wgh=spec(ic)%part(n,id_ch)
-    che(1)=ch(1)
+    wgh_cmp=spec(ic)%part(n,id_ch)
+    charge=-1
     do i=1,inc
      ii=ii+1
      spec(1)%part(ii,1:3)=spec(ic)%part(n,1:3)
@@ -366,7 +356,7 @@
      spec(1)%part(ii,6)=temp(3)*u
      call gasdev(u)
      spec(1)%part(ii,5)=sp_field(n,1)*u
-     spec(1)%part(ii,id_ch)=wghe
+     spec(1)%part(ii,id_ch)=wgh_cmp
     end do
     np_el=np_el+inc
    endif
@@ -386,11 +376,9 @@
  integer,intent(inout) :: new_np_el
  integer,intent(inout) :: ion_ch_inc(:)
  real(dp),allocatable :: wpr(:)
- real(sp) :: ch(2),che(2)
- real(dp) :: ion_wch,p, p1,p2,ep(3)
- equivalence (ion_wch,ch)
- integer :: n,nk,kk
- integer :: kf,z0,loc_zmax,z1,inc,id_ch,sp_ion
+ real(dp) :: ion_wch,p
+ integer :: n,nk,kk,z0
+ integer :: kf,loc_inc,id_ch,sp_ion
  real(dp) :: energy_norm,ef_ion
       !=====================
  ! Units Ef_ion is in unit mc^2/e=2 MV/m
@@ -415,17 +403,17 @@
  case(1)
   !========= Only one level ionization usining  adk model
   do n=1,np
-   nk=ion_ch_inc(n)    !the field grid value on the n-th ion E_f=nk*dge
-   ion_wch=sp_loc%part(n,id_ch)
-   z0=int(ch(2))     !the ion current Z charge
+   nk=ion_ch_inc(n)    !the ioniz field grid value on the n-th ion E_f=nk*dge
+   wgh_cmp=sp_loc%part(n,id_ch)
+   z0=charge                     !the current ion Z charge, charge is short_int
    ion_ch_inc(n)=0
    call random_number(p)
    if(p < W_one_lev(nk,z0,sp_ion))then
-    z1=z0+1
+    charge=charge+1
     ion_ch_inc(n)=1                !the ionization electron count
-    ch(2)=z1
-    sp_loc%part(n,id_ch)=ion_wch   !the new ion (weight,z-charge)
-    ef_ion=1.5*amp_aux(n,1)/Vfact(z1,sp_ion)
+    z0=z0+1
+    sp_loc%part(n,id_ch)=wgh_cmp          !the new ion (id,z-chargei,wgh) 
+    ef_ion=1.5*amp_aux(n,1)/Vfact(z0,sp_ion)
     if(ef_ion >0.0)amp_aux(n,1)=sqrt(ef_ion)*amp_aux(n,2)!Delta*|A| on ion(n,ic)
     kk=kk+1
      endif

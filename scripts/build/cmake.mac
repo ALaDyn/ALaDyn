@@ -4,7 +4,7 @@ export CC=/usr/local/bin/gcc-7
 export CXX=/usr/local/bin/g++-7
 export FC=/usr/local/bin/gfortran-7
 
-mkdir build ; cd build
+mkdir -p build ; cd build
 cmake .. -DCMAKE_Fortran_COMPILER=$FC
 cmake --build . --target install
 cd ..

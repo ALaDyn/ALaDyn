@@ -28,6 +28,116 @@
  !=====Contains functions to prepare selected output variables=======
  contains
 !============================================
+!=============== Tracking particles============
+ subroutine initial_tparticles_select(sp_loc,dt_loc,tx1,tx2,ty1,ty2,tz1,tz2)
+
+ type(species),intent(inout) :: sp_loc
+ real(dp),intent(in):: dt_loc,tx1,tx2,ty1,ty2,tz1,tz2
+
+ integer :: np,p,ik,ndv,ik_max,last_ind
+ integer(hp_int) :: plab
+ real(dp) :: xx,yy,zz
+
+ np=size(sp_loc%part,1)
+ ndv=size(sp_loc%part,2)
+!========================
+! Define track_tot_nstep
+  p=0
+  if(dt_loc > 0.0)p=nint((t_out-t_in)/dt_loc)
+  track_tot_nstep=nint(real(p,dp)/real(tkjump,dp))
+  ndv=size(sp_loc%part,2)
+  
+! Select particles on each mpi_task
+ ik=0
+ select case(ndim)
+ case(2)
+ do p=1,np,nkjump
+  xx=sp_loc%part(p,1)
+  yy=sp_loc%part(p,2)
+  if(tx1 <= xx.and. tx2 > xx)then
+   if(ty1 <= yy.and. ty2 > yy)then
+   ik=ik+1
+   wgh_cmp=sp_loc%part(p,5)
+   part_ind=int(ik,hp_int)
+   sp_loc%part(p,5)=wgh_cmp
+   endif
+  endif
+ end do
+ case(3)
+ do p=1,np,nkjump
+  xx=sp_loc%part(p,1)
+  yy=sp_loc%part(p,2)
+  zz=sp_loc%part(p,3)
+  if(tx1 <= xx.and. tx2 > xx)then
+   if(ty1 <= yy.and. ty2 > yy)then
+    if(tz1 <= zz.and. tz2 > zz)then
+     ik=ik+1
+     wgh_cmp=sp_loc%part(p,7)
+     part_ind=int(ik,hp_int)
+     sp_loc%part(p,7)=wgh_cmp
+    endif
+   endif
+  endif
+ end do
+ end select
+ loc_tpart(mype+1)=ik
+ call intvec_distribute(ik,loc_tpart,npe)
+ track_tot_part=sum(loc_tpart(1:npe))
+ ik_max=maxval(loc_tpart(1:npe))
+ allocate(pdata_tracking(ndv,ik_max,track_tot_nstep))
+ last_ind=0
+ if(mype >0)last_ind=sum(loc_tpart(1:mype))
+ if(loc_tpart(mype+1)>0)write(6,*)'last_ind',mype,last_ind
+ do p=1,np 
+  wgh_cmp=sp_loc%part(p,ndv)
+  if(part_ind >0)part_ind=part_ind+int(last_ind,hp_int)
+  sp_loc%part(p,ndv)=wgh_cmp
+ enddo
+ if(pe0)then
+  write(6,'(a19,i6)')'  tot_track_steps  ',track_tot_nstep
+  write(6,'(a19,i6)')'  tot_track_parts  ',track_tot_part
+  write(6,'(a19,i6)')'  Max track_parts  ',ik_max
+  write(6,'(a18,i8)')'  short_int size  ',huge(plab)
+  write(6,'(a20,e11.4)')'  ptrack memory(MB) ',1.e-06*real(4*ndv*track_tot_nstep*ik_max,dp)
+ endif
+!================================
+
+ end subroutine initial_tparticles_select
+!============================================
+ subroutine t_particles_collect(sp_loc,sp_aux,time_ind)
+
+ type(species),intent(in) :: sp_loc
+ real(dp),intent(inout) :: sp_aux(:,:)
+ integer,intent(in) :: time_ind
+
+ integer :: np,ik,ip,p,ndv
+
+ if(time_ind > track_tot_nstep)return
+ np=size(sp_loc%part,1)
+ ndv=size(sp_loc%part,2)
+ ik=0
+ do p=1,np
+  wgh_cmp=sp_loc%part(p,ndv)
+  if(part_ind >0)then
+   ik=ik+1
+   do ip=1,ndv
+    sp_aux(ik,ip)=sp_loc%part(p,ip)
+   enddo
+  endif
+ enddo
+ loc_tpart(mype+1)=ik
+ if(ik >0)then
+  !write(6,*)mype,ik,size(pdata_tracking,2),time_ind
+ do p=1,ik
+  do ip=1,ndv-1
+   pdata_tracking(ip,p,time_ind)=real(sp_aux(p,ip),sp)
+  enddo
+  wgh_cmp=sp_aux(p,ndv)
+  pdata_tracking(ndv,p,time_ind)=real(part_ind,sp)
+ enddo
+ endif
+ end subroutine t_particles_collect
+!=================================================
  subroutine fill_density_data(den,i1,i2,j1,j2,k1,k2,ic)
   real(dp),intent(inout)  :: den(:,:,:,:)
   integer,intent(in) :: i1,i2,j1,j2,k1,k2,ic

@@ -1,6 +1,5 @@
  !*****************************************************************************************************!
  !             Copyright 2008-2018 Pasquale Londrillo, Stefano Sinigardi, Andrea Sgattoni              !
- !                                                Alberto Marocchino                                   !
  !*****************************************************************************************************!
 
  !*****************************************************************************************************!
@@ -558,11 +557,10 @@
  real(dp),intent(inout) :: den(:,:,:,:)
  integer,intent(in) :: np,ndm,n_st,ic
  real(dp),intent(in) :: xmn,ymn,zmn
- real(dp) :: xx,sx,sx2,dvol,wgh
+ real(dp) :: xx,sx,sx2,dvol
  real(dp) :: ax0(0:3),ay0(0:3),az0(0:3),xp(3)
  integer :: i,j,k,i1,j1,k1,i2,j2,k2,n,ch,spl
- real(sp) :: charge(2),wgh4
- equivalence(charge,wgh)
+ real(sp) :: wght
  !======================
  ax0(0:3)=0.0;ay0(0:3)=0.0
  az0(0:3)=0.0
@@ -572,8 +570,8 @@
   j2=1
   do n=1,np
    xp(1)=dx_inv*(sp_loc%part(n,1)-xmn)
-   wgh=sp_loc%part(n,5)
-   wgh4=charge(1)*charge(2)
+   wgh_cmp=sp_loc%part(n,5)
+   wght=charge*wgh
    xx=shx+xp(1)
    i=int(xx+0.5)
    sx=xx-real(i,dp)
@@ -581,7 +579,7 @@
    ax0(1)=0.75-sx2
    ax0(2)=0.5*(0.25+sx2+sx)
    ax0(0)=1.-ax0(1)-ax0(2)
-   ax0(0:2)=wgh4*ax0(0:2)
+   ax0(0:2)=wght*ax0(0:2)
    i=i-1
    do i1=0,2
     i2=i+i1
@@ -592,12 +590,14 @@
   ch=5
   do n=1,np
    pt(n,1:2)=sp_loc%part(n,1:2)
+   wgh_cmp=sp_loc%part(n,5)
+   pt(n,4)=charge*wgh
   end do
   call set_local_positions(pt,1,np,n_st,2,xmn,ymn,zmn)
+!==========================
   do n=1,np
+   wght=pt(n,4)
    xp(1:2)=pt(n,1:2)
-   wgh=sp_loc%part(n,ch)
-   wgh4=charge(1)*charge(2)
    xx=shx+xp(1)
    i=int(xx+0.5)
    sx=xx-real(i,dp)
@@ -605,7 +605,7 @@
    ax0(1)=0.75-sx2
    ax0(2)=0.5*(0.25+sx2+sx)
    ax0(0)=1.-ax0(1)-ax0(2)
-   ax0(0:2)=wgh4*ax0(0:2)
+   ax0(0:2)=wght*ax0(0:2)
    i=i-1
 
    xx=shy+xp(2)
@@ -630,12 +630,14 @@
   do n=1,np
    pt(n,1:3)=sp_loc%part(n,1:3)
    pt(n,4)=sp_loc%part(n,ch)
+   wgh_cmp=pt(n,4)
+   wght=charge*wgh
+   pt(n,4)=wght
   end do
   call set_local_positions(pt,1,np,n_st,3,xmn,ymn,zmn)
   do n=1,np
    xp(1:3)=pt(n,1:3)
-   wgh=pt(n,4)
-   wgh4=charge(1)*charge(2)
+   wght=pt(n,4)
    xx=shx+xp(1)
    i=int(xx+0.5)
    sx=xx-real(i,dp)
@@ -643,7 +645,7 @@
    ax0(1)=0.75-sx2
    ax0(2)=0.5*(0.25+sx2+sx)
    ax0(0)=1.-ax0(1)-ax0(2)
-   ax0(0:2)=wgh4*ax0(0:2)
+   ax0(0:2)=wght*ax0(0:2)
 
    xx=shy+xp(2)
    j=int(xx+0.5)
@@ -693,8 +695,7 @@
  integer :: i,j,i0,j0,i1,j1,i2,j2,k,k0,k1,k2,n
  integer :: ch,ih0,ih
  real(dp) :: xp1(3),xp0(3),pp(3)
- real(sp) :: charge(2),wgh4
- equivalence(charge,wgh)
+ real(sp) :: wght
  !======================
  ax0=0.0;ay0=0.0
  ax1=0.0;ay1=0.0
@@ -707,8 +708,8 @@
    pt(n,1:2)=sp_loc%part(n,1:2)
    pp(1:2)=sp_loc%part(n,3:4)
    gam=sqrt(1.+pp(1)*pp(1)+pp(2)*pp(2))!gamma
-   wgh=sp_loc%part(n,ch)
-   wgh4=0.5*charge(1)*charge(2)
+   wgh_cmp=sp_loc%part(n,ch)
+   wght=0.5*charge*wgh
    pp(1:2)=pp(1:2)/gam                 !velocities
    pt(n,3)=pt(n,1)-dt_loc*pp(1)           !old positions
    pt(n,4)=pt(n,2)-dt_loc*pp(2)
@@ -722,7 +723,7 @@
    !=============================
    do j1=1,3
     j2=j0+j1
-    dvol=wgh4*ay0(j1)
+    dvol=wght*ay0(j1)
     dvol1=dvol*pp(1)
     do i1=1,3
      i2=i0+i1
@@ -733,7 +734,7 @@
      den(i2,j2,1,2)=den(i2,j2,1,2)+dvol1*axh0(i1)  !  Jx
   end do
      j2=j+j1
-    dvol=wgh4*ay1(j1)
+    dvol=wght*ay1(j1)
     dvol1=dvol*pp(1)
     do i1=1,3
       i2=i+i1
@@ -754,8 +755,8 @@
    pt(n,1:3)=sp_loc%part(n,1:3)
    pp(1:3)=sp_loc%part(n,4:6)
    gam=sqrt(1.+pp(1)*pp(1)+pp(2)*pp(2)+pp(3)*pp(3))!gamma
-   wgh=sp_loc%part(n,ch)
-   wgh4=0.5*charge(1)*charge(2)
+   wgh_cmp=sp_loc%part(n,ch)
+   wght=0.5*charge*wgh
    pp(1:3)=pp(1:3)/gam                 !velocities
    pt(n,4)=pt(n,1)-dt_loc*pp(1)           !old positions
    pt(n,5)=pt(n,2)-dt_loc*pp(2)
@@ -775,7 +776,7 @@
     dvol2=az0(k1)
     do j1=1,3
      j2=j0+j1
-     dvol=wgh4*ay0(j1)*dvol2
+     dvol=wght*ay0(j1)*dvol2
      dvol1=dvol*pp(1)
      do i1=1,3
       i2=i0+i1
@@ -792,7 +793,7 @@
     dvol2=az1(k1)
     do j1=1,3
      j2=j+j1
-     dvol=wgh4*ay1(j1)*dvol2
+     dvol=wght*ay1(j1)*dvol2
      dvol1=dvol*pp(1)
      do i1=1,3
       i2=i+i1
@@ -817,11 +818,9 @@
  real(dp),intent(inout) :: eden(:,:,:,:)
  integer,intent(in) :: np,ndm,njc,n_st
  real(dp),intent(in) :: xmn,ymn,zmn
- real(dp) :: xx,sx,sx2,dvol,wgh,gam
+ real(dp) :: xx,sx,sx2,dvol,gam
  real(dp) :: ax0(0:2),ay0(0:2),az0(0:2),xp(3),pp(3)
  integer :: i,j,k,i1,j1,k1,i2,j2,k2,n,ch,spl
- real(sp) :: charge(2)
- equivalence(charge,wgh)
  !======================
  !   Computes eden(grid,1)= n/n_0 and eden(grid,2)=<gam-1}n>/n_0
  !================================================
@@ -836,7 +835,7 @@
    xp(1)=dx_inv*(sp_loc%part(n,1)-xmn)
    pp(1:2)=sp_loc%part(n,3:4)
    gam=sqrt(pp(1)*pp(1)+pp(2)*pp(2)+1.)
-   wgh=sp_loc%part(n,ch)
+   wgh_cmp=sp_loc%part(n,ch)
    xx=shx+xp(1)
    i=int(xx+0.5)
    sx=xx-real(i,dp)
@@ -844,12 +843,12 @@
    ax0(1)=0.75-sx2
    ax0(2)=0.5*(0.25+sx2+sx)
    ax0(0)=1.-ax0(1)-ax0(2)
-   ax0(0:2)=charge(1)*ax0(0:2)
+   ax0(0:2)=wgh*ax0(0:2)
    i=i-1
    do i1=0,2
     i2=i+i1
     dvol=ax0(i1)
-    eden(i2,j2,1,1)=eden(i2,j2,1,1)+dvol*charge(2)
+    eden(i2,j2,1,1)=eden(i2,j2,1,1)+dvol*charge
     eden(i2,j2,1,2)=eden(i2,j2,1,2)+(gam-1.)*dvol
    end do
   end do
@@ -864,7 +863,7 @@
    do n=1,np
     xp(1:2)=pt(n,1:2)
     gam=pt(n,3)
-    wgh=pt(n,ch)
+    wgh_cmp=pt(n,ch)
     xx=shx+xp(1)
     i=int(xx+0.5)
     sx=xx-real(i,dp)
@@ -872,7 +871,7 @@
     ax0(1)=0.75-sx2
     ax0(2)=0.5*(0.25+sx2+sx)
     ax0(0)=1.-ax0(1)-ax0(2)
-    ax0(0:2)=charge(1)*ax0(0:2)  !weights are inside
+    ax0(0:2)=wgh*ax0(0:2)  !weights are inside
     i=i-1
 
     xx=shy+xp(2)
@@ -888,7 +887,7 @@
      do i1=0,2
       i2=i+i1
       dvol=ax0(i1)*ay0(j1)
-      eden(i2,j2,1,1)=eden(i2,j2,1,1)+dvol*charge(2)
+      eden(i2,j2,1,1)=eden(i2,j2,1,1)+dvol*charge
       eden(i2,j2,1,2)=eden(i2,j2,1,2)+(gam-1.)*dvol
      end do
     end do
@@ -898,7 +897,7 @@
    do n=1,np
     xp(1:2)=pt(n,1:2)
     gam=pt(n,4)
-    wgh=pt(n,ch)
+    wgh_cmp=pt(n,ch)
 
     xx=shx+xp(1)
     i=int(xx+0.5)
@@ -907,7 +906,7 @@
     ax0(1)=0.75-sx2
     ax0(2)=0.5*(0.25+sx2+sx)
     ax0(0)=1.-ax0(1)-ax0(2)
-    ax0(0:2)=charge(1)*ax0(0:2)
+    ax0(0:2)=wgh*ax0(0:2)
     i=i-1
 
     xx=shy+xp(2)
@@ -923,7 +922,7 @@
      do i1=0,2
       i2=i+i1
       dvol=ax0(i1)*ay0(j1)
-      eden(i2,j2,1,1)=eden(i2,j2,1,1)+dvol*charge(2)
+      eden(i2,j2,1,1)=eden(i2,j2,1,1)+dvol*charge
       eden(i2,j2,1,2)=eden(i2,j2,1,2)+(gam-1.)*dvol
      end do
     end do
@@ -939,7 +938,7 @@
   call set_part_gamma(pt,1,np,3)
   do n=1,np
    xp(1:3)=pt(n,1:3)
-   wgh=pt(n,ch)
+   wgh_cmp=pt(n,ch)
    gam=pt(n,4)
    xx=shx+xp(1)
    i=int(xx+0.5)
@@ -948,7 +947,7 @@
    ax0(1)=0.75-sx2
    ax0(2)=0.5*(0.25+sx2+sx)
    ax0(0)=1.-ax0(1)-ax0(2)
-   ax0(0:2)=charge(1)*ax0(0:2)
+   ax0(0:2)=wgh*ax0(0:2)
 
    xx=shy+xp(2)
    j=int(xx+0.5)
@@ -976,7 +975,7 @@
      dvol=az0(k1)*ay0(j1)
      do i1=0,spl
       i2=i+i1
-      eden(i2,j2,k2,1)=eden(i2,j2,k2,1)+ax0(i1)*dvol*charge(2)
+      eden(i2,j2,k2,1)=eden(i2,j2,k2,1)+ax0(i1)*dvol*charge
       eden(i2,j2,k2,2)=eden(i2,j2,k2,2)+(gam-1.)*ax0(i1)*dvol
      end do
     end do
@@ -2655,14 +2654,12 @@
  integer,intent(in) :: np,ndm
  real(dp),intent(in) :: dt_loc,xmn,ymn,zmn
 
- real(dp) :: xx,sx,sx2,dvol,dvol1,gam2,wgh
+ real(dp) :: xx,sx,sx2,dvol,dvol1,gam2
  real(dp) :: axh(0:2),ayh(0:2),up(3),xp1(3)
  real(dp) :: ax1(0:2),ay1(0:2),azh(0:2),az1(0:2),ap(12)
  integer :: i,ih,j,jh,i1,j1,i2,j2,k,kh,k1,k2,n
  real(dp) :: a1,b1,gam,gamp_new,dth4
  !===============================================
- real(sp) :: charge(2)
- equivalence(charge,wgh)
  !===============================================
  ! Linear shape for fields at half-index quadratic shape for fields
  !                         at integer index
@@ -2696,7 +2693,7 @@
    ap=0.0
    xp1(1:2)=sp_loc%part(n,1:2)    !the current particle positions
    up(1:2)=sp_loc%part(n,3:4)    !the current particle  momenta
-   wgh=sp_loc%part(n,5)          !the current particle  weight
+   wgh_cmp=sp_loc%part(n,5)          !wgh is the current particle  weight
    xx=shx+dx_inv*(xp1(1)-xmn)
    i=int(xx+0.5)
    sx=xx-real(i,dp)
@@ -2773,14 +2770,13 @@
    a1=dot_product(ap(1:2),up(1:2))
    b1=dot_product(ap(4:5),up(1:2))
    gam=sqrt(gam2)
-   gamp_new=gam+charge(2)*dth4*(gam*a1+b1)/gam2
+   gamp_new=gam+charge*dth4*(gam*a1+b1)/gam2
    ap(3:5)=ap(3:5)/gamp_new
    pt(n,1)=ap(1)+ap(4)     !E+grad[F]/2
    pt(n,2)=ap(2)+ap(5)
-   pt(n,3)=ap(3)
-   pt(n,4)=ap(6)
-   pt(n,1:3)=charge(2)*pt(n,1:3)
-   pt(n,5)=charge(1)/gamp_new
+   pt(n,3)=ap(3)            
+   pt(n,4)=ap(6)            
+   pt(n,5)=wgh/gamp_new
   end do
   !========================
  case(3)
@@ -2788,7 +2784,7 @@
    ap=0.0
    xp1(1:3)=sp_loc%part(n,1:3)   !the current particle positions
    up(1:3)=sp_loc%part(n,4:6)    !the current particle  momenta
-   wgh=sp_loc%part(n,7)          !the current particle (weight,charge)
+   wgh_cmp=sp_loc%part(n,7)          !the current particle (weight,charge)
    xx=shx+dx_inv*(xp1(1)-xmn)
    i=int(xx+0.5)
    sx=xx-real(i,dp)
@@ -2903,13 +2899,12 @@
    a1=dot_product(ap(1:3),up(1:3))
    b1=dot_product(ap(7:9),up(1:3))
    gam=sqrt(gam2)
-   gamp_new=gam+charge(2)*dth4*(gam*a1+b1)/gam2
+   gamp_new=gam+charge*dth4*(gam*a1+b1)/gam2
    ap(4:9)=ap(4:9)/gamp_new          !ap(4:6)=B/gamp, ap(7:9)= Grad[F]/2*gamp
 
    pt(n,1:3)=ap(1:3)+ap(7:9)
    pt(n,4:6)=ap(4:6)
-   pt(n,1:6)=charge(2)*pt(n,1:6)  !q*F_Lorentz
-   pt(n,7)=charge(1)/gamp_new     !weight/gamp
+   pt(n,7)=wgh/gamp_new     !weight/gamp
   end do
  end select
  end subroutine set_env_acc
@@ -2923,15 +2918,12 @@
  integer,intent(in) :: np,ndm
  real(dp),intent(in) :: xmn,ymn,zmn
 
- real(dp) :: xx,sx,sx2,dvol,dvol1,gam2,wgh
+ real(dp) :: xx,sx,sx2,dvol,dvol1,gam2
  real(dp) :: axh(0:2),ayh(0:2),up(3),xp1(3)
  real(dp) :: ax1(0:2),ay1(0:2),azh(0:2),az1(0:2),ap(12)
  integer :: i,ih,j,jh,i1,j1,i2,j2,k,kh,k1,k2,n
  !real(dp) :: gam
  real(dp) :: gam_inv
- !===============================================
- real(sp) :: charge(2)
- equivalence(charge,wgh)
  !===============================================
  ! Linear shape for fields at half-index quadratic shape for fields
  !                         at integer index
@@ -2960,7 +2952,7 @@
    ap=0.0
    xp1(1:2)=sp_loc%part(n,1:2)    !the t^{k-1} particle positions, momenta and weight
    up(1:2)=sp_loc%part(n,3:4)
-   wgh=sp_loc%part(n,5)
+   wgh_cmp=sp_loc%part(n,5)
    xx=shx+dx_inv*(xp1(1)-xmn)
    i=int(xx+0.5)
    sx=xx-real(i,dp)
@@ -3039,7 +3031,7 @@
    pt(n,1)=ap(1)+0.5*ap(4)
    pt(n,2)=ap(2)+0.5*ap(5)  !E+F_env
    pt(n,3)=ap(3)            !B_z/gam_p
-   pt(n,5)=charge(1)*gam_inv  !wgh/gam_p
+   pt(n,5)=wgh*gam_inv  !wgh/gam_p
   end do
   !========================
  case(3)
@@ -3047,7 +3039,7 @@
    ap=0.0
    xp1(1:3)=sp_loc%part(n,1:3)   !the current t^{k-1} particle positions, momenta and weights
    up(1:3)=sp_loc%part(n,4:6)
-   wgh=sp_loc%part(n,7)
+   wgh_cmp=sp_loc%part(n,7)
    xx=shx+dx_inv*(xp1(1)-xmn)
    i=int(xx+0.5)
    sx=xx-real(i,dp)
@@ -3163,7 +3155,7 @@
 
    pt(n,1:3)=ap(1:3)+0.5*ap(7:9)
    pt(n,4:6)=ap(4:6)
-   pt(n,7)=charge(1)*gam_inv  !wgh/gam_p
+   pt(n,7)=wgh*gam_inv  !wgh/gam_p
   end do
  end select
  end subroutine set_env_rk_acc
@@ -3176,7 +3168,7 @@
  integer,intent(in) :: np,ndm,ic
  real(dp),intent(in) :: xmn,ymn,zmn
 
- real(dp) :: xx,sx,sx2,dvol,dvol1,wgh
+ real(dp) :: xx,sx,sx2,dvol,dvol1,wghp
  real(dp) :: xp1(3)
  real(dp) :: ax1(0:2),ay1(0:2),az1(0:2)
  integer :: i,j,i1,j1,i2,j2,k,k1,k2,n
@@ -3192,7 +3184,7 @@
   do n=1,np
    xp1(1)=dx_inv*(efp(n,1)-xmn)                ! local x
    xp1(2)=dy_inv*(efp(n,2)-ymn)                ! local y
-   wgh=efp(n,5)                       !the particle  q*wgh/gamp at current time
+   wghp=efp(n,5)                       !the particle  q*wgh/gamp at current time
    xx=shx+xp1(1)
    i=int(xx+0.5)
    sx=xx-real(i,dp)
@@ -3214,7 +3206,7 @@
    !==========================
    do j1=0,2
     j2=j+j1
-    dvol=ay1(j1)*wgh
+    dvol=ay1(j1)*wghp
     do i1=0,2
      i2=i1+i
      dvol1=dvol*ax1(i1)
@@ -3228,7 +3220,7 @@
    xp1(1)=dx_inv*(efp(n,1)-xmn)                ! local x
    xp1(2)=dy_inv*(efp(n,2)-ymn)                ! local y
    xp1(3)=dz_inv*(efp(n,3)-zmn)                ! local z
-   wgh=efp(n,7)          !the particle  wgh/gamp at current time
+   wghp=efp(n,7)          !the particle  wgh/gamp at current time
 
    xx=shx+xp1(1)
    i=int(xx+0.5)
@@ -3262,7 +3254,7 @@
     k2=k+k1
     do j1=0,2
      j2=j+j1
-     dvol=ay1(j1)*az1(k1)*wgh
+     dvol=ay1(j1)*az1(k1)*wghp
      do i1=0,2
       i2=i1+i
       dvol1=dvol*ax1(i1)
@@ -3282,13 +3274,11 @@
  integer,intent(in) :: np,sind
  real(dp),intent(in) :: xmn,ymn
 
- real(dp) :: wgh,xx,sx,sx2,dvol
+ real(dp) :: xx,sx,sx2,dvol
  real(dp) :: axh(0:2),ayh(0:2),xp1(3)
  real(dp) :: ax1(0:2),ay1(0:2),ap(3),zmn
  integer :: i,ih,j,jh,i1,j1,i2,j2,k2,n
 
- real(sp) :: charge(2)
- equivalence(charge,wgh)
  !===============================================
  ! Linear shape at half-index quadratic shape at integer index
  !====================================
@@ -3304,7 +3294,7 @@
  call set_local_positions(pt,1,np,sind,2,xmn,ymn,zmn)
  do n=1,np
   ap(1:3)=0.0
-  wgh=sp_loc%part(n,5) ! the particle charge
+  wgh_cmp=sp_loc%part(n,5) ! the particle charge
   xp1(1:2)=pt(n,1:2)    !the current particle positions
   xx=shx+xp1(1)
   i=int(xx+0.5)
@@ -3361,8 +3351,7 @@
     ap(3)=ap(3)+axh(i1)*dvol*(ef1(i2,j2,k2,3)+ef2(i2,j2,k2,3))
    end do
   end do
-  wgh=charge(2)
-  pt(n,1:3)=wgh*ap(1:3)
+  pt(n,1:3)=charge*ap(1:3)
  end do
  !================================
  end subroutine set_part2d_twofield_acc
@@ -3375,13 +3364,10 @@
  integer,intent(in) :: np,sind
  real(dp),intent(in) :: xmn,ymn
 
- real(dp) :: wgh,xx,sx,sx2,dvol
+ real(dp) :: xx,sx,sx2,dvol
  real(dp) :: axh(0:2),ayh(0:2),xp1(3)
  real(dp) :: ax1(0:2),ay1(0:2),ap(3),zmn
  integer :: i,ih,j,jh,i1,j1,i2,j2,k2,n
-
- real(sp) :: charge(2)
- equivalence(charge,wgh)
  !===============================================
  ! Linear shape at half-index quadratic shape at integer index
  !====================================
@@ -3397,7 +3383,7 @@
  call set_local_positions(pt,1,np,sind,2,xmn,ymn,zmn)
  do n=1,np
   ap(1:3)=0.0
-  wgh=sp_loc%part(n,5) ! the particle charge
+  wgh_cmp=sp_loc%part(n,5) ! the particle charge
   xp1(1:2)=pt(n,1:2)    !the current particle positions
   xx=shx+xp1(1)
   i=int(xx+0.5)
@@ -3454,8 +3440,7 @@
     ap(3)=ap(3)+axh(i1)*dvol*(ef1(i2,j2,k2,3)+ef2(i2,j2,k2,3)+ef3(i2,j2,k2,3))
    end do
   end do
-  wgh=charge(2)
-  pt(n,1:3)=wgh*ap(1:3)
+  pt(n,1:3)=charge*ap(1:3)
  end do
  end subroutine set_part2d_two_bfield_acc
 !=====================================================
@@ -4052,19 +4037,17 @@
  real(dp),intent(inout) :: pt(:,:),jcurr(:,:,:,:)
  integer,intent(in) :: n0,np,n_st,njc,ndm
  real(dp),intent(in) :: xmn,ymn
- real(dp) :: ax,sx,sx2,dvol,wgh
+ real(dp) :: ax,sx,sx2,dvol
  real(dp) :: ax0(0:3),ay0(0:3),xp1(3),xp0(3)
  real(dp) :: ax1(0:3),ay1(0:3),vp(3),vyp
  real(dp) :: axh(0:4),axh0(0:4),axh1(0:4),ayh(0:4)
  real(dp) :: currx(0:4),curry(0:4)
+ real(sp) :: wght
  integer :: i,j,i0,j0,i1,j1,i2,j2,n
  integer :: ih,jh,ix0,ix1,iy0,iy1
- !=======================
- real(sp) :: charge(2)
- equivalence(charge,wgh)
  !==========================
- !Iform=0 or 1 IMPLEMENTS the ESIRKEPOV SCHEME for QUADRATIC SHAPE
- !==========================================
+ !Iform=0 or 1 IMPLEMENTS the ESIRKEPOV SCHEME for LINEAR-QUADRATIC SHAPE
+ ! ==============================Only new and old positions needed
  ax1=0.0
  ay1=0.0
  ax0=0.0
@@ -4075,9 +4058,9 @@
    xp1(1:2)=sp_loc%part(n,1:2) !x-new  t^(n+1)
    xp0(1:2)=pt(n,3:4)             !x-old  t^n
    vp(1:2)=xp1(1:2)-xp0(1:2)
-   wgh=sp_loc%part(n,5)
-   wgh=charge(1)*charge(2)
-   vyp=0.5*wgh*vp(2)                !q*Dt*Vy time level t^(n+1/2)
+   wgh_cmp=sp_loc%part(n,5)
+   wght=charge*wgh
+   vyp=0.5*wght*vp(2)                !q*Dt*Vy time level t^(n+1/2)
 
    ax=shx+dx_inv*(xp0(1)-xmn)
    i0=int(ax+0.5)
@@ -4127,11 +4110,14 @@
   end do
   !======================
  case(2)
-  if(njc==2)then            !Two currents components
+  if(njc==2)then            !Two current components
    do n=1,np
     pt(n,1:2)=sp_loc%part(n,1:2) !x-y-new  t^(n+1)
     pt(n,1)=dx_inv*(pt(n,1)-xmn)
     pt(n,3)=dx_inv*(pt(n,3)-xmn)
+    wgh_cmp=sp_loc%part(n,5)
+    wght=charge*wgh
+    pt(n,5)=wght
    end do
    if(n_st==0)then
     do n=n0,np
@@ -4142,11 +4128,11 @@
     call map2dy_part_sind(np,n_st,2,ymn,pt)
     call map2dy_part_sind(np,n_st,4,ymn,pt)
    endif
+!========================
    do n=n0,np
     xp1(1:2)=pt(n,1:2)        !x-y  -new
     xp0(1:2)=pt(n,3:4)        !x-y  -old
-    wgh=sp_loc%part(n,5)
-    wgh=charge(1)*charge(2)
+    wght=pt(n,5)              !w*q
     !=====================
     ax=shx+xp0(1)
     i0=int(ax+0.5)
@@ -4176,7 +4162,7 @@
     do i1=1,3
      axh(i1)=axh(i1)+ax0(i1-1)
     end do
-    currx(0:4)=wgh*currx(0:4)
+    currx(0:4)=wght*currx(0:4)
     ix0=min(ih,1)
     ix1=max(ih+2,3)
     !-------
@@ -4206,7 +4192,7 @@
      curry(i1)=curry(i1-1)+ay0(i1-1)-ayh(i1)
     end do
     curry(4)=curry(3)-ayh(4)
-    curry(0:4)=wgh*curry(0:4)
+    curry(0:4)=wght*curry(0:4)
     !========================================
     do i1=1,3
      ayh(i1)=ayh(i1)+ay0(i1-1)
@@ -4244,6 +4230,9 @@
     pt(n,1:3)=sp_loc%part(n,1:3) !x-y-z -new  t^(n+1)
     pt(n,1)=dx_inv*(pt(n,1)-xmn)
     pt(n,4)=dx_inv*(pt(n,4)-xmn)
+    wgh_cmp=sp_loc%part(n,7)
+    wght=charge*wgh
+    pt(n,7)=wght
    end do
    if(n_st==0)then
     do n=n0,np
@@ -4254,13 +4243,13 @@
     call map2dy_part_sind(np,n_st,2,ymn,pt)
     call map2dy_part_sind(np,n_st,5,ymn,pt)
    endif
+!==============================
    do n=n0,np
     xp1(1:3)=pt(n,1:3)                !increments xyz-new
     xp0(1:3)=pt(n,4:6)              !increments xyz z-old
-    wgh=sp_loc%part(n,7)
-    wgh=charge(1)*charge(2)
+    wght=pt(n,7)
     vp(3)=xp1(3)-xp0(3)                    !dt*v_z(n+1/2)
-    vp(3)=wgh*vp(3)/3.                     !dt*vz/3
+    vp(3)=wght*vp(3)/3.                     !dt*q*w*vz/3
     !=====================
     ax=shx+xp0(1)
     i0=int(ax+0.5)
@@ -4292,7 +4281,7 @@
     do i1=1,3
      axh(i1)=axh(i1)+ax0(i1-1)
     end do
-    currx(0:4)=wgh*currx(0:4)
+    currx(0:4)=wght*currx(0:4)
 
     axh0(0:4)=0.5*axh(0:4)
     axh1(0:4)=axh(0:4)
@@ -4334,7 +4323,7 @@
      curry(i1)=curry(i1-1)+ay0(i1-1)-ayh(i1)
     end do
     curry(4)=curry(3)-ayh(4)
-    curry(0:4)=wgh*curry(0:4)
+    curry(0:4)=wght*curry(0:4)
     do i1=1,3
      ayh(i1)=ayh(i1)+ay0(i1-1)
     end do
@@ -4387,18 +4376,17 @@
  real(dp),intent(inout) :: pt(:,:),jcurr(:,:,:,:)
  integer,intent(in) :: n0,np,s_ind
  real(dp),intent(in) :: xmn,ymn,zmn
- real(dp) :: ax,sx,sx2,dvol,dvolh,wgh
+ real(dp) :: ax,sx,sx2,dvol,dvolh
  real(dp) :: ax0(0:2),ay0(0:2),az0(0:2),xp1(3),xp0(3)
  real(dp) :: ax1(0:2),ay1(0:2),az1(0:2)
  real(dp) :: axh(0:4),ayh(0:4),azh(0:4)
  real(dp) :: axh0(0:4),axh1(0:4),ayh0(0:4),ayh1(0:4)
  real(dp) :: currx(0:4),curry(0:4),currz(0:4)
+ real(sp) :: wght
  integer :: i,j,k,i0,j0,k0,i1,j1,k1,i2,j2,k2,n
  integer :: ih,jh,kh
  integer :: ix0,ix1,iy0,iy1,iz0,iz1
  !=======================
- real(sp) :: charge(2),wgh4
- equivalence(charge,wgh)
 
  ax1(0:2)=0.0;ay1(0:2)=0.0
  az1(0:2)=0.0;az0(0:2)=0.0
@@ -4409,11 +4397,14 @@
  currz(0:4)=0.0
  axh0(0:4)=0.0;ayh0(0:4)=0.0
  axh1(0:4)=0.0;ayh1(0:4)=0.0
-
+! ==============================Only new and old positions needed
  do n=n0,np
   pt(n,1:3)=sp_loc%part(n,1:3) !x-y-z -new  t^(n+1)
   pt(n,1)=dx_inv*(pt(n,1)-xmn)
   pt(n,4)=dx_inv*(pt(n,4)-xmn)
+  wgh_cmp=sp_loc%part(n,7)
+  wght=charge*wgh
+  pt(n,7)=wght
  end do
  if(s_ind==0)then
   do n=n0,np
@@ -4429,9 +4420,7 @@
  do n=n0,np
   xp1(1:3)=pt(n,1:3)        !increments of the new positions
   xp0(1:3)=pt(n,4:6)        !increments of old positions
-  wgh=sp_loc%part(n,7)
-  wgh4=charge(1)*charge(2)
-
+  wght=pt(n,7)
   ax=shx+xp0(1)
   i0=int(ax+0.5)
   sx=ax-real(i0,dp)
@@ -4458,7 +4447,7 @@
    currx(i1)=currx(i1-1)+ax0(i1-1)-axh(i1)
   end do
   currx(4)=currx(3)-axh(4)
-  currx(0:4)=wgh4*currx(0:4)
+  currx(0:4)=wght*currx(0:4)
   !=======================
   axh0(0:4)=0.5*axh(0:4)
   axh1(0:4)=axh(0:4)
@@ -4502,7 +4491,7 @@
    curry(i1)=curry(i1-1)+ay0(i1-1)-ayh(i1)
   end do
   curry(4)=curry(3)-ayh(4)
-  curry(0:4)=wgh4*curry(0:4)
+  curry(0:4)=wght*curry(0:4)
   !=====================================
   !                                 Jx =>    Wz^0(0.5*wy^1+Wy^0)=Wz^0*ayh0
   !                                          Wz^1(wy^1+0.5*Wy^0)=Wz^1*ayh1
@@ -4545,7 +4534,7 @@
    currz(i1)=currz(i1-1)+az0(i1-1)-azh(i1)
   end do
   currz(4)=currz(3)-azh(4)
-  currz(0:4)=wgh4*currz(0:4)
+  currz(0:4)=wght*currz(0:4)
   !----------
   k0=k0-1
   k=k-1
@@ -4771,31 +4760,33 @@
  integer,intent(in) :: n0,np,s_ind,njc,ndm
  ! real(dp),intent(in) :: dt_loc
  real(dp),intent(in) :: xmn,ymn
- real(dp) :: ax,sx,sx2,wgh,gam_inv
+ real(dp) :: ax,sx,sx2,gam_inv
  real(dp) :: axh0(2),axh1(2),ayh0(2),ayh1(2)
  real(dp) :: ax0(3),ay0(3),xp1(3),xp0(3)
  real(dp) :: ax1(3),ay1(3),vp(3),dvol(3)
+ real(sp) :: wght
  integer :: i,j,i0,j0,i1,j1,i2,j2,n
  integer :: ih0,jh0,ih,jh
  logical :: set_den
  !=======================
- real(sp) :: charge(2),wgh4
- equivalence(charge,wgh)
  set_den=.false.
  if(size(jc,4)>njc)set_den=.true.
 
  if(ndm <2)then
   j2=1
   do n=n0,np
-   xp1(1:2)=loc_sp%part(n,1:2)  !(x,y) new
-   vp(1:2)=loc_sp%part(n,3:4)  !(Px,Py) momenta
-   wgh=loc_sp%part(n,5)
-   wgh4=charge(1)*charge(2)
+   wgh_cmp=loc_sp%part(n,5)
+   wght=charge*wgh
    gam_inv=pt(n,5)           !stores dt/gam
-   vp(1:2)=0.5*wgh4*gam_inv*vp(1:2) !1/2 *V* q*dt
-   vp(3)=wgh
+   vp(1)=0.5*wght*pt(n,1)                !q*wgh*dt*Vx also in comoving
+   vp(2)=loc_sp%part(n,4)  !(Py) momenta
+   vp(2)=0.5*wght*gam_inv*vp(2) !1/2 *V*w*q*dt
+   vp(3)=wght
+   xp1(1:2)=loc_sp%part(n,1:2)  !(x,y) new
    xp1(1)=dx_inv*(xp1(1)-xmn)                !new positions
+   xp1(2)=dy_inv*(xp1(2)-ymn)                !new positions
    xp0(1)=dx_inv*(pt(n,3)-xmn)     !old positions
+   xp0(2)=dy_inv*(pt(n,4)-ymn)     !old positions
 
    ax=shx+xp0(1)
    i0=int(ax+0.5)
@@ -4850,29 +4841,31 @@
  select case(njc)
  case(2)      !2D-2V
   do n=n0,np
-   pt(n,1:2)=loc_sp%part(n,1:2)  !(x,y) new
-   pt(n,1)=dx_inv*(pt(n,1)-xmn)
-   pt(n,3)=dx_inv*(pt(n,3)-xmn)
+   pt(n,2)=loc_sp%part(n,2)  !(y) new  pt(n,3:4) x-y old
   end do
   if(s_ind==0)then
    do n=1,np
     pt(n,2)=dy_inv*(pt(n,2)-ymn)  !loc y new
-    pt(n,4)=dy_inv*(pt(n,4)-ymn)  !loc y new
+    pt(n,4)=dy_inv*(pt(n,4)-ymn)  !loc y old
    end do
   else
    call map2dy_part_sind(np,s_ind,2,ymn,pt)
    call map2dy_part_sind(np,s_ind,4,ymn,pt)
   endif
+!========== In pt(n,1)=dt*V_x in  pt(n,5) = dt/gam
   do n=n0,np
-   vp(1:2)=loc_sp%part(n,3:4)
-   wgh=loc_sp%part(n,5)
-   wgh4=charge(1)*charge(2)
-   gam_inv=pt(n,5)           !dt/gam
-   vp(3)=wgh4
-   vp(1:2)=0.5*vp(3)*gam_inv*vp(1:2)      !1/2 * V*wgh*dt
+   wgh_cmp=loc_sp%part(n,5)
+   wght=charge*wgh                   !w*q for  q=e, ion_charge
+   vp(1)=wght*pt(n,1)                !q*wgh*dt*Vx also in comoving
+   vp(2)=wght*pt(n,5)*loc_sp%part(n,4)    !dt*q*wgh*Vy
+   vp(1:2)=0.5*vp(1:2)               !1/2 * V*q*wgh*dt
 
-   xp1(1:2)=pt(n,1:2)                !new positions
-   xp0(1:2)=pt(n,3:4)                !old positions
+   pt(n,1)=loc_sp%part(n,1)          !new x position
+   xp1(1)=dx_inv*(pt(n,1)-xmn)   
+   xp0(1)=dx_inv*(pt(n,3)-xmn)
+!============================
+   xp1(2)=pt(n,2)                !norm new and y-positions
+   xp0(2)=pt(n,4) 
 
    call ql_interpolate(xp0,ax0,axh0,ay0,ayh0,i0,j0,ih0,jh0)
    call ql_interpolate(xp1,ax1,axh1,ay1,ayh1,i,j,ih,jh)
@@ -4909,13 +4902,13 @@
    if(set_den)then
     do j1=1,3
      j2=j+j1
-     dvol(1)=wgh4*ay1(j1)
+     dvol(1)=wght*ay1(j1)
      do i1=1,3
       i2=i+i1
       jcurr(i2,j2,1,3)=jcurr(i2,j2,1,3)+dvol(1)*ax1(i1)
      end do
      j2=j0+j1
-     dvol(1)=wgh4*ay0(j1)
+     dvol(1)=wght*ay0(j1)
      do i1=1,3
       i2=i0+i1
       jcurr(i2,j2,1,3)=jcurr(i2,j2,1,3)-dvol(1)*ax0(i1)
@@ -4927,8 +4920,7 @@
  case(3)  !2D +3V
   !===================
   do n=n0,np
-   pt(n,1:2)=loc_sp%part(n,1:2)  !(x,y) new
-   pt(n,1)=dx_inv*(pt(n,1)-xmn)
+   pt(n,2)=loc_sp%part(n,2)  !(y) new
    pt(n,4)=dx_inv*(pt(n,4)-xmn)
   end do
   if(s_ind==0)then
@@ -4941,14 +4933,17 @@
    call map2dy_part_sind(np,s_ind,5,ymn,pt)
   endif
   do n=n0,np
+   wgh_cmp=loc_sp%part(n,7)
+   wght=charge*wgh      !w*q for  q=ion_charge
+   vp(1)=0.5*wght*pt(n,1)        !dt*w*q*V_x/2
+   vp(2:3)=loc_sp%part(n,5:6)
+   gam_inv=wght*pt(n,7)
+   vp(2:3)=0.5*gam_inv*vp(2:3)  !1/2*dt*q*w*vp (y-z)comp
+
+   pt(n,1)=loc_sp%part(n,1)  !(x) new
+   pt(n,1)=dx_inv*(pt(n,1)-xmn)
    xp1(1:2)=pt(n,1:2)        !new (x,y) positions
    xp0(1:2)=pt(n,4:5)        !old (x,y) positions
-
-   vp(1:3)=loc_sp%part(n,4:6)
-   wgh=loc_sp%part(n,7)
-   wgh4=charge(1)*charge(2)
-   gam_inv=pt(n,7)
-   vp(1:3)=0.5*wgh4*gam_inv*vp(1:3)
 
    ax=shx+xp0(1)
    i0=int(ax+0.5)
@@ -5009,7 +5004,7 @@
    if(set_den)then
     do j=1,3
      j2=j+j1
-     dvol(1)=wgh4*ay1(j1)
+     dvol(1)=wght*ay1(j1)
      do i1=1,3
       i2=i+i1
       jcurr(i2,j2,1,4)=jcurr(i2,j2,1,4)+dvol(1)*ax1(i1)
@@ -5029,25 +5024,25 @@
  integer,intent(in) :: n0,np,s_ind
  ! real(dp),intent(in) :: dt_loc
  real(dp),intent(in) :: xmn,ymn,zmn
- real(dp) :: ax,sx,sx2,dvol(3),wgh,gam_inv
+ real(dp) :: ax,sx,sx2,dvol(3),gam_inv
  real(dp) :: xp0(3),xp1(3)
  real(dp) :: ax0(0:2),ay0(0:2),az0(0:2)
  real(dp) :: ax1(0:2),ay1(0:2),az1(0:2),vp(3)
  real(dp) :: axh0(0:1),axh1(0:1),ayh0(0:1),ayh1(0:1),azh0(0:1),azh1(0:1)
+ real(sp) :: wght
  integer :: i,j,k,i0,j0,k0,i1,j1,k1,i2,j2,k2,n
  integer :: ih,jh,kh,ih0,jh0,kh0,ib_ind
  logical :: set_den
  !=======================
- real(sp) :: charge(2),wgh4
- equivalence(charge,wgh)
  !
  ! WARNING: NO X-stretch allowed
  ! Current densities defined by alternating order (quadratic/linear) shapes
- ! Enter new and old poaitions.
+ ! Enter new and old positions. 
  !WARNING : to be used ONLY within the one cycle partcle integration scheme
  !=============================================
  ib_ind=size(jc,4)
  set_den=.false.
+ !============================
  if(ib_ind>3)set_den=.true.
  ax1(0:2)=0.0;ay1(0:2)=0.0
  az1(0:2)=0.0;az0(0:2)=0.0
@@ -5057,9 +5052,7 @@
  axh1(0:1)=0.0;ayh1(0:1)=0.0
 
  do n=n0,np
-  pt(n,1:3)=sp_loc%part(n,1:3)  !(x,y) new
-  pt(n,1)=dx_inv*(pt(n,1)-xmn)
-  pt(n,4)=dx_inv*(pt(n,4)-xmn)
+  pt(n,2:3)=sp_loc%part(n,2:3)  !(y,z) new
  end do
  if(s_ind==0)then
   do n=n0,np
@@ -5073,13 +5066,19 @@
   call map3d_part_sind(pt,np,s_ind,5,6,ymn,zmn)
  endif
  do n=n0,np
-  vp(1:3)=sp_loc%part(n,4:6)     !Momenta at t^{n+1/2}
-  wgh=sp_loc%part(n,7)           !Weight
-  wgh4=charge(1)*charge(2)            !q*w
-  gam_inv=pt(n,7)                   !dt*gam_inv
-  vp(1:3)=0.5*wgh4*gam_inv*vp(1:3)    !wgh*q*dt*V factor 1/2 for density average
-  xp0(1:3)=pt(n,4:6)
-  xp1(1:3)=pt(n,1:3)
+  vp(1)=pt(n,1)            !dt*V_x holds also comoving
+  vp(2:3)=sp_loc%part(n,5:6)     !Momenta at t^{n+1/2}
+  wgh_cmp=sp_loc%part(n,7)
+  wght=real(charge*wgh,sp)       !w*q for  q=charge
+  gam_inv=wght*pt(n,7)           !q*wgh*dt/gam               
+  vp(1)=0.5*wght*vp(1)           !dt*q*wgh*V_x/2
+  vp(2:3)=0.5*gam_inv*vp(2:3)    !wgh*q*dt*V factor 1/2 from density average
+  
+  pt(n,1)=sp_loc%part(n,1)  !(x) new
+  xp1(1)=dx_inv*(pt(n,1)-xmn)
+  xp0(1)=dx_inv*(pt(n,4)-xmn)
+  xp0(2:3)=pt(n,5:6)
+  xp1(2:3)=pt(n,2:3)
   !================================== old  x^n
   ax=shx+xp0(1)
   i0=int(ax+0.5)
@@ -5222,7 +5221,7 @@
     k2=k+k1
     do j1=0,2
      j2=j+j1
-     dvol(1)=wgh4*ay1(j1)*az1(k1)
+     dvol(1)=wght*ay1(j1)*az1(k1)
      do i1=0,2
       i2=i+i1
       jcurr(i2,j2,k2,ib_ind)=jcurr(i2,j2,k2,ib_ind)+dvol(1)*ax1(i1)
@@ -5231,7 +5230,7 @@
     k2=k0+k1
     do j1=0,2
      j2=j0+j1
-     dvol(1)=wgh4*ay0(j1)*az0(k1)
+     dvol(1)=wght*ay0(j1)*az0(k1)
      do i1=0,2
       i2=i0+i1
       jcurr(i2,j2,k2,ib_ind)=jcurr(i2,j2,k2,ib_ind)-dvol(1)*ax0(i1)

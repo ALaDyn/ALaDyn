@@ -25,17 +25,18 @@
  use der_lib
  use fstruct_data
  use all_param
- use fft_lib
  use parallel
 
  implicit none
  real(dp),allocatable :: ww(:),ww0(:,:),sf1(:),sf2(:),wr(:,:),wl(:,:),var(:,:)
  real(dp) :: sigm_opt
+ real(dp) :: mat_env_coeff(5,5)
  contains
 
- subroutine w_alloc
- real(dp) :: cfl_loc,lxb,lyb,a0,alp
- integer :: ii,ndmx,nd1mx
+ subroutine w_alloc(opt_der)
+ real(dp),intent(in) :: opt_der
+ real(dp) :: cfl_loc,lxb,lyb,as0,alp
+ integer :: ndmx,nd1mx,ng
 
  !============================
  ! allocate auxiliary arrays ww() dw() and
@@ -45,29 +46,61 @@
  allocate(wr(ndmx+6,10),wl(ndmx+6,10))
  allocate(var(0:ndmx+5,10))
  cfl_loc=0.0
+ ng=nx
 
  if(LPf_ord >0)then
   cfl_loc=cfl
   if(ndim >1)cfl_loc=cfl*yx_rat/sqrt(yx_rat*yx_rat+float(ndim)-1.)
  endif
- call set_mat_der(cfl_loc,nx,ny,nz,ndim,&
-  ibx,der_ord,ifilt,iform)
+ call set_mat_der(cfl_loc,opt_der,nx,ny,nz,ndim,&
+                  ibx,der_ord,ifilt,iform,Comoving)
 !============= k-space data for fft
   allocate(sf1(nx/2+1),sf2(nx/2+1))
-  if(der_ord==4)then
-   allocate(mat_env(nx,5))
-   allocate(amat(nx,nx))
-   alp=0.25
-   a0=3.*alp
-   call set_mat_env5(oml,alp,a0,dx_inv,nx)
-   deallocate(amat)
+  if(Envelope)then
+   allocate(mat_env(ng,5))
+   alp=dt*oml
+   as0=dt*dx_inv
+   call set_env5_coeff(alp,as0)
+   call set_mat_env5(mat_env_coeff,ng)
   endif
-  !
-  !call set_mat_env2(b0,c0,nx)
-  !if(pe0)call env_test(oml,dx_inv,nx)
  !============================
  end subroutine w_alloc
  !====================================
+ subroutine set_env5_coeff(ap,a)
+  real(dp),intent(in) :: ap,a
+  real(dp) :: ap2,a2
+  ap2=ap*ap
+  a2=a*a
+!======== The discrete operator 1+(dt*k0)*(dt*k0)+dt*dtD_xD_x-2*dt*D_x
+!   First row
+  mat_env_coeff(1,1)=1.+ap2+2*a+0.5*a2
+  mat_env_coeff(1,2)=-a2-2.*a
+  mat_env_coeff(1,3)= 0.5*a2
+
+!   second row
+  mat_env_coeff(2,1)=0.5*a2+a
+  mat_env_coeff(2,2)=1.+ap2+0.25*a2+a
+  mat_env_coeff(2,3)=-a
+  mat_env_coeff(2,4)=0.25*a2
+
+!   interior rows
+  mat_env_coeff(3,1)=0.25*a2
+  mat_env_coeff(3,2)=a
+  mat_env_coeff(3,3)=1.+ap2-0.5*a2
+  mat_env_coeff(3,4)=-a
+  mat_env_coeff(3,5)=0.25*a2
+!   n-1-th row
+  mat_env_coeff(4,1)=0.25*a2
+  mat_env_coeff(4,2)=a
+  mat_env_coeff(4,3)=-0.5*a2
+  mat_env_coeff(4,4)=1.+ap2+0.25*a2-a
+!   n-th row
+  mat_env_coeff(5,1)=0.25*a2
+  mat_env_coeff(5,2)=a-0.5*a2
+  mat_env_coeff(5,3)=1+ap2-a
+!=============================
+ end subroutine set_env5_coeff
+!====================
  subroutine matenv_inv(n,nc)
  integer,intent(in) :: n,nc
  integer :: ix,ic
@@ -206,6 +239,7 @@
  do k=n-1,1,-1
   ww0(k,ic)=ww0(k,ic)-dw(k+1)*ww0(k+1,ic)
  end do
+!----------------------
  ww0(1,ic1)=gm
  ww0(n,ic1)=alp
  ww0(2:n-1,ic1)=0.0
@@ -227,41 +261,62 @@
  ww0(1:n,ic)=ww0(1:n,ic)-fact*ww0(1:n,ic1)
  end subroutine cycle_trid_inv
  !=================================
- subroutine trid_der1(a,b1,c1,an,bn,n,ic1,ic2,ord)
- real(dp),intent(in) :: a,b1,c1,an,bn
- integer,intent(in) :: n,ic1,ic2,ord
+ subroutine upper_trid(a,b,c,bn,cn,n,ic1,ic2)
+ real(dp),intent(in) :: a,b,c,bn,cn
+ integer,intent(in) :: n,ic1,ic2
  integer :: k,ic
- real(dp) :: bet,a_0,c_0
  !==========================
  ! Solves
- ! a_0*ww(i-1)+ww(i)+c_0*ww(i+1)=u(i), i=2,3,..,n-1
- ! at the first row (1+2a)*ww(1)-2a*ww(2)=u(1)
- ! at the n-last row (1-2a)*ww(n-1)+2a*ww(n)=u(n)
+ ! a*ww(i)+b*ww(i+1)+c*ww(i+2)=u(i), i=1,3,..,n-2
+ ! at the n-1 row bn*ww(n-1)+cn*ww(n)=u(n-1)
+ ! at the n row ww(n)=u(n)
+ ! first order right boundary clusure
+ !===============================
+ do ic=ic1,ic2
+  k=n-1
+  ww0(k,ic)=ww0(k,ic)-cn*ww0(k+1,ic)
+  ww0(k,ic)=ww0(k,ic)/bn
+  do k=n-2,1,-1
+   ww0(k,ic)=ww0(k,ic)-b*ww0(k+1,ic)-c*ww0(k+2,ic)
+   ww0(k,ic)=ww0(k,ic)/a
+  end do
+ end do
+ end subroutine upper_trid
+ !================
+ subroutine trid_der1(a,b,c,b1,c1,an,bn,n,ic1,ic2,ord)
+ real(dp),intent(in) :: a,b,c,b1,c1,an,bn
+ integer,intent(in) :: n,ic1,ic2,ord
+ integer :: k,ic
+ real(dp) :: bet
+ !==========================
+ ! Solves
+ ! a*ww(i-1)+b*ww(i)+c*ww(i+1)=u(i), i=2,3,..,n-1
+ ! at the first row b1*ww(1)+c1*ww(2)=u(1)
+ ! at the n-last row an*ww(n-1)+bn*ww(n)=u(n)
  ! first order boundary clusure
  !===============================
- a_0=-a
- c_0=a
  if(ord >0)then
   do ic=ic1,ic2
    ww0(1,ic)=ww0(1,ic)+ww0(2,ic)
    ww0(n,ic)=ww0(n,ic)+ww0(n-1,ic)
   end do
  endif
+!===================
  do ic=ic1,ic2
   dw(1)=0.0
   bet=b1
   ww0(1,ic)=ww0(1,ic)/bet
   k=2
   dw(k)=c1/bet
-  bet=1.-a_0*dw(k)
-  ww0(k,ic)=(ww0(k,ic)-a_0*ww0(k-1,ic))/bet
+  bet=b-a*dw(k)
+  ww0(k,ic)=(ww0(k,ic)-a*ww0(k-1,ic))/bet
   do k=3,n-1
-   dw(k)=c_0/bet
-   bet=1.-a_0*dw(k)
-   ww0(k,ic)=(ww0(k,ic)-a_0*ww0(k-1,ic))/bet
+   dw(k)=c/bet
+   bet=b-a*dw(k)
+   ww0(k,ic)=(ww0(k,ic)-a*ww0(k-1,ic))/bet
   end do
   k=n
-  dw(k)=c_0/bet
+  dw(k)=c/bet
   bet=bn-an*dw(k)
   ww0(k,ic)=(ww0(k,ic)-an*ww0(k-1,ic))/bet
   do k=n-1,1,-1
@@ -312,36 +367,40 @@
  !===========================
  end subroutine hder_inv
  !===================================
- subroutine field_xadvect(ef,i1,n1p,j1,n2p,k1,n3p,ic1,ic2,aphx,v_adv)
+ subroutine field_xcomov_advect(ef,i1,n1p,j1,n2p,k1,n3p,ic1,ic2,aphx,v_adv,tsch)
  real(dp),intent(inout) :: ef(:,:,:,:)
- integer,intent(in) :: i1,n1p,j1,n2p,k1,n3p,ic1,ic2
+ integer,intent(in) :: i1,n1p,j1,n2p,k1,n3p,ic1,ic2,tsch
  real(dp),intent(in) :: aphx,v_adv
  integer :: i,j,k,ii,n1,n1_loc,ic,ind
- real(dp) :: aphx_adv,b1,c1,an,bn
+ real(dp) :: aphx_adv,aphx_adv1,a,b,c,b1,c1,an,bn,cn
+ real(dp),dimension(3),parameter :: rder=(/-3.,4.,-1./)
  !=====================
  ! APPLIES also for prlx=.true. (MPI x decomposition)
  !=============================================
- ! for positive advection v_adv>0
- ! solves Df/Dt=-v_adv*Df/Dx
- ! In comoving system Maxwell eqs. have v_adv <0
- aphx_adv=0.25*v_adv*aphx !v_adv*(Dt/Dx)/4
- !b_cmp=1.5+0.25*aphx*aphx*aphx
- !a_cmp=0.5*(b_cmp-1.)
+ ! Solves Df/Dt=-v_adv*Df/Dx
+ ! forward advection for v_adv >
+ ! backward advection for v_adv <0
+ ! In comoving system in the Maxwell eqs. enters v_adv <0
+ !==================
+ !Implicit advection scheme in x-coordinate 
+ !          E^n+1=E^n-aphx_adv*[D_xE^n+D_xE^{n+1}]
+ !          (1+aphx_adv*D_x)E^{n+1}=(1-aphx_adv*D_x)E^n
+ !================================
+       aphx_adv1=0.5*v_adv*aphx     ! v_b*Dt/(2*Dx) for first order explicit
+       aphx_adv=0.5*aphx_adv1  !semi-implicit second order
+                                !v_adv*(Dt/2Dx)/2=>  1/2 for time centering
  ind=1
- b1=one_dp
- c1=zero_dp
- !bn=1.+aphx_adv
- !an=-c1
+ b1=1.
+ c1=0.0
  bn=1.
  an=0.0
-
+ !bn = 1.-2.*aphx_adv
+ !cn = 2.*aphx_adv
  !=====================
  n1_loc=loc_xgrid(imodx)%ng
  n1=n1_loc
  !=========================
  if(prlx)n1=nx
- ! Advection in x-coordinate E^n+1=E^n-aphx_adv*[D_xE^n+D_xE^{n+1}]
- ! (1+aphx_adv)E^{n+1}=(1-aphx_adv*D_x)E^n
  !=====================
  if(pex0)then
   do ic=ic1,ic2
@@ -356,7 +415,122 @@
   do ic=ic1,ic2
    do k=k1,n3p
     do j=j1,n2p
-     ef(n1p+1,j,k,ic)=ef(n1p-1,j,k,ic)
+     ef(n1p+1,j,k,ic)=ef(n1p,j,k,ic)
+    enddo
+   end do
+  end do
+ endif
+ !===============================
+ select case(tsch)
+ case(0)             !pure explicit
+ do ic=ic1,ic2
+  do k=k1,n3p
+   do j=j1,n2p
+    do i=i1,n1p
+     ii=i-2
+     ww0(ii,1)=ef(i,j,k,ic)-aphx_adv1*(ef(i+1,j,k,ic)-ef(i-1,j,k,ic))
+    end do
+    do i=i1,n1p
+     ii=i-2
+     ef(i,j,k,ic)=ww0(ii,1)
+    end do
+   end do
+  end do
+ end do
+ case(1)      !semi-implicit
+  a=-aphx_adv
+  b=1.
+  c= aphx_adv
+ do ic=ic1,ic2
+  do k=k1,n3p
+   do j=j1,n2p
+    do i=i1,n1p
+     ii=i-2
+     ww0(ii,1)=ef(i,j,k,ic)-aphx_adv*(ef(i+1,j,k,ic)-ef(i-1,j,k,ic))
+    end do
+    call trid_der1(a,b,c,b1,c1,an,bn,ii,1,1,0)
+    do i=i1,n1p
+     ii=i-2
+     ef(i,j,k,ic)=ww0(ii,1)
+    end do
+   end do
+  end do
+ end do
+ case(2)      !implicit (1+aphx_adv1*Dx]ef=ef
+  a=-aphx_adv1
+  b=1.
+  c= aphx_adv1
+ do ic=ic1,ic2
+  do k=k1,n3p
+   do j=j1,n2p
+    do i=i1,n1p
+     ii=i-2
+     ww0(ii,1)=ef(i,j,k,ic)
+    end do
+    call trid_der1(a,b,c,b1,c1,an,bn,ii,1,1,0)
+    do i=i1,n1p
+     ii=i-2
+     ef(i,j,k,ic)=ww0(ii,1)
+    end do
+   end do
+  end do
+ end do
+ end select
+ end subroutine field_xcomov_advect
+!==================================
+ subroutine field_xadvect(ef,i1,n1p,j1,n2p,k1,n3p,ic1,ic2,aphx,v_adv)
+ real(dp),intent(inout) :: ef(:,:,:,:)
+ integer,intent(in) :: i1,n1p,j1,n2p,k1,n3p,ic1,ic2
+ real(dp),intent(in) :: aphx,v_adv
+ integer :: i,j,k,ii,n1,n1_loc,ic,ind
+ real(dp) :: aphx_adv,aphx_adv1,a,b,c,b1,c1,an,bn,cn
+ real(dp),dimension(3),parameter :: rder=(/-3.,4.,-1./)
+ !=====================
+ ! APPLIES also for prlx=.true. (MPI x decomposition)
+ !=============================================
+ ! Solves Df/Dt=-v_adv*Df/Dx
+ ! forward advection for v_adv >
+ ! backward advection for v_adv <0
+ ! In comoving system in the Maxwell eqs. enters v_adv <0
+ !==================
+ !Implicit advection scheme in x-coordinate 
+ !          E^n+1=E^n-aphx_adv*[D_xE^n+D_xE^{n+1}]
+ !          (1+aphx_adv*D_x)E^{n+1}=(1-aphx_adv*D_x)E^n
+ !================================
+       aphx_adv1=v_adv*aphx     ! for first order upwind
+       aphx_adv=0.25*aphx_adv1  !implicit second order
+                                !v_adv*(Dt/Dx)/4=>  1/2 for space derivative and 
+       !                                            1/2 for time averaging
+ ind=1
+ b1=1.
+ c1=0.0
+ bn=1.
+ an=0.0
+ a=-aphx_adv
+ b=1.
+ c= aphx_adv
+ !bn = 1.-2.*aphx_adv
+ !cn = 2.*aphx_adv
+ !=====================
+ n1_loc=loc_xgrid(imodx)%ng
+ n1=n1_loc
+ !=========================
+ if(prlx)n1=nx
+ !=====================
+ if(pex0)then
+  do ic=ic1,ic2
+   do k=k1,n3p
+    do j=j1,n2p
+     ef(i1-1,j,k,ic)=ef(i1+1,j,k,ic)
+    enddo
+   end do
+  end do
+ endif
+ if(pex1)then
+  do ic=ic1,ic2
+   do k=k1,n3p
+    do j=j1,n2p
+     ef(n1p+1,j,k,ic)=ef(n1p,j,k,ic)
     enddo
    end do
   end do
@@ -375,7 +549,7 @@
      do i=1,n1
       ww0(i,1)=aux2(i)
      end do
-     call trid_der1(aphx_adv,b1,c1,an,bn,n1,1,1,0)
+     call trid_der1(a,b,c,b1,c1,an,bn,n1,1,1,0)
      do i=i1,n1p
       ii=i-2+imodx*n1_loc
       ef(i,j,k,ic)=ww0(ii,1)
@@ -391,10 +565,10 @@
    do j=j1,n2p
     do i=i1,n1p
      ii=i-2
-     ww0(ii,1)=ef(i,j,k,ic)-aphx_adv*(&
-      ef(i+1,j,k,ic)-ef(i-1,j,k,ic))
+     ww0(ii,1)=ef(i,j,k,ic)-aphx_adv*(ef(i+1,j,k,ic)-ef(i-1,j,k,ic))
     end do
-    call trid_der1(aphx_adv,b1,c1,an,bn,ii,1,1,0)
+                                  !call upper_trid(a,b,c,bn,cn,ii,ic1,ic2)
+    call trid_der1(a,b,c,b1,c1,an,bn,ii,1,1,0)
     do i=i1,n1p
      ii=i-2
      ef(i,j,k,ic)=ww0(ii,1)
@@ -675,115 +849,6 @@
 !======================================
  end subroutine initial_beam_fields
  !===========================================
- subroutine initial_beam_potential_and_fields(ef1,ef0,ef,&
-  i1,nxp,j1,nyp,k1,nzp,dt_loc,g2,bet)
- real(dp),intent(inout) :: ef1(:,:,:,:),ef0(:,:,:,:),ef(:,:,:,:)
- integer,intent(in) :: i1,nxp,j1,nyp,k1,nzp
- real(dp),intent(in) :: dt_loc,g2,bet
- integer :: i,j,k,ic,jj,kk
- real(dp) :: a1,b1,sdhy,sdhz,aphx
-
- ! Enter
- ! in ef1(1) enters pot_b(i,j,k) => (Ex,Ey, Ez)
- ! in ef1(3) enters Jxb(i,j,k) = ef1(4)=Jxb[i+1/2,j,k]
- ! => ef1(2) pot_b(i+1/2,j,k)==> By, Bz
-
- b1=-1./16.
- a1=0.5-b1
- !------------------------------------
- aphx=dt_loc*dx_inv
- ef0=0.0
-
- ! advects phi^n => phi^{n-1}
-
- ic=4
- do k=1,nzp
-  do j=j1,nyp
-   do i=i1,nxp
-    ef1(i,j,k,ic)=ef1(i,j,k,1)
-    ef0(i,j,k,ic)=ef1(i,j,k,1)
-   end do
-  end do
- end do
- ! phi^n at ef1(4)
- call field_xadvect(ef0,i1,nxp,j1,nyp,k1,nzp,ic,ic,aphx,-bet)
- if(pe1y)then
-  j=nyp
-  do k=k1,nzp
-   do i=i1,nxp
-    ef1(i,j+1,k,ic)=3.*(ef1(i,j,k,ic)-ef1(i,j-1,k,ic))+ef1(i,j-2,k,ic)
-   end do
-  end do
- endif
- if(pe1z)then
-  k=nzp
-  do j=j1,nyp
-   do i=i1,nxp
-    ef1(i,j,k+1,ic)=3.*(ef1(i,j,k,ic)-ef1(i,j,k-1,ic))+ef1(i,j,k-2,ic)
-   end do
-  end do
- endif
- do k=k1,nzp+1
-  do j=j1,nyp+1
-   ef1(nxp+1,j,k,ic)=3.*(ef1(nxp,j,k,ic)-ef1(nxp-1,j,k,ic))+ef1(nxp-2,j,k,ic)
-  end do
- end do
- ! defines Ax(i+1/2,j,k) at leven n in ef1(1)
- do k=k1,nzp+1
-  do j=j1,nyp+1
-   ef1(i1,j,k,1)=0.5*(ef1(i1,j,k,ic)+ef1(i1+1,j,k,ic))
-   ef1(nxp,j,k,1)=0.5*(ef1(nxp,j,k,ic)+ef1(nxp+1,j,k,ic))
-   do i=i1+1,nxp-1
-    ef1(i,j,k,1)=a1*(ef1(i,j,k,ic)+ef1(i+1,j,k,ic))+b1*(&
-     ef1(i-1,j,k,ic)+ef1(i+2,j,k,ic))
-   end do
-   do i=i1,nxp
-    ef1(i,j,k,1)=bet*ef1(i,j,k,1)
-   end do
-  end do
- end do
- ! ef1(1)=[Ax(i+1/2)]^n defines (By,Bz)
- do k=k1,nzp
-  kk=k-2
-  sdhz=loc_zg(kk,3,imodz)*dz_inv
-  do j=j1,nyp
-   jj=j-2
-   sdhy=loc_yg(jj,3,imody)*dy_inv
-   do i=i1,nxp
-    ef(i,j,k,4)=0.0
-    ef(i,j,k,5)=sdhz*(ef1(i,j,k+1,1)-ef1(i,j,k,1))
-    ef(i,j,k,6)=-sdhy*(ef1(i,j+1,k,1)-ef1(i,j,k,1))
-   end do
-  end do
- end do
- !=======================
- ! Defines Ax(i+1/2) ef0(1) at level n-1/2 ief1(1) at level n+1/2
- do k=1,nzp
-  do j=j1,nyp
-   do i=i1+1,nxp
-    ef0(i,j,k,1)=ef0(i-1,j,k,1)-(ef1(i,j,k,4)-ef0(i,j,k,4))/aphx
-   end do
-   do i=i1,nxp
-    ef1(i,j,k,1)=2.*ef1(i,j,k,1)-ef0(i,j,k,1)
-    ef1(i,j,k,2:3)=0.0
-   end do
-  end do
- end do
- do k=k1,nzp
-  kk=k-2
-  sdhz=loc_zg(kk,3,imodz)*dz_inv
-  do j=j1,nyp
-   jj=j-2
-   sdhy=loc_yg(jj,3,imody)*dy_inv
-   do i=i1,nxp
-    ef(i,j,k,2)=-sdhy*(ef1(i,j+1,k,4)-ef1(i,j,k,4))
-    ef(i,j,k,3)=-sdhz*(ef1(i,j,k+1,4)-ef1(i,j,k,4))
-    ef(i,j,k,1)=-dx_inv*(ef1(i+1,j,k,4)-ef1(i,j,k,4))/g2
-   end do
-  end do
- end do
-
- end subroutine initial_beam_potential_and_fields
  ! END SECTION FOR initial beam fields
  !==================================
  ! SECTION for initial fields in ENVELOPE MODEL
@@ -977,6 +1042,30 @@
  end do
  end subroutine init_gprof_envelope_field
  !============================
+ subroutine init_env_filtering(av,i1,n1p,j1,n2p,k1,n3p)
+
+ real(dp),intent(inout) :: av(:,:,:,:)
+ integer,intent(in) :: i1,n1p,j1,n2p,k1,n3p
+ integer :: ii,i,j,k,ic
+
+ do ic=1,4
+  do k=k1,n3p
+   do j=j1,n2p
+    ii=1
+    do i=i1+1,n1p-1
+     ww0(ii,1)=0.5*av(i,j,k,ic)+0.25*(av(i+1,j,k,ic)+av(i-1,j,k,ic))
+     ii=ii+1
+    end do
+    ii=1
+    do i=i1+1,n1p-1
+     av(i,j,k,ic)=ww0(ii,1)
+     ii=ii+1
+    end do
+   end do
+  end do
+ end do
+ end subroutine init_env_filtering
+!================================
  subroutine env_matrix_inv(lk0,dhx,b_diag,i1,n1p,j1,n2p,k1,n3p)
 
  real(dp),intent(in) :: lk0,dhx,b_diag
@@ -1026,20 +1115,20 @@
  end subroutine env_matrix_inv
  !==============
  subroutine pp_lapl(&
-            av,source,ic1,ic2,is,ord,i1,n1p,j1,n2p,k1,n3p,dhy,dhz)
+            av,source,ic1,ic2,ord,i1,n1p,j1,n2p,k1,n3p,dhy,dhz)
 
  real(dp),intent(inout) :: av(:,:,:,:)
  real(dp),intent(inout) :: source(:,:,:,:)
 
- integer,intent(in) :: ic1,ic2,is,ord,i1,n1p,j1,n2p,k1,n3p
+ integer,intent(in) :: ic1,ic2,ord,i1,n1p,j1,n2p,k1,n3p
  real(dp),intent(in) :: dhy,dhz
  integer :: i,j,k,ic,j01,j02,k01,k02
  real(dp) :: dy2_inv,dz2_inv,cf(0:2)
  !==========================
  ! is=1 adds  is=-1 subtracts the laaplacian term
  !--------------------------------------------------
- dy2_inv=is*dhy*dhy
- dz2_inv=is*dhz*dhz
+ dy2_inv=dhy*dhy
+ dz2_inv=dhz*dhz
  cf(0)=0.0
  cf(1)=1.
  cf(2)=-2.
@@ -1499,32 +1588,39 @@
   real(dp),intent(inout) :: curr(:,:,:,:),evf(:,:,:,:)
   integer,intent(in) :: i1,n1p,j1,n2p,k1,n3p
   real(dp),intent(in) :: om0,dhx,dhy,dhz,dt_loc
-  integer :: i,j,k,ii,ic,lpl_sign
-  real(dp) :: dt2,dx1_inv,dhx1_inv,om2,kfact,k2_fact
-  real(dp),dimension(0:2),parameter :: lder=(/0.5,-2.,1.5/)
+  integer :: i,j,k,ii,ic
+  real(dp) ::dt2,dx1_inv,dhx1_inv
+  real(dp) ::kfact,k2_fact,skfact
+  real(dp),dimension(0:2),parameter :: lder=(/1.0,-4.0,3.0/)
  !==========================
  ! EXPLICIT INTEGRATION of Maxwell ENVELOPE EVOLUTION EQUATION
  !============================
   dt2=dt_loc*dt_loc
-  om2=om0*om0
+  !khfact=2.*sin(0.5*om0*dt_loc)/dt_loc
+  !kh2_fact=khfact*khfact
+  !khfact=2.*dhx*sin(0.5*om0*dx)
+  !kh2_sfact=khfact*khfact
+
+  !kfact=sin(om0*dt_loc)
   kfact=om0*dt_loc
   k2_fact=1./(1.+kfact*kfact)
-  dx1_inv=om0*dhx
+  skfact=om0
+  !skfact=dhx*sin(om0*dx)
+  dx1_inv=skfact*dhx
   dhx1_inv=2.*dx1_inv
-  lpl_sign=1
   ic=2
- !========Enter  jc(1:2)= om2*<q^2*chi*env(1:2)
+ !========Enter  jc(1:2)= - omp2*<q^2*chi*env(1:2)
  !                        chi <q^2*wgh*n/gam_p> >0
  ! Computes the full Laplacian of A^{n}=env(1:2) components
  !========and adds to  jc(1:2)
-  call potential_lapl(evf,curr,1,ic,lpl_sign,2,i1,n1p,j1,n2p,k1,n3p,dhx,dhy,dhz)
+  call potential_lapl(evf,curr,1,ic,der_ord,i1,n1p,j1,n2p,k1,n3p,dhx,dhy,dhz)
  !=====================
- ! =>   jc(1:2)=[D^2+omp^2*chi]A= S(A);
+ ! =>   jc(1:2)=[D^2-omp^2*chi]A= S(A);
  !=================
- !  Computes D_{xi} centered first derivatives of A and adds to S(A)
+ !  Computes D_{x} centered first derivatives of A and adds to S(A)
   call first_Ader
- !S_R => S_R +2*om0[D_xA_I]
- !S_I => S_I -2*om0[D_xA_R]
+ !S_R => S_R -2*k0[D_xA_I]  
+ !S_I => S_I +2*k0[D_xA_R]
  !
    do k=k1,n3p
     do j=j1,n2p
@@ -1551,7 +1647,7 @@
  contains
  subroutine first_Ader
 !============
-  ! explicit second order [-2ikDx]A and add to S(A)
+  ! explicit second order [-2isin(k0dx)*Dx]A and add to S(A)
 
   do k=k1,n3p
    do j=j1,n2p
@@ -1568,23 +1664,165 @@
     end do
     i=n1p
     curr(i,j,k,1)=curr(i,j,k,1)-dx1_inv*(&
-             !lder(0)*evf(i-2,j,k,2)+lder(1)*evf(i-1,j,k,2)+lder(2)*evf(i,j,k,2))
              evf(i,j,k,2)-evf(i-1,j,k,2))
     curr(i,j,k,2)=curr(i,j,k,2)+dx1_inv*(&
-             !lder(0)*evf(i-2,j,k,1)+lder(1)*evf(i-1,j,k,1)+lder(2)*evf(i,j,k,1))
              evf(i,j,k,1)-evf(i-1,j,k,1))
    end do
   end do
  end subroutine first_Ader
 
  end subroutine env_maxw_solve
+!==================================
+ subroutine env_comov_maxw_solve(curr,evf,i1,n1p,j1,n2p,k1,n3p,&
+                                 om0,dhx,dhy,dhz,dt_loc)
+  real(dp),intent(inout) :: curr(:,:,:,:),evf(:,:,:,:)
+  integer,intent(in) :: i1,n1p,j1,n2p,k1,n3p
+  real(dp),intent(in) :: om0,dhx,dhy,dhz,dt_loc
+  integer :: i,j,k,ii,ic,ic1
+  real(dp) ::dt2,dx1_inv,dhx1_inv
+  real(dp) ::kfact,k2_fact,a_fact
+  real(dp),dimension(0:2),parameter :: lder=(/1.0,-4.0,3.0/)
+ !==========================
+ ! EXPLICIT INTEGRATION of Maxwell ENVELOPE EVOLUTION EQUATION
+ !============================
+  dt2=dt_loc*dt_loc
+  kfact=om0*dt_loc
+  a_fact=dt_loc*dhx
+  a_fact=0.0            !NO MIXED DER
+  k2_fact=1./(1.+kfact*kfact)
+  dx1_inv=0.5*a_fact
+  dhx1_inv=2.*dx1_inv
+  ic=2
+ !========Enter  jc(1:2)= - omp2*<q^2*chi*env(1:2)
+ !                        chi <q^2*wgh*n/gam_p> >0
+ ! Computes the transverse Laplacian of A^{n}=env(1:2) components
+ !========and adds to  jc(1:2)
+ call pp_lapl(evf,curr,1,ic,der_ord,i1,n1p,j1,n2p,k1,n3p,dhy,dhz)
+ !=====================
+ ! =>   jc(1:2)=[D_pp^2-omp^2*chi]A= S(A);
+ !=================
+ !A^n-A_{n-1} def[B^{n-1/2}=> A^n
+  do k=k1,n3p
+   do j=j1,n2p
+    do i=i1,n1p
+     evf(i,j,k,1)=evf(i,j,k,1)-evf(i,j,k,3)
+     evf(i,j,k,2)=evf(i,j,k,2)-evf(i,j,k,4)
+    end do
+   end do
+  end do
+!===============
+   do k=k1,n3p
+    do j=j1,n2p
+     do i=i1,n1p
+      curr(i,j,k,1)=dt2*curr(i,j,k,1)-kfact*evf(i,j,k,2)
+      curr(i,j,k,2)=dt2*curr(i,j,k,2)+kfact*evf(i,j,k,1)
+     end do
+    end do
+   end do
+ !curr(1)=F_R=dt2*S_R-kfact*B_I^{n-1/2} 
+ !curr(2)=F_I=dt2*S_I+kfact*B_R^{n-1/2} 
+ !====================
+  if(a_fact >0.0)call AF_der(1)
+ !F_R => F_R +dt*[D_xB_R]  
+ !F_I => F_I +dt*[D_xB_I]
+ !======================
+  call AF_der(2)
+ !F_R => (1+dt*D_x)F_R-kfact*F_I  
+ !F_I => (1+dt*D_x)F_I+kfact*F_R  
+ !======================
+  do k=k1,n3p
+   do j=j1,n2p
+    do i=i1,n1p
+     evf(i,j,k,1)=evf(i,j,k,1)+evf(i,j,k,3) !A^{n}=> B^{n+1/2}+A^{n-1}
+     evf(i,j,k,2)=evf(i,j,k,2)+evf(i,j,k,4) 
+     evf(i,j,k,3)=evf(i,j,k,1)
+     evf(i,j,k,4)=evf(i,j,k,2) 
+    end do
+   end do
+  end do
+  do k=k1,n3p
+   do j=j1,n2p
+    do i=i1,n1p
+     ii=i-2
+     ww0(ii,1)=curr(i,j,k,1)
+     ww0(ii,2)=curr(i,j,k,2)
+    end do
+    !call matenv_inv(ii,2)
+    do i=i1,n1p
+     ii=i-2
+     evf(i,j,k,1)=evf(i,j,k,1)+k2_fact*ww0(ii,1)
+     evf(i,j,k,2)=evf(i,j,k,2)+k2_fact*ww0(ii,2)
+    end do
+   end do
+  end do
+ contains 
+ subroutine AF_der(id)
+
+  integer,intent(in) :: id
+!============
+  select case(id)
+  case(1)
+  do ic=1,2
+   do k=k1,n3p
+    do j=j1,n2p
+     i=i1
+     curr(i,j,k,ic)=curr(i,j,k,ic)+dhx1_inv*(&
+             evf(i+1,j,k,ic)-evf(i,j,k,ic))
+     do i=i1+1,n1p-1
+      curr(i,j,k,ic)=curr(i,j,k,ic)+dx1_inv*(&
+              evf(i+1,j,k,ic)-evf(i-1,j,k,ic))
+     end do
+     i=n1p
+     curr(i,j,k,ic)=curr(i,j,k,ic)+dx1_inv*(&
+             evf(i,j,k,ic)-evf(i-1,j,k,ic))
+    end do
+   end do
+  end do
+  case(2)
+  do k=k1,n3p
+   do j=j1,n2p
+    i=i1
+    ii=i-2
+    ww0(ii,1)=curr(i,j,k,1)+dhx1_inv*(&
+            curr(i+1,j,k,1)-curr(i,j,k,1))
+    ww0(ii,2)=curr(i,j,k,2)+dhx1_inv*(&
+            curr(i+1,j,k,2)-curr(i,j,k,2))
+    do i=i1+1,n1p-1
+     ii=i-2
+     ww0(ii,1)=curr(i,j,k,1)+dx1_inv*(&
+             curr(i+1,j,k,1)+curr(i-1,j,k,1))
+     ww0(ii,2)=curr(i,j,k,2)+dx1_inv*(&
+             curr(i+1,j,k,2)-curr(i-1,j,k,2))
+    end do
+     i=n1p
+     ii=i-2
+     ww0(ii,1)=curr(i,j,k,1)+dx1_inv*(&
+             curr(i,j,k,1)-curr(i-1,j,k,1))
+     ww0(ii,2)=curr(i,j,k,2)+dx1_inv*(&
+             curr(i,j,k,2)-curr(i-1,j,k,2))
+    do i=i1,n1p
+     ii=i-2
+     ww0(ii,1)=ww0(ii,1)-kfact*curr(i,j,k,2)
+     ww0(ii,2)=ww0(ii,2)+kfact*curr(i,j,k,1)
+    end do
+    do i=i1,n1p
+     ii=i-2
+     curr(i,j,k,1)=ww0(ii,1)
+     curr(i,j,k,2)=ww0(ii,2)
+    end do
+   end do
+  end do
+  end select
+ end subroutine AF_der
+
+ end subroutine env_comov_maxw_solve
  !==============================
  subroutine env_lpf_solve(curr,evf,ib,i1,n1p,j1,n2p,k1,n3p,&
   om0,dhx,dhy,dhz,dt_loc)
  real(dp),intent(inout) :: curr(:,:,:,:),evf(:,:,:,:)
  integer,intent(in) :: ib,i1,n1p,j1,n2p,k1,n3p
  real(dp),intent(in) :: om0,dhx,dhy,dhz,dt_loc
- integer :: i,j,k,ii,ic,ic1,n1,is_lapl
+ integer :: i,j,k,ii,ic,ic1,n1
  real(dp) :: dx1_inv,om2,aph1,dx_norm,dx2_norm
  real(dp) :: adv,b1,c1,an,bn,der2_norm,c1_der(0:1),c2_der(0:2)
  !==========================
@@ -1601,24 +1839,24 @@
  dx_norm=dhx/om0
  dx2_norm=dx_norm*dx_norm
  der2_norm=0.25*dx2_norm
- is_lapl=-1
- !========Enter  jc(1:2)= om2*<q^2*chi*env(1:2)
+ !========Enter  jc(1:2)= -om2*<q^2*chi*env(1:2)
  !        chi <q^2*wgh*n/gam_p> >0
  ! Computes the transverse Laplacian of A^{n}=env(1:2) components
- !========and subtract to jc(1:2)
+ !========and adds to jc(1:2)
  ic=2
- call pp_lapl(evf,curr,1,ic,is_lapl,2,i1,n1p,j1,n2p,k1,n3p,dhy,dhz)
+ call pp_lapl(evf,curr,1,ic,2,i1,n1p,j1,n2p,k1,n3p,dhy,dhz)
  !=====================
  do ic=1,2
   do k=k1,n3p
    do j=j1,n2p
     do i=i1,n1p
-     curr(i,j,k,ic)=dt_loc*curr(i,j,k,ic)
+     curr(i,j,k,ic)=-dt_loc*curr(i,j,k,ic)
     end do
    end do
   end do
  end do
- ! =>   jc(1:2)=2*Delta t*S(A)=dt*[-D^2_{pp}+omp^2*chi]A;
+ !=======================================================
+ ! =>   jc(1:2)=2*Delta t*S(A)=-dt*[D^2_{pp}-omp^2*chi]A;
  !=================
  !  Computes D_{xi} centered first derivatives of S(A)
  !      ww0(1)= k0*S(A_I) + D_xi[A_R]= F_R
@@ -1846,7 +2084,7 @@
  ! Computes the Laplacian
  !======== in jc(1:2)= omp2*<w*n/gam_p>*env(1:2)=> omp2*chi*A
  ic=2
- call pp_lapl(evf,curr,1,ic,-1,der_ord,i1,n1p,j1,n2p,k1,n3p,dhy,dhz)
+ call pp_lapl(evf,curr,1,ic,der_ord,i1,n1p,j1,n2p,k1,n3p,dhy,dhz)
  do ic=1,2
   do k=k1,n3p
    do j=j1,n2p
@@ -2003,34 +2241,33 @@
  real(dp),intent(in) :: coords(4),par_lp(7)
  real(dp),intent(out) :: fields(6)
  real(dp) :: phi0, phi1, phig00, phig10, csphig01
- real(dp) :: x1, y1, t1,wx2,r2,w2
- real(dp):: A0, A1,ev0,phx,wshape
+ real(dp) :: x1, y1, t1,r2,w2
+ real(dp):: A0, A1,tshape,phx,wshape
  !========== enter
  !par_lp(1)=oml
  !par_lp(3)=wx
  !par_lp(4)=wy
  !par_lp(5)=zra
  !par_lp(6)=eps
- !par_lp(7)=sigma
+ !par_lp(7)=sigma    =1/(oml*wx)
  !===============================
  x1=coords(1)     !x-x_f
  y1=coords(2)/par_lp(4)
  t1=coords(4)     !t-t_f        => (t1-x1)= t-(x-xc)
  !====================
  r2=y1*y1
- wx2=par_lp(3)*par_lp(3)
  phi0=par_lp(1)*(t1-x1)
- phi1=(t1-x1)*(t1-x1)/wx2
+ phi1=(t1-x1)/par_lp(3)
  x1=x1/par_lp(5)
  w2=1./(1.+x1*x1)   !     w2=(w0/w)^2
  phx=0.5*atan(x1)
  phig00=phi0+phx-x1*r2*w2    !phi_g ,(phi_g)^1=phi_g+phx
  phig10=phig00+phx
- ev0=exp(-phi1)
+ tshape=exp(-phi1*phi1)
  wshape=sqrt(sqrt(w2))*exp(-w2*r2)
- A0=ev0*sin(phig00)
+ A0=tshape*sin(phig00)
  fields(2)=wshape*A0  !Ey
- A1=ev0*2.*par_lp(6)*w2*exp(-w2*r2)
+ A1=tshape*2.*par_lp(6)*w2*exp(-w2*r2)
  fields(1)=y1*A1*cos(phig10)  !Ex
  fields(4)=0.0
  fields(6)=fields(2)          !Bz
@@ -2043,9 +2280,8 @@
  real(dp),intent(out) :: fields(6)
  real(dp) :: phi0, phi1, phig00, phig10, csphig01
  real(dp) :: x1, y1, t1,pih
- real(dp) :: w2,ar,rho, ss0 ,cs0
- real(dp) :: A0, A1
- real(dp) :: ev0, ev1,phx, psi, r2, wshape
+ real(dp) :: w2,A0, A1
+ real(dp) :: tshape, phx, r2, wshape
  !========== enter
  !par_lp(1)=oml
  !par_lp(2)=xc
@@ -2069,24 +2305,15 @@
  phx=0.5*atan(x1)
  phig00=phi0+phx-x1*r2*w2    !phi_g ,(phi_g)^1=phi_g+phx
  phig10=phig00+phx
- ev0=cos(phi1)*cos(phi1)
+ tshape=cos(phi1)*cos(phi1)
  wshape=sqrt(sqrt(w2))*exp(-w2*r2)
- A0=ev0*sin(phig00)
+ A0=tshape*sin(phig00)
  fields(2)=wshape*A0  !Ey
- A1=ev0*2.*par_lp(6)*w2*exp(-w2*r2)
+ A1=tshape*2.*par_lp(6)*w2*exp(-w2*r2)
  fields(1)=y1*A1*cos(phig10)  !Ex
  fields(4)=0.0
-!===================== O(sigma) correction
- psi=phig00+2.*phx
- ar=1.-r2               !r2=r^2/wy^2
- rho=sqrt(ar*ar+x1*x1)  !the module (1-r^2)+x^2 of 1-ar+i*x1
- psi=psi-atan(x1/ar)
- csphig01=cos(psi)
- ev1=cos(phi1)*sin(phi1)
- A1=ev1*par_lp(7)*x1*w2*rho
- A1=A1*csphig01
- fields(2)=fields(2)+wshape*A1  !Ey(1)
  fields(6)=fields(2)          !Bz
+!===================== O(sigma) correction
  fields(3)=0.0
  fields(5)=0.0
  end subroutine get_2Dlaser_fields_lp
@@ -2094,11 +2321,10 @@
  subroutine get_laser_fields_lp(coords,par_lp,fields)
  real(dp),intent(in) :: coords(4),par_lp(7)
  real(dp),intent(out) :: fields(6)
- real(dp) :: phi0, phi1, phig00, phig10, csphig01
+ real(dp) :: phi0, phi1, phig00, phig10
  real(dp) :: x1, y1, z1, t1,pih
- real(dp) :: w2,ar,rho, ss0 ,cs0
- real(dp) :: A0, A1
- real(dp) :: ev0, ev1,phx, psi, r2, wshape
+ real(dp) :: w2,A0, A1
+ real(dp) :: tshape, phx, r2, wshape
  !========== enter
  !par_lp(1)=oml
  !par_lp(2)=xc
@@ -2123,23 +2349,13 @@
  phx=atan(x1)
  phig00=phi0+phx-x1*r2*w2    !phi_g ,(phi_g)^1=phi_g+phx
  phig10=phig00+phx
- ev0=cos(phi1)*cos(phi1)
+ tshape=cos(phi1)*cos(phi1)
  wshape=sqrt(w2)*exp(-w2*r2)
- A0=ev0*sin(phig00)
+ A0=tshape*sin(phig00)
  fields(2)=wshape*A0  !Ey
- A1=ev0*2.*par_lp(6)*w2*exp(-w2*r2)
+ A1=tshape*2.*par_lp(6)*w2*exp(-w2*r2)
  fields(1)=y1*A1*cos(phig10)  !Ex
  fields(4)=z1*A1*cos(phig10)  !Bx
-!===================== O(sigma) correction
- psi=phig00+2.*phx
- ar=1.-r2               !r2=r^2/wy^2
- rho=sqrt(ar*ar+x1*x1)  !the module (1-r^2)+x^2 of 1-ar+i*x1
- psi=psi-atan(x1/ar)
- csphig01=cos(psi)
- ev1=cos(phi1)*sin(phi1)
- A1=ev1*par_lp(7)*x1*w2*rho
- A1=A1*csphig01
- fields(2)=fields(2)+wshape*A1  !Ey(1)
  fields(6)=fields(2)          !Bz
  fields(3)=0.0
  fields(5)=0.0
@@ -2150,8 +2366,7 @@
  real(dp),intent(out) :: fields(6)
  real(dp) :: phi0, phi1, phig00, phig10, csphig01
  real(dp) :: x1, y1, z1, t1,pih
- real(dp) :: w2,wx2
- real(dp) :: A0, A1
+ real(dp) :: A0, A1,w2
  real(dp) :: phx, r2, wshape,tshape
  !========== enter
  !par_lp(1)=oml
@@ -2160,6 +2375,7 @@
  !par_lp(4)=wy
  !par_lp(5)=zra
  !par_lp(6)=eps
+ !par_lp(7)=sigma                  =1/(wx*oml)
  !===============================
  !        t_profile is gaussian exp(-(t-x)*(t-x)/wx2)
  x1=coords(1)          !x-xf
@@ -2169,19 +2385,19 @@
  pih=0.5*pi
  !====================
  r2=y1*y1+z1*z1
- wx2=par_lp(3)*par_lp(3)
  phi0=par_lp(1)*(t1-x1)    !fast oscillations
- phi1=(t1-x1)*(t1-x1)/wx2   !t_envelope
- tshape=exp(-phi1)
+ phi1=(t1-x1)/par_lp(3)   !t_envelope
 !-----------
  x1=x1/par_lp(5)
  w2=1./(1.+x1*x1)   !     w2=(w0/w)^2
  phx=atan(x1)
  phig00=phi0+phx-x1*r2*w2    !phi_g ,(phi_g)^1=phi_g+phx
  phig10=phig00+phx
+ tshape=exp(-phi1*phi1)
  wshape=sqrt(w2)*exp(-w2*r2)
- A0=tshape*wshape*sin(phig00)
- fields(2)=A0                            !Ey
+ A0=tshape*sin(phig00)
+ fields(2)=wshape*A0  !Ey
+!==============
  A1=2.*par_lp(6)*tshape*w2*exp(-w2*r2)
  fields(1)=y1*A1*cos(phig10)             !Ex
  fields(4)=z1*A1*cos(phig10)             !Bx
@@ -2624,7 +2840,7 @@
  ! eps=1./k0*wy k0=omega_0=omgl
  ! NORMAL INCIDENCE
 
- sigma=2.*pi/(om0*wx)     !sigma=lambda/wx
+ sigma=1./(om0*wx) 
  eps=1./(om0*wy)
  zra=0.5*om0*wy*wy
  xc=xf0-tf
@@ -3023,7 +3239,7 @@
   sf=sin(pi*angle/180.)
   cf=cos(pi*angle/180.)
  endif
- sigma=2.*pi/(om0*wx)     !sigma=lambda/wx
+ sigma=1./(om0*wx) 
  eps=1./(om0*wy)
  zra=0.5*om0*wy*wy
  xc=xf0-tf+lp_shx
@@ -4166,28 +4382,52 @@
  end do
  end subroutine grad_pot
  !==================================
- subroutine potential_lapl(apf,curr,ic1,ic2,sn_lapl,dord,i1,n1p,j1,n2p,k1,n3p,&
-  dhx,dhy,dhz)
+ subroutine potential_lapl(apf,curr,ic1,ic2,dord,i1,n1p,j1,n2p,k1,n3p,&
+                                                      dhx,dhy,dhz)
  real(dp),intent(inout)  :: apf(:,:,:,:),curr(:,:,:,:)
 
- integer,intent(in):: ic1,ic2,sn_lapl,dord,i1,n1p,j1,n2p,k1,n3p
+ integer,intent(in):: ic1,ic2,dord,i1,n1p,j1,n2p,k1,n3p
  real(dp),intent(in) :: dhx,dhy,dhz
- integer :: i,j,k,ic
- real(dp) :: dx2
+ integer :: i,j,k,ic,i01,i02
+ real(dp) :: dx2,cf(0:2)
  !Computes the Laplacian(apf) and accumulates on the source array curr
- !                 curr=sn_lapla*Laplacian(apf)+curr
+ !                 curr=laplcian(apf)+curr
  !========================================
- dx2=sn_lapl*dhx*dhx
- !============= ALL FIELDS ic=ic1,ic2
+ dx2=dhx*dhx
+ i01=i1
+ i02=n1p
+ !2============= ALL FIELDS ic=ic1,ic2
+ cf(0)=0.0
+ cf(1)=1.
+ cf(2)=-2.
+ if(dord==3)then
+  cf(0)=2.*se_coeff(2)/3.      !=> (u_{i+2}+u_{i-2})
+  cf(1)=1.-8.*se_coeff(2)/3.   !=> (u_{i+1}+u_{i-1})
+  cf(2)=2.*(2.*se_coeff(2)-1.) !=> u_i
+ endif
  if(pex0)then
   i=i1
   do ic=ic1,ic2
    do k=k1,n3p
     do j=j1,n2p
-     apf(i-1,j,k,ic)=apf(i+2,j,k,ic)-3.*(apf(i+1,j,k,ic)-apf(i,j,k,ic))
+     curr(i,j,k,ic)=curr(i,j,k,ic)+dx2*(apf(i+2,j,k,ic)+apf(i,j,k,ic)-&
+                                        2.*apf(i+1,j,k,ic))
     enddo
    end do
   end do
+  i01=i1+1
+  if(dord >2)then
+   i=i1+1
+   do ic=ic1,ic2
+    do k=k1,n3p
+     do j=j1,n2p
+      curr(i,j,k,ic)=curr(i,j,k,ic)+dx2*(apf(i+1,j,k,ic)+apf(i-1,j,k,ic)-&
+                                        2.*apf(i,j,k,ic))
+     enddo
+    end do
+   end do
+   i01=i1+2
+  endif
  endif
  if(pex1)then
   i=n1p
@@ -4198,19 +4438,45 @@
     enddo
    end do
   end do
+  i02=n1p-1
+  if(dord >2)then
+   i=n1p-1
+   do ic=ic1,ic2
+    do k=k1,n3p
+     do j=j1,n2p
+      curr(i,j,k,ic)=curr(i,j,k,ic)+dx2*(apf(i+1,j,k,ic)+apf(i-1,j,k,ic)-&
+                                        2.*apf(i,j,k,ic))
+     enddo
+    end do
+   end do
+   i02=n1p-2
+  endif
  endif
  do ic=ic1,ic2
   do k=k1,n3p
    do j=j1,n2p
-    do i=i1,n1p
-     curr(i,j,k,ic)=curr(i,j,k,ic)+dx2*(apf(i+1,j,k,ic)-&
-      2.*apf(i,j,k,ic)+apf(i-1,j,k,ic))
+    do i=i01,i02
+     curr(i,j,k,ic)=curr(i,j,k,ic)+dx2*(cf(1)*(apf(i+1,j,k,ic)+apf(i-1,j,k,ic))+&
+                                        cf(2)*apf(i,j,k,ic))
+
     end do
    end do
   end do
  end do
+ if(dord> 2)then
+  do ic=ic1,ic2
+   do k=k1,n3p
+    do j=j1,n2p
+     do i=i01,i02
+      curr(i,j,k,ic)=curr(i,j,k,ic)+dx2*cf(0)*(apf(i+2,j,k,ic)+apf(i-2,j,k,ic))
+
+     end do
+    end do
+   end do
+  end do
+ endif
  if(ndim >1)call pp_lapl(&
-                          apf,curr,ic1,ic2,sn_lapl,dord,i1,n1p,j1,n2p,k1,n3p,dhy,dhz)
+                   apf,curr,ic1,ic2,dord,i1,n1p,j1,n2p,k1,n3p,dhy,dhz)
  end subroutine potential_lapl
  !===========================
  subroutine rotE(ef,i1,n1p,j1,j2,k1,k2,aphx,aphy,aphz)
@@ -5026,14 +5292,14 @@
       var(i,ic)=flx(i,j,k,ic)
      end do
     end do
-   call weno3_nc(fcomp+1,i1,n1p)
-   do ic=1,fcomp-1
+   call weno3_nc(fcomp+1,i1,n1p) 
+   do ic=1,fcomp-1               !var=momenta
     do i=i1+2,n1p-2
      vx=var(i,fcomp+1)
      ef(i,j,k,ic)=ef(i,j,k,ic)+aphx*vx*(var(i,ic)-var(i-1,ic))
     end do
    end do
-   ic=fcomp
+   ic=fcomp                     !var(ic)=vx*density
    do i=i1+2,n1p-2
     ef(i,j,k,ic)=ef(i,j,k,ic)+aphx*(var(i,ic)-var(i-1,ic))
    end do

@@ -34,21 +34,16 @@
  real(dp),allocatable :: env(:,:,:,:),env1(:,:,:,:)
  real(dp),allocatable :: up(:,:,:,:),up0(:,:,:,:),up1(:,:,:,:),flux(:,:,:,:)
  real(dp),allocatable :: ub(:,:,:,:),ub0(:,:,:,:),ub1(:,:,:,:)
-
- real(dp),allocatable :: ebf_bunch_gammarange(:,:,:,:)
- real(dp),allocatable :: ebf1_bunch_gammarange(:,:,:,:)
- real(dp),allocatable :: ebf_gammarange(:,:,:,:)
- real(dp),allocatable :: jc_gammarange(:,:,:,:)
  !--------------------------
 
  contains
 
  !--------------------------
 
- subroutine v_alloc(n1,n2,n3,ncomp,njc,ndm,ns,ifluid,lp,oder,envlp,color,fsize)
+ subroutine v_alloc(n1,n2,n3,ncomp,njc,ndm,ns,ifluid,lp,oder,envlp,color,comv,fsize)
 
  integer,intent(in) ::n1,n2,n3,ncomp,njc,ndm,ns,ifluid,lp,oder
- logical,intent(in) :: envlp,color
+ logical,intent(in) :: envlp,color,comv
  integer,intent(inout) ::fsize
  integer :: njdim,ng,ng0,n1p,n2p,n3p,shx,AllocStatus,fsize_loc
  !==============
@@ -75,8 +70,15 @@
  fsize_loc=fsize_loc+ng*ncomp+ng*njc
  ebf=0.0
  jc=0.0
+ if(comv)then
+  if(lp <3)then     !to handle backward advected fields
+   allocate(ebf0(n1p,n2p,n3p,ncomp),STAT=AllocStatus)
+   fsize_loc=fsize_loc+ng*ncomp
+   ebf0=0.0
+  endif
+ endif
  if(ifluid==2)then
-  if(lp <3)then     !for 2th order RK
+  if(lp <3)then     !for 2th order lpf in fluid variables
    allocate(ebf0(n1p,n2p,n3p,ncomp),STAT=AllocStatus)
    fsize_loc=fsize_loc+ng*ncomp
    ebf0=0.0

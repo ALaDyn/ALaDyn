@@ -43,8 +43,8 @@
  real(dp) :: gamma_cut_min,weights_cut_min,weights_cut_max
  logical :: Part,part_dcmp,cmp,test,Stretch,Hybrid
  logical :: Lp_active,Lp_inject,Plane_wave,Lin_lp,Circ_lp,Relativistic,Envelope,Ions,Beam,Pbeam,Two_color
- logical :: Ionization,Wake,Solid_target,Charge_cons,G_prof
- logical :: Impact_ioniz,Comoving
+ logical :: Ionization,Wake,Solid_target,Charge_cons,G_prof,High_gamma
+ logical :: Impact_ioniz,Comoving,P_tracking
  logical :: L_intdiagnostics_pwfa,L_intdiagnostics_classic
  logical :: L_force_singlefile_output
  logical :: L_print_J_on_grid

@@ -27,7 +27,16 @@
  integer, parameter :: sp = selected_real_kind(6, 37)
  integer, parameter :: dp = selected_real_kind(15, 307)
  integer, parameter :: dp_int = selected_int_kind(16)
+ integer, parameter :: hp_int = selected_int_kind(4)
  integer, parameter :: qp = selected_real_kind(33, 4931)
+
+ character, dimension(8) :: res_string
+ real(dp)                :: wgh_cmp
+ real(sp)                :: wgh
+ integer(hp_int)         :: charge
+ integer(hp_int)         :: part_ind
+
+ EQUIVALENCE(charge,res_string(1)),(part_ind,res_string(3)),(wgh,res_string(5)),(wgh_cmp,res_string(1))
 
  real(dp), parameter :: zero_dp = 0.0
  real(dp), parameter :: one_dp = 1.0

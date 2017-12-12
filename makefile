@@ -194,6 +194,12 @@ marconi_gnu: FFTW_LIB = /cineca/prod/opt/libraries/fftw/3.3.4/openmpi--1-10.3--g
 marconi_gnu: FFTW_INC = /cineca/prod/opt/libraries/fftw/3.3.4/openmpi--1-10.3--gnu--6.1.0/include
 marconi_gnu: all
 
+marconi_debug_gnu: marconi_gnu
+marconi_debug_gnu: EXE = ALaDyn.debug
+marconi_debug_gnu: OPTFC = -fdefault-real-8 -O0 -g -Wall -Wextra -fbacktrace -fbounds-check
+marconi_debug_gnu: OPTCC = -O0 -g
+marconi_debug_gnu: all
+
 fermi: FC = mpixlf90
 fermi: CC = mpixlcxx
 fermi: FFTW_DEF = -WF,-DUSE_OLD_FFTW_INTERFACE

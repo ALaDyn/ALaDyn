@@ -41,7 +41,7 @@
  real(dp),allocatable :: loc_rg(:,:,:),r(:),rh(:),dr1(:),dr1h(:),dvr(:)
  integer,allocatable :: str_indx(:,:)
  real(dp),allocatable :: rpt(:),wgp(:)
- real(dp) :: xtot,xmax,xmin,ymax,ymin,zmax,zmin
+ real(dp) :: xtot,xmax,xmin,ymax,ymin,zmax,zmin,xw_min,xw_max
  real(dp) :: Lx_box,Ly_box,Lz_box
  real(dp) :: dx,dx_inv,dxi_inv,dy,dz,dy_inv,dyi_inv,dz_inv,dzi_inv
  real(dp) :: aph,L_s,Lx_s,dxi,dyi,dzi,sy_rat,sz_rat,sx_rat
@@ -499,6 +499,8 @@
  xmin=x(1)
  if(ib==2)xmax=x(n1+1)
  Lx_box=xmax-xmin
+ xw_min=xmin
+ xw_max=xmax
 
  dy=1.
  dy_inv=1./dy

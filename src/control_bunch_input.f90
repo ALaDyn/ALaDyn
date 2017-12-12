@@ -29,8 +29,6 @@
  integer :: n_bunches,bunch_type(5),nb_tot(5),number_of_slices(4),bunch_shape(5)
 
  integer :: np_1,np_2,np_3,np_4,np_5
- integer :: ppc_bunch_1,ppc_bunch_2,ppc_bunch_3,&
-                  ppc_bunch_4,ppc_bunch_5
  integer :: bunch_type_1,bunch_type_2,bunch_type_3,bunch_type_4,bunch_type_5
  integer :: bunch_shape_1,bunch_shape_2,bunch_shape_3,&
                 bunch_shape_4,bunch_shape_5

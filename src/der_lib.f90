@@ -30,14 +30,15 @@
  real(dp),allocatable :: mat_der_inv(:,:),fmat(:,:,:),lpl_mat(:,:,:)
  real(dp),allocatable :: mat_env(:,:)
  real(dp) :: aph_der,avg_cmp,cmp_coeff(2),se_coeff(2), se4_coeff(2),&
-  filt_coeff(0:6),falp,int_coeff(0:3)
+  filt_coeff(0:6),falp,int_coeff(0:3),upw(4)
  logical :: derinv
  contains
  !==========================================
- subroutine set_mat_der(nu,n1,n2,n3,nd,ib1,ord,filt,fform)
+ subroutine set_mat_der(nu,fopt,n1,n2,n3,nd,ib1,ord,filt,fform,comv)
 
- real(dp),intent(in) :: nu
+ real(dp),intent(in) :: nu,fopt
  integer,intent(in) :: n1,n2,n3,nd,ib1,ord,filt,fform
+ logical,intent(in) :: comv
  integer :: nd_max
  real(dp) :: aph
  !------------------ Compact derivarives coefficients
@@ -50,14 +51,19 @@
   cmp_coeff(2)=0.
   avg_cmp=1.0
   aph_der=cmp_coeff(2)*avg_cmp
-  !OSE4 optimized explicit nu=cfl in 1D
-  !                        nu=cfl*rat/sqrt(1.+rat*rat) multi-D
  case(3)
-  cmp_coeff(1)=1.+0.125*(1.-1.2*nu*nu)  !Modified along x-coord
+  !                        nu=cfl*rat/sqrt(rat*rat+nd-1) multi-D optimized
+  !                        coefficient
+  !=====================================
+  cmp_coeff(1)=1.+0.125*(1.-fopt*nu*nu)  !rot(E) and rot(B) Modified along x-coord
   cmp_coeff(2)=(1.-cmp_coeff(1))/3.
   avg_cmp=1./(cmp_coeff(1)+cmp_coeff(2))
   aph_der=cmp_coeff(2)*avg_cmp
   derinv=.true.
+  if(comv)then
+   cmp_coeff(1)=5./8.
+   cmp_coeff(2)=1./8.
+  endif
  case(4)
   cmp_coeff(1)=1.125   !9/8(SE4)
   cmp_coeff(2)=(1.-cmp_coeff(1))/3.  !-1./24
@@ -66,6 +72,10 @@
   derinv=.true.
   se4_coeff(1)=4./3.
   se4_coeff(2)=-1./6.
+  upw(1)=1./3.
+  upw(2)=0.5
+  upw(3)=-1.
+  upw(4)=-(upw(1)+upw(2)+upw(3))
   !------------------------------
  end select
  se_coeff(1:2)=cmp_coeff(1:2)
@@ -301,48 +311,26 @@
  mat_env(i,3)=1.0/mat_env(i,3)
  end subroutine penta_diag_lufact
  !==============================
- subroutine set_mat_env5(om0,aph,ap,dg_inv,ng)
+ subroutine set_mat_env5(a,ng)
  integer,intent(in) :: ng
- real(dp),intent(in) ::om0,aph,ap,dg_inv
+ real(dp),intent(in) :: a(5,5)
  integer :: i,j
- real(dp) :: ap2,alp2,om2,dx2
- real(dp) :: a,b,d
  !==============
- !==============
+ !          To invert a penta-diagonal matrix
+ !          coefficients  a(1,1:3)  first row
+ !          coefficients  a(2,1:4)  second row
+ !          coefficients  a(3,1:5)  interior rows 
+ !          
+ allocate(amat(ng,ng))
  amat=0.0
- alp2=aph*aph
- ap2=ap*ap
- om2=om0*om0
- dx2=dg_inv*dg_inv
 
-
- a=alp2+ap2*dx2/om2
- b=2.*aph
- d=2.*alp2+1.-2.*ap2*dx2/om2
-
- !  Symmetric BC's
-
- amat(1,1)=d
- amat(1,2)=2.*b
- amat(1,3)=2.*a
- amat(2,1)=b
- amat(2,2)=d+a
- amat(2,3)=b
- amat(2,4)=a
+ amat(1,1:3)=a(1,1:3)
+ amat(2,1:4)=a(2,1:4)
  do j=3,ng-2
-  amat(j,j-2)=a
-  amat(j,j-1)=b
-  amat(j,j)=d
-  amat(j,j+1)=b
-  amat(j,j+2)=a
+  amat(j,j-2:j+2)=a(3,1:5)
  end do
- amat(ng-1,ng-3)=a
- amat(ng-1,ng-2)=b
- amat(ng-1,ng-1)=d+a
- amat(ng-1,ng)=b
- amat(ng,ng-2)=2.*a
- amat(ng,ng-1)=2.*b
- amat(ng,ng)=d
+ amat(ng-1,ng-3:ng)=a(4,1:4)
+ amat(ng,ng-2:ng)=a(5,1:3)
  !        LU Factorize a penta-diagonal matrix
  call  ludcmp(amat,ng)
  mat_env(1,1:2)=0.0
@@ -358,6 +346,7 @@
    if(abs(mat_env(j,i)) <1.e-08)mat_env(j,i)=0.0
   end do
  end do
+ deallocate(amat)
  end subroutine set_mat_env5
  !=======================
  subroutine set_mat_env2(bp,aph,ng)

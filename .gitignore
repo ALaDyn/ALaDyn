@@ -46,8 +46,8 @@ cmake.*
 make.*
 !/scripts/build/cmake.*
 !/scripts/build/make.*
+build.*
 
 .project
 *.nml
 index.md
-

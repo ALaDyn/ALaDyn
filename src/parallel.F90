@@ -42,7 +42,7 @@
 
  integer :: mpi_err
  integer,allocatable :: loc_npart(:,:,:,:),loc_nbpart(:,:,:,:)
- integer,allocatable :: loc_ne_ionz(:,:,:)
+ integer,allocatable :: loc_ne_ionz(:,:,:),loc_tpart(:)
  integer,allocatable :: yp_next(:),yp_prev(:)
  integer,allocatable :: zp_next(:),zp_prev(:)
  integer,allocatable :: xp_next(:),xp_prev(:)
@@ -72,6 +72,8 @@
  if (nprocx < 0 .or. nprocy < 0 .or. nprocz < 0 .or. nprocx*nprocy*nprocz /= mpi_size) then
   if (mpi_rank == 0) then
    write(6,*) 'Invalid MPI decomposition'
+   write(6,*) 'mpi_size =',mpi_size
+   write(6,*) 'nprocx =',nprocx,'nprocy =',nprocy,'nprocz =',nprocz
    STOP 674
   endif
  endif
@@ -165,6 +167,8 @@
  loc_npart(0:npe_yloc-1,0:npe_zloc-1,0:npe_xloc-1,1:pkind)=0
  allocate(loc_ne_ionz(0:npe_yloc-1,0:npe_zloc-1,0:npe_xloc-1))
  loc_ne_ionz(0:npe_yloc-1,0:npe_zloc-1,0:npe_xloc-1)=0
+ allocate(loc_tpart(npe))
+ loc_tpart(1:npe)=0
 !============================
  if(model >4)then
   allocate(loc_nbpart(0:npe_yloc-1,0:npe_zloc-1,0:npe_xloc-1,1:bkind))

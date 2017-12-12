@@ -1883,11 +1883,10 @@
   endif
  endif               !end of moving_window=false
  !=====================
- !In moving window all species leaving the computational box to the left
- !of the x-boundary are removed
+ !In moving window all species leaving the computational box at the left
+ !x-boundary are removed
 !==========================================
  nspx=nsp
- !if(moving_wind)nspx=nsp_run
  xmm=loc_xgrid(imodx)%gmin
  xmx=loc_xgrid(imodx)%gmax
  lbd_min=loc_xgrid(0)%gmin

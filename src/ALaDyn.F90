@@ -42,7 +42,7 @@
  logical :: Diag
  real(dp) :: tdia,dtdia,tout,dtout,tstart,mem_max_addr
  real(dp) :: dt_loc
- integer :: t_ind,ic
+ integer :: t_ind,ic,tk_ind
 
  mem_psize_max=0.0
  mem_max_addr=0.0
@@ -85,6 +85,7 @@
  call data_out(jump)
  dt_loc=dt
  t_ind=0
+ tk_ind=0
  if(Ionization)then
   lp_max=2.*lp_max
   do ic=2,nsp_ionz
@@ -95,6 +96,9 @@
    call set_impact_ioniz_wfunction(atomic_number(nsp_ionz-1),2)
    if(Pe0) call Impact_ioniz_data(atomic_number(nsp_ionz-1),z1_coll)
   endif
+ endif
+ if(P_tracking)then
+  call initial_tparticles_select(spec(1),dt,txmin,txmax,tymin,tymax,tzmin,tzmax)
  endif
  do while (tnow < tmax)
 
@@ -119,12 +123,16 @@
  call data_out(jump)
  dt_loc=dt
  t_ind=0
+ tk_ind=0
  if(Ionization)then
   !lp_max=1.2*oml*a0
   do ic=2,nsp_ionz
    call set_field_ioniz_wfunction(ion_min(ic-1),atomic_number(ic-1),ic,ionz_lev,ionz_model,lp_max,dt)
   end do
   if(Pe0) call Ioniz_data(lp_max,ion_min,atomic_number,ionz_lev,ionz_model)
+ endif
+ if(P_tracking)then
+  call initial_tparticles_select(spec(1),dt,txmin,txmax,tymin,tymax,tzmin,tzmax)
  endif
  do while (tnow < tmax)
   call ENV_run(tnow,dt_loc,iter,LPf_ord)
@@ -184,7 +192,12 @@
 
 
  idata=iout
-
+ if(P_tracking)then
+  if(mod(iter,tkjump)==0)then
+   tk_ind=tk_ind+1
+   call t_particles_collect(spec(1),ebfp,tk_ind)
+  endif
+ endif
  if(Diag)then
   if (tnow>=tdia) then
    ienout=ienout+1
@@ -200,7 +213,11 @@
   if(Diag)then
    if(pe0)call en_data(ienout,iter,idata)
   endif
-
+!=============== tracking data
+  if(P_tracking)then
+   if(tk_ind <= track_tot_nstep)call track_part_pdata_out(tnow,tk_ind,1)
+  endif
+!==================
   if(nvout>0)then
    if (mod_ord==2) then
     if(L_env_modulus)then
@@ -311,24 +328,20 @@
   endif
 
   if(nvout>0)then
-   do i=1,nvout
+   do i=1,min(nvout,nfield)
     if(L_force_singlefile_output) then
      call fields_out(ebf,tnow,i,i,jump)    ! second index to label field
     else
      call fields_out_new(ebf,tnow,i,i,jump)
     endif
    end do
-   if(L_print_J_on_grid) then
+   
+   if      (L_print_J_on_grid .AND. L_force_singlefile_output) call fields_out(jc,tnow,1,0,jump)     ! 0 for Jx current
+   else if (L_print_J_on_grid .AND. L_force_singlefile_output) call fields_out_new(jc,tnow,1,0,jump) ! 0  to label Jx field
+
+   do i=1,nbfield
     if(L_force_singlefile_output) then
-     call fields_out(jc,tnow,1,0,jump)       !0 for Jx current
-    else
-     call fields_out_new(jc,tnow,1,0,jump) ! 0  to label Jx field
-    endif
-   endif
-   do i=1,nvout
-    if(L_force_singlefile_output) then
-     if(ibeam==0)call bfields_out(ebf_bunch,ebf_bunch,tnow,i,jump)
-     if(ibeam==1)call bfields_out(ebf_bunch,ebf1_bunch,tnow,i,jump)
+     call bfields_out(ebf_bunch,ebf1_bunch,tnow,i,jump)
     else
      call fields_out_new(ebf_bunch,tnow,i,i+6,jump)
     endif
@@ -477,7 +490,8 @@
  subroutine start
 
  integer :: nxp,nyp,nzp,ns_ioniz
-
+ real(dp), parameter :: opt_der=1.0
+ 
  !enable loop to attach with gdb only if really needed
  !WARNING if enabled without needed, the program sleeps at start without doing anything!
 #ifdef ENABLE_GDB_ATTACH
@@ -528,7 +542,7 @@
  if(Impact_ioniz)ns_ioniz=nsp              !only for collisional ionization
  !=====================
  ! Allocates basic arrays, defines grid parameters, boundary index etc
- call w_alloc      !local arrays and matrix for space derivatives
+ call w_alloc(opt_der)      !local arrays and matrix for space derivatives
  mem_size=0
  mem_psize=0
  if (nvout>nfield) nvout=nfield
@@ -546,7 +560,7 @@
  !====== Fields and current arrays allocated on [1: N_loc+5]
  !==========================
  call v_alloc(nxp,nyp,nzp,nfield,nj_dim,&
-             ndim,ns_ioniz,ibeam,LPf_ord,der_ord,Envelope,Two_color,mem_size)
+             ndim,ns_ioniz,ibeam,LPf_ord,der_ord,Envelope,Two_color,Comoving,mem_size)
  if(Hybrid)call fluid_alloc(nxp,nyp,nzp,nfcomp,ndim,LPF_ord,mem_size)
  if (Beam) then
    call bv_alloc(nxp,nyp,nzp,nbfield,ndim,ibeam,mem_size)
@@ -841,6 +855,8 @@
  integer,intent(in) :: nw
  integer :: i
  character(len=21) :: output_data_in
+ integer(hp_int) :: chsize
+ real(sp) :: wgsize
 
  write(output_data_in,'(a15,i2.2,a4)')'init_data_info_',id_new,'.dat'
 
@@ -858,6 +874,9 @@
 !======================================
 
  open(60,file=output_data_in)
+ write(60,*)' data bsize'
+ write(60,*),huge(chsize),huge(wgsize)
+!============================================
  if(nw==0)then
   write(60,*)'********** INITIAL DATA INFO************* '
  else
@@ -1036,7 +1055,7 @@
    write(60,*)' Ionization active on ion species:',species_name(atomic_number(i))
     end do
    end if
- write(6,*)'**********TARGET PLASMA PARAMETERS***********'
+ write(60,*)'**********TARGET PLASMA PARAMETERS***********'
   if(Part)then
    write(60,'(a26,e11.4,a10)')'  Electron number density ',n0_ref,'[10^18/cc]'
    write(60,'(a21,f5.2)')'  Plasma wavelength= ',lambda_p
@@ -1053,7 +1072,7 @@
     write(60,*)' zmin_t       zmax_t     '
     write(60,'(a2,2e11.4)')'  ',zmin_t,zmax_t
    endif
-   write(6,*)'********** TARGET CONFIGURATION***********'
+   write(60,*)'********** TARGET CONFIGURATION***********'
    if(Wake)then
     select case(dmodel_id)
     case(1)
@@ -1141,6 +1160,15 @@
  endif
  write(60,*)'*******  END INITIAL DATA INFO***********'
  close(60)
+ write(6,*)'********** TARGET *********************'
+  write(6,*)' target in  target_end'
+  write(6,'(2e11.4)')targ_in,targ_end
+  write(6,*)' ymin_t       ymax_t     '
+  write(6,'(2e11.4)')ymin_t,ymax_t
+  write(6,*)' Electron number per cell '
+  write(6,'(i4)')nref
+  write(6,*)' Particle density normalization  '
+  write(6,'(e11.4)')j0_norm
  write(6,*)'********** ALLOCATED MEMORY (MB) *********************'
  write(6,'(a28,e12.5)')' Pe0 allocated grid memory= ',1.e-06*real(mem_size,dp)*kind(electron_charge_norm)
  write(6,'(a28,e12.5)')' Pe0 allocated part memory= ',1.e-06*real(mem_psize,dp)*kind(electron_charge_norm)

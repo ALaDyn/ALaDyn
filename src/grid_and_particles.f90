@@ -1,6 +1,5 @@
  !*****************************************************************************************************!
  !             Copyright 2008-2018 Pasquale Londrillo, Stefano Sinigardi, Andrea Sgattoni              !
- !                                                Alberto Marocchino                                   !
  !*****************************************************************************************************!
 
  !*****************************************************************************************************!
@@ -55,6 +54,9 @@
  real(dp) :: lpx(7),lpy(3),targ_in,targ_end,lx_fwhm,tau_fwhm
  real(dp) :: lp_in(Ref_nlas),lp_end(Ref_nlas),lp_ionz_in,lp_ionz_end,xf_loc(Ref_nlas),xc_loc(Ref_nlas)
  real(dp) :: ymin_t,ymax_t,zmin_t,zmax_t,rmin_t,rmax_t
+ ! tracking param
+ real(dp) :: txmin,txmax,tymin,tymax,tzmin,tzmax,t_in,t_out
+ integer  :: tkjump,nkjump,track_tot_nstep,track_tot_part
 
  integer :: pot_ndim,nb_max,pe_nbmax,nb_min,pe_nbmin
  integer :: RK_ord,LPf_ord,Tsc_ord,der_ord,t_ord,spl_ord
