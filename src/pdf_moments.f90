@@ -78,8 +78,6 @@
  integer :: np_loc,i
  real(dp) :: mu_mean_local(1)=0.0,mu_mean(1)=0.0,moment_local(1)=0.0,moment(1)=0.0, bch
  real(dp) :: tot_weights_local(1)=0.0,tot_weights(1)=0.0
- real(sp) :: ch(2)
- equivalence(bch,ch)
 
  !---
  np_loc=loc_nbpart(imody,imodz,imodx,number_bunch)
@@ -92,19 +90,19 @@
   if(component<=7) then
       DO i=1,np_loc
           if(Pselection(i)) then
-              bch=bunch(number_bunch)%part(i,7)
-              mu_mean_local  = mu_mean_local+bunch(number_bunch)%part(i,component)*ch(1)
-              tot_weights_local=tot_weights_local+ch(1)
+              wgh_cmp=bunch(number_bunch)%part(i,7)
+              mu_mean_local  = mu_mean_local+bunch(number_bunch)%part(i,component)*wgh
+              tot_weights_local=tot_weights_local+wgh
           endif
       ENDDO
   endif
   if(component==8) then !--- for particle GAMMA ---!
       DO i=1,np_loc
           if(Pselection(i)) then
-              bch=bunch(number_bunch)%part(i,7)
+              wgh_cmp=bunch(number_bunch)%part(i,7)
               mu_mean_local  = mu_mean_local + &
-              sqrt(1.0 + bunch(number_bunch)%part(i,4)**2+bunch(number_bunch)%part(i,5)**2+bunch(number_bunch)%part(i,6)**2)*ch(1)
-              tot_weights_local=tot_weights_local+ch(1)
+              sqrt(1.0 + bunch(number_bunch)%part(i,4)**2+bunch(number_bunch)%part(i,5)**2+bunch(number_bunch)%part(i,6)**2)*wgh
+              tot_weights_local=tot_weights_local+wgh
           endif
       ENDDO
   endif
@@ -118,19 +116,19 @@
   if(component<=7) then
     DO i=1,np_loc
       if(Pselection(i)) then
-        bch=bunch(number_bunch)%part(i,7)
-        moment_local   = moment_local+( bunch(number_bunch)%part(i,component) - mu_mean(1) )**nth * ch(1)
+        wgh_cmp=bunch(number_bunch)%part(i,7)
+        moment_local   = moment_local+( bunch(number_bunch)%part(i,component) - mu_mean(1) )**nth * wgh
       endif
     ENDDO
   endif
   if(component==8) then !--- for particle GAMMA ---!
     DO i=1,np_loc
       if(Pselection(i)) then
-        bch=bunch(number_bunch)%part(i,7)
+        wgh_cmp=bunch(number_bunch)%part(i,7)
         moment_local   = moment_local+&
         ( sqrt(1.0+bunch(number_bunch)%part(i,4)**2+bunch(number_bunch)%part(i,5)**2+&
         bunch(number_bunch)%part(i,6)**2) &
-        - mu_mean(1) )**nth * ch(1)
+        - mu_mean(1) )**nth * wgh
       endif
     ENDDO
   endif
@@ -143,10 +141,8 @@
  real(dp) FUNCTION calculate_nth_moment_bunch(number_bunch,nth,component)!,Pselection)
  integer, intent(in) :: nth, component, number_bunch
  integer :: np_loc,i
- real(dp) :: moment_local(1)=0.0,moment(1)=0.0, bch
+ real(dp) :: moment_local(1)=0.0,moment(1)=0.0
  real(dp) :: tot_weights_local(1)=0.0,tot_weights(1)=0.0
- real(sp) :: ch(2)
- equivalence(bch,ch)
 
  !---
  np_loc=loc_nbpart(imody,imodz,imodx,number_bunch)
@@ -157,20 +153,20 @@
  if(component<=7) then
        DO i=1,np_loc
              if(Pselection(i)) then
-                   bch=bunch(number_bunch)%part(i,7)
-                   moment_local   = moment_local+( bunch(number_bunch)%part(i,component) )**nth * ch(1)
-                   tot_weights_local=tot_weights_local+ch(1)
+                   wgh_cmp=bunch(number_bunch)%part(i,7)
+                   moment_local   = moment_local+( bunch(number_bunch)%part(i,component) )**nth * wgh
+                   tot_weights_local=tot_weights_local+wgh
              endif
        ENDDO
  endif
   if(component==8) then !for particle GAMMA ---!
         DO i=1,np_loc
               if(Pselection(i)) then
-                    bch=bunch(number_bunch)%part(i,7)
+                    wgh_cmp=bunch(number_bunch)%part(i,7)
                     moment_local   = moment_local + &
                     sqrt( 1.0 + bunch(number_bunch)%part(i,4)**2 &
-                    + bunch(number_bunch)%part(i,5)**2 + bunch(number_bunch)%part(i,6)**2 )**nth * ch(1)
-                    tot_weights_local=tot_weights_local+ch(1)
+                    + bunch(number_bunch)%part(i,5)**2 + bunch(number_bunch)%part(i,6)**2 )**nth * wgh
+                    tot_weights_local=tot_weights_local+wgh
               endif
         ENDDO
   endif
@@ -186,12 +182,10 @@
  real(dp) FUNCTION calculate_Correlation_bunch(number_bunch,component1,component2)
  integer, intent(in) ::  component1,  component2, number_bunch
  integer :: np_loc,i
- real(dp) :: mu_mean_local_1(1),mu_mean_local_2(1),mu_mean_1(1),mu_mean_2(1), bch
+ real(dp) :: mu_mean_local_1(1),mu_mean_local_2(1),mu_mean_1(1),mu_mean_2(1)
  real(dp) :: correlation_local(1),correlation(1)
  real(dp) :: tot_weights_local(1)=0.0,tot_weights(1)=0.0
  real(dp) :: tot_weights2_local(1)=0.0,tot_weights2(1)=0.0
- real(sp) :: ch(2)
- equivalence(bch,ch)
 
  !---
  np_loc=loc_nbpart(imody,imodz,imodx,number_bunch)
@@ -202,10 +196,10 @@
  tot_weights_local=0.0
  DO i=1,np_loc
        if(Pselection(i)) then
-             bch=bunch(number_bunch)%part(i,7)
-             mu_mean_local_1   = mu_mean_local_1+( bunch(number_bunch)%part(i,component1) ) * ch(1)
-             mu_mean_local_2   = mu_mean_local_2+( bunch(number_bunch)%part(i,component2) ) * ch(1)
-             tot_weights_local=tot_weights_local+ch(1)
+             wgh_cmp=bunch(number_bunch)%part(i,7)
+             mu_mean_local_1   = mu_mean_local_1+( bunch(number_bunch)%part(i,component1) ) * wgh
+             mu_mean_local_2   = mu_mean_local_2+( bunch(number_bunch)%part(i,component2) ) * wgh
+             tot_weights_local=tot_weights_local+wgh
          endif
  ENDDO
  call allreduce_dpreal(0,mu_mean_local_1,mu_mean_1,1)
@@ -220,12 +214,12 @@ correlation_local=0.0
 tot_weights2_local=0.0
 DO i=1,np_loc
       if(Pselection(i)) then
-            bch=bunch(number_bunch)%part(i,7)
+            wgh_cmp=bunch(number_bunch)%part(i,7)
             correlation_local   = correlation_local + &
             ( bunch(number_bunch)%part(i,component1)-mu_mean_1(1) ) * &
             ( bunch(number_bunch)%part(i,component2)-mu_mean_2(1) ) * &
-            ch(1)/tot_weights(1)
-            tot_weights2_local = tot_weights2_local + ch(1)**2
+            wgh / tot_weights(1)
+            tot_weights2_local = tot_weights2_local + wgh**2
       endif
 ENDDO
 call allreduce_dpreal(0,correlation_local,correlation,1)
@@ -240,12 +234,10 @@ correlation         = correlation / (1.-tot_weights2(1))
  real(dp) FUNCTION calculate_Covariance_bunch(number_bunch,component1,component2)
  integer, intent(in) ::  component1,  component2, number_bunch
  integer :: np_loc,i
- real(dp) :: mu_mean_local_1(1),mu_mean_local_2(1),mu_mean_1(1),mu_mean_2(1), bch
+ real(dp) :: mu_mean_local_1(1),mu_mean_local_2(1),mu_mean_1(1),mu_mean_2(1)
  real(dp) :: covariance_local(1),covariance(1)
  real(dp) :: tot_weights_local(1)=0.0,tot_weights(1)=0.0
  real(dp) :: tot_weights2_local(1)=0.0,tot_weights2(1)=0.0
- real(sp) :: ch(2)
- equivalence(bch,ch)
 
  !---
  call mpi_barrier(mpi_comm_world,error)
@@ -261,10 +253,10 @@ correlation         = correlation / (1.-tot_weights2(1))
  tot_weights_local=0.0
  DO i=1,np_loc
        if(Pselection(i)) then
-             bch=bunch(number_bunch)%part(i,7)
-             mu_mean_local_1   = mu_mean_local_1+( bunch(number_bunch)%part(i,component1) ) * ch(1)
-             mu_mean_local_2   = mu_mean_local_2+( bunch(number_bunch)%part(i,component2) ) * ch(1)
-             tot_weights_local=tot_weights_local+ch(1)
+             wgh_cmp=bunch(number_bunch)%part(i,7)
+             mu_mean_local_1   = mu_mean_local_1+( bunch(number_bunch)%part(i,component1) ) * wgh
+             mu_mean_local_2   = mu_mean_local_2+( bunch(number_bunch)%part(i,component2) ) * wgh
+             tot_weights_local=tot_weights_local+wgh
          endif
  ENDDO
  call allreduce_dpreal(0,mu_mean_local_1,mu_mean_1,1)
@@ -280,11 +272,11 @@ correlation         = correlation / (1.-tot_weights2(1))
  covariance=0.0
  DO i=1,np_loc
       if(Pselection(i)) then
-            bch=bunch(number_bunch)%part(i,7)
+            wgh_cmp=bunch(number_bunch)%part(i,7)
             covariance_local   = covariance_local + &
             ( bunch(number_bunch)%part(i,component1)-mu_mean_1(1) ) * &
             ( bunch(number_bunch)%part(i,component2)-mu_mean_2(1) ) * &
-            ch(1)
+            wgh
       endif
  ENDDO
  call allreduce_dpreal(0,covariance_local,covariance,1)
@@ -482,9 +474,7 @@ correlation         = correlation / (1.-tot_weights2(1))
  real(dp) :: corr_y_py(1), corr_z_pz(1), corr_x_px(1) !correlation transverse plane
  real(dp) :: emittance_y(1), emittance_z(1) !emittance variables
  real(dp) :: tot_weights(1),tot_weights_local(1)
- real(dp) :: np_inv,bch
- real(sp) :: ch(2)
- equivalence(bch,ch)
+ real(dp) :: np_inv
  character(1) :: b2str
 
  !---!
@@ -510,14 +500,14 @@ correlation         = correlation / (1.-tot_weights2(1))
  tot_weights_local=0.0
  tot_weights=0.0
  DO i=1,np_local
-   bch=bunch(bunch_number)%part(i,7)
-   mu_x_local   = mu_x_local+ bunch(bunch_number)%part(i,1)*ch(1)
-   mu_y_local   = mu_y_local+ bunch(bunch_number)%part(i,2)*ch(1)
-   mu_z_local   = mu_z_local+ bunch(bunch_number)%part(i,3)*ch(1)
-   mu_px_local  = mu_px_local+ bunch(bunch_number)%part(i,4)*ch(1)
-   mu_py_local  = mu_py_local+ bunch(bunch_number)%part(i,5)*ch(1)
-   mu_pz_local  = mu_pz_local+ bunch(bunch_number)%part(i,6)*ch(1)
-   tot_weights_local = tot_weights_local+ch(1)
+   wgh_cmp=bunch(number_bunch)%part(i,7)
+   mu_x_local   = mu_x_local+ bunch(bunch_number)%part(i,1)*wgh
+   mu_y_local   = mu_y_local+ bunch(bunch_number)%part(i,2)*wgh
+   mu_z_local   = mu_z_local+ bunch(bunch_number)%part(i,3)*wgh
+   mu_px_local  = mu_px_local+ bunch(bunch_number)%part(i,4)*wgh
+   mu_py_local  = mu_py_local+ bunch(bunch_number)%part(i,5)*wgh
+   mu_pz_local  = mu_pz_local+ bunch(bunch_number)%part(i,6)*wgh
+   tot_weights_local = tot_weights_local+wgh
  ENDDO
  !---
  call allreduce_dpreal(0,mu_x_local,mu_x,1)
@@ -545,13 +535,13 @@ correlation         = correlation / (1.-tot_weights2(1))
  s_py_local=0.0
  s_pz_local=0.0
  DO i=1,np_local
-   bch=bunch(bunch_number)%part(i,7)
-   s_x_local   = s_x_local+ ( bunch(bunch_number)%part(i,1)-mu_x(1)  )**2*ch(1)
-   s_y_local   = s_y_local+ ( bunch(bunch_number)%part(i,2)-mu_y(1)  )**2*ch(1)
-   s_z_local   = s_z_local+ ( bunch(bunch_number)%part(i,3)-mu_z(1)  )**2*ch(1)
-   s_px_local  = s_px_local+ ( bunch(bunch_number)%part(i,4)-mu_px(1) )**2*ch(1)
-   s_py_local  = s_py_local+ ( bunch(bunch_number)%part(i,5)-mu_py(1) )**2*ch(1)
-   s_pz_local  = s_pz_local+ ( bunch(bunch_number)%part(i,6)-mu_pz(1) )**2*ch(1)
+   wgh_cmp=bunch(number_bunch)%part(i,7)
+   s_x_local   = s_x_local+ ( bunch(bunch_number)%part(i,1)-mu_x(1)  )**2*wgh
+   s_y_local   = s_y_local+ ( bunch(bunch_number)%part(i,2)-mu_y(1)  )**2*wgh
+   s_z_local   = s_z_local+ ( bunch(bunch_number)%part(i,3)-mu_z(1)  )**2*wgh
+   s_px_local  = s_px_local+ ( bunch(bunch_number)%part(i,4)-mu_px(1) )**2*wgh
+   s_py_local  = s_py_local+ ( bunch(bunch_number)%part(i,5)-mu_py(1) )**2*wgh
+   s_pz_local  = s_pz_local+ ( bunch(bunch_number)%part(i,6)-mu_pz(1) )**2*wgh
  ENDDO
  !---
  call allreduce_dpreal(0,s_x_local,s_x,1)
@@ -585,10 +575,10 @@ correlation         = correlation / (1.-tot_weights2(1))
  mu_gamma_local=0.0
  mu_gamma=0.0
  DO i=1,np_local
-   bch=bunch(bunch_number)%part(i,7)
+   wgh_cmp=bunch(number_bunch)%part(i,7)
    mu_gamma_local  = mu_gamma_local+ sqrt(   1.0 + bunch(bunch_number)%part(i,4)**2 + &
     bunch(bunch_number)%part(i,5)**2 + &
-    bunch(bunch_number)%part(i,6)**2 ) * ch(1)
+    bunch(bunch_number)%part(i,6)**2 ) * wgh
   ENDDO
  !---
  call allreduce_dpreal(0,mu_gamma_local,mu_gamma,1)
@@ -598,10 +588,10 @@ correlation         = correlation / (1.-tot_weights2(1))
  s_gamma_local=0.0
  s_gamma=0.0
  DO i=1,np_local
-   bch=bunch(bunch_number)%part(i,7)
+   wgh_cmp=bunch(number_bunch)%part(i,7)
    s_gamma_local  = s_gamma_local+(sqrt (1.0 + bunch(bunch_number)%part(i,4)**2 + &
     bunch(bunch_number)%part(i,5)**2 + &
-    bunch(bunch_number)%part(i,6)**2 )-mu_gamma)**2*ch(1)
+    bunch(bunch_number)%part(i,6)**2 )-mu_gamma)**2*wgh
   ENDDO
  !---
  call allreduce_dpreal(0,s_gamma_local,s_gamma,1)
@@ -616,13 +606,13 @@ correlation         = correlation / (1.-tot_weights2(1))
  corr_z_pz_local=0.0
  corr_z_pz=0.0
  DO i=1,np_local
-   bch=bunch(bunch_number)%part(i,7)
+   wgh_cmp=bunch(number_bunch)%part(i,7)
    corr_x_px_local =corr_x_px_local+ (  (bunch(bunch_number)%part(i,1)-mu_x(1)) &
-    * (bunch(bunch_number)%part(i,4)-mu_px(1)) )*ch(1)
+    * (bunch(bunch_number)%part(i,4)-mu_px(1)) )*wgh
    corr_y_py_local = corr_y_py_local+(  (bunch(bunch_number)%part(i,2)-mu_y(1)) &
-    * (bunch(bunch_number)%part(i,5)-mu_py(1)) )*ch(1)
+    * (bunch(bunch_number)%part(i,5)-mu_py(1)) )*wgh
    corr_z_pz_local = corr_z_pz_local+(  (bunch(bunch_number)%part(i,3)-mu_z(1)) &
-    * (bunch(bunch_number)%part(i,6)-mu_pz(1)) )*ch(1)
+    * (bunch(bunch_number)%part(i,6)-mu_pz(1)) )*wgh
 ENDDO
  !---
  call allreduce_dpreal(0,corr_x_px_local,corr_x_px,1)
@@ -1182,8 +1172,6 @@ ENDDO
  real(dp) :: emittance_y(1), emittance_z(1) !emittance variables
  real(dp) :: weights_local(1),weights(1),total_charge(1)
  real(dp) :: np_inv
- real(sp) :: charge(2)
- equivalence(charge,wgh)
  integer :: ip,nInside_loc
  logical, allocatable :: mask(:)
 
@@ -1204,9 +1192,9 @@ nInside_loc=0
       if(spec(1)%part(ip,1) < xmin_out ) mask(ip)=.false.
       if(spec(1)%part(ip,1) > xmax_out) mask(ip)=.false.
       ! !--- weight selection ---!
-      wgh=spec(1)%part(ip,7)
-      if(charge(1) < weights_cut_min) mask(ip)=.false.
-      if(charge(1) > weights_cut_max) mask(ip)=.false.
+      wgh_cmp=spec(1)%part(ip,7)
+      if(wgh < weights_cut_min) mask(ip)=.false.
+      if(wgh > weights_cut_max) mask(ip)=.false.
       ! !--- gamma selection ---!
       if( sqrt(1.0+SUM(spec(1)%part(ip,4:6)**2)) < gamma_cut_min) mask(ip)=.false.
       !--- particle counter ---!
@@ -1223,14 +1211,14 @@ nInside_loc=0
  mu_pz_local=0.0
  do ip=1,np_local
         if(mask(ip)) then
-         wgh=spec(1)%part(ip,7)
-         mu_x_local   = mu_x_local+spec(1)%part(ip,1) * charge(1)
-         mu_y_local   = mu_y_local+spec(1)%part(ip,2) * charge(1)
-         mu_z_local   = mu_z_local+spec(1)%part(ip,3) * charge(1)
-         mu_px_local  = mu_px_local+spec(1)%part(ip,4) * charge(1)
-         mu_py_local  = mu_py_local+spec(1)%part(ip,5) * charge(1)
-         mu_pz_local  = mu_pz_local+spec(1)%part(ip,6) * charge(1)
-         weights_local = weights_local+charge(1)
+         wgh_cmp=spec(1)%part(ip,7)
+         mu_x_local   = mu_x_local+spec(1)%part(ip,1) * wgh
+         mu_y_local   = mu_y_local+spec(1)%part(ip,2) * wgh
+         mu_z_local   = mu_z_local+spec(1)%part(ip,3) * wgh
+         mu_px_local  = mu_px_local+spec(1)%part(ip,4) * wgh
+         mu_py_local  = mu_py_local+spec(1)%part(ip,5) * wgh
+         mu_pz_local  = mu_pz_local+spec(1)%part(ip,6) * wgh
+         weights_local = weights_local+wgh
        endif
  enddo
  !---
@@ -1241,7 +1229,7 @@ nInside_loc=0
  call allreduce_dpreal(0,mu_py_local,mu_py,1)
  call allreduce_dpreal(0,mu_pz_local,mu_pz,1)
  call allreduce_dpreal(0,weights_local,weights,1)
- if(weights(1)<=0.0) weights=1.0
+ if(wgh<=0.0) weights=1.0
  !---
  mu_x  = mu_x / weights
  mu_y  = mu_y / weights
@@ -1260,13 +1248,13 @@ nInside_loc=0
  s_pz_local=0.0
  do ip=1,np_local
         if(mask(ip)) then
-               wgh=spec(1)%part(ip,7)
-               s_x_local   = s_x_local+( spec(1)%part(ip,1)-mu_x(1)  )**2 * charge(1)
-               s_y_local   = s_y_local+( spec(1)%part(ip,2)-mu_y(1)  )**2 * charge(1)
-               s_z_local   = s_z_local+( spec(1)%part(ip,3)-mu_z(1)  )**2 * charge(1)
-               s_px_local  = s_px_local+( spec(1)%part(ip,4)-mu_px(1) )**2 * charge(1)
-               s_py_local  = s_py_local+( spec(1)%part(ip,5)-mu_py(1) )**2 * charge(1)
-               s_pz_local  = s_pz_local+( spec(1)%part(ip,6)-mu_pz(1) )**2 * charge(1)
+               wgh_cmp=spec(1)%part(ip,7)
+               s_x_local   = s_x_local+( spec(1)%part(ip,1)-mu_x(1)  )**2 * wgh
+               s_y_local   = s_y_local+( spec(1)%part(ip,2)-mu_y(1)  )**2 * wgh
+               s_z_local   = s_z_local+( spec(1)%part(ip,3)-mu_z(1)  )**2 * wgh
+               s_px_local  = s_px_local+( spec(1)%part(ip,4)-mu_px(1) )**2 * wgh
+               s_py_local  = s_py_local+( spec(1)%part(ip,5)-mu_py(1) )**2 * wgh
+               s_pz_local  = s_pz_local+( spec(1)%part(ip,6)-mu_pz(1) )**2 * wgh
         endif
   enddo
  !---
@@ -1288,10 +1276,10 @@ nInside_loc=0
  mu_gamma_local=0.0
  do ip=1,np_local
         if(mask(ip)) then
-               wgh=spec(1)%part(ip,7)
+                wgh_cmp=spec(1)%part(ip,7)
                 mu_gamma_local  = mu_gamma_local + sqrt(1.0 + spec(1)%part(ip,4)**2 + &
                                                   spec(1)%part(ip,5)**2 + &
-                                                  spec(1)%part(ip,6)**2 )*charge(1)
+                                                  spec(1)%part(ip,6)**2 )*wgh
         endif
   enddo
  !---
@@ -1301,11 +1289,11 @@ nInside_loc=0
  s_gamma_local=0.0
  do ip=1,np_local
         if(mask(ip)) then
-               wgh=spec(1)%part(ip,7)
+               wgh_cmp=spec(1)%part(ip,7)
                s_gamma_local  = s_gamma_local + (sqrt(1.0 + spec(1)%part(ip,4)**2 + &
                                              spec(1)%part(ip,5)**2 + &
                                              spec(1)%part(ip,6)**2 )-mu_gamma(1))**2 &
-                                             *charge(1)
+                                             *wgh
          endif
  enddo
  !---
@@ -1319,13 +1307,13 @@ nInside_loc=0
  corr_z_pz_local=0.0
  do ip=1,np_local
         if(mask(ip)) then
-               wgh=spec(1)%part(ip,7)
+            wgh_cmp=spec(1)%part(ip,7)
  corr_x_px_local = corr_x_px_local+ (spec(1)%part(ipl,1)-mu_x(1)) &
-  * (spec(1)%part(ip,4)-mu_px(1)) * charge(1)
+  * (spec(1)%part(ip,4)-mu_px(1)) * wgh
  corr_y_py_local =corr_y_py_local+ (spec(1)%part(ip,2)-mu_y(1)) &
-  * (spec(1)%part(ip,5)-mu_py(1)) * charge(1)
+  * (spec(1)%part(ip,5)-mu_py(1)) * wgh
  corr_z_pz_local = corr_z_pz_local+(spec(1)%part(ip,3)-mu_z(1)) &
-  * (spec(1)%part(ip,6)-mu_pz(1)) * charge(1)
+  * (spec(1)%part(ip,6)-mu_pz(1)) * wgh
         endif
 enddo
  !---
