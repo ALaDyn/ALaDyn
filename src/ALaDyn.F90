@@ -335,9 +335,12 @@
      call fields_out_new(ebf,tnow,i,i,jump)
     endif
    end do
-   
-   if      (L_print_J_on_grid .AND. L_force_singlefile_output) call fields_out(jc,tnow,1,0,jump)     ! 0 for Jx current
-   else if (L_print_J_on_grid .AND. L_force_singlefile_output) call fields_out_new(jc,tnow,1,0,jump) ! 0  to label Jx field
+
+   if      (L_print_J_on_grid .AND. L_force_singlefile_output) then
+     call fields_out(jc,tnow,1,0,jump)     ! 0 for Jx current
+   else if  (L_print_J_on_grid .AND. L_force_singlefile_output) then
+     call fields_out_new(jc,tnow,1,0,jump) ! 0  to label Jx field
+   endif
 
    do i=1,nbfield
     if(L_force_singlefile_output) then
@@ -491,7 +494,7 @@
 
  integer :: nxp,nyp,nzp,ns_ioniz
  real(dp), parameter :: opt_der=1.0
- 
+
  !enable loop to attach with gdb only if really needed
  !WARNING if enabled without needed, the program sleeps at start without doing anything!
 #ifdef ENABLE_GDB_ATTACH
@@ -875,7 +878,7 @@
 
  open(60,file=output_data_in)
  write(60,*)' data bsize'
- write(60,*),huge(chsize),huge(wgsize)
+ write(60,*) huge(chsize),huge(wgsize)
 !============================================
  if(nw==0)then
   write(60,*)'********** INITIAL DATA INFO************* '
