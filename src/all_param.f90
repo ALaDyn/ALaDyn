@@ -355,7 +355,7 @@
  if(model_id == 4) then
   mod_ord=2
   Envelope=.true.
-   L_env_modulus=.true.
+   !L_env_modulus=.true.
   endif
   if(n_over_nc >1.)then
    Solid_target=.true.

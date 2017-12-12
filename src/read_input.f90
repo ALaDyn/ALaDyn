@@ -129,7 +129,7 @@
  L_force_singlefile_output = .true.
  L_first_output_on_restart = .false.
  L_print_J_on_grid = .true.
- L_env_modulus = .false.
+ L_env_modulus = .true.
  open(nml_iounit,file=input_namelist_filename, status='old')
  read(nml_iounit,OUTPUT,iostat=nml_ierr)
  nml_error_message='OUTPUT'
