@@ -1,6 +1,6 @@
  !*****************************************************************************************************!
- !             Copyright 2008-2016 Pasquale Londrillo, Stefano Sinigardi, Andrea Sgattoni              !
- !                                 Alberto Marocchino                                                  !
+ !             Copyright 2008-2018 Pasquale Londrillo, Stefano Sinigardi, Andrea Sgattoni              !
+ !                                                Alberto Marocchino                                   !
  !*****************************************************************************************************!
 
  !*****************************************************************************************************!
@@ -34,7 +34,7 @@
  real(dp),allocatable :: env(:,:,:,:),env1(:,:,:,:)
  real(dp),allocatable :: up(:,:,:,:),up0(:,:,:,:),up1(:,:,:,:),flux(:,:,:,:)
  real(dp),allocatable :: ub(:,:,:,:),ub0(:,:,:,:),ub1(:,:,:,:)
- 
+
  real(dp),allocatable :: ebf_bunch_gammarange(:,:,:,:)
  real(dp),allocatable :: ebf1_bunch_gammarange(:,:,:,:)
  real(dp),allocatable :: ebf_gammarange(:,:,:,:)
@@ -54,11 +54,11 @@
  !==============
  ! ns =nsp for active ionization
  !======================
- !extended grid [1:n1+3]  interior [shx,n1]  
+ !extended grid [1:n1+3]  interior [shx,n1]
  !overlapping grid [n1-1,n1+shx]=> 1,shx+2  [1,2] <= [n1-1,n1],[shx,shx+2]=>[n1+1,n1+3]
- 
+
  shx=3
- n1p=n1+shx          
+ n1p=n1+shx
  n2p=n2+shx
  n3p=n3
  ng0=1+(n1-2)*(n2-2)

@@ -1,6 +1,6 @@
  !*****************************************************************************************************!
- !             Copyright 2008-2016 Pasquale Londrillo, Stefano Sinigardi, Andrea Sgattoni              !
- !                                 Alberto Marocchino                                                  !
+ !             Copyright 2008-2018 Pasquale Londrillo, Stefano Sinigardi, Andrea Sgattoni              !
+ !                                                Alberto Marocchino                                   !
  !*****************************************************************************************************!
 
  !*****************************************************************************************************!
@@ -667,7 +667,7 @@
  call ef_bds(ef,i1,i2,j1,j2,k1,k2,zero_dp,ibd)
  ! Uses upper BCs of E fields: ibd=0 for inflow-outflow
  !                             ibd=1 for symmetric
- ! solves B^{n+1/2}= B^n -DTH[rot E]^n 
+ ! solves B^{n+1/2}= B^n -DTH[rot E]^n
  !============================
  call rotE(ef,i1,i2,j1,j2,k1,k2,dthx,dthy,dthz)
  !=============================
@@ -684,7 +684,7 @@
  ! Uses lower BCs for B fields: ibd=0 for inflow-outflow
  !                             ibd=1 for symmetric
  !=======================
- ! solves E^{n+1}= E^n +DT[rot B]^{n+1/2}- ompe*DT*J^{n+1/2} 
+ ! solves E^{n+1}= E^n +DT[rot B]^{n+1/2}- ompe*DT*J^{n+1/2}
  !==================
  call rotB(ef,i1,i2,j1,j2,k1,k2,dtx,dty,dtz)
  !===================
@@ -700,7 +700,7 @@
   call fill_ebfield_yzxbdsdata(ef,i1,i2,j1,j2,k1,k2,1,curr_ndim,str,stl)
  endif
  ! E field gets stl points from right (nyp+stl), (nzp+stl)
- ! solves B^{n+1}= B^{n+1/2} -DTH[rot E]^{n+1} 
+ ! solves B^{n+1}= B^{n+1/2} -DTH[rot E]^{n+1}
  !===================
  call ef_bds(ef,i1,i2,j1,j2,k1,k2,dt_lp,ibd)
  call rotE(ef,i1,i2,j1,j2,k1,k2,dthx,dthy,dthz)
@@ -964,7 +964,7 @@
   end do
  end do
  ! Subtracts from the ongitudinal bunch current the advected initial bunch
- ! current  
+ ! current
  end subroutine advect_bunch_fields
  !==================================
 
@@ -1177,7 +1177,7 @@
      endif
     call ionization_cycle(spec(ic),ebfp,np,ic,iter_loc,0,de_inv)
     endif
-    !======== injects new electrons. 
+    !======== injects new electrons.
    end do
   endif
   !===================END IONIZATION MODULE============
@@ -1368,7 +1368,7 @@
   apy=-dty
   apz=-dtz
   ch=dt_rk*unit_charge(1)
-  fdim=curr_ndim+1     !dimension of fluid variables (ux,uy,uz,den)    
+  fdim=curr_ndim+1     !dimension of fluid variables (ux,uy,uz,den)
   fldim=2*curr_ndim+1  !dimension of aux flx() array
 !====================== CONSERVATIVE FORM for DENSITY MOMEMTA
 !========== t^{k-1}=> t^k  RK cycle===========
@@ -1396,7 +1396,7 @@
       pp(1:curr_ndim)=gam_inv*pp(1:curr_ndim)  !(vx,vy)=pp/gam
      endif
      do ic=1,curr_ndim
-      flx(i,j,k,fdim+ic)=pp(ic) 
+      flx(i,j,k,fdim+ic)=pp(ic)
      end do
     end do
    end do
@@ -1415,7 +1415,7 @@
    end do
   endif
   call fill_flux_yzxbdsdata(flx,&
-                   i1,i2,j1,j2,k1,k2,1,fldim,3,3)  
+                   i1,i2,j1,j2,k1,k2,1,fldim,3,3)
                    !extends flx arrays to [j1-3--j2+3]
   call fill_ebfield_yzxbdsdata(&
                    ef,i1,i2,j1,j2,k1,k2,1,nfield,2,2)
@@ -1432,7 +1432,7 @@
   call rk_fluid_density_momenta(u,flx,i1,i2,j1,j2,k1,k2,fdim,fldim,apx,apy,apz)
                         !in u() adds f(u) derivatives in yrange [j1+1,j2+1]
                         ! u=u0+f(u)   flx[u^{k-1} unmodified
-  call add_rk_lorentz_force      !exit u=u+(E+vxB)^{k-1}  
+  call add_rk_lorentz_force      !exit u=u+(E+vxB)^{k-1}
    do ic=1,fdim
     do k=k1,k2
      do j=j1,j2
@@ -1578,7 +1578,7 @@
     endif
     call ionization_cycle(spec(ic),ebfp,np,ic,itr,0,de_inv)
    endif
-    !======== injects new electrons. 
+    !======== injects new electrons.
   end do
  endif
  !===================END IONIZATION MODULE============
@@ -1892,7 +1892,7 @@
  if(prl)call fill_ebfield_yzxbdsdata(av,i1,i2,j1,j2,k1,k2,1,1,spr,spl)
 
  call env_grad(av,i1,i2,j1,j2,k1,k2,ord,dx_inv,dy_inv,dz_inv)
- !Exit staggered grad|A|^2/2 in jc(2:4) or jc(2:3) 
+ !Exit staggered grad|A|^2/2 in jc(2:4) or jc(2:3)
 
  if(prl)call fill_ebfield_yzxbdsdata(av,i1,i2,j1,j2,k1,k2,2,curr_ndim+1,spr,spl)
 
@@ -1976,7 +1976,7 @@
    str=1
    stl=1
    if(prl)then
-    !                                     !extends flux data to j1-2,j2+2 and k1-2,k2+2 
+    !                                     !extends flux data to j1-2,j2+2 and k1-2,k2+2
     call fill_ebfield_yzxbdsdata(flx,i1,i2,j1,j2,k1,k2,1,fldim,2,2)
     call fill_ebfield_yzxbdsdata(ef,i1,i2,j1,j2,k1,k2,1,nfield,str,stl)
    endif
@@ -1991,7 +1991,7 @@
   end do
    call nc_fluid_density_momenta(flx,u0,i1,i2,j1,j2,k1,k2,fdim,apx,apy,apz)
    call fill_ebfield_yzxbdsdata(curr,i1,i2,j1,j2,k1,k2,1,curr_ndim+1,str,stl)
-   call add_lorentz_force  !u_0=u_0+ F(u)+q*Dt*[E+vxB+grad|A^2|/4*gam] 
+   call add_lorentz_force  !u_0=u_0+ F(u)+q*Dt*[E+vxB+grad|A^2|/4*gam]
   do ic=1,fdim
    do k=k1,k2
     do j=j1,j2
@@ -2051,15 +2051,15 @@
        ez=wk1*(ef(i,j,k,3)+ef(i,j,k-1,3))  !Ez(i,j,k)
        fz=wk1*(curr(i,j,k,4)+curr(i,j,k-1,4))  ! Fz
        b1p=wk1*(ef(i,j,k,5)+ef(i-1,j,k,5))        !by(i+1/2,j,k+1/2)
-       b1m=wk1*(ef(i,j,k-1,5)+ef(i-1,j,k-1,5))    
+       b1m=wk1*(ef(i,j,k-1,5)+ef(i-1,j,k-1,5))
        by=wk1*(b1p+b1m)                !By(i,j,k)
        b1p=wk1*(ef(i,j,k,4)+ef(i,j-1,k,4))        !bx(i,j+1/2,k+1/2)
-       b1m=wk1*(ef(i,j,k-1,4)+ef(i,j-1,k-1,4))    
+       b1m=wk1*(ef(i,j,k-1,4)+ef(i,j-1,k-1,4))
        bx=wk1*(b1p+b1m)                !Bx(i,j,k)
        vx=flx(i,j,k,fdim+1)    !vx^n
        vy=flx(i,j,k,fdim+2)    !vy^n
        vz=flx(i,j,k,fdim+3)    !vz^n
-       u0(i,j,k,1)=u0(i,j,k,1)-den*lzf*vz*by 
+       u0(i,j,k,1)=u0(i,j,k,1)-den*lzf*vz*by
        u0(i,j,k,2)=u0(i,j,k,2)+den*lzf*vz*bx
        u0(i,j,k,3)=u0(i,j,k,3)+den*lzf*(ez+vx*by-vy*bx+fz)
                                          !=> u^{n+1}
@@ -2253,7 +2253,7 @@
  !======================
   if(Hybrid)then
    call set_momentum_density_flux(up,jc,flux,i1,i2,j1,nyf,k1,nzf)
-    !exit jc(1)=q^2*n/gam  
+    !exit jc(1)=q^2*n/gam
    call update_lpf2_fluid_variables(up,up0,flux,ebf,jc,dt_loc,i1,i2,j1,nyf,k1,nzf)
    ! In up,up0 exit updated momenta-density variables (u^{n+1}, u0^{n})
    ! in flux(1) exit the fluid contribution of the sorce term q^2*n/gam
@@ -2574,7 +2574,7 @@
                         spec(ic),ebfp,np,ic,iter_loc,0,deb_inv)
    endif
   end do
-  !======== injects new electrons, with weights equal to ion weights 
+  !======== injects new electrons, with weights equal to ion weights
  endif
 !=======================
 ! STEP 1
@@ -2598,7 +2598,7 @@
     if(initial_time)call init_lpf_momenta(spec(ic),ebfp,1,np,dt_loc,Ltz)
     call lpf_momenta_and_positions(spec(ic),ebfp,1,np,dt_loc,vb,Ltz)
 !  EXIT p^{n+1/2}, v^{n+1/2}, x^{n+1}
-!  in x^{n+1} are stored in ebfp(1:3) old x^n are stored in ebfp((4:6)  
+!  in x^{n+1} are stored in ebfp(1:3) old x^n are stored in ebfp((4:6)
 !  in ebfp(7) is stored dt_loc/gamma
    call curr_accumulate(spec(ic),ebfp,jc,1,np,iform,n_st,xm,ym,zm)
  endif
@@ -2633,7 +2633,7 @@
    if(initial_time)call init_lpf_momenta(bunch(ic),ebfb,1,np,dt_loc,Ltz)
    call lpf_momenta_and_positions(bunch(ic),ebfb,1,np,dt_loc,vb,Ltz)
    if(L_EMBunchEvolution .and. ompe>0.0) call curr_accumulate(bunch(ic),ebfb,jb,1,np,iform,n_st,xm,ym,zm)
-   
+
   endif
  !================ advances bunches
  enddo
@@ -2642,7 +2642,7 @@
 ! time t^{n+1/2}
 ! STEP3  advances fields
 !=======================
- if(L_EMBunchEvolution) call advance_lpf_fields(ebf,jc,dt_loc,vbeam,i1,i2,j1,j2,k1,k2,1) 
+ if(L_EMBunchEvolution) call advance_lpf_fields(ebf,jc,dt_loc,vbeam,i1,i2,j1,j2,k1,k2,1)
  !======================= boundary ibx as for Maxwell equation
  if(ibeam > 0)then
   call advect_bunch_fields(ebf_bunch,jb,&

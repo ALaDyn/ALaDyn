@@ -1,6 +1,6 @@
  !*****************************************************************************************************!
- !             Copyright 2008-2016 Pasquale Londrillo, Stefano Sinigardi, Andrea Sgattoni              !
- !                                 Alberto Marocchino                                                  !
+ !             Copyright 2008-2018 Pasquale Londrillo, Stefano Sinigardi, Andrea Sgattoni              !
+ !                                                Alberto Marocchino                                   !
  !*****************************************************************************************************!
 
  !*****************************************************************************************************!
@@ -236,7 +236,7 @@
    enddo
    if(nden > 2)then
     call set_wake_potential
-    call den_energy_out(tnow,0,nden,1,jump)  !data on jc(1) for wake potential 
+    call den_energy_out(tnow,0,nden,1,jump)  !data on jc(1) for wake potential
     endif
   endif
   if(Hybrid)then
@@ -347,7 +347,7 @@
    enddo
    if(nden>2)then
     call set_wake_potential
-    call den_energy_out(tnow,0,nden,1,jump)  !data on jc(1) for wake potential 
+    call den_energy_out(tnow,0,nden,1,jump)  !data on jc(1) for wake potential
      endif
     endif
   if(nbout> 0)then
@@ -633,13 +633,13 @@
  write(10,*)'nsp_ionz-1,zlev,zmod,N_ge '
  write(10,'(4i8)')nsp_ionz-1,zlev,zmod,N_ge
  write(10,*)'  Max Ef       dt      Omega_au  '
- write(10,'(3E11.4)')Ef_max,dt_fs,omega_a    
+ write(10,'(3E11.4)')Ef_max,dt_fs,omega_a
  if(Two_color)then
  write(10,*)' a0        lam0,      om0,      a1,      lam1,         om1'
- write(10,'(6E11.4)')a0,lam0,oml,a1,lam1,om1   
+ write(10,'(6E11.4)')a0,lam0,oml,a1,lam1,om1
  else
  write(10,*)' a0        lam0,      om0'
- write(10,'(6E11.4)')a0,lam0,oml   
+ write(10,'(6E11.4)')a0,lam0,oml
  endif
  do ic=1,nsp_ionz-1
   write(10,*)' z0,     zmax'
@@ -981,7 +981,7 @@
   write(60,'(a13,e13.3,a10)')'  Intensity= ',lp_intensity,'(e18W/cm2)'
   write(60,'(a9,e13.3,a4)')'  Power = ',lp_pow,'(TW)'
   write(60,'(a10,e13.3,a3)')'  Energy= ',lp_energy,'(J)'
-  write(60,'(a30,i4)')'  Number of main laser pulses= ',nb_laser 
+  write(60,'(a30,i4)')'  Number of main laser pulses= ',nb_laser
   if(nb_laser >1)write(60,'(a29,f5.2)')'  Distance among lp centers= ',lp_delay
   write(60,*)'-----------------------------------'
   if(Two_color)then

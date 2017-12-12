@@ -1,5 +1,5 @@
  !*****************************************************************************************************!
- !             Copyright 2008-2016 Pasquale Londrillo, Stefano Sinigardi, Andrea Sgattoni              !
+ !             Copyright 2008-2018 Pasquale Londrillo, Stefano Sinigardi, Andrea Sgattoni              !
  !*****************************************************************************************************!
 
  !*****************************************************************************************************!
@@ -302,7 +302,7 @@
      rho(i1:i2,j1-1,k1:k2,ik)
     rho(i1:i2,j1,k1:k2,ik)=rho(i1:i2,j1+1,k1:k2,ik)
    endif
-   if(iby==1)then                  
+   if(iby==1)then
     rho(i1:i2,j1+1,k1:k2,ik)=rho(i1:i2,j1+1,k1:k2,ik)+ &
      rho(i1:i2,j1-1,k1:k2,ik)
     rho(i1:i2,j1-1,k1:k2,ik)=0.0
@@ -465,7 +465,7 @@
  iy2=j2
  iz1=k1
  iz2=k2
- ! WARNING str <4 , stl>3 allowed 
+ ! WARNING str <4 , stl>3 allowed
  !=======================
  ! Extends data to the y-left
  ! sends to the right iy=[j2:j2-str+1]
@@ -755,7 +755,7 @@
  iy2=j2
  iz1=k1
  iz2=k2
- ! WARNING str <3 , stl>2 allowed 
+ ! WARNING str <3 , stl>2 allowed
  !=======================
  ! Extends data to the y-left
  ! sends to the right iy=[j2:j2-str+1]

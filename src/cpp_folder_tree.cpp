@@ -1,6 +1,5 @@
 /****************************************************************************************************
-             Copyright 2008-2016 Pasquale Londrillo, Stefano Sinigardi, Andrea Sgattoni
-                                                Alberto Marocchino
+             Copyright 2008-2018 Pasquale Londrillo, Stefano Sinigardi, Andrea Sgattoni
 *****************************************************************************************************
 *****************************************************************************************************
   This file is part of ALaDyn.

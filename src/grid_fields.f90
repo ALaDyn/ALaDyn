@@ -1,5 +1,5 @@
  !*****************************************************************************************************!
- !             Copyright 2008-2016 Pasquale Londrillo, Stefano Sinigardi, Andrea Sgattoni              !
+ !             Copyright 2008-2018 Pasquale Londrillo, Stefano Sinigardi, Andrea Sgattoni              !
  !*****************************************************************************************************!
 
  !*****************************************************************************************************!
@@ -62,7 +62,7 @@
    call set_mat_env5(oml,alp,a0,dx_inv,nx)
    deallocate(amat)
   endif
-  !                       
+  !
   !call set_mat_env2(b0,c0,nx)
   !if(pe0)call env_test(oml,dx_inv,nx)
  !============================
@@ -587,7 +587,7 @@
  !Ey=-Dy[pot] Ez=-Dz[pot]  Ex=-Dx[pot]/gam2
  !Bz=-Dy[Ax]=bet*Ey     By=Dz[Ax]=-bet*Ez   Bx=0
  !============================
- !Interpolation to the Yee grid is needed for [By,Bz] fields 
+ !Interpolation to the Yee grid is needed for [By,Bz] fields
  !==============================================================
  ic=1
  if(pe1y)then
@@ -898,7 +898,7 @@
  integer :: i,j,k,ii,jj,kk
 
 
- ! inviluppo temporale= 
+ ! inviluppo temporale=
  ! eps=1./k0*wy k0=omega_0=omgl
  ! Ay(i,j,k) complex envelope in paraxial approximation
  ! xf0= xc+tf
@@ -920,7 +920,7 @@
     ii=i-2
     xx=loc_xg(ii,1,imodx)
     xx=xx-xf0
-    phi1=(xx-t)/wx        !phi1=(x-xf+tf)/wx=(x-xc)/wx > longitudinal shape 
+    phi1=(xx-t)/wx        !phi1=(x-xf+tf)/wx=(x-xc)/wx > longitudinal shape
     phi0=(xx-tm)/wx
     xx=xx/zra             !xx=(x-xf)/Zr
     w2=1./(1.+xx*xx)
@@ -1534,10 +1534,10 @@
      end do
     end do
    end do
-      
+
  !====================
- !curr(1)=F_R=dt2*S_R+2*A_R^n-A_R^{n-1}-kfact*A_I^{n-1} 
- !curr(2)=F_I=dt2*S_I+2*A_I^n-A_I^{n-1}+kfact*A_R^{n-1} 
+ !curr(1)=F_R=dt2*S_R+2*A_R^n-A_R^{n-1}-kfact*A_I^{n-1}
+ !curr(2)=F_I=dt2*S_I+2*A_I^n-A_I^{n-1}+kfact*A_R^{n-1}
     do k=k1,n3p
      do j=j1,n2p
       do i=i1,n1p
@@ -1630,7 +1630,7 @@
 !==================
 ! The M operator M=[k0*k0+D_xD_x]X = F   X=DA/Dtau
 
- !   Explicit inversion 
+ !   Explicit inversion
  !M^{-1}=([1-Dx_norm^2]F)/k0*k0
  !===============
      call explicit_mat_inv
@@ -1640,8 +1640,8 @@
  !   aX_{i-1}+bX_i + aX_{i+1}=F
  !=============
      !call implicit_mat_inv
- 
- 
+
+
  !
  if(ib>0)then     !fixed coordinate system (x,t)
  !=======================
@@ -4829,11 +4829,11 @@
   real(dp),parameter :: eps=1.e-06
   real(dp),dimension(2),parameter :: w03=(/1./3.,2./3./)
   !real(dp),dimension(2),parameter :: w03=(/0.1250,0.3750/)
-!  enter data [i1,np]  
+!  enter data [i1,np]
   integer :: i,l,ic
 
 !=======ENTER DATA [i1,np]
-!wl_{i+1/2}in range [i=i1+1,np-1] 
+!wl_{i+1/2}in range [i=i1+1,np-1]
 !wr_{i+1/2} in range[i=i1,np-2]
 !(wr+wl)_{i+1/2} in common range [i1+1,np-2]
 ! Dw first derivative in range[i1+2,np-2]
@@ -4864,7 +4864,7 @@
     !s0=s0*min(abs(dw(1)),abs(dw(2)))
     !wl(i,ic)=var(i,ic)+0.5*s0
     !wr(i-1,ic)=var(i,ic)-0.5*s0
-   end do  
+   end do
   end do
 !===================================
    do ic=1,nc-1
@@ -4888,11 +4888,11 @@
   real(dp),parameter :: eps=1.e-06
   real(dp),dimension(2),parameter :: w03=(/1./3.,2./3./)
   !real(dp),dimension(2),parameter :: w03=(/0.1250,0.3750/)
-!  enter data [i1,np]  
+!  enter data [i1,np]
   integer :: i,l,ic
 
 !=======ENTER DATA [i1,np]
-!wl_{i+1/2}in range [i=i1+1,np-1] 
+!wl_{i+1/2}in range [i=i1+1,np-1]
 !wr_{i+1/2} in range[i=i1,np-2]
 !(wr+wl)_{i+1/2} in common range [i1+1,np-2]
 ! Dw first derivative in range[i1+2,np-2]
@@ -4923,7 +4923,7 @@
     !s0=s0*min(abs(dw(1)),abs(dw(2)))
     !wl(i,ic)=var(i,ic)+0.5*s0
     !wr(i-1,ic)=var(i,ic)-0.5*s0
-   end do  
+   end do
   end do
 !===================================
    do ic=1,nc-1
@@ -4973,8 +4973,8 @@
     dw(2)=dw(3)
    end do
 !  wl[i0+2,ng-2]   wr[i0+1,ng-3]
-   
-   
+
+
   end do           !STORES LxF flux on var arrays
   do i=i0+2,ng-3
    vl=wl(i,nc)
@@ -4999,7 +4999,7 @@
     end do
    end subroutine smooth_ind
   end subroutine weno5
-!=================================  
+!=================================
  subroutine nc_fluid_density_momenta(flx,ef,i1,n1p,j1,n2p,k1,n3p,fcomp,aphx,aphy,aphz)
   real(dp),intent(in) :: flx(:,:,:,:)
   real(dp),intent(inout) :: ef(:,:,:,:)
@@ -5026,7 +5026,7 @@
       var(i,ic)=flx(i,j,k,ic)
      end do
     end do
-   call weno3_nc(fcomp+1,i1,n1p) 
+   call weno3_nc(fcomp+1,i1,n1p)
    do ic=1,fcomp-1
     do i=i1+2,n1p-2
      vx=var(i,fcomp+1)
@@ -5054,7 +5054,7 @@
     do j=j01-2,j02+2
      var(j,fcomp+1)=flx(i,j,k,fcomp+2)
     end do
-    call weno3_nc(fcomp+1,j01-2,j02+2)    !rec[flux][j01-1,ij02], [j1-1,n2p] for interior points 
+    call weno3_nc(fcomp+1,j01-2,j02+2)    !rec[flux][j01-1,ij02], [j1-1,n2p] for interior points
     do ic=1,fcomp-1
      do j=j01,j02
       vy=var(j,fcomp+1)
@@ -5081,7 +5081,7 @@
     do k=k01-2,k02+2
      var(k,ic)=flx(i,j,k,ic+2)
     end do
-    call weno3_nc(fcomp+1,k01-2,k02+2)    !rec[flux][j01-1,ij02], [j1-1,n2p] for interior points 
+    call weno3_nc(fcomp+1,k01-2,k02+2)    !rec[flux][j01-1,ij02], [j1-1,n2p] for interior points
     do ic=1,fcomp-1
      do k=k01,k02
       vz=var(k,fcomp+1)
@@ -5119,7 +5119,7 @@
   end do
   do k=k1,n3p
    do j=j1,n2p
-    do i=n1p-1,n1p 
+    do i=n1p-1,n1p
      vx=flx(i,j,k,fcomp+1)
      if(vx >0.0)then
       do ic=1,fcomp-1
@@ -5285,7 +5285,7 @@
     do j=j01-2,j02+2
      var(j,fcomp+1)=flx(i,j,k,fcomp+2)
     end do
-    call weno3(fcomp+1,j01-2,j02+2)    !rec[flux][j01-1,ij02], [j1-1,n2p] for interior points 
+    call weno3(fcomp+1,j01-2,j02+2)    !rec[flux][j01-1,ij02], [j1-1,n2p] for interior points
     do ic=1,fcomp
      do j=j01,j02
       ef(i,j,k,ic)=ef(i,j,k,ic)+aphy*(var(j,ic)-var(j-1,ic))
@@ -5307,7 +5307,7 @@
     do k=k01-2,k02+2
      var(k,ic)=flx(i,j,k,ic+2)
     end do
-    call weno3(fcomp+1,k01-2,k02+2)    !rec[flux][j01-1,ij02], [j1-1,n2p] for interior points 
+    call weno3(fcomp+1,k01-2,k02+2)    !rec[flux][j01-1,ij02], [j1-1,n2p] for interior points
     do ic=1,fcomp
      do k=k01,k02
       ef(i,j,k,ic)=ef(i,j,k,ic)+aphz*(var(k,ic)-var(k-1,ic))
@@ -5335,7 +5335,7 @@
   end do
   do k=k1,n3p
    do j=j1,n2p
-    do i=n1p-1,n1p 
+    do i=n1p-1,n1p
      vx=flx(i,j,k,fcomp+1)
      if(vx >0.0)then
       do ic=1,fcomp
@@ -5442,7 +5442,7 @@
   real(dp),dimension(3),parameter :: lder3=(/0.5,-2.,1.5/)
   real(dp),dimension(3),parameter :: rder3=(/-1.5,2.,-0.5/)
 !=========================
-! Enter conservative variables ef=(ux,uy,uz,den]  fcomp dimension 
+! Enter conservative variables ef=(ux,uy,uz,den]  fcomp dimension
 ! Enter variables ef1=(ux,uy,uz,den,vx,vy,vz]     flcomp dimension
  j01=j1
  j02=n2p
@@ -5453,7 +5453,7 @@
    do i=i1,n1p
      var(i,1:fcomp+1)=flx(i,j,k,1:fcomp+1)  !data [i1:n1p]
    end do
-    call weno5(fcomp+1,i1,n1p)   !exit flux(i+1/2) [i1+2,n1p-3]=> 
+    call weno5(fcomp+1,i1,n1p)   !exit flux(i+1/2) [i1+2,n1p-3]=>
     do ic=1,fcomp
      do i=i1+3,n1p-3
       ef(i,j,k,ic)=ef(i,j,k,ic)+aphx*(var(i,ic)-var(i-1,ic))

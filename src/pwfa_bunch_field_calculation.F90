@@ -1,5 +1,5 @@
  !*****************************************************************************************************!
- !             Copyright 2008-2016 Pasquale Londrillo, Stefano Sinigardi, Andrea Sgattoni              !
+ !             Copyright 2008-2018 Pasquale Londrillo, Stefano Sinigardi, Andrea Sgattoni              !
  !                                 Alberto Marocchino                                                  !
  !*****************************************************************************************************!
 
@@ -101,10 +101,10 @@
 !  call FFT_Psolv(ebf_bunch_gammarange,(twohundred_dp)**2,lxb,lyb, &
 !   nx,nx_loc,ny,ny_loc,nz,nz_loc,i1,i2b,j1,nyp,k1,nzp,1)
  call FFT_Psolv(ebf_bunch_gammarange,(twohundred_dp)**2,ompe,nx,nx_loc,ny,ny_loc,nz,nz_loc,&
-                i1,i2b,j1,nyp,k1,nzp,2,1)  
-                !I have forced ft_mod=2 for cosine transform  
+                i1,i2b,j1,nyp,k1,nzp,2,1)
+                !I have forced ft_mod=2 for cosine transform
                 !I have forced ft_sym=1
-  
+
  call fill_ebfield_yzxbdsdata(ebf_bunch_gammarange,i1,i2b,j1,nyp,k1,nzp,1,2,1,1)
 
  call initial_beam_potential_and_fields &
@@ -381,9 +381,3 @@
 
  !---------------------------
  end module pwfa_bunch_field_calculation
-
-
-
-
-
-

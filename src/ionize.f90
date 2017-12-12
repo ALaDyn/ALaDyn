@@ -1,5 +1,5 @@
  !*****************************************************************************************************!
- !             Copyright 2008-2016 Pasquale Londrillo, Stefano Sinigardi, Andrea Sgattoni              !
+ !             Copyright 2008-2018 Pasquale Londrillo, Stefano Sinigardi, Andrea Sgattoni              !
  !*****************************************************************************************************!
 
  !*****************************************************************************************************!
@@ -83,7 +83,7 @@
    j=k-z0
    ns=2.*nstar(k,ic)-1.
    do i=1,N_ge
-    Ei=dge*real(i,dp)        
+    Ei=dge*real(i,dp)
     fact2=(2.*Vfact(k,ic)/Ei)
     fact1=(fact2)**ns
     fact1=fact1*sqrt(3.*Ei/(pig*Vfact(k,ic)))
@@ -165,7 +165,7 @@
  Wi=omega_a*Wi
  zm_loc=zm-z0
  if(nz_lev==1)then               ! one level ionization
-  !W_one_level(Ef,k=z0:zm,ic) P(k.k+1) ionization 
+  !W_one_level(Ef,k=z0:zm,ic) P(k.k+1) ionization
   !Wi(Ef,zk=1,zm-z0,ic) Rate of ionization zk+z0-1=> zk+z0
   W_one_lev(0:N_ge,zm,ic)=0.0
   do z=0,zm_loc-1
@@ -258,7 +258,7 @@
 
  integer :: n,i,ii
  !========== Enter sp_field(n,1)= the rms momenta Delta*a (n) for env model
- !                 inc=ion_ch_inc(n) the number of ionization electrons   
+ !                 inc=ion_ch_inc(n) the number of ionization electrons
  id_ch=nd2+1
 
 !==========
@@ -325,7 +325,7 @@
 
  integer :: n,i,ii
  !========== Enter sp_field(n,1)= the rms momenta Delta*a (n) for env model
- !                 inc=ion_ch_inc(n) the number of ionization electrons   
+ !                 inc=ion_ch_inc(n) the number of ionization electrons
  id_ch=nd2+1
 
   temp(1)=t0_pl(1)
@@ -424,7 +424,7 @@
     z1=z0+1
     ion_ch_inc(n)=1                !the ionization electron count
     ch(2)=z1
-    sp_loc%part(n,id_ch)=ion_wch   !the new ion (weight,z-charge) 
+    sp_loc%part(n,id_ch)=ion_wch   !the new ion (weight,z-charge)
     ef_ion=1.5*amp_aux(n,1)/Vfact(z1,sp_ion)
     if(ef_ion >0.0)amp_aux(n,1)=sqrt(ef_ion)*amp_aux(n,2)!Delta*|A| on ion(n,ic)
     kk=kk+1
@@ -485,7 +485,7 @@
  efp_aux(1:np,2)=sp_aux(1:np,id_ch-1)
 !=========================
 ! In efp_aux(n,1) is the ionizing field squared |E|^2 on ions n=1,np
-! For envelope model : in efp_aux(n,2) is the env |A| value on ions n=1,np 
+! For envelope model : in efp_aux(n,2) is the env |A| value on ions n=1,np
 !=========================
 
   do n=1,np
@@ -494,12 +494,12 @@
     ef_ion=sqrt(ef2_ion)
     nk=nint(def_inv*ef_ion)
     efp_aux(n,1)=ef_ion
-    el_ionz_count(n)=nk                
+    el_ionz_count(n)=nk
           !for each ion index n nk(n) is the ionizing fiels grid index
    endif
    end do
 !=====================
-! The ionizing field ef_ion=|E| discretized to a grid. 
+! The ionizing field ef_ion=|E| discretized to a grid.
 !            Ef(n)=nk*DE=nk*dge=nk/def_inv
 ! Grid index nk stored in el_ionz_count(n)
 !====================

@@ -1,6 +1,5 @@
 /****************************************************************************************************
-Copyright 2008-2016 Pasquale Londrillo, Stefano Sinigardi, Andrea Sgattoni
-                                    Alberto Marocchino
+Copyright 2008-2018 Pasquale Londrillo, Stefano Sinigardi, Andrea Sgattoni
 *****************************************************************************************************
 *****************************************************************************************************
 This file is part of ALaDyn.
@@ -21,7 +20,7 @@ along with ALaDyn.  If not, see <http://www.gnu.org/licenses/>.
 
 #ifdef _WIN32
 #include <process.h>
-#else 
+#else
 #include <sys/types.h>
 #include <unistd.h>
 #define _getpid(x) getpid(x)
@@ -40,5 +39,3 @@ extern "C" {
     return;
   }
 }
-
-

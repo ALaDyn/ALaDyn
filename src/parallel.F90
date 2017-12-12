@@ -1,5 +1,5 @@
  !*****************************************************************************************************!
- !             Copyright 2008-2016 Pasquale Londrillo, Stefano Sinigardi, Andrea Sgattoni              !
+ !             Copyright 2008-2018 Pasquale Londrillo, Stefano Sinigardi, Andrea Sgattoni              !
  !*****************************************************************************************************!
 
  !*****************************************************************************************************!
@@ -24,7 +24,7 @@
  use mpi_var
  use grid_and_particles
 
-#if !defined (_MSC_VER) && !defined (__INTEL_COMPILER)
+#if !defined (__INTEL_COMPILER)
  use mpi
  use fft_lib
  implicit none
@@ -35,7 +35,6 @@
  use fft_lib
  implicit none
  include 'mpif.h'
- !include 'mpiof.h'
 #endif
 
 

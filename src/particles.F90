@@ -1,6 +1,6 @@
- !4****************************************************************************************************!
- !             Copyright 2008-2016 Pasquale Londrillo, Stefano Sinigardi, Andrea Sgattoni              !
- !                                 Alberto Marocchino												   !
+ !*****************************************************************************************************!
+ !             Copyright 2008-2018 Pasquale Londrillo, Stefano Sinigardi, Andrea Sgattoni              !
+ !                                                Alberto Marocchino                                   !
  !*****************************************************************************************************!
 
  !*****************************************************************************************************!
@@ -501,14 +501,14 @@
   endif
  end select
  end subroutine set_local_positions
-!================ 
+!================
  subroutine set_part_gamma(pt_loc,n1,np,njc)
  real(dp),intent(inout) :: pt_loc(:,:)
  integer,intent(in) :: n1,np,njc
  integer :: n
  real(dp) :: gam2,gam_inv
- 
- 
+
+
   select case(njc)
   case(2)
    do n=n1,np
@@ -530,7 +530,7 @@
  integer,intent(in) :: n1,np,njc
  integer :: n
  real(dp) :: gam2,gam_inv
- 
+
   select case(njc)
   case(2)
    do n=n1,np
@@ -696,8 +696,8 @@
  real(sp) :: charge(2),wgh4
  equivalence(charge,wgh)
  !======================
- ax0=0.0;ay0=0.0 
- ax1=0.0;ay1=0.0 
+ ax0=0.0;ay0=0.0
+ ax1=0.0;ay1=0.0
  axh0=0.0; axh1=0.0
 !========
  ch=size(sp_loc%part,2)
@@ -761,11 +761,11 @@
    pt(n,5)=pt(n,2)-dt_loc*pp(2)
    pt(n,6)=pt(n,3)-dt_loc*pp(3)
    xp1(1)=dx_inv*(pt(n,1)-xmn)       !new positions
-   xp1(2)=dy_inv*(pt(n,2)-ymn)       
-   xp1(3)=dz_inv*(pt(n,3)-zmn)      
+   xp1(2)=dy_inv*(pt(n,2)-ymn)
+   xp1(3)=dz_inv*(pt(n,3)-zmn)
    xp0(1)=dx_inv*(pt(n,4)-xmn)       !old positions
-   xp0(2)=dy_inv*(pt(n,5)-ymn)       
-   xp0(3)=dz_inv*(pt(n,6)-zmn)     
+   xp0(2)=dy_inv*(pt(n,5)-ymn)
+   xp0(3)=dz_inv*(pt(n,6)-zmn)
    call qlql_density_spline(shx,xp0(1),xp1(1),ax0,ax1,axh0,axh1,i0,i,ih0,ih)
    call qq_density_spline(shy,xp0(2),xp1(2),ay0,ay1,j0,j)
    call qq_density_spline(shz,xp0(3),xp1(3),az0,az1,k0,k)
@@ -2672,13 +2672,13 @@
  ! enters av(1)=F=|a|^2/2 envelope at integer grid nodes
  ! and av(2:4)=grad[F] at staggered points
  !  COMPUTES
- !(E,B), F, gradF  assignements to particle positions 
- ! => ap(1:6)  in 2D 
+ !(E,B), F, gradF  assignements to particle positions
+ ! => ap(1:6)  in 2D
  ! => ap(1:10) in 3D
  ! approximated gamma function:
  ! gam_new= gam +0.25*charge*Dt(gam*E+0.5*grad[F]).p^{n-1/2}/gam^2
  ! EXIT
- ! charge*(E+ 0.5grad[F]/gam_new) charge*B/gam_new, F   and wgh/gam_new  
+ ! charge*(E+ 0.5grad[F]/gam_new) charge*B/gam_new, F   and wgh/gam_new
  ! pt(1:5)  in 2D
  ! pt(1:7)  in 3D
  !========================================
@@ -2777,8 +2777,8 @@
    ap(3:5)=ap(3:5)/gamp_new
    pt(n,1)=ap(1)+ap(4)     !E+grad[F]/2
    pt(n,2)=ap(2)+ap(5)
-   pt(n,3)=ap(3)            
-   pt(n,4)=ap(6)            
+   pt(n,3)=ap(3)
+   pt(n,4)=ap(6)
    pt(n,1:3)=charge(2)*pt(n,1:3)
    pt(n,5)=charge(1)/gamp_new
   end do
@@ -5043,7 +5043,7 @@
  !
  ! WARNING: NO X-stretch allowed
  ! Current densities defined by alternating order (quadratic/linear) shapes
- ! Enter new and old poaitions. 
+ ! Enter new and old poaitions.
  !WARNING : to be used ONLY within the one cycle partcle integration scheme
  !=============================================
  ib_ind=size(jc,4)

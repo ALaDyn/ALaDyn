@@ -1,4 +1,24 @@
  !*****************************************************************************************************!
+ !             Copyright 2008-2018 Pasquale Londrillo, Stefano Sinigardi, Andrea Sgattoni              !
+ !*****************************************************************************************************!
+
+ !*****************************************************************************************************!
+ !  This file is part of ALaDyn.                                                                       !
+ !                                                                                                     !
+ !  ALaDyn is free software: you can redistribute it and/or modify                                     !
+ !  it under the terms of the GNU General Public License as published by                               !
+ !  the Free Software Foundation, either version 3 of the License, or                                  !
+ !  (at your option) any later version.                                                                !
+ !                                                                                                     !
+ !  ALaDyn is distributed in the hope that it will be useful,                                          !
+ !  but WITHOUT ANY WARRANTY; without even the implied warranty of                                     !
+ !  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                                      !
+ !  GNU General Public License for more details.                                                       !
+ !                                                                                                     !
+ !  You should have received a copy of the GNU General Public License                                  !
+ !  along with ALaDyn.  If not, see <http://www.gnu.org/licenses/>.                                    !
+ !*****************************************************************************************************!
+
  module pic_out_util
  use particles
  use pic_rutil
@@ -243,7 +263,7 @@
  end subroutine prl_den_energy_interp
 !
  subroutine set_wake_potential
- 
+
  integer :: nyf,nzf,np,i1,i2,j1,k1,stl,str
  real(dp) :: xm,ym,zm
  integer :: ic,i,j,k,jj,kk,n_str,ft_mod,ft_sym
@@ -282,7 +302,7 @@
 !============== jc(1)=rho-Jx=======================
 
  ft_mod=2                                          !for cosine transform
- ft_sym=2              
+ ft_sym=2
 !-------------------------------------------
  call FFT_2D_Psolv(jc,ompe,nx,nx_loc,ny,ny_loc,nz,nz_loc,&
                                 i1,i2,j1,nyf,k1,nzf,ft_mod,ft_sym)

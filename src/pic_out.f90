@@ -1,6 +1,6 @@
  !*****************************************************************************************************!
- !             Copyright 2008-2016 Pasquale Londrillo, Stefano Sinigardi, Andrea Sgattoni       !
- !                                                Alberto Marocchino                                                              !
+ !             Copyright 2008-2018 Pasquale Londrillo, Stefano Sinigardi, Andrea Sgattoni              !
+ !                                                Alberto Marocchino                                   !
  !*****************************************************************************************************!
 
  !*****************************************************************************************************!
@@ -1987,7 +1987,7 @@
   if(ndim <3)ik=2
   nb_tot=nb_laser
   if(Two_color)nb_tot=nb_laser+1
-  eavg(1:nb_tot,nst)=0.0    
+  eavg(1:nb_tot,nst)=0.0
 !================ field component selection
   do ic=1,nb_laser
    if(lp_in(ic) > xm)then
@@ -2025,7 +2025,7 @@
   call allreduce_dpreal(SUMV,ekt,eks,nb_tot)
   call allreduce_dpreal(SUMV,xcm,xcms,nb_tot)
   do ic=1,nb_tot
-   if(eks(ic) >0.0)eavg(ic,nst)=xcms(ic)/eks(ic)          !Sum(xE^2)/sum(E^2) 
+   if(eks(ic) >0.0)eavg(ic,nst)=xcms(ic)/eks(ic)          !Sum(xE^2)/sum(E^2)
   end do
   !=================
  end subroutine laser_struct_data
@@ -2794,7 +2794,7 @@
     ekt(5)=ekt(4)      !<Py>
     ekt(4)=ekt(3)      !<Px>
     ekt(3)=0.0          !<z>
-   else    
+   else
     do kk=1,np_loc
      pp(1:3)=bch(kk,4:6)
      gmb=sqrt(1.+pp(1)*pp(1)+pp(2)*pp(2)+pp(3)*pp(3))

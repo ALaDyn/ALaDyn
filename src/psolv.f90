@@ -1,3 +1,24 @@
+ !*****************************************************************************************************!
+ !             Copyright 2008-2018 Pasquale Londrillo, Stefano Sinigardi, Andrea Sgattoni              !
+ !*****************************************************************************************************!
+
+ !*****************************************************************************************************!
+ !  This file is part of ALaDyn.                                                                       !
+ !                                                                                                     !
+ !  ALaDyn is free software: you can redistribute it and/or modify                                     !
+ !  it under the terms of the GNU General Public License as published by                               !
+ !  the Free Software Foundation, either version 3 of the License, or                                  !
+ !  (at your option) any later version.                                                                !
+ !                                                                                                     !
+ !  ALaDyn is distributed in the hope that it will be useful,                                          !
+ !  but WITHOUT ANY WARRANTY; without even the implied warranty of                                     !
+ !  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                                      !
+ !  GNU General Public License for more details.                                                       !
+ !                                                                                                     !
+ !  You should have received a copy of the GNU General Public License                                  !
+ !  along with ALaDyn.  If not, see <http://www.gnu.org/licenses/>.                                    !
+ !*****************************************************************************************************!
+
  module psolv
  use parallel
  use all_param
@@ -66,8 +87,8 @@
  real(dp) :: ak2p
  integer :: ix,iy,iy1,iz,iz1
  !_________________________________
- ! Laplacian(y,z)(pot)=-rho =>  [k^2_y+k^2_z][pot(ky,kz)]=rho[ky,kz]    
- ! Solves Poisson equation in Fourier space 
+ ! Laplacian(y,z)(pot)=-rho =>  [k^2_y+k^2_z][pot(ky,kz)]=rho[ky,kz]
+ ! Solves Poisson equation in Fourier space
  ! ft_ind >1  sin/cosine transform
  ! ft_mod=0,1   periodic fft
  do iz=1,n3_loc
@@ -95,7 +116,7 @@
  !_________________________________
  ! ft_ind=0,1 solves Poisson equation in Fourier space (kx/gam,ky,kz)
  ! ft_ind=2 solves Poisson equation in sin/cosine Fourier space (kx/gam,ky,kz)
- ! Laplacian(pot)=-rho =>  K^2[pot(kx,ky,kz]=rho[kx,ky,kz]    
+ ! Laplacian(pot)=-rho =>  K^2[pot(kx,ky,kz]=rho[kx,ky,kz]
  if(n3_loc==1)then
   iz=1
   do iy=1,n2_loc
@@ -185,7 +206,7 @@
  !exit fourier components for beam potential
   call pftw3d(wb,n1,n2,n2_loc,n3,n3_loc,1)
  endif
- 
+
  if(prlx)then
   do k=k1,k2
    do j=j1,j2

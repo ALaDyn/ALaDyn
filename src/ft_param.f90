@@ -1,5 +1,5 @@
  !*****************************************************************************************************!
- !             Copyright 2008-2016 Pasquale Londrillo, Stefano Sinigardi, Andrea Sgattoni              !
+ !             Copyright 2008-2018 Pasquale Londrillo, Stefano Sinigardi, Andrea Sgattoni              !
  !*****************************************************************************************************!
 
  !*****************************************************************************************************!
@@ -43,4 +43,3 @@
  parameter(FFTW_SCRAMBLED_INPUT=8192)
  parameter(FFTW_SCRAMBLED_OUTPUT=16384)
  integer FFTW_REDFT00
-
