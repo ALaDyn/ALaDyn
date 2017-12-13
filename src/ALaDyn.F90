@@ -20,8 +20,6 @@
  !  along with ALaDyn.  If not, see <http://www.gnu.org/licenses/>.                                    !
  !*****************************************************************************************************!
 
-!#define ENABLE_GDB_ATTACH
-
  program ALaDyn
 
  use precision_def

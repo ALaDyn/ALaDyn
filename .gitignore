@@ -41,6 +41,8 @@ opt_report.txt
 [Bb]in/
 .vs/
 .vscode/
+*.Rapp.history
+log.*
 
 cmake.*
 make.*

@@ -151,7 +151,7 @@
  subroutine param
  ! sets general parameters and grid depending on initial conditions
  integer :: i, sh_t,pml_size
- real(dp) :: bunch_charge_density,gvol,gvol_inv,a_ch,k_ch,nm_fact
+ real(dp) :: bunch_charge_density,gvol,gvol_inv,nm_fact
  real(dp) :: aph_fwhm
 
  a_lpf(1:4)=1.
@@ -265,6 +265,7 @@
  Two_color = .false.
  Wake=.false.
  Solid_target=.false.
+ nm_fact=1.
  if(iform <2)Charge_cons=.true.
  if(np_per_xc(1) > 0)Part=.true.
  if(nsp > 1)Part=.true.
@@ -380,7 +381,6 @@
   !E0(A,phi) in MV unit
  !==========================================
   np_per_cell=1
-  nm_fact=1.
 !====================================
   !=======================
   ! Code Units for laser fields

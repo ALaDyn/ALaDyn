@@ -58,7 +58,7 @@
 
  integer,parameter :: im1=2147483563,im2=2147483399,ia1=40014, &
   ia2=40692,iq1=53668,iq2=52774,ir1=12211,&
-  ir2=3791,ntab=32,imm1=im1-1,ndiv=1+imm1/ntab
+  ir2=3791,ntab=32,imm1=im1-1,ndiv=1+int(imm1/ntab)
  real(dp),parameter :: am=1.0/im1,eps=1.2e-07,rnmx=1.0-eps
  integer :: j,k
  integer,save :: iv(32)=0,iy=0,idum2=123456789
@@ -895,7 +895,7 @@ idx=n1
            bunch(1,idx)=x
            bunch(2,idx)=y
            bunch(3,idx)=z
-           wgh=1./PRODUCT(ppcb)*(Charge_left+(Charge_right-Charge_left)/s_x*(x+s_x-x_cm))
+           wgh=one_sp/real(PRODUCT(ppcb)*(Charge_left+(Charge_right-Charge_left)/s_x*(x+s_x-x_cm)),sp)
            charge = int(unit_charge(1), hp_int)
            bunch(7,idx)=wgh_cmp
            idx=idx+1
@@ -997,9 +997,9 @@ idx=n1
             bunch(1,idx)=x
             bunch(2,idx)=y
             bunch(3,idx)=z
-            wgh = 1./PRODUCT(ppcb)
-            wgh = wgh*(Charge_left+(Charge_right-Charge_left)/s_x*(x+s_x-x_cm))
-            wgh = wgh*exp(-((y-y_cm)**2+(z-z_cm)**2)/2./s_y**2)
+            wgh = one_sp/PRODUCT(ppcb)
+            wgh = wgh*real((Charge_left+(Charge_right-Charge_left)/s_x*(x+s_x-x_cm)),sp)
+            wgh = wgh*real(exp(-((y-y_cm)**2+(z-z_cm)**2)/2./s_y**2),sp)
             charge = int(unit_charge(1), hp_int)
             bunch(7,idx)=wgh_cmp
             idx=idx+1
@@ -1137,29 +1137,9 @@ subroutine generate_bunch_triangularZ_normalR_equal(n1,n2,x_cm,y_cm,z_cm,s_x,s_y
  random_number_range = (maximum-minimum)*x+minimum
  end function random_number_range
 
- !--- shape for triangular bunch shapes ---!
- real(dp) function shape(x,Charge_left,Charge_Right)
- real(dp), intent(in) :: x,Charge_left,Charge_right
- real(dp) :: intercept, slope, edge, sigma
- edge=0.0
- sigma=edge/3.0
-
- if( x>edge .and. x<1.0-edge) then
-   intercept=Charge_left
-   slope=(Charge_right-Charge_left)/(1.0-2.0*edge)
-   shape = intercept+slope*(x-edge)
- endif
- if( x<edge ) then
-   shape = Charge_left*exp(-(x-edge)**2/(2.0*sigma)**2)
- endif
- if( x>1.0-edge ) then
-   shape = Charge_right*exp(-(x-1.0+edge)**2/(2.0*sigma)**2)
- endif
-end function shape
 
 
-
- !--- MOVE IT TO A NEW SUBROUTINE DESIGNE TO PARTICLE HANDLING?
+ !--- MOVE IT TO A NEW SUBROUTINE DESIGNED TO PARTICLE HANDLING?
  !--- I am placing this subroutine here for the moment
  !--- it is the starting point to initialise particle
  !--- in a random way

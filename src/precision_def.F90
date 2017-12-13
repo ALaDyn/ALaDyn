@@ -39,7 +39,9 @@
  EQUIVALENCE(charge,res_string(1)),(part_ind,res_string(3)),(wgh,res_string(5)),(wgh_cmp,res_string(1))
 
  real(dp), parameter :: zero_dp = 0.0
+ real(sp), parameter :: zero_sp = real(0.0,sp)
  real(dp), parameter :: one_dp = 1.0
+ real(sp), parameter :: one_sp = real(1.0,sp)
  integer, parameter :: zero = 0
  integer, parameter :: one = 1
  end module precision_def
