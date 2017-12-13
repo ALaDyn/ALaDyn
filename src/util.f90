@@ -815,7 +815,7 @@
                wgh = wgh*exp(-(y-y_cm)**2/2./s_y**2)
                wgh = wgh*exp(-(z-z_cm)**2/2./s_z**2)
                charge = int(unit_charge(1), hp_int)
-               wgh_cmp=bunch(7,idx)
+               bunch(7,idx)=wgh_cmp
                idx=idx+1
              enddo
            endif
@@ -897,7 +897,7 @@ idx=n1
            bunch(3,idx)=z
            wgh=1./PRODUCT(ppcb)*(Charge_left+(Charge_right-Charge_left)/s_x*(x+s_x-x_cm))
            charge = int(unit_charge(1), hp_int)
-           wgh_cmp=bunch(7,idx)
+           bunch(7,idx)=wgh_cmp
            idx=idx+1
          enddo
        endif
@@ -1001,7 +1001,7 @@ idx=n1
             wgh = wgh*(Charge_left+(Charge_right-Charge_left)/s_x*(x+s_x-x_cm))
             wgh = wgh*exp(-((y-y_cm)**2+(z-z_cm)**2)/2./s_y**2)
             charge = int(unit_charge(1), hp_int)
-            wgh_cmp=bunch(7,idx)
+            bunch(7,idx)=wgh_cmp
             idx=idx+1
           enddo
         endif
