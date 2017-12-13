@@ -431,10 +431,21 @@
       write(lun,'(4i8)')loc_npart(0:npe_yloc-1,j,jj,jjj)
      end do
     end do
-    if(Beam)then
-     write(lun,*)'B-part'
-     write(lun,'(4i8)')loc_nbpart(0:npe_yloc-1,j,jj,1)
-    endif
+
+    ! if(pe0) THEN
+    !   write(*,*) 'in ALADYN model_id model_id model_id',model_id
+    !   write(*,*) 'in ALADYN dmodel_id dmodel_id dmodel_id',dmodel_id
+    !   write(*,*) 'in ALADYN Beam Beam Beam',Beam
+    ! endif
+
+    ! if(Beam)then
+    !   if(pe0) write(*,*) 'Beam',Beam,allocated(loc_nbpart)
+    !   if(pe0) write(*,*) 'dimensions',npe_yloc,j,jj
+    !  write(lun,*)'B-part'
+    !  ! do jj=0,npe_xloc-1
+    !  write(lun,'(4i8)')loc_nbpart(0:npe_yloc-1,j,jj,1)
+    !  ! enddo
+    ! endif
    end do
   end if
   close(lun)

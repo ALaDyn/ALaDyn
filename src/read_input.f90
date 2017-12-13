@@ -208,11 +208,13 @@
  close(nml_iounit)
  if(nml_ierr>0) call print_at_screen_nml_error
 
- IF(1.le.n_bunches) call select_number_of_bunch_particles(ppc_x_bunch(1),ppc_y_bunch(1),ppc_z_bunch(1),ppc_bunch(1,1:3),nb_tot(1))
- IF(2.le.n_bunches) call select_number_of_bunch_particles(ppc_x_bunch(2),ppc_y_bunch(2),ppc_z_bunch(2),ppc_bunch(2,1:3),nb_tot(2))
- IF(3.le.n_bunches) call select_number_of_bunch_particles(ppc_x_bunch(3),ppc_y_bunch(3),ppc_z_bunch(3),ppc_bunch(3,1:3),nb_tot(3))
- IF(4.le.n_bunches) call select_number_of_bunch_particles(ppc_x_bunch(4),ppc_y_bunch(4),ppc_z_bunch(4),ppc_bunch(4,1:3),nb_tot(4))
- IF(5.le.n_bunches) call select_number_of_bunch_particles(ppc_x_bunch(5),ppc_y_bunch(5),ppc_z_bunch(5),ppc_bunch(5,1:3),nb_tot(5))
+ call select_number_of_bunch_particles()
+
+ ! IF(1.le.n_bunches) call select_number_of_bunch_particles(ppc_x_bunch(1),ppc_y_bunch(1),ppc_z_bunch(1),ppc_bunch(1,1:3),nb_tot(1))
+ ! IF(2.le.n_bunches) call select_number_of_bunch_particles(ppc_x_bunch(2),ppc_y_bunch(2),ppc_z_bunch(2),ppc_bunch(2,1:3),nb_tot(2))
+ ! IF(3.le.n_bunches) call select_number_of_bunch_particles(ppc_x_bunch(3),ppc_y_bunch(3),ppc_z_bunch(3),ppc_bunch(3,1:3),nb_tot(3))
+ ! IF(4.le.n_bunches) call select_number_of_bunch_particles(ppc_x_bunch(4),ppc_y_bunch(4),ppc_z_bunch(4),ppc_bunch(4,1:3),nb_tot(4))
+ ! IF(5.le.n_bunches) call select_number_of_bunch_particles(ppc_x_bunch(5),ppc_y_bunch(5),ppc_z_bunch(5),ppc_bunch(5,1:3),nb_tot(5))
 
  end subroutine read_bunch_namelist
 
@@ -556,22 +558,27 @@ end subroutine read_nml_integrated_background_diagnostic
  end subroutine print_at_screen_nml_error
 
  !--- *** *** *** ---!
- subroutine select_number_of_bunch_particles(ppc_x_bunch,ppc_y_bunch,ppc_z_bunch,ppc_bunch,nb_tot)
-   integer, intent(inout) :: ppc_x_bunch,ppc_y_bunch,ppc_z_bunch,ppc_bunch(3),nb_tot
+ subroutine select_number_of_bunch_particles()
+   integer :: i
 
-   if(ppc_x_bunch==-1 .and. ppc_y_bunch==-1 .and. ppc_z_bunch==-1 .and. nb_tot==-1) then
-     ppc_bunch=1
-     nb_tot=-1
-   elseif(ppc_x_bunch>=1 .and. ppc_y_bunch>=1 .and. ppc_z_bunch>=1 .and. nb_tot>=1) then
-     ppc_bunch(1)=ppc_x_bunch
-     ppc_bunch(2)=ppc_y_bunch
-     ppc_bunch(3)=ppc_z_bunch
-     nb_tot=-1
-   else
-     ppc_bunch(1)=ppc_x_bunch
-     ppc_bunch(2)=ppc_y_bunch
-     ppc_bunch(3)=ppc_z_bunch
-   endif
+   Do i = 1,n_bunches
+
+     if(ppc_x_bunch(i)==-1 .and. ppc_y_bunch(i)==-1 .and. ppc_z_bunch(i)==-1 .and. nb_tot(i)==-1) then
+       ppc_bunch(i,:)=1
+       nb_tot(i)=-1
+     elseif(ppc_x_bunch(i)>=1 .and. ppc_y_bunch(i)>=1 .and. ppc_z_bunch(i)>=1 .and. nb_tot(i)>=1) then
+       ppc_bunch(i,1)=ppc_x_bunch(i)
+       ppc_bunch(i,2)=ppc_y_bunch(i)
+       ppc_bunch(i,3)=ppc_z_bunch(i)
+       nb_tot(i)=-1
+     else
+       ppc_bunch(i,1)=ppc_x_bunch(i)
+       ppc_bunch(i,2)=ppc_y_bunch(i)
+       ppc_bunch(i,3)=ppc_z_bunch(i)
+       nb_tot(i)=-1
+     endif
+
+   EndDo
  end subroutine select_number_of_bunch_particles
 
  end module read_input

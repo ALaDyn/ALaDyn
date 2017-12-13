@@ -170,9 +170,16 @@
  allocate(loc_tpart(npe))
  loc_tpart(1:npe)=0
 !============================
+if(pe0) THEN
+  write(*,*) 'model model model',model
+  write(*,*) 'model_id model_id model_id',model_id
+  write(*,*) 'dmodel_id dmodel_id dmodel_id',dmodel_id
+endif
  if(model >4)then
+   if(pe0) write(*,*) 'im ready to allocate',npe_yloc,npe_zloc,npe_xloc,bkind
   allocate(loc_nbpart(0:npe_yloc-1,0:npe_zloc-1,0:npe_xloc-1,1:bkind))
   loc_nbpart(0:npe_yloc-1,0:npe_zloc-1,0:npe_xloc-1,1:bkind)=0
+   if(pe0) write(*,*) 'i have allocated'
  endif
 
  allocate(yp_next(npe_yloc),yp_prev(npe_yloc))

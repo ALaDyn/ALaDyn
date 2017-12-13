@@ -937,7 +937,7 @@
  !--------------------------
 
  subroutine bfields_out(ef,ef1,tnow,f_ind,jump)
- real(dp),intent(in) :: ef(:,:,:,:),ef1(:,:,:,:)
+ real(dp),intent(inout) :: ef(:,:,:,:),ef1(:,:,:,:)
  real(dp),intent(in) :: tnow
  character(8) :: fname='        '
  integer,intent(in) :: f_ind,jump
@@ -978,6 +978,10 @@
    do iy=j1,nyp,jump
     do ix=i1,nxp,jump
      kk=kk+1
+     if(abs(ef(ix,iy,iz,f_ind)+ef1(ix,iy,iz,f_ind)).gt.1d34) THEN
+       write(*,*) 'Error :: overflow in file output'
+       write(*,'(A,4I4)') 'index:'ix,iy,iz,f_ind
+     endif
      wdata(kk)=real(ef(ix,iy,iz,f_ind)+ef1(ix,iy,iz,f_ind),sp)
     end do
    end do
@@ -2364,7 +2368,7 @@
     !sigma^2 of particle momenta (in KeV)
    end do
   end do
- endif 
+ endif
  if(Ionization)then
   call enb_ionz(nst,tnow,gam_min)      !select ioniz.electrons with gamma > gam_min
  else

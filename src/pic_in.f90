@@ -2957,7 +2957,7 @@
                                syb(ip),zc_bunch(ip),&
                                gam(ip),&
                                epsy(ip),epsz(ip),sigma_cut_bunch(ip),&
-                               dg(ip),bpart,dx,dy,dz,rhob(ip),ppc_bunch(ip,1:3))
+                               dg(ip),bpart,dx,dy,dz,rhob(ip),ppc_bunch(ip,:))
    if(bunch_shape(ip)==1 .and. ppc_bunch(ip,1)==-1) & !equal-weight
                           call generate_bunch_bigaussian_equal(i1,i2,&
                                sxb(ip),xc_bunch(ip),&
