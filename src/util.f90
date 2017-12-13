@@ -809,13 +809,13 @@
                bunch(1,idx)=x
                bunch(2,idx)=y
                bunch(3,idx)=z
-               wgh_cmp=bunch(7,idx)
                wgh = 1.0/PRODUCT(ppcb)
                wgh = wgh*alpha
                wgh = wgh*exp(-(x-x_cm)**2/2./s_x**2)
                wgh = wgh*exp(-(y-y_cm)**2/2./s_y**2)
                wgh = wgh*exp(-(z-z_cm)**2/2./s_z**2)
-               charge = real(unit_charge(1), sp)
+               charge = int(unit_charge(1), hp_int)
+               wgh_cmp=bunch(7,idx)
                idx=idx+1
              enddo
            endif
@@ -853,7 +853,7 @@ real(dp) :: rnumber(n2-n1+1)
     bunch(5,n1:n2)=rnumber*eps_y/s_y
     call boxmuller_vector(rnumber,n2-n1+1)
     bunch(6,n1:n2)=rnumber*eps_z/s_z
-    !bunch(7,n1:n2)=wgh_cmp
+    bunch(7,n1:n2)=wgh_cmp
 end subroutine generate_bunch_bigaussian_equal
 
  !---*** TRIANGULAR-UNIFORM_R bunch, same number of particle per cell :: different weights ***---!
@@ -895,9 +895,9 @@ idx=n1
            bunch(1,idx)=x
            bunch(2,idx)=y
            bunch(3,idx)=z
-           wgh_cmp=bunch(7,idx)
            wgh=1./PRODUCT(ppcb)*(Charge_left+(Charge_right-Charge_left)/s_x*(x+s_x-x_cm))
-           charge = real(unit_charge(1), sp)
+           charge = int(unit_charge(1), hp_int)
+           wgh_cmp=bunch(7,idx)
            idx=idx+1
          enddo
        endif
@@ -954,7 +954,7 @@ idx=n1
    bunch(5,n1:n2)=rnumber*2.*eps_y/s_y
    call boxmuller_vector(rnumber,n2-n1+1)
    bunch(6,n1:n2)=rnumber*2.*eps_z/s_z
-   !bunch(7,n1:n2)=wgh_cmp
+   bunch(7,n1:n2)=wgh_cmp
  end subroutine generate_bunch_triangularZ_uniformR_equal
 
 
@@ -997,11 +997,11 @@ idx=n1
             bunch(1,idx)=x
             bunch(2,idx)=y
             bunch(3,idx)=z
-            wgh_cmp=bunch(7,idx)
             wgh = 1./PRODUCT(ppcb)
             wgh = wgh*(Charge_left+(Charge_right-Charge_left)/s_x*(x+s_x-x_cm))
             wgh = wgh*exp(-((y-y_cm)**2+(z-z_cm)**2)/2./s_y**2)
-            charge = real(unit_charge(1), sp)
+            charge = int(unit_charge(1), hp_int)
+            wgh_cmp=bunch(7,idx)
             idx=idx+1
           enddo
         endif
@@ -1053,7 +1053,7 @@ subroutine generate_bunch_triangularZ_normalR_equal(n1,n2,x_cm,y_cm,z_cm,s_x,s_y
   bunch(5,n1:n2)=rnumber*eps_y/s_y
   call boxmuller_vector(rnumber,n2-n1+1)
   bunch(6,n1:n2)=rnumber*eps_z/s_z
-  !bunch(7,n1:n2)=wgh_cmp
+  bunch(7,n1:n2)=wgh_cmp
  end subroutine generate_bunch_triangularZ_normalR_equal
 
 

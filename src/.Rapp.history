@@ -1,0 +1,332 @@
+#---------------------------------------------------------------##
+### --- *** Putting together old and new *** --- ####
+#--------------------------------------------------------------##
+forecast<-c()#
+forecast <- data.frame( progressive_id,store,year,week,qty,sigp,sigm,estimated_markdown,estimated_seasonality,estimated_traffic)#
+year<-c(); store<-c(); average_price<-c(); averageT<-c(); average_precipitation_mm<-c()#
+average_markdown<-c(); average_unittck<-c(); progressive_id<-c(); count=0; average_traffic<-c(); average_qty<-c()#
+#
+for (ishop in 1:nrow(store_master)){ #shop-loop#
+      if(store_master$store[ishop]!=39740){#
+            count=count+1#
+            for (iyear in c(2014:2017)){#
+                  if( iyear<=2016){#
+                  selected <-(store_data$store==store_master$store[ishop] & store_data$txn_year==iyear)#
+                  #print(c(store_master$store[ishop],iyear,mean(store_data$avg_price[selected])))#
+#
+                  year<-c(year,iyear)#
+                  store<-c(store,store_master$store[ishop])#
+                  # average_price<-c(average_price,mean(store_data$avg_price[selected]))#
+                  average_markdown<-c(average_markdown,mean(store_data$avg_markdown[selected]))#
+                  # average_unittck<-c(average_unittck,mean(store_data$units_per_ticket[selected]))#
+                  average_traffic<-c(average_traffic,mean(store_data$traffic[selected]))#
+                  progressive_id<-c(progressive_id,count)#
+                  average_qty<-c(average_qty,mean(store_data$qty[selected]))#
+                }else{#
+                  selected <-(forecast$store==store_master$store[ishop] & forecast$year==iyear)#
+                  year<-c(year,iyear)#
+                  store<-c(store,store_master$store[ishop])#
+                  # average_price<-c(average_price,mean(forecast$avg_price[selected]))#
+                  average_markdown<-c(average_markdown,mean(forecast$estimated_markdown[selected]))#
+                  # average_unittck<-c(average_unittck,mean(forecast$units_per_ticket[selected]))#
+                  average_traffic<-c(average_traffic,mean(forecast$estimated_traffic[selected]))#
+                  progressive_id<-c(progressive_id,count)#
+                  average_qty<-c(average_qty,mean(forecast$qty[selected]))#
+                }#
+          }#
+      }#
+}#
+store_year_averaged <- data.frame( progressive_id,year,store,average_markdown,average_qty,average_traffic)
+p1<-ggplot(store_year_averaged, aes(x=progressive_id, y=average_qty, group=store),las=2) + geom_line() +#
+geom_point(data=store_year_averaged, aes(x=progressive_id, y=average_qty, colour=factor(year), group=year)) +#
+scale_x_continuous("Store",breaks=store_year_averaged$progressive_id,labels=store_year_averaged$store) +#
+theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ylab("Average Quantity") + ggtitle("averaged quantity per year")
+p1
+x<-seq(1,10,100)
+x
+x<-seq(1,10)
+x
+seq(1,10)
+seq(1,0.1,10)
+dnorm(x, mean = 0, sd = 1, log = FALSE)
+dnorm(10, mean = 0, sd = 1)
+x<-seq(1,10,length=100)#
+y_therory<-x#
+y=y_therory+rnorm(n=100,mean=0.,sd=1.)
+plot(x,y)
+plot(x,y_theory)
+plot(x,y_therory)
+x<-seq(1,10,length=100)#
+y_therory<-x#
+y=y_therory+rnorm(n=100,mean=0.,sd=1.)#
+data<-data.frame(x,y,y_therory)
+linear_model <- lm(data,y~x)
+x<-seq(1,10,length=100)#
+y_therory<-x#
+y=y_therory+rnorm(n=100,mean=0.,sd=1.)#
+mydata<-data.frame(x,y,y_therory)
+linear_model <- lm(mydata,y~x)
+linear_model <- lm(data=mydata,y~x)
+mydata$prediction<-predict(linear_model, type="link",se=FALSE)
+mydata<-predict(linear_model, type="link",se=FALSE)
+predict(linear_model,x, type="link",se=FALSE)
+x
+predict(linear_model,x)
+predict(linear_model,data=predict(linear_model,newdata=mydata$x, type="link",se=FALSE)x, type="link",se=FALSE)
+predict(linear_model,newdata=mydata$x, type="link",se=FALSE)
+predict(linear_model,nmydata$x, type="link",se=FALSE)
+predict(linear_model,mydata$x, type="link",se=FALSE)
+predict(linear_model,newdata=mydata$x, type="link",se=FALSE)
+predict(linear_model,newdata=mydata$x)
+predict(linear_model,newdata=mydata)
+predict(linear_model,newdata=mydata, type="link",se=FALSE)
+predict(linear_model,newdata=mydata, se=FALSE)
+aaa<-predict(linear_model,newdata=mydata, se=FALSE)
+aaa
+predict(linear_model,newdata=mydata, se=FALSE)[[1]]
+predict(linear_model,newdata=mydata, se=FALSE)[[:]]
+predict(linear_model,newdata=mydata, se=FALSE)
+linear_model <- lm(data=mydata,y~x)#
+mydata$prediction<-predict(linear_model,newdata=mydata, se=FALSE)
+ggplot(mydata, aes(x=x, y=y)) + geom_point()
+ggplot(mydata, aes(x=x, y=y)) + geom_point() +#
+geom_point(aes(x=x,y=y_therory))
+ggplot(mydata, aes(x=x, y=y)) + geom_point() +#
+geom_point(aes(x=x,y=y_therory)) +#
+geom_line(aes(x=x,y=prediction)) +
+ggplot(mydata, aes(x=x, y=y)) + geom_point() +#
+geom_point(aes(x=x,y=y_therory)) +#
+geom_line(aes(x=x,y=prediction))
+ggplot(mydata, aes(x=x, y=y)) + geom_point() +#
+geom_line(aes(x=x,y=prediction))
+ggplot(mydata, aes(x=x, y=y)) + geom_point() +#
+geom_point(aes(x=x,y=y_therory)) +#
+geom_line(aes(x=x,y=prediction),colour="#000099")
+ggplot(mydata, aes(x=x, y=y)) + geom_point() +#
+geom_point(aes(x=x,y=y_therory)) +#
+geom_line(aes(x=x,y=prediction),colour="#CC0000")
+ggplot(mydata, aes(x=x, y=y)) + geom_point() +#
+geom_point(aes(x=x,y=y_therory)) +#
+geom_line(aes(x=x,y=prediction),colour="#CC0000",size=2)
+ggplot(mydata, aes(x=x, y=y)) + geom_point() +#
+geom_point(aes(x=x,y=y_therory)) +#
+geom_line(aes(x=x,y=prediction),colour="#CC0000",size=1.3)
+ggplot(mydata, aes(x=x, y=y)) + geom_point() +#
+geom_point(aes(x=x,y=y_therory)) +#
+geom_line(aes(x=x,y=prediction),colour="#CC0000",size=1.3)+#
+xlab("x")+ylab("y")
+ggplot(mydata, aes(x=x, y=y)) + geom_point() +#
+geom_point(aes(x=x,y=y_therory),shape = 2) +#
+geom_line(aes(x=x,y=prediction),colour="#CC0000",size=1.3)+#
+xlab("x")+ylab("y")
+ggplot(mydata, aes(x=x, y=y)) + geom_point() +#
+geom_line(aes(x=x,y=prediction),colour="#CC0000",size=1.3)+#
+geom_point(aes(x=x,y=y_therory),shape = 2) +#
+xlab("x")+ylab("y")
+quit()
+116*5
+(116+23.8*3)
+1060/5-(116+23.8*3)
+1060/5-(116+23.8*4)
+(116+7.5*4)
+(116+7.5*4)*5
+730/20
+734/20
+736/20
+738/20
+740/20
+740/5
+20/5
+720/20
+740-720
+20/5
+19+6.65
+528*2
+548*2
+q<-30e-12/30e3
+q
+q/1.6e-19
+4500*q
+4500*6250
+1.6e-19*2*pi*(0.9e-6)*(1.4e-6)*(1+0)*20e-6/2.*1e16*1e6
+1.6e-19*2*pi*(0.9e-6)*(1.4e-6)*(1+0)*20e-6/2.*1e16*1e6*1e12
+1.6e-19*2*pi*(0.9e-6)*(1.4e-6)*(10+0)*20e-6/2.*1e16*1e6*1e12
+1.6e-19*2*pi*(0.9e-6)*(1.4e-6)*(30+0)*20e-6/2.*1e16*1e6*1e12
+1.6e-19*2*pi*(0.9e-6)*(1.4e-6)*(300+0)*20e-6/2.*1e16*1e6*1e12
+1.6e-19*2*pi*(0.9e-6)*(1.4e-6)*(270+0)*20e-6/2.*1e16*1e6*1e12
+1.6e-19*2*pi*(0.9e-6)*(1.4e-6)*(230+0)*20e-6/2.*1e16*1e6*1e12
+sqrt(2*pi)
+seq(1,2,3)
+seq(1,20,3)
+seq(4,64)
+seq(4,64,4)
+len(seq(4,64,4))
+length(seq(4,64,4))
+length(seq(10,100,10))
+10*17
+200/5
+740/5
+720-250
+720/20
+470/20
+460/20
+480/20
+720-240
+240/5
+112-240/5
+240/5
+60-48
+88-48
+240/5
+68-48
+3*.7
+1e-6/3e8
+quit()
+3e8*60*3.34e-15
+3e8*60*3.34e-15*1e6
+quit()
+180-60
+120*0.08
+1.8*4
+quit()
+480/5
+520/5*0.75
+116+23.4*4
+(116+23.4*4)*5
+(116+23.4*4)*5/20
+1040/20
+1040/20/2
+1040/20
+1/12.5*1.56
+1/12.5
+1/12.5*1.56
+quit()
+1.8*2
+28*4+10
+33*4+10
+17*4+10
+87/3
+sqrt(87/2)
+sz=20e-6
+sx=20e-6
+sz=16.8e-6
+V=sz*sy**2*pi
+V=sx*sz**2*pi
+DV=1e-6*0.4e-6*0.4e-6
+DV/V
+DV/V*1e6
+0.49389E+02
+30/12
+30/sqrt(12)
+sqrt(30**2/12)
+49/8.66
+589941+605091+605091+620544+589941+605091+605091+620544
+(589941+605091+605091+620544+589941+605091+605091+620544)/2420667
+(472620+478620+478620+484680+472620+478620+478620+484680)/1914540
+210-15
+30/sqrt(12)
+sqrt(2.3/1)
+sqrt(2.376/1)
+sqrt(2.8e-1/3)
+1250/8
+520/2
+1040/2
+474/2
+260/4
+1/5*1040
+1/2.5*(1040/2)
+sqrt(5.51/1)
+sqrt(5.51*1)
+sqrt(15*1)
+0.42837E-02
+8.4**2*6e-2**2
+1.7**2
+8.4**2*6e-2**2-2e-3**2
+sqrt(8.4**2*6e-2**2-2e-3**2)
+sqrt(8.3978**2*5.9558e-2**2-1.99177e-3**2)
+sqrt(8.3978**2*5.9558e-2**2-9.9620e-4**2)
+sqrt(12)
+sqrt(12)*2.50159e-1
+1/2.50159e-1
+sqrt(2.50159e-1)
+1/sqrt(2.50159e-1)
+sigmax = np.average((X-average)**2, weights=W)
+1e9/(64/8*7)
+1e9/(64/8*7)/1e9
+1e9/(64/8*7)/1e6
+1e9/(64/8*(7+5))/1e6
+9.83e+01
+54/11
+54.65/11.78
+54.65/11.78*100
+54.65/11.78
+54.65*21.6/100
+54.65/11.778396*100
+54.65/11.778396
+(54.65/11.778396)**-1
+(54.65/11.778396)**-1*100
+580/12
+580/48
+580/11
+580/12
+580/13
+580/14
+580/16
+580/10
+130/7
+200/7.5
+528/12
+:q
+quit()
+580/2
+416/2
+542/2
+290/4
+290/5
+280/4
+110*4000
+110*4000/1e4
+10/13*100
+(1-10/13)*100
+(23-13)/23
+(23-13)/13
+(23-13)/23
++ `enum_dimension_number num_dim`: The number of dimensions of the problem known from#
+  class `Grid` is stored here#
++ `enum_problem_geometry geometry`: The geometry of the problem known from#
+  class `Grid` is stored here#
++ `multi_array<type_data, 3> density`: The density for each cell#
++ `multi_array<type_data, 4> velocity`: The velocity components for each cell#
++ `multi_array<type_data, 3> temperature`: The temperature for each cell#
++ `multi_array<type_data, 3> ionization`: The ionization for each cells#
++ `multi_array<type_data, 3> internal_energy`: The internal energy for each cell#
++ `multi_array<type_data, 4> Bfield`: The B field components for each cell
+600+7e3
+600+7e3+1e3
+600+7e3+1e3+3e4
+600+7e3+1e3+3e4+1e3
+600+7e3+1e3+3e4+1e3+15e3
+600+7e3+1e3+3e4+1e3+15e3+100
+600+7e3+1e3+3e4+1e3+15e3+100+500
+1/4*1.5
+1/4*1.05
+1/4*1.5
+7+5+9+5+4
+528/4
+528/2
+528/2/4
+520/2
+470/2
+240/4
+832-822
+24*24
+520/20
+520/12
+520/13
+50/12
+# Class Status
+import matplotlib.pyplot as plt
+quit()
+setwd("/Users/albz/Codes/Code_ALaDyn/ALaDyn_albz_forked/ALaDyn/src")
+quir()
+quit()
