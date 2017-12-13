@@ -1,5 +1,5 @@
  !*****************************************************************************************************!
- !             Copyright 2008-2018 Pasquale Londrillo, Stefano Sinigardi, Andrea Sgattoni              !
+ !                            Copyright 2008-2018  The ALaDyn Collaboration                            !
  !*****************************************************************************************************!
 
  !*****************************************************************************************************!
@@ -382,7 +382,7 @@
  ! backward advection for v_adv <0
  ! In comoving system in the Maxwell eqs. enters v_adv <0
  !==================
- !Implicit advection scheme in x-coordinate 
+ !Implicit advection scheme in x-coordinate
  !          E^n+1=E^n-aphx_adv*[D_xE^n+D_xE^{n+1}]
  !          (1+aphx_adv*D_x)E^{n+1}=(1-aphx_adv*D_x)E^n
  !================================
@@ -493,13 +493,13 @@
  ! backward advection for v_adv <0
  ! In comoving system in the Maxwell eqs. enters v_adv <0
  !==================
- !Implicit advection scheme in x-coordinate 
+ !Implicit advection scheme in x-coordinate
  !          E^n+1=E^n-aphx_adv*[D_xE^n+D_xE^{n+1}]
  !          (1+aphx_adv*D_x)E^{n+1}=(1-aphx_adv*D_x)E^n
  !================================
        aphx_adv1=v_adv*aphx     ! for first order upwind
        aphx_adv=0.25*aphx_adv1  !implicit second order
-                                !v_adv*(Dt/Dx)/4=>  1/2 for space derivative and 
+                                !v_adv*(Dt/Dx)/4=>  1/2 for space derivative and
        !                                            1/2 for time averaging
  ind=1
  b1=1.
@@ -1619,7 +1619,7 @@
  !=================
  !  Computes D_{x} centered first derivatives of A and adds to S(A)
   call first_Ader
- !S_R => S_R -2*k0[D_xA_I]  
+ !S_R => S_R -2*k0[D_xA_I]
  !S_I => S_I +2*k0[D_xA_R]
  !
    do k=k1,n3p
@@ -1719,24 +1719,24 @@
      end do
     end do
    end do
- !curr(1)=F_R=dt2*S_R-kfact*B_I^{n-1/2} 
- !curr(2)=F_I=dt2*S_I+kfact*B_R^{n-1/2} 
+ !curr(1)=F_R=dt2*S_R-kfact*B_I^{n-1/2}
+ !curr(2)=F_I=dt2*S_I+kfact*B_R^{n-1/2}
  !====================
   if(a_fact >0.0)call AF_der(1)
- !F_R => F_R +dt*[D_xB_R]  
+ !F_R => F_R +dt*[D_xB_R]
  !F_I => F_I +dt*[D_xB_I]
  !======================
   call AF_der(2)
- !F_R => (1+dt*D_x)F_R-kfact*F_I  
- !F_I => (1+dt*D_x)F_I+kfact*F_R  
+ !F_R => (1+dt*D_x)F_R-kfact*F_I
+ !F_I => (1+dt*D_x)F_I+kfact*F_R
  !======================
   do k=k1,n3p
    do j=j1,n2p
     do i=i1,n1p
      evf(i,j,k,1)=evf(i,j,k,1)+evf(i,j,k,3) !A^{n}=> B^{n+1/2}+A^{n-1}
-     evf(i,j,k,2)=evf(i,j,k,2)+evf(i,j,k,4) 
+     evf(i,j,k,2)=evf(i,j,k,2)+evf(i,j,k,4)
      evf(i,j,k,3)=evf(i,j,k,1)
-     evf(i,j,k,4)=evf(i,j,k,2) 
+     evf(i,j,k,4)=evf(i,j,k,2)
     end do
    end do
   end do
@@ -1755,7 +1755,7 @@
     end do
    end do
   end do
- contains 
+ contains
  subroutine AF_der(id)
 
   integer,intent(in) :: id
@@ -2840,7 +2840,7 @@
  ! eps=1./k0*wy k0=omega_0=omgl
  ! NORMAL INCIDENCE
 
- sigma=1./(om0*wx) 
+ sigma=1./(om0*wx)
  eps=1./(om0*wy)
  zra=0.5*om0*wy*wy
  xc=xf0-tf
@@ -3239,7 +3239,7 @@
   sf=sin(pi*angle/180.)
   cf=cos(pi*angle/180.)
  endif
- sigma=1./(om0*wx) 
+ sigma=1./(om0*wx)
  eps=1./(om0*wy)
  zra=0.5*om0*wy*wy
  xc=xf0-tf+lp_shx
@@ -5292,7 +5292,7 @@
       var(i,ic)=flx(i,j,k,ic)
      end do
     end do
-   call weno3_nc(fcomp+1,i1,n1p) 
+   call weno3_nc(fcomp+1,i1,n1p)
    do ic=1,fcomp-1               !var=momenta
     do i=i1+2,n1p-2
      vx=var(i,fcomp+1)

@@ -1,5 +1,5 @@
  !*****************************************************************************************************!
- !             Copyright 2008-2018 Pasquale Londrillo, Stefano Sinigardi, Andrea Sgattoni              !
+ !                            Copyright 2008-2018  The ALaDyn Collaboration                            !
  !*****************************************************************************************************!
 
  !*****************************************************************************************************!
@@ -46,7 +46,7 @@
   if(dt_loc > 0.0)p=nint((t_out-t_in)/dt_loc)
   track_tot_nstep=nint(real(p,dp)/real(tkjump,dp))
   ndv=size(sp_loc%part,2)
-  
+
 ! Select particles on each mpi_task
  ik=0
  select case(ndim)
@@ -88,7 +88,7 @@
  last_ind=0
  if(mype >0)last_ind=sum(loc_tpart(1:mype))
  if(loc_tpart(mype+1)>0)write(6,*)'last_ind',mype,last_ind
- do p=1,np 
+ do p=1,np
   wgh_cmp=sp_loc%part(p,ndv)
   if(part_ind >0)part_ind=part_ind+int(last_ind,hp_int)
   sp_loc%part(p,ndv)=wgh_cmp

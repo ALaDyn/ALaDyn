@@ -1,6 +1,5 @@
  !*****************************************************************************************************!
- !             Copyright 2008-2018 Pasquale Londrillo, Stefano Sinigardi, Andrea Sgattoni              !
- !                                                Alberto Marocchino                                   !
+ !                            Copyright 2008-2018  The ALaDyn Collaboration                            !
  !*****************************************************************************************************!
 
  !*****************************************************************************************************!
@@ -19,8 +18,6 @@
  !  You should have received a copy of the GNU General Public License                                  !
  !  along with ALaDyn.  If not, see <http://www.gnu.org/licenses/>.                                    !
  !*****************************************************************************************************!
-
-!#define ENABLE_GDB_ATTACH
 
  program ALaDyn
 

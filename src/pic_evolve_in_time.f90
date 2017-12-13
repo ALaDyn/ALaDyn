@@ -1,6 +1,5 @@
  !*****************************************************************************************************!
- !             Copyright 2008-2018 Pasquale Londrillo, Stefano Sinigardi, Andrea Sgattoni              !
- !                                                Alberto Marocchino                                   !
+ !                            Copyright 2008-2018  The ALaDyn Collaboration                            !
  !*****************************************************************************************************!
 
  !*****************************************************************************************************!
@@ -192,7 +191,7 @@
  integer :: j2,k2,ndv
  integer :: j,k
 
- !========== inject particles from the right 
+ !========== inject particles from the right
  !   xmx is the box xmax grid value at current time after window move
  !   in Comoving frame xmax is fixed and particles are left advected
  !=================================
@@ -200,7 +199,7 @@
  !  nptx(ic) is updated in the same way both for moving window xmax
  !  or for left-advect particles with fixed xmax
  !===============================================
- 
+
  ndv=nd2+1
  do ic=1,nsp
  ! if(Comoving)then
@@ -208,7 +207,7 @@
  !  if(i1 <= sptx_max(ic))then
  !   i2=i1
  !   do ix=i1,sptx_max(ic)
- !    if(xpt(ix,ic) <= xmx)i2=i2+1 
+ !    if(xpt(ix,ic) <= xmx)i2=i2+1
  !   end do
  !  endif
  !  nptx(ic)=i2
@@ -216,7 +215,7 @@
    i1=1+nptx(ic)
    if(i1 <= sptx_max(ic))then
     do ix=i1,sptx_max(ic)
-     if(xpt(ix,ic) > xmx)exit 
+     if(xpt(ix,ic) > xmx)exit
     end do
     i2=ix-1
     if(ix==sptx_max(ic))i2=ix
@@ -331,25 +330,25 @@
  real(dp) :: dt_tot
  logical,parameter :: mw=.true.
  !======================
- ! In comoving x-coordinate the 
+ ! In comoving x-coordinate the
  ! [xmin <= x <= xmax] computational box is stationaty
- ! xi= (x-vb*t) => xw is left-advected 
+ ! xi= (x-vb*t) => xw is left-advected
  ! fields are left-advected in the x-grid directely in the maxw. equations
  ! particles are left-advected:
  ! xp=xp-vb*dt inside the computational box is added in the eq. of motion and
  ! for moving coordinates at each w_nst steps
  ! xpt(ix,ic)=xpt(ix,ic)-vb*w_nst*dt outside the computational box
  ! then targ_in=targ_in -vb*w_nst*dt   targ_out=targ_out-vb*w_nst*dt
- ! 
+ !
  !==================
  if(loc_it==0)return
  dt_tot=0.0
  do i=1,w_nst
   dt_tot=dt_tot+dt_loc
  enddo
- shx=nint(dx_inv*dt_tot*vb)      !the number of grid points x-shift for each w_nst step 
+ shx=nint(dx_inv*dt_tot*vb)      !the number of grid points x-shift for each w_nst step
  do i=1,nx+1
-  xw(i)=xw(i)-dx*shx   !moves backwards the grid xw 
+  xw(i)=xw(i)-dx*shx   !moves backwards the grid xw
  end do
  xw_max=xw_max-dx*shx
  xw_min=xw_min-dx*shx
@@ -660,7 +659,7 @@
  ! B^{n} => B^{n}+v_b*Dth[Dx]B^n  v_b >0
  endif
  !==================================
- ! solves B^{n+1/2}= B^n -Dth[rot E]^n 
+ ! solves B^{n+1/2}= B^n -Dth[rot E]^n
  !============================
  call rotE(ef,i1,i2,j1,j2,k1,k2,dthx,dthy,dthz)
  !=============================
@@ -704,7 +703,7 @@
  endif
  ! E field gets stl points from right (nyp+stl), (nzp+stl)
  call ef_bds(ef,i1,i2,j1,j2,k1,k2,dt_lp,ibd)
- ! solves B^{n+1}= B^{n+1/2} -Dth[rot E]^{n+1} 
+ ! solves B^{n+1}= B^{n+1/2} -Dth[rot E]^{n+1}
  !===================
  call rotE(ef,i1,i2,j1,j2,k1,k2,dthx,dthy,dthz)
  !==============
@@ -1133,7 +1132,7 @@
    gam2=1.+dot_product(pp(1:3),pp(1:3))
    pt(p,7)= dt_lp/sqrt(gam2)
    vp(1:3)=pt(p,7)*pp(1:3)
-   pt(p,1:3)=vp(1:3)                  !stores dt*V 
+   pt(p,1:3)=vp(1:3)                  !stores dt*V
    sp_loc%part(p,1:3)=sp_loc%part(p,1:3)+vp(1:3) !new positions
   end do
  end select
@@ -1147,7 +1146,7 @@
  if(Comoving)then
   do p=n0,np
    sp_loc%part(p,1)=sp_loc%part(p,1)-dt_lp*vb
-   pt(p,1)=pt(p,1)-dt_lp*vb ! 
+   pt(p,1)=pt(p,1)-dt_lp*vb !
   end do
  endif
  end subroutine lpf_momenta_and_positions
@@ -1213,7 +1212,7 @@
     !============
     call set_lpf_acc(ebf,spec(ic),ebfp,np,ndim,nfield,n_st,xm,ym,zm)
     call field_charge_multiply(spec(ic),ebfp,1,np,nfield)
-   
+
     if(initial_time)call init_lpf_momenta(spec(ic),ebfp,1,np,dt_loc,Ltz)
     call lpf_momenta_and_positions(spec(ic),ebfp,1,np,dt_loc,vbeam,Ltz)
     ! For each species :

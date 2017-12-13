@@ -5,27 +5,58 @@ enable_language(CXX)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 
+# uncomment the following definition to enable GDB attach to debug while running
+# add_definitions(-DENABLE_GDB_ATTACH)
+
+# make sure that the default is a RELEASE
+set(default_build_type "Release")
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+  message(STATUS "Setting build type to '${default_build_type}' as none was specified.")
+  set(CMAKE_BUILD_TYPE "${default_build_type}" CACHE
+      STRING "Choose the type of build." FORCE)
+  set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS
+    "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
+endif()
+
+
+include(CheckCXXCompilerFlag)
+function(enable_cxx_compiler_flag_if_supported flag)
+    string(FIND "${CMAKE_CXX_FLAGS}" "${flag}" flag_already_set)
+    if(flag_already_set EQUAL -1)
+        check_cxx_compiler_flag("${flag}" flag_supported)
+				if(flag_supported)
+						message(STATUS "  Enabled flag: " ${flag})
+						SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${flag}" PARENT_SCOPE)
+						SET(CMAKE_Fortran_FLAGS  "${CMAKE_Fortran_FLAGS} ${flag}" PARENT_SCOPE)
+        endif()
+        unset(flag_supported CACHE)
+    endif()
+endfunction()
+
+enable_cxx_compiler_flag_if_supported("-Wall")
+enable_cxx_compiler_flag_if_supported("/Wall")
+
 get_filename_component (Fortran_COMPILER_NAME ${CMAKE_Fortran_COMPILER} NAME)
 if (Fortran_COMPILER_NAME MATCHES "gfortran*")
   if (MARCONI_KNL)
-    set (CMAKE_CXX_COMPILE_FLAGS "${CMAKE_CXX_COMPILE_FLAGS} -mavx512f -mavx512cd -mavx512er -mavx512pf")
-    set (CMAKE_Fortran_FLAGS_RELEASE "-fdefault-real-8 -funroll-all-loops  -mavx512f -mavx512cd -mavx512er -mavx512pf -O3")
-    set (CMAKE_Fortran_FLAGS_DEBUG   "-fdefault-real-8 -Wall -Wextra -fbacktrace -fbounds-check  -mavx512f -mavx512cd -mavx512er -mavx512pf -Og -g")
+    string(APPEND CMAKE_CXX_COMPILE_FLAGS " -mavx512f -mavx512cd -mavx512er -mavx512pf")
+    string(APPEND CMAKE_Fortran_FLAGS_RELEASE " -fdefault-real-8 -funroll-all-loops  -mavx512f -mavx512cd -mavx512er -mavx512pf -O3")
+    string(APPEND CMAKE_Fortran_FLAGS_DEBUG   " -fdefault-real-8 -Wextra -fbacktrace -fbounds-check  -mavx512f -mavx512cd -mavx512er -mavx512pf -Og -g")
   else()
-    set (CMAKE_Fortran_FLAGS_RELEASE "-fdefault-real-8 -funroll-all-loops -O3")
-    set (CMAKE_Fortran_FLAGS_DEBUG   "-fdefault-real-8 -Wall -Wextra -fbacktrace -fbounds-check -Og -g")
+    string(APPEND CMAKE_Fortran_FLAGS_RELEASE " -fdefault-real-8 -funroll-all-loops -O3")
+    string(APPEND CMAKE_Fortran_FLAGS_DEBUG   " -fdefault-real-8 -Wextra -fbacktrace -fbounds-check -Og -g")
   endif()
 elseif (Fortran_COMPILER_NAME MATCHES "ifort*")
   if (MARCONI_KNL)
-    set (CMAKE_CXX_COMPILE_FLAGS "${CMAKE_CXX_COMPILE_FLAGS} -xMIC-AVX512")
-    set (CMAKE_Fortran_FLAGS_RELEASE "-real-size 64 -xMIC-AVX512 -O3")
-    set (CMAKE_Fortran_FLAGS_DEBUG   "-real-size 64 -xMIC-AVX512 -check all -fpe0 -warn -traceback -debug extended -O0 -g")
-    set (CMAKE_Fortran_LINK_FLAGS "${CMAKE_Fortran_LINK_FLAGS} -lstdc++")
+    string(APPEND CMAKE_CXX_COMPILE_FLAGS " -xMIC-AVX512")
+    string(APPEND CMAKE_Fortran_FLAGS_RELEASE " -real-size 64 -xMIC-AVX512 -O3")
+    string(APPEND CMAKE_Fortran_FLAGS_DEBUG   " -real-size 64 -xMIC-AVX512 -check all -fpe0 -warn -traceback -debug extended -O0 -g")
+    string(APPEND CMAKE_Fortran_LINK_FLAGS " -lstdc++")
   else()
-    set (CMAKE_CXX_COMPILE_FLAGS "${CMAKE_CXX_COMPILE_FLAGS} -axcore-avx-i,SSE4.2")
-    set (CMAKE_Fortran_FLAGS_RELEASE "-real-size 64 -axcore-avx-i,SSE4.2 -O3")
-    set (CMAKE_Fortran_FLAGS_DEBUG   "-real-size 64 -check all -fpe0 -warn -traceback -debug extended -O0 -g")
-    set (CMAKE_Fortran_LINK_FLAGS "${CMAKE_Fortran_LINK_FLAGS} -lstdc++")
+    string(APPEND CMAKE_CXX_COMPILE_FLAGS " -axcore-avx-i,SSE4.2")
+    string(APPEND CMAKE_Fortran_FLAGS_RELEASE " -real-size 64 -axcore-avx-i,SSE4.2 -O3")
+    string(APPEND CMAKE_Fortran_FLAGS_DEBUG   " -real-size 64 -check all -fpe0 -warn -traceback -debug extended -O0 -g")
+    string(APPEND CMAKE_Fortran_LINK_FLAGS " -lstdc++")
   endif()
 else ()
   if (MARCONI_KNL)
@@ -33,8 +64,6 @@ else ()
   else()
     message ("CMAKE_Fortran_COMPILER found but unsupported")
     message ("Let's try using it...")
-    set (CMAKE_Fortran_FLAGS_RELEASE "-O3")
-    set (CMAKE_Fortran_FLAGS_DEBUG   "-O0 -g")
   endif ()
 endif ()
 
@@ -50,25 +79,15 @@ if(NOT FFTW_FOUND AND NOT MKL_FOUND)
 message(FATAL_ERROR "FFTW and MKL not found, unable to build")
 endif()
 
-# make sure that the default is a RELEASE
-set(default_build_type "Release")
-if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
-  message(STATUS "Setting build type to '${default_build_type}' as none was specified.")
-  set(CMAKE_BUILD_TYPE "${default_build_type}" CACHE
-      STRING "Choose the type of build." FORCE)
-  set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS
-    "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
-endif()
-
-set(CMAKE_CXX_COMPILE_FLAGS "${CMAKE_CXX_COMPILE_FLAGS} ${MPI_COMPILE_FLAGS}")
-set(CMAKE_CXX_LINK_FLAGS "${CMAKE_CXX_LINK_FLAGS} ${MPI_LINK_FLAGS}")
-set(CMAKE_Fortran_COMPILE_FLAGS "${CMAKE_Fortran_COMPILE_FLAGS} ${MPI_COMPILE_FLAGS} ${MPI_Fortran_COMPILE_FLAGS}")
-set(CMAKE_Fortran_LINK_FLAGS "${CMAKE_Fortran_LINK_FLAGS} ${MPI_LINK_FLAGS} ${MPI_Fortran_LINK_FLAGS}")
+string(APPEND CMAKE_CXX_COMPILE_FLAGS " ${MPI_COMPILE_FLAGS}")
+string(APPEND CMAKE_CXX_LINK_FLAGS " ${MPI_LINK_FLAGS}")
+string(APPEND CMAKE_Fortran_COMPILE_FLAGS " ${MPI_COMPILE_FLAGS} ${MPI_Fortran_COMPILE_FLAGS}")
+string(APPEND CMAKE_Fortran_LINK_FLAGS " ${MPI_LINK_FLAGS} ${MPI_Fortran_LINK_FLAGS}")
 
 include_directories(${OTHER_INCLUDE_DIR} ${MPI_INCLUDE_PATH} ${MPI_Fortran_INCLUDE_PATH} ${FFTW_INCLUDES} ${MKL_INCLUDE_DIRS} ${Boost_INCLUDE_DIR})
 link_directories(${OTHER_LINK_DIR})
 
-add_executable (ALaDyn 
+add_executable (ALaDyn
 	src/ALaDyn.F90
 	src/precision_def.F90
 	src/mpi_var.f90
@@ -103,43 +122,31 @@ add_executable (ALaDyn
 	src/pwfa_output_addons.f90
 )
 
+#add_library(ALaCarte STATIC ${ALaCarte_SOURCES})
+add_library(cpp_folder_tree STATIC src/cpp_folder_tree.cpp)
+add_library(find_last_addr STATIC src/find_last_addr.cpp)
+add_library(enable_gdb_attach STATIC src/enable_gdb_attach.cpp)
 
-target_link_libraries(ALaDyn 
-	cpp_folder_tree 
-	find_last_addr 
-	enable_gdb_attach 
-	${MPI_Fortran_LIBRARIES} 
-	${MPI_LIBRARIES} 
+target_link_libraries(ALaDyn
+  #ALaCarte
+	cpp_folder_tree
+	find_last_addr
+	enable_gdb_attach
+	${MPI_Fortran_LIBRARIES}
+	${MPI_LIBRARIES}
 	${Boost_LIBRARIES}
-) 
+)
 
 if(MKL_FOUND)
-target_link_libraries(ALaDyn 
-	${MKL_LIBRARIES} 
-) 
+target_link_libraries(ALaDyn
+	${MKL_LIBRARIES}
+)
 else()
-	target_link_libraries(ALaDyn 
-	${FFTW_LIBRARIES} 
-) 
+	target_link_libraries(ALaDyn
+	${FFTW_LIBRARIES}
+)
 endif()
 
-
-#set_target_properties(ALaDyn PROPERTIES HAS_Fortran TRUE LINKER_LANGUAGE CXX)
-#set_target_properties(ALaDyn PROPERTIES HAS_CXX TRUE LINKER_LANGUAGE Fortran)
 set_target_properties(ALaDyn PROPERTIES LINKER_LANGUAGE Fortran)
 
 install (TARGETS ALaDyn DESTINATION ${CMAKE_SOURCE_DIR}/bin/)
-
-add_library(cpp_folder_tree STATIC src/cpp_folder_tree.cpp)
-#set_target_properties(cpp_folder_tree PROPERTIES HAS_CXX TRUE)
-#set_property(TARGET ${cpp_folder_tree} PROPERTY LINKER_LANGUAGE CXX)
-
-add_library(find_last_addr STATIC src/find_last_addr.cpp)
-#set_target_properties(find_last_addr PROPERTIES HAS_CXX TRUE)
-#set_property(TARGET ${find_last_addr} PROPERTY LINKER_LANGUAGE CXX)
-
-add_library(enable_gdb_attach STATIC src/enable_gdb_attach.cpp)
-#set_target_properties(enable_gdb_attach PROPERTIES HAS_CXX TRUE)
-#set_property(TARGET ${enable_gdb_attach} PROPERTY LINKER_LANGUAGE CXX)
-
-
