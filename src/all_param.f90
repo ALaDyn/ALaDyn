@@ -1,5 +1,5 @@
  !*****************************************************************************************************!
- !             Copyright 2008-2018 Pasquale Londrillo, Stefano Sinigardi, Andrea Sgattoni              !
+ !                            Copyright 2008-2018  The ALaDyn Collaboration                            !
  !*****************************************************************************************************!
 
  !*****************************************************************************************************!
@@ -374,7 +374,7 @@
    nfield=6
    curr_ndim=3
   endif
-  if(lp_offset /=0.0)Two_color=.true.
+  if(.not. is_zero(lp_offset)) Two_color=.true.
 !====================
   !to be multiplied by the particle charge in the equation of motion
   !E=in unit mc^2/(e*l0)=[TV/m]/E0; E0*E in [TV/m]=[MV/mu] unit

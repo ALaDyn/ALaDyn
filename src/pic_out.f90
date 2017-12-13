@@ -1,6 +1,5 @@
  !*****************************************************************************************************!
- !             Copyright 2008-2018 Pasquale Londrillo, Stefano Sinigardi, Andrea Sgattoni              !
- !                                                Alberto Marocchino                                   !
+ !                            Copyright 2008-2018  The ALaDyn Collaboration                            !
  !*****************************************************************************************************!
 
  !*****************************************************************************************************!
@@ -2364,7 +2363,7 @@
     !sigma^2 of particle momenta (in KeV)
    end do
   end do
- endif 
+ endif
  if(Ionization)then
   call enb_ionz(nst,tnow,gam_min)      !select ioniz.electrons with gamma > gam_min
  else

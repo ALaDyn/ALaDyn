@@ -1,5 +1,5 @@
  !*****************************************************************************************************!
- !             Copyright 2008-2018 Pasquale Londrillo, Stefano Sinigardi, Andrea Sgattoni              !
+ !                            Copyright 2008-2018  The ALaDyn Collaboration                            !
  !*****************************************************************************************************!
 
  !*****************************************************************************************************!
@@ -44,4 +44,16 @@
  real(sp), parameter :: one_sp = real(1.0,sp)
  integer, parameter :: zero = 0
  integer, parameter :: one = 1
+
+ contains
+
+ function is_zero(value) result(check)
+ real(dp),intent(in) :: value
+ real(dp),parameter  :: small_value = 0.1
+ logical             :: check
+
+ check = abs(value) < epsilon(small_value)
+
+ end function is_zero
+
  end module precision_def

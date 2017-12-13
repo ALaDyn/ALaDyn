@@ -1,6 +1,7 @@
 /****************************************************************************************************
-Copyright 2008-2018 Pasquale Londrillo, Stefano Sinigardi, Andrea Sgattoni
+*                           Copyright 2008-2018  The ALaDyn Collaboration                           *
 *****************************************************************************************************
+
 *****************************************************************************************************
 This file is part of ALaDyn.
 
@@ -17,8 +18,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with ALaDyn.  If not, see <http://www.gnu.org/licenses/>.
 ****************************************************************************************************/
-
-
 
 extern "C" {
 

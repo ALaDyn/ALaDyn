@@ -1,5 +1,5 @@
  !*****************************************************************************************************!
- !             Copyright 2008-2018 Pasquale Londrillo, Stefano Sinigardi, Andrea Sgattoni              !
+ !                            Copyright 2008-2018  The ALaDyn Collaboration                            !
  !*****************************************************************************************************!
 
  !*****************************************************************************************************!
@@ -2774,8 +2774,8 @@
    ap(3:5)=ap(3:5)/gamp_new
    pt(n,1)=ap(1)+ap(4)     !E+grad[F]/2
    pt(n,2)=ap(2)+ap(5)
-   pt(n,3)=ap(3)            
-   pt(n,4)=ap(6)            
+   pt(n,3)=ap(3)
+   pt(n,4)=ap(6)
    pt(n,5)=wgh/gamp_new
   end do
   !========================
@@ -4861,11 +4861,11 @@
    vp(1:2)=0.5*vp(1:2)               !1/2 * V*q*wgh*dt
 
    pt(n,1)=loc_sp%part(n,1)          !new x position
-   xp1(1)=dx_inv*(pt(n,1)-xmn)   
+   xp1(1)=dx_inv*(pt(n,1)-xmn)
    xp0(1)=dx_inv*(pt(n,3)-xmn)
 !============================
    xp1(2)=pt(n,2)                !norm new and y-positions
-   xp0(2)=pt(n,4) 
+   xp0(2)=pt(n,4)
 
    call ql_interpolate(xp0,ax0,axh0,ay0,ayh0,i0,j0,ih0,jh0)
    call ql_interpolate(xp1,ax1,axh1,ay1,ayh1,i,j,ih,jh)
@@ -5037,7 +5037,7 @@
  !
  ! WARNING: NO X-stretch allowed
  ! Current densities defined by alternating order (quadratic/linear) shapes
- ! Enter new and old positions. 
+ ! Enter new and old positions.
  !WARNING : to be used ONLY within the one cycle partcle integration scheme
  !=============================================
  ib_ind=size(jc,4)
@@ -5070,10 +5070,10 @@
   vp(2:3)=sp_loc%part(n,5:6)     !Momenta at t^{n+1/2}
   wgh_cmp=sp_loc%part(n,7)
   wght=real(charge*wgh,sp)       !w*q for  q=charge
-  gam_inv=wght*pt(n,7)           !q*wgh*dt/gam               
+  gam_inv=wght*pt(n,7)           !q*wgh*dt/gam
   vp(1)=0.5*wght*vp(1)           !dt*q*wgh*V_x/2
   vp(2:3)=0.5*gam_inv*vp(2:3)    !wgh*q*dt*V factor 1/2 from density average
-  
+
   pt(n,1)=sp_loc%part(n,1)  !(x) new
   xp1(1)=dx_inv*(pt(n,1)-xmn)
   xp0(1)=dx_inv*(pt(n,4)-xmn)

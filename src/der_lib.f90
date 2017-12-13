@@ -1,5 +1,5 @@
  !*****************************************************************************************************!
- !             Copyright 2008-2018 Pasquale Londrillo, Stefano Sinigardi, Andrea Sgattoni              !
+ !                            Copyright 2008-2018  The ALaDyn Collaboration                            !
  !*****************************************************************************************************!
 
  !*****************************************************************************************************!
@@ -319,8 +319,8 @@
  !          To invert a penta-diagonal matrix
  !          coefficients  a(1,1:3)  first row
  !          coefficients  a(2,1:4)  second row
- !          coefficients  a(3,1:5)  interior rows 
- !          
+ !          coefficients  a(3,1:5)  interior rows
+ !
  allocate(amat(ng,ng))
  amat=0.0
 

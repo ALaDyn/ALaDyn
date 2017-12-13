@@ -1,5 +1,5 @@
  !*****************************************************************************************************!
- !             Copyright 2008-2018 Pasquale Londrillo, Stefano Sinigardi, Andrea Sgattoni              !
+ !                            Copyright 2008-2018  The ALaDyn Collaboration                            !
  !*****************************************************************************************************!
 
  !*****************************************************************************************************!
@@ -412,7 +412,7 @@
     charge=charge+1
     ion_ch_inc(n)=1                !the ionization electron count
     z0=z0+1
-    sp_loc%part(n,id_ch)=wgh_cmp          !the new ion (id,z-chargei,wgh) 
+    sp_loc%part(n,id_ch)=wgh_cmp          !the new ion (id,z-chargei,wgh)
     ef_ion=1.5*amp_aux(n,1)/Vfact(z0,sp_ion)
     if(ef_ion >0.0)amp_aux(n,1)=sqrt(ef_ion)*amp_aux(n,2)!Delta*|A| on ion(n,ic)
     kk=kk+1
