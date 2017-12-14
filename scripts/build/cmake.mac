@@ -6,6 +6,7 @@ export FC=/usr/local/bin/gfortran-7
 
 mkdir -p build ; cd build
 cmake .. -DCMAKE_BUILD_TYPE="Debug" -DCMAKE_Fortran_COMPILER=$FC
+#cmake .. -DCMAKE_Fortran_COMPILER=$FC
 cmake --build . --target install
 #make VERBOSE=1
 cd ..
