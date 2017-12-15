@@ -79,6 +79,11 @@
 
  subroutine LP_cycle
 
+ if(P_tracking)then
+  call initial_tparticles_select(spec(1),dt,txmin,txmax,tymin,tymax,tzmin,tzmax)
+  tk_ind=tk_ind+1
+  call t_particles_collect(spec(1),tk_ind)
+ endif
  call data_out(jump)
  dt_loc=dt
  t_ind=0
@@ -94,12 +99,17 @@
    if(Pe0) call Impact_ioniz_data(atomic_number(nsp_ionz-1),z1_coll)
   endif
  endif
- if(P_tracking)then
-  call initial_tparticles_select(spec(1),dt,txmin,txmax,tymin,tymax,tzmin,tzmax)
- endif
+
  do while (tnow < tmax)
 
   call LP_run(tnow,dt_loc,iter,LPf_ord)
+
+    if(P_tracking)then
+   if(mod(iter,tkjump)==0)then
+    tk_ind=tk_ind+1
+    call t_particles_collect(spec(1),tk_ind)
+   endif
+  endif
 
   call timing
   call data_out(jump)
@@ -117,6 +127,11 @@
 
  subroutine ENV_cycle
 
+ if(P_tracking)then
+  tk_ind=tk_ind+1
+  call initial_tparticles_select(spec(1),dt,txmin,txmax,tymin,tymax,tzmin,tzmax)
+  call t_particles_collect(spec(1),tk_ind)
+ endif
  call data_out(jump)
  dt_loc=dt
  t_ind=0
@@ -128,11 +143,16 @@
   end do
   if(Pe0) call Ioniz_data(lp_max,ion_min,atomic_number,ionz_lev,ionz_model)
  endif
- if(P_tracking)then
-  call initial_tparticles_select(spec(1),dt,txmin,txmax,tymin,tymax,tzmin,tzmax)
- endif
+
  do while (tnow < tmax)
   call ENV_run(tnow,dt_loc,iter,LPf_ord)
+
+  if(P_tracking)then
+   if(mod(iter,tkjump)==0)then
+    tk_ind=tk_ind+1
+    call t_particles_collect(spec(1),tk_ind)
+   endif
+  endif
 
   call timing
   call data_out(jump)
@@ -189,12 +209,7 @@
 
 
  idata=iout
- if(P_tracking)then
-  if(mod(iter,tkjump)==0)then
-   tk_ind=tk_ind+1
-   call t_particles_collect(spec(1),ebfp,tk_ind)
-  endif
- endif
+
  if(Diag)then
   if (tnow>=tdia) then
    ienout=ienout+1
@@ -212,7 +227,9 @@
   endif
 !=============== tracking data
   if(P_tracking)then
+   if(tk_ind >1)then
    if(tk_ind <= track_tot_nstep)call track_part_pdata_out(tnow,tk_ind,1)
+   endif
   endif
 !==================
   if(nvout>0)then

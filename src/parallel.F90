@@ -436,7 +436,24 @@ endif
  endif
 
  end subroutine exchange_3d_sp_data
- !====================
+  !====================
+ subroutine exchange_1d_grdata(sr,dat0,lenw,ipe,tag)
+ logical,intent(in) :: sr
+ real(dp),intent(inout) :: dat0(:)
+ integer,intent(in) :: lenw,ipe,tag
+ if(sr)then
+
+  call mpi_send(dat0(1),lenw,mpi_sd,ipe,tag, &
+   comm,error)
+
+ else
+
+  call mpi_recv(dat0(1),lenw,mpi_sd,ipe,tag, &
+   comm,status,error)
+ endif
+
+ end subroutine exchange_1d_grdata
+ !
  subroutine exchange_2d_grdata(sr,dat0,n1,n2,ipe,tag)
  logical,intent(in) :: sr
  real(dp),intent(inout) :: dat0(:,:)

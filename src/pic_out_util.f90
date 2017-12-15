@@ -28,14 +28,15 @@
  !=====Contains functions to prepare selected output variables=======
  contains
 !============================================
+!============================================
 !=============== Tracking particles============
  subroutine initial_tparticles_select(sp_loc,dt_loc,tx1,tx2,ty1,ty2,tz1,tz2)
 
  type(species),intent(inout) :: sp_loc
  real(dp),intent(in):: dt_loc,tx1,tx2,ty1,ty2,tz1,tz2
 
- integer :: np,p,ik,ndv,ik_max,last_ind
- integer(hp_int) :: plab
+ integer :: np,p,ik,ndv,ik_max
+ integer(hp_int) :: plab,last_ind
  real(dp) :: xx,yy,zz
 
  np=size(sp_loc%part,1)
@@ -46,7 +47,7 @@
   if(dt_loc > 0.0)p=nint((t_out-t_in)/dt_loc)
   track_tot_nstep=nint(real(p,dp)/real(tkjump,dp))
   ndv=size(sp_loc%part,2)
-
+  
 ! Select particles on each mpi_task
  ik=0
  select case(ndim)
@@ -84,60 +85,88 @@
  call intvec_distribute(ik,loc_tpart,npe)
  track_tot_part=sum(loc_tpart(1:npe))
  ik_max=maxval(loc_tpart(1:npe))
- allocate(pdata_tracking(ndv,ik_max,track_tot_nstep))
  last_ind=0
- if(mype >0)last_ind=sum(loc_tpart(1:mype))
- if(loc_tpart(mype+1)>0)write(6,*)'last_ind',mype,last_ind
- do p=1,np
+ if(mype==1)last_ind=loc_tpart(1)
+ if(mype>1)last_ind=sum(loc_tpart(1:mype))
+ if(loc_tpart(mype+1)>0)write(6,*)'last partcle index',mype,last_ind
+ do p=1,np 
   wgh_cmp=sp_loc%part(p,ndv)
-  if(part_ind >0)part_ind=part_ind+int(last_ind,hp_int)
+  if(part_ind >0)part_ind=part_ind+last_ind
   sp_loc%part(p,ndv)=wgh_cmp
  enddo
+ allocate(track_aux(2*ndv*ik_max))
  if(pe0)then
+  allocate(pdata_tracking(ndv,track_tot_part,track_tot_nstep))
+  write(6,*)'==== Initial track-Partcile data==========='
   write(6,'(a19,i6)')'  tot_track_steps  ',track_tot_nstep
   write(6,'(a19,i6)')'  tot_track_parts  ',track_tot_part
-  write(6,'(a19,i6)')'  Max track_parts  ',ik_max
   write(6,'(a18,i8)')'  short_int size  ',huge(plab)
-  write(6,'(a20,e11.4)')'  ptrack memory(MB) ',1.e-06*real(4*ndv*track_tot_nstep*ik_max,dp)
+  write(6,'(a20,e11.4)')'  ptrack memory(MB) ',1.e-06*real(4*ndv*track_tot_nstep*track_tot_part,dp)
  endif
 !================================
-
  end subroutine initial_tparticles_select
 !============================================
- subroutine t_particles_collect(sp_loc,sp_aux,time_ind)
+ subroutine t_particles_collect(sp_loc,time_ind)
 
  type(species),intent(in) :: sp_loc
- real(dp),intent(inout) :: sp_aux(:,:)
  integer,intent(in) :: time_ind
 
- integer :: np,ik,ip,p,ndv
+ integer :: np,ik,ip,p,ndv,ipe,kk,ik1,ik2
+ logical :: sr
 
  if(time_ind > track_tot_nstep)return
  np=size(sp_loc%part,1)
  ndv=size(sp_loc%part,2)
  ik=0
+ kk=0
  do p=1,np
   wgh_cmp=sp_loc%part(p,ndv)
   if(part_ind >0)then
    ik=ik+1
    do ip=1,ndv
-    sp_aux(ik,ip)=sp_loc%part(p,ip)
+    kk=kk+1
+    track_aux(kk)=sp_loc%part(p,ip)
    enddo
   endif
  enddo
  loc_tpart(mype+1)=ik
- if(ik >0)then
-  !write(6,*)mype,ik,size(pdata_tracking,2),time_ind
- do p=1,ik
-  do ip=1,ndv-1
-   pdata_tracking(ip,p,time_ind)=real(sp_aux(p,ip),sp)
+ call intvec_distribute(ik,loc_tpart,npe)
+!=================
+ if(pe0)then
+  sr=.false.
+  ik1=0
+  do ipe=1,npe-1
+   ik=loc_tpart(ipe+1)
+   if(ik >0)then
+    call exchange_1d_grdata(sr,track_aux,ik*ndv,ipe,ipe+10)
+               !pe0 receives from ipe ik sp_aux data and collects on track array
+   wgh_cmp=track_aux(ndv)
+    kk=0
+    do p=1,ik
+     ik2=ik1+p
+     do ip=1,ndv-1
+      kk=kk+1
+      pdata_tracking(ip,ik2,time_ind)=real(track_aux(kk),sp)
+     enddo
+     kk=kk+1
+     wgh_cmp=track_aux(kk)
+     pdata_tracking(ndv,ik2,time_ind)=real(part_ind,sp)
+    enddo
+    ik1=ik2
+   endif
   enddo
-  wgh_cmp=sp_aux(p,ndv)
-  pdata_tracking(ndv,p,time_ind)=real(part_ind,sp)
- enddo
+  loc_tpart(1)=ik2
+ else
+  ik=loc_tpart(mype+1)
+  if(ik >0)then
+   sr=.true.
+   call exchange_1d_grdata(sr,track_aux,ik*ndv,0,mype+10)    !sends ik data to pe0
+   wgh_cmp=track_aux(ndv)
+  endif
  endif
  end subroutine t_particles_collect
 !=================================================
+
  subroutine fill_density_data(den,i1,i2,j1,j2,k1,k2,ic)
   real(dp),intent(inout)  :: den(:,:,:,:)
   integer,intent(in) :: i1,i2,j1,j2,k1,k2,ic

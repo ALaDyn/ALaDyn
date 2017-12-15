@@ -979,7 +979,7 @@
      kk=kk+1
      if(abs(ef(ix,iy,iz,f_ind)+ef1(ix,iy,iz,f_ind)).gt.1d34) THEN
        write(*,*) 'Error :: overflow in file output'
-       write(*,'(A,4I4)') 'index:'ix,iy,iz,f_ind
+       write(*,'(A,4I4)') 'index:',ix,iy,iz,f_ind
      endif
      wdata(kk)=real(ef(ix,iy,iz,f_ind)+ef1(ix,iy,iz,f_ind),sp)
     end do
@@ -1626,7 +1626,11 @@
  write (folderName,'(i4.4)') iout
 
  ndv=nd2+1
- ip=loc_tpart(mype+1)
+ if(mype>0)then
+  ip=0
+ else
+  ip=loc_tpart(1)
+ endif
  call intvec_distribute(ip,loc_tpart,npe)
 
  tot_tpart=0
@@ -1640,15 +1644,17 @@
  lenp=ndv*ip*tk
  allocate(pdata(lenp))
  ik=0
- if(ip >0)then
-  do p=1,ip
-   do it=1,tk
-    do q=1,ndv
-     ik=ik+1
-     pdata(ik)=pdata_tracking(q,p,it) !(coordinates,pindex,time)=>(coordinates,time,pind)
+ if(pe0)then
+  if(ip >0)then
+   do p=1,ip
+    do it=1,tk
+     do q=1,ndv
+      ik=ik+1
+      pdata(ik)=pdata_tracking(q,p,it) !(coordinates,pindex,time)=>(coordinates,time,pind)
+     end do
     end do
    end do
-  end do
+  endif
   if(ik /= lenp)write(6,'(a16,3i8)')'wrong pdata size',mype,lenp,ik
  endif
  call endian(i_end)
@@ -1710,40 +1716,39 @@
 
  write (folderName,'(i4.4)') iout
 
-
  ndv=nd2+2
  np=loc_npart(imody,imodz,imodx,pid)
  ip=0
  if(np >0)then
- if(ndim >2)then
-  do p=1,np,jmp
-   yy=spec(pid)%part(p,2)
-   zz=spec(pid)%part(p,3)
-   if(abs(yy)<=ymax_out.and.abs(zz)<=ymax_out)then
-    xx=spec(pid)%part(p,1)
-    if(xx>=xmin_out.and.xx <=xmax_out)then
-     ip=ip+1
-     do q=1,nd2+1
-      ebfp(ip,q)=spec(pid)%part(p,q)
-     end do
+  if(ndim >2)then
+   do p=1,np,jmp
+    yy=spec(pid)%part(p,2)
+    zz=spec(pid)%part(p,3)
+    if(abs(yy)<=ymax_out.and.abs(zz)<=ymax_out)then
+     xx=spec(pid)%part(p,1)
+     if(xx>=xmin_out.and.xx <=xmax_out)then
+      ip=ip+1
+      do q=1,nd2+1
+       ebfp(ip,q)=spec(pid)%part(p,q)
+      end do
+     endif
     endif
-   endif
-  end do
- else
-  zz=1.
-  do p=1,np,jmp
-   yy=spec(pid)%part(p,2)
-   if(abs(yy)<=ymax_out)then
-    xx=spec(pid)%part(p,1)
-    if(xx>=xmin_out.and.xx<=xmax_out)then
-     ip=ip+1
-     do q=1,nd2+1
-      ebfp(ip,q)=spec(pid)%part(p,q)
-     end do
+   end do
+  else
+   zz=1.
+   do p=1,np,jmp
+    yy=spec(pid)%part(p,2)
+    if(abs(yy)<=ymax_out)then
+     xx=spec(pid)%part(p,1)
+     if(xx>=xmin_out.and.xx<=xmax_out)then
+      ip=ip+1
+      do q=1,nd2+1
+       ebfp(ip,q)=spec(pid)%part(p,q)
+      end do
+     endif
     endif
-   endif
-  end do
- endif
+   end do
+  endif
  endif
  ip_loc(mype+1)=ip
 
