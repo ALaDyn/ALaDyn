@@ -640,7 +640,7 @@
     end do
     nptx(ic)=nptx(ic)+n_peak
    enddo
-    xfsh=xfsh+lpx(4)
+   xfsh=xfsh+lpx(4)
   endif
   if(nxl(5)>0)then     !second down-ramp ==> 0
    do ic=1,nsp_run
@@ -653,15 +653,15 @@
     end do
     nptx(ic)=nptx(ic)+n_peak
    end do
-    xfsh=xfsh+lpx(5)
+   xfsh=xfsh+lpx(5)
   endif
-   do ic=1,nsp
+  do ic=1,nsp
    nptx_alloc(ic)=min(nptx(ic)+10,nx*np_per_xc(ic))
-    end do
+  end do
  end select
-   do ic=1,nsp
+ do ic=1,nsp
   sptx_max(ic)=nptx(ic)
-    end do
+ end do
  !================================
  ! END of section setting global coordinates
  !=================================
@@ -690,12 +690,12 @@
  endif
  !====================
  call mpi_yz_part_distrib(nsp,loc_npty,loc_nptz,npyc,npzc,&
-  ymin_t,zmin_t,wy,wz)
+                          ymin_t,zmin_t,wy,wz)
  ! Restricts to the computational box
  !=================================
  if(pe0)then
   open(12,file='Initial_gas_target_x-profiles',form='formatted')
- do ic=1,nsp
+   do ic=1,nsp
    write(12,*)'species',ic,sptx_max(ic)
    write(12,*)'particle x-coordinate'
    write(12,'(6e11.4)')xpt(1:sptx_max(ic),ic)
@@ -721,7 +721,7 @@
  !==================
 !=====================
  !Resets nptx(ic)=last particle coordinate inside the computational box
- !in the initial condition: for t>0  nptx(ic) updated by mowing window
+ !in the initial condition: for t>0  nptx(ic) updated by mowing window 
  do ic=1,nsp
   i1=0
   do j=1,nptx(ic)
@@ -1268,11 +1268,11 @@
  loc_imax(imodx,1:6)=nptx_loc(1:6)
  nps_loc=0
  !Weights for multilayer multisp targets
- wgh_sp(1)=1./real(mp_per_cell(3),dp)
+ wgh_sp(1)=1./real(mp_per_cell(3),dp)                   
  wgh_sp(2)=1./(real(ion_min(2),dp)*real(mp_per_cell(4),dp))
  wgh_sp(3)= j0_norm
  wgh_sp(4)=1./(real(ion_min(1),dp)*real(mp_per_cell(2),dp))
- wgh_sp(5)=1./real(mp_per_cell(5),dp)
+ wgh_sp(5)=1./real(mp_per_cell(5),dp)                   
  wgh_sp(6)=1./(real(ion_min(2),dp)*real(mp_per_cell(6),dp))
  !================================================
  if(nxl(1) >0)then
@@ -1323,7 +1323,7 @@
   end do
  end do
  !================================
- ! WARNING : electrons and Z1 ions have the same weight
+ ! WARNING : electrons and Z1 ions have the same weight 
  ! if mp_per_cell(1)=Z1*mp_per_cell(2)
  !=================================
  xfsh=xfsh+lpx(3)+lpx(2)
@@ -1576,7 +1576,7 @@
  !============ nptx(nsp)  distribution
  nptx(1)=nptx_loc(1)+nptx_loc(3)+nptx_loc(6)  !electrons
  nptx(2)=nptx_loc(4)                          !Z1-A1 species
- nptx(3)=nptx_loc(5)                          !Z2-A2 species
+ nptx(3)=nptx_loc(5)                          !Z2-A2 species 
  nptx(4)=nptx_loc(2)+nptx_loc(6)              !Z3-A3  species in nxl(1) and nxl(5) layer
  nptx_max=maxval(nptx_loc(1:7))
  !=======================
@@ -1761,9 +1761,9 @@
  p=0
  i2=loc_imax(imodx,4)
  call pspecies_distribute(spec(2),t0_pl(2),unit_charge(2),p,4,i2,ip_ion)
-  p=0
+ p=0
  if(nsp==3)p=ip_pr
-  i2=loc_imax(imodx,5)
+ i2=loc_imax(imodx,5)
  call pspecies_distribute(spec(3),t0_pl(3),unit_charge(3),p,5,i2,ip_ion)
  !============
  ! The third electron-proton layer
@@ -2080,10 +2080,10 @@
    end do
   end do
   if(nps_bulk >2)then
-  ic=6
-  n_peak=nptx_loc(ic)
-  wghpt(1:n_peak,ic)=wghpt(1:n_peak,ic)/real(ion_min(nps_bulk-1),dp)
- endif
+   ic=6
+   n_peak=nptx_loc(ic)
+   wghpt(1:n_peak,ic)=wghpt(1:n_peak,ic)/real(ion_min(nps_bulk-1),dp)
+  endif
  endif
  xfsh=xfsh+lpx(4)
  !  Electrons and Z3_ions contaminants
@@ -2512,7 +2512,7 @@
   !lpx(4) second plateau density np2 and to final downramp lpx(5)
   !n_0=n_over_nc can be an average, or n0_=n1_over_nc or n0_=n2_over_nc
   !Multispecies implementation
-  ! target in models id=1 and id=2 contain (implicitely) an ion species id_sp=1
+  ! target in models id=1 and id=2 contain (implicitely) an ion species id_sp=1 
   !as a neutralizing background. If ionization is on, nsp=2 and ionizing species
   !is loaded and activated for ionization.
   !====================================
@@ -2520,7 +2520,7 @@
   !as a neutralizing background:
   ! layer(1) + layer(2) only electrons and H+ with ne=n0=n_over_nc
   ! layer(3) is a plateau with an added dopant (A1,Z1) with density
-  ! np1=n1_over_n/n0 (few %)
+  ! np1=n1_over_n/n0 (few %) 
   ! layer(4)+layer(5) as layer(1)+layer(2)
   !----------
  else
@@ -2665,7 +2665,7 @@
  integer,intent(in) :: lp_mod
  integer :: ic,i1,i2,j1,j2,k1,k2,lp_ind
  real(dp) :: angle,shx_lp,sigm,eps,xm,tt,tau,tau1
-
+ 
 
  !===========================
  ! field grid index defined on set_pgrid
@@ -2696,17 +2696,17 @@
  angle=lpx(6)
  xf=xc_lp+t0_lp
   !=======================
-  lp_ind=lp_mod
-  shx_lp=0.0
+ lp_ind=lp_mod
+ shx_lp=0.0
  xc_loc(1)=xc_lp
  xf_loc(1)=xf
-  if(Plane_wave)lp_ind=0
+ if(Plane_wave)lp_ind=0
  if(angle >0.0)then
    shx_lp=lpx(7)
   if(lp_end(1) > xm)then
    call init_lp_fields(ebf,lp_amp,tt,t0_lp,w0_x,w0_y,xf,oml,&
-   angle,shx_lp,lp_ind,i1,i2)
-   endif
+                                       angle,shx_lp,lp_ind,i1,i2)
+  endif
  else         !normal incidence
   if(lp_end(1) > xm)then
    call init_lp_inc0_fields(ebf,lp_amp,tt,t0_lp,w0_x,w0_y,xf,oml,lp_ind,i1,i2)
@@ -2726,14 +2726,14 @@
  if(Two_color)then
   xc1_lp=xc_loc(nb_laser)-lp_offset
   xf1=xc1_lp+t1_lp
-
+  
   lp_ionz_in=xc1_lp-tau1
   lp_ionz_end=xc1_lp+tau1
   call init_lp_inc0_fields(ebf,lp1_amp,tt,t1_lp,w1_x,w1_y,xf1,om1,&
                                               lp_ind,i1,i2)
   if(pe0)write(6,'(a30,e11.4)')'two-color activated at xc1_lp=',xc1_lp
-  endif
-
+ endif 
+  
 !==================================
  !==================== inject particles
  if(Hybrid)then
@@ -2814,7 +2814,7 @@
  eps=1./(oml*w0_y)
  sigm=lam0/w0_x
  xf=xc_lp+t0_lp
- !=======================
+  !=======================
  xc_loc(1)=xc_lp
  xf_loc(1)=xf
  env(:,:,:,:)=0.0
@@ -2823,7 +2823,7 @@
    call init_gprof_envelope_field(&
               env,a0,dt,tt,t0_lp,w0_x,w0_y,xf,oml,i1,i2)
   else
-  call init_envelope_field(&
+   call init_envelope_field(&
               env,a0,dt,tt,t0_lp,w0_x,w0_y,xf,oml,i1,i2)
    !call init_env_filtering(env,i1,i2,j1,nyp,k1,nzp)
   endif
@@ -2850,7 +2850,7 @@
   env1(:,:,:,:)=0.0
   xc1_lp=xc_loc(nb_laser)-lp_offset
   xf1=xc1_lp+t1_lp
-
+   
   lp_ionz_in=xc1_lp-tau1
   lp_ionz_end=xc1_lp+tau1
   if(lp_ionz_end > xm)then
@@ -2861,7 +2861,7 @@
     call init_envelope_field(&
               env1,a1,dt,tt,t1_lp,w1_x,w1_y,xf1,om1,i1,i2)
    endif
-  endif
+  endif 
  endif
  !=======================
  !==========================
@@ -3000,10 +3000,7 @@
 
    i1=i2+1
   end do
-
-
- end select
-
+  end select
  ! Pe0 p data are copied to all MPI tasks
  if(pe0)then
   sr=.true.
@@ -3018,7 +3015,7 @@
  end subroutine beam_data
  !===================
  subroutine MPI_beam_distribute(ndm)
-
+ 
  integer,intent(in) :: ndm
 
  integer :: i,ii,i1,j
@@ -3028,8 +3025,8 @@
  !========= count particles on each (yz) MPI domain
  np_tot=sum(nb_tot(1:nsb))
  ! ALL MPI tasks do
-  x1=loc_xgrid(imodx)%gmin
-  x2=loc_xgrid(imodx)%gmax
+ x1=loc_xgrid(imodx)%gmin
+ x2=loc_xgrid(imodx)%gmax
  i1=0
  select case(ndm)
  case(2)
@@ -3046,7 +3043,7 @@
       if(bpart(1,i) >x1.and.bpart(1,i) <=x2)then
         loc_nbpart(ipp,ip,p,ic)=loc_nbpart(ipp,ip,p,ic)+1
       endif
- endif
+     endif
     end do
    end do
   end do
@@ -3263,7 +3260,7 @@
  if(ndim==3)call FFT_Psolv(jc,gam2,ompe,nx,nx_loc,ny,ny_loc,nz,nz_loc,&
                 i1,i2b,j1,nyp,k1,nzp,ft_mod,ft_sym)
  !Solves Laplacian[pot]=ompe*rho
- !Beam potential in jc(1)
+ !Beam potential in jc(1) 
  !===================
  !====================
  call fill_ebfield_yzxbdsdata(jc,i1,i2b,j1,nyp,k1,nzp,1,2,1,1)
@@ -3271,7 +3268,7 @@
   ! generates (Ex,Ey,Ez,By,Bz) bunch fields
   if(ibeam>0)then
    ebf1_bunch(:,:,:,:)=0.0
- endif
+  endif
  !========================================
  lp_end(1)=xc_bunch(1)+2.*sxb(1)
  !=====================================

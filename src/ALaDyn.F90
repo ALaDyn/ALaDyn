@@ -79,11 +79,6 @@
 
  subroutine LP_cycle
 
- if(P_tracking)then
-  call initial_tparticles_select(spec(1),dt,txmin,txmax,tymin,tymax,tzmin,tzmax)
-  tk_ind=tk_ind+1
-  call t_particles_collect(spec(1),tk_ind)
- endif
  call data_out(jump)
  dt_loc=dt
  t_ind=0
@@ -99,17 +94,14 @@
    if(Pe0) call Impact_ioniz_data(atomic_number(nsp_ionz-1),z1_coll)
   endif
  endif
-
+ if(P_tracking)then
+  call initial_tparticles_select(spec(1),dt,txmin,txmax,tymin,tymax,tzmin,tzmax)
+  tk_ind=tk_ind+1
+  call t_particles_collect(spec(1),tk_ind)
+ endif
  do while (tnow < tmax)
 
   call LP_run(tnow,dt_loc,iter,LPf_ord)
-
-    if(P_tracking)then
-   if(mod(iter,tkjump)==0)then
-    tk_ind=tk_ind+1
-    call t_particles_collect(spec(1),tk_ind)
-   endif
-  endif
 
   call timing
   call data_out(jump)
@@ -134,7 +126,6 @@
  endif
  call data_out(jump)
  dt_loc=dt
- t_ind=0
  tk_ind=0
  if(Ionization)then
   !lp_max=1.2*oml*a0
@@ -143,7 +134,6 @@
   end do
   if(Pe0) call Ioniz_data(lp_max,ion_min,atomic_number,ionz_lev,ionz_model)
  endif
-
  do while (tnow < tmax)
   call ENV_run(tnow,dt_loc,iter,LPf_ord)
 
@@ -209,7 +199,6 @@
 
 
  idata=iout
-
  if(Diag)then
   if (tnow>=tdia) then
    ienout=ienout+1
@@ -225,7 +214,6 @@
   if(Diag)then
    if(pe0)call en_data(ienout,iter,idata)
   endif
-!=============== tracking data
   if(P_tracking)then
    if(tk_ind >1)then
    if(tk_ind <= track_tot_nstep)call track_part_pdata_out(tnow,tk_ind,1)
@@ -244,10 +232,10 @@
        call env_two_fields_out(env,env1,tnow,i,jump)
       end do
      else
-    do i=1,2
-     call env_fields_out(env,tnow,i,jump)
-    end do
-   endif
+      do i=1,2
+       call env_fields_out(env,tnow,i,jump)
+      end do
+     endif
     endif
    endif
    do i=1,nvout
@@ -263,12 +251,12 @@
     call prl_den_energy_interp(i)
     do ic=1,min(2,nden)
      call den_energy_out(tnow,i,ic,ic,jump)
-     end do
+    end do
    enddo
    if(nden > 2)then
     call set_wake_potential
-    call den_energy_out(tnow,0,nden,1,jump)  !data on jc(1) for wake potential
-    endif
+    call den_energy_out(tnow,0,nden,1,jump)  !data on jc(1) for wake potential 
+   endif
   endif
   if(Hybrid)then
    do i=1,nfcomp
@@ -373,13 +361,13 @@
     call prl_den_energy_interp(i)
     do ic=1,min(2,nden)
      call den_energy_out(tnow,i,ic,ic,jump)
-      end do
+    end do
    enddo
    if(nden>2)then
     call set_wake_potential
-    call den_energy_out(tnow,0,nden,1,jump)  !data on jc(1) for wake potential
-     endif
-    endif
+    call den_energy_out(tnow,0,nden,1,jump)  !data on jc(1) for wake potential 
+   endif
+  endif
   if(nbout> 0)then
    do i=1,nsb
     call part_bdata_out(tnow,i,pjump)
@@ -410,8 +398,6 @@
   if(pe0) write(6,*) '3D dump data being written'
   call dump_data(iter,tnow)
  endif
-
-
  end subroutine bdata_out
  !--------------------------
 
@@ -445,23 +431,21 @@
       write(lun,'(4i8)')loc_npart(0:npe_yloc-1,j,jj,jjj)
      end do
     end do
-
-    ! if(pe0) THEN
-    !   write(*,*) 'in ALADYN model_id model_id model_id',model_id
-    !   write(*,*) 'in ALADYN dmodel_id dmodel_id dmodel_id',dmodel_id
-    !   write(*,*) 'in ALADYN Beam Beam Beam',Beam
-    ! endif
-
-    ! if(Beam)then
-    !   if(pe0) write(*,*) 'Beam',Beam,allocated(loc_nbpart)
-    !   if(pe0) write(*,*) 'dimensions',npe_yloc,j,jj
-    !  write(lun,*)'B-part'
-    !  ! do jj=0,npe_xloc-1
-    !  write(lun,'(4i8)')loc_nbpart(0:npe_yloc-1,j,jj,1)
-    !  ! enddo
-    ! endif
    end do
   end if
+  if (Beam) then
+   write(lun,'(a24,i6,a5,i4)')'beam particles at iter =',iter,'dcmp=',dcmp_count
+   do j=0,npe_zloc-1
+    write(lun,*)'npe_zloc=',j
+    do jj=0,npe_xloc-1
+     write(lun,*)'npe_xloc=',jj
+     do jjj=1,nsp_run
+      write(lun,*)'nsp=',jjj
+      write(lun,'(4i8)')loc_nbpart(0:npe_yloc-1,j,jj,jjj)
+     end do
+    end do
+   end do
+  endif
   close(lun)
  end if
  end subroutine diag_part_dist
@@ -591,8 +575,8 @@
              ndim,ns_ioniz,ibeam,LPf_ord,der_ord,Envelope,Two_color,Comoving,mem_size)
  if(Hybrid)call fluid_alloc(nxp,nyp,nzp,nfcomp,ndim,LPF_ord,mem_size)
  if (Beam) then
-   call bv_alloc(nxp,nyp,nzp,nbfield,ndim,ibeam,mem_size)
-  endif
+  call bv_alloc(nxp,nyp,nzp,nbfield,ndim,ibeam,mem_size)
+ endif
  if (Stretch) then
   if (pe0) call str_grid_data
  endif
@@ -610,6 +594,7 @@
   Diag = .false.
   iene=1
  endif
+
 
  select case (new_sim)
 
@@ -675,13 +660,13 @@
  write(10,*)'nsp_ionz-1,zlev,zmod,N_ge '
  write(10,'(4i8)')nsp_ionz-1,zlev,zmod,N_ge
  write(10,*)'  Max Ef       dt      Omega_au  '
- write(10,'(3E11.4)')Ef_max,dt_fs,omega_a
+ write(10,'(3E11.4)')Ef_max,dt_fs,omega_a    
  if(Two_color)then
  write(10,*)' a0        lam0,      om0,      a1,      lam1,         om1'
- write(10,'(6E11.4)')a0,lam0,oml,a1,lam1,om1
+ write(10,'(6E11.4)')a0,lam0,oml,a1,lam1,om1   
  else
  write(10,*)' a0        lam0,      om0'
- write(10,'(6E11.4)')a0,lam0,oml
+ write(10,'(6E11.4)')a0,lam0,oml   
  endif
  do ic=1,nsp_ionz-1
   write(10,*)' z0,     zmax'
@@ -918,7 +903,7 @@
  write(60,*)'*************IMPLEMENTATION TOOLS********************'
   write(60,*)'  Field collocation on the Yee-module staggered grid'
   write(60,*)'  B-spline shapes of alternating first-second order '
- if(LPf_ord >0)then
+  if(LPf_ord >0)then
    if(LPf_ord==2)write(60,*)'  One-step leap-frog time integration '
    if(der_ord==2)write(60,*)'  Explicit second order space derivative '
    if(der_ord==3)write(60,*)'  Optmal Explicit second order space derivative'
@@ -927,12 +912,12 @@
     write(60,*)'  RK multi-step fourth order time scheme '
     write(60,*)'  Explicit fourth order Space Derivative'
    endif
- endif
+  endif
   if(Charge_cons)then
    write(60,*)'  Continuity equation enforced by Esirkepov scheme'
   else
    write(60,*)'  No charge preserving scheme activated'
- endif
+  endif
   write(60,*)'***************GRID**********************'
   write(60,'(a18,3i8)')'  total grid size ',nx,ny,nz
   write(60,'(a18,3i8)')'  local grid size ',nx_loc,ny_loc,nz_loc
