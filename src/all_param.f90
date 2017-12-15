@@ -200,7 +200,7 @@
   ny_stretch=nint(real(ny,dp)*size_of_stretch_along_y)
  endif
  call grid_alloc(nx,nx_loc,ny,ny_loc,nz,nz_loc,ny_targ,&
-  pml_size,nprocy,nprocz,nprocx)
+                pml_size,nprocy,nprocz,nprocx)
  loc_nyc_max=loc_ygr_max
  loc_nzc_max=loc_zgr_max
  loc_nxc_max=loc_xgr_max
@@ -331,9 +331,9 @@
   nsp_ionz=min(nsp_ionz,nsp)
   do i=1,3
    if(mass_number(i)< 1.)call set_atomic_weight(atomic_number(i),mass_number(i))
- end do
+  end do
   if(ionz_lev >0)Ionization=.true.
-  if(Ionization) call set_ionization_coeff(atomic_number,nsp_ionz)
+  if(Ionization) call set_ionization_coeff(atomic_number,nsp_ionz) 
   !uses ion index 1,2,,,nsp-1
   wgh_ion=1./(real(mp_per_cell(2),dp))
   if(ion_min(1)>1)wgh_ion=1./(real(ion_min(1),dp)*real(mp_per_cell(2),dp))
@@ -350,19 +350,19 @@
  ! Target parameters  enter n_over_nc
  if(Lp_active)then
   if(iby==2)Plane_wave=.true.
- mod_ord=1
- if(model_id < 3) Lin_lp = .true.
- if(model_id == 3) Circ_lp = .true.
- if(model_id == 4) then
-  mod_ord=2
-  Envelope=.true.
-   !L_env_modulus=.true.
+  mod_ord=1
+  if(model_id < 3) Lin_lp = .true.
+  if(model_id == 3) Circ_lp = .true.
+  if(model_id == 4) then
+   mod_ord=2
+   Envelope=.true.
+   L_env_modulus= .true.
   endif
   if(n_over_nc >1.)then
    Solid_target=.true.
   else
    Wake=.true.
- endif
+  endif
   Relativistic=.true.
   nfield=3
   curr_ndim=2
@@ -382,12 +382,12 @@
  !==========================================
   np_per_cell=1
 !====================================
-  !=======================
+!=======================
   ! Code Units for laser fields
   ncrit=pi/(rc0*lam0*lam0)      !critical density in units n0=10^21/cm^3=10^9/mu^3
   n0_ref= 1.e03*ncrit*n_over_nc !initial density in e18/cc unit
   nm_fact=ncrit*(1.e+9)         ! critical density (1/mu^3)
-  oml=pi2/lam0             !laser frequency in unit c/l0
+  oml=pi2/lam0               !laser frequency in unit c/l0
   om1=pi2/lam1               !laser frequency in unit c/l0
   lp_amp=a0*oml
   lp1_amp=a1*om1             !field in unit 0.51 MV/m
@@ -398,13 +398,13 @@
   ompe=nc0*n_over_nc       !squared adimensional plasma frequency :
 !========== Laser parameters
   lp_intensity=1.37*(a0/lam0)*(a0/lam0)  !in units 10^18 W/cm^2
-   lp_rad=w0_y*sqrt(2.*log(2.))           !FWHM focal spot
-   ZR=pi*w0_y*w0_y/lam0
+  lp_rad=w0_y*sqrt(2.*log(2.))           !FWHM focal spot
+  ZR=pi*w0_y*w0_y/lam0
   lp1_rad=w1_y*sqrt(2.*log(2.))           !FWHM focal spot
   ZR1=pi*w1_y*w1_y/lam1
-   lp_pow=0.5*pi*lp_intensity*w0_y*w0_y   !in units 10^10 W
-   if(ndim==2)lp_pow=0.5*dy*lp_intensity*w0_y   !in units 10^10 W
-   lp_pow=0.01*lp_pow                     !in TW= 1.e-03[J/fs]  units
+  lp_pow=0.5*pi*lp_intensity*w0_y*w0_y   !in units 10^10 W
+  if(ndim==2)lp_pow=0.5*dy*lp_intensity*w0_y   !in units 10^10 W
+  lp_pow=0.01*lp_pow                     !in TW= 1.e-03[J/fs]  units
   if(Plane_wave)then        !plane LP wave
    lp_pow=0.01*lp_intensity*Ly_box*Lz_box  !in TW = 10^{-3}J/fs
    ZR=0.0
@@ -540,7 +540,7 @@
    !--- *** ---!
 
    b_charge=bunch_charge(1)
- endif
+  endif
  !============================
  !  SET PARAM all cases
  if(Hybrid)nfcomp=curr_ndim+1
@@ -584,16 +584,15 @@
  !under the condition :np_per_cell is the same for plasma and bunch macro
  !-----------------------------
  !========================= driving beams parameters
-
  pot_ndim=0
  nd2=2*curr_ndim
  nj_dim=curr_ndim
  if(Envelope)nj_dim=curr_ndim+1
  if(Beam)then
- if(ibeam==2)then
-  nj_dim=curr_ndim+1
-  pot_ndim=nj_dim+1
- endif
+  if(ibeam==2)then
+   nj_dim=curr_ndim+1
+   pot_ndim=nj_dim+1
+  endif
  endif
 
 

@@ -170,16 +170,9 @@
  allocate(loc_tpart(npe))
  loc_tpart(1:npe)=0
 !============================
-if(pe0) THEN
-  write(*,*) 'model model model',model
-  write(*,*) 'model_id model_id model_id',model_id
-  write(*,*) 'dmodel_id dmodel_id dmodel_id',dmodel_id
-endif
  if(model >4)then
-   if(pe0) write(*,*) 'im ready to allocate',npe_yloc,npe_zloc,npe_xloc,bkind
   allocate(loc_nbpart(0:npe_yloc-1,0:npe_zloc-1,0:npe_xloc-1,1:bkind))
   loc_nbpart(0:npe_yloc-1,0:npe_zloc-1,0:npe_xloc-1,1:bkind)=0
-   if(pe0) write(*,*) 'i have allocated'
  endif
 
  allocate(yp_next(npe_yloc),yp_prev(npe_yloc))
@@ -436,7 +429,7 @@ endif
  endif
 
  end subroutine exchange_3d_sp_data
-  !====================
+ !====================
  subroutine exchange_1d_grdata(sr,dat0,lenw,ipe,tag)
  logical,intent(in) :: sr
  real(dp),intent(inout) :: dat0(:)
@@ -453,7 +446,7 @@ endif
  endif
 
  end subroutine exchange_1d_grdata
- !
+!
  subroutine exchange_2d_grdata(sr,dat0,n1,n2,ipe,tag)
  logical,intent(in) :: sr
  real(dp),intent(inout) :: dat0(:,:)
@@ -1358,7 +1351,7 @@ endif
 
  select case(is)
  case(-1)         !
-  if(n2 <=2)return
+ if(n2 <=2)return
   if(prly)then
    n1_loc=n1/npe_yloc
    call swap_xy_3data_inv(w,fp1,n1_loc,n2_loc,n3_loc)

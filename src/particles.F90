@@ -4934,7 +4934,7 @@
   endif
   do n=n0,np
    wgh_cmp=loc_sp%part(n,7)
-   wght=charge*wgh      !w*q for  q=ion_charge
+   wght=real(charge*wgh,sp)      !w*q for  q=ion_charge
    vp(1)=0.5*wght*pt(n,1)        !dt*w*q*V_x/2
    vp(2:3)=loc_sp%part(n,5:6)
    gam_inv=wght*pt(n,7)

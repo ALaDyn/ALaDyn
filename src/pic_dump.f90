@@ -121,6 +121,7 @@
   write(lun)up(:,:,:,:)
   write(lun)up0(:,:,:,:)
  endif
+  
  if(Beam)then
   write(lun)ebf_bunch(1:i2b,1:j2b,1:k2b,1:nbf)
   if(ibeam==1)write(lun)ebf1_bunch(1:i2b,1:j2b,1:k2b,1:nbf)

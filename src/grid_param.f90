@@ -645,7 +645,6 @@
                     !case(0)  ! staggered k-grid
  wkx=2.*acos(-1.)/lxbox !lxbox=x(n1+1)-x(1)
  wky=2.*acos(-1.)/lybox !lybox=y(n2+1)-y(1)
-
  wkz=wky
   do i=1,n1/2
    akx(i,0)=wkx*(real(i,dp)-0.5)

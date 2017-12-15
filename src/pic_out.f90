@@ -936,7 +936,7 @@
  !--------------------------
 
  subroutine bfields_out(ef,ef1,tnow,f_ind,jump)
- real(dp),intent(inout) :: ef(:,:,:,:),ef1(:,:,:,:)
+ real(dp),intent(in) :: ef(:,:,:,:),ef1(:,:,:,:)
  real(dp),intent(in) :: tnow
  character(8) :: fname='        '
  integer,intent(in) :: f_ind,jump
@@ -2710,8 +2710,6 @@
  !==========================
  end subroutine enbvar
 
- !=====================================
-
  subroutine enb_ionz(nst,t_loc,gmm)
  integer,intent(in) :: nst
  real(dp),intent(in) :: t_loc,gmm
@@ -3135,7 +3133,7 @@
   close(lun)
  end subroutine en_bdata
 
-  subroutine en_ionz_data(nst,itrz,data_id)
+ subroutine en_ionz_data(nst,itrz,data_id)
 
  integer,intent(in) :: nst,itrz,data_id
  character(12) :: fname='            '
@@ -3153,7 +3151,6 @@
  if(Two_color)color=1
  npv=16
  write (fname,'(a10,i2.2)') 'ionz_emitt',data_id
-
   open (lun,file='diagnostics/'//fname//'.dat',form='formatted')
   write(lun,*)'mod_id,dmodel_id LP_ord,der_ord, ibeam,  color'
   write(lun,'(6i6)')model_id,dmodel_id,LPf_ord,der_ord,ibeam,color

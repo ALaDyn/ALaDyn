@@ -28,7 +28,6 @@
  !=====Contains functions to prepare selected output variables=======
  contains
 !============================================
-!============================================
 !=============== Tracking particles============
  subroutine initial_tparticles_select(sp_loc,dt_loc,tx1,tx2,ty1,ty2,tz1,tz2)
 
@@ -88,7 +87,7 @@
  last_ind=0
  if(mype==1)last_ind=loc_tpart(1)
  if(mype>1)last_ind=sum(loc_tpart(1:mype))
- if(loc_tpart(mype+1)>0)write(6,*)'last partcle index',mype,last_ind
+ if(loc_tpart(mype+1)>0)write(6,*)'last particle index',mype,last_ind
  do p=1,np 
   wgh_cmp=sp_loc%part(p,ndv)
   if(part_ind >0)part_ind=part_ind+last_ind
@@ -166,7 +165,6 @@
  endif
  end subroutine t_particles_collect
 !=================================================
-
  subroutine fill_density_data(den,i1,i2,j1,j2,k1,k2,ic)
   real(dp),intent(inout)  :: den(:,:,:,:)
   integer,intent(in) :: i1,i2,j1,j2,k1,k2,ic
@@ -402,7 +400,7 @@
  end subroutine prl_den_energy_interp
 !
  subroutine set_wake_potential
-
+ 
  integer :: nyf,nzf,np,i1,i2,j1,k1,stl,str
  real(dp) :: xm,ym,zm
  integer :: ic,i,j,k,jj,kk,n_str,ft_mod,ft_sym
@@ -441,7 +439,7 @@
 !============== jc(1)=rho-Jx=======================
 
  ft_mod=2                                          !for cosine transform
- ft_sym=2
+ ft_sym=2              
 !-------------------------------------------
  call FFT_2D_Psolv(jc,ompe,nx,nx_loc,ny,ny_loc,nz,nz_loc,&
                                 i1,i2,j1,nyf,k1,nzf,ft_mod,ft_sym)

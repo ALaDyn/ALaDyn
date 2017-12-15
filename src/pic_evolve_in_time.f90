@@ -2668,7 +2668,6 @@
    if(L_EMBunchEvolution .and. ompe>0.0) call curr_accumulate(bunch(ic),ebfb,jb,1,np,iform,n_st,xm,ym,zm)
 
   endif
- !================ advances bunches
  enddo
  call curr_mpi_collect(jb,i1,i2,j1,j2,k1,k2)
 ! EXIT current density jb(1:3) due to bunch particles density and velocity at
@@ -2679,7 +2678,7 @@
  !======================= boundary ibx as for Maxwell equation
  if(ibeam > 0)then
   call advect_bunch_fields(ebf_bunch,jb,&
-  bet0,dt_loc,i1,i2,j1,j2,k1,k2,initial_time)
+                          bet0,dt_loc,i1,i2,j1,j2,k1,k2,initial_time)
  endif
  call advance_lpf_fields(ebf1_bunch,jb,dt_loc,vbeam,i1,i2,j1,j2,k1,k2,1)  !here reflecting bds
  !=========================
@@ -2722,4 +2721,4 @@
  end subroutine BUNCH_run
  !================================
  end module pic_evolve_in_time
- !==============================
+!==============================
