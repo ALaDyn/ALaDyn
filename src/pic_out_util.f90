@@ -122,6 +122,16 @@
   wgh_cmp=sp_loc%part(p,ndv)
   if(part_ind >0)then
    ik=ik+1
+  endif
+ enddo
+ if(ik*ndv>size(track_aux))then
+  deallocate(track_aux)
+  allocate(track_aux(ik*ndv+10))
+ endif
+ do p=1,np
+  wgh_cmp=sp_loc%part(p,ndv)
+  if(part_ind >0)then
+   ik=ik+1
    do ip=1,ndv
     kk=kk+1
     track_aux(kk)=sp_loc%part(p,ip)

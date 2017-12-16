@@ -5136,7 +5136,7 @@
    do ic=1,nc-1
     do i=i1+1,np-2
      vv=wr(i,nc)+wl(i,nc)
-     s0=sign(1.,vv)        !s0=1*sign(vv)
+     s0=sign(one_dp,vv)        !s0=1*sign(vv)
      !if(vv>0.0)then
       var(i,ic)=max(0.,s0)*wl(i,ic)-min(0.,s0)*wr(i,ic)
      !else
@@ -5195,7 +5195,7 @@
    do ic=1,nc-1
     do i=i1+1,np-2
      vv=wr(i,nc)+wl(i,nc)
-     s0=sign(1.,vv)        !s0=1*sign(vv)
+     s0=sign(one_dp,vv)        !s0=1*sign(vv)
      var(i,ic)=max(0.,s0)*wl(i,ic)-min(0.,s0)*wr(i,ic)
     end do
    end do

@@ -63,7 +63,7 @@
  !  if(number_of_slices(i)>0) CALL bunch_sliced_diagnostics(bunch_number,moments,number_of_slices(i))
  ! ENDDO
 
- if(bunch_number.eq.1) call lineout_Ex(0.0,0.0) !lineout E-field total
+ if(bunch_number.eq.1) call lineout_Ex(zero_dp,zero_dp) !lineout E-field total
 
  END SUBROUTINE bunch_diagnostics
 

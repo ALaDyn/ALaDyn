@@ -936,11 +936,11 @@ idx=n1
       call random_number(a)
     enddo
 
-    y=random_number_range(-1.0,1.0)
-    z=random_number_range(-1.0,1.0)
+    y=random_number_range(-one_dp,one_dp)
+    z=random_number_range(-one_dp,one_dp)
     Do while(sqrt(y**2+z**2)>1.0)
-      y=random_number_range(-1.0,1.0)
-      z=random_number_range(-1.0,1.0)
+      y=random_number_range(-one_dp,one_dp)
+      z=random_number_range(-one_dp,one_dp)
     enddo
     bunch(1,i)=x*s_x+x_cm-s_x
     bunch(2,i)=y*s_y+y_cm

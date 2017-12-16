@@ -55,7 +55,7 @@
  contains
  subroutine set_atomic_weight(At_number,W_number)
  integer,intent(in) :: At_number
- real,intent(out) :: W_number
+ real(dp),intent(out) :: W_number
 
 
  select case(At_number)

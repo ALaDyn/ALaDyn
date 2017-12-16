@@ -752,8 +752,8 @@
   call fill_ebfield_yzxbdsdata(&
                 ef,i1,nxp,j1,nyp,k1,nzp,1,nfield,str,stl)
  endif
- call ef_bds(ef,i1,nxp,j1,nyp,k1,nzp,0.0,0)
- call bf_bds(ef,i1,nxp,j1,nyp,k1,nzp,0.0,0)
+ call ef_bds(ef,i1,nxp,j1,nyp,k1,nzp,zero_dp,0)
+ call bf_bds(ef,i1,nxp,j1,nyp,k1,nzp,zero_dp,0)
  !=======================
  ! enters curr() <=[dt*b^k]*J(x,v)^{k-1}
  !===============================

@@ -250,7 +250,7 @@
  integer,intent(in) :: ic,np,new_np_el
  integer,intent(inout) :: np_el
  integer(sp) :: inc,id_ch
- real :: u,temp(3)
+ real(dp) :: u,temp(3)
 
  integer :: n,i,ii
  !========== Enter sp_field(n,1)= the rms momenta Delta*a (n) for env model
@@ -307,12 +307,12 @@
 !=======================================
  subroutine env_ionization_electrons_inject(sp_field,ion_ch_inc,ic,np,np_el,new_np_el)
 
- real,intent(in) :: sp_field(:,:)
+ real(dp),intent(in) :: sp_field(:,:)
  integer,intent(in) :: ion_ch_inc(:)
  integer,intent(in) :: ic,np,new_np_el
  integer,intent(inout) :: np_el
  integer(sp) :: inc,id_ch
- real :: u,temp(3)
+ real(dp) :: u,temp(3)
 
  integer :: n,i,ii
  !========== Enter sp_field(n,1)= the rms momenta Delta*a (n) for env model
