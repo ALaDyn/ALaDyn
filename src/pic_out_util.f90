@@ -101,6 +101,8 @@
   write(6,'(a19,i6)')'  tot_track_parts  ',track_tot_part
   write(6,'(a18,i8)')'  short_int size  ',huge(plab)
   write(6,'(a20,e11.4)')'  ptrack memory(MB) ',1.e-06*real(4*ndv*track_tot_nstep*track_tot_part,dp)
+  write(6,'(a20,i6)')'  track_aux size   ',2*ndv*ik_max
+  write(6,'(a20,i6)')'  ik_max           ',ik_max
  endif
 !================================
  end subroutine initial_tparticles_select
@@ -128,6 +130,7 @@
   deallocate(track_aux)
   allocate(track_aux(ik*ndv+10))
  endif
+ ik=0
  do p=1,np
   wgh_cmp=sp_loc%part(p,ndv)
   if(part_ind >0)then
@@ -140,12 +143,16 @@
  enddo
  loc_tpart(mype+1)=ik
  call intvec_distribute(ik,loc_tpart,npe)
-!=================
+ !=================
  if(pe0)then
   sr=.false.
   ik1=0
   do ipe=1,npe-1
    ik=loc_tpart(ipe+1)
+   if(ik*ndv>size(track_aux))then
+    deallocate(track_aux)
+    allocate(track_aux(ik*ndv+10))
+   endif
    if(ik >0)then
     call exchange_1d_grdata(sr,track_aux,ik*ndv,ipe,ipe+10)
                !pe0 receives from ipe ik sp_aux data and collects on track array
