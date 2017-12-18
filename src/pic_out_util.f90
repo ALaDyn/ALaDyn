@@ -112,7 +112,7 @@
  type(species),intent(in) :: sp_loc
  integer,intent(in) :: time_ind
 
- integer :: np,ik,ip,p,ndv,ipe,kk,ik1,ik2
+ integer :: np,ik,ip,p,ndv,ipe,kk,ik1,ik2,ik_max
  logical :: sr
 
  if(time_ind > track_tot_nstep)return
@@ -143,16 +143,17 @@
  enddo
  loc_tpart(mype+1)=ik
  call intvec_distribute(ik,loc_tpart,npe)
+ ik_max=maxval(loc_tpart(1:npe))
  !=================
  if(pe0)then
   sr=.false.
   ik1=0
+  if(ik_max*ndv>size(track_aux))then
+   deallocate(track_aux)
+   allocate(track_aux(ik_max*ndv+10))
+  endif
   do ipe=1,npe-1
    ik=loc_tpart(ipe+1)
-   if(ik*ndv>size(track_aux))then
-    deallocate(track_aux)
-    allocate(track_aux(ik*ndv+10))
-   endif
    if(ik >0)then
     call exchange_1d_grdata(sr,track_aux,ik*ndv,ipe,ipe+10)
                !pe0 receives from ipe ik sp_aux data and collects on track array
