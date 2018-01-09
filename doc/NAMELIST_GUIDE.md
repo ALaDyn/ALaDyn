@@ -122,8 +122,8 @@ With those parameters, the full box size (in μm) is: `Lx = nx / k0`, `Ly = yx_r
  lpy(1)           = 0.0,
  lpy(2)           = 0.0,
  n_over_nc        = 100.0,
- n1_over_n        = 1.0,
- n2_over_n        = 10.0
+ np1              = 1.0,
+ np2              = 10.0
 /
 ```
 + `nsp` is the number of species (be careful and coherent with `dmodel_id`)
@@ -164,35 +164,47 @@ Copper    (atomic_number = 29) - mass_number = 63.54
 + `n_over_nc` is the density in the central layer (bulk)
   - *LWFA* case: density is in units of critical density
   - *PWFA* case: the density is in units of (a nominal value) nc=1e18 cm-3
-+ `n1_over_n` is the density in the upstream layer (foam/preplasma)
-+ `n2_over_n` is the density in the downstream layer (contaminants)
++ `np1` is the density in the upstream layer (foam/preplasma)
++ `np2` is the density in the downstream layer (contaminants)
 + `ionz_lev`: if set to 0, we disable ionization; if 1, only one electron can be extracted per ion, if accessible, per timestep; if 2, it ionizes all the accessible levels in a single timestep
-+ `ionz_model` describes the various ionization models: 1 (pure ADK, the best one for wake sims), 2 (...), 3 (...), 4 (...)
++ `ionz_model` describes the various ionization models: 1 (pure ADK as in chen et al (2013), the best one for wake sims), 2 (ADK averaged over cycles, as in chen et al (2013), `W_AC=<W_DC>`, best for envelope simulations), 3 (`W_AC+BSI`, added barrier suppression ionization), 4 (Minimum between ADK and BSI ionization values. Here the ADK value is computed averaging on `m`, the magnetic quantum number of the ionized electrons as in Alistair Lawrence-Douglas PhD thesis)
 
 
 ### LASER namelist block (**only for `ibeam=1`**)
 ```
 &LASER
+ G_prof         = .true.,
+ nb_laser       = 1,
  t0_lp          = 16.5,
  xc_lp          = 16.5,
- w0_x           = 33.0,
+ tau_fwhm       = 33.0,
  w0_y           = 6.2,
  a0             = 3.0
  lam0           = 0.8
+ lp_delay         = 20.59
+ lp_offset        = 0      !xc1_lp=xc_lp-(nb_laser-1)*lp_delay-lp_offset
+ t1_lp            = 200.0,
+ tau1_fwhm        = 24.74          !tau1= 35/sqrt(2)
+ w1_y             = 3.5,
+ a1               = 0.45,
+ lam1             = 0.4,
 /
 ```
++ `G_prof` logical flag: if true the pulse is temporally gaussian, if false it has a `cos^2` shape
++ `nb_laser` number of (identical) laser pulses injected
 + `xc_lp` is the position (in μm) along *x* of the central point of the laser envelope
 + `t0_lp` is the distance (in μm) after which the laser is focused; so the focus is at `xf = xc_lp + t0_lp`
-+ `w0_x` is twice the longitudinal waist, corresponding to the total laser length, which is twice the FWHM. For example, if we have a 40 fs FWHM Ti:Sa laser, we should write for `w0_x=33 μm` because:
-```
-    (40 fs/3.333)*2*1.37 = 33 μm
-    40/3.3333 is done to convert fs to μm
-    *2 is to convert from FWHM to full length
-    *1.37 is to convert from laser intensity to fields: usually we receive from experiments the FWHM of the laser intensity, but we set the length of fields and the FWHM of a cos4 has to be converted to the FWHM of a cos2: FWHM(cos4)=FWHM(cos2)/1.37
-```
++ `tau_fwhm` is the FWHM pulse duration (in fs)
 + `w0_y` is the transverse waist FWHM (in μm)
-+ `a` is the laser adimensional parameter: a<sub>0</sub>=eA/(m<sub>e</sub> c<sup>2</sup>)
-+ `lam0` is the laser wavelength (in μm)
++ `a_0` is the laser adimensional parameter: a<sub>0</sub>=eA/(m<sub>e</sub> c<sup>2</sup>) of all the pulses injected
++ `lam0` is the laser wavelength (in μm) of all the pulses injected
++ `lp_delay`is the distance between the center of every injected laser pulse
++ `lp_offset` is the distance between the center of the last injected pulse and the center of another different pulse injected (if different from 0)
++ `t1_lp` same as `t0_lp`, but for the additional pulse injected with `lp_offset!=0`
++ `tau1_fwhm` same as `tau_fwhm`, but for the additional pulse injected with `lp_offset!=0`
++ `w1_y` same as `w0_y`, but for the additional pulse injected with `lp_offset!=0`
++ `a1` same as `a0`, but for the additional pulse injected with `lp_offset!=0`
++ `lam1` same as `lam0`, but for the additional pulse injected with `lp_offset!=0`  
 
 
 ### MOVING_WINDOW namelist block
@@ -228,7 +240,9 @@ Copper    (atomic_number = 29) - mass_number = 63.54
  cfl            = 0.8,
  new_sim        = 0,
  id_new         = 0,
- dump           = 0
+ dump           = 0,
+ L_env_modulus    =.true.,
+ P_tracking       =.true.,
 /
 ```
 + `nouts` is the number of binary outputs during the relative time of the simulation
@@ -256,6 +270,35 @@ Copper    (atomic_number = 29) - mass_number = 63.54
 + `dump`
     - `1`: each processor will dump a binary file for every `nout` in order to enable restart
     - `0`: dumps are suppressed
++ `L_env_modulus` logical flag, only if `model_id=4`: if true the code generates the absolute value of the laser envelope amplitude, otherwise gives the real and imaginary part in two separate files
++ `P_tracking` logical flag, if true the particle tracking is enabled
+
+### TRACKING namelist block
+```
+&TRACKING
+        nkjump           = 1,
+        tkjump           = 4,
+        txmin            = 55.,
+        txmax            = 75.,
+        tymin            =-80.,
+        tymax            = 80.,
+        tzmin            =-20.,
+        tzmax            = 20.,
+        t_in             = 0.,
+        t_out            = 200.,
+/
+```
+
++ `nkjump` a tracked particle every `nkjump` is given back in the output file
++ `tkjump` a snapshot of the tracked particles phase space is taken every `tkjump` timestep
++ `txmin` to select particles with initial longitudinal coordinate `x > txmin` to be tracked
++ `txmax` to select particles with initial longitudinal coordinate `x < txmax` to be tracked
++ `tymin` to select particles with initial transverse coordinate `y > tymin` to be tracked
++ `tymax` to select particles with initial transverse coordinate `y < tymax` to be tracked
++ `tzmin` to select particles with initial transverse coordinate `z > tzmin` to be tracked
++ `tzmax` to select particles with initial transverse coordinate `z < tzmax` to be tracked
++ `t_in` initial tracking time
++ `t_out` final tracking time
 
 
 ### MPIPARAMS namelist block
