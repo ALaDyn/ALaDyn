@@ -167,7 +167,11 @@ Copper    (atomic_number = 29) - mass_number = 63.54
 + `np1` is the density in the upstream layer (foam/preplasma)
 + `np2` is the density in the downstream layer (contaminants)
 + `ionz_lev`: if set to 0, we disable ionization; if 1, only one electron can be extracted per ion, if accessible, per timestep; if 2, it ionizes all the accessible levels in a single timestep
-+ `ionz_model` describes the various ionization models: 1 (pure ADK as in chen et al (2013), the best one for wake sims), 2 (ADK averaged over cycles, as in chen et al (2013), `W_AC=<W_DC>`, best for envelope simulations), 3 (`W_AC+BSI`, added barrier suppression ionization), 4 (Minimum between ADK and BSI ionization values. Here the ADK value is computed averaging on `m`, the magnetic quantum number of the ionized electrons as in Alistair Lawrence-Douglas PhD thesis)
++ `ionz_model` describes the various ionization models:
+    - 1 (pure ADK as in chen et al (2013), the best one for wake sims)
+    - 2 (ADK averaged over cycles, as in chen et al (2013), `W_AC=<W_DC>`, best for envelope simulations)
+    - 3 (`W_AC+BSI`, added barrier suppression ionization)
+    - 4 (Minimum between ADK and BSI ionization values. Here the ADK value is computed averaging on `m`, the magnetic quantum number of the ionized electrons as in Alistair Lawrence-Douglas PhD thesis)
 
 
 ### LASER namelist block (**only for `ibeam=1`**)
@@ -289,7 +293,7 @@ Copper    (atomic_number = 29) - mass_number = 63.54
 /
 ```
 
-+ `nkjump` a tracked particle every `nkjump` is given back in the output file
++ `nkjump` a tracked particle every `nkjump` is written in the output file
 + `tkjump` a snapshot of the tracked particles phase space is taken every `tkjump` timestep
 + `txmin` to select particles with initial longitudinal coordinate `x > txmin` to be tracked
 + `txmax` to select particles with initial longitudinal coordinate `x < txmax` to be tracked
