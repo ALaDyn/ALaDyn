@@ -3176,7 +3176,7 @@
   write(lun,*)'time'
   write(lun,'(5e11.4)')tionz(1:nst)
   write(lun,*)' ionization numbers '
-  write(lun,'(6i8)')ionz_number(1:nst)
+  write(lun,'(6i10)')ionz_number(1:nst)
   write(lun,'(6a14)')fb(1:6)
   do ik=1,nst
    write(lun,'(6e13.4)')ionz_bavg(ik,1:6)

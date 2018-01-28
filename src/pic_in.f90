@@ -2655,7 +2655,7 @@
    end do
   end do
   if(pe0)then
-   write(6,*)'Fluid density',maxval(uf(i1:i2,j1:j2,k1:k2,ic))
+   write(6,'(a22,e11.4)')'Max init fluid density',maxval(uf(i1:i2,j1:j2,k1:k2,ic))
   endif
  !========================
  end subroutine init_fluid_density_momenta
@@ -2926,7 +2926,7 @@
  allocate(bpart(nch,np_tot))
   !---!
   i1=1
-  charge=int(unit_charge(1))      !nsb electron bunches
+  charge=int(unit_charge(1),hp_int)      !nsb electron bunches
   select case(ndm)
   case(2)
   do ip=1,nsb

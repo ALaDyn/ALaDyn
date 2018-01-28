@@ -326,7 +326,7 @@
  subroutine comoving_coordinate(vb,dt_loc,w_nst,loc_it)
  real(dp),intent(in) :: vb,dt_loc
  integer,intent(in) :: w_nst,loc_it
- integer :: i,ic,shx
+ integer :: i,ic,nshx
  real(dp) :: dt_tot
  logical,parameter :: mw=.true.
  !======================
@@ -346,12 +346,12 @@
  do i=1,w_nst
   dt_tot=dt_tot+dt_loc
  enddo
- shx=nint(dx_inv*dt_tot*vb)      !the number of grid points x-shift for each w_nst step
+ nshx=nint(dx_inv*dt_tot*vb)      !the number of grid points x-shift for each w_nst step 
  do i=1,nx+1
-  xw(i)=xw(i)-dx*shx   !moves backwards the grid xw
+  xw(i)=xw(i)-dx*nshx   !moves backwards the grid xw 
  end do
- xw_max=xw_max-dx*shx
- xw_min=xw_min-dx*shx
+ xw_max=xw_max-dx*nshx
+ xw_min=xw_min-dx*nshx
 !======================== xw(i) grid used only for diagnostics purposes
  targ_in=targ_in-vb*dt_tot
  targ_end=targ_end-vb*dt_tot
@@ -376,7 +376,7 @@
  real(dp),intent(in) :: dt_loc
  integer,intent(in) :: witr,init_iter
  integer :: i1,n1p,j1,nyp,k1,nzp,nc_env
- integer :: ix,shx,wi2
+ integer :: ix,nshx,wi2
  real(dp),save :: xlapse
  integer,save :: wi1
  logical,parameter :: mw=.true.
@@ -396,36 +396,40 @@
  !======================
  xlapse=xlapse+w_speed*dt_loc*witr
  wi2=nint(dx_inv*xlapse)
- shx=wi2-wi1
+ nshx=wi2-wi1
  wi1=wi2
  do ix=1,nx+1
-  x(ix)=x(ix)+dx*shx
-  xh(ix)=xh(ix)+dx*shx
+  x(ix)=x(ix)+dx*nshx
+  xh(ix)=xh(ix)+dx*nshx
  end do
- xmin=xmin+dx*shx
- xmax=xmax+dx*shx
- xp0_out=xp0_out+dx*shx
- xp1_out=xp1_out+dx*shx
- loc_xgrid(imodx)%gmin=loc_xgrid(imodx)%gmin+dx*shx
- loc_xgrid(imodx)%gmax=loc_xgrid(imodx)%gmax+dx*shx
- wi2=n1p-shx
+ xmin=xmin+dx*nshx
+ xmax=xmax+dx*nshx
+ xp0_out=xp0_out+dx*nshx
+ xp1_out=xp1_out+dx*nshx
+ loc_xgrid(imodx)%gmin=loc_xgrid(imodx)%gmin+dx*nshx
+ loc_xgrid(imodx)%gmax=loc_xgrid(imodx)%gmax+dx*nshx
+ wi2=n1p-nshx
  if(wi2<=0)then
   write(6,'(a37,3i6)')'Error in window shifting for MPI proc',imody,imodz,imodx
   ier=2
   return
  endif
  !===========================
- call fields_left_xshift(ebf,i1,wi2,j1,nyp,k1,nzp,1,nfield,shx)
+ call fields_left_xshift(ebf,i1,wi2,j1,nyp,k1,nzp,1,nfield,nshx)
  if(Hybrid)then
-  call fluid_left_xshift(up,fluid_x_profile,i1,wi2,j1,nyp,k1,nzp,1,nfcomp,shx)
-  call fluid_left_xshift(up0,fluid_x_profile,i1,wi2,j1,nyp,k1,nzp,1,nfcomp,shx)
+  do ix=wi2,nxf-nshx
+   fluid_x_profile(ix)=fluid_x_profile(ix+nshx)
+  end do
+  nxf=nxf-nshx
+  call fluid_left_xshift(up,fluid_x_profile,i1,wi2,j1,nyp,k1,nzp,1,nfcomp,nshx)
+  call fluid_left_xshift(up0,fluid_x_profile,i1,wi2,j1,nyp,k1,nzp,1,nfcomp,nshx)
  endif
  if(Envelope)then
   nc_env=size(env,4)
-  call fields_left_xshift(env,i1,wi2,j1,nyp,k1,nzp,1,nc_env,shx)
-  if(Two_color)call fields_left_xshift(env1,i1,wi2,j1,nyp,k1,nzp,1,nc_env,shx)
+  call fields_left_xshift(env,i1,wi2,j1,nyp,k1,nzp,1,nc_env,nshx)
+  if(Two_color)call fields_left_xshift(env1,i1,wi2,j1,nyp,k1,nzp,1,nc_env,nshx)
  endif
- !shifts fields data and inject right ebf(wi2+1:n1p) x-grid shx new data
+ !shifts fields data and inject right ebf(wi2+1:n1p) x-grid nshx new data
  !===========================
  if(Part)then
   call cell_part_dist(mw)   !particles are redistributes along the
@@ -445,7 +449,7 @@
  real(dp),intent(in) :: dt_loc
  integer,intent(in) :: witr,wt
  integer :: i1,n1p,j1,nyp,k1,nzp
- integer :: ix,shx,wi2,w2f
+ integer :: ix,nshx,wi2,w2f
  real(dp),save :: xlapse
  integer,save :: wi1
  logical,parameter :: mw=.true.
@@ -467,31 +471,31 @@
  !========== bunch fields have enlarged stencil of (y,z)points
  xlapse=xlapse+w_speed*dt_loc*witr
  wi2=nint(dx_inv*xlapse)
- shx=wi2-wi1
+ nshx=wi2-wi1
  wi1=wi2
  do ix=1,nx+1
-  x(ix)=x(ix)+dx*shx
-  xh(ix)=xh(ix)+dx*shx
+  x(ix)=x(ix)+dx*nshx
+  xh(ix)=xh(ix)+dx*nshx
  end do
- xmin=xmin+dx*shx
- xmax=xmax+dx*shx
- loc_xgrid(imodx)%gmin=loc_xgrid(imodx)%gmin+dx*shx
- loc_xgrid(imodx)%gmax=loc_xgrid(imodx)%gmax+dx*shx
- xp0_out=xp0_out+dx*shx
- xp1_out=xp1_out+dx*shx
+ xmin=xmin+dx*nshx
+ xmax=xmax+dx*nshx
+ loc_xgrid(imodx)%gmin=loc_xgrid(imodx)%gmin+dx*nshx
+ loc_xgrid(imodx)%gmax=loc_xgrid(imodx)%gmax+dx*nshx
+ xp0_out=xp0_out+dx*nshx
+ xp1_out=xp1_out+dx*nshx
  !====================
- w2f=n1p-shx
+ w2f=n1p-nshx
  if(w2f<=0)then
   write(6,*)'Error in window shifting in task',imody,imodz,imodx
   ier=2
   return
  endif
  !===========================
- call fields_left_xshift(ebf,i1,w2f,j1,nyp,k1,nzp,1,nfield,shx)
+ call fields_left_xshift(ebf,i1,w2f,j1,nyp,k1,nzp,1,nfield,nshx)
  call fields_left_xshift(&
-  ebf_bunch,i1,w2f,j1,nyp,k1,nzp,1,nbfield,shx)
+                   ebf_bunch,i1,w2f,j1,nyp,k1,nzp,1,nbfield,nshx)
  call fields_left_xshift(&
-  ebf1_bunch,i1,w2f,j1,nyp,k1,nzp,1,nbfield,shx)
+             ebf1_bunch,i1,w2f,j1,nyp,k1,nzp,1,nbfield,nshx)
  !========================================
  if(Part)then
   call cell_part_dist(mw)
@@ -1703,7 +1707,7 @@
  dt_lp=dtloc
  alp=0.5*dt_lp*Lz_fact
  !==========================
- !Enter F_pt= charge*(E+0.5^grad[F]/gamp)  charge*B/gamp     F=|A|^2/2
+ !Enter F_pt(1:2)= charge*(E+0.5^grad[F]/gamp) and F_pt(3)=charge*B/gamp     where F=|A|^2/2
  select case(curr_ndim)
  case(2)
   !F_pt(5)=wgh/gamp
@@ -1717,6 +1721,7 @@
    vph(1)=vp(1)+vp(2)*bb(1)
    vph(2)=vp(2)-vp(1)*bb(1)
    vph(1:2)=vph(1:2)/b2       !p_n=(p_{n+1/2)+p_{n-1/2})/2
+   vph(1:2)=vp(1:2)
    sp_loc%part(p,3:4)=2.*vph(1:2)-pp(1:2)
    F_pt(p,1:2)=sp_loc%part(p,1:2)
   end do
@@ -1754,7 +1759,7 @@
  real(dp),intent(in) :: dtloc,vb
  integer :: p,ch
  real(dp) :: pp(3),vp(3)
- real(dp) :: b2,gam2,gam_new,gam_inv,dt_lp,dth_lp
+ real(dp) :: b2,gam2,gam_inv,dt_lp,dth_lp
 
  dt_lp=dtloc
  dth_lp=0.5*dt_lp
@@ -1762,7 +1767,7 @@
  !==========================
  select case(curr_ndim)
   !============  enter F_pt(3)=F, F_pt (1:2) Grad[F] where F=|A|^2/2
-  !             at time level t^{n+1/2} assigned at the x^n positions
+  !             at time level t^{n+1/2} assigned to the x^n positions
  case(2)
   do p=1,np
    pp(1:2)=sp_loc%part(p,3:4)  !p^{n+1/2}
@@ -1771,8 +1776,8 @@
    gam2=1.+dot_product(pp(1:2),pp(1:2))+F_pt(p,3)
    b2=0.25*dot_product(pp(1:2),vp(1:2))
    !--------------------
-   gam_new=sqrt(gam2)+dt_lp*b2/gam2
-   gam_inv=1./gam_new
+   gam_inv=1./sqrt(gam2)
+   gam_inv=gam_inv*(1.-dt_lp*b2/gam2)
    vp(1:2)=dt_lp*gam_inv*pp(1:2)
    F_pt(p,3:4)=sp_loc%part(p,1:2) !old (x,y)^n positions
    F_pt(p,5)=dt_lp*gam_inv                   ! 1/gamma
@@ -1790,8 +1795,8 @@
    gam2=1.+dot_product(pp(1:3),pp(1:3))+F_pt(p,4)
    b2=0.25*dot_product(pp(1:3),vp(1:3))
    !--------------------
-   gam_new=sqrt(gam2)+dt_lp*b2/gam2
-   gam_inv=1./gam_new
+   gam_inv=1./sqrt(gam2)
+   gam_inv=gam_inv*(1.-dt_lp*b2/gam2)
    vp(1:3)=dt_lp*gam_inv*pp(1:3)
    F_pt(p,4:6)=sp_loc%part(p,1:3) !old positions
    F_pt(p,7)=dt_lp*gam_inv             ! dt*gam_inv
@@ -1875,9 +1880,10 @@
  real(dp),intent(in) :: evf(:,:,:,:)
  real(dp),intent(out) :: av(:,:,:,:)
  integer,intent(in) :: i1,i2,j1,j2,k1,k2,spl_in,spr_in
- integer :: ix,iy,iz
+ integer :: ix,iy,iz,ord
  real(dp) :: ar,ai
  !===================
+ ord=2
  do iz=k1,k2
   do iy=j1,j2
    do ix=i1,i2
@@ -1889,7 +1895,10 @@
   end do
  end do
  if(prl)call fill_ebfield_yzxbdsdata(av,i1,i2,j1,j2,k1,k2,1,1,spr_in,spl_in)
- call field_xyzbd(av,i1,i2,j1,j2,k1,k2,1,spr_in,spl_in)
+ call env_grad(av,i1,i2,j1,j2,k1,k2,ord,dx_inv,dy_inv,dz_inv)
+ !Exit staggered grad|A|^2/2 in jc(2:4) or jc(2:3) 
+
+ if(prl)call fill_ebfield_yzxbdsdata(av,i1,i2,j1,j2,k1,k2,2,curr_ndim+1,spr_in,spl_in)
  !=====================
  end subroutine env_fields_average
  !===========================
@@ -1919,7 +1928,7 @@
  call env_grad(av,i1,i2,j1,j2,k1,k2,ord,dx_inv,dy_inv,dz_inv)
  !Exit staggered grad|A|^2/2 in jc(2:4) or jc(2:3)
 
- if(prl)call fill_ebfield_yzxbdsdata(av,i1,i2,j1,j2,k1,k2,2,curr_ndim+1,spr,spl)
+ if(prl)call fill_ebfield_yzxbdsdata(av,i1,i2,j1,j2,k1,k2,1,curr_ndim+1,spr,spl)
 
  call field_xyzbd(av,i1,i2,j1,j2,k1,k2,nj_dim,spr,spl)
  !=====================
@@ -2258,19 +2267,19 @@
  jc(:,:,:,:)=0.0
  np=loc_npart(imody,imodz,imodx,ic)
  if(Two_color)then
-  call env_amp_two_fields_prepare(env,env1,jc,i1,i2,j1,nyf,k1,nzf,2,1,1)
+  call env_amp_two_fields_prepare(env,env1,jc,i1,i2,j1,nyf,k1,nzf,2,2,2)
  else
-  call env_amp_prepare(env,jc,i1,i2,j1,nyf,k1,nzf,2,1,1)
+  call env_amp_prepare(env,jc,i1,i2,j1,nyf,k1,nzf,2,2,2)
  endif
   !======================================
  ! exit jc(1)=|a|^2/2 at t^n
   !      jc(2:4)=grad|a|^2/2 at t^n
   ! For two-color |A|= |A_0|+|A_1|
- !======================================
- call set_env_acc(ebf,jc,spec(ic),ebfp,np,curr_ndim,dt_loc,xm,ym,zm)
-  call field_charge_multiply(spec(ic),ebfp,1,np,nfield)
-  !exit ebfp(1:3)=[E+F] ebfp(4:6)=B/gamp, ebfp(7)=wgh/gamp at t^n
- !Fields already multiplied by particle charge
+  !======================================
+  call set_env_acc(ebf,jc,spec(ic),ebfp,np,curr_ndim,dt_loc,xm,ym,zm)
+                            !call field_charge_multiply(spec(ic),ebfp,1,np,nfield)
+  !exit ebfp(1:3)=q*[E+F] ebfp(4:6)=q*B/gamp, ebfp(7)=wgh/gamp at t^n
+  !Lorentz force already multiplied by particle charge
   !jc(1:4) not modified
  !====================
  call lpf_env_momenta(spec(ic),ebfp,np,dt_loc,Ltz)
@@ -2309,24 +2318,25 @@
  !advance (A_1^n, J^n) => A_1^{n+1}, A_1^{n-1}=> A_1^n
 !=======================
  if(Two_color)then
-  call env_two_fields_average(env,env1,jc,i1,i2,j1,nyf,k1,nzf,1,1)
+  call env_two_fields_average(env,env1,jc,i1,i2,j1,nyf,k1,nzf,2,2)
  else
- call env_fields_average(env,jc,i1,i2,j1,nyf,k1,nzf,1,1)
+  call env_fields_average(env,jc,i1,i2,j1,nyf,k1,nzf,2,2)
  endif
- ! In jc(1)= |A|^2/2 +|A_1|/2 at t^{n+1/2}
+ ! In jc(1)= F= |A|^2/2 +|A_1|/2 at t^{n+1/2}  in jc(2:4) grad[F]
  if(Hybrid)then
   flux(i1:i2,j1:nyf,k1:nzf,curr_ndim+1)=jc(i1:i2,j1:nyf,k1:nzf,1)
   !stores in flux()
  endif
- call set_env_interp(jc,spec(ic),ebfp,np,curr_ndim,xm,ym,zm)
- !=============================
-  ! Exit interpolated field variables
- ! at time level t^{n+1/2} and positions at time t^n
+  call set_env_interp(jc,spec(ic),ebfp,np,curr_ndim,xm,ym,zm)
+  !=============================
+  ! Exit p-interpolated field variables
+  ! at time level t^{n+1/2} and positions at time t^n
   ! in ebfp(1:3)=grad|A|^2/2 ebfp(4)=|A|^2/2 in 3D
   ! in ebfp(1:2)=grad|A|^2/2 ebfp(3)=|A|^2/2 in 2D
- !=====================================
+  !=====================================
    call lpf_env_positions(spec(ic),ebfp,np,dt_loc,vbeam)
- !===========================
+   if(ompe==0.0)return
+  !===========================
   ! ebfp(1:3) dt*V^{n+1/2}  ebfp(4:6) old positions for curr J^{n+1/2}
   ! ebfp(7)=dt*gam_inv
  !==============================

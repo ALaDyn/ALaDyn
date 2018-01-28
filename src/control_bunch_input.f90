@@ -41,7 +41,6 @@
  real(dp) :: sigma_cut_bunch(5)
  real(dp) :: alpha_twiss(5),beta_twiss(5)
  real(dp) :: B_ex_poloidal,radius_poloidal
- ! real(dp) :: xmin_out,xmax_out,ymax_out,weights_cut_min,weights_cut_max,gamma_cut_min
  integer  :: ppc_x_bunch(5),ppc_y_bunch(5),ppc_z_bunch(5),ppc_bunch(5,3)
 
  logical :: L_particles,L_Twiss(5),L_Bpoloidal,L_EMBunchEvolution

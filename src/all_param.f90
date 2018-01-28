@@ -333,7 +333,7 @@
    if(mass_number(i)< 1.)call set_atomic_weight(atomic_number(i),mass_number(i))
   end do
   if(ionz_lev >0)Ionization=.true.
-  if(Ionization) call set_ionization_coeff(atomic_number,nsp_ionz) 
+  if(Ionization) call set_ionization_coeff(atomic_number,nsp_ionz)
   !uses ion index 1,2,,,nsp-1
   wgh_ion=1./(real(mp_per_cell(2),dp))
   if(ion_min(1)>1)wgh_ion=1./(real(ion_min(1),dp)*real(mp_per_cell(2),dp))
@@ -374,7 +374,7 @@
    nfield=6
    curr_ndim=3
   endif
-  if(.not. is_zero(lp_offset)) Two_color=.true.
+  if(lp_offset > 0.0)Two_color=.true.
 !====================
   !to be multiplied by the particle charge in the equation of motion
   !E=in unit mc^2/(e*l0)=[TV/m]/E0; E0*E in [TV/m]=[MV/mu] unit
@@ -413,7 +413,8 @@
   if(G_prof)then
    aph_fwhm= sqrt(2.*log(2.))
   else
-   aph_fwhm=2.*acos(sqrt(0.5*sqrt(2.)))/pi
+   !aph_fwhm=2.*acos(sqrt(0.5*sqrt(2.)))/pi
+   aph_fwhm=2.*acos(sqrt(sqrt(0.5*sqrt(2.))))/pi
   endif
   lx_fwhm=tau_fwhm*speed_of_light ! In micron unit
   w0_x=lx_fwhm/aph_fwhm

@@ -21,11 +21,8 @@
 
  module precision_def
 
-
-
  implicit none
 
- !F2003 version
  integer, parameter :: sp = selected_real_kind(6, 37)
  integer, parameter :: dp = selected_real_kind(15, 307)
  integer, parameter :: dp_int = selected_int_kind(16)
@@ -54,7 +51,7 @@
  real(dp),parameter  :: small_value = 0.1
  logical             :: check
 
- check = abs(value) < epsilon(small_value)
+ check = (abs(value) < epsilon(small_value))
 
  end function is_zero
 
