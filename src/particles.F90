@@ -2454,6 +2454,7 @@
 
  !===============================================
  ! enters av(1)=|a|^2 envelope at integer grid nodes
+ ! and av(2:4)=[Grad |a|2/2] at staggered grid points
  ! exit |a|^2/2 and grad[|a|^2]/2 at the particle positions
  !=========================
  ! Particle positions assigned using quadratic splines
@@ -2532,12 +2533,11 @@
     do i1=0,2
      i2=i+i1
      dvol1=dvol*ax1(i1)
-     ap(2)=ap(2)+dvol1*av(i2,j2,k2,1)
+     ap(2)=ap(2)+dvol1*av(i2,j2,k2,3)
     end do
    end do
    !pt(n,1)=dxe*ap(1)    !assigned grad[A^2/2]
    !pt(n,2)=dye*ap(2)
-   !pt(n,3)=ap(3)        !assigned A^2/2
    pt(n,1:3)=ap(1:3)    !assigned A^2/2 and grad[A^2/2]
   end do
 !=================================
@@ -2547,9 +2547,9 @@
   dze=dz_inv
   do n=1,np
    ap=zero_dp
-   xp1(1)=dx_inv*(sp_loc%part(n,1)-xmn) !loc x position
-   xp1(2)=dy_inv*(sp_loc%part(n,2)-ymn) !loc y position
-   xp1(3)=dz_inv*(sp_loc%part(n,3)-zmn) !loc z position
+   xp1(1)=dxe*(sp_loc%part(n,1)-xmn) !loc x position
+   xp1(2)=dye*(sp_loc%part(n,2)-ymn) !loc y position
+   xp1(3)=dze*(sp_loc%part(n,3)-zmn) !loc z position
 
    xx=shx+xp1(1)
    i=int(xx+0.5)
@@ -2613,7 +2613,7 @@
      do i1=0,2
       i2=i1+ih
       dvol1=dvol*axh(i1)
-      ap(1)=ap(1)+dvol1*av(i2,j2,k2,2)    !Dx[F]
+      ap(1)=ap(1)+dvol1*av(i2,j2,k2,2)   !Dx[F]
       i2=i1+i
       ap(4)=ap(4)+ax1(i1)*dvol*av(i2,j2,k2,1)  !F
      end do
@@ -2638,9 +2638,6 @@
     end do
    end do
    pt(n,1:4)=ap(1:4)
-   pt(n,2)=dye*ap(2)
-   pt(n,3)=dze*ap(3)
-   pt(n,4)=ap(4)
    !=================================
   end do
  end select
@@ -2654,14 +2651,14 @@
  integer,intent(in) :: np,ndm
  real(dp),intent(in) :: dt_loc,xmn,ymn,zmn
 
- real(dp) :: xx,sx,sx2,dvol,dvol1,gam2
+ real(dp) :: xx,sx,sx2,dvol,dvol1
  real(dp) :: axh(0:2),ayh(0:2),up(3),xp1(3)
  real(dp) :: ax1(0:2),ay1(0:2),azh(0:2),az1(0:2),ap(12)
  integer :: i,ih,j,jh,i1,j1,i2,j2,k,kh,k1,k2,n
- real(dp) :: a1,b1,gam,gamp_new,dth4
+ real(dp) :: a1,b1,dgam,gam_inv,gam,gam2,dth
  !===============================================
  !===============================================
- ! Linear shape for fields at half-index quadratic shape for fields
+ ! Uses linear shapes for fields at half-index quadratic shape for fields
  !                         at integer index
  !====================================
  !===================================================
@@ -2684,14 +2681,14 @@
  axh(0:2)=zero_dp;ayh(0:2)=zero_dp
  azh(0:2)=zero_dp
 
- dth4=0.25*dt_loc
+ dth=0.5*dt_loc
  select case(ndm)
  !==========================
  case(2)
   k2=1
   do n=1,np
-   ap=zero_dp
-   xp1(1:2)=sp_loc%part(n,1:2)    !the current particle positions
+   ap(1:6)=zero_dp
+   xp1(1:2)=sp_loc%part(n,1:2)   !the current particle positions
    up(1:2)=sp_loc%part(n,3:4)    !the current particle  momenta
    wgh_cmp=sp_loc%part(n,5)          !the current particle (weight,charge)
    xx=shx+dx_inv*(xp1(1)-xmn)
@@ -2740,14 +2737,15 @@
     j2=j+j1
     dvol=ay1(j1)
     do i1=0,2
-     i2=i1+i
+     i2=i+i1
      ap(6)=ap(6)+ax1(i1)*dvol*av(i2,j2,k2,1)!t^n p-assigned F=a^2/2 field
     end do
-    do i1=0,1
-     i2=i1+ih
+    do i1=0,2
+     i2=ih+i1
      dvol1=dvol*axh(i1)
      ap(1)=ap(1)+dvol1*ef(i2,j2,k2,1)    !Ex and Dx[F] (i+1/2,j,k))
      ap(4)=ap(4)+dvol1*av(i2,j2,k2,2)
+                                         !ap(4)=ap(4)+dvol1*dx_inv*(av(i2+1,j2,k2,1)-av(i2,j2,k2,1))
     end do
    end do
    do j1=0,1
@@ -2758,25 +2756,28 @@
      dvol1=dvol*ax1(i1)
      ap(2)=ap(2)+dvol1*ef(i2,j2,k2,2)  !Ey and Dy[F] (i,j+1/2,k)
      ap(5)=ap(5)+dvol1*av(i2,j2,k2,3)
+                                       !ap(5)=ap(5)+dvol1*dy_inv*(av(i2,j2+1,k2,1)-av(i2,j2,k2,1))
     end do
-    do i1=0,1
-     i2=i1+ih
-     ap(3)=ap(6)+axh(i1)*dvol*ef(i2,j2,k2,3)   !Bz(i+1/2,j+1/2,k)
+    do i1=0,2
+     i2=ih+i1
+     ap(3)=ap(3)+axh(i1)*dvol*ef(i2,j2,k2,3)   !Bz(i+1/2,j+1/2,k)
     end do
    end do
    !=========================
    gam2=1.+up(1)*up(1)+up(2)*up(2)+ap(6)   !gamma^{n-1/2}
-   ap(4:5)=0.5*ap(4:5)
-   !  ap(1:2)=(Ex,Ey)   ap(3)=Bz,ap(4:5)=[Dx,Dy]F/2
-   a1=dot_product(ap(1:2),up(1:2))
-   b1=dot_product(ap(4:5),up(1:2))
+   ap(1:3)=charge*ap(1:3)
+   ap(4:5)=0.5*charge*ap(4:5)
+   !  ap(1:2)=q(Ex,Ey)   ap(3)=q*Bz,ap(4:5)=q*[Dx,Dy]F/2
+   a1=dth*dot_product(ap(1:2),up(1:2))
+   b1=dth*dot_product(ap(4:5),up(1:2))
    gam=sqrt(gam2)
-   gamp_new=gam+charge*dth4*(gam*a1+b1)/gam2
-   ap(3:5)=ap(3:5)/gamp_new          !ap(3)=B/gamp, ap(4:5)= Grad[F]/2*gamp
+   dgam=(a1*gam+b1)/(gam2-a1)
+   gam_inv=(gam-dgam)/gam2
+   ap(3:5)=ap(3:5)*gam_inv          !ap(3)=q*B/gamp, ap(4:5)= q*Grad[F]/2*gamp
 
-   pt(n,1:2)=ap(1:2)+ap(4:5)
+   pt(n,1:2)=ap(1:2)+ap(4:5)   ! Lorentz force already multiplied by q    
    pt(n,3)=ap(3)
-   pt(n,5)=wgh/gamp_new     !weight/gamp
+   pt(n,5)=wgh*gam_inv     !weight/gamp
   end do
 !=============================
  case(3)
@@ -2894,17 +2895,20 @@
    end do
    !=================================
    gam2=1.+up(1)*up(1)+up(2)*up(2)+up(3)*up(3)+ap(10)   !gamma^{n-1/2}
-   ap(7:9)=0.5*ap(7:9)
-   !  ap(1:3)=(Ex,Ey,Ez)   ap(4:6)=(Bx,By,Bz),ap(7:9)=[Dx,Dy,Dz]F/2
-   a1=dot_product(ap(1:3),up(1:3))
-   b1=dot_product(ap(7:9),up(1:3))
+   ap(1:6)=charge*ap(1:6)
+   ap(7:9)=0.5*charge*ap(7:9)
+   !  ap(1:3)=q(Ex,Ey,Ez)   ap(4:6)=q(Bx,By,Bz),ap(7:9)=q[Dx,Dy,Dz]F/2
+   a1=dth*dot_product(ap(1:3),up(1:3))
+   b1=dth*dot_product(ap(7:9),up(1:3))
    gam=sqrt(gam2)
-   gamp_new=gam+charge*dth4*(gam*a1+b1)/gam2
-   ap(4:9)=ap(4:9)/gamp_new          !ap(4:6)=B/gamp, ap(7:9)= Grad[F]/2*gamp
+   dgam=(a1*gam+b1)/(gam2-a1)
+   gam_inv=(gam-dgam)/gam2
+
+   ap(4:9)=ap(4:9)*gam_inv          !ap(4:6)=B/gamp, ap(7:9)= Grad[F]/2*gamp
 
    pt(n,1:3)=ap(1:3)+ap(7:9)
    pt(n,4:6)=ap(4:6)
-   pt(n,7)=wgh/gamp_new     !weight/gamp
+   pt(n,7)=wgh*gam_inv     !weight/gamp
   end do
  end select
  end subroutine set_env_acc

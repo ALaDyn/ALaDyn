@@ -87,7 +87,7 @@
  last_ind=0
  if(mype==1)last_ind=loc_tpart(1)
  if(mype>1)last_ind=sum(loc_tpart(1:mype))
- if(loc_tpart(mype+1)>0)write(6,*)'last particle index',mype,last_ind
+ !if(loc_tpart(mype+1)>0)write(6,*)'last particle index',mype,last_ind
  do p=1,np 
   wgh_cmp=sp_loc%part(p,ndv)
   if(part_ind >0)part_ind=part_ind+last_ind
@@ -112,7 +112,7 @@
  type(species),intent(in) :: sp_loc
  integer,intent(in) :: time_ind
 
- integer :: np,ik,ip,p,ndv,ipe,kk,ik1,ik2,ik_max
+ integer :: np,ik,ik_max,ip,p,ndv,ipe,kk,ik1,ik2
  logical :: sr
 
  if(time_ind > track_tot_nstep)return
@@ -122,13 +122,14 @@
  kk=0
  do p=1,np
   wgh_cmp=sp_loc%part(p,ndv)
-  if(part_ind >0)then
-   ik=ik+1
-  endif
+  if(part_ind >0)ik=ik+1
  enddo
- if(ik*ndv>size(track_aux))then
+ loc_tpart(mype+1)=ik
+ call intvec_distribute(ik,loc_tpart,npe)
+ ik_max=maxval(loc_tpart(1:npe))
+ if(ndv*ik_max > size(track_aux))then
   deallocate(track_aux)
-  allocate(track_aux(ik*ndv+10))
+  allocate(track_aux(ndv*ik_max))
  endif
  ik=0
  do p=1,np
@@ -141,17 +142,10 @@
    enddo
   endif
  enddo
- loc_tpart(mype+1)=ik
- call intvec_distribute(ik,loc_tpart,npe)
- ik_max=maxval(loc_tpart(1:npe))
- !=================
+!=================
  if(pe0)then
   sr=.false.
   ik1=0
-  if(ik_max*ndv>size(track_aux))then
-   deallocate(track_aux)
-   allocate(track_aux(ik_max*ndv+10))
-  endif
   do ipe=1,npe-1
    ik=loc_tpart(ipe+1)
    if(ik >0)then

@@ -331,24 +331,24 @@
  endif
  end subroutine den_zyxbd
  !====================
- subroutine fluid_left_xshift(fld,u0,i1,i2,j1,j2,k1,k2,ic1,ic2,shx)
+ subroutine fluid_left_xshift(fld,u0,i1,i2,j1,j2,k1,k2,ic1,ic2,xsh)
 
- integer,intent(in) :: i1,i2,j1,j2,k1,k2,ic1,ic2,shx
+ integer,intent(in) :: i1,i2,j1,j2,k1,k2,ic1,ic2,xsh
  real(dp),intent(inout) :: fld(:,:,:,:)
  real(dp),intent(in) :: u0(:)
  integer :: ic,ix,j,iy,iz,kk,lenws
 
 
- if(shx==0)return
- lenws=(ic2+1-ic1)*(k2+1-k1)*(j2+1-j1)*shx
+ if(xsh==0)return
+ lenws=(ic2+1-ic1)*(k2+1-k1)*(j2+1-j1)*xsh
  if(prlx)then
-  !Sends to x-left side shx data (i1:i1+shx-1)
-  !Recvs from x-right data(i2+1:i2+shx)       i2=n1p-shx
+  !Sends to x-left side xsh data (i1:i1+xsh-1)
+  !Recvs from x-right data(i2+1:i2+xsh)       i2=n1p-xsh
   kk=0
   do ic=ic1,ic2
    do iz=k1,k2
     do iy=j1,j2
-     do j=0,shx-1
+     do j=0,xsh-1
       ix=i1+j
       kk=kk+1
       aux1(kk)=fld(ix,iy,iz,ic)
@@ -360,32 +360,36 @@
   call exchange_bdx_data(lenws,lenws,3,RIGHT)
  endif
  !
- ! shifts (i1+shx:i2+shx=n1p)=>(i1:i2)
- do ic=ic1,ic2
+ ! shifts (i1+xsx:i2+xsh=n1p)=>(i1:i2)
+ do ic=ic1,ic2-1
   do iz=k1,k2
    do iy=j1,j2
     do ix=i1,i2
-     fld(ix,iy,iz,ic)=fld(ix+shx,iy,iz,ic)
+     fld(ix,iy,iz,ic)=fld(ix+xsh,iy,iz,ic)
     end do
-    fld(i2+1:i2+shx,iy,iz,ic)=0.0
+    fld(i1,iy,iz,ic)=2.*fld(i1+1,iy,iz,ic)-fld(i1+2,iy,iz,ic)
+    fld(i2+1:i2+xsh,iy,iz,ic)=0.0
    end do
   end do
  end do
+ ic=ic2
  do iz=k1,k2
   do iy=j1,j2
-   do ix=i2+1,i2+shx
-    fld(ix,iy,iz,ic2)=u0(ix)
+   do ix=i1,i2
+    fld(ix,iy,iz,ic)=fld(ix+xsh,iy,iz,ic)
    end do
+   fld(i1,iy,iz,ic)=2.*fld(i1+1,iy,iz,ic)-fld(i1+2,iy,iz,ic)
+   fld(i2+1:i2+xsh,iy,iz,ic)=u0(i2+1:i2+xsh)
   end do
  end do
- ! now replaces (i2+1:i2+shx=n1p)
+ ! now replaces (i2+1:i2+xsh=n1p)
  if(prlx)then
   if(pex1)aux2(1:lenws)=0.0
   kk=0
   do ic=ic1,ic2
    do iz=k1,k2
     do iy=j1,j2
-     do j=1,shx
+     do j=1,xsh
       ix=i2+j
       kk=kk+1
       fld(ix,iy,iz,ic)=aux2(kk)
@@ -397,23 +401,23 @@
 
  end subroutine fluid_left_xshift
  !==================================
- subroutine fields_left_xshift(fld,i1,i2,j1,j2,k1,k2,ic1,ic2,shx)
+ subroutine fields_left_xshift(fld,i1,i2,j1,j2,k1,k2,ic1,ic2,xsh)
 
- integer,intent(in) :: i1,i2,j1,j2,k1,k2,ic1,ic2,shx
+ integer,intent(in) :: i1,i2,j1,j2,k1,k2,ic1,ic2,xsh
  real(dp) :: fld(:,:,:,:)
  integer :: ic,ix,j,iy,iz,kk,lenws
 
 
- if(shx==0)return
- lenws=(ic2+1-ic1)*(k2+1-k1)*(j2+1-j1)*shx
+ if(xsh==0)return
+ lenws=(ic2+1-ic1)*(k2+1-k1)*(j2+1-j1)*xsh
  if(prlx)then
-  !Sends to x-left side shx data (i1:i1+shx-1)
-  !Recvs from x-right data(i2+1:i2+shx)       i2=n1p-shx
+  !Sends to x-left side xsh data (i1:i1+xsh-1)
+  !Recvs from x-right data(i2+1:i2+xsh)       i2=n1p-sh
   kk=0
   do ic=ic1,ic2
    do iz=k1,k2
     do iy=j1,j2
-     do j=0,shx-1
+     do j=0,xsh-1
       ix=i1+j
       kk=kk+1
       aux1(kk)=fld(ix,iy,iz,ic)
@@ -425,25 +429,25 @@
   call exchange_bdx_data(lenws,lenws,3,RIGHT)
  endif
  !
- ! shifts (i1+shx:i2+shx=n1p)=>(i1:i2)
+ ! shifts (i1+xsh:i2+xsh=n1p)=>(i1:i2)
  do ic=ic1,ic2
   do iz=k1,k2
    do iy=j1,j2
     do ix=i1,i2
-     fld(ix,iy,iz,ic)=fld(ix+shx,iy,iz,ic)
+     fld(ix,iy,iz,ic)=fld(ix+xsh,iy,iz,ic)
     end do
-    fld(i2+1:i2+shx,iy,iz,ic)=0.0
+    fld(i2+1:i2+xsh,iy,iz,ic)=0.0
    end do
   end do
  end do
- ! now replaces (i2+1:i2+shx=n1p)
+ ! now replaces (i2+1:i2+xsh=n1p)
  if(prlx)then
   if(pex1)aux2(1:lenws)=0.0
   kk=0
   do ic=ic1,ic2
    do iz=k1,k2
     do iy=j1,j2
-     do j=1,shx
+     do j=1,xsh
       ix=i2+j
       kk=kk+1
       fld(ix,iy,iz,ic)=aux2(kk)

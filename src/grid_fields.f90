@@ -35,7 +35,7 @@
 
  subroutine w_alloc(opt_der)
  real(dp),intent(in) :: opt_der
- real(dp) :: cfl_loc,lxb,lyb,as0,alp
+ real(dp) :: cfl_loc,as0,alp
  integer :: ndmx,nd1mx,ng
 
  !============================
@@ -483,7 +483,7 @@
  integer,intent(in) :: i1,n1p,j1,n2p,k1,n3p,ic1,ic2
  real(dp),intent(in) :: aphx,v_adv
  integer :: i,j,k,ii,n1,n1_loc,ic,ind
- real(dp) :: aphx_adv,aphx_adv1,a,b,c,b1,c1,an,bn,cn
+ real(dp) :: aphx_adv,aphx_adv1,a,b,c,b1,c1,an,bn
  real(dp),dimension(3),parameter :: rder=(/-3.,4.,-1./)
  !=====================
  ! APPLIES also for prlx=.true. (MPI x decomposition)
@@ -900,9 +900,11 @@
     Ar=e0*cos(phi)*sqrt(sqrt(w2))*exp(-w2*r2)
     Ai=-e0*sin(phi)*sqrt(sqrt(w2))*exp(-w2*r2)
     A0=cos(phi1)*cos(phi1)
+    A0=A0*A0
     ef(i,j,k,1)=ef(i,j,k,1)+A0*Ar    !Re[Ay](t_loc)
     ef(i,j,k,2)=ef(i,j,k,2)+A0*Ai    !Im[Ay]
     A0=cos(phi0)*cos(phi0)
+    A0=A0*A0
     ef(i,j,k,3)=ef(i,j,k,3)+A0*Ar    !Re[Ay](t_loc-Dt)
     ef(i,j,k,4)=ef(i,j,k,4)+A0*Ai    !Im[Ay]
    end do
@@ -1678,7 +1680,7 @@
   real(dp),intent(inout) :: curr(:,:,:,:),evf(:,:,:,:)
   integer,intent(in) :: i1,n1p,j1,n2p,k1,n3p
   real(dp),intent(in) :: om0,dhx,dhy,dhz,dt_loc
-  integer :: i,j,k,ii,ic,ic1
+  integer :: i,j,k,ii,ic
   real(dp) ::dt2,dx1_inv,dhx1_inv
   real(dp) ::kfact,k2_fact,a_fact
   real(dp),dimension(0:2),parameter :: lder=(/1.0,-4.0,3.0/)
@@ -1824,7 +1826,7 @@
  real(dp),intent(in) :: om0,dhx,dhy,dhz,dt_loc
  integer :: i,j,k,ii,ic,ic1,n1
  real(dp) :: dx1_inv,om2,aph1,dx_norm,dx2_norm
- real(dp) :: adv,b1,c1,an,bn,der2_norm,c1_der(0:1),c2_der(0:2)
+ real(dp) :: adv,an,bn,der2_norm,c1_der(0:1),c2_der(0:2)
  !==========================
  ! EXPLICIT INTEGRATION of ENVELOPE EVOLUTION EQUATION
  !============================
@@ -4672,7 +4674,7 @@
 
  integer,intent(in) :: nef,i1,n1p,j1,n2p,k1,n3p
  real(dp),intent(in) :: vb,aphx,aphy,aphz
- integer :: i,j,k,ic,ic1,ii,jj,j01,j02,kk,k01,k02
+ integer :: i,j,k,ic,ii,jj,j01,j02,kk,k01,k02
  real(dp),dimension(2),parameter :: e4_coeff=(/1.125,-1./24/)
  real(dp) :: aphx1,aphx2,advx,advx1,advx2
  real(dp) :: aphy1,aphy2,sdy

@@ -36,7 +36,7 @@
  character(13) :: fname='             '
  integer :: np,ic,lun,i,j
  integer :: nxf_loc,nyf_loc,nzf_loc,nf
- integer :: nxfl,i2b,j2b,k2b,nbf,env_cp
+ integer :: i2b,j2b,k2b,nbf,env_cp
  real(dp) :: rdata(10)
  integer :: ndata(10),nps_loc(4),nbs_loc(5)
  !==============
@@ -52,8 +52,6 @@
   k2b=size(ebf_bunch,3)
   nbf=size(ebf_bunch,4)
  endif
- nxfl=0
- if(Hybrid)nxfl=size(fluid_x_profile)
  !=========================
  ndata=0
  rdata=0.0
@@ -75,7 +73,8 @@
  ndata(7)=npty
  ndata(8)=npt_buffer(1)
  ndata(9)=size(x)
- ndata(10)=nxfl
+ ndata(10)=nxf
+ !if(pe0)write(6,*)'dump data',ndata(1:10)
  !==============
  lun=10
  open (lun,file='dumpRestart/'//fname//'.bin',form='unformatted',status='unknown')
@@ -88,7 +87,7 @@
  !-----------------------------
  if(targ_end > xmax)then
   if(Hybrid)then
-   write(lun)fluid_x_profile(1:nxfl)
+   write(lun)fluid_x_profile(1:nxf)
   endif
   do i=1,nsp
    write(lun)loc_npty(i),loc_nptz(i)
@@ -169,7 +168,7 @@
  integer :: np,nps_loc(4),nbs_loc(5),np_max
  integer :: n1_old,lun,i,j,ic
  integer :: nxf_loc,nyf_loc,nzf_loc,nf,npt_max
- integer :: i2b,j2b,k2b,nbf,env_cp,nxfl
+ integer :: i2b,j2b,k2b,nbf,env_cp
  integer :: n1_loc,n2_loc,n3_loc,nf_loc
  real(dp) :: rdata(10)
  integer :: ndata(10)
@@ -203,12 +202,18 @@
  nptz=npty
  npt_max=ndata(8)
  n1_old=ndata(9)
- nxfl=ndata(10)
+ nxf=ndata(10)
  !=======================================
  !=======================================
  allocate(xx(n1_old))
  i=ndata(9)
  read(lun)xx(1:i)
+ if(Hybrid)then
+  if(nxf>0)then
+   allocate(fluid_x_profile(nxf))
+   read(lun)fluid_x_profile(1:nxf)
+  endif
+ endif
  !===================
  ! x() defined on the grid module starting from x(1)=0.0
  if(xx(1) >0.0)then
@@ -223,10 +228,6 @@
  endif
  !===================
  if(targ_end > xmax)then
-  if(nxfl>0)then
-   allocate(fluid_x_profile(nxfl))
-   read(lun)fluid_x_profile(1:nxfl)
-  endif
   do i=1,nsp
    read(lun)loc_npty(i),loc_nptz(i)
   end do

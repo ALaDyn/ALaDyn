@@ -1,14 +1,11 @@
 #!/bin/bash
-#PBS -A my_cineca_computing_account
-#PBS -l walltime=0:10:00
-#PBS -l select=1:ncpus=68:mpiprocs=68:mem=86GB:mcdram=cache:numa=quadrant
-#PBS -j eo
+#SBATCH --account=IscrB_account    # put the name of your project
+#SBATCH --time=10:00               # 10 minutes
+#SBATCH -N1 -n68                   # 1 node, 68 tasks
+#SBATCH --error  job.err
+#SBATCH --output job.out
+#SBATCH --partition=knl_usr_prod
 
-##PBS -o opic.txt   #commented to have output in real-time via redirection and not all at the end of the job
-##PBS -e epic.txt
-
-
-cd "${PBS_O_WORKDIR}" || exit
 
 module purge
 

@@ -33,32 +33,31 @@
  real(dp),allocatable :: env(:,:,:,:),env1(:,:,:,:)
  real(dp),allocatable :: up(:,:,:,:),up0(:,:,:,:),up1(:,:,:,:),flux(:,:,:,:)
  real(dp),allocatable :: ub(:,:,:,:),ub0(:,:,:,:),ub1(:,:,:,:)
+ integer(hp_int),parameter :: ihx=3
  !--------------------------
 
  contains
 
  !--------------------------
-
  subroutine v_alloc(n1,n2,n3,ncomp,njc,ndm,ns,ifluid,lp,oder,envlp,color,comv,fsize)
 
  integer,intent(in) ::n1,n2,n3,ncomp,njc,ndm,ns,ifluid,lp,oder
  logical,intent(in) :: envlp,color,comv
  integer,intent(inout) ::fsize
- integer :: njdim,ng,ng0,n1p,n2p,n3p,shx,AllocStatus,fsize_loc
+ integer :: njdim,ng,ng0,n1p,n2p,n3p,AllocStatus,fsize_loc
  !==============
  ! ns =nsp for active ionization
  !======================
- !extended grid [1:n1+3]  interior [shx,n1]  
- !overlapping grid [n1-1,n1+shx]=> 1,shx+2  [1,2] <= [n1-1,n1],[shx,shx+2]=>[n1+1,n1+3]
+ !extended grid [1:n1+3]  interior [ihx,n1]  
+ !overlapping grid [n1-1,n1+ihx]=> 1,ihx+2  [1,2] <= [n1-1,n1],[ihx,ihx+2]=>[n1+1,n1+3]
  
- shx=3
- n1p=n1+shx          
- n2p=n2+shx
+ n1p=n1+ihx          
+ n2p=n2+ihx
  n3p=n3
  ng0=1+(n1-2)*(n2-2)
  if(ndm==3)then
   ng0=1+(n1-2)*(n2-2)*(n3-2)
-  n3p=n3+shx
+  n3p=n3+ihx
  endif
  ng=n1p*n2p*n3p
  fsize_loc=0
@@ -128,13 +127,12 @@
 
  integer,intent(in) ::n1,n2,n3,bcomp,ndm,ibch
  integer,intent(inout) ::fsize
- integer :: ng,n1p,n2p,n3p,shx,AllocStatus
+ integer :: ng,n1p,n2p,n3p,AllocStatus
 
- shx=3
- n1p=n1+shx       !x-grid ix=1,2 bd, 3:nx+2=n1p data n1p+1 bd
- n2p=n2+shx
+ n1p=n1+ihx       !x-grid ix=1,2 bd, 3:nx+2=n1p data n1p+1 bd
+ n2p=n2+ihx
  n3p=n3
- if(ndm==3)n3p=n3+shx
+ if(ndm==3)n3p=n3+ihx
  ng=n1p*n2p*n3p
  allocate(ebf_bunch(n1p,n2p,n3p,bcomp),STAT=AllocStatus)
  allocate(jb(n1p,n2p,n3p,ndm),STAT=AllocStatus)
@@ -154,14 +152,13 @@
 
  integer,intent(in) ::n1,n2,n3,fcomp,ndm,lp
  integer,intent(inout) ::fsize
- integer :: ng,n1p,n2p,n3p,shx,flcomp,AllocStatus
+ integer :: ng,n1p,n2p,n3p,flcomp,AllocStatus
 
- shx=3
- n1p=n1+shx       !x-grid ix=1,2 bd, 3:n1+2=n1p data n1+1 bd
- n2p=n2+shx       !overlapping grid y=1,3 = n2-1,n2+1  y=n2+1=shx
+ n1p=n1+ihx       !x-grid ix=1,2 bd, 3:n1+2=n1p data n1+1 bd
+ n2p=n2+ihx       !overlapping grid y=1,3 = n2-1,n2+1  y=n2+1=ihx
  n3p=n3
  flcomp=2*fcomp-1
- if(ndm==3)n3p=n3+shx
+ if(ndm==3)n3p=n3+ihx
  ng=n1p*n2p*n3p
  allocate(up(n1p,n2p,n3p,fcomp),STAT=AllocStatus)
  allocate(up0(n1p,n2p,n3p,fcomp),STAT=AllocStatus)
@@ -177,14 +174,15 @@
  endif
  end subroutine fluid_alloc
  !============ external B-field allocated
- subroutine bext_alloc(n1,n2,n3,bcomp,ndm,fsize)
+ subroutine bext_alloc(n1,n2,n3,bcomp,fsize)
 
- integer,intent(in) ::n1,n2,n3,bcomp,ndm
+ integer,intent(in) ::n1,n2,n3,bcomp
  integer,intent(inout) ::fsize
- integer :: ng,n1p,n2p,n3p,shx,AllocStatus
- n1p=n1+shx       !x-grid ix=1,2 bd, 3:n1+2=n1p data n1+1 bd
- n2p=n2+shx       !overlapping grid y=1,3 = n2-1,n2+1  y=n2+1=shx
+ integer :: ng,n1p,n2p,n3p,AllocStatus
+ n1p=n1+ihx       !x-grid ix=1,2 bd, 3:n1+2=n1p data n1+1 bd
+ n2p=n2+ihx       !overlapping grid y=1,3 = n2-1,n2+1  y=n2+1=ihx
  n3p=n3
+ ng=n1p*n2p*n3p
  allocate(ebf0_bunch(n1p,n2p,n3p,bcomp),STAT=AllocStatus)
  ebf0_bunch=0.0
  fsize=fsize+bcomp*ng
