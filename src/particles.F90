@@ -562,8 +562,8 @@
  integer :: i,j,k,i1,j1,k1,i2,j2,k2,n,ch,spl
  real(sp) :: wght
  !======================
- ax0(0:3)=0.0;ay0(0:3)=0.0
- az0(0:3)=0.0
+ ax0(0:3)=zero_dp;ay0(0:3)=zero_dp
+ az0(0:3)=zero_dp
  spl=2
  select case(ndm)
  case(1)
@@ -697,9 +697,9 @@
  real(dp) :: xp1(3),xp0(3),pp(3)
  real(sp) :: wght
  !======================
- ax0=0.0;ay0=0.0
- ax1=0.0;ay1=0.0
- axh0=0.0; axh1=0.0
+ ax0=zero_dp;ay0=zero_dp
+ ax1=zero_dp;ay1=zero_dp
+ axh0=zero_dp; axh1=zero_dp
 !========
  ch=size(sp_loc%part,2)
  select case(ndm)   !only two or three dimensional conf. considered
@@ -749,8 +749,8 @@
    !=============
  case(3)
   ch=7
-  az0=0.0
-  az1=0.0
+  az0=zero_dp
+  az1=zero_dp
    do n=1,np
    pt(n,1:3)=sp_loc%part(n,1:3)
    pp(1:3)=sp_loc%part(n,4:6)
@@ -824,8 +824,8 @@
  !======================
  !   Computes eden(grid,1)= n/n_0 and eden(grid,2)=<gam-1}n>/n_0
  !================================================
- ax0(0:2)=0.0;ay0(0:2)=0.0
- az0(0:2)=0.0
+ ax0(0:2)=zero_dp;ay0(0:2)=zero_dp
+ az0(0:2)=zero_dp
  spl=2
  select case(ndm)
  case(1)
@@ -1005,7 +1005,7 @@
  case(3)
   j2=1
   do n=1,np
-   ap(1:3)=0.0
+   ap(1:3)=zero_dp
    xp1(1)=sp_loc%part(n,1)    !the current particle positions
    xx=shx+dx_inv*(xp1(1)-xmn)
 
@@ -1037,7 +1037,7 @@
  case(6)
   j2=1
   do n=1,np
-   ap(1:6)=0.0
+   ap(1:6)=zero_dp
    xp1(1)=sp_loc%part(n,1)    !the current particle positions
    xx=shx+dx_inv*(xp1(1)-xmn)
 
@@ -1093,9 +1093,9 @@
  ! USES quadratic splines along each coordinate
  !=======================================
  ! ndf is the number of field component
- ax1=0.0;ay1=0.0
- axh=0.0;ayh=0.0
- dvol=0.0
+ ax1=zero_dp;ay1=zero_dp
+ axh=zero_dp;ayh=zero_dp
+ dvol=zero_dp
  do n=1,np
   pt(n,1:3)=sp_loc%part(n,1:3)
  end do
@@ -1103,7 +1103,7 @@
  select case(ndf)
  case(3)
   do n=1,np
-   ap(1:3)=0.0
+   ap(1:3)=zero_dp
    xp1(1:2)=pt(n,1:2)
    call qq_interpolate(xp1,ax1,axh,ay1,ayh,i,j,ih,jh)
 
@@ -1132,7 +1132,7 @@
  case(6)
   !=====================
   do n=1,np
-   ap(1:6)=0.0
+   ap(1:6)=zero_dp
    xp1(1:2)=pt(n,1:2)
    call qq_interpolate(xp1,ax1,axh,ay1,ayh,i,j,ih,jh)
 
@@ -1182,10 +1182,10 @@
  !================================
  ! Uses quadratic or linear shapes depending on staggering
  ! ndf is the number of field component
- ax1=0.0;ay1=0.0
- axh=0.0;ayh=0.0
- xp1=0.0
- sx=0.0
+ ax1=zero_dp;ay1=zero_dp
+ axh=zero_dp;ayh=zero_dp
+ xp1=zero_dp
+ sx=zero_dp
  do n=1,np
   pt(n,1:3)=sp_loc%part(n,1:3)
  end do
@@ -1194,20 +1194,20 @@
  select case(ndf)     !Field components
  case(3)
   do n=1,np
-   ap(1:3)=0.0
+   ap(1:3)=zero_dp
    xp1(1:2)=pt(n,1:2)
-   call ql_interpolate(xp1,ax1,axh,ay1,ayh,i,j,ih,jh)
+   call qq_interpolate(xp1,ax1,axh,ay1,ayh,i,j,ih,jh)
 
    do j1=1,3
     j2=j+j1
     dvol=ay1(j1)
-    do i1=1,2
+    do i1=1,3
      i2=i1+ih
      dvol1=axh(i1)*dvol
      ap(1)=ap(1)+dvol1*ef(i2,j2,1,1) !Ex(i+1/2,j)
     end do
    end do
-   do j1=1,2
+   do j1=1,3
     j2=jh+j1
     dvol=ayh(j1)
     do i1=1,3
@@ -1215,7 +1215,7 @@
      dvol1=ax1(i1)*dvol
      ap(2)=ap(2)+dvol1*ef(i2,j2,1,2) !Ey(i,j+1/2)
     end do
-    do i1=1,2
+    do i1=1,3
      i2=i1+ih
      dvol1=axh(i1)*dvol
      ap(3)=ap(3)+dvol1*ef(i2,j2,1,3) !Bz(i+1/2,j+1/2)
@@ -1227,14 +1227,14 @@
  case(6)
   !=====================
   do n=1,np
-   ap(1:6)=0.0
+   ap(1:6)=zero_dp
    xp1(1:2)=pt(n,1:2)
-   call ql_interpolate(xp1,ax1,axh,ay1,ayh,i,j,ih,jh)
+   call qq_interpolate(xp1,ax1,axh,ay1,ayh,i,j,ih,jh)
 
    do j1=1,3
     j2=j+j1
     dvol=ay1(j1)
-    do i1=1,2
+    do i1=1,3
      i2=i1+ih
      dvol1=axh(i1)*dvol
      ap(1)=ap(1)+dvol1*ef(i2,j2,1,1) !Ex(i+1/2,j)
@@ -1246,7 +1246,7 @@
      ap(3)=ap(3)+dvol1*ef(i2,j2,1,3) !Ez(i,j,k+1/2)
     end do
    end do
-   do j1=1,2
+   do j1=1,3
     j2=jh+j1
     dvol=ayh(j1)
     do i1=1,3
@@ -1255,7 +1255,7 @@
      ap(2)=ap(2)+dvol1*ef(i2,j2,1,2) !Ey(i,j+1/2)
      ap(4)=ap(4)+dvol1*ef(i2,j2,1,4) !Bx(i,j+1/2)
     end do
-    do i1=1,2
+    do i1=1,3
      i2=i1+ih
      dvol1=axh(i1)*dvol
      ap(6)=ap(6)+dvol1*ef(i2,j2,1,6) !Bz(i+1/2,j+1/2)
@@ -1287,13 +1287,13 @@
  ! particle indexing : i=1,....,nx => weights 1,.....nx+2
  ! Fields data[1:n1+2,1:n2+2,1:n3+2] ax(0)=> data(i), ax(1)=> data(i+1) ax(3)=>data(i+2)
  !===================================================
- ax1=0.0;ay1=0.0
- az1=0.0;azh=0.0
- axh=0.0;ayh=0.0
+ ax1=zero_dp;ay1=zero_dp
+ az1=zero_dp;azh=zero_dp
+ axh=zero_dp;ayh=zero_dp
  pt(1:np,1:3)=sp_loc%part(1:np,1:3)
  call set_local_positions(pt,1,np,s_ind,3,xmn,ymn,zmn)
  do n=1,np
-  ap(1:6)=0.0
+  ap(1:6)=zero_dp
   xp1(1:3)=pt(n,1:3)    !the current particle positions
   xx=shx+xp1(1)
   i=int(xx+0.5)
@@ -1432,9 +1432,9 @@
  !===============================================
  ! Linear shape at half-index quadratic shape at integer index
  !====================================
- ax1(0:2)=0.0;ay1(0:2)=0.0
- az1(0:2)=0.0;azh(0:2)=0.0
- axh(0:2)=0.0;ayh(0:2)=0.0
+ ax1(0:2)=zero_dp;ay1(0:2)=zero_dp
+ az1(0:2)=zero_dp;azh(0:2)=zero_dp
+ axh(0:2)=zero_dp;ayh(0:2)=zero_dp
  !===== enter species positions at t^{n+1} level========
  ! fields are at t^n
  select case(ndm)
@@ -1463,7 +1463,7 @@
   endif
   !==========================
   do n=1,np
-   ap(1:2)=0.0
+   ap(1:2)=zero_dp
    xp1(1:2)=pt(n,1:2)
    xx=shx+xp1(1)
    i=int(xx+0.5)
@@ -1555,7 +1555,7 @@
   endif
   !==========================
   do n=1,np
-   ap(1:3)=0.0
+   ap(1:3)=zero_dp
    xp1(1:3)=pt(n,1:3)
    xx=shx+xp1(1)
    i=int(xx+0.5)
@@ -1672,9 +1672,9 @@
  !===============================================
  ! Only linear shape at half-index and at integer index
  !====================================
- ax1(0:2)=0.0;ay1(0:2)=0.0
- az1(0:2)=0.0;azh(0:1)=0.0
- axh(0:1)=0.0;ayh(0:1)=0.0
+ ax1(0:2)=zero_dp;ay1(0:2)=zero_dp
+ az1(0:2)=zero_dp;azh(0:1)=zero_dp
+ axh(0:1)=zero_dp;ayh(0:1)=zero_dp
  ddx=dx_inv
  ddy=dy_inv
  !===== enter species positions at t^{n+1} level========
@@ -1689,7 +1689,7 @@
    end do
   !==========================
   do n=1,np
-   ap(1:6)=0.0
+   ap(1:6)=zero_dp
    xp1(1:2)=pt(n,1:2)
    xx=shx+xp1(1)
    i=int(xx+0.5)
@@ -1761,7 +1761,7 @@
    end do
   !==========================
   do n=1,np
-   ap(1:6)=0.0
+   ap(1:6)=zero_dp
    xp1(1:3)=pt(n,1:3)
    xx=shx+xp1(1)
    i=int(xx+0.5)
@@ -1860,9 +1860,9 @@
  !===============================================
  ! Linear shape at half-index quadratic shape at integer index
  !====================================
- ax1(0:2)=0.0;ay1(0:2)=0.0
- az1(0:2)=0.0;azh(0:2)=0.0
- axh(0:2)=0.0;ayh(0:2)=0.0
+ ax1(0:2)=zero_dp;ay1(0:2)=zero_dp
+ az1(0:2)=zero_dp;azh(0:2)=zero_dp
+ axh(0:2)=zero_dp;ayh(0:2)=zero_dp
  !===== enter species positions at t^{n+1} level========
  ! fields are at t^n
  select case(ndm)
@@ -1891,7 +1891,7 @@
   endif
   !==========================
   do n=1,np
-   ap(1:2)=0.0
+   ap(1:2)=zero_dp
    xp1(1:2)=pt(n,1:2)
    xx=shx+xp1(1)
    i=int(xx+0.5)
@@ -1985,7 +1985,7 @@
   endif
   !==========================
   do n=1,np
-   ap(1:3)=0.0
+   ap(1:3)=zero_dp
    xp1(1:3)=pt(n,1:3)
    xx=shx+xp1(1)
    i=int(xx+0.5)
@@ -2098,9 +2098,9 @@
  !===============================================
  ! Linear shape at half-index quadratic shape at integer index
  !====================================
- ax1(0:2)=0.0;ay1(0:2)=0.0
- az1(0:2)=0.0;azh(0:2)=0.0
- axh(0:2)=0.0;ayh(0:2)=0.0
+ ax1(0:2)=zero_dp;ay1(0:2)=zero_dp
+ az1(0:2)=zero_dp;azh(0:2)=zero_dp
+ axh(0:2)=zero_dp;ayh(0:2)=zero_dp
  !===== enter species positions at t^{n+1} level========
  ! fields are at t^n
  select case(ndm)
@@ -2119,7 +2119,7 @@
   endif
   !==========================
   do n=1,np
-   ap(1:2)=0.0
+   ap(1:2)=zero_dp
    xp1(1:2)=pt(n,1:2)
    xx=shx+xp1(1)
    i=int(xx+0.5)
@@ -2203,7 +2203,7 @@
   endif
   !==========================
   do n=1,np
-   ap(1:3)=0.0
+   ap(1:3)=zero_dp
    xp1(1:3)=pt(n,1:3)
    xx=shx+xp1(1)
    i=int(xx+0.5)
@@ -2318,9 +2318,9 @@
  ! Quadratic shape at integer index
  !====================================
  !=============================================================
- ax1(0:2)=0.0;ay1(0:2)=0.0
- az1(0:2)=0.0;azh(0:2)=0.0
- axh(0:2)=0.0;ayh(0:2)=0.0
+ ax1(0:2)=zero_dp;ay1(0:2)=zero_dp
+ az1(0:2)=zero_dp;azh(0:2)=zero_dp
+ axh(0:2)=zero_dp;ayh(0:2)=zero_dp
 
  do n=1,np
   pt(n,1:3)=sp_loc%part(n,1:3)
@@ -2328,7 +2328,7 @@
  call set_local_positions(pt,1,np,s_ind,3,xmn,ymn,zmn)
  !==========================
  do n=1,np
-  ap(1:6)=0.0
+  ap(1:6)=zero_dp
   xp1(1:3)=pt(n,1:3)
   xx=shx+xp1(1)
   i=int(xx+0.5)
@@ -2463,20 +2463,20 @@
  !  ap(3)= [D_z(F)](i,j,k+1/2)
  !  ap(4)= [F](i,j,k)
  !===========================================
- ax1(0:2)=0.0;ay1(0:2)=0.0
- az1(0:2)=0.0
- axh(0:2)=0.0;ayh(0:2)=0.0
- azh(0:2)=0.0
+ ax1(0:2)=zero_dp;ay1(0:2)=zero_dp
+ az1(0:2)=zero_dp
+ axh(0:2)=zero_dp;ayh(0:2)=zero_dp
+ azh(0:2)=zero_dp
 
- dxe=dx_inv
- dye=dy_inv
- k2=1
  select case(ndm)
  case(2)
+  dxe=dx_inv
+  dye=dy_inv
+  k2=1
   do n=1,np
-   ap(1:3)=0.0
-   xp1(1)=dx_inv*(sp_loc%part(n,1)-xmn) !loc (x) position
-   xp1(2)=dy_inv*(sp_loc%part(n,2)-ymn) !loc (y) position
+   ap=zero_dp
+   xp1(1)=dxe*(sp_loc%part(n,1)-xmn) !loc x position
+   xp1(2)=dye*(sp_loc%part(n,2)-ymn) !loc y position
 
    xx=shx+xp1(1)
    i=int(xx+0.5)
@@ -2513,40 +2513,40 @@
 
    ih=ih-1
    jh=jh-1
-   ap=0.0
    !==========================
+   ap=zero_dp
    do j1=0,2
     j2=j+j1
     dvol=ay1(j1)
     do i1=0,2
      i2=i1+ih
      dvol1=dvol*axh(i1)
-     ap(1)=ap(1)+dvol1*(av(i2+1,j2,k2,1)-av(i2,j2,k2,1))
-    end do
-    do i1=0,2
+     ap(1)=ap(1)+dvol1*av(i2,j2,k2,2)
      i2=i1+i
-     ap(3)=ap(3)+ax1(i1)*dvol*av(i2,j2,k2,1)   !the p-assigned |a|^2/2 field
+     ap(3)=ap(3)+ax1(i1)*dvol*av(i2,j2,k2,1)
     end do
+   end do
+   do j1=0,2
     j2=jh+j1
     dvol=ayh(j1)
     do i1=0,2
      i2=i+i1
      dvol1=dvol*ax1(i1)
-     ap(2)=ap(2)+dvol1*(av(i2,j2+1,k2,1)-av(i2,j2,k2,1))
+     ap(2)=ap(2)+dvol1*av(i2,j2,k2,1)
     end do
    end do
-   !=========================
-   pt(n,1)=dxe*ap(1)   !p-assigned grad_x
-   pt(n,2)=dye*ap(2)   !p-assigned grad_y
-   pt(n,3)=ap(3)
+   !pt(n,1)=dxe*ap(1)    !assigned grad[A^2/2]
+   !pt(n,2)=dye*ap(2)
+   !pt(n,3)=ap(3)        !assigned A^2/2
+   pt(n,1:3)=ap(1:3)    !assigned A^2/2 and grad[A^2/2]
   end do
-  !========================
+!=================================
  case(3)
   dxe=dx_inv
   dye=dy_inv
   dze=dz_inv
   do n=1,np
-   ap=0.0
+   ap=zero_dp
    xp1(1)=dx_inv*(sp_loc%part(n,1)-xmn) !loc x position
    xp1(2)=dy_inv*(sp_loc%part(n,2)-ymn) !loc y position
    xp1(3)=dz_inv*(sp_loc%part(n,3)-zmn) !loc z position
@@ -2604,7 +2604,7 @@
    jh=jh-1
    kh=kh-1
    !==========================
-   ap=0.0
+   ap=zero_dp
    do k1=0,2
     k2=k+k1
     do j1=0,2
@@ -2613,9 +2613,9 @@
      do i1=0,2
       i2=i1+ih
       dvol1=dvol*axh(i1)
-      ap(1)=ap(1)+dvol1*(av(i2+1,j2,k2,1)-av(i2,j2,k2,1))
+      ap(1)=ap(1)+dvol1*av(i2,j2,k2,2)    !Dx[F]
       i2=i1+i
-      ap(4)=ap(4)+ax1(i1)*dvol*av(i2,j2,k2,1)
+      ap(4)=ap(4)+ax1(i1)*dvol*av(i2,j2,k2,1)  !F
      end do
     end do
     do j1=0,2
@@ -2624,7 +2624,7 @@
      do i1=0,2
       i2=i+i1
       dvol1=dvol*ax1(i1)
-      ap(2)=ap(2)+dvol1*(av(i2,j2+1,k2,1)-av(i2,j2,k2,1))
+      ap(2)=ap(2)+dvol1*av(i2,j2,k2,3)
      end do
     end do
     k2=kh+k1
@@ -2633,11 +2633,11 @@
      dvol=ay1(j1)*azh(k1)
      do i1=0,2
       dvol1=dvol*ax1(i1)
-      ap(3)=ap(3)+dvol1*(av(i2,j2,k2+1,1)-av(i2,j2,k2,1))
+      ap(3)=ap(3)+dvol1*av(i2,j2,k2,4)
      end do
     end do
    end do
-   pt(n,1)=dxe*ap(1)
+   pt(n,1:4)=ap(1:4)
    pt(n,2)=dye*ap(2)
    pt(n,3)=dze*ap(3)
    pt(n,4)=ap(4)
@@ -2669,31 +2669,31 @@
  ! enters av(1)=F=|a|^2/2 envelope at integer grid nodes
  ! and av(2:4)=grad[F] at staggered points
  !  COMPUTES
- !(E,B), F, gradF  assignements to particle positions
- ! => ap(1:6)  in 2D
+ !(E,B), F, gradF  assignements to particle positions 
+ ! => ap(1:6)  in 2D 
  ! => ap(1:10) in 3D
  ! approximated gamma function:
  ! gam_new= gam +0.25*charge*Dt(gam*E+0.5*grad[F]).p^{n-1/2}/gam^2
  ! EXIT
- ! charge*(E+ 0.5grad[F]/gam_new) charge*B/gam_new, F   and wgh/gam_new
+ ! (E+ 0.5grad[F]/gam_new) B/gam_new, F   and wgh/gam_new  
  ! pt(1:5)  in 2D
  ! pt(1:7)  in 3D
  !========================================
- ax1(0:2)=0.0;ay1(0:2)=0.0
- az1(0:2)=0.0
- axh(0:2)=0.0;ayh(0:2)=0.0
- azh(0:2)=0.0
+ ax1(0:2)=zero_dp;ay1(0:2)=zero_dp
+ az1(0:2)=zero_dp
+ axh(0:2)=zero_dp;ayh(0:2)=zero_dp
+ azh(0:2)=zero_dp
 
- k2=1
  dth4=0.25*dt_loc
  select case(ndm)
+ !==========================
  case(2)
-
+  k2=1
   do n=1,np
-   ap=0.0
+   ap=zero_dp
    xp1(1:2)=sp_loc%part(n,1:2)    !the current particle positions
    up(1:2)=sp_loc%part(n,3:4)    !the current particle  momenta
-   wgh_cmp=sp_loc%part(n,5)          !wgh is the current particle  weight
+   wgh_cmp=sp_loc%part(n,5)          !the current particle (weight,charge)
    xx=shx+dx_inv*(xp1(1)-xmn)
    i=int(xx+0.5)
    sx=xx-real(i,dp)
@@ -2702,15 +2702,15 @@
    ax1(2)=0.5*(0.25+sx2+sx)
    ax1(0)=1.-ax1(1)-ax1(2)
 
-   ih=int(xx)
-   sx=xx-0.5-real(ih,dp)
-   sx2=sx*sx
-   axh(1)=0.75-sx2
-   axh(2)=0.5*(0.25+sx2+sx)
-   axh(0)=1.-axh(1)-axh(2)
+   !ih=int(xx)
+   !sx=xx-0.5-real(ih,dp)
+   !sx2=sx*sx
+   !axh(1)=0.75-sx2
+   !axh(2)=0.5*(0.25+sx2+sx)
+   !axh(0)=1.-axh(1)-axh(2)
 
-   !axh(1)=sx+0.5
-   !axh(0)=1.-axh(1)
+   axh(1)=sx+0.5
+   axh(0)=1.-axh(1)
 
    xx=shy+dy_inv*(xp1(2)-ymn)
    j=int(xx+0.5)
@@ -2727,61 +2727,61 @@
    ayh(2)=0.5*(0.25+sx2+sx)
    ayh(0)=1.-ayh(1)-ayh(2)
 
-   !ayh(1)=sx+0.5
-   !ayh(0)=1.-ayh(1)
+   ayh(1)=sx+0.5
+   ayh(0)=1.-ayh(1)
 
    i=i-1
    j=j-1
 
-   ih=ih-1
-   jh=jh-1
+   ih=i
+   jh=j
    !==========================
    do j1=0,2
     j2=j+j1
     dvol=ay1(j1)
     do i1=0,2
+     i2=i1+i
+     ap(6)=ap(6)+ax1(i1)*dvol*av(i2,j2,k2,1)!t^n p-assigned F=a^2/2 field
+    end do
+    do i1=0,1
      i2=i1+ih
      dvol1=dvol*axh(i1)
-     ap(1)=ap(1)+dvol1*ef(i2,j2,k2,1)   !Ex
-     ap(4)=ap(4)+dvol1*av(i2,j2,k2,2)   !D_xF
-    end do
-    do i1=0,2
-     i2=i1+i
-     ap(6)=ap(6)+ax1(i1)*dvol*av(i2,j2,k2,1)!the p-assigned |A|^2/2 env field
+     ap(1)=ap(1)+dvol1*ef(i2,j2,k2,1)    !Ex and Dx[F] (i+1/2,j,k))
+     ap(4)=ap(4)+dvol1*av(i2,j2,k2,2)
     end do
    end do
-   do j1=0,2
+   do j1=0,1
     j2=jh+j1
     dvol=ayh(j1)
     do i1=0,2
      i2=i+i1
      dvol1=dvol*ax1(i1)
-     ap(2)=ap(2)+dvol1*ef(i2,j2,k2,2) !Ey
-     ap(5)=ap(5)+dvol1*av(i2,j2,k2,3) !D_yF
+     ap(2)=ap(2)+dvol1*ef(i2,j2,k2,2)  !Ey and Dy[F] (i,j+1/2,k)
+     ap(5)=ap(5)+dvol1*av(i2,j2,k2,3)
     end do
-    do i1=0,2
+    do i1=0,1
      i2=i1+ih
-     ap(3)=ap(3)+axh(i1)*dvol*ef(i2,j2,k2,3)  !Bz
+     ap(3)=ap(6)+axh(i1)*dvol*ef(i2,j2,k2,3)   !Bz(i+1/2,j+1/2,k)
     end do
    end do
-   !===============================
-   gam2=1.+up(1)*up(1)+up(2)*up(2)+ap(6)
+   !=========================
+   gam2=1.+up(1)*up(1)+up(2)*up(2)+ap(6)   !gamma^{n-1/2}
    ap(4:5)=0.5*ap(4:5)
+   !  ap(1:2)=(Ex,Ey)   ap(3)=Bz,ap(4:5)=[Dx,Dy]F/2
    a1=dot_product(ap(1:2),up(1:2))
    b1=dot_product(ap(4:5),up(1:2))
    gam=sqrt(gam2)
    gamp_new=gam+charge*dth4*(gam*a1+b1)/gam2
-   ap(3:5)=ap(3:5)/gamp_new
-   pt(n,1)=ap(1)+ap(4)     !E+grad[F]/2
-   pt(n,2)=ap(2)+ap(5)
+   ap(3:5)=ap(3:5)/gamp_new          !ap(3)=B/gamp, ap(4:5)= Grad[F]/2*gamp
+
+   pt(n,1:2)=ap(1:2)+ap(4:5)
    pt(n,3)=ap(3)
-   pt(n,4)=ap(6)
-   pt(n,5)=wgh/gamp_new
+   pt(n,5)=wgh/gamp_new     !weight/gamp
   end do
-  !========================
+!=============================
  case(3)
   do n=1,np
-   ap=0.0
+   ap=zero_dp
    xp1(1:3)=sp_loc%part(n,1:3)   !the current particle positions
    up(1:3)=sp_loc%part(n,4:6)    !the current particle  momenta
    wgh_cmp=sp_loc%part(n,7)          !the current particle (weight,charge)
@@ -2938,10 +2938,10 @@
  ! and av(2:4)=grad[F] at staggered points
  ! exit total Lorentz force and velocities at particle positions
  !========================================
- ax1(0:2)=0.0;ay1(0:2)=0.0
- az1(0:2)=0.0
- axh(0:2)=0.0;ayh(0:2)=0.0
- azh(0:2)=0.0
+ ax1(0:2)=zero_dp;ay1(0:2)=zero_dp
+ az1(0:2)=zero_dp
+ axh(0:2)=zero_dp;ayh(0:2)=zero_dp
+ azh(0:2)=zero_dp
 
  k2=1
  select case(ndm)
@@ -2949,7 +2949,7 @@
   !================== Works also for (z,r) Pz,Pr cylindrical coordinates
 
   do n=1,np
-   ap=0.0
+   ap=zero_dp
    xp1(1:2)=sp_loc%part(n,1:2)    !the t^{k-1} particle positions, momenta and weight
    up(1:2)=sp_loc%part(n,3:4)
    wgh_cmp=sp_loc%part(n,5)
@@ -3036,7 +3036,7 @@
   !========================
  case(3)
   do n=1,np
-   ap=0.0
+   ap=zero_dp
    xp1(1:3)=sp_loc%part(n,1:3)   !the current t^{k-1} particle positions, momenta and weights
    up(1:3)=sp_loc%part(n,4:6)
    wgh_cmp=sp_loc%part(n,7)
@@ -3175,8 +3175,8 @@
  !===============================================
  ! enter efp(1:4) positions and wgh/gamp at time level n
  ! exit av(:,:,:,ic) the den source in envelope equation :  <n*wgh/gamp> > 0
- ax1(0:2)=0.0;ay1(0:2)=0.0
- az1(0:2)=0.0
+ ax1(0:2)=zero_dp;ay1(0:2)=zero_dp
+ az1(0:2)=zero_dp
 
  select case(ndm)
  case(2)
@@ -3286,14 +3286,14 @@
  ! ef1 plasma wakefield
  ! ef2 bunch fields
  !====================
- ax1(0:2)=0.0;ay1(0:2)=0.0
- axh(0:2)=0.0;ayh(0:2)=0.0
+ ax1(0:2)=zero_dp;ay1(0:2)=zero_dp
+ axh(0:2)=zero_dp;ayh(0:2)=zero_dp
  k2=1
- zmn=0.0
+ zmn=zero_dp
  pt(1:np,1:3)=sp_loc%part(1:np,1:3)
  call set_local_positions(pt,1,np,sind,2,xmn,ymn,zmn)
  do n=1,np
-  ap(1:3)=0.0
+  ap(1:3)=zero_dp
   wgh_cmp=sp_loc%part(n,5) ! the particle charge
   xp1(1:2)=pt(n,1:2)    !the current particle positions
   xx=shx+xp1(1)
@@ -3375,14 +3375,14 @@
  ! ef1 plasma wakefield
  ! ef2 bunch fields
  !====================
- ax1(0:2)=0.0;ay1(0:2)=0.0
- axh(0:2)=0.0;ayh(0:2)=0.0
+ ax1(0:2)=zero_dp;ay1(0:2)=zero_dp
+ axh(0:2)=zero_dp;ayh(0:2)=zero_dp
  k2=1
- zmn=0.0
+ zmn=zero_dp
  pt(1:np,1:3)=sp_loc%part(1:np,1:3)
  call set_local_positions(pt,1,np,sind,2,xmn,ymn,zmn)
  do n=1,np
-  ap(1:3)=0.0
+  ap(1:3)=zero_dp
   wgh_cmp=sp_loc%part(n,5) ! the particle charge
   xp1(1:2)=pt(n,1:2)    !the current particle positions
   xx=shx+xp1(1)
@@ -3471,7 +3471,7 @@
  pt(1:np,1:3)=sp_loc%part(1:np,1:3)
  call set_local_positions(pt,n0,np,sind,3,xmn,ymn,zmn)
  do n=n0,np
-  ap(1:6)=0.0
+  ap(1:6)=zero_dp
   xp1(1:3)=pt(n,1:3)    !the local current particle positions
   xx=shx+xp1(1)
   i=int(xx+0.5)
@@ -3615,7 +3615,7 @@
  pt(1:np,1:3)=sp_loc%part(1:np,1:3)
  call set_local_positions(pt,n0,np,sind,3,xmn,ymn,zmn)
  do n=n0,np
-  ap(1:6)=0.0
+  ap(1:6)=zero_dp
   xp1(1:3)=pt(n,1:3)    !the current particle positions
   xx=shx+xp1(1)
   i=int(xx+0.5)
@@ -3765,7 +3765,7 @@
   call map3d_part_sind(pt,np,sind,2,3,ymn,zmn)
  endif
  do n=n0,np
-  ap(1:6)=0.0
+  ap(1:6)=zero_dp
   xp1(1:3)=pt(1:3,n)    !the current particle positions
   xx=shx+xp1(1)
   i=int(xx+0.5)
@@ -3913,7 +3913,7 @@
  !=================
  call set_local_positions(pt,np1,np,0,3,xmn,ymn,zmn)
  do n=np1,np
-  ap(1:6)=0.0
+  ap(1:6)=zero_dp
   xp1(1:3)=pt(n,1:3)    !the current particle positions
   xx=shx+xp1(1)
   i=int(xx+0.5)
@@ -4048,10 +4048,10 @@
  !==========================
  !Iform=0 or 1 IMPLEMENTS the ESIRKEPOV SCHEME for LINEAR-QUADRATIC SHAPE
  ! ==============================Only new and old positions needed
- ax1=0.0
- ay1=0.0
- ax0=0.0
- ay0=0.0
+ ax1=zero_dp
+ ay1=zero_dp
+ ax0=zero_dp
+ ay0=zero_dp
  select case(ndm)
  case(1)
   do n=n0,np
@@ -4077,7 +4077,7 @@
    ax1(1)=0.75-sx2
    ax1(2)=0.5*(0.25+sx2+sx)
    ax1(0)=1.-ax1(1)-ax1(2)
-   axh(0:4)=0.0
+   axh(0:4)=zero_dp
    !-----------------------
    ih=i-i0+1
    do i1=0,2
@@ -4132,7 +4132,7 @@
    do n=n0,np
     xp1(1:2)=pt(n,1:2)        !x-y  -new
     xp0(1:2)=pt(n,3:4)        !x-y  -old
-    wght=pt(n,5)              !w*q
+    wght=real(pt(n,5),sp)              !w*q
     !=====================
     ax=shx+xp0(1)
     i0=int(ax+0.5)
@@ -4149,7 +4149,7 @@
     ax1(1)=0.75-sx2
     ax1(2)=0.5*(0.25+sx2+sx)
     ax1(0)=1.-ax1(1)-ax1(2)
-    axh(0:4)=0.0
+    axh(0:4)=zero_dp
     ih=i-i0+1
     do i1=0,2
      axh(ih+i1)=ax1(i1)
@@ -4183,7 +4183,7 @@
     ay1(0)=1.-ay1(1)-ay1(2)
 
     jh=j-j0+1
-    ayh(0:4)=0.0
+    ayh(0:4)=zero_dp
     do i1=0,2
      ayh(jh+i1)=ay1(i1)
     end do
@@ -4247,7 +4247,7 @@
    do n=n0,np
     xp1(1:3)=pt(n,1:3)                !increments xyz-new
     xp0(1:3)=pt(n,4:6)              !increments xyz z-old
-    wght=pt(n,7)
+    wght=real(pt(n,7),sp)
     vp(3)=xp1(3)-xp0(3)                    !dt*v_z(n+1/2)
     vp(3)=wght*vp(3)/3.                     !dt*q*w*vz/3
     !=====================
@@ -4266,7 +4266,7 @@
     ax1(1)=0.75-sx2
     ax1(2)=0.5*(0.25+sx2+sx)
     ax1(0)=1.-ax1(1)-ax1(2)
-    axh(0:4)=0.0
+    axh(0:4)=zero_dp
     ih=i-i0+1
     ix0=min(ih,1)
     ix1=max(ih+2,3)
@@ -4314,7 +4314,7 @@
     iy0=min(jh,1)
     iy1=max(jh+2,3)
 
-    ayh(0:4)=0.0
+    ayh(0:4)=zero_dp
     do i1=0,2
      ayh(jh+i1)=ay1(i1)
     end do
@@ -4388,15 +4388,15 @@
  integer :: ix0,ix1,iy0,iy1,iz0,iz1
  !=======================
 
- ax1(0:2)=0.0;ay1(0:2)=0.0
- az1(0:2)=0.0;az0(0:2)=0.0
- ax0(0:2)=0.0;ay0(0:2)=0.0
- axh(0:4)=0.0;ayh(0:4)=0.0
- azh(0:4)=0.0
- currx(0:4)=0.0;curry(0:4)=0.0
- currz(0:4)=0.0
- axh0(0:4)=0.0;ayh0(0:4)=0.0
- axh1(0:4)=0.0;ayh1(0:4)=0.0
+ ax1(0:2)=zero_dp;ay1(0:2)=zero_dp
+ az1(0:2)=zero_dp;az0(0:2)=zero_dp
+ ax0(0:2)=zero_dp;ay0(0:2)=zero_dp
+ axh(0:4)=zero_dp;ayh(0:4)=zero_dp
+ azh(0:4)=zero_dp
+ currx(0:4)=zero_dp;curry(0:4)=zero_dp
+ currz(0:4)=zero_dp
+ axh0(0:4)=zero_dp;ayh0(0:4)=zero_dp
+ axh1(0:4)=zero_dp;ayh1(0:4)=zero_dp
 ! ==============================Only new and old positions needed
  do n=n0,np
   pt(n,1:3)=sp_loc%part(n,1:3) !x-y-z -new  t^(n+1)
@@ -4420,7 +4420,7 @@
  do n=n0,np
   xp1(1:3)=pt(n,1:3)        !increments of the new positions
   xp0(1:3)=pt(n,4:6)        !increments of old positions
-  wght=pt(n,7)
+  wght=real(pt(n,7),sp)
   ax=shx+xp0(1)
   i0=int(ax+0.5)
   sx=ax-real(i0,dp)
@@ -4436,7 +4436,7 @@
   ax1(1)=0.75-sx2
   ax1(2)=0.5*(0.25+sx2+sx)
   ax1(0)=1.-ax1(1)-ax1(2)
-  axh(0:4)=0.0
+  axh(0:4)=zero_dp
   ih=i-i0+1
   !========== direct Jx-inversion
   do i1=0,2
@@ -4482,7 +4482,7 @@
 
   !========== direct Jy-inversion
   jh=j-j0+1 !=[0,1,2]
-  ayh(0:4)=0.0
+  ayh(0:4)=zero_dp
   do i1=0,2
    ayh(jh+i1)=ay1(i1)
   end do
@@ -4525,7 +4525,7 @@
   az1(0)=1.-az1(1)-az1(2)
   ! Direct Jz inversion
   kh=k-k0+1
-  azh(0:4)=0.0
+  azh(0:4)=zero_dp
   do i1=0,2
    azh(kh+i1)=az1(i1)
   end do
@@ -5044,12 +5044,12 @@
  set_den=.false.
  !============================
  if(ib_ind>3)set_den=.true.
- ax1(0:2)=0.0;ay1(0:2)=0.0
- az1(0:2)=0.0;az0(0:2)=0.0
- ax0(0:2)=0.0;ay0(0:2)=0.0
- axh0(0:1)=0.0;ayh0(0:1)=0.0
- azh0(0:1)=0.0;azh1(0:1)=0.0
- axh1(0:1)=0.0;ayh1(0:1)=0.0
+ ax1(0:2)=zero_dp;ay1(0:2)=zero_dp
+ az1(0:2)=zero_dp;az0(0:2)=zero_dp
+ ax0(0:2)=zero_dp;ay0(0:2)=zero_dp
+ axh0(0:1)=zero_dp;ayh0(0:1)=zero_dp
+ azh0(0:1)=zero_dp;azh1(0:1)=zero_dp
+ axh1(0:1)=zero_dp;ayh1(0:1)=zero_dp
 
  do n=n0,np
   pt(n,2:3)=sp_loc%part(n,2:3)  !(y,z) new
