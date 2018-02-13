@@ -11,7 +11,10 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 # we force FFTW only for now because MKL has some problems with ALaDyn.
 # MKL in fact requires the -fdefault-integer-8 flag (or equivalent),
 # which is unsupported in ALaDyn (breaks binary output as of now, need fixes)
-set(FORCE_FFTW TRUE)
+set(FORCE_FFTW TRUE CACHE BOOL "Forcing FFTW libraries")
+
+# set this variable to true to force static linking (if supported by the compiler)
+set(FORCE_STATIC_LINK FALSE CACHE BOOL "Forcing static linking to libraries")
 
 # make sure that the default is a RELEASE
 set(default_build_type "Release")
@@ -62,6 +65,10 @@ else ()
   endif ()
 endif ()
 
+if(FORCE_STATIC_LINK)
+  string(APPEND CMAKE_Fortran_LINK_FLAGS " -static")
+endif()
+
 find_package(Boost COMPONENTS system filesystem REQUIRED)
 find_package(MPI REQUIRED)
 if (USING_INTEL_COMPILER AND NOT FORCE_FFTW)
@@ -75,7 +82,7 @@ string(APPEND CMAKE_CXX_LINK_FLAGS " ${MPI_LINK_FLAGS}")
 string(APPEND CMAKE_Fortran_COMPILE_FLAGS " ${MPI_COMPILE_FLAGS} ${MPI_Fortran_COMPILE_FLAGS}")
 string(APPEND CMAKE_Fortran_LINK_FLAGS " ${MPI_LINK_FLAGS} ${MPI_Fortran_LINK_FLAGS}")
 
-include_directories(${OTHER_INCLUDE_DIR} ${MPI_INCLUDE_PATH} ${MPI_Fortran_INCLUDE_PATH} ${FFTW_INCLUDES} ${MKL_INCLUDE_DIR} ${MKL_FFTW_INCLUDE_DIR} ${Boost_INCLUDE_DIR})
+include_directories(${OTHER_INCLUDE_DIR} ${MPI_INCLUDE_PATH} ${MPI_Fortran_INCLUDE_PATH} ${FFTW_INCLUDE_DIR} ${MKL_INCLUDE_DIR} ${MKL_FFTW_INCLUDE_DIR} ${Boost_INCLUDE_DIR})
 link_directories(${OTHER_LINK_DIR})
 
 add_executable (ALaDyn
