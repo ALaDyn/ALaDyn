@@ -6,16 +6,15 @@ module load env-knl
 module load intel
 module load intelmpi
 module load boost
-module load mkl
+module load fftw
 module load cmake
 
-export INTELROOT=/cineca/prod/opt/compilers/intel/pe-xe-2017/binary
 export CLINKER=/cineca/prod/opt/compilers/intel/pe-xe-2017/binary/bin/icpc
 export CC=/cineca/prod/opt/compilers/intel/pe-xe-2017/binary/bin/icc
 export CXX=/cineca/prod/opt/compilers/intel/pe-xe-2017/binary/bin/icpc
 export FC=/cineca/prod/opt/compilers/intel/pe-xe-2017/binary/bin/ifort
 
 mkdir -p build_knl ; cd build_knl
-cmake .. -DCMAKE_BUILD_TYPE="Debug" -DINTELROOT=$INTELROOT -DMARCONI_KNL:BOOL=TRUE -DCMAKE_LINKER=$CLINKER -DOTHER_INCLUDE_DIR=/cineca/prod/opt/compilers/intel/pe-xe-2017/binary/mkl/include/fftw/ -DBoost_NO_BOOST_CMAKE=ON -DCMAKE_Fortran_COMPILER=$FC
+cmake .. -DCMAKE_BUILD_TYPE="Debug" -DMARCONI_KNL:BOOL=TRUE -DCMAKE_LINKER=$CLINKER -DBoost_NO_BOOST_CMAKE=ON -DCMAKE_Fortran_COMPILER=$FC
 cmake --build . --target install
 cd ..

@@ -12,6 +12,6 @@ export FC=/shared/software/compilers/intel_2017/compilers_and_libraries_2017.0.0
 export CLINKER=$CXX
 
 mkdir -p build ; cd build
-cmake .. -DCMAKE_LINKER=$CLINKER -DOTHER_INCLUDE_DIR=/cineca/prod/opt/compilers/intel/pe-xe-2017/binary/mkl/include/fftw/ -DBoost_NO_BOOST_CMAKE=ON -DCMAKE_Fortran_COMPILER=$FC
+cmake .. -DCMAKE_LINKER=$CLINKER -DFFTW_ROOT=/shared/software/project/aladyn/fftw -DBoost_NO_BOOST_CMAKE=ON -DCMAKE_Fortran_COMPILER=$FC
 cmake --build . --target install
 cd ..
