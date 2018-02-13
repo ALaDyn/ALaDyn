@@ -19,22 +19,6 @@
 #
 # Set ``FFTW_ROOT_DIR`` to a directory that contains a FFTW installation.
 #
-# This script expects to find libraries at ``$FFTW_ROOT_DIR/lib`` and the
-# headers at ``$FFTW_ROOT_DIR/include/fftw3``.
-# Usage:
-#   find_package(FFTW [REQUIRED] [QUIET] )
-#
-# It sets the following variables:
-#   FFTW_FOUND               ... true if fftw is found on the system
-#   FFTW_LIBRARIES           ... full path to fftw library
-#   FFTW_INCLUDES            ... fftw include directory
-#
-# The following variables will be checked by the function
-#   FFTW_USE_STATIC_LIBS    ... if true, only static libraries are found
-#   FFTW_ROOT               ... if set, the libraries are exclusively searched
-#                               under this path
-#   FFTW_LIBRARY            ... fftw library to use
-#   FFTW_INCLUDE_DIR        ... fftw include directory
 #
 
 include(FindPackageHandleStandardArgs)
