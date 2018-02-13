@@ -8,8 +8,9 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 # uncomment the following definition to enable GDB attach to debug while running
 # add_definitions(-DENABLE_GDB_ATTACH)
 
-# we force for now FFTW because MKL has some problems with ALaDyn.
-# MKL in fact requires the -fdefault-integer-8 flag, which is unsupported in ALaDyn (breaks binary output as of now, need fixes)
+# we force FFTW only for now because MKL has some problems with ALaDyn.
+# MKL in fact requires the -fdefault-integer-8 flag (or equivalent),
+# which is unsupported in ALaDyn (breaks binary output as of now, need fixes)
 set(FORCE_FFTW TRUE)
 
 # make sure that the default is a RELEASE
@@ -23,47 +24,30 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
 endif()
 
 
-include(CheckCXXCompilerFlag)
-function(enable_cxx_compiler_flag_if_supported flag)
-    string(FIND "${CMAKE_CXX_FLAGS}" "${flag}" flag_already_set)
-    if(flag_already_set EQUAL -1)
-        check_cxx_compiler_flag("${flag}" flag_supported)
-        if(flag_supported)
-            message(STATUS "  Enabled flag: " ${flag})
-            SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${flag}" PARENT_SCOPE)
-            SET(CMAKE_Fortran_FLAGS  "${CMAKE_Fortran_FLAGS} ${flag}" PARENT_SCOPE)
-        endif()
-        unset(flag_supported CACHE)
-    endif()
-endfunction()
-
-#enable_cxx_compiler_flag_if_supported("-Wall")
-#enable_cxx_compiler_flag_if_supported("/Wall")
-
 get_filename_component (Fortran_COMPILER_NAME ${CMAKE_Fortran_COMPILER} NAME)
 if (Fortran_COMPILER_NAME MATCHES "gfortran*")
   if (MARCONI_KNL)
-    string(APPEND CMAKE_CXX_COMPILE_FLAGS " -mavx512f -mavx512cd -mavx512er -mavx512pf")
-    string(APPEND CMAKE_Fortran_FLAGS_RELEASE " -fdefault-real-8 -funroll-all-loops  -mavx512f -mavx512cd -mavx512er -mavx512pf -O3")
-    string(APPEND CMAKE_Fortran_FLAGS_DEBUG   " -fdefault-real-8 -Wextra -fbacktrace -fbounds-check  -mavx512f -mavx512cd -mavx512er -mavx512pf -Og -g")
+    string(APPEND CMAKE_CXX_COMPILE_FLAGS " -Wall -mavx512f -mavx512cd -mavx512er -mavx512pf")
+    string(APPEND CMAKE_Fortran_FLAGS_RELEASE " -fdefault-real-8 -Wall -funroll-all-loops  -mavx512f -mavx512cd -mavx512er -mavx512pf -O3")
+    string(APPEND CMAKE_Fortran_FLAGS_DEBUG   " -fdefault-real-8 -Wall -Wextra -fbacktrace -fbounds-check -mavx512f -mavx512cd -mavx512er -mavx512pf -Og -g")
   else()
-    string(APPEND CMAKE_Fortran_FLAGS_RELEASE " -fdefault-real-8 -funroll-all-loops -O3")
-    string(APPEND CMAKE_Fortran_FLAGS_DEBUG   " -fdefault-real-8 -Wextra -fbacktrace -fbounds-check -Og -g")
+    string(APPEND CMAKE_Fortran_FLAGS_RELEASE " -fdefault-real-8 -Wall -funroll-all-loops -O3")
+    string(APPEND CMAKE_Fortran_FLAGS_DEBUG   " -fdefault-real-8 -Wall -Wextra -fbacktrace -fbounds-check -Og -g")
   endif()
 elseif (Fortran_COMPILER_NAME MATCHES "ifort*" OR Fortran_COMPILER_NAME MATCHES "ftn*")
   set(USING_INTEL_COMPILER TRUE)
   if (MARCONI_KNL)
-    string(APPEND CMAKE_CXX_COMPILE_FLAGS " -xMIC-AVX512")
-    string(APPEND CMAKE_Fortran_FLAGS_RELEASE " -real-size 64 -xMIC-AVX512 -O3")
-    string(APPEND CMAKE_Fortran_FLAGS_DEBUG   " -real-size 64 -xMIC-AVX512 -check all -fpe0 -warn -traceback -debug extended -O0 -g")
+    string(APPEND CMAKE_CXX_COMPILE_FLAGS " -diag-enable warn -xMIC-AVX512")
+    string(APPEND CMAKE_Fortran_FLAGS_RELEASE " -real-size 64 -diag-enable warn -xMIC-AVX512 -O3")
+    string(APPEND CMAKE_Fortran_FLAGS_DEBUG   " -real-size 64 -diag-enable warn -xMIC-AVX512 -check all -fpe0 -warn -traceback -debug extended -O0 -g")
     string(APPEND CMAKE_Fortran_LINK_FLAGS " -lstdc++")
     if (NOT FORCE_FFTW)
       string(APPEND CMAKE_Fortran_LINK_FLAGS " -mkl")
     endif()
   else()
     string(APPEND CMAKE_CXX_COMPILE_FLAGS " -axcore-avx-i,SSE4.2")
-    string(APPEND CMAKE_Fortran_FLAGS_RELEASE " -real-size 64 -axcore-avx-i,SSE4.2 -O3")
-    string(APPEND CMAKE_Fortran_FLAGS_DEBUG   " -real-size 64 -check all -fpe0 -warn -traceback -debug extended -O0 -g")
+    string(APPEND CMAKE_Fortran_FLAGS_RELEASE " -real-size 64 -diag-enable warn -axcore-avx-i,SSE4.2 -O3")
+    string(APPEND CMAKE_Fortran_FLAGS_DEBUG   " -real-size 64 -diag-enable warn -check all -fpe0 -warn -traceback -debug extended -O0 -g")
     string(APPEND CMAKE_Fortran_LINK_FLAGS " -lstdc++")
     if (NOT FORCE_FFTW)
       string(APPEND CMAKE_Fortran_LINK_FLAGS " -mkl")
@@ -147,7 +131,6 @@ target_link_libraries(ALaDyn
 if (NOT USING_INTEL_COMPILER OR FORCE_FFTW)
   target_link_libraries(ALaDyn ${FFTW_LIBRARIES})
 endif()
-
 
 set_target_properties(ALaDyn PROPERTIES LINKER_LANGUAGE Fortran)
 
