@@ -10,14 +10,6 @@ environment:
       CYGWIN_NOWINPATH: yes
       CYGSH: C:\cygwin64\bin\bash -c
 
-
-environment:
-    CYGWIN_NOWINPATH: yes
-    matrix:
-        - cygwin_url: https://cygwin.com/setup-x86_64.exe
-          COMPILER: cygwin
-          CYGSH: C:\cygwin64\bin\bash -c
-
 init:
   - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
