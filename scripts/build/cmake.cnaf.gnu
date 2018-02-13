@@ -10,6 +10,6 @@ export CC=/shared/software/compilers/gcc-4.9.0/bin/gcc
 export CXX=/shared/software/compilers/gcc-4.9.0/bin/g++
 
 mkdir -p build ; cd build
-cmake .. -DFFTW_ROOT=/shared/software/project/aladyn/fftw -DBoost_NO_BOOST_CMAKE=ON
+cmake .. -DFFTW_ROOT_DIR=/shared/software/project/aladyn/fftw -DBoost_NO_BOOST_CMAKE=ON
 cmake --build . --target install
 cd ..

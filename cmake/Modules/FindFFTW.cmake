@@ -50,6 +50,7 @@ if( NOT EXISTS "${FFTW_ROOT_DIR}" )
   set( FFTW_USE_PKGCONFIG ON )
 endif()
 
+set(ENABLE_FFTW_LONG_DOUBLE FALSE CACHE BOOL "Enabling FFTW3L")
 
 #=============================================================================
 # As a first try, use the PkgConfig module.  This will work on many
@@ -88,11 +89,13 @@ find_library( FFTWF_LIBRARY
   PATH_SUFFIXES Release Debug
 )
 
-find_library( FFTWL_LIBRARY
-  NAMES fftw3l
-  HINTS ${FFTW_ROOT_DIR}/lib ${FFTW_LIBDIR}
-  PATH_SUFFIXES Release Debug
-)
+if (ENABLE_FFTW_LONG_DOUBLE)
+  find_library( FFTWL_LIBRARY
+    NAMES fftw3l
+    HINTS ${FFTW_ROOT_DIR}/lib ${FFTW_LIBDIR}
+    PATH_SUFFIXES Release Debug
+  )
+endif()
 
 # Do we also have debug versions?
 find_library( FFTW_LIBRARY_DEBUG
@@ -107,11 +110,13 @@ find_library( FFTWF_LIBRARY_DEBUG
   PATH_SUFFIXES Debug
 )
 
-find_library( FFTWL_LIBRARY_DEBUG
-  NAMES fftw3ld
-  HINTS ${FFTW_ROOT_DIR}/lib ${FFTW_LIBDIR}
-  PATH_SUFFIXES Debug
-)
+if (ENABLE_FFTW_LONG_DOUBLE)
+  find_library( FFTWL_LIBRARY_DEBUG
+    NAMES fftw3ld
+    HINTS ${FFTW_ROOT_DIR}/lib ${FFTW_LIBDIR}
+    PATH_SUFFIXES Debug
+  )
+endif()
 
 set( FFTW_INCLUDE_DIRS ${FFTW_INCLUDE_DIR} )
 set( FFTW_LIBRARIES ${FFTW_LIBRARY} ${FFTWF_LIBRARY} ${FFTWL_LIBRARY} )
@@ -156,7 +161,9 @@ if( FFTW_FOUND AND NOT TARGET FFTW::fftw3 )
 
     # Windows systems with dll libraries.
     add_library( FFTW::fftw3      SHARED IMPORTED )
-    add_library( FFTW::fftw3l     SHARED IMPORTED )
+    if (ENABLE_FFTW_LONG_DOUBLE)
+      add_library( FFTW::fftw3l     SHARED IMPORTED )
+    endif()
     add_library( FFTW::fftw3f     SHARED IMPORTED )
 
     # Windows with dlls, but only Release libraries.
@@ -166,12 +173,14 @@ if( FFTW_FOUND AND NOT TARGET FFTW::fftw3 )
       INTERFACE_INCLUDE_DIRECTORIES     "${FFTW_INCLUDE_DIRS}"
       IMPORTED_CONFIGURATIONS           Release
       IMPORTED_LINK_INTERFACE_LANGUAGES "C" )
-    set_target_properties( FFTW::fftw3l PROPERTIES
-      IMPORTED_LOCATION_RELEASE         "${FFTWL_LIBRARY_DLL}"
-      IMPORTED_IMPLIB                   "${FFTWL_LIBRARY}"
-      INTERFACE_INCLUDE_DIRECTORIES     "${FFTW_INCLUDE_DIRS}"
-      IMPORTED_CONFIGURATIONS           Release
-      IMPORTED_LINK_INTERFACE_LANGUAGES "C" )
+    if (ENABLE_FFTW_LONG_DOUBLE)
+      set_target_properties( FFTW::fftw3l PROPERTIES
+        IMPORTED_LOCATION_RELEASE         "${FFTWL_LIBRARY_DLL}"
+        IMPORTED_IMPLIB                   "${FFTWL_LIBRARY}"
+        INTERFACE_INCLUDE_DIRECTORIES     "${FFTW_INCLUDE_DIRS}"
+        IMPORTED_CONFIGURATIONS           Release
+        IMPORTED_LINK_INTERFACE_LANGUAGES "C" )
+    endif()
     set_target_properties( FFTW::fftw3 PROPERTIES
       IMPORTED_LOCATION_RELEASE         "${FFTW_LIBRARY_DLL}"
       IMPORTED_IMPLIB                   "${FFTW_LIBRARY}"
@@ -185,10 +194,12 @@ if( FFTW_FOUND AND NOT TARGET FFTW::fftw3 )
       set_target_properties( FFTW::fftw3f PROPERTIES
         IMPORTED_LOCATION_DEBUG           "${FFTWF_LIBRARY_DEBUG_DLL}"
         IMPORTED_IMPLIB_DEBUG             "${FFTWF_LIBRARY_DEBUG}" )
-      set_property( TARGET FFTW::fftw3l APPEND PROPERTY IMPORTED_CONFIGURATIONS Debug )
-      set_target_properties( FFTW::fftw3l PROPERTIES
-        IMPORTED_LOCATION_DEBUG           "${FFTWL_LIBRARY_DEBUG_DLL}"
-        IMPORTED_IMPLIB_DEBUG             "${FFTWL_LIBRARY_DEBUG}" )
+      if (ENABLE_FFTW_LONG_DOUBLE)
+        set_property( TARGET FFTW::fftw3l APPEND PROPERTY IMPORTED_CONFIGURATIONS Debug )
+        set_target_properties( FFTW::fftw3l PROPERTIES
+          IMPORTED_LOCATION_DEBUG           "${FFTWL_LIBRARY_DEBUG_DLL}"
+          IMPORTED_IMPLIB_DEBUG             "${FFTWL_LIBRARY_DEBUG}" )
+      endif()
       set_property( TARGET FFTW::fftw3 APPEND PROPERTY IMPORTED_CONFIGURATIONS Debug )
       set_target_properties( FFTW::fftw3 PROPERTIES
         IMPORTED_LOCATION_DEBUG           "${FFTW_LIBRARY_DEBUG_DLL}"
@@ -206,10 +217,12 @@ if( FFTW_FOUND AND NOT TARGET FFTW::fftw3 )
       IMPORTED_LOCATION                 "${FFTWF_LIBRARY}"
       INTERFACE_INCLUDE_DIRECTORIES     "${FFTW_INCLUDE_DIRS}"
       IMPORTED_LINK_INTERFACE_LANGUAGES "C" )
-    set_target_properties( FFTW::fftw3l PROPERTIES
-      IMPORTED_LOCATION                 "${FFTWL_LIBRARY}"
-      INTERFACE_INCLUDE_DIRECTORIES     "${FFTW_INCLUDE_DIRS}"
-      IMPORTED_LINK_INTERFACE_LANGUAGES "C" )
+    if (ENABLE_FFTW_LONG_DOUBLE)
+      set_target_properties( FFTW::fftw3l PROPERTIES
+        IMPORTED_LOCATION                 "${FFTWL_LIBRARY}"
+        INTERFACE_INCLUDE_DIRECTORIES     "${FFTW_INCLUDE_DIRS}"
+        IMPORTED_LINK_INTERFACE_LANGUAGES "C" )
+    endif()
     set_target_properties( FFTW::fftw3 PROPERTIES
       IMPORTED_LOCATION                 "${FFTW_LIBRARY}"
       INTERFACE_INCLUDE_DIRECTORIES     "${FFTW_INCLUDE_DIRS}"

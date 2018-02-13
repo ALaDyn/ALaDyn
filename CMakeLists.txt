@@ -136,7 +136,7 @@ target_link_libraries(ALaDyn
 )
 
 if (NOT USING_INTEL_COMPILER OR FORCE_FFTW)
-  target_link_libraries(ALaDyn ${FFTW_LIBRARIES})
+  target_link_libraries(ALaDyn ${FFTW_LIBRARY})
 endif()
 
 set_target_properties(ALaDyn PROPERTIES LINKER_LANGUAGE Fortran)
