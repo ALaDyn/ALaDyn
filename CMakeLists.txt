@@ -16,6 +16,9 @@ set(FORCE_FFTW TRUE CACHE BOOL "Forcing FFTW libraries")
 # set this variable to true to force static linking (if supported by the compiler)
 set(FORCE_STATIC_LINK FALSE CACHE BOOL "Forcing static linking to libraries")
 
+# set this variable to use the old FFT interfaces in fft_lib.F90
+add_definitions(-DUSE_OLD_FFTW_INTERFACE)
+
 # make sure that the default is a RELEASE
 set(default_build_type "Release")
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)

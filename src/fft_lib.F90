@@ -25,8 +25,9 @@
 
 #ifdef USE_OLD_FFTW_INTERFACE
  !---------------------------------------
+ use, intrinsic :: iso_c_binding
  implicit none
- include 'ft_param.f90'
+ include 'fftw3.f03'
 
  integer(dp) :: plan1,iplan1
  integer(dp) :: plan2,iplan2
