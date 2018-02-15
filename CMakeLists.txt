@@ -8,16 +8,17 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 # uncomment the following definition to enable GDB attach to debug while running
 # add_definitions(-DENABLE_GDB_ATTACH)
 
-# we force FFTW only for now because MKL has some problems with ALaDyn.
-# MKL in fact requires the -fdefault-integer-8 flag (or equivalent),
-# which is unsupported in ALaDyn (breaks binary output as of now, need fixes)
-set(FORCE_FFTW TRUE CACHE BOOL "Forcing FFTW libraries")
+# you can force FFTW if necessary, avoiding MKL (which is preferred on Intel systems)
+set(FORCE_FFTW OFF CACHE BOOL "Forcing FFTW libraries")
+
+if (FORCE_FFTW)
+  message(STATUS "Forcing FFTW, avoid MKL even if found")
+else()
+  message(STATUS "MKL is preferred to FFTW, if found")
+endif()
 
 # set this variable to true to force static linking (if supported by the compiler)
 set(FORCE_STATIC_LINK FALSE CACHE BOOL "Forcing static linking to libraries")
-
-# set this variable to use the old FFT interfaces in fft_lib.F90
-add_definitions(-DUSE_OLD_FFTW_INTERFACE)
 
 # make sure that the default is a RELEASE
 set(default_build_type "Release")
