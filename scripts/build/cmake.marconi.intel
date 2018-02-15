@@ -2,10 +2,11 @@
 
 module purge
 
+
 module load intel
 module load intelmpi
 module load boost
-module load fftw
+module load mkl
 module load cmake
 
 export CC=/cineca/prod/opt/compilers/intel/pe-xe-2017/binary/bin/icc
