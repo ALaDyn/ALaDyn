@@ -1,14 +1,14 @@
 #!/bin/bash
 
 module load PrgEnv-intel
+module load intel-mkl
 module load cmake
-module load cray-fftw
 module load boost
 
 #rm -rf build
 mkdir -p build
 cd build
 
-cmake .. "-DBoost_NO_BOOST_CMAKE=ON" "-DFFTW_USE_STATIC_LIBS:BOOL=TRUE" "-DFFTW_ROOT_DIR=/opt/cray/pe/fftw/3.3.6.2/x86_64/"
+cmake .. "-DBoost_NO_BOOST_CMAKE=ON"
 cmake --build . --target install
 cd ..

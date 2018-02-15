@@ -2,7 +2,6 @@
 #
 #   MKL_FOUND            : True if mkl is found
 #   MKL_INCLUDE_DIR      : include directory
-#   MKL_FFTW_INCLUDE_DIR : include directory for fftw headers
 
 
 if(DEFINED $ENV{INTELROOT})
@@ -12,16 +11,10 @@ else()
 endif()
 
 set(INTEL_ROOT $INTELROOT CACHE PATH "Folder contains intel libs")
-find_path(MKL_ROOT include/mkl.h PATHS $ENV{MKLROOT} ${INTEL_ROOT}/mkl
-                                   DOC "Folder contains MKL")
+find_path(MKL_ROOT include/mkl.h PATHS $ENV{MKLROOT} ${INTEL_ROOT}/mkl  DOC "Folder contains MKL")
 
 find_path(MKL_INCLUDE_DIR mkl.h PATHS ${MKL_ROOT} PATH_SUFFIXES include)
 set(__looked_for MKL_INCLUDE_DIR)
 
-find_path(MKL_FFTW_INCLUDE_DIR fftw3.h PATHS ${MKL_ROOT} PATH_SUFFIXES include fftw3)
-list(APPEND __looked_for MKL_FFTW_INCLUDE_DIR)
-
-
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(MKL DEFAULT_MSG ${__looked_for})
-
