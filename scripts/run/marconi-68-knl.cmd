@@ -13,7 +13,7 @@ module load env-knl
 module load intel
 module load intelmpi
 module load boost
-module load fftw
+module load mkl
 
 
 mpirun ./ALaDyn >> opic.txt 2>> epic.txt
