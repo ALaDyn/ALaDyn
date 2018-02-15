@@ -900,11 +900,9 @@
     Ar=e0*cos(phi)*sqrt(sqrt(w2))*exp(-w2*r2)
     Ai=-e0*sin(phi)*sqrt(sqrt(w2))*exp(-w2*r2)
     A0=cos(phi1)*cos(phi1)
-    A0=A0*A0
     ef(i,j,k,1)=ef(i,j,k,1)+A0*Ar    !Re[Ay](t_loc)
     ef(i,j,k,2)=ef(i,j,k,2)+A0*Ai    !Im[Ay]
     A0=cos(phi0)*cos(phi0)
-    A0=A0*A0
     ef(i,j,k,3)=ef(i,j,k,3)+A0*Ar    !Re[Ay](t_loc-Dt)
     ef(i,j,k,4)=ef(i,j,k,4)+A0*Ai    !Im[Ay]
    end do

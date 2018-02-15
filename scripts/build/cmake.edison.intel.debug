@@ -9,6 +9,6 @@ module load boost
 mkdir -p build
 cd build
 
-cmake .. "-DBoost_NO_BOOST_CMAKE=ON" "-DFFTW_USE_STATIC_LIBS:BOOL=TRUE" "-DFFTW_ROOT_DIR=/opt/cray/pe/fftw/3.3.6.2/x86_64/"
+cmake .. "-DBoost_NO_BOOST_CMAKE=ON" "-DFFTW_USE_STATIC_LIBS:BOOL=TRUE" "-DCMAKE_BUILD_TYPE=Debug" "-DFFTW_ROOT_DIR=/opt/cray/pe/fftw/3.3.6.2/x86_64/"
 cmake --build . --target install
 cd ..

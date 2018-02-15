@@ -54,8 +54,8 @@
  do p=1,np,nkjump
   xx=sp_loc%part(p,1)
   yy=sp_loc%part(p,2)
-  if(tx1 <= xx.and. tx2 > xx)then
-   if(ty1 <= yy.and. ty2 > yy)then
+  if(tx1 < xx.and. tx2 > xx)then
+   if(ty1 < yy.and. ty2 > yy)then
    ik=ik+1
    wgh_cmp=sp_loc%part(p,5)
    part_ind=int(ik,hp_int)
@@ -68,9 +68,9 @@
   xx=sp_loc%part(p,1)
   yy=sp_loc%part(p,2)
   zz=sp_loc%part(p,3)
-  if(tx1 <= xx.and. tx2 > xx)then
-   if(ty1 <= yy.and. ty2 > yy)then
-    if(tz1 <= zz.and. tz2 > zz)then
+  if(tx1 < xx.and. tx2 > xx)then
+   if(ty1 < yy.and. ty2 > yy)then
+    if(tz1 < zz.and. tz2 > zz)then
      ik=ik+1
      wgh_cmp=sp_loc%part(p,7)
      part_ind=int(ik,hp_int)
@@ -96,7 +96,7 @@
  allocate(track_aux(2*ndv*ik_max))
  if(pe0)then
   allocate(pdata_tracking(ndv,track_tot_part,track_tot_nstep))
-  write(6,*)'==== Initial track-Partcile data==========='
+  write(6,*)'==== Initial track-Particle data==========='
   write(6,'(a19,i6)')'  tot_track_steps  ',track_tot_nstep
   write(6,'(a19,i6)')'  tot_track_parts  ',track_tot_part
   write(6,'(a18,i8)')'  short_int size  ',huge(plab)
@@ -120,6 +120,7 @@
  ndv=size(sp_loc%part,2)
  ik=0
  kk=0
+ ik2=0
  do p=1,np
   wgh_cmp=sp_loc%part(p,ndv)
   if(part_ind >0)ik=ik+1
@@ -151,7 +152,7 @@
    if(ik >0)then
     call exchange_1d_grdata(sr,track_aux,ik*ndv,ipe,ipe+10)
                !pe0 receives from ipe ik sp_aux data and collects on track array
-   wgh_cmp=track_aux(ndv)
+    wgh_cmp=track_aux(ndv)
     kk=0
     do p=1,ik
      ik2=ik1+p
