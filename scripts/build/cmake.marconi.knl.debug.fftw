@@ -15,6 +15,6 @@ export CXX=/cineca/prod/opt/compilers/intel/pe-xe-2017/binary/bin/icpc
 export FC=/cineca/prod/opt/compilers/intel/pe-xe-2017/binary/bin/ifort
 
 mkdir -p build_knl ; cd build_knl
-cmake .. -DCMAKE_BUILD_TYPE="Debug" -DFORCE_FFTW:BOOL=ON -DMARCONI_KNL:BOOL=TRUE -DCMAKE_LINKER=$CLINKER -DBoost_NO_BOOST_CMAKE=ON -DCMAKE_Fortran_COMPILER=$FC
+cmake .. -DCMAKE_BUILD_TYPE="Debug" -DFORCE_FFTW:BOOL=ON -DFFTW_ROOT_DIR=/cineca/prod/opt/libraries/fftw/3.3.4/intelmpi--2017--binary/ -DMARCONI_KNL:BOOL=TRUE -DCMAKE_LINKER=$CLINKER -DBoost_NO_BOOST_CMAKE=ON -DCMAKE_Fortran_COMPILER=$FC
 cmake --build . --target install
 cd ..
