@@ -2699,15 +2699,15 @@
    ax1(2)=0.5*(0.25+sx2+sx)
    ax1(0)=1.-ax1(1)-ax1(2)
 
-   !ih=int(xx)
-   !sx=xx-0.5-real(ih,dp)
-   !sx2=sx*sx
-   !axh(1)=0.75-sx2
-   !axh(2)=0.5*(0.25+sx2+sx)
-   !axh(0)=1.-axh(1)-axh(2)
+   ih=int(xx)
+   sx=xx-0.5-real(ih,dp)
+   sx2=sx*sx
+   axh(1)=0.75-sx2
+   axh(2)=0.5*(0.25+sx2+sx)
+   axh(0)=1.-axh(1)-axh(2)
 
-   axh(1)=sx+0.5
-   axh(0)=1.-axh(1)
+   !axh(1)=sx+0.5
+   !axh(0)=1.-axh(1)
 
    xx=shy+dy_inv*(xp1(2)-ymn)
    j=int(xx+0.5)
@@ -2724,14 +2724,14 @@
    ayh(2)=0.5*(0.25+sx2+sx)
    ayh(0)=1.-ayh(1)-ayh(2)
 
-   ayh(1)=sx+0.5
-   ayh(0)=1.-ayh(1)
+   !ayh(1)=sx+0.5
+   !ayh(0)=1.-ayh(1)
 
    i=i-1
    j=j-1
 
-   ih=i
-   jh=j
+   ih=ih-1
+   jh=jh-1
    !==========================
    do j1=0,2
     j2=j+j1
@@ -2748,7 +2748,7 @@
                                          !ap(4)=ap(4)+dvol1*dx_inv*(av(i2+1,j2,k2,1)-av(i2,j2,k2,1))
     end do
    end do
-   do j1=0,1
+   do j1=0,2
     j2=jh+j1
     dvol=ayh(j1)
     do i1=0,2

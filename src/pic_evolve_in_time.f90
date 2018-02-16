@@ -2210,7 +2210,7 @@
  n_st=0
  if(Stretch)n_st=str_indx(imody,imodz)
  !====================
- call pfields_prepare(ebf,i1,i2,j1,nyf,k1,nzf,nfield,1,1)
+ call pfields_prepare(ebf,i1,i2,j1,nyf,k1,nzf,nfield,2,2)
 !======================================
  if(Ionization)then
   if(it_loc==0)then
