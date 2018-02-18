@@ -561,7 +561,7 @@
  if(Impact_ioniz)ns_ioniz=nsp              !only for collisional ionization
  !=====================
  ! Allocates basic arrays, defines grid parameters, boundary index etc
- call w_alloc(opt_der)      !local arrays and matrix for space derivatives
+ call w_alloc(ch_opt)      !local arrays and matrix for space derivatives
  mem_size=0
  mem_psize=0
  if (nvout>nfield) nvout=nfield

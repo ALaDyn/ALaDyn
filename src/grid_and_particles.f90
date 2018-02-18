@@ -32,7 +32,7 @@
  integer :: nx_stretch,ny_stretch,nz_stretch
  integer :: ibx,iby,ibz
  real(dp) :: k0,yx_rat,zx_rat,djc(3),lxb,lyb
-
+ real(dp) :: ch_opt,fl_opt
  integer :: mp_per_cell(6),nref,nb_laser
  integer :: np_per_xc(Ref_nlayer),np_per_yc(Ref_nlayer),np_per_zc(Ref_nlayer),ppc(Ref_nlayer)
  integer :: ion_min(3),ion_max(3),atomic_number(3),ionz_lev,ionz_model

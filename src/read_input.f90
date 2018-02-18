@@ -62,7 +62,7 @@
  !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
  NAMELIST/GRID/nx,ny,nz,ny_targ,k0,yx_rat,zx_rat
  NAMELIST/SIMULATION/LPf_ord,der_ord,str_flag,iform,model_id,&
-  dmodel_id,ibx,iby,ibz,ibeam
+  dmodel_id,ibx,iby,ibz,ibeam,ch_opt,fl_opt
  NAMELIST/TARGET_DESCRIPTION/nsp,nsb,ionz_lev,ionz_model,ion_min,ion_max,atomic_number,&
   mass_number,t0_pl,ppc,np_per_xc,np_per_yc,np_per_zc,lpx,lpy,&
   n_over_nc,np1,np2,L_disable_rng_seed
@@ -86,12 +86,13 @@
  call consistency_check_grid
 
  !--- reading sim parameters ---!
+ ch_opt=1.
+ fl_opt=0.5
  open(nml_iounit,file=input_namelist_filename, status='old')
  read(nml_iounit,SIMULATION,iostat=nml_ierr)
  nml_error_message='SIMULATION'
  close(nml_iounit)
  if(nml_ierr>0) call print_at_screen_nml_error
-
  !--- reading target parameters ---!
  mass_number(1:3) = 1.0
  ppc=-1
