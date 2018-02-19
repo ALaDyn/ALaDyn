@@ -528,10 +528,14 @@
     end do
    endif
    do i=1,nsb
-    if(bunch_shape(i)==1) jb_norm(i)=rhob(i)*gvol_inv*bunch_volume(i)/(nb_tot(i)*j0_norm)
-    if(bunch_shape(i)==2) jb_norm(i)=(Charge_left(i)+Charge_right(i))/2.0*gvol_inv*bunch_volume(i)/(nb_tot(i)*j0_norm)
-    if(bunch_shape(i)==3) jb_norm(i)=(Charge_left(i)+Charge_right(i))/2.0*gvol_inv*bunch_volume(i)/(nb_tot(i)*j0_norm)
-    if(bunch_shape(i)==4) jb_norm(i)=rhob(i)*gvol_inv*bunch_volume(i)/(nb_tot(i)*j0_norm)
+    if(bunch_shape(i)==1 .and. nb_tot(i)>  0) jb_norm(i)=rhob(i)*gvol_inv*bunch_volume(i)/(nb_tot(i)*j0_norm)
+    if(bunch_shape(i)==1 .and. nb_tot(i)==-1) jb_norm(i)=1.0_dp/(PRODUCT(ppc_bunch(i,:))*j0_norm)
+    if(bunch_shape(i)==2 .and. nb_tot(i)>  0) jb_norm(i)=(Charge_left(i)+Charge_right(i))/2.0*gvol_inv*bunch_volume(i)/(nb_tot(i)*j0_norm)
+    if(bunch_shape(i)==1 .and. nb_tot(i)==-1) jb_norm(i)=1.0_dp/(PRODUCT(ppc_bunch(i,:))*j0_norm)
+    if(bunch_shape(i)==3 .and. nb_tot(i)>  0) jb_norm(i)=(Charge_left(i)+Charge_right(i))/2.0*gvol_inv*bunch_volume(i)/(nb_tot(i)*j0_norm)
+    if(bunch_shape(i)==3 .and. nb_tot(i)==-1) jb_norm(i)=1.0_dp/(PRODUCT(ppc_bunch(i,:))*j0_norm)
+    if(bunch_shape(i)==4 .and. nb_tot(i)>  0) jb_norm(i)=rhob(i)*gvol_inv*bunch_volume(i)/(nb_tot(i)*j0_norm)
+    if(bunch_shape(i)==1 .and. nb_tot(i)==-1) jb_norm(i)=1.0_dp/(PRODUCT(ppc_bunch(i,:))*j0_norm)
    end do
 
    !--- I am forcing this part to be again with the correct input values ---!
