@@ -9,9 +9,8 @@ module load boost_1_56_0_gcc4_9_0
 export CC=/shared/software/compilers/intel_2017/compilers_and_libraries_2017.0.098/linux/bin/intel64/icc
 export CXX=/shared/software/compilers/intel_2017/compilers_and_libraries_2017.0.098/linux/bin/intel64/icpc
 export FC=/shared/software/compilers/intel_2017/compilers_and_libraries_2017.0.098/linux/bin/intel64/ifort
-export CLINKER=$CXX
 
 mkdir -p build ; cd build
-cmake .. -DCMAKE_LINKER=$CLINKER -DFFTW_ROOT_DIR=/shared/software/project/aladyn/fftw -DBoost_NO_BOOST_CMAKE=ON -DCMAKE_Fortran_COMPILER=$FC
+cmake .. -DBoost_NO_BOOST_CMAKE=ON 
 cmake --build . --target install
 cd ..
