@@ -1644,6 +1644,14 @@
      end do
     end do
    enddo
+    do k=k1,n3p
+     do j=j1,n2p
+      do i=i1,i1+1
+       evf(i,j,k,1)=zero_dp
+       evf(i,j,k,2)=zero_dp
+     end do
+    end do
+   enddo
  contains
  subroutine first_Ader
 !============

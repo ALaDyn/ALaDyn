@@ -358,7 +358,7 @@
  subroutine prl_den_energy_interp(ic)
  integer,intent(in) :: ic
  integer :: nyf,nzf,np,i1,i2,j1,k1,stl,str
- real(dp) :: xm,ym,zm,dery,derz
+ real(dp) :: xm,ym,zm,dery,derz,ar,ai
  integer :: i,j,k,jj,kk,n_str
 
 
@@ -380,8 +380,23 @@
  end do
  !curr_clean
  np=loc_npart(imody,imodz,imodx,ic)
- if(np>0)call set_grid_den_energy(&
+ if(Envelope)then
+  do k=k1,nzf
+   do j=j1,nyf
+    do i=i1,i2
+     ar=.5*(env(i,j,k,1)+env(i,j,k,3))
+     ai=.5*(env(i,j,k,2)+env(i,j,k,4))
+     jc(i,j,k,3)=0.5*(ar*ar+ai*ai)
+    end do
+   end do
+  end do
+  if(prl)call fill_ebfield_yzxbdsdata(jc,i1,i2,j1,nyf,k1,nzf,3,3,2,2)
+  call set_grid_den_env_energy(&
+                        spec(ic),ebfp,jc,np,ndim,curr_ndim,n_str,3,xm,ym,zm)
+ else
+  call set_grid_den_energy(&
                         spec(ic),ebfp,jc,np,ndim,curr_ndim,n_str,xm,ym,zm)
+ endif
  !========= den on [i1-1:i2+2,j1-1:nyp+2,k1-1:nzp+2]
  if(prl)then
   call fill_curr_yzxbdsdata(jc,i1,i2,j1,nyf,k1,nzf,2)

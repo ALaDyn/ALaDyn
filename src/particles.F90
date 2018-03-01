@@ -811,6 +811,218 @@
  !+++++++++++++++++++++++++++++++
  end subroutine set_grid_charge_and_Jx
  !==========================
+ subroutine set_grid_den_env_energy(sp_loc,pt,eden,np,ndm,njc,n_st,icp,xmn,ymn,zmn)
+
+ type(species),intent(in) :: sp_loc
+ real(dp),intent(inout) :: pt(:,:)
+ real(dp),intent(inout) :: eden(:,:,:,:)
+ integer,intent(in) :: np,ndm,njc,n_st,icp
+ real(dp),intent(in) :: xmn,ymn,zmn
+ real(dp) :: xx,sx,sx2,dvol,gam2,gam_p
+ real(dp) :: ax0(0:2),ay0(0:2),az0(0:2),xp(3),pp(3)
+ integer :: i,j,k,i1,j1,k1,i2,j2,k2,n,ch,spl
+ !======================
+ !   Computes eden(grid,1)= n/n_0 and eden(grid,2)=<gam-1}n>/n_0
+ !================================================
+ ax0(0:2)=0.0;ay0(0:2)=0.0
+ az0(0:2)=0.0
+ spl=2
+ if(np<1)return
+ select case(ndm)
+ case(1)
+  ch=5
+  j2=1
+  do n=1,np
+   xp(1)=dx_inv*(sp_loc%part(n,1)-xmn)
+   pp(1:2)=sp_loc%part(n,3:4)
+   gam2=pp(1)*pp(1)+pp(2)*pp(2)
+   wgh_cmp=sp_loc%part(n,ch)
+   xx=shx+xp(1)
+   i=int(xx+0.5)
+   sx=xx-real(i,dp)
+   sx2=sx*sx
+   ax0(1)=0.75-sx2
+   ax0(2)=0.5*(0.25+sx2+sx)
+   ax0(0)=1.-ax0(1)-ax0(2)
+   ax0(0:2)=wgh*ax0(0:2)
+   i=i-1
+   do i1=0,2
+    i2=i+i1
+    dvol=ax0(i1)
+    gam2=gam2+dvol*eden(i2,j2,1,icp)
+   end do
+   gam_p=sqrt(1.+gam2)
+   do i1=0,2
+    i2=i+i1
+    dvol=ax0(i1)
+    eden(i2,j2,1,1)=eden(i2,j2,1,1)+dvol*charge
+    eden(i2,j2,1,2)=eden(i2,j2,1,2)+(gam_p-1)*dvol
+   end do
+  end do
+ case(2)
+  ch=size(sp_loc%part,2)
+  do n=1,np
+   pt(n,1:ch)=sp_loc%part(n,1:ch)
+  end do
+  call set_local_positions(pt,1,np,n_st,ndm,xmn,ymn,zmn)
+  if(njc==2)then
+   do n=1,np
+    pp(1:2)=sp_loc%part(n,3:4)
+    gam2=pp(1)*pp(1)+pp(2)*pp(2)
+    xp(1:2)=pt(n,1:2)
+    wgh_cmp=pt(n,ch)
+    xx=shx+xp(1)
+    i=int(xx+0.5)
+    sx=xx-real(i,dp)
+    sx2=sx*sx
+    ax0(1)=0.75-sx2
+    ax0(2)=0.5*(0.25+sx2+sx)
+    ax0(0)=1.-ax0(1)-ax0(2)
+    ax0(0:2)=wgh*ax0(0:2)  !weights are inside
+    i=i-1
+
+    xx=shy+xp(2)
+    j=int(xx+0.5)
+    sx=xx-real(j,dp)
+    sx2=sx*sx
+    ay0(1)=0.75-sx2
+    ay0(2)=0.5*(0.25+sx2+sx)
+    ay0(0)=1.-ay0(1)-ay0(2)
+    j=j-1
+    do j1=0,2
+     j2=j+j1
+     do i1=0,2
+      i2=i+i1
+      dvol=ax0(i1)*ay0(j1)
+      gam2=gam2+dvol*eden(i2,j2,1,icp)
+     end do
+    end do
+    gam_p=sqrt(1.+gam2)
+    do j1=0,2
+     j2=j+j1
+     do i1=0,2
+      i2=i+i1
+      dvol=ax0(i1)*ay0(j1)
+      eden(i2,j2,1,1)=eden(i2,j2,1,1)+dvol*charge
+      eden(i2,j2,1,2)=eden(i2,j2,1,2)+(gam_p-1.)*dvol
+     end do
+    end do
+   end do
+  endif
+  if(njc==3)then
+   do n=1,np
+    pp(1:3)=sp_loc%part(n,4:6)
+    gam2=pp(1)*pp(1)+pp(2)*pp(2)+pp(3)*pp(3)
+    xp(1:2)=pt(n,1:2)
+    wgh_cmp=pt(n,ch)
+
+    xx=shx+xp(1)
+    i=int(xx+0.5)
+    sx=xx-real(i,dp)
+    sx2=sx*sx
+    ax0(1)=0.75-sx2
+    ax0(2)=0.5*(0.25+sx2+sx)
+    ax0(0)=1.-ax0(1)-ax0(2)
+    ax0(0:2)=wgh*ax0(0:2)
+    i=i-1
+
+    xx=shy+xp(2)
+    j=int(xx+0.5)
+    sx=xx-real(j,dp)
+    sx2=sx*sx
+    ay0(1)=0.75-sx2
+    ay0(2)=0.5*(0.25+sx2+sx)
+    ay0(0)=1.-ay0(1)-ay0(2)
+    j=j-1
+!============ adds [A^2/2]_p contribution
+    do j1=0,2
+     j2=j+j1
+     do i1=0,2
+      i2=i+i1
+      dvol=ax0(i1)*ay0(j1)
+      gam2=gam2+dvol*eden(i2,j2,1,icp)
+     end do
+    end do
+    gam_p=sqrt(1.+gam2)
+    do j1=0,2
+     j2=j+j1
+     do i1=0,2
+      i2=i+i1
+      dvol=ax0(i1)*ay0(j1)
+      eden(i2,j2,1,1)=eden(i2,j2,1,1)+dvol*charge
+      eden(i2,j2,1,2)=eden(i2,j2,1,2)+(gam_p-1.)*dvol
+     end do
+    end do
+   end do
+  endif
+ case(3)
+  ch=7
+  do n=1,np
+   pt(n,1:ch)=sp_loc%part(n,1:ch)
+  end do
+  call set_local_positions(pt,1,np,n_st,3,xmn,ymn,zmn)
+  do n=1,np
+   pp(1:3)=sp_loc%part(n,4:6)
+   gam2=pp(1)*pp(1)+pp(2)*pp(2)+pp(3)*pp(3)
+   xp(1:3)=pt(n,1:3)
+   wgh_cmp=pt(n,ch)
+   xx=shx+xp(1)
+   i=int(xx+0.5)
+   sx=xx-real(i,dp)
+   sx2=sx*sx
+   ax0(1)=0.75-sx2
+   ax0(2)=0.5*(0.25+sx2+sx)
+   ax0(0)=1.-ax0(1)-ax0(2)
+   ax0(0:2)=wgh*ax0(0:2)
+
+   xx=shy+xp(2)
+   j=int(xx+0.5)
+   sx=xx-real(j,dp)
+   sx2=sx*sx
+   ay0(1)=0.75-sx2
+   ay0(2)=0.5*(0.25+sx2+sx)
+   ay0(0)=1.-ay0(1)-ay0(2)
+
+   xx=shz+xp(3)
+   k=int(xx+0.5)
+   sx=xx-real(k,dp)
+   sx2=sx*sx
+   az0(1)=0.75-sx2
+   az0(2)=0.5*(0.25+sx2+sx)
+   az0(0)=1.-az0(1)-az0(2)
+   !---------------
+   i=i-1
+   j=j-1
+   k=k-1
+   do k1=0,spl
+    k2=k+k1
+    do j1=0,spl
+     j2=j+j1
+     dvol=az0(k1)*ay0(j1)
+     do i1=0,spl
+      i2=i+i1
+      gam2=gam2+ax0(i1)*dvol*eden(i2,j2,k2,icp)
+     end do
+    end do
+   end do
+   gam_p=sqrt(1.+gam2)
+   do k1=0,spl
+    k2=k+k1
+    do j1=0,spl
+     j2=j+j1
+     dvol=az0(k1)*ay0(j1)
+     do i1=0,spl
+      i2=i+i1
+      eden(i2,j2,k2,1)=eden(i2,j2,k2,1)+ax0(i1)*dvol*charge
+      eden(i2,j2,k2,2)=eden(i2,j2,k2,2)+(gam_p-1.)*ax0(i1)*dvol
+     end do
+    end do
+   end do
+  end do
+ end select
+ !+++++++++++++++++++++++++++++++
+ end subroutine set_grid_den_env_energy
+!=================================================
  subroutine set_grid_den_energy(sp_loc,pt,eden,np,ndm,njc,n_st,xmn,ymn,zmn)
 
  type(species),intent(in) :: sp_loc
