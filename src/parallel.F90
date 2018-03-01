@@ -24,18 +24,12 @@
  use mpi_var
  use grid_and_particles
 
-#if !defined (__INTEL_COMPILER)
- use mpi
- use fft_lib
- implicit none
-#else
 #if !defined (_CRESCO)
 #define ENABLE_MPI_LONG_INT
 #endif
  use fft_lib
  implicit none
  include 'mpif.h'
-#endif
 
 
  integer, parameter :: offset_kind = MPI_OFFSET_KIND
