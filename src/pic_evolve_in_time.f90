@@ -1707,7 +1707,7 @@
  dt_lp=dtloc
  alp=0.5*dt_lp*Lz_fact
  !==========================
- !Enter F_pt(1:2)= charge*(E+0.5^grad[F]/gamp) and F_pt(3)=charge*B/gamp     where F=|A|^2/2
+ !Enter F_pt(1:2)= q*E+0.5^*q^2*grad[F]/gamp and F_pt(3)=charge*B/gamp     where F=|A|^2/2
  select case(curr_ndim)
  case(2)
   !F_pt(5)=wgh/gamp
@@ -1721,7 +1721,6 @@
    vph(1)=vp(1)+vp(2)*bb(1)
    vph(2)=vp(2)-vp(1)*bb(1)
    vph(1:2)=vph(1:2)/b2       !p_n=(p_{n+1/2)+p_{n-1/2})/2
-   vph(1:2)=vp(1:2)
    sp_loc%part(p,3:4)=2.*vph(1:2)-pp(1:2)
    F_pt(p,1:2)=sp_loc%part(p,1:2)
   end do
@@ -1759,7 +1758,7 @@
  real(dp),intent(in) :: dtloc,vb
  integer :: p,ch
  real(dp) :: pp(3),vp(3)
- real(dp) :: b2,gam2,gam_inv,dt_lp,dth_lp
+ real(dp) :: b2,gam2,gam_inv,dt_lp,dth_lp,gam,gam3
 
  dt_lp=dtloc
  dth_lp=0.5*dt_lp
@@ -1774,10 +1773,12 @@
    vp(1:2)=F_pt(p,1:2)              !grad[F]
    !=============================
    gam2=1.+dot_product(pp(1:2),pp(1:2))+F_pt(p,3)
+   gam=sqrt(gam2)
+   gam3=gam2*gam
    b2=0.25*dot_product(pp(1:2),vp(1:2))
    !--------------------
-   gam_inv=1./sqrt(gam2)
-   gam_inv=gam_inv*(1.-dt_lp*b2/gam2)
+   gam_inv=1./gam
+   gam_inv=gam_inv*(1.-dt_lp*b2/gam3)
    vp(1:2)=dt_lp*gam_inv*pp(1:2)
    F_pt(p,3:4)=sp_loc%part(p,1:2) !old (x,y)^n positions
    F_pt(p,5)=dt_lp*gam_inv                   ! 1/gamma
@@ -1793,10 +1794,12 @@
    vp(1:3)=F_pt(p,1:3)              !grad[F]
    !=============================
    gam2=1.+dot_product(pp(1:3),pp(1:3))+F_pt(p,4)
+   gam=sqrt(gam2)
+   gam3=gam2*gam
    b2=0.25*dot_product(pp(1:3),vp(1:3))
    !--------------------
    gam_inv=1./sqrt(gam2)
-   gam_inv=gam_inv*(1.-dt_lp*b2/gam2)
+   gam_inv=gam_inv*(1.-dt_lp*b2/gam3)
    vp(1:3)=dt_lp*gam_inv*pp(1:3)
    F_pt(p,4:6)=sp_loc%part(p,1:3) !old positions
    F_pt(p,7)=dt_lp*gam_inv             ! dt*gam_inv

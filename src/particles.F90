@@ -844,7 +844,6 @@
    ax0(1)=0.75-sx2
    ax0(2)=0.5*(0.25+sx2+sx)
    ax0(0)=1.-ax0(1)-ax0(2)
-   ax0(0:2)=wgh*ax0(0:2)
    i=i-1
    do i1=0,2
     i2=i+i1
@@ -852,6 +851,7 @@
     gam2=gam2+dvol*eden(i2,j2,1,icp)
    end do
    gam_p=sqrt(1.+gam2)
+   ax0(0:2)=wgh*ax0(0:2)
    do i1=0,2
     i2=i+i1
     dvol=ax0(i1)
@@ -878,7 +878,6 @@
     ax0(1)=0.75-sx2
     ax0(2)=0.5*(0.25+sx2+sx)
     ax0(0)=1.-ax0(1)-ax0(2)
-    ax0(0:2)=wgh*ax0(0:2)  !weights are inside
     i=i-1
 
     xx=shy+xp(2)
@@ -898,6 +897,7 @@
      end do
     end do
     gam_p=sqrt(1.+gam2)
+    ax0(0:2)=wgh*ax0(0:2)  !weights are inside
     do j1=0,2
      j2=j+j1
      do i1=0,2
@@ -923,7 +923,6 @@
     ax0(1)=0.75-sx2
     ax0(2)=0.5*(0.25+sx2+sx)
     ax0(0)=1.-ax0(1)-ax0(2)
-    ax0(0:2)=wgh*ax0(0:2)
     i=i-1
 
     xx=shy+xp(2)
@@ -944,6 +943,7 @@
      end do
     end do
     gam_p=sqrt(1.+gam2)
+    ax0(0:2)=wgh*ax0(0:2)
     do j1=0,2
      j2=j+j1
      do i1=0,2
@@ -973,7 +973,6 @@
    ax0(1)=0.75-sx2
    ax0(2)=0.5*(0.25+sx2+sx)
    ax0(0)=1.-ax0(1)-ax0(2)
-   ax0(0:2)=wgh*ax0(0:2)
 
    xx=shy+xp(2)
    j=int(xx+0.5)
@@ -1006,6 +1005,7 @@
     end do
    end do
    gam_p=sqrt(1.+gam2)
+   ax0(0:2)=wgh*ax0(0:2)
    do k1=0,spl
     k2=k+k1
     do j1=0,spl
@@ -2978,16 +2978,16 @@
    !=========================
    gam2=1.+up(1)*up(1)+up(2)*up(2)+ap(6)   !gamma^{n-1/2}
    ap(1:3)=charge*ap(1:3)
-   ap(4:5)=0.5*charge*ap(4:5)
+   ap(4:5)=0.5*charge*charge*ap(4:5)
    !  ap(1:2)=q(Ex,Ey)   ap(3)=q*Bz,ap(4:5)=q*[Dx,Dy]F/2
    a1=dth*dot_product(ap(1:2),up(1:2))
    b1=dth*dot_product(ap(4:5),up(1:2))
    gam=sqrt(gam2)
-   dgam=(a1*gam+b1)/(gam2-a1)
+   dgam=(a1*gam-b1)/gam2
    gam_inv=(gam-dgam)/gam2
    ap(3:5)=ap(3:5)*gam_inv          !ap(3)=q*B/gamp, ap(4:5)= q*Grad[F]/2*gamp
 
-   pt(n,1:2)=ap(1:2)+ap(4:5)   ! Lorentz force already multiplied by q    
+   pt(n,1:2)=ap(1:2)-ap(4:5)   ! Lorentz force already multiplied by q    
    pt(n,3)=ap(3)
    pt(n,5)=wgh*gam_inv     !weight/gamp
   end do
@@ -3006,15 +3006,15 @@
    ax1(2)=0.5*(0.25+sx2+sx)
    ax1(0)=1.-ax1(1)-ax1(2)
 
-   !ih=int(xx)
-   !sx=xx-0.5-real(ih,dp)
-   !sx2=sx*sx
-   !axh(1)=0.75-sx2
-   !axh(2)=0.5*(0.25+sx2+sx)
-   !axh(0)=1.-axh(1)-axh(2)
+   ih=int(xx)
+   sx=xx-0.5-real(ih,dp)
+   sx2=sx*sx
+   axh(1)=0.75-sx2
+   axh(2)=0.5*(0.25+sx2+sx)
+   axh(0)=1.-axh(1)-axh(2)
 
-   axh(1)=sx+0.5
-   axh(0)=1.-axh(1)
+   !axh(1)=sx+0.5
+   !axh(0)=1.-axh(1)
 
    xx=shy+dy_inv*(xp1(2)-ymn)
    j=int(xx+0.5)
@@ -3024,9 +3024,15 @@
    ay1(2)=0.5*(0.25+sx2+sx)
    ay1(0)=1.-ay1(1)-ay1(2)
 
+   jh=int(xx)
+   sx=xx-0.5-real(jh,dp)
+   sx2=sx*sx
+   ayh(1)=0.75-sx2
+   ayh(2)=0.5*(0.25+sx2+sx)
+   ayh(0)=1.-axh(1)-axh(2)
 
-   ayh(1)=sx+0.5
-   ayh(0)=1.-ayh(1)
+   !ayh(1)=sx+0.5
+   !ayh(0)=1.-ayh(1)
 
    xx=shz+dz_inv*(xp1(3)-zmn)
    k=int(xx+0.5)
@@ -3036,17 +3042,23 @@
    az1(2)=0.5*(0.25+sx2+sx)
    az1(0)=1.-az1(1)-az1(2)
 
+   kh=int(xx)
+   sx=xx-0.5-real(kh,dp)
+   sx2=sx*sx
+   azh(1)=0.75-sx2
+   azh(2)=0.5*(0.25+sx2+sx)
+   azh(0)=1.-axh(1)-axh(2)
 
-   azh(1)=sx+0.5
-   azh(0)=1.-azh(1)
+   !azh(1)=sx+0.5
+   !azh(0)=1.-azh(1)
 
    i=i-1
    j=j-1
    k=k-1
 
-   ih=i
-   jh=j
-   kh=k
+   ih=ih-1
+   jh=jh-1
+   kh=kh-1
    !==========================
    do k1=0,2
     k2=k+k1
@@ -3057,14 +3069,14 @@
       i2=i1+i
       ap(10)=ap(10)+ax1(i1)*dvol*av(i2,j2,k2,1)!t^n p-assigned F=a^2/2 field
      end do
-     do i1=0,1
+     do i1=0,2
       i2=i1+ih
       dvol1=dvol*axh(i1)
       ap(1)=ap(1)+dvol1*ef(i2,j2,k2,1)    !Ex and Dx[F] (i+1/2,j,k))
       ap(7)=ap(7)+dvol1*av(i2,j2,k2,2)
      end do
     end do
-    do j1=0,1
+    do j1=0,2
      j2=jh+j1
      dvol=ayh(j1)*az1(k1)
      do i1=0,2
@@ -3073,16 +3085,16 @@
       ap(2)=ap(2)+dvol1*ef(i2,j2,k2,2)  !Ey and Dy[F] (i,j+1/2,k)
       ap(8)=ap(8)+dvol1*av(i2,j2,k2,3)
      end do
-     do i1=0,1
+     do i1=0,2
       i2=i1+ih
       ap(6)=ap(6)+axh(i1)*dvol*ef(i2,j2,k2,6)   !Bz(i+1/2,j+1/2,k)
      end do
     end do
    end do
    !=========================
-   do k1=0,1
+   do k1=0,2
     k2=kh+k1
-    do j1=0,1
+    do j1=0,2
      j2=jh+j1
      dvol=ayh(j1)*azh(k1)
      do i1=0,2
@@ -3093,7 +3105,7 @@
     do j1=0,2
      j2=j+j1
      dvol=ay1(j1)*azh(k1)
-     do i1=0,1
+     do i1=0,2
       i2=ih+i1
       ap(5)=ap(5)+axh(i1)*dvol*ef(i2,j2,k2,5)  !By(i+1/2,j,k+1/2)
      end do
@@ -3108,17 +3120,17 @@
    !=================================
    gam2=1.+up(1)*up(1)+up(2)*up(2)+up(3)*up(3)+ap(10)   !gamma^{n-1/2}
    ap(1:6)=charge*ap(1:6)
-   ap(7:9)=0.5*charge*ap(7:9)
+   ap(7:9)=0.5*charge*charge*ap(7:9)
    !  ap(1:3)=q(Ex,Ey,Ez)   ap(4:6)=q(Bx,By,Bz),ap(7:9)=q[Dx,Dy,Dz]F/2
    a1=dth*dot_product(ap(1:3),up(1:3))
    b1=dth*dot_product(ap(7:9),up(1:3))
    gam=sqrt(gam2)
-   dgam=(a1*gam+b1)/(gam2-a1)
+   dgam=(a1*gam-b1)/gam2
    gam_inv=(gam-dgam)/gam2
 
    ap(4:9)=ap(4:9)*gam_inv          !ap(4:6)=B/gamp, ap(7:9)= Grad[F]/2*gamp
 
-   pt(n,1:3)=ap(1:3)+ap(7:9)
+   pt(n,1:3)=ap(1:3)-ap(7:9)
    pt(n,4:6)=ap(4:6)
    pt(n,7)=wgh*gam_inv     !weight/gamp
   end do
