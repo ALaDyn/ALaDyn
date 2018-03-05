@@ -2210,9 +2210,9 @@
    call init_random_seed(mype)
   endif
   id_ch=nd2+1
-  call pfields_prepare(env,i1,i2,j1,nyf,k1,nzf,2,1,1)
+  call pfields_prepare(env,i1,i2,j1,nyf,k1,nzf,2,2,2)
   if(Two_color)then
-   call pfields_prepare(env1,i1,i2,j1,nyf,k1,nzf,2,1,1)
+   call pfields_prepare(env1,i1,i2,j1,nyf,k1,nzf,2,2,2)
    do ic=2,nsp_ionz
     np=loc_npart(imody,imodz,imodx,ic)
     if(np>0)then
