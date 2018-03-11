@@ -136,7 +136,6 @@ add_library(find_last_addr STATIC src/find_last_addr.cpp)
 add_library(enable_gdb_attach STATIC src/enable_gdb_attach.cpp)
 
 target_link_libraries(ALaDyn
-  #ALaCarte
   cpp_folder_tree
   find_last_addr
   enable_gdb_attach

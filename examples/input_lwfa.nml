@@ -74,14 +74,14 @@
   nb_laser         = 1,
   t0_lp            = 0.,
   xc_lp            = 50.,
-  tau_fwhm         = 40.       !tau= 30/sqrt(2)
+  tau_fwhm         = 40.,
   w0_y             = 20.0,
   a0               = 2.0,
   lam0             = 0.8,
   lp_delay         = 20.59
-  lp_offset        = 0      !xc1_lp=xc_lp-(nb_laser-1)*lp_delay-lp_offset
+  lp_offset        = 0,
   t1_lp            = 200.0,
-  tau1_fwhm        = 24.74          !tau1= 35/sqrt(2)
+  tau1_fwhm        = 24.74,
   w1_y             = 3.5,
   a1               = 0.45,
   lam1             = 0.4,
@@ -134,5 +134,3 @@
   nprocy           = 40,
   nprocz           = 1,
 /
-
-

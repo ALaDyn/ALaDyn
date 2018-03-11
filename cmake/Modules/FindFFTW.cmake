@@ -10,22 +10,24 @@
 #
 # This module will set the following variables in your project::
 #
-#  FFTW_FOUND          - True if FFTW found on the local system
-#  FFTW_INCLUDE_DIRS   - Location of FFTW header files.
-#  FFTW_LIBRARIES      - The FFTW libraries.
+#  ``FFTW_FOUND``
+#    True if FFTW found on the local system
+#
+#  ``FFTW_INCLUDE_DIRS``
+#    Location of FFTW header files.
+#
+#  ``FFTW_LIBRARIES``
+#    The FFTW libraries.
 #
 # Hints
 # ^^^^^
 #
-# Set ``FFTW_ROOT_DIR`` to a directory that contains a FFTW installation.
-#
+#  ``FFTW_ROOT_DIR``
+#    Set this variable to a directory that contains a FFTW installation.
 #
 
 include(FindPackageHandleStandardArgs)
 
-#=============================================================================
-# If the user has provided ``FFTW_ROOT_DIR``, use it!  Choose items found
-# at this location over system locations.
 if( EXISTS "$ENV{FFTW_ROOT_DIR}" )
   file( TO_CMAKE_PATH "$ENV{FFTW_ROOT_DIR}" FFTW_ROOT_DIR )
   set( FFTW_ROOT_DIR "${FFTW_ROOT_DIR}" CACHE PATH "Prefix for FFTW installation." )

@@ -2,7 +2,6 @@
 
 module purge
 
-
 module load intel
 module load intelmpi
 module load boost

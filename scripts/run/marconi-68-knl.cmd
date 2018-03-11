@@ -6,7 +6,6 @@
 #SBATCH --output job.out
 #SBATCH --partition=knl_usr_prod
 
-
 module purge
 
 module load env-knl
@@ -15,6 +14,4 @@ module load intelmpi
 module load boost
 module load mkl
 
-
 mpirun ./ALaDyn >> opic.txt 2>> epic.txt
-

@@ -5,10 +5,7 @@ module load cmake
 module load cray-fftw
 module load boost
 
-#rm -rf build
-mkdir -p build
-cd build
-
+mkdir -p build ; cd build
 cmake .. "-DBoost_NO_BOOST_CMAKE=ON" "-DFORCE_FFTW:BOOL=ON" "-DFFTW_USE_STATIC_LIBS:BOOL=ON" "-DFFTW_ROOT_DIR=/opt/cray/pe/fftw/3.3.6.2/x86_64/"
 cmake --build . --target install
 cd ..

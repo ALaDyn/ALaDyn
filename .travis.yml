@@ -56,4 +56,3 @@ install:
 
 script:
   - mkdir build && cd build && cmake .. && cmake --build . --target install
-

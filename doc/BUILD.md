@@ -14,9 +14,9 @@ cmake --build . --target install
 
 On Windows (*not* Cygwin) the second to last line should read `cmake -G "Ninja" "-DCMAKE_TOOLCHAIN_FILE=$env:WORKSPACE\vcpkg\scripts\buildsystems\vcpkg.cmake" ..`
 
-# Prerequisites to build the code
+## Prerequisites
 
-## Ubuntu
+### Ubuntu
 
 1) Open a Bash terminal and type the following commands
 
@@ -26,7 +26,7 @@ sudo apt-get dist-upgrade
 sudo apt-get install -y g++ gfortran cmake make git ninja-build libboost-all-dev libopenmpi-dev pkgconf libfftw3-dev
 ```
 
-## macOS
+### macOS
 
 1) If not already installed, install the XCode Command Line Tools, typing this command in a terminal:
 
@@ -43,7 +43,7 @@ brew upgrade
 brew install gcc cmake make git ninja boost open-mpi fftw
 ```
 
-## Windows (7+)
+### Windows (7+)
 
 1) Install Visual Studio 2015 Community (no PGI compiler is still compatible with VS 2017)
 2) Install PGI 17.10 Community Edition
@@ -102,7 +102,7 @@ PS Code\vcpkg>    rmdir .\buildtrees\
 
 Pay attention to possible failures due to missing MS-MPI SDK installation. A message should be prompted to the shell describing how to fix it.
 
-### Upgrade software
+#### Upgrade software
 
 1) To update software installed with Chocolatey, open a Powershell with Administrator privileges and type
 
@@ -121,7 +121,7 @@ PS Code>          .\vcpkg update
 PS Code>          .\vcpkg upgrade --no-dry-run
 ```
 
-## Cygwin
+### Cygwin
 
 1) If not already installed, please install chocolatey using the [official guide](http://chocolatey.org)
 2) Open a Powershell with Administrator privileges and type

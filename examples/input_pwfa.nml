@@ -1,10 +1,11 @@
+
 &GRID
-  nx = 456
-  ny = 288
-  nz = 288
-  ny_targ =256
-  k0 = 1.0
-  yx_rat = 0.4
+  nx      = 456,
+  ny      = 288,
+  nz      = 288,
+  ny_targ = 256,
+  k0      = 1.0,
+  yx_rat  = 0.4,
 /
 
 &SIMULATION
@@ -14,57 +15,57 @@
   iform       = 0,
   model_id    = 5,
   dmodel_id   = 1,
-  ibx         = 0, !BC - 0:open - 1:riflessivo - 2:periodico
-  iby         = 0, !BC
-  ibz         = 0, !BC
+  ibx         = 0,
+  iby         = 0,
+  ibz         = 0,
   ibeam       = 0,
 /
 
 &TARGET_DESCRIPTION
-  nsp         = 1,
-  nsb         = 1,
-  ionz_lev    = 0,
-  ionz_model  = 1,
-  ion_min(1)  = 1,
-  ion_min(2)  = 1,
-  ion_min(3)  = 1,
-  ion_max(1)  = 18,
-  ion_max(2)  = 18,
-  ion_max(3)  = 18,
+  nsp              = 1,
+  nsb              = 1,
+  ionz_lev         = 0,
+  ionz_model       = 1,
+  ion_min(1)       = 1,
+  ion_min(2)       = 1,
+  ion_min(3)       = 1,
+  ion_max(1)       = 18,
+  ion_max(2)       = 18,
+  ion_max(3)       = 18,
   atomic_number(1) = 18, !numero atomico specie
   mass_number(1)   = 40.0,
   atomic_number(2) = 18,
   mass_number(2)   = 40.0,
   atomic_number(3) = 18,
   mass_number(3)   = 40.0,
-  t0_pl(1)    = 0.0001 !temperatura iniziale
-  t0_pl(2)    = 0.0
-  t0_pl(3)    = 0.0
-  t0_pl(4)    = 0.0
-  np_per_xc(1) = 1,
-  np_per_xc(2) = 2
-  np_per_xc(3) = 2,
-  np_per_xc(4) = 2,
-  np_per_xc(5) = 6,
-  np_per_xc(6) = 6,
-  np_per_yc(1) = 2,
-  np_per_yc(2) = 2,
-  np_per_yc(3) = 2,
-  np_per_yc(4) = 2,
-  np_per_yc(5) = 6,
-  np_per_yc(6) = 6,
-  lpx(1)      = 0.0,
-  lpx(2)      = 0.0,
-  lpx(3)      = 20000.,
-  lpx(4)      = 0.0,
-  lpx(5)      = 0.0,
-  lpx(6)      = 0.0,
-  lpx(7)      = -340.,
-  lpy(1)      = 0.2,      !wire and interwires sizes
-  lpy(2)      = 0.1,
-  n_over_nc   = 0.01       !in units 1e+18 for bunches
-  n1_over_n   = 0.,
-  n2_over_n   = 0.,
+  t0_pl(1)         = 0.0001 !temperatura iniziale
+  t0_pl(2)         = 0.0
+  t0_pl(3)         = 0.0
+  t0_pl(4)         = 0.0
+  np_per_xc(1)     = 1,
+  np_per_xc(2)     = 2
+  np_per_xc(3)     = 2,
+  np_per_xc(4)     = 2,
+  np_per_xc(5)     = 6,
+  np_per_xc(6)     = 6,
+  np_per_yc(1)     = 2,
+  np_per_yc(2)     = 2,
+  np_per_yc(3)     = 2,
+  np_per_yc(4)     = 2,
+  np_per_yc(5)     = 6,
+  np_per_yc(6)     = 6,
+  lpx(1)           = 0.0,
+  lpx(2)           = 0.0,
+  lpx(3)           = 20000.,
+  lpx(4)           = 0.0,
+  lpx(5)           = 0.0,
+  lpx(6)           = 0.0,
+  lpx(7)           = -340.,
+  lpy(1)           = 0.2,
+  lpy(2)           = 0.1,
+  n_over_nc        = 0.01,
+  n1_over_n        = 0.,
+  n2_over_n        = 0.,
 /
 
 &LASER
@@ -84,25 +85,25 @@
 /
 
 &OUTPUT
-  nouts     = 1,
-  iene      = 2,
-  nvout     = 6,
-  nden      = 1,
-  npout     = 1,
-  nbout     = 1,
-  jump      = 1,
-  pjump     = 2,
-  xp0_out   = 20.0,
-  xp1_out   = 60.0,
-  yp_out    = 5.,
-  tmax      = 2000.0,
-  cfl       = 0.85,
-  new_sim   = 0,
-  id_new    = 0,
-  dump      = 0,
-  L_force_singlefile_output =.TRUE.,
-  time_interval_dumps = 90000.,
-  L_print_J_on_grid = .true.,
+  nouts                     = 1,
+  iene                      = 2,
+  nvout                     = 6,
+  nden                      = 1,
+  npout                     = 1,
+  nbout                     = 1,
+  jump                      = 1,
+  pjump                     = 2,
+  xp0_out                   = 20.0,
+  xp1_out                   = 60.0,
+  yp_out                    = 5.,
+  tmax                      = 2000.0,
+  cfl                       = 0.85,
+  new_sim                   = 0,
+  id_new                    = 0,
+  dump                      = 0,
+  L_force_singlefile_output = .true.,
+  time_interval_dumps       = 90000.,
+  L_print_J_on_grid         = .true.,
   L_first_output_on_restart = .false.,
 /
 
@@ -114,9 +115,9 @@
 
 &NUMBER_BUNCHES
   n_bunches                = 1,
-  L_particles              = .F.,
-  L_intdiagnostics_pwfa    = .T.,
-  L_intdiagnostics_classic = .F.,
+  L_particles              = .false.,
+  L_intdiagnostics_pwfa    = .true.,
+  L_intdiagnostics_classic = .false.,
 /
 
 &BUNCH1
@@ -146,7 +147,7 @@
 /
 
 &TWISS
-  L_TWISS        = .T.,
+  L_TWISS        = .true.,
   alpha_twiss(1) = 0.09375,
   alpha_twiss(2) = 0.20794,
   beta_twiss(1)  = 5.3802083,
