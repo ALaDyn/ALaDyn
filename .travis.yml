@@ -10,6 +10,7 @@ compiler:
 addons:
   apt:
     packages:
+    - gfortran
     - libopenmpi-dev
     - libboost-all-dev
     - libfftw3-dev
