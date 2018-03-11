@@ -35,11 +35,11 @@
 
  implicit none
 
- integer :: last_iter,ngout
- logical :: Diag
+ integer  :: last_iter,ngout
+ logical  :: Diag
  real(dp) :: tdia,dtdia,tout,dtout,tstart,mem_max_addr
  real(dp) :: dt_loc
- integer :: t_ind,ic,tk_ind
+ integer  :: t_ind,ic,tk_ind
 
  mem_psize_max=0.0
  mem_max_addr=0.0
@@ -109,7 +109,7 @@
     call t_particles_collect(spec(1),tk_ind)
    endif
   endif
-  
+
   call timing
   call data_out(jump)
 
@@ -262,7 +262,7 @@
    enddo
    if(nden > 2)then
     call set_wake_potential
-    call den_energy_out(tnow,0,nden,1,jump)  !data on jc(1) for wake potential 
+    call den_energy_out(tnow,0,nden,1,jump)  !data on jc(1) for wake potential
    endif
   endif
   if(Hybrid)then
@@ -372,7 +372,7 @@
    enddo
    if(nden>2)then
     call set_wake_potential
-    call den_energy_out(tnow,0,nden,1,jump)  !data on jc(1) for wake potential 
+    call den_energy_out(tnow,0,nden,1,jump)  !data on jc(1) for wake potential
    endif
   endif
   if(nbout> 0)then
@@ -667,13 +667,13 @@
  write(10,*)'nsp_ionz-1,zlev,zmod,N_ge '
  write(10,'(4i8)')nsp_ionz-1,zlev,zmod,N_ge
  write(10,*)'  Max Ef       dt      Omega_au  '
- write(10,'(3E11.4)')Ef_max,dt_fs,omega_a    
+ write(10,'(3E11.4)')Ef_max,dt_fs,omega_a
  if(Two_color)then
  write(10,*)' a0        lam0,      om0,      a1,      lam1,         om1'
- write(10,'(6E11.4)')a0,lam0,oml,a1,lam1,om1   
+ write(10,'(6E11.4)')a0,lam0,oml,a1,lam1,om1
  else
  write(10,*)' a0        lam0,      om0'
- write(10,'(6E11.4)')a0,lam0,oml   
+ write(10,'(6E11.4)')a0,lam0,oml
  endif
  do ic=1,nsp_ionz-1
   write(10,*)' z0,     zmax'

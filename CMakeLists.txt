@@ -131,7 +131,6 @@ add_executable (ALaDyn
   src/pwfa_output_addons.f90
 )
 
-#add_library(ALaCarte STATIC ${ALaCarte_SOURCES})
 add_library(cpp_folder_tree STATIC src/cpp_folder_tree.cpp)
 add_library(find_last_addr STATIC src/find_last_addr.cpp)
 add_library(enable_gdb_attach STATIC src/enable_gdb_attach.cpp)

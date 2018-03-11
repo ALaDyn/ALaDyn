@@ -4,25 +4,18 @@ os:
   - linux
   - osx
 
-compiler: 
+compiler:
   - gcc
 
 addons:
   apt:
-    sources:
-    - ubuntu-toolchain-r-test
-    - sourceline: 'ppa:boost-latest/ppa'
     packages:
-    - gfortran
-    - gcc
-    - g++
     - libopenmpi-dev
     - libboost-all-dev
     - libfftw3-dev
-    - cmake
 
 before_install:
-  # OSX Setup 
+  # OSX Setup
   - if [[ "$TRAVIS_OS_NAME" == "osx"   ]]; then brew update                                                                               ;fi
   - if [[ "$TRAVIS_OS_NAME" == "osx"   ]]; then brew cask uninstall oclint                                                                ;fi
   - if [[ "$TRAVIS_OS_NAME" == "osx"   ]]; then brew install gcc                                                                          ;fi
@@ -37,8 +30,8 @@ install:
   - if [[ "$TRAVIS_OS_NAME" == "osx"   ]]; then export CXX=/usr/local/bin/g++-7                                                           ;fi
   - if [[ "$TRAVIS_OS_NAME" == "osx"   ]]; then export CMAKE_Fortran_COMPILER=$FC                                                         ;fi
   - if [[ "$TRAVIS_OS_NAME" == "osx"   ]]; then export CMAKE_C_COMPILER=$CC                                                               ;fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx"   ]]; then export CMAKE_CXX_COMPILER=$CXX                                                            ;fi 
-  - if [[ "$TRAVIS_OS_NAME" == "osx"   ]]; then export CMAKE_LINKER=clang++                                                               ;fi 
+  - if [[ "$TRAVIS_OS_NAME" == "osx"   ]]; then export CMAKE_CXX_COMPILER=$CXX                                                            ;fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx"   ]]; then export CMAKE_LINKER=clang++                                                               ;fi
   - if [[ "$TRAVIS_OS_NAME" == "osx"   ]]; then export OMPI_MPICXX=$CXX                                                                   ;fi
   - if [[ "$TRAVIS_OS_NAME" == "osx"   ]]; then export OMPI_CXX=$CXX                                                                      ;fi
   - if [[ "$TRAVIS_OS_NAME" == "osx"   ]]; then export OMPI_MPICC=$CC                                                                     ;fi
@@ -48,7 +41,7 @@ install:
   - if [[ "$TRAVIS_OS_NAME" == "osx"   ]]; then export OMPI_MPIF77=$FC                                                                    ;fi
   - if [[ "$TRAVIS_OS_NAME" == "osx"   ]]; then export OMPI_F77=$FC                                                                       ;fi
 
-  # Linux Setup 
+  # Linux Setup
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export CXX="/usr/bin/g++"                                                                 ;fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export CC="/usr/bin/gcc"                                                                  ;fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export FC="/usr/bin/gfortran"                                                             ;fi

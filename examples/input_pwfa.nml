@@ -1,158 +1,154 @@
 &GRID
-	nx = 456
-	ny = 288
-	nz = 288
-	ny_targ =256
-	k0 = 1.0
-	yx_rat = 0.4
+  nx = 456
+  ny = 288
+  nz = 288
+  ny_targ =256
+  k0 = 1.0
+  yx_rat = 0.4
 /
 
 &SIMULATION
-	LPf_ord     = 2,
-	der_ord     = 2,
-	str_flag    = 0,
-	iform       = 0,
-	model_id    = 5,
-	dmodel_id   = 1,
-	ibx         = 0, !BC - 0:open - 1:riflessivo - 2:periodico
-	iby         = 0, !BC
-	ibz         = 0, !BC
-	ibeam       = 0,
+  LPf_ord     = 2,
+  der_ord     = 2,
+  str_flag    = 0,
+  iform       = 0,
+  model_id    = 5,
+  dmodel_id   = 1,
+  ibx         = 0, !BC - 0:open - 1:riflessivo - 2:periodico
+  iby         = 0, !BC
+  ibz         = 0, !BC
+  ibeam       = 0,
 /
 
 &TARGET_DESCRIPTION
-	nsp         = 1,
-	nsb         = 1,
-	ionz_lev    = 0,
-	ionz_model  = 1,
-	ion_min(1)  = 1,
-	ion_min(2)  = 1,
-	ion_min(3)  = 1,
-	ion_max(1)  = 18,
-        ion_max(2)  = 18,
-        ion_max(3)  = 18,
-	atomic_number(1) = 18, !numero atomico specie
-	mass_number(1)   = 40.0,
-	atomic_number(2) = 18,
-	mass_number(2)   = 40.0,
-	atomic_number(3) = 18,
-	mass_number(3)   = 40.0,
-	t0_pl(1)    = 0.0001 !temperatura iniziale
-	t0_pl(2)    = 0.0
-	t0_pl(3)    = 0.0
-	t0_pl(4)    = 0.0
-	np_per_xc(1) = 1,
-	np_per_xc(2) = 2
-	np_per_xc(3) = 2,
-	np_per_xc(4) = 2,
-	np_per_xc(5) = 6,
-	np_per_xc(6) = 6,
-	np_per_yc(1) = 2,
-	np_per_yc(2) = 2,
-	np_per_yc(3) = 2,
-	np_per_yc(4) = 2,
-	np_per_yc(5) = 6,
-	np_per_yc(6) = 6,
-	lpx(1)      = 0.0,
-	lpx(2)      = 0.0,
-	lpx(3)      = 20000.,
-	lpx(4)      = 0.0,
-	lpx(5)      = 0.0,
-	lpx(6)      = 0.0,
-	lpx(7)      = -340.,
-	lpy(1)      = 0.2,      !wire and interwires sizes
-	lpy(2)      = 0.1,
-	n_over_nc   = 0.01       !in units 1e+18 for bunches
-	n1_over_n   = 0.,
-	n2_over_n   = 0.,
+  nsp         = 1,
+  nsb         = 1,
+  ionz_lev    = 0,
+  ionz_model  = 1,
+  ion_min(1)  = 1,
+  ion_min(2)  = 1,
+  ion_min(3)  = 1,
+  ion_max(1)  = 18,
+  ion_max(2)  = 18,
+  ion_max(3)  = 18,
+  atomic_number(1) = 18, !numero atomico specie
+  mass_number(1)   = 40.0,
+  atomic_number(2) = 18,
+  mass_number(2)   = 40.0,
+  atomic_number(3) = 18,
+  mass_number(3)   = 40.0,
+  t0_pl(1)    = 0.0001 !temperatura iniziale
+  t0_pl(2)    = 0.0
+  t0_pl(3)    = 0.0
+  t0_pl(4)    = 0.0
+  np_per_xc(1) = 1,
+  np_per_xc(2) = 2
+  np_per_xc(3) = 2,
+  np_per_xc(4) = 2,
+  np_per_xc(5) = 6,
+  np_per_xc(6) = 6,
+  np_per_yc(1) = 2,
+  np_per_yc(2) = 2,
+  np_per_yc(3) = 2,
+  np_per_yc(4) = 2,
+  np_per_yc(5) = 6,
+  np_per_yc(6) = 6,
+  lpx(1)      = 0.0,
+  lpx(2)      = 0.0,
+  lpx(3)      = 20000.,
+  lpx(4)      = 0.0,
+  lpx(5)      = 0.0,
+  lpx(6)      = 0.0,
+  lpx(7)      = -340.,
+  lpy(1)      = 0.2,      !wire and interwires sizes
+  lpy(2)      = 0.1,
+  n_over_nc   = 0.01       !in units 1e+18 for bunches
+  n1_over_n   = 0.,
+  n2_over_n   = 0.,
 /
 
 &LASER
-	t0_lp       = 0.,
-	xc_lp       = 16.,
-	w0_x        = 20.6,
-	w0_y        = 10.,
-	a0          = 1.0,
-	lam0        = 0.8,
+  t0_lp       = 0.,
+  xc_lp       = 16.,
+  w0_x        = 20.6,
+  w0_y        = 10.,
+  a0          = 1.0,
+  lam0        = 0.8,
 /
 
 &MOVING_WINDOW
-	w_sh        = 10,
-	wi_time     = 0.,
-	wf_time     = 9000000.,
-	w_speed     = 1.0,
+  w_sh        = 10,
+  wi_time     = 0.,
+  wf_time     = 9000000.,
+  w_speed     = 1.0,
 /
 
 &OUTPUT
-	nouts     = 1,
-	iene      = 2,
-	nvout     = 6,
-	nden      = 1,
-	npout     = 1,
-	nbout     = 1,
-	jump      = 1,
-	pjump     = 2,
-	xp0_out   = 20.0,
-	xp1_out   = 60.0,
-	yp_out    = 5.,
-	tmax      = 2000.0,
-	cfl       = 0.85,
-	new_sim   = 0,
-	id_new    = 0,
-	dump      = 0,
-	L_force_singlefile_output =.TRUE.,
-	time_interval_dumps = 90000.,
-	L_print_J_on_grid = .true.,
-	L_first_output_on_restart = .false.,
+  nouts     = 1,
+  iene      = 2,
+  nvout     = 6,
+  nden      = 1,
+  npout     = 1,
+  nbout     = 1,
+  jump      = 1,
+  pjump     = 2,
+  xp0_out   = 20.0,
+  xp1_out   = 60.0,
+  yp_out    = 5.,
+  tmax      = 2000.0,
+  cfl       = 0.85,
+  new_sim   = 0,
+  id_new    = 0,
+  dump      = 0,
+  L_force_singlefile_output =.TRUE.,
+  time_interval_dumps = 90000.,
+  L_print_J_on_grid = .true.,
+  L_first_output_on_restart = .false.,
 /
 
 &MPIPARAMS
-	nprocx    = 1,
-	nprocy    = 12,
-	nprocz    = 12,
+  nprocx    = 1,
+  nprocy    = 12,
+  nprocz    = 12,
 /
-
-
-
 
 &NUMBER_BUNCHES
-	n_bunches=1,
-	L_particles=.F.,
-	L_intdiagnostics_pwfa=.T.,
-	L_intdiagnostics_classic=.F.,
+  n_bunches                = 1,
+  L_particles              = .F.,
+  L_intdiagnostics_pwfa    = .T.,
+  L_intdiagnostics_classic = .F.,
 /
 
-
 &BUNCH1
-      bunch_type_1 = 1,
-      rho_b_1 = 9.95,
-      gamma_1 = 200.,
-      xb_1    = 296.,
-      sx_1    = 50.,
-      sy_1    = 4.0,
-      epsy_1  = 3.0,
-      epsz_1  = 3.0,
-      dg_1    = 0.1,
-      np_1    = 1500000,
+  bunch_type_1 = 1,
+  rho_b_1      = 9.95,
+  gamma_1      = 200.,
+  xb_1         = 296.,
+  sx_1         = 50.,
+  sy_1         = 4.0,
+  epsy_1       = 3.0,
+  epsz_1       = 3.0,
+  dg_1         = 0.1,
+  np_1         = 1500000,
 /
 
 &BUNCH2
-      bunch_type_2 = 1,
-      rho_b_2 = 50.0,
-      gamma_2 = 200.,
-      xb_2    = 129.,
-      sx_2    = 10.,
-      sy_2    = 2.30,
-      epsy_2  = 1.0,
-      epsz_2  = 1.0,
-      dg_2    = 0.1,
-      np_2    = 800000,
+  bunch_type_2 = 1,
+  rho_b_2      = 50.0,
+  gamma_2      = 200.,
+  xb_2         = 129.,
+  sx_2         = 10.,
+  sy_2         = 2.30,
+  epsy_2       = 1.0,
+  epsz_2       = 1.0,
+  dg_2         = 0.1,
+  np_2         = 800000,
 /
 
 &TWISS
-      L_TWISS=.T.,
-      alpha_twiss(1)=0.09375,
-      alpha_twiss(2)=0.20794,
-      beta_twiss(1)=5.3802083,
-      beta_twiss(2)=5.5187334593,
+  L_TWISS        = .T.,
+  alpha_twiss(1) = 0.09375,
+  alpha_twiss(2) = 0.20794,
+  beta_twiss(1)  = 5.3802083,
+  beta_twiss(2)  = 5.5187334593,
 /

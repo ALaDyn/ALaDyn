@@ -1,3 +1,6 @@
+# Distributed under the OSI-approved BSD 3-Clause License.
+# Copyright Stefano Sinigardi
+
 # Find the MKL includes
 #
 #   MKL_FOUND            : True if mkl is found
