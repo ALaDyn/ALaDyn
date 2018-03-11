@@ -19,7 +19,8 @@ Copyright on the code is by the ALaDyn Collaboration.
 
 `ALaDyn` is built using CMake.
 
-We support building ALaDyn on almost all sane systems, a guide will be published soon, in the meantime the appveyor and travis recipes should be clear enough on how to build the code on Windows (cygwin or WSL, only gcc toolchain), Mac (only gcc toolchain) and Linux (only gcc toolchain).
+We support building ALaDyn on almost all sane systems. [Here](doc/BUILD.md) you can find a guide to build the code on many different OS configurations, but only using the `gcc` toolchain.  
+appveyor and travis recipes can also help understanding how to build the code.
 
 ## Support channels
 
