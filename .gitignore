@@ -53,3 +53,4 @@ build.*
 .project
 *.nml
 index.md
+fftw*/

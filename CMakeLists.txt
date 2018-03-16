@@ -12,9 +12,9 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 set(FORCE_FFTW OFF CACHE BOOL "Forcing FFTW libraries")
 
 if (FORCE_FFTW)
-  message(STATUS "Forcing FFTW, avoid MKL even if found")
+  message(STATUS "ALaDyn: Forcing FFTW, avoid MKL even if found")
 else()
-  message(STATUS "MKL is preferred to FFTW, if found")
+  message(STATUS "ALaDyn: MKL is preferred to FFTW, if found")
 endif()
 
 # set this variable to true to force static linking (if supported by the compiler)
@@ -23,16 +23,27 @@ set(FORCE_STATIC_LINK FALSE CACHE BOOL "Forcing static linking to libraries")
 # make sure that the default is a RELEASE
 set(default_build_type "Release")
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
-  message(STATUS "Setting build type to '${default_build_type}' as none was specified.")
+  message(STATUS "ALaDyn: Setting build type to '${default_build_type}' as none was specified.")
   set(CMAKE_BUILD_TYPE "${default_build_type}" CACHE
       STRING "Choose the type of build." FORCE)
   set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS
     "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
 endif()
 
+set(USING_PGI_COMPILER FALSE)
+set(USING_GNU_COMPILER FALSE)
+set(USING_INTEL_COMPILER FALSE)
 
 get_filename_component (Fortran_COMPILER_NAME ${CMAKE_Fortran_COMPILER} NAME)
-if (Fortran_COMPILER_NAME MATCHES "gfortran*")
+if (Fortran_COMPILER_NAME MATCHES "pgf*")
+  message(STATUS "ALaDyn: PGI Fortran support is experimental")
+  set(USING_PGI_COMPILER TRUE)
+  string(APPEND CMAKE_Fortran_FLAGS_RELEASE " -r8 -O3")
+  string(APPEND CMAKE_Fortran_FLAGS_DEBUG   " -r8 -O0 -g")
+#  string(APPEND CMAKE_Fortran_LINK_FLAGS " -Bstatic_pgi")
+elseif (Fortran_COMPILER_NAME MATCHES "gfor*")
+  message(STATUS "ALaDyn: Using GCC")
+  set(USING_GNU_COMPILER TRUE)
   string(APPEND CMAKE_CXX_COMPILE_FLAGS " -Wall")
   string(APPEND CMAKE_Fortran_FLAGS_RELEASE " -fdefault-real-8")
   string(APPEND CMAKE_Fortran_FLAGS_DEBUG   " -fdefault-real-8 -Wall -Wextra")
@@ -44,7 +55,8 @@ if (Fortran_COMPILER_NAME MATCHES "gfortran*")
     string(APPEND CMAKE_Fortran_FLAGS_RELEASE " -funroll-all-loops -O3")
     string(APPEND CMAKE_Fortran_FLAGS_DEBUG   " -fbacktrace -fbounds-check -Og -g")
   endif()
-elseif (Fortran_COMPILER_NAME MATCHES "ifort*" OR Fortran_COMPILER_NAME MATCHES "ftn*")
+elseif (Fortran_COMPILER_NAME MATCHES "ifor*" OR Fortran_COMPILER_NAME MATCHES "ftn*")
+  message(STATUS "ALaDyn: Using Intel Compiler")
   set(USING_INTEL_COMPILER TRUE)
   string(APPEND CMAKE_CXX_COMPILE_FLAGS " -diag-enable warn")
   string(APPEND CMAKE_Fortran_FLAGS_RELEASE " -real-size 64")
@@ -68,10 +80,10 @@ elseif (Fortran_COMPILER_NAME MATCHES "ifort*" OR Fortran_COMPILER_NAME MATCHES 
   endif()
 else ()
   if (MARCONI_KNL)
-    error ("Unsupported compiler for KNL")
+    error("ALaDyn: Unsupported compiler for KNL")
   else()
-    message ("CMAKE_Fortran_COMPILER found but unsupported")
-    message ("Let's try using it...")
+    message(STATUS "ALaDyn: Compiler ${CMAKE_Fortran_COMPILER} found, unsupported")
+    message(STATUS "ALaDyn: Let's try using it...")
   endif ()
 endif ()
 
@@ -79,7 +91,9 @@ if(FORCE_STATIC_LINK)
   string(APPEND CMAKE_Fortran_LINK_FLAGS " -static")
 endif()
 
-find_package(Boost COMPONENTS system filesystem REQUIRED)
+if(NOT USING_PGI_COMPILER)
+  find_package(Boost COMPONENTS system filesystem REQUIRED)
+endif()
 find_package(MPI REQUIRED)
 if (USING_INTEL_COMPILER AND NOT FORCE_FFTW)
   find_package(MKL REQUIRED)
@@ -142,11 +156,9 @@ target_link_libraries(ALaDyn
   ${MPI_Fortran_LIBRARIES}
   ${MPI_LIBRARIES}
   ${Boost_LIBRARIES}
+  ${MKL_LIBRARIES}
+  ${FFTW_LIBRARY}
 )
-
-if (NOT USING_INTEL_COMPILER OR FORCE_FFTW)
-  target_link_libraries(ALaDyn ${FFTW_LIBRARY})
-endif()
 
 set_target_properties(ALaDyn PROPERTIES LINKER_LANGUAGE Fortran)
 

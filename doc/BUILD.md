@@ -1,18 +1,21 @@
 # How to build the code
 
 1) Follow your system prerequisites (below)
-2) Open your terminal and type these commands (they should be completely system independent)
+2) Clone ALaDyn from this repository, or download a stable release 
 
 ```bash
 git clone https://github.com/ALaDyn/ALaDyn.git
 cd ALaDyn
-mkdir build
-cd build
-cmake ..
-cmake --build . --target install
 ```
 
-On Windows (*not* Cygwin) the second to last line should read `cmake -G "Ninja" "-DCMAKE_TOOLCHAIN_FILE=$env:WORKSPACE\vcpkg\scripts\buildsystems\vcpkg.cmake" ..`
+3) Use the best script depending to your configuration. There are many examples inside `scripts/build`. For example:
+
+```bash
+./scripts/build/cmake.generic
+```
+
+Note that some scripts only work in a specific environment or shell.  
+We support running `ALaDyn` only on x86-64 CPUs, with 64 bit operating systems.
 
 ## Prerequisites
 
@@ -23,7 +26,7 @@ On Windows (*not* Cygwin) the second to last line should read `cmake -G "Ninja" 
 ```bash
 sudo apt-get update
 sudo apt-get dist-upgrade
-sudo apt-get install -y g++ gfortran cmake make git ninja-build libboost-all-dev libopenmpi-dev pkgconf libfftw3-dev
+sudo apt-get install -y g++ gfortran cmake make git ninja-build libboost-all-dev libopenmpi-dev pkgconf libfftw3-dev pkg-config
 ```
 
 ### macOS
@@ -40,85 +43,100 @@ xcode-select --install
 ```bash
 brew update
 brew upgrade
-brew install gcc cmake make git ninja boost open-mpi fftw
+brew install gcc cmake make git ninja boost open-mpi fftw pkg-config
 ```
 
-### Windows (7+)
+### Windows (7+) - PGI Compiler
 
-1) Install Visual Studio 2015 Community (no PGI compiler is still compatible with VS 2017)
-2) Install PGI 17.10 Community Edition
-3) If not already installed, please install chocolatey using the [official guide](http://chocolatey.org)
-4) If you are not sure about having them updated, or even installed, please install `git`, `cmake` and an updated `Powershell`. To do so, open your Powershell with Administrator privileges and type
+1) Install Visual Studio 2015 Community (no PGI compiler is still compatible with VS 2017) from the [official website](https://www.visualstudio.com/it/vs/older-downloads/)
+2) Install MS-MPI 9.0 from the [official website](https://www.microsoft.com/en-us/download/details.aspx?id=56511)
+3) Install PGI 17.10 Community Edition from the [official website](https://www.pgroup.com/products/community.htm), being careful about manually adding all the fortran compilers during installation and avoiding installing MS-MPI from the PGI installer (an older and broken version would be downloaded)
+4) Install Intel MKL from the [official website](https://software.seek.intel.com/performance-libraries) [unsupported on compilers different from Intel]
+5) Open your Powershell with Administrator privileges, type the following command and confirm it:
 
 ```PowerShell
-PS \>             cinst -y git cmake powershell ninja
+PS \>                 Set-ExecutionPolicy unrestricted
 ```
 
-5) Restart the PC if required by chocolatey after the latest step
-6) Open your Powershell with Administrator privileges, type the following command and confirm it:
+6) If not already installed, please install chocolatey using the [official guide](http://chocolatey.org)
+7) If you are not sure about having them updated, or even installed, please install `git`, `cmake` and an updated `Powershell`. To do so, open your Powershell with Administrator privileges and type
 
 ```PowerShell
-PS \>             Set-ExecutionPolicy unrestricted
+PS \>                 cinst -y git cmake powershell ninja
 ```
 
-7) Define a work folder, which we will call WORKSPACE in this tutorial: this could be a "Code" folder in our home, a "cpp" folder on our desktop, whatever you want. Create it if you don't already have, using your favourite method (mkdir in Powershell, or from the graphical interface in explorer). We will now define an environment variable to tell the system where our folder is. Please note down its full path. Open a Powershell (as a standard user) and type
+8) Restart the PC if required by chocolatey after the latest step
+9) Define a work folder, which we will call WORKSPACE in this tutorial: this could be a "Code" folder in our home, a "cpp" folder on our desktop, whatever you want. Create it if you don't already have, using your favourite method (mkdir in Powershell, or from the graphical interface in explorer). We will now define an environment variable to tell the system where our folder is. Please note down its full path. Open a Powershell (as a standard user) and type
 
 ```PowerShell
-PS \>             rundll32 sysdm.cpl,EditEnvironmentVariables
+PS \>                 rundll32 sysdm.cpl,EditEnvironmentVariables
 ```
 
-8) In the upper part of the window that pops-up, we have to create three new environment variables: one with name `WORKSPACE` and value the full path noted down before and one with name `VCPKG_ROOT` and value `%WORKSPACE%\vcpkg`.
+10) In the upper part of the window that pops-up, we have to create two new environment variables: one with name `WORKSPACE` and value the full path noted down before and one with name `VCPKG_ROOT` and value `%WORKSPACE%\vcpkg`.
 If it not already in the `PATH` (this is possible only if you did it before), we also need to modify the "Path" variable adding the following string (on Windows 10 you need to add a new line to insert it, on Windows Windows 7/8 it is necessary to append it using a `;` as a separator between other records):
 
 ```cmd
-%PROGRAMFILES%\CMake\bin
+                      %PROGRAMFILES%\CMake\bin
 ```
 
-9) If `vcpkg` is not installed, please follow the next procedure, otherwise please jump to #10
+11) If `vcpkg` is not installed, please follow the next procedure, otherwise please jump to #13
 
 ```PowerShell
-PS \>             cd $env:WORKSPACE
-PS Code>          git clone https://github.com/Microsoft/vcpkg.git
-PS Code>          cd vcpkg
-PS Code\vcpkg>    .\bootstrap-vcpkg.bat
+PS \>                 cd $env:WORKSPACE
+PS Code>              git clone https://github.com/Microsoft/vcpkg.git
+PS Code>              cd vcpkg
+PS Code\vcpkg>        .\bootstrap-vcpkg.bat
 ```
 
-10) Open a Powershell with Administrator privileges and type
+12) Open a Powershell with Administrator privileges and type
 
 ```PowerShell
-PS \>             cd $env:WORKSPACE
-PS Code>          cd vcpkg
-PS Code\vcpkg>    .\vcpkg integrate install
+PS \>                 cd $env:WORKSPACE
+PS Code>              cd vcpkg
+PS Code\vcpkg>        .\vcpkg integrate install
 ```
 
-11) Open a Powershell (as a standard user) and type (the last command requires a confirmation and is used to clean up unnecessary files)
+13) Open a Powershell (as a standard user) and type (the last command requires a confirmation and is used to clean up unnecessary files)
 
 ```PowerShell
-PS \>             cd $env:WORKSPACE
-PS Code>          cd vcpkg
-PS Code\vcpkg>    .\vcpkg install boost:x64-windows-static fftw:x64-windows-static msmpi:x64-windows-static
-PS Code\vcpkg>    rmdir .\buildtrees\
+PS \>                 cd $env:WORKSPACE
+PS Code>              cd vcpkg
+PS Code\vcpkg>        .\vcpkg install boost:x64-windows-static fftw3:x64-windows-static msmpi:x64-windows-static
+PS Code\vcpkg>        rmdir .\buildtrees\
+PS Code\vcpkg>        cd $env:WORKSPACE
+PS Code>              git clone https://github.com/ALaDyn/ALaDyn
 ```
 
-Pay attention to possible failures due to missing MS-MPI SDK installation. A message should be prompted to the shell describing how to fix it.
+14) Download fftw3 (64 bit, look for file `fftw-3.3.5-dll64.zip`) from the [official website](http://fftw.org/install/windows.html) [the one just built with `vcpkg` is not enough because the Fortran headers have just been added to the CMake toolchain - check for the next release], then extract the archive and put all the extracted file in an `ALaDyn/fftw` subfolder - avoid nesting other subfolders.
+15) Open a `PGICE cmd shell` (as a standard user) and type
+
+```cmd
+CMD \>                cd %WORKSPACE%
+CMD Code>             cd ALaDyn\fftw
+CMD Code\ALaDyn\fftw> lib /machine:x64 /def:libfftw3-3.def
+CMD Code\ALaDyn\fftw> lib /machine:x64 /def:libfftw3f-3.def
+CMD Code\ALaDyn\fftw> lib /machine:x64 /def:libfftw3l-3.def
+```
+
+16) Open a `PGICE cmd shell` and build `ALaDyn` using the `scripts\build\cmake.win` bat script
 
 #### Upgrade software
 
 1) To update software installed with Chocolatey, open a Powershell with Administrator privileges and type
 
 ```PowerShell
-PS \>             cup all -y
+PS \>                 cup all -y
 ```
 
 2) To update libraries installed with vcpkg, open a Powershell (as a standard user), type these commands and follow on-screen instructions
 
 ```PowerShell
-PS \>             cd $env:WORKSPACE
-PS Code>          cd vcpkg
-PS Code>          git pull
-PS Code>          .\bootstrap-vcpkg.bat
-PS Code>          .\vcpkg update
-PS Code>          .\vcpkg upgrade --no-dry-run
+PS \>                 cd $env:WORKSPACE
+PS Code>              cd vcpkg
+PS Code>              git pull
+PS Code>              .\bootstrap-vcpkg.bat
+PS Code>              .\vcpkg update
+PS Code>              .\vcpkg upgrade --no-dry-run
 ```
 
 ### Cygwin
@@ -127,12 +145,13 @@ PS Code>          .\vcpkg upgrade --no-dry-run
 2) Open a Powershell with Administrator privileges and type
 
 ```PowerShell
-PS \>             cinst -y cygwin
+PS \>                 cinst -y cygwin
 ```
 
-3) Open a Powershell (as a standard user) and type (remove the `_x64` suffix in the second line if your operating system is 32 bit)
+3) Open a Powershell (as a standard user) and type
 
 ```PowerShell
-PS \>             Invoke-WebRequest https://cygwin.com/setup-x86_64.exe -OutFile $env:WORKSPACE\cygwin-setup.exe
-PS \>             .\cygwin-setup --quiet-mode --no-shortcuts --no-startmenu --no-desktop --upgrade-also --packages gcc-g++,gcc-gfortran,cmake,git,libboost-devel
+PS \>                 Invoke-WebRequest https://cygwin.com/setup-x86_64.exe -OutFile $env:WORKSPACE\cygwin-setup.exe
+PS \>                 cd $env:WORKSPACE
+PS Code>              .\cygwin-setup --quiet-mode --no-shortcuts --no-startmenu --no-desktop --upgrade-also --packages gcc-g++,libopenmpi-devel,gcc-fortran,cmake,fftw3,libfftw3-devel,libboost-devel,pkg-config
 ```

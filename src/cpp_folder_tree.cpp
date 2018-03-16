@@ -19,6 +19,7 @@
  *  along with ALaDyn.  If not, see <http://www.gnu.org/licenses/>.                                    *
  ******************************************************************************************************/
 
+#ifndef _WIN32
 #include <boost/filesystem.hpp>
 #include <cstring>
 
@@ -30,3 +31,8 @@ void create_folder_(char* folderName, size_t len)
   boost::filesystem::create_directories(fname);
 }
 }
+#else
+extern "C" {
+void create_folder_(char* folderName, size_t len) {}
+}
+#endif

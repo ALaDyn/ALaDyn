@@ -43,6 +43,8 @@
  integer :: i,nm
  real(dp) :: wk
 
+!!$PRAGMA C( DFFTW_PLAN_DFT_R2C_1D, DFFTW_PLAN_DFT_C2R_1D )
+
  select case(ind_ft)
  case(0)
   nm=max(n1,n2)
@@ -53,13 +55,13 @@
    sfhx(i)=sin(real(i-1,dp)*wk)
   end do
   w1=0.0
-  call dfftw_plan_dft_r2c_1d(plan1,n1,w1,w1,FFTW_ESTIMATE)
-  call dfftw_plan_dft_c2r_1d(iplan1,n1,w1,w1, FFTW_ESTIMATE)
+  call DFFTW_PLAN_DFT_R2C_1D(plan1,n1,w1,w1,FFTW_ESTIMATE)
+  call DFFTW_PLAN_DFT_C2R_1D(iplan1,n1,w1,w1, FFTW_ESTIMATE)
 
   allocate(w2(n2+2),cfhy(n2),sfhy(n2))
   w2=0.0
-  call dfftw_plan_dft_r2c_1d(plan2,n2,w2,w2,FFTW_ESTIMATE)
-  call dfftw_plan_dft_c2r_1d(iplan2,n2,w2,w2,FFTW_ESTIMATE)
+  call DFFTW_PLAN_DFT_R2C_1D(plan2,n2,w2,w2,FFTW_ESTIMATE)
+  call DFFTW_PLAN_DFT_C2R_1D(iplan2,n2,w2,w2,FFTW_ESTIMATE)
   wk=acos(-1.0)/real(n2,dp)
   do i=1,n2
    cfhy(i)=cos(real(i-1,dp)*wk)
@@ -67,8 +69,8 @@
   end do
    allocate(w3(n3+2),cfhz(n3),sfhz(n3))
    w3=0.0
-   call dfftw_plan_dft_r2c_1d(plan3,n3,w3,w3,FFTW_ESTIMATE)
-   call dfftw_plan_dft_c2r_1d(iplan3,n3,w3,w3,FFTW_ESTIMATE)
+   call DFFTW_PLAN_DFT_R2C_1D(plan3,n3,w3,w3,FFTW_ESTIMATE)
+   call DFFTW_PLAN_DFT_C2R_1D(iplan3,n3,w3,w3,FFTW_ESTIMATE)
    wk=acos(-1.0)/real(n3,dp)
    do i=1,n3
     cfhz(i)=cos(real(i-1,dp)*wk)
@@ -77,32 +79,32 @@
  case(1)
   allocate(w1(n1+2))
   w1=0.0
-  call dfftw_plan_dft_r2c_1d(plan1,n1,w1,w1,FFTW_ESTIMATE)
-  call dfftw_plan_dft_c2r_1d(iplan1,n1,w1,w1, FFTW_ESTIMATE)
+  call DFFTW_PLAN_DFT_R2C_1D(plan1,n1,w1,w1,FFTW_ESTIMATE)
+  call DFFTW_PLAN_DFT_C2R_1D(iplan1,n1,w1,w1, FFTW_ESTIMATE)
 
   allocate(w2(n2+2))
   w2=0.0
-  call dfftw_plan_dft_r2c_1d(plan2,n2,w2,w2,FFTW_ESTIMATE)
-  call dfftw_plan_dft_c2r_1d(iplan2,n2,w2,w2,FFTW_ESTIMATE)
+  call DFFTW_PLAN_DFT_R2C_1D(plan2,n2,w2,w2,FFTW_ESTIMATE)
+  call DFFTW_PLAN_DFT_C2R_1D(iplan2,n2,w2,w2,FFTW_ESTIMATE)
    allocate(w3(n3+2))
    w3=0.0
-   call dfftw_plan_dft_r2c_1d(plan3,n3,w3,w3,FFTW_ESTIMATE)
-   call dfftw_plan_dft_c2r_1d(iplan3,n3,w3,w3,FFTW_ESTIMATE)
+   call DFFTW_PLAN_DFT_R2C_1D(plan3,n3,w3,w3,FFTW_ESTIMATE)
+   call DFFTW_PLAN_DFT_C2R_1D(iplan3,n3,w3,w3,FFTW_ESTIMATE)
  case(2) !for sin/cos transforms
   allocate(w1(2*n1+2))
   w1=0.0
-  call dfftw_plan_dft_r2c_1d(plan1,2*n1,w1,w1,FFTW_ESTIMATE)
-  call dfftw_plan_dft_c2r_1d(iplan1,2*n1,w1,w1, FFTW_ESTIMATE)
+  call DFFTW_PLAN_DFT_R2C_1D(plan1,2*n1,w1,w1,FFTW_ESTIMATE)
+  call DFFTW_PLAN_DFT_C2R_1D(iplan1,2*n1,w1,w1, FFTW_ESTIMATE)
   if(n2>1)then
    allocate(w2(2*n2+2))
    w2=0.0
-   call dfftw_plan_dft_r2c_1d(plan2,2*n2,w2,w2,FFTW_ESTIMATE)
-   call dfftw_plan_dft_c2r_1d(iplan2,2*n2,w2,w2,FFTW_ESTIMATE)
+   call DFFTW_PLAN_DFT_R2C_1D(plan2,2*n2,w2,w2,FFTW_ESTIMATE)
+   call DFFTW_PLAN_DFT_C2R_1D(iplan2,2*n2,w2,w2,FFTW_ESTIMATE)
   endif
    allocate(w3(2*n3+2))
    w3=0.0
-   call dfftw_plan_dft_r2c_1d(plan3,2*n3,w3,w3,FFTW_ESTIMATE)
-   call dfftw_plan_dft_c2r_1d(iplan3,2*n3,w3,w3,FFTW_ESTIMATE)
+   call DFFTW_PLAN_DFT_R2C_1D(plan3,2*n3,w3,w3,FFTW_ESTIMATE)
+   call DFFTW_PLAN_DFT_C2R_1D(iplan3,2*n3,w3,w3,FFTW_ESTIMATE)
  end select
  end subroutine ftw_init
  !----------------------
@@ -123,6 +125,8 @@
  integer :: ii,ix,iy,iz,i1,i2,n1_tr,n2_tr
  real(dp) :: sc,wrr,wir,wri,wii
 
+!!$PRAGMA C( DFFTW_EXECUTE )
+
  !=============================
  !staggered (k_x,k_y,k_z)
  !===================
@@ -135,12 +139,12 @@
      do ix=1,n1
       w1(ix)=cfhx(ix)*w(ix,iy,iz)
      end do
-     call dfftw_execute(plan1)
+     call DFFTW_EXECUTE(plan1)
      w1_st(1:n1)=w1(1:n1)
      do ix=1,n1
       w1(ix)=sfhx(ix)*w(ix,iy,iz)
      end do
-     call dfftw_execute(plan1)
+     call DFFTW_EXECUTE(plan1)
      do ix=1,n1/2
       i2=2*ix
       i1=i2-1
@@ -156,7 +160,7 @@
      w(n1_tr+1:n1,iy,iz)=0.0
      w1(n1+1:n1+2)=0.0
      w1(1:n1)=w(1:n1,iy,iz)
-     call dfftw_execute(iplan1)
+     call DFFTW_EXECUTE(iplan1)
      w1_st(1:n1)=w1(1:n1)
      w1(1:n1+2)=0.0
      do ix=1,n1/2
@@ -165,7 +169,7 @@
       w1(i1)=-w(i2,iy,iz)
       w1(i2)=w(i1,iy,iz)
      end do
-     call dfftw_execute(iplan1)
+     call DFFTW_EXECUTE(iplan1)
      do ix=1,n1
       w(ix,iy,iz)=cfhx(ix)*w1_st(ix)+ &
        sfhx(ix)*w1(ix)
@@ -185,12 +189,12 @@
       do iy=1,n2
        w2(iy)=cfhy(iy)*w(ii,iy,iz)
       end do
-      call dfftw_execute(plan2)
+      call DFFTW_EXECUTE(plan2)
       do iy=1,n2
        cw(ii,iy)=sc*w2(iy)
        w2(iy)=sfhy(iy)*w(ii,iy,iz)
       end do
-      call dfftw_execute(plan2)
+      call DFFTW_EXECUTE(plan2)
       do iy=1,n2/2
        cw(ii,2*iy-1)=cw(ii,2*iy-1)+sc*w2(2*iy)
        cw(ii,2*iy)=cw(ii,2*iy)-sc*w2(2*iy-1)
@@ -235,7 +239,7 @@
       do iy=1,n2
        w2(iy)=cw(ii,iy)
       end do
-      call dfftw_execute(iplan2)
+      call DFFTW_EXECUTE(iplan2)
       do iy=1,n2
        w(ii,iy,iz)=cfhy(iy)*w2(iy)
       end do
@@ -244,7 +248,7 @@
        w2(2*iy-1)=-cw(ii,2*iy)
        w2(2*iy)=cw(ii,2*iy-1)
       end do
-      call dfftw_execute(iplan2)
+      call DFFTW_EXECUTE(iplan2)
       do iy=1,n2
        w(ii,iy,iz)=w(ii,iy,iz)+sfhy(iy)*w2(iy)
       end do
@@ -265,12 +269,12 @@
       do iz=1,n3
        w3(iz)=cfhz(iz)*w(ii,iy,iz)
       end do
-      call dfftw_execute(plan3)
+      call DFFTW_EXECUTE(plan3)
       do iz=1,n3
        cw(ii,iz)=sc*w3(iz)
        w3(iz)=sfhz(iz)*w(ii,iy,iz)
       end do
-      call dfftw_execute(plan3)
+      call DFFTW_EXECUTE(plan3)
       do iz=1,n3/2
        cw(ii,2*iz-1)=cw(ii,2*iz-1)+sc*w3(2*iz)
        cw(ii,2*iz)=cw(ii,2*iz)-sc*w3(2*iz-1)
@@ -316,7 +320,7 @@
       do iz=1,n3
        w3(iz)=cw(ii,iz)
       end do
-      call dfftw_execute(iplan3)
+      call DFFTW_EXECUTE(iplan3)
       do iz=1,n3
        w(ii,iy,iz)=cfhz(iz)*w3(iz)
       end do
@@ -325,7 +329,7 @@
        w3(2*iz-1)=-cw(ii,2*iz)
        w3(2*iz)=cw(ii,2*iz-1)
       end do
-      call dfftw_execute(iplan3)
+      call DFFTW_EXECUTE(iplan3)
       do iz=1,n3
        w(ii,iy,iz)=w(ii,iy,iz)+sfhz(iz)*w3(iz)
       end do
@@ -344,6 +348,8 @@
  integer :: ix,iy,iz,i1,i2,n1_tr,n2_tr
  real(dp) :: sc,wrr,wir,wri,wii
 
+!!$PRAGMA C( DFFTW_EXECUTE )
+
  select case(dir)
  case(1)
   if(is <0)then
@@ -351,7 +357,7 @@
    do iz=1,n3
     do iy=1,n2
      w1(1:n1)=w(1:n1,iy,iz)
-     call dfftw_execute(plan1)
+     call DFFTW_EXECUTE(plan1)
      w(1:n1,iy,iz)=sc*w1(1:n1)
     end do
    end do
@@ -361,7 +367,7 @@
     do iy=1,n2
      w1(n1+1:n1+2)=0.0
      w1(1:n1_tr)=w(1:n1_tr,iy,iz)
-     call dfftw_execute(iplan1)
+     call DFFTW_EXECUTE(iplan1)
      w(1:n1,iy,iz)=w1(1:n1)
     end do
    end do
@@ -377,12 +383,12 @@
      do iy=1,n2
       w2(iy)=w(i1,iy,iz)
      end do
-     call dfftw_execute(plan2)
+     call DFFTW_EXECUTE(plan2)
      do iy=1,n2
       cw(i1,iy)=sc*w2(iy)
       w2(iy)=w(i2,iy,iz)
      end do
-     call dfftw_execute(plan2)
+     call DFFTW_EXECUTE(plan2)
      do iy=1,n2
       cw(i2,iy)=sc*w2(iy)
      end do
@@ -420,7 +426,7 @@
       w2(2*iy-1)=0.5*(cw(i1,iy)+cw(i1,n2+2-iy))
       w2(2*iy)=0.5*(cw(i2,iy)-cw(i2,n2+2-iy))
      end do
-     call dfftw_execute(iplan2)
+     call DFFTW_EXECUTE(iplan2)
      do iy=1,n2
       w(i1,iy,iz)=w2(iy)
      end do
@@ -430,7 +436,7 @@
       w2(2*iy-1)=0.5*(cw(i2,iy)+cw(i2,n2+2-iy))
       w2(2*iy)=0.5*(cw(i1,n2+2-iy)-cw(i1,iy))
      end do
-     call dfftw_execute(iplan2)
+     call DFFTW_EXECUTE(iplan2)
      do iy=1,n2
       w(i2,iy,iz)=w2(iy)
      end do
@@ -449,12 +455,12 @@
      do iz=1,n3
       w3(iz)=w(i1,iy,iz)
      end do
-     call dfftw_execute(plan3)
+     call DFFTW_EXECUTE(plan3)
      do iz=1,n3
       cw(i1,iz)=sc*w3(iz)
       w3(iz)=w(i2,iy,iz)
      end do
-     call dfftw_execute(plan3)
+     call DFFTW_EXECUTE(plan3)
      do iz=1,n3
       cw(i2,iz)=sc*w3(iz)
      end do
@@ -499,7 +505,7 @@
       w3(2*iz-1)=0.5*(cw(i1,iz)+cw(i1,n3+2-iz))  !wrr
       w3(2*iz)=0.5*(cw(i2,iz)-cw(i2,n3+2-iz))    !wri
      end do
-     call dfftw_execute(iplan3)
+     call DFFTW_EXECUTE(iplan3)
      do iz=1,n3
       w(i1,iy,iz)=w3(iz)
      end do
@@ -509,7 +515,7 @@
       w3(2*iz-1)=0.5*(cw(i2,iz)+cw(i2,n3+2-iz)) !wir
       w3(2*iz)=0.5*(cw(i1,n3+2-iz)-cw(i1,iz))   !wii
      end do
-     call dfftw_execute(iplan3)
+     call DFFTW_EXECUTE(iplan3)
      do iz=1,n3
       w(i2,iy,iz)=w3(iz)
      end do
@@ -527,6 +533,8 @@
  real(dp) :: sc
  integer :: ndb
 
+!!$PRAGMA C( DFFTW_EXECUTE )
+
  ndb=2*n1
  sc=1.
  if(is <0)then
@@ -535,7 +543,7 @@
   do ix=n1+2,ndb
    w1(ix)=-w1(ndb+2-ix)
   end do
-  call dfftw_execute(plan1)
+  call DFFTW_EXECUTE(plan1)
   do ix=1,n1
    i2=2*ix
    w(ix)=sc*w1(i2)
@@ -546,7 +554,7 @@
    w1(ix)=w1(ndb+2-ix)
   end do
   w1(n1+1)=0.5*(w1(n1)+w1(n1+2))
-  call dfftw_execute(plan1)
+  call DFFTW_EXECUTE(plan1)
   do ix=1,n1
    i2=2*ix-1
    w(ix)=sc*w1(i2)
@@ -562,6 +570,8 @@
  real(dp) :: sc
  integer :: ndb
 
+!!$PRAGMA C( DFFTW_EXECUTE )
+
  select case(dir)
  case(1)
   ndb=2*n1
@@ -575,7 +585,7 @@
       do ix=n1+2,ndb
        w1(ix)=-w1(ndb+2-ix)
       end do
-      call dfftw_execute(plan1)
+      call DFFTW_EXECUTE(plan1)
       do ix=1,n1
        i2=2*ix
        w(ix,iy,iz)=sc*w1(i2)
@@ -590,7 +600,7 @@
        w1(ix)=w1(ndb+2-ix)
       end do
       w1(n1+1)=0.5*(w1(n1)+w1(n1+2))
-      call dfftw_execute(plan1)
+      call DFFTW_EXECUTE(plan1)
       do ix=1,n1
        i2=2*ix-1
        w(ix,iy,iz)=sc*w1(i2)
@@ -608,7 +618,7 @@
        i2=2*ix
        w1(i2)=w(ix,iy,iz)
       end do
-      call dfftw_execute(iplan1)
+      call DFFTW_EXECUTE(iplan1)
       w(1:n1,iy,iz)=w1(1:n1)
      end do
     end do
@@ -620,7 +630,7 @@
        i2=2*ix-1
        w1(i2)=w(ix,iy,iz)
       end do
-      call dfftw_execute(iplan1)
+      call DFFTW_EXECUTE(iplan1)
       w(1:n1,iy,iz)=w1(1:n1)
      end do
     end do
@@ -640,7 +650,7 @@
      do iy=n2+2,ndb
       w2(iy)=-w2(ndb+2-iy)
      end do
-     call dfftw_execute(plan2)
+     call DFFTW_EXECUTE(plan2)
      do iy=1,n2
       cw(ix,iy)=sc*w2(2*iy)
      end do
@@ -659,7 +669,7 @@
      do iy=1,n2
       w2(2*iy)=w(ix,iy,iz)
      end do
-     call dfftw_execute(iplan2)
+     call DFFTW_EXECUTE(iplan2)
      do iy=1,n2
       cw(ix,iy)=w2(iy)
      end do
@@ -682,7 +692,7 @@
      do iz=n3+2,ndb
       w3(iz)=-w3(ndb+2-iz)
      end do
-     call dfftw_execute(plan3)
+     call DFFTW_EXECUTE(plan3)
      do iz=1,n3
       cw(ix,iz)=sc*w3(2*iz)
      end do
@@ -701,7 +711,7 @@
      do iz=1,n3
       w3(2*iz)=w(ix,iy,iz)
      end do
-     call dfftw_execute(iplan3)
+     call DFFTW_EXECUTE(iplan3)
      do iz=1,n3
       cw(ix,iz)=w3(iz)
      end do
