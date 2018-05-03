@@ -693,17 +693,17 @@
                           ymin_t,zmin_t,wy,wz)
  ! Restricts to the computational box
  !=================================
- if(pe0)then
-  open(12,file='Initial_gas_target_x-profiles',form='formatted')
-   do ic=1,nsp
-   write(12,*)'species',ic,sptx_max(ic)
-   write(12,*)'particle x-coordinate'
-   write(12,'(6e11.4)')xpt(1:sptx_max(ic),ic)
-   write(12,*)'particle weight'
-   write(12,'(6e11.4)')wghpt(1:sptx_max(ic),ic)
-  end do
- close(12)
- endif
+!  if(pe0)then
+!   open(12,file='Initial_gas_target_x-profiles',form='formatted')
+!    do ic=1,nsp
+!    write(12,*)'species',ic,sptx_max(ic)
+!    write(12,*)'particle x-coordinate'
+!    write(12,'(6e11.4)')xpt(1:sptx_max(ic),ic)
+!    write(12,*)'particle weight'
+!    write(12,'(6e11.4)')wghpt(1:sptx_max(ic),ic)
+!   end do
+!  close(12)
+!  endif
 !========== PARICLE ALLOCATION ==============
  do ic=1,nsp
   nps_loc(ic)=nptx_alloc(ic)*loc_jmax(imody,ic)*loc_kmax(imodz,ic)
