@@ -167,7 +167,8 @@
  !--- *** namelist *** ---!
  NAMELIST/NUMBER_BUNCHES/ n_bunches, L_particles, L_intdiagnostics_pwfa, &
   L_intdiagnostics_classic,L_EMBunchEvolution,number_of_slices
- NAMELIST/BUNCHES/nb_tot,bunch_type,bunch_shape,rhob,xc_bunch,yc_bunch,zc_bunch, &
+ NAMELIST/BUNCHES/nb_tot,bunch_type,bunch_shape,particle_charge,rhob, &
+  xc_bunch,yc_bunch,zc_bunch, &
   gam,sxb,syb,epsy,epsz,dg,Charge_right,Charge_left,sigma_cut_bunch, &
   ppc_x_bunch,ppc_y_bunch,ppc_z_bunch
 
@@ -193,6 +194,7 @@
  !shape 2: trapezoidal (linear in Z, uniform with cutoff in R)
  !shape 3: trapezoidal-gaussian (linear in Z, gaussian in R)
  !shape 4: cylinder
+ particle_charge = -1.
  rhob=1.0 !relative density n_bunch/n_plasmabackground
  Charge_right=-1.0
  Charge_left =-1.0
