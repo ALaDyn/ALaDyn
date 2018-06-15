@@ -721,7 +721,7 @@
  !==================
 !=====================
  !Resets nptx(ic)=last particle coordinate inside the computational box
- !in the initial condition: for t>0  nptx(ic) updated by mowing window 
+ !in the initial condition: for t>0  nptx(ic) updated by mowing window
  do ic=1,nsp
   i1=0
   do j=1,nptx(ic)
@@ -1268,11 +1268,11 @@
  loc_imax(imodx,1:6)=nptx_loc(1:6)
  nps_loc=0
  !Weights for multilayer multisp targets
- wgh_sp(1)=1./real(mp_per_cell(3),dp)                   
+ wgh_sp(1)=1./real(mp_per_cell(3),dp)
  wgh_sp(2)=1./(real(ion_min(2),dp)*real(mp_per_cell(4),dp))
  wgh_sp(3)= j0_norm
  wgh_sp(4)=1./(real(ion_min(1),dp)*real(mp_per_cell(2),dp))
- wgh_sp(5)=1./real(mp_per_cell(5),dp)                   
+ wgh_sp(5)=1./real(mp_per_cell(5),dp)
  wgh_sp(6)=1./(real(ion_min(2),dp)*real(mp_per_cell(6),dp))
  !================================================
  if(nxl(1) >0)then
@@ -1323,7 +1323,7 @@
   end do
  end do
  !================================
- ! WARNING : electrons and Z1 ions have the same weight 
+ ! WARNING : electrons and Z1 ions have the same weight
  ! if mp_per_cell(1)=Z1*mp_per_cell(2)
  !=================================
  xfsh=xfsh+lpx(3)+lpx(2)
@@ -1576,7 +1576,7 @@
  !============ nptx(nsp)  distribution
  nptx(1)=nptx_loc(1)+nptx_loc(3)+nptx_loc(6)  !electrons
  nptx(2)=nptx_loc(4)                          !Z1-A1 species
- nptx(3)=nptx_loc(5)                          !Z2-A2 species 
+ nptx(3)=nptx_loc(5)                          !Z2-A2 species
  nptx(4)=nptx_loc(2)+nptx_loc(6)              !Z3-A3  species in nxl(1) and nxl(5) layer
  nptx_max=maxval(nptx_loc(1:7))
  !=======================
@@ -2512,7 +2512,7 @@
   !lpx(4) second plateau density np2 and to final downramp lpx(5)
   !n_0=n_over_nc can be an average, or n0_=n1_over_nc or n0_=n2_over_nc
   !Multispecies implementation
-  ! target in models id=1 and id=2 contain (implicitely) an ion species id_sp=1 
+  ! target in models id=1 and id=2 contain (implicitely) an ion species id_sp=1
   !as a neutralizing background. If ionization is on, nsp=2 and ionizing species
   !is loaded and activated for ionization.
   !====================================
@@ -2520,7 +2520,7 @@
   !as a neutralizing background:
   ! layer(1) + layer(2) only electrons and H+ with ne=n0=n_over_nc
   ! layer(3) is a plateau with an added dopant (A1,Z1) with density
-  ! np1=n1_over_n/n0 (few %) 
+  ! np1=n1_over_n/n0 (few %)
   ! layer(4)+layer(5) as layer(1)+layer(2)
   !----------
  else
@@ -2665,7 +2665,7 @@
  integer,intent(in) :: lp_mod
  integer :: ic,i1,i2,j1,j2,k1,k2,lp_ind
  real(dp) :: angle,shx_lp,sigm,eps,xm,tt,tau,tau1
- 
+
 
  !===========================
  ! field grid index defined on set_pgrid
@@ -2726,14 +2726,14 @@
  if(Two_color)then
   xc1_lp=xc_loc(nb_laser)-lp_offset
   xf1=xc1_lp+t1_lp
-  
+
   lp_ionz_in=xc1_lp-tau1
   lp_ionz_end=xc1_lp+tau1
   call init_lp_inc0_fields(ebf,lp1_amp,tt,t1_lp,w1_x,w1_y,xf1,om1,&
                                               lp_ind,i1,i2)
   if(pe0)write(6,'(a30,e11.4)')'two-color activated at xc1_lp=',xc1_lp
- endif 
-  
+ endif
+
 !==================================
  !==================== inject particles
  if(Hybrid)then
@@ -2850,7 +2850,7 @@
   env1(:,:,:,:)=0.0
   xc1_lp=xc_loc(nb_laser)-lp_offset
   xf1=xc1_lp+t1_lp
-   
+
   lp_ionz_in=xc1_lp-tau1
   lp_ionz_end=xc1_lp+tau1
   if(lp_ionz_end > xm)then
@@ -2861,7 +2861,7 @@
     call init_envelope_field(&
               env1,a1,dt,tt,t1_lp,w1_x,w1_y,xf1,om1,i1,i2)
    endif
-  endif 
+  endif
  endif
  !=======================
  !==========================
@@ -2950,14 +2950,14 @@
    wgh=real(j0_norm*jb_norm(ip),sp) !the bunch particles weights
    i2=i1+nb_tot(ip)-1
 
-      if(bunch_shape(ip)==1 .and. ppc_bunch(ip,1)>0) & !weighted-option
+   if(bunch_shape(ip)==1 .and. ppc_bunch(ip,1)>0) & !weighted-option
                           call generate_bunch_bigaussian_weighted(i1,i2,&
                                sxb(ip),xc_bunch(ip),&
                                syb(ip),yc_bunch(ip),&
                                syb(ip),zc_bunch(ip),&
                                gam(ip),&
                                epsy(ip),epsz(ip),sigma_cut_bunch(ip),&
-                               dg(ip),bpart,dx,dy,dz,rhob(ip),ppc_bunch(ip,:))
+                               dg(ip),bpart,dx,dy,dz,rhob(ip),ppc_bunch(ip,:), particle_charge(ip))
    if(bunch_shape(ip)==1 .and. ppc_bunch(ip,1)==-1) & !equal-weight
                           call generate_bunch_bigaussian_equal(i1,i2,&
                                sxb(ip),xc_bunch(ip),&
@@ -2965,33 +2965,33 @@
                                syb(ip),zc_bunch(ip),&
                                gam(ip),&
                               epsy(ip),epsz(ip),sigma_cut_bunch(ip),&
-                              dg(ip),bpart,dx,dy,dz,rhob(ip))
+                              dg(ip),bpart,dx,dy,dz,rhob(ip), particle_charge(ip))
    if(bunch_shape(ip)==2 .and. ppc_bunch(ip,1)>0) & !weighted-option
                           call generate_bunch_triangularZ_uniformR_weighted(i1,i2,&
                                xc_bunch(ip),yc_bunch(ip),zc_bunch(ip),&
                                sxb(ip),syb(ip),syb(ip),gam(ip),&
                                epsy(ip),epsz(ip),sigma_cut_bunch(ip),dg(ip),&
                                bpart,Charge_right(ip),Charge_left(ip),dx,dy,dz, &
-                               ppc_bunch(ip,1:3))
+                               ppc_bunch(ip,1:3), particle_charge(ip))
    if(bunch_shape(ip)==2 .and. ppc_bunch(ip,1)==-1) & !equal-weight
                            call generate_bunch_triangularZ_uniformR_equal(i1,i2,&
                                 xc_bunch(ip),yc_bunch(ip),zc_bunch(ip),&
                                 sxb(ip),syb(ip),syb(ip),gam(ip),&
                                 epsy(ip),epsz(ip),sigma_cut_bunch(ip),dg(ip),&
-                                bpart,Charge_right(ip),Charge_left(ip))
+                                bpart,Charge_right(ip),Charge_left(ip), particle_charge(ip))
    if(bunch_shape(ip)==3 .and. ppc_bunch(ip,1)>0) & !weighted-option
                            call generate_bunch_triangularZ_normalR_weighted(i1,i2,&
                                 xc_bunch(ip),yc_bunch(ip),zc_bunch(ip),&
                                 sxb(ip),syb(ip),syb(ip),&
                                 gam(ip),epsy(ip),epsz(ip),sigma_cut_bunch(ip),dg(ip),&
                                 bpart,Charge_right(ip),Charge_left(ip),dx,dy,dz, &
-                                ppc_bunch(ip,1:3))
+                                ppc_bunch(ip,1:3), particle_charge(ip))
    if(bunch_shape(ip)==3 .and. ppc_bunch(ip,1)==-1) & !equal-weight
                            call generate_bunch_triangularZ_normalR_equal(i1,i2,&
                                 xc_bunch(ip),yc_bunch(ip),zc_bunch(ip),&
                                 sxb(ip),syb(ip),syb(ip),&
                                 gam(ip),epsy(ip),epsz(ip),sigma_cut_bunch(ip),dg(ip),&
-                                bpart,Charge_right(ip),Charge_left(ip))
+                                bpart,Charge_right(ip),Charge_left(ip), particle_charge(ip))
 
     !--- Twiss Rotation ---!
     if(L_TWISS(ip)) call bunch_twissrotation(i1,i2,bpart, &
@@ -3015,7 +3015,7 @@
  end subroutine beam_data
  !===================
  subroutine MPI_beam_distribute(ndm)
- 
+
  integer,intent(in) :: ndm
 
  integer :: i,ii,i1,j
@@ -3260,7 +3260,7 @@
  if(ndim==3)call FFT_Psolv(jc,gam2,ompe,nx,nx_loc,ny,ny_loc,nz,nz_loc,&
                 i1,i2b,j1,nyp,k1,nzp,ft_mod,ft_sym)
  !Solves Laplacian[pot]=ompe*rho
- !Beam potential in jc(1) 
+ !Beam potential in jc(1)
  !===================
  !====================
  call fill_ebfield_yzxbdsdata(jc,i1,i2b,j1,nyp,k1,nzp,1,2,1,1)
