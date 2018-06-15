@@ -839,6 +839,7 @@ real(dp),intent(in) :: s_x,s_y,s_z,gm,eps_y,eps_z,dg,alpha,sigma_cut
 real(dp),intent(in) :: x_cm,y_cm,z_cm,dx,dy,dz,particle_unit_charge
 real(dp),intent(inout) :: bunch(:,:)
 real(dp) :: rnumber(n2-n1+1)
+integer :: npart
 
     call boxmuller_vector_cut(rnumber,n2-n1+1,sigma_cut)
     bunch(1,n1:n2)=rnumber*s_x + x_cm
@@ -900,7 +901,7 @@ idx=n1
            bunch(2,idx)=y
            bunch(3,idx)=z
            wgh=one_sp/real(PRODUCT(ppcb)*(Charge_left+(Charge_right-Charge_left)/s_x*(x+s_x-x_cm)),sp)
-           charge = int(particle_unit_charge*-1.unit_charge(1), hp_int)
+           charge = int(particle_unit_charge*-1.*unit_charge(1), hp_int)
            bunch(7,idx)=wgh_cmp
            idx=idx+1
          enddo
@@ -928,7 +929,7 @@ idx=n1
  real(dp),intent(in)    :: Charge_right,Charge_left,particle_unit_charge
  real(dp),intent(inout)   :: bunch(:,:)
  real(dp) :: rnumber(n2-n1+1)
- integer :: i
+ integer :: i, npart
  real(dp) :: z,y,x,a,intercept,slope
 
   do i=n1,n2+1
@@ -1036,7 +1037,7 @@ subroutine generate_bunch_triangularZ_normalR_equal(n1,n2,x_cm,y_cm,z_cm,s_x,s_y
   real(dp),intent(in)  :: Charge_right,Charge_left,particle_unit_charge
   real(dp),intent(inout) :: bunch(:,:)
   real(dp) :: rnumber(n2-n1+1)
-  integer :: i
+  integer :: i, npart
   real(dp) :: z,y,x,a,intercept,slope
 
   do i=n1,n2+1
