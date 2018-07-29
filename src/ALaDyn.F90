@@ -1009,9 +1009,9 @@
   write(60,*)'******LASER PHYSICAL PARAMETERS *****************'
   write(60,*)'     Main pulse parameters '
   write(60,*)' Transverse scales'
-  write(60,'(a8,f5.2,a18,f5.2)')'  w0_y= ',w0_y,'   focal spot =   ',lp_rad
+  write(60,'(a8,f6.2,a18,f6.2)')'  w0_y= ',w0_y,'   focal spot =   ',lp_rad
   write(60,*)' Longitudinal scales'
-  write(60,'(a8,f5.2,a18,f5.2)')'  w0_x= ',w0_x,'   tau_fwhm(fs) = ',tau_FWHM
+  write(60,'(a8,f6.2,a18,f6.2)')'  w0_x= ',w0_x,'   tau_fwhm(fs) = ',tau_FWHM
   write(60,'(a13,f5.2,a13,f5.2)')'  wavelength=',lam0,'   frequency=',oml
   write(60,'(a17,f6.2,a17,f6.2)')'  Initial focus =',xf,'   Pulse center= ',xc_lp
   write(60,'(a29,e11.4)')'  Diffraction length Z_Rayl= ',ZR

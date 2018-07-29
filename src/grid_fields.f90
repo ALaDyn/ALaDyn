@@ -1133,9 +1133,9 @@
  cf(1)=1.
  cf(2)=-2.
  if(ord==4)then
-  cf(0)=-1./12.
-  cf(1)=4./3.
-  cf(2)=-5./2.
+  cf(0)=-1./12.     !2.*hord_der2/3
+  cf(1)=4./3.       !1-8*hord_der2/3
+  cf(2)=-5./2.      !2*(2*hord_der2-1)
  endif
  !===========================
  !Second order derivative. At boundaries D^3[av]=0
@@ -1589,7 +1589,7 @@
   integer,intent(in) :: i1,n1p,j1,n2p,k1,n3p
   real(dp),intent(in) :: om0,dhx,dhy,dhz,dt_loc
   integer :: i,j,k,ii,ic
-  real(dp) ::dt2,dx1_inv,dhx1_inv
+  real(dp) ::dt2,dx1_inv,dhx1_inv,aph_opt(2)
   real(dp) ::kfact,k2_fact,skfact
   real(dp),dimension(0:2),parameter :: lder=(/1.0,-4.0,3.0/)
  !==========================
@@ -1608,6 +1608,12 @@
   !skfact=dhx*sin(om0*dx)
   dx1_inv=skfact*dhx
   dhx1_inv=2.*dx1_inv
+  aph_opt(1)=1.
+  aph_opt(2)=0.
+  if(der_ord ==3)then
+   aph_opt(1)=dx1_inv*opt_der1
+   aph_opt(2)=dx1_inv*0.5*(1.-opt_der1)
+  endif
   ic=2
  !========Enter  jc(1:2)= - omp2*<q^2*chi*env(1:2)
  !                        chi <q^2*wgh*n/gam_p> >0
@@ -1656,7 +1662,7 @@
  subroutine first_Ader
 !============
   ! explicit second order [-2isin(k0dx)*Dx]A and add to S(A)
-
+ if(der_ord <3)then
   do k=k1,n3p
    do j=j1,n2p
     i=i1
@@ -1677,6 +1683,40 @@
              evf(i,j,k,1)-evf(i-1,j,k,1))
    end do
   end do
+ else
+  do k=k1,n3p
+   do j=j1,n2p
+    i=i1
+    curr(i,j,k,1)=curr(i,j,k,1)-dhx1_inv*(&
+             evf(i+1,j,k,2)-evf(i,j,k,2))
+    curr(i,j,k,2)=curr(i,j,k,2)+dhx1_inv*(&
+             evf(i+1,j,k,1)-evf(i,j,k,1))
+    i=i+1
+     curr(i,j,k,1)=curr(i,j,k,1)-dx1_inv*(&
+              evf(i+1,j,k,2)-evf(i-1,j,k,2))
+     curr(i,j,k,2)=curr(i,j,k,2)+dx1_inv*(&
+              evf(i+1,j,k,1)-evf(i-1,j,k,1))
+    do i=i1+2,n1p-2
+     curr(i,j,k,1)=curr(i,j,k,1)- &
+                 aph_opt(1)*(evf(i+1,j,k,2)-evf(i-1,j,k,2))-&
+                 aph_opt(2)*(evf(i+2,j,k,2)-evf(i-2,j,k,2))
+     curr(i,j,k,2)=curr(i,j,k,2)+ &
+                 aph_opt(1)*(evf(i+1,j,k,1)-evf(i-1,j,k,1))+&
+                 aph_opt(2)*(evf(i+2,j,k,1)-evf(i-2,j,k,1))
+    end do
+    i=n1p-1
+     curr(i,j,k,1)=curr(i,j,k,1)-dx1_inv*(&
+              evf(i+1,j,k,2)-evf(i-1,j,k,2))
+     curr(i,j,k,2)=curr(i,j,k,2)+dx1_inv*(&
+              evf(i+1,j,k,1)-evf(i-1,j,k,1))
+    i=n1p
+    curr(i,j,k,1)=curr(i,j,k,1)-dx1_inv*(&
+             evf(i,j,k,2)-evf(i-1,j,k,2))
+    curr(i,j,k,2)=curr(i,j,k,2)+dx1_inv*(&
+             evf(i,j,k,1)-evf(i-1,j,k,1))
+   end do
+  end do
+ endif
  end subroutine first_Ader
 
  end subroutine env_maxw_solve
@@ -4408,18 +4448,19 @@
  cf(0)=0.0
  cf(1)=1.
  cf(2)=-2.
- if(dord==3)then
-  cf(0)=2.*se_coeff(2)/3.      !=> (u_{i+2}+u_{i-2})
-  cf(1)=1.-8.*se_coeff(2)/3.   !=> (u_{i+1}+u_{i-1})
-  cf(2)=2.*(2.*se_coeff(2)-1.) !=> u_i
+ if(dord > 2)then              ! dord=3  se_coeff(2)=-(1-nu*nu)/8  dord=4 se_coeff(2)=-1/8    
+  cf(0)=hord_der2
+  cf(1)=1.-4.*hord_der2
+  cf(2)=6.*hord_der2-2.
  endif
  if(pex0)then
   i=i1
   do ic=ic1,ic2
    do k=k1,n3p
     do j=j1,n2p
-     curr(i,j,k,ic)=curr(i,j,k,ic)+dx2*(apf(i+2,j,k,ic)+apf(i,j,k,ic)-&
-                                        2.*apf(i+1,j,k,ic))
+     apf(i-1,j,k,ic)=apf(i,j,k,ic)
+     curr(i,j,k,ic)=curr(i,j,k,ic)+dx2*(apf(i+1,j,k,ic)+apf(i-1,j,k,ic)-&
+                                        2.*apf(i,j,k,ic))
     enddo
    end do
   end do
@@ -4443,6 +4484,8 @@
    do k=k1,n3p
     do j=j1,n2p
      apf(i+1,j,k,ic)=apf(i,j,k,ic)
+     curr(i,j,k,ic)=curr(i,j,k,ic)+dx2*(apf(i+1,j,k,ic)+apf(i-1,j,k,ic)-&
+                                        2.*apf(i,j,k,ic))
     enddo
    end do
   end do

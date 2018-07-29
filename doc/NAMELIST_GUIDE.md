@@ -165,7 +165,7 @@ Copper    (atomic_number = 29) - mass_number = 63.54
 + `lpx(4)` is the length [μm] of the ramp (linear), connecting the bulk with the contaminants (made with bulk particles)
 + `lpx(5)` is the length [μm] of the downstream layer (contaminants), having density `n3/nc`
 + `lpx(6)` is the angle *α* of incidence, between the laser axis and the target plane
-+ `lpx(7)` is the offset [μm] between the end of the laser and the beginning of the target (if zero, the target starts right at the end of the laser pulse). The offset is calculated *before* laser rotation, so mind the transverse size if `lx(6) ≠ 0`, in order to avoid laser initialization *inside the target*.
++ `lpx(7)` is the offset [μm] between the end of the laser and the beginning of the target (if zero, the target starts right at the end of the laser pulse). In the gaussian case, the end of the pulse is defined as the center position + the FWHM. The offset is calculated *before* laser rotation, so mind the transverse size if `lx(6) ≠ 0`, in order to avoid laser initialization *inside the target*.
 + `lpy(1)` defines the wire size [μm]
 + `lpy(2)` defines the distance [μm] between wires (interwire size)
 + `n_over_nc` is the density in the central layer (bulk)

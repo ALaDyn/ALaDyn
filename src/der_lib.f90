@@ -29,7 +29,7 @@
  real(dp),allocatable :: dw(:),zp(:),amat(:,:),rmat(:,:)
  real(dp),allocatable :: mat_der_inv(:,:),fmat(:,:,:),lpl_mat(:,:,:)
  real(dp),allocatable :: mat_env(:,:)
- real(dp) :: aph_der,avg_cmp,cmp_coeff(2),se_coeff(2), se4_coeff(2),&
+ real(dp) :: hord_der2, opt_der2,opt_der1,aph_der,avg_cmp,cmp_coeff(2),se_coeff(2), se4_coeff(2),&
   filt_coeff(0:6),falp,int_coeff(0:3),upw(4)
  logical :: derinv
  contains
@@ -51,12 +51,20 @@
   cmp_coeff(2)=0.
   avg_cmp=1.0
   aph_der=cmp_coeff(2)*avg_cmp
+  opt_der1=1.
  case(3)
   !                        nu=cfl*rat/sqrt(rat*rat+nd-1) multi-D optimized
   !                        coefficient
   !=====================================
+  !For der_rder=3 opt first derivative on Yee grid
   cmp_coeff(1)=1.+0.125*(1.-fopt*nu*nu)  !rot(E) and rot(B) Modified along x-coord
   cmp_coeff(2)=(1.-cmp_coeff(1))/3.
+  opt_der2= -(1.-nu*nu)/12.
+  hord_der2= opt_der2
+  !For der_rder=3 opt second derivative 
+  opt_der1= (4.-nu*nu)/3.
+  !For der_rder=3 opt for centered first derivative 
+  !=========================
   avg_cmp=1./(cmp_coeff(1)+cmp_coeff(2))
   aph_der=cmp_coeff(2)*avg_cmp
   derinv=.true.
@@ -65,8 +73,12 @@
    cmp_coeff(2)=1./8.
   endif
  case(4)
+   !For forth-order first derivative on Yee grid
   cmp_coeff(1)=1.125   !9/8(SE4)
   cmp_coeff(2)=(1.-cmp_coeff(1))/3.  !-1./24
+    !For forth-order second derivative
+  hord_der2= -1./12.
+ !===================================
   avg_cmp=1./(cmp_coeff(1)+cmp_coeff(2))
   aph_der=cmp_coeff(2)*avg_cmp
   derinv=.true.

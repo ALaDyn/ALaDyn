@@ -5,6 +5,6 @@ export CXX=/disk01/gcc/gcc-5.1.0/bin/g++
 export FC=/disk01/gcc/gcc-5.1.0/bin/gfortran
 
 mkdir -p build ; cd build
-cmake .. -DBoost_NO_BOOST_CMAKE=ON -DCMAKE_Fortran_COMPILER=$FC
+cmake .. -DFFTW_ROOT_DIR=/disk01/fftw -DBoost_NO_BOOST_CMAKE=ON -DCMAKE_Fortran_COMPILER=$FC
 cmake --build . --target install
 cd ..

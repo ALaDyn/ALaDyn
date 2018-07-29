@@ -54,3 +54,9 @@ build.*
 *.nml
 index.md
 fftw*/
+
+#Visual studio code
+*.code-workspace
+
+#Backup files
+*.bak

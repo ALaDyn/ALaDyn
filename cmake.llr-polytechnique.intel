@@ -1,0 +1,13 @@
+#!/bin/bash
+
+module purge
+module load cmake
+module load compilers/icc/17.3.191
+export CC=/opt/exp_soft/vo.llr.in2p3.fr/intel/v17/compilers_and_libraries_2017.3.191/linux/bin/intel64/icc
+export CXX=/opt/exp_soft/vo.llr.in2p3.fr/intel/v17/compilers_and_libraries_2017.3.191/linux/bin/intel64/icpc
+export FC=/opt/exp_soft/vo.llr.in2p3.fr/intel/v17/compilers_and_libraries_2017.3.191/linux/bin/intel64/ifort
+
+mkdir -p build ; cd build
+cmake .. -DBoost_NO_BOOST_CMAKE=ON -DCMAKE_Fortran_COMPILER=$FC -DCMAKE_C_COMPILER=$CC -DCMAKE_CXX_COMPILER=$CXX
+cmake --build . --target install
+cd ..

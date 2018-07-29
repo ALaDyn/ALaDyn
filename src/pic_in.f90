@@ -250,513 +250,518 @@
 
  subroutine multi_layer_gas_target(layer_mod,nyh,xf0)
 
- integer,intent(in) :: layer_mod,nyh
- real(dp),intent(in) :: xf0
- integer :: p
- integer :: i,j,i1,i2,ic
- integer :: n_peak,nyl1,nzl1
- integer :: npyc(4),npzc(4),npty_ne,nptz_ne
- integer :: npmax,nxtot
- real(dp) :: uu,yy,zz,dxip,dpy,dpz,u2
- real(dp) :: zp_min,zp_max,yp_min,yp_max,xp_min,xp_max
- real(dp) :: xfsh,un(2),wgh_sp(3)
- integer :: nxl(5)
- real(dp),allocatable :: wy(:,:),wz(:,:)
- integer :: loc_nptx(4),nps_loc(4),np_per_zcell(4),last_particle_index(4),nptx_alloc(4)
- !==========================
- p=0
- i=0
- j=0
- i1=0
- i2=0
- ic=0
- ! the following variables are used only in Stretched mode, initialized anyway to zero
- yy=0.0
- dxip=0.0
- !==========================
- xp_min=xmin
- xp_max=xmax
- np_per_zcell(1:nsp)=1
- !==========================
- nxl=0
- nyl1=1+ny/2-nyh/2  !=1 if nyh=ny
- nzl1=1+nz/2-nyh/2
- !============================
- ! Parameters for particle distribution along the x-coordinate
- !============================
- ! Layers nxl(1:5) all containing the same ion species
- xtot=0.0
- nxtot=0
- do i=1,5
-  nxl(i)=nint(dx_inv*lpx(i))
-  lpx(i)=nxl(i)*dx
-  xtot=xtot+lpx(i)
-  nxtot=nxtot+nxl(i)
- end do
- xfsh=xf0+lpx(7)
- targ_in=xfsh
- targ_end=targ_in+xtot
- !=============================
- loc_nptx=0
- loc_nptx(1:nsp)=(nxl(1)+nxl(2)+nxl(3)+nxl(4)+nxl(5))*np_per_xc(1:nsp)
-
- nptx_max=maxval(loc_nptx(1:nsp))
- allocate(xpt(nptx_max,nsp))
- allocate(wghpt(nptx_max,nsp))
- allocate(loc_xpt(nptx_max,nsp))
- !=============================
- ! mulltispecies y-z distribution in a uniform target
- yp_min=ymin_t
- yp_max=ymax_t
- zp_min=zmin_t
- zp_max=zmax_t
- !----------------------
- npty=maxval(np_per_yc(1:nsp))
- npty=nyh*npty
- nptz=1
- if(ndim==3)then
-  np_per_zcell(1:nsp)=np_per_zc(1:nsp)
-  nptz=maxval(np_per_zc(1:nsp))
-  nptz=nyh*nptz
- endif
- allocate(ypt(npty,nsp))
- allocate(zpt(nptz,nsp))
- allocate(wy(npty,nsp))
- allocate(wz(nptz,nsp))
- ypt=0.
- zpt=0.
- wy=1.
- wz=1.
- !==================
- allocate(loc_jmax(0:npe_yloc-1,nsp))
- allocate(loc_kmax(0:npe_zloc-1,nsp))
- allocate(loc_imax(0:npe_xloc-1,nsp))
- !==================
- !  UNIFORM y-z particle distribution for all models
- !========================
- wghpt=one_dp
- un=one_dp
- !===================================
- ! Distributes particles on y-z coordinates
- do ic=1,nsp
-  npyc(ic)=nyh*np_per_yc(ic)
-  npty_ne=npyc(ic)
-  npzc(ic)=1
-  if(ndim > 1 )then
-   dpy=(yp_max-yp_min)/real(npyc(ic),dp)
-   do i=1,npyc(ic)
-    ypt(i,ic)=yp_min+dpy*(real(i,dp)-0.5)
-   enddo
-   if(Stretch)then
-    yy=str_ygrid%smin
-    if(yy >yp_min)then
-     dpy=dyi/real(np_per_yc(ic),dp)
-     i1=(str_ygrid%sind(1)-nyl1+1)*np_per_yc(ic)
-     i2=npty_ne-i1
-     do i=1,i1
-      dxip=dpy*(real(i-i1,dp)-0.5)
-      ypt(i,ic)=str_ygrid%smin+L_s*tan(dxip)
-      wy(i,ic)=1./(cos(dxip)*cos(dxip))
-     enddo
-     dxip=dy/real(np_per_yc(ic),dp)
-     do i=i1+1,i2
-      ypt(i,ic)=str_ygrid%smin+dxip*(real(i-i1,dp)-0.5)
-     end do
-     do i=i2+1,npty_ne
-      dxip=dpy*(real(i-i2,dp)-0.5)
-      ypt(i,ic)=str_ygrid%smax+L_s*tan(dxip)
-      wy(i,ic)=1./(cos(dxip)*cos(dxip))
-     enddo
-    endif
-   endif
+  integer,intent(in) :: layer_mod,nyh
+  real(dp),intent(in) :: xf0
+  integer :: p
+  integer :: i,j,i1,i2,ic
+  integer :: n_peak,nyl1,nzl1
+  integer :: npyc(4),npzc(4),npty_ne,nptz_ne
+  integer :: npmax,nxtot
+  real(dp) :: uu,yy,zz,dxip,dpy,dpz,u2,u3,ramp_prefactor
+  real(dp) :: zp_min,zp_max,yp_min,yp_max,xp_min,xp_max
+  real(dp) :: xfsh,un(2),wgh_sp(3)
+  integer :: nxl(5)
+  real(dp),allocatable :: wy(:,:),wz(:,:)
+  integer :: loc_nptx(4),nps_loc(4),np_per_zcell(4),last_particle_index(4),nptx_alloc(4)
+  !==========================
+  p=0
+  i=0
+  j=0
+  i1=0
+  i2=0
+  ic=0
+  ! the following variables are used only in Stretched mode, initialized anyway to zero
+  yy=0.0
+  dxip=0.0
+  !==========================
+  xp_min=xmin
+  xp_max=xmax
+  np_per_zcell(1:nsp)=1
+  !==========================
+  nxl=0
+  nyl1=1+ny/2-nyh/2  !=1 if nyh=ny
+  nzl1=1+nz/2-nyh/2
+  !============================
+  ! Parameters for particle distribution along the x-coordinate
+  !============================
+  ! Layers nxl(1:5) all containing the same ion species
+  xtot=0.0
+  nxtot=0
+  do i=1,5
+   nxl(i)=nint(dx_inv*lpx(i))
+   lpx(i)=nxl(i)*dx
+   xtot=xtot+lpx(i)
+   nxtot=nxtot+nxl(i)
+  end do
+  xfsh=xf0+lpx(7)
+  targ_in=xfsh
+  targ_end=targ_in+xtot
+  !=============================
+  loc_nptx=0
+  loc_nptx(1:nsp)=(nxl(1)+nxl(2)+nxl(3)+nxl(4)+nxl(5))*np_per_xc(1:nsp)
+ 
+  nptx_max=maxval(loc_nptx(1:nsp))
+  allocate(xpt(nptx_max,nsp))
+  allocate(wghpt(nptx_max,nsp))
+  allocate(loc_xpt(nptx_max,nsp))
+  !=============================
+  ! mulltispecies y-z distribution in a uniform target
+  yp_min=ymin_t
+  yp_max=ymax_t
+  zp_min=zmin_t
+  zp_max=zmax_t
+  !----------------------
+  npty=maxval(np_per_yc(1:nsp))
+  npty=nyh*npty
+  nptz=1
+  if(ndim==3)then
+   np_per_zcell(1:nsp)=np_per_zc(1:nsp)
+   nptz=maxval(np_per_zc(1:nsp))
+   nptz=nyh*nptz
   endif
- enddo
- if(ndim > 2)then !along-z-drection
+  allocate(ypt(npty,nsp))
+  allocate(zpt(nptz,nsp))
+  allocate(wy(npty,nsp))
+  allocate(wz(nptz,nsp))
+  ypt=0.
+  zpt=0.
+  wy=1.
+  wz=1.
+  !==================
+  allocate(loc_jmax(0:npe_yloc-1,nsp))
+  allocate(loc_kmax(0:npe_zloc-1,nsp))
+  allocate(loc_imax(0:npe_xloc-1,nsp))
+  !==================
+  !  UNIFORM y-z particle distribution for all models
+  !========================
+  wghpt=one_dp
+  un=one_dp
+  !===================================
+  ! Distributes particles on y-z coordinates
   do ic=1,nsp
-   npzc(ic)=nyh*np_per_zc(ic)
-   nptz_ne=npzc(ic)
-   dpz=(zp_max-zp_min)/real(npzc(ic),dp)
-   do i=1,npzc(ic)
-    zpt(i,ic)=zp_min+dpz*(real(i,dp)-0.5)
-   enddo
-   if(Stretch)then
-    zz=str_zgrid%smin
-    if(zz>zp_min)then
-     dpz=dzi/real(np_per_zc(ic),dp)
-     i1=(str_zgrid%sind(1)-nzl1+1)*np_per_zc(ic)
-     i2=nptz_ne-i1
-     do i=1,i1
-      dxip=dpz*(real(i-i1,dp)-0.5)
-      zpt(i,ic)=str_zgrid%smin+L_s*tan(dxip)
-      wz(i,ic)=1./(cos(dxip)*cos(dxip))
-     enddo
-     dxip=dz/real(np_per_zc(ic),dp)
-     do i=i1+1,i2
-      zpt(i,ic)=str_zgrid%smin+dxip*(real(i-i1,dp)-0.5)
-     enddo
-     do i=i2+1,nptz_ne
-      dxip=dpz*(real(i-i2,dp)-0.5)
-      zpt(i,ic)=str_zgrid%smax+L_s*tan(dxip)
-      wz(i,ic)=1./(cos(dxip)*cos(dxip))
-     enddo
+   npyc(ic)=nyh*np_per_yc(ic)
+   npty_ne=npyc(ic)
+   npzc(ic)=1
+   if(ndim > 1 )then
+    dpy=(yp_max-yp_min)/real(npyc(ic),dp)
+    do i=1,npyc(ic)
+     ypt(i,ic)=yp_min+dpy*(real(i,dp)-0.5)
+    enddo
+    if(Stretch)then
+     yy=str_ygrid%smin
+     if(yy >yp_min)then
+      dpy=dyi/real(np_per_yc(ic),dp)
+      i1=(str_ygrid%sind(1)-nyl1+1)*np_per_yc(ic)
+      i2=npty_ne-i1
+      do i=1,i1
+       dxip=dpy*(real(i-i1,dp)-0.5)
+       ypt(i,ic)=str_ygrid%smin+L_s*tan(dxip)
+       wy(i,ic)=1./(cos(dxip)*cos(dxip))
+      enddo
+      dxip=dy/real(np_per_yc(ic),dp)
+      do i=i1+1,i2
+       ypt(i,ic)=str_ygrid%smin+dxip*(real(i-i1,dp)-0.5)
+      end do
+      do i=i2+1,npty_ne
+       dxip=dpy*(real(i-i2,dp)-0.5)
+       ypt(i,ic)=str_ygrid%smax+L_s*tan(dxip)
+       wy(i,ic)=1./(cos(dxip)*cos(dxip))
+      enddo
+     endif
     endif
    endif
   enddo
- endif
- ! Now the y-z particle distribution are shared among mpi-tasks
- ! on output =>> loc_jmax, loc_kmax
- !=======================================
- do ic=1,nsp
-  call set_pgrid_ind(npyc(ic),npzc(ic),ic)
- enddo
- !===========================
- ! WARNING for charge distribution
- !====================================
- ! wgh_sp(1:nsp) already set by initial conditions
- !=====================================================
- ! Longitudinal distribution
- nptx=0
- !Weights for mulpispecies target
- wgh_sp(1:3)=j0_norm
- if(nsp==2)then
-  wgh_sp(2)=1./(real(mp_per_cell(2),dp))
-  if(ion_min(1)>1)wgh_sp(2)=1./(real(ion_min(1),dp)*real(mp_per_cell(2),dp))
- endif
- select case(layer_mod)
-  !================ first uniform layer np1=================
- case(1)
-  if(nxl(1)>0)then
+  if(ndim > 2)then !along-z-drection
    do ic=1,nsp
-    n_peak=nxl(1)*np_per_xc(ic)
-    do i=1,n_peak
-     uu=(real(i,dp)-0.5)/real(n_peak,dp)
-     i1=nptx(ic)+i
-     xpt(i1,ic)=xfsh+lpx(1)*uu
-     wghpt(i1,ic)=np1*wgh_sp(ic)
-    end do
-    nptx(ic)=nptx(ic)+n_peak
-   end do
-   xfsh=xfsh+lpx(1)
-  endif
-  !================ first linear or exp ramp np1 => 1 =================
-  if(nxl(2)>0)then
-   do ic=1,nsp
-    n_peak=nxl(2)*np_per_xc(ic)
-    do i=1,n_peak
-     uu=(real(i,dp)-0.5)/real(n_peak,dp)
-     i1=nptx(ic)+i
-     xpt(i1,ic)=xfsh+lpx(2)*uu
-     u2=(uu-1.)*(uu-1.)
-     !wghpt(i1,ic)=(np1+exp(-4.5*u2)*(1.-np1))*wgh_sp(ic)
-     wghpt(i1,ic)=exp(-4.5*u2)*wgh_sp(ic)
-    end do
-    nptx(ic)=nptx(ic)+n_peak
-   end do
-   xfsh=xfsh+lpx(2)
-  endif
-  !================ Central layer=================
-  if(nxl(3)>0)then
-   do ic=1,nsp
-    n_peak=nxl(3)*np_per_xc(ic)
-    do i=1,n_peak
-     uu=(real(i,dp)-0.5)/real(n_peak,dp)
-     i1=nptx(ic)+i
-     xpt(i1,ic)=xfsh+lpx(3)*uu
-     wghpt(i1,ic)=wgh_sp(ic)
-    end do
-    nptx(ic)=nptx(ic)+n_peak
-   end do
-   xfsh=xfsh+lpx(3)
-  endif
-  !================ second linear ramp =================
-  if(nxl(4)>0)then
-   do ic=1,nsp
-    n_peak=nxl(4)*np_per_xc(ic)
-    do i=1,n_peak
-     uu=(real(i,dp)-0.5)/real(n_peak,dp)
-     i1=nptx(ic)+i
-     xpt(i1,ic)=xfsh+lpx(4)*uu
-     wghpt(i1,ic)=(1.-uu*(1.-np2))*wgh_sp(ic)
-    end do
-    nptx(ic)=nptx(ic)+n_peak
-   end do
-   xfsh=xfsh+lpx(4)
-  endif
-  if(nxl(5)>0)then
-   do ic=1,nsp
-    n_peak=nxl(5)*np_per_xc(ic)
-    do i=1,n_peak
-     uu=(real(i,dp)-0.5)/real(n_peak,dp)
-     i1=nptx(ic)+i
-     xpt(i1,ic)=xfsh+lpx(5)*uu
-     wghpt(i1,ic)=np2*wgh_sp(ic)
-    end do
-    nptx(ic)=nptx(ic)+n_peak
-   end do
-   xfsh=xfsh+lpx(5)
-  endif
-  do ic=1,nsp
-   nptx_alloc(ic)=min(nptx(ic)+10,nx*np_per_xc(ic))
-  end do
-  !=========================================
- case(2)
-  !                 two bumps  (n1/n_c, n2/n_c) of length x_1 and x_2
-  !                 n_over_nc enters as average n_over nc= (n1* x_1+n2*x_2)/(x_1+x_2)
-  !                 weight j0_norm =>> j0_norm*np1 in x_1       =>> j0_norm*np2 in x_2
-  !                 particle per cell uniform
-  !================================================
-  !================ first linear ramp to first plateau n1/n_c =================
-  if(nxl(1)>0)then
-   do ic=1,nsp
-    n_peak=nxl(1)*np_per_xc(ic)
-    do i=1,n_peak
-     uu=(real(i,dp)-0.5)/real(n_peak,dp)
-     i1=nptx(ic)+i
-     xpt(i1,ic)=xfsh+lpx(1)*uu
-     wghpt(i1,ic)=uu*np1*wgh_sp(ic)
-    end do
-    nptx(ic)=nptx(ic)+n_peak
-   end do
-   xfsh=xfsh+lpx(1)
-  endif
-  if(nxl(2)>0)then              !first plateau
-   do ic=1,nsp
-    n_peak=nxl(2)*np_per_xc(ic)
-    do i=1,n_peak
-     uu=(real(i,dp)-0.5)/real(n_peak,dp)
-     i1=nptx(ic)+i
-     xpt(i1,ic)=xfsh+lpx(2)*uu
-     wghpt(i1,ic)=np1*wgh_sp(ic)
-    end do
-    nptx(ic)=nptx(ic)+n_peak
-   end do
-   xfsh=xfsh+lpx(2)
-  endif
-  !================ np1 => np2 down-ramp =================
-  if(nxl(3)>0)then
-   do ic=1,nsp
-    n_peak=nxl(3)*np_per_xc(ic)
-    do i=1,n_peak
-     uu=(real(i,dp)-0.5)/real(n_peak,dp)
-     i1=nptx(ic)+i
-     xpt(i1,ic)=xfsh+lpx(3)*uu
-     wghpt(i1,ic)=wgh_sp(ic)*(np1+uu*(np2-np1))
-    end do
-    nptx(ic)=nptx(ic)+n_peak
+    npzc(ic)=nyh*np_per_zc(ic)
+    nptz_ne=npzc(ic)
+    dpz=(zp_max-zp_min)/real(npzc(ic),dp)
+    do i=1,npzc(ic)
+     zpt(i,ic)=zp_min+dpz*(real(i,dp)-0.5)
+    enddo
+    if(Stretch)then
+     zz=str_zgrid%smin
+     if(zz>zp_min)then
+      dpz=dzi/real(np_per_zc(ic),dp)
+      i1=(str_zgrid%sind(1)-nzl1+1)*np_per_zc(ic)
+      i2=nptz_ne-i1
+      do i=1,i1
+       dxip=dpz*(real(i-i1,dp)-0.5)
+       zpt(i,ic)=str_zgrid%smin+L_s*tan(dxip)
+       wz(i,ic)=1./(cos(dxip)*cos(dxip))
+      enddo
+      dxip=dz/real(np_per_zc(ic),dp)
+      do i=i1+1,i2
+       zpt(i,ic)=str_zgrid%smin+dxip*(real(i-i1,dp)-0.5)
+      enddo
+      do i=i2+1,nptz_ne
+       dxip=dpz*(real(i-i2,dp)-0.5)
+       zpt(i,ic)=str_zgrid%smax+L_s*tan(dxip)
+       wz(i,ic)=1./(cos(dxip)*cos(dxip))
+      enddo
+     endif
+    endif
    enddo
-   xfsh=xfsh+lpx(3)
   endif
-  !================ second plateau n2/n_c < n1/n_c =================
-  if(nxl(4)>0)then
-   do ic=1,nsp
-    n_peak=nxl(4)*np_per_xc(ic)
-    do i=1,n_peak
-     uu=(real(i,dp)-0.5)/real(n_peak,dp)
-     i1=nptx(ic)+i
-     xpt(i1,ic)=xfsh+lpx(4)*uu
-     wghpt(i1,ic)=np2*wgh_sp(ic)
-    end do
-    nptx(ic)=nptx(ic)+n_peak
-   end do
-   xfsh=xfsh+lpx(4)
+  ! Now the y-z particle distribution are shared among mpi-tasks
+  ! on output =>> loc_jmax, loc_kmax
+  !=======================================
+  do ic=1,nsp
+   call set_pgrid_ind(npyc(ic),npzc(ic),ic)
+  enddo
+  !===========================
+  ! WARNING for charge distribution
+  !====================================
+  ! wgh_sp(1:nsp) already set by initial conditions
+  !=====================================================
+  ! Longitudinal distribution
+  nptx=0
+  !Weights for mulpispecies target
+  wgh_sp(1:3)=j0_norm
+  if(nsp==2)then
+   wgh_sp(2)=1./(real(mp_per_cell(2),dp))
+   if(ion_min(1)>1)wgh_sp(2)=1./(real(ion_min(1),dp)*real(mp_per_cell(2),dp))
   endif
-  if(nxl(5)>0)then     !second down-ramp n2/n_c ==> 0
-   do ic=1,nsp
-    n_peak=nxl(5)*np_per_xc(ic)
-    do i=1,n_peak
-     uu=(real(i)-0.5)/real(n_peak,dp)
-     i1=nptx(ic)+i
-     xpt(i1,ic)=xfsh+lpx(5)*uu
-     wghpt(i1,ic)=(1.-uu)*wgh_sp(ic)
+  ramp_prefactor=one_dp
+  select case(layer_mod)
+   !================ first uniform layer np1=================
+  case(1)
+   if(nxl(1)>0)then
+    do ic=1,nsp
+     n_peak=nxl(1)*np_per_xc(ic)
+     ramp_prefactor=one_dp-np1
+     do i=1,n_peak
+      uu=(real(i,dp)-0.5)/real(n_peak,dp)
+      i1=nptx(ic)+i
+      xpt(i1,ic)=xfsh+lpx(1)*uu
+      wghpt(i1,ic)=np1*wgh_sp(ic)
+     end do
+     nptx(ic)=nptx(ic)+n_peak
     end do
-    nptx(ic)=nptx(ic)+n_peak
+    xfsh=xfsh+lpx(1)
+   endif
+   !================ first CUBIC ramp np1 => 1 --linear or exponential still available but commented =================
+   if(nxl(2)>0)then
+    do ic=1,nsp
+     n_peak=nxl(2)*np_per_xc(ic)
+     do i=1,n_peak
+      uu=(real(i,dp)-0.5)/real(n_peak,dp)
+      i1=nptx(ic)+i
+      xpt(i1,ic)=xfsh+lpx(2)*uu
+      !u2=(uu-1.)*(uu-1.)
+      u2=uu*uu
+      u3=u2*uu
+      !wghpt(i1,ic)=(np1+exp(-4.5*u2)*(1.-np1))*wgh_sp(ic)
+      !wghpt(i1,ic)=exp(-4.5*u2)*wgh_sp(ic)
+      wghpt(i1,ic)=(-2.*ramp_prefactor*u3+3.*ramp_prefactor*u2+one_dp-ramp_prefactor)*wgh_sp(ic)
+     end do
+     nptx(ic)=nptx(ic)+n_peak
+    end do
+    xfsh=xfsh+lpx(2)
+   endif
+   !================ Central layer=================
+   if(nxl(3)>0)then
+    do ic=1,nsp
+     n_peak=nxl(3)*np_per_xc(ic)
+     do i=1,n_peak
+      uu=(real(i,dp)-0.5)/real(n_peak,dp)
+      i1=nptx(ic)+i
+      xpt(i1,ic)=xfsh+lpx(3)*uu
+      wghpt(i1,ic)=wgh_sp(ic)
+     end do
+     nptx(ic)=nptx(ic)+n_peak
+    end do
+    xfsh=xfsh+lpx(3)
+   endif
+   !================ second linear ramp =================
+   if(nxl(4)>0)then
+    do ic=1,nsp
+     n_peak=nxl(4)*np_per_xc(ic)
+     do i=1,n_peak
+      uu=(real(i,dp)-0.5)/real(n_peak,dp)
+      i1=nptx(ic)+i
+      xpt(i1,ic)=xfsh+lpx(4)*uu
+      wghpt(i1,ic)=(1.-uu*(1.-np2))*wgh_sp(ic)
+     end do
+     nptx(ic)=nptx(ic)+n_peak
+    end do
+    xfsh=xfsh+lpx(4)
+   endif
+   if(nxl(5)>0)then
+    do ic=1,nsp
+     n_peak=nxl(5)*np_per_xc(ic)
+     do i=1,n_peak
+      uu=(real(i,dp)-0.5)/real(n_peak,dp)
+      i1=nptx(ic)+i
+      xpt(i1,ic)=xfsh+lpx(5)*uu
+      wghpt(i1,ic)=np2*wgh_sp(ic)
+     end do
+     nptx(ic)=nptx(ic)+n_peak
+    end do
+    xfsh=xfsh+lpx(5)
+   endif
+   do ic=1,nsp
+    nptx_alloc(ic)=min(nptx(ic)+10,nx*np_per_xc(ic))
    end do
-   xfsh=xfsh+lpx(5)
+   !=========================================
+  case(2)
+   !                 two bumps  (n1/n_c, n2/n_c) of length x_1 and x_2
+   !                 n_over_nc enters as average n_over nc= (n1* x_1+n2*x_2)/(x_1+x_2)
+   !                 weight j0_norm =>> j0_norm*np1 in x_1       =>> j0_norm*np2 in x_2
+   !                 particle per cell uniform
+   !================================================
+   !================ first linear ramp to first plateau n1/n_c =================
+   if(nxl(1)>0)then
+    do ic=1,nsp
+     n_peak=nxl(1)*np_per_xc(ic)
+     do i=1,n_peak
+      uu=(real(i,dp)-0.5)/real(n_peak,dp)
+      i1=nptx(ic)+i
+      xpt(i1,ic)=xfsh+lpx(1)*uu
+      wghpt(i1,ic)=uu*np1*wgh_sp(ic)
+     end do
+     nptx(ic)=nptx(ic)+n_peak
+    end do
+    xfsh=xfsh+lpx(1)
+   endif
+   if(nxl(2)>0)then              !first plateau
+    do ic=1,nsp
+     n_peak=nxl(2)*np_per_xc(ic)
+     do i=1,n_peak
+      uu=(real(i,dp)-0.5)/real(n_peak,dp)
+      i1=nptx(ic)+i
+      xpt(i1,ic)=xfsh+lpx(2)*uu
+      wghpt(i1,ic)=np1*wgh_sp(ic)
+     end do
+     nptx(ic)=nptx(ic)+n_peak
+    end do
+    xfsh=xfsh+lpx(2)
+   endif
+   !================ np1 => np2 down-ramp =================
+   if(nxl(3)>0)then
+    do ic=1,nsp
+     n_peak=nxl(3)*np_per_xc(ic)
+     do i=1,n_peak
+      uu=(real(i,dp)-0.5)/real(n_peak,dp)
+      i1=nptx(ic)+i
+      xpt(i1,ic)=xfsh+lpx(3)*uu
+      wghpt(i1,ic)=wgh_sp(ic)*(np1+uu*(np2-np1))
+     end do
+     nptx(ic)=nptx(ic)+n_peak
+    enddo
+    xfsh=xfsh+lpx(3)
+   endif
+   !================ second plateau n2/n_c < n1/n_c =================
+   if(nxl(4)>0)then
+    do ic=1,nsp
+     n_peak=nxl(4)*np_per_xc(ic)
+     do i=1,n_peak
+      uu=(real(i,dp)-0.5)/real(n_peak,dp)
+      i1=nptx(ic)+i
+      xpt(i1,ic)=xfsh+lpx(4)*uu
+      wghpt(i1,ic)=np2*wgh_sp(ic)
+     end do
+     nptx(ic)=nptx(ic)+n_peak
+    end do
+    xfsh=xfsh+lpx(4)
+   endif
+   if(nxl(5)>0)then     !second down-ramp n2/n_c ==> 0
+    do ic=1,nsp
+     n_peak=nxl(5)*np_per_xc(ic)
+     do i=1,n_peak
+      uu=(real(i)-0.5)/real(n_peak,dp)
+      i1=nptx(ic)+i
+      xpt(i1,ic)=xfsh+lpx(5)*uu
+      wghpt(i1,ic)=(1.-uu)*wgh_sp(ic)
+     end do
+     nptx(ic)=nptx(ic)+n_peak
+    end do
+    xfsh=xfsh+lpx(5)
+   endif
+   do ic=1,nsp
+    nptx_alloc(ic)=min(nptx(ic)+10,nx*np_per_xc(ic))
+   end do
+ !======================================
+  case(3)
+   !                 three layers
+   !                 lpx(1)[ramp]+lpx(2)[plateau]  and lpx(4) plateu lpx(5) downramp n_ion=0 n_e=n_0
+   !                 lpx(3)[plateau]  with a (A1-Z1) dopant with % density np1=n1_per_nc/n_per_nc
+   !                 and electronic density n_e=n_0+Z1*n_ion  n0=n_H(+)
+   !---------------
+   !================================================
+   !Z1 electrons are accounted for by a larger electron weight
+   un(1)=1.+ion_min(1)*np1
+   un(2)=np1        !float(mp_per_cell(1))/float(mp_per_cell(ic))
+ 
+   if(nxl(1)>0)then
+    do ic=1,nsp_run
+     n_peak=nxl(1)*np_per_xc(ic)
+     do i=1,n_peak
+      uu=(real(i,dp)-0.5)/real(n_peak,dp)
+      i1=nptx(ic)+i
+      xpt(i1,ic)=xfsh+lpx(1)*uu
+      wghpt(i1,ic)=uu*wgh_sp(ic)
+     end do
+     nptx(ic)=nptx(ic)+n_peak
+    end do
+    xfsh=xfsh+lpx(1)
+   endif
+   if(nxl(2)>0)then              !first plateau
+    do ic=1,nsp_run
+     n_peak=nxl(2)*np_per_xc(ic)
+     do i=1,n_peak
+      uu=(real(i,dp)-0.5)/real(n_peak,dp)
+      i1=nptx(ic)+i
+      xpt(i1,ic)=xfsh+lpx(2)*uu
+      wghpt(i1,ic)=wgh_sp(ic)
+     end do
+     nptx(ic)=nptx(ic)+n_peak
+    end do
+    xfsh=xfsh+lpx(2)
+   endif
+   !================
+   if(nxl(3)>0)then !el+H(+) + dopant un(1:2) correct (electron,Z1) weights
+    do ic=1,nsp
+     n_peak=nxl(3)*np_per_xc(ic)
+     do i=1,n_peak
+      uu=(real(i,dp)-0.5)/real(n_peak,dp)
+      i1=nptx(ic)+i
+      xpt(i1,ic)=xfsh+lpx(3)*uu
+      wghpt(i1,ic)=un(ic)*wgh_sp(ic)
+     end do
+     nptx(ic)=nptx(ic)+n_peak
+    end do
+    xfsh=xfsh+lpx(3)
+   endif
+   !================ second plateau only electrons =================
+   if(nxl(4)>0)then
+    do ic=1,nsp_run
+     n_peak=nxl(4)*np_per_xc(ic)
+     do i=1,n_peak
+      uu=(real(i,dp)-0.5)/real(n_peak,dp)
+      i1=nptx(ic)+i
+      xpt(i1,ic)=xfsh+lpx(4)*uu
+      wghpt(i1,ic)=wgh_sp(ic)
+     end do
+     nptx(ic)=nptx(ic)+n_peak
+    enddo
+    xfsh=xfsh+lpx(4)
+   endif
+   if(nxl(5)>0)then     !second down-ramp ==> 0
+    do ic=1,nsp_run
+     n_peak=nxl(5)*np_per_xc(ic)
+     do i=1,n_peak
+      uu=(real(i)-0.5)/real(n_peak,dp)
+      i1=nptx(ic)+i
+      xpt(i1,ic)=xfsh+lpx(5)*uu
+      wghpt(i1,ic)=(1.-uu)*wgh_sp(ic)
+     end do
+     nptx(ic)=nptx(ic)+n_peak
+    end do
+    xfsh=xfsh+lpx(5)
+   endif
+   do ic=1,nsp
+    nptx_alloc(ic)=min(nptx(ic)+10,nx*np_per_xc(ic))
+   end do
+  end select
+  do ic=1,nsp
+   sptx_max(ic)=nptx(ic)
+  end do
+  !================================
+  ! END of section setting global coordinates
+  !=================================
+  ! LOCAL to mpi domains particle representation
+  ! NO dependence of (y,z) coordinates on x coordinate
+  !=====loc_npty,loc_nptz allocated to (nsp) yz-layers or components
+  loc_npty(1:nsp)=loc_jmax(imody,1:nsp)
+  loc_nptz(1:nsp)=loc_kmax(imodz,1:nsp)
+  !===========================
+  npty_ne=maxval(loc_npty(1:nsp))
+  nptz_ne=maxval(loc_nptz(1:nsp))
+  !==========================
+  !====================
+  if(npty_ne >0)then
+   allocate(loc_wghy(npty_ne,nsp))
+   allocate(loc_ypt(npty_ne,nsp))
+   loc_ypt=0.0
+   loc_wghy=1.
+  endif
+  !==============
+  if(nptz_ne >0)then
+   allocate(loc_wghz(nptz_ne,nsp))
+   allocate(loc_zpt(nptz_ne,nsp))
+   loc_wghz=1.
+   loc_zpt=0.0
+  endif
+  !====================
+  call mpi_yz_part_distrib(nsp,loc_npty,loc_nptz,npyc,npzc,&
+                           ymin_t,zmin_t,wy,wz)
+  ! Restricts to the computational box
+  !=================================
+  if(pe0)then
+   open(12,file='Initial_gas_target_x-profiles',form='formatted')
+    do ic=1,nsp
+    write(12,*)'species',ic,sptx_max(ic)
+    write(12,*)'particle x-coordinate'
+    write(12,'(6e11.4)')xpt(1:sptx_max(ic),ic)
+    write(12,*)'particle weight'
+    write(12,'(6e11.4)')wghpt(1:sptx_max(ic),ic)
+   end do
+  close(12)
+  endif
+ !========== PARICLE ALLOCATION ==============
+  do ic=1,nsp
+   nps_loc(ic)=nptx_alloc(ic)*loc_jmax(imody,ic)*loc_kmax(imodz,ic)
+  end do
+  npmax=maxval(nps_loc(1:nsp))
+  nps_loc(1)=npmax
+  call p_alloc(npmax,nd2+1,nps_loc,nsp,LPf_ord,1,1,mem_psize)
+  !=========== Local x-distribution
+  allocate(loc_wghx(nptx_max,nsp))
+  do ic=1,nsp
+   call set_pgrid_xind(nptx(ic),ic)
+  end do
+  if(pe0)write(6,*)'imax on each mpi task',loc_imax(0,1:nsp)
+  loc_nptx(1:nsp)=loc_imax(imodx,1:nsp)
+  !==================
+ !=====================
+  !Resets nptx(ic)=last particle coordinate inside the computational box
+  !in the initial condition: for t>0  nptx(ic) updated by mowing window 
+  do ic=1,nsp
+   i1=0
+   do j=1,nptx(ic)
+    if(xpt(j,ic)< xmax)i1=i1+1
+   end do
+   nptx(ic)=i1
+   loc_nptx(ic)=i1
+  end do
+  if(pe0)then
+   do ic=1,nsp
+   write(6,*)'last particle coordinate in initial computationalbox',nptx(ic)
+   end do
   endif
   do ic=1,nsp
-   nptx_alloc(ic)=min(nptx(ic)+10,nx*np_per_xc(ic))
+   do i=1,nptx(ic)
+    loc_xpt(i,ic)=xpt(i,ic)
+    loc_wghx(i,ic)=wghpt(i,ic)
+   end do
   end do
-!======================================
- case(3)
-  !                 three layers
-  !                 lpx(1)[ramp]+lpx(2)[plateau]  and lpx(4) plateu lpx(5) downramp n_ion=0 n_e=n_0
-  !                 lpx(3)[plateau]  with a (A1-Z1) dopant with % density np1=n1_per_nc/n_per_nc
-  !                 and electronic density n_e=n_0+Z1*n_ion  n0=n_H(+)
-  !---------------
-  !================================================
-  !Z1 electrons are accounted for by a larger electron weight
-  un(1)=1.+ion_min(1)*np1
-  un(2)=np1        !float(mp_per_cell(1))/float(mp_per_cell(ic))
-
-  if(nxl(1)>0)then
-   do ic=1,nsp_run
-    n_peak=nxl(1)*np_per_xc(ic)
-    do i=1,n_peak
-     uu=(real(i,dp)-0.5)/real(n_peak,dp)
-     i1=nptx(ic)+i
-     xpt(i1,ic)=xfsh+lpx(1)*uu
-     wghpt(i1,ic)=uu*wgh_sp(ic)
-    end do
-    nptx(ic)=nptx(ic)+n_peak
-   end do
-   xfsh=xfsh+lpx(1)
-  endif
-  if(nxl(2)>0)then              !first plateau
-   do ic=1,nsp_run
-    n_peak=nxl(2)*np_per_xc(ic)
-    do i=1,n_peak
-     uu=(real(i,dp)-0.5)/real(n_peak,dp)
-     i1=nptx(ic)+i
-     xpt(i1,ic)=xfsh+lpx(2)*uu
-     wghpt(i1,ic)=wgh_sp(ic)
-    end do
-    nptx(ic)=nptx(ic)+n_peak
-   end do
-   xfsh=xfsh+lpx(2)
-  endif
-  !================
-  if(nxl(3)>0)then !el+H(+) + dopant un(1:2) correct (electron,Z1) weights
-   do ic=1,nsp
-    n_peak=nxl(3)*np_per_xc(ic)
-    do i=1,n_peak
-     uu=(real(i,dp)-0.5)/real(n_peak,dp)
-     i1=nptx(ic)+i
-     xpt(i1,ic)=xfsh+lpx(3)*uu
-     wghpt(i1,ic)=un(ic)*wgh_sp(ic)
-    end do
-    nptx(ic)=nptx(ic)+n_peak
-   end do
-   xfsh=xfsh+lpx(3)
-  endif
-  !================ second plateau only electrons =================
-  if(nxl(4)>0)then
-   do ic=1,nsp_run
-    n_peak=nxl(4)*np_per_xc(ic)
-    do i=1,n_peak
-     uu=(real(i,dp)-0.5)/real(n_peak,dp)
-     i1=nptx(ic)+i
-     xpt(i1,ic)=xfsh+lpx(4)*uu
-     wghpt(i1,ic)=wgh_sp(ic)
-    end do
-    nptx(ic)=nptx(ic)+n_peak
-   enddo
-   xfsh=xfsh+lpx(4)
-  endif
-  if(nxl(5)>0)then     !second down-ramp ==> 0
-   do ic=1,nsp_run
-    n_peak=nxl(5)*np_per_xc(ic)
-    do i=1,n_peak
-     uu=(real(i)-0.5)/real(n_peak,dp)
-     i1=nptx(ic)+i
-     xpt(i1,ic)=xfsh+lpx(5)*uu
-     wghpt(i1,ic)=(1.-uu)*wgh_sp(ic)
-    end do
-    nptx(ic)=nptx(ic)+n_peak
-   end do
-   xfsh=xfsh+lpx(5)
-  endif
+  !=============================
+  ! Alocation using a large buffer npt_max=mp_per_cell(1)*nx_loc*ny_loc*nz_loc
+ 
+  !===========================
+  last_particle_index=0
+  !============
   do ic=1,nsp
-   nptx_alloc(ic)=min(nptx(ic)+10,nx*np_per_xc(ic))
-  end do
- end select
- do ic=1,nsp
-  sptx_max(ic)=nptx(ic)
- end do
- !================================
- ! END of section setting global coordinates
- !=================================
- ! LOCAL to mpi domains particle representation
- ! NO dependence of (y,z) coordinates on x coordinate
- !=====loc_npty,loc_nptz allocated to (nsp) yz-layers or components
- loc_npty(1:nsp)=loc_jmax(imody,1:nsp)
- loc_nptz(1:nsp)=loc_kmax(imodz,1:nsp)
- !===========================
- npty_ne=maxval(loc_npty(1:nsp))
- nptz_ne=maxval(loc_nptz(1:nsp))
- !==========================
- !====================
- if(npty_ne >0)then
-  allocate(loc_wghy(npty_ne,nsp))
-  allocate(loc_ypt(npty_ne,nsp))
-  loc_ypt=0.0
-  loc_wghy=1.
- endif
- !==============
- if(nptz_ne >0)then
-  allocate(loc_wghz(nptz_ne,nsp))
-  allocate(loc_zpt(nptz_ne,nsp))
-  loc_wghz=1.
-  loc_zpt=0.0
- endif
- !====================
- call mpi_yz_part_distrib(nsp,loc_npty,loc_nptz,npyc,npzc,&
-                          ymin_t,zmin_t,wy,wz)
- ! Restricts to the computational box
- !=================================
- if(pe0)then
-  open(12,file='Initial_gas_target_x-profiles',form='formatted')
-   do ic=1,nsp
-   write(12,*)'species',ic,sptx_max(ic)
-   write(12,*)'particle x-coordinate'
-   write(12,'(6e11.4)')xpt(1:sptx_max(ic),ic)
-   write(12,*)'particle weight'
-   write(12,'(6e11.4)')wghpt(1:sptx_max(ic),ic)
-  end do
- close(12)
- endif
-!========== PARICLE ALLOCATION ==============
- do ic=1,nsp
-  nps_loc(ic)=nptx_alloc(ic)*loc_jmax(imody,ic)*loc_kmax(imodz,ic)
- end do
- npmax=maxval(nps_loc(1:nsp))
- nps_loc(1)=npmax
- call p_alloc(npmax,nd2+1,nps_loc,nsp,LPf_ord,1,1,mem_psize)
- !=========== Local x-distribution
- allocate(loc_wghx(nptx_max,nsp))
- do ic=1,nsp
-  call set_pgrid_xind(nptx(ic),ic)
- end do
- if(pe0)write(6,*)'imax on each mpi task',loc_imax(0,1:nsp)
- loc_nptx(1:nsp)=loc_imax(imodx,1:nsp)
- !==================
-!=====================
- !Resets nptx(ic)=last particle coordinate inside the computational box
- !in the initial condition: for t>0  nptx(ic) updated by mowing window 
- do ic=1,nsp
-  i1=0
-  do j=1,nptx(ic)
-   if(xpt(j,ic)< xmax)i1=i1+1
-  end do
-  nptx(ic)=i1
-  loc_nptx(ic)=i1
- end do
- if(pe0)then
-  do ic=1,nsp
-  write(6,*)'last particle coordinate in initial computationalbox',nptx(ic)
-  end do
- endif
- do ic=1,nsp
-  do i=1,nptx(ic)
-   loc_xpt(i,ic)=xpt(i,ic)
-   loc_wghx(i,ic)=wghpt(i,ic)
-  end do
- end do
- !=============================
- ! Alocation using a large buffer npt_max=mp_per_cell(1)*nx_loc*ny_loc*nz_loc
-
- !===========================
- last_particle_index=0
- !============
- do ic=1,nsp
-  p=0
-  i2=loc_nptx(ic)
-  if (i2>0) call pspecies_distribute(spec(ic),t0_pl(ic),unit_charge(ic),&
-   p,ic,i2,last_particle_index(ic))
-  loc_npart(imody,imodz,imodx,ic)=last_particle_index(ic)
- enddo
-
- end subroutine multi_layer_gas_target
- !=============================
+   p=0
+   i2=loc_nptx(ic)
+   if (i2>0) call pspecies_distribute(spec(ic),t0_pl(ic),unit_charge(ic),&
+    p,ic,i2,last_particle_index(ic))
+   loc_npart(imody,imodz,imodx,ic)=last_particle_index(ic)
+  enddo
+ 
+  end subroutine multi_layer_gas_target
+  !=============================
  !===============================
  subroutine preplasma_multisp(nyh,xf0)
 
@@ -1332,7 +1337,7 @@
  else
   np1_loc=0.005
  endif
- !======== a preplasma rump
+ !======== a preplasma ramp
  if(nxl(2) >0)then
   do ic=3,4
    n_peak=nxl(2)*np_per_xc(ic-2)
@@ -2957,7 +2962,7 @@
                                syb(ip),zc_bunch(ip),&
                                gam(ip),&
                                epsy(ip),epsz(ip),sigma_cut_bunch(ip),&
-                               dg(ip),bpart,dx,dy,dz,rhob(ip),ppc_bunch(ip,:))
+                               dg(ip),bpart,dx,dy,dz,rhob(ip),ppc_bunch(ip,:), particle_charge(ip))
    if(bunch_shape(ip)==1 .and. ppc_bunch(ip,1)==-1) & !equal-weight
                           call generate_bunch_bigaussian_equal(i1,i2,&
                                sxb(ip),xc_bunch(ip),&
@@ -2965,33 +2970,33 @@
                                syb(ip),zc_bunch(ip),&
                                gam(ip),&
                               epsy(ip),epsz(ip),sigma_cut_bunch(ip),&
-                              dg(ip),bpart,dx,dy,dz,rhob(ip))
+                              dg(ip),bpart,dx,dy,dz,rhob(ip), particle_charge(ip))
    if(bunch_shape(ip)==2 .and. ppc_bunch(ip,1)>0) & !weighted-option
                           call generate_bunch_triangularZ_uniformR_weighted(i1,i2,&
                                xc_bunch(ip),yc_bunch(ip),zc_bunch(ip),&
                                sxb(ip),syb(ip),syb(ip),gam(ip),&
                                epsy(ip),epsz(ip),sigma_cut_bunch(ip),dg(ip),&
                                bpart,Charge_right(ip),Charge_left(ip),dx,dy,dz, &
-                               ppc_bunch(ip,1:3))
+                               ppc_bunch(ip,1:3), particle_charge(ip))
    if(bunch_shape(ip)==2 .and. ppc_bunch(ip,1)==-1) & !equal-weight
                            call generate_bunch_triangularZ_uniformR_equal(i1,i2,&
                                 xc_bunch(ip),yc_bunch(ip),zc_bunch(ip),&
                                 sxb(ip),syb(ip),syb(ip),gam(ip),&
                                 epsy(ip),epsz(ip),sigma_cut_bunch(ip),dg(ip),&
-                                bpart,Charge_right(ip),Charge_left(ip))
+                                bpart,Charge_right(ip),Charge_left(ip), particle_charge(ip))
    if(bunch_shape(ip)==3 .and. ppc_bunch(ip,1)>0) & !weighted-option
                            call generate_bunch_triangularZ_normalR_weighted(i1,i2,&
                                 xc_bunch(ip),yc_bunch(ip),zc_bunch(ip),&
                                 sxb(ip),syb(ip),syb(ip),&
                                 gam(ip),epsy(ip),epsz(ip),sigma_cut_bunch(ip),dg(ip),&
                                 bpart,Charge_right(ip),Charge_left(ip),dx,dy,dz, &
-                                ppc_bunch(ip,1:3))
+                                ppc_bunch(ip,1:3), particle_charge(ip))
    if(bunch_shape(ip)==3 .and. ppc_bunch(ip,1)==-1) & !equal-weight
                            call generate_bunch_triangularZ_normalR_equal(i1,i2,&
                                 xc_bunch(ip),yc_bunch(ip),zc_bunch(ip),&
                                 sxb(ip),syb(ip),syb(ip),&
                                 gam(ip),epsy(ip),epsz(ip),sigma_cut_bunch(ip),dg(ip),&
-                                bpart,Charge_right(ip),Charge_left(ip))
+                                bpart,Charge_right(ip),Charge_left(ip), particle_charge(ip))
 
     !--- Twiss Rotation ---!
     if(L_TWISS(ip)) call bunch_twissrotation(i1,i2,bpart, &

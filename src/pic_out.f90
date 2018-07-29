@@ -31,7 +31,7 @@
 
  real(sp),allocatable :: wdata(:),gwdata(:)
 
- real(dp) :: tloc(1000),tsp(1:1001),eavg(10,1001),eavg1(10,1001),&
+ real(dp) :: tloc(10000),tsp(1:1001),eavg(10,1001),eavg1(10,1001),&
   pavg(15,1001,4),favg(30,1001)
  integer,parameter :: par_dim=20,ne=100
  real(dp) :: nde0(ne),nde1(ne),nde2(ne)
@@ -2889,8 +2889,11 @@
  write (fname,'(a4,i2.2)') 'diag',idata
 
  open (lun,file='diagnostics/'//fname//'.dat',form='formatted')
- write(lun,*)'mod_id,dmodel_id LP_ord,der_ord, ibeam,  color'
- write(lun,'(6i6)')model_id,dmodel_id,LPf_ord,der_ord,ibeam,color
+ write(lun,*)'    mod_id, dmodel_id,    LP_ord,   der_ord,     ibeam,     color,   &
+ n_field'
+ write(lun,'(7i11)')model_id,dmodel_id,LPf_ord,der_ord,ibeam,color,nfield
+ write(lun,*)'        Part,        Beam,        Wake, Solid_Target'
+ write(lun,'(4L13)')Part,Beam,Wake,Solid_target
  write(lun,*)'Z1_i,  A1_i,   Z2_i,   A2_i,   iform,    str'
  write(lun,'(6i6)')ion_min(1),atomic_number(1),ion_min(2),atomic_number(2),iform,str_flag
  write(lun,*)' xmax       xmin       ymax      ymin      '
@@ -2942,18 +2945,18 @@
  endif
  write(lun,*)'====================================='
  write(lun,*)'time'
- write(lun,'(5e11.4)')tloc(1:nst)
+ write(lun,'(5e18.10)')tloc(1:nst)
  if(Part)then
   write(lun,*)'========== Particle section======='
   do ic=1,nsp
    write(lun,'(a14)')sp_type(ic)
    write(lun,'(6a14)')pe(1:6)
    do ik=1,nst
-    write(lun,'(6e13.5)')pavg(1:6,ik,ic)
+    write(lun,'(6e18.10)')pavg(1:6,ik,ic)
    end do
    write(lun,'(5a14)')pe(7:11)
    do ik=1,nst
-    write(lun,'(5e13.5)')pavg(7:11,ik,ic)
+    write(lun,'(5e18.10)')pavg(7:11,ik,ic)
    end do
   end do
  endif         !END particle section
@@ -2965,7 +2968,7 @@
    write(lun,'(6a14)')fe2(1:6)
   endif
   do ik=1,nst
-   write(lun,'(6e13.5)')favg(1:6,ik)
+   write(lun,'(6e18.10)')favg(1:6,ik)
   end do
  else
   if(Beam)then
@@ -2974,7 +2977,7 @@
    write(lun,'(6a14)')fe(1:6)
   endif
   do ik=1,nst
-   write(lun,'(6e13.5)')favg(1:6,ik)
+   write(lun,'(6e18.10)')favg(1:6,ik)
   end do
   if(Beam)then
    write(lun,'(6a14)')feb(7:12)
@@ -2982,7 +2985,7 @@
    write(lun,'(6a14)')fe(7:12)
   endif
   do ik=1,nst
-   write(lun,'(6e13.5)')favg(7:12,ik)
+   write(lun,'(6e18.10)')favg(7:12,ik)
   end do
  endif
  if(Beam)then
@@ -2990,16 +2993,16 @@
   if(nfield < 6)then
    write(lun,'(6a14)')feb2(1:6)
    do ik=1,nst
-    write(lun,'(6e13.5)')favg(13:18,ik)
+    write(lun,'(6e18.10)')favg(13:18,ik)
    end do
   else
    write(lun,'(6a14)')feb(1:6)
    do ik=1,nst
-    write(lun,'(6e13.5)')favg(13:18,ik)
+    write(lun,'(6e18.10)')favg(13:18,ik)
    end do
    write(lun,'(6a14)')feb(7:12)
    do ik=1,nst
-    write(lun,'(6e13.5)')favg(19:24,ik)
+    write(lun,'(6e18.10)')favg(19:24,ik)
    end do
   endif
  endif
@@ -3008,13 +3011,13 @@
    write(lun,*)'====  the leading pulse integrated variables'
    write(lun,'(4a14)')fenv(1:4)
    do ik=1,nst
-    write(lun,'(4e13.5)')eavg(1:4,ik)
+    write(lun,'(4e18.10)')eavg(1:4,ik)
    end do
    if(Two_color)then
     write(lun,*)'====  the injection pulse integrated variables'
     write(lun,'(4a14)')fenv(1:4)
     do ik=1,nst
-     write(lun,'(4e13.5)')eavg1(1:4,ik)
+     write(lun,'(4e18.10)')eavg1(1:4,ik)
     end do
    endif
   endif
@@ -3024,12 +3027,12 @@
   if(nfield==6)then
    write(lun,'(6a14)')flt(1:6)
    do ik=1,nst
-    write(lun,'(6e13.5)')eavg(1:6,ik)
+    write(lun,'(6e18.10)')eavg(1:6,ik)
    end do
   else
    write(lun,'(3a14)')flt(1:3)
    do ik=1,nst
-    write(lun,'(3e13.5)')eavg(1:3,ik)
+    write(lun,'(3e18.10)')eavg(1:3,ik)
    end do
   endif
  endif

@@ -34,7 +34,7 @@
 
  real(dp) :: bunch_charge(5),bunch_volume(5),jb_norm(5),reduced_charge(5),Lorentz_bfact(5)
  real(dp) :: Charge_right(5), Charge_left(5)
- real(dp) :: gam(5),rhob(5)
+ real(dp) :: gam(5),rhob(5), particle_charge(5)
  real(dp) :: xc_bunch(5),yc_bunch(5),zc_bunch(5)
  real(dp) :: sxb(5),syb(5)
  real(dp) :: epsy(5),epsz(5),dg(5)
