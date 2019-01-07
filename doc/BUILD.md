@@ -107,11 +107,18 @@ PS Code\vcpkg>        cd $env:WORKSPACE
 PS Code>              git clone https://github.com/ALaDyn/ALaDyn
 ```
 
-14) Open a `cmd` shell and build `ALaDyn` using the `scripts\build\cmake.win.bat` bat script
+14) Open a `cmd` shell and build `ALaDyn` using the `scripts\build\cmake.win.bat` script or open a `powershell` shell and build `ALaDyn` using the `scripts\build\cmake.win.ps1` script
+
 ```cmd
-PS \>                 cd %WORKSPACE%
+X:\>                  cd %WORKSPACE%
+X:\Code>              cd ALaDyn
+X:\Code\ALaDyn>       .\scripts\build\cmake.win.bat
+```
+
+```PowerShell
+PS \>                 cd $env:WORKSPACE
 PS Code>              cd ALaDyn
-PS Code\ALaDyn>       .\scripts\build\cmake.win.bat
+PS Code\ALaDyn>       .\scripts\build\cmake.win.ps1
 ```
 
 #### Upgrade software
