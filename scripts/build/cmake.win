@@ -1,9 +1,0 @@
-call "%PROGRAMFILES(x86)%\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x64
-REM call "%PROGRAMFILES(x86)%\IntelSWTools\compilers_and_libraries\windows\mkl\bin\mklvars.bat" intel64 lp64
-
-rmdir /S /Q build
-mkdir build
-cd build
-cmake "-DFFTW_ROOT_DIR=%cd%\..\fftw" -G "NMake Makefiles" -DCMAKE_BUILD_TYPE="Release" ..
-cmake --build . --target install
-cd ..

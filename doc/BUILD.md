@@ -48,10 +48,10 @@ brew install gcc cmake make git ninja boost open-mpi fftw pkg-config
 
 ### Windows (7+) - PGI Compiler
 
-1) Install Visual Studio 2015 Community (no PGI compiler is still compatible with VS 2017) from the [official website](https://www.visualstudio.com/it/vs/older-downloads/)
+1) Install Visual Studio 2017 from the [official website](https://www.visualstudio.com/)
 2) Install MS-MPI 9.0 from the [official website](https://www.microsoft.com/en-us/download/details.aspx?id=56511)
-3) Install PGI 17.10 Community Edition from the [official website](https://www.pgroup.com/products/community.htm), being careful about manually adding all the fortran compilers during installation and avoiding installing MS-MPI from the PGI installer (an older and broken version would be downloaded)
-4) Install Intel MKL from the [official website](https://software.seek.intel.com/performance-libraries) [unsupported on compilers different from Intel]
+3) Install PGI 18.10 Community Edition from the [official website](https://www.pgroup.com/products/community.htm) (it is better to avoid installing MS-MPI, JRE and Cygwin from the PGI installer)
+4) Activate license for PGI 18.10 Community Edition (run as Administrator the link for the License Manager)
 5) Open your Powershell with Administrator privileges, type the following command and confirm it:
 
 ```PowerShell
@@ -107,18 +107,12 @@ PS Code\vcpkg>        cd $env:WORKSPACE
 PS Code>              git clone https://github.com/ALaDyn/ALaDyn
 ```
 
-14) Download fftw3 (64 bit, look for file `fftw-3.3.5-dll64.zip`) from the [official website](http://fftw.org/install/windows.html) [the one just built with `vcpkg` is not enough because the Fortran headers have just been added to the CMake toolchain - check for the next release], then extract the archive and put all the extracted file in an `ALaDyn/fftw` subfolder - avoid nesting other subfolders.
-15) Open a `PGICE cmd shell` (as a standard user) and type
-
+14) Open a `cmd` shell and build `ALaDyn` using the `scripts\build\cmake.win.bat` bat script
 ```cmd
-CMD \>                cd %WORKSPACE%
-CMD Code>             cd ALaDyn\fftw
-CMD Code\ALaDyn\fftw> lib /machine:x64 /def:libfftw3-3.def
-CMD Code\ALaDyn\fftw> lib /machine:x64 /def:libfftw3f-3.def
-CMD Code\ALaDyn\fftw> lib /machine:x64 /def:libfftw3l-3.def
+PS \>                 cd %WORKSPACE%
+PS Code>              cd ALaDyn
+PS Code\ALaDyn>       .\scripts\build\cmake.win.bat
 ```
-
-16) Open a `PGICE cmd shell` and build `ALaDyn` using the `scripts\build\cmake.win` bat script
 
 #### Upgrade software
 

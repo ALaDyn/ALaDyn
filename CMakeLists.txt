@@ -93,8 +93,11 @@ endif()
 
 if(NOT USING_PGI_COMPILER)
   find_package(Boost COMPONENTS system filesystem REQUIRED)
+  find_package(MPI REQUIRED)
+else()
+  find_package(MPI COMPONENTS C REQUIRED)
 endif()
-find_package(MPI REQUIRED)
+
 if (USING_INTEL_COMPILER AND NOT FORCE_FFTW)
   find_package(MKL REQUIRED)
   set(MKL_FFTW_INCLUDE_DIR "${MKL_INCLUDE_DIR}/fftw/")
