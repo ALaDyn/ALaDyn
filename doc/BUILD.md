@@ -50,22 +50,22 @@ brew install gcc cmake make git ninja boost open-mpi fftw pkg-config
 
 1) Install Visual Studio 2017 from the [official website](https://www.visualstudio.com/)
 2) Install MS-MPI 9.0 from the [official website](https://www.microsoft.com/en-us/download/details.aspx?id=56511)
-3) Install PGI 18.10 Community Edition from the [official website](https://www.pgroup.com/products/community.htm) (it is better to avoid installing MS-MPI, JRE and Cygwin from the PGI installer)
-4) Activate license for PGI 18.10 Community Edition (run as Administrator the link for the License Manager)
-5) Open your Powershell with Administrator privileges, type the following command and confirm it:
+3) Open your Powershell with Administrator privileges, type the following command and confirm it:
 
 ```PowerShell
 PS \>                 Set-ExecutionPolicy unrestricted
 ```
 
-6) If not already installed, please install chocolatey using the [official guide](http://chocolatey.org)
-7) If you are not sure about having them updated, or even installed, please install `git`, `cmake` and an updated `Powershell`. To do so, open your Powershell with Administrator privileges and type
+4) If not already installed, please install chocolatey using the [official guide](http://chocolatey.org)
+5) If you are not sure about having them updated, or even installed, please install `git`, `javaruntime`, `cmake` and an updated `Powershell`. To do so, open your Powershell with Administrator privileges and type
 
 ```PowerShell
-PS \>                 cinst -y git cmake powershell ninja
+PS \>                 cinst -y git cmake powershell javaruntime
 ```
 
-8) Restart the PC if required by chocolatey after the latest step
+6) Restart the PC if required by chocolatey after the latest step
+7) Install PGI 18.10 Community Edition from the [official website](https://www.pgroup.com/products/community.htm) (it is better to avoid installing MS-MPI, JRE and Cygwin from the PGI installer)
+8) Activate license for PGI 18.10 Community Edition (run as Administrator the link for the License Manager in your start menu)
 9) Define a work folder, which we will call WORKSPACE in this tutorial: this could be a "Code" folder in our home, a "cpp" folder on our desktop, whatever you want. Create it if you don't already have, using your favourite method (mkdir in Powershell, or from the graphical interface in explorer). We will now define an environment variable to tell the system where our folder is. Please note down its full path. Open a Powershell (as a standard user) and type
 
 ```PowerShell
