@@ -78,7 +78,7 @@ If it not already in the `PATH` (this is possible only if you did it before), we
                       %PROGRAMFILES%\CMake\bin
 ```
 
-10) If `vcpkg` is not installed, please follow the next procedure, otherwise please jump to #13
+10) If `vcpkg` is not installed, please follow the next procedure, otherwise please jump to #12
 
 ```PowerShell
 PS \>                 cd $env:WORKSPACE
@@ -106,18 +106,20 @@ PS Code\vcpkg>        cd $env:WORKSPACE
 PS Code>              git clone https://github.com/ALaDyn/ALaDyn
 ```
 
-13) Open a `cmd` shell and build `ALaDyn` using the `scripts\build\cmake.win.bat` script or open a `powershell` shell and build `ALaDyn` using the `scripts\build\cmake.win.ps1` script
-
-```cmd
-X:\>                  cd %WORKSPACE%
-X:\Code>              cd ALaDyn
-X:\Code\ALaDyn>       .\scripts\build\cmake.win.bat
-```
+13) Open a Powershell and build `ALaDyn` using the `scripts\build\cmake.win.ps1` script
 
 ```PowerShell
 PS \>                 cd $env:WORKSPACE
 PS Code>              cd ALaDyn
 PS Code\ALaDyn>       .\scripts\build\cmake.win.ps1
+```
+
+14) You may have to manually copy the `fftw3.dll` from the vcpkg folder to the install folder
+
+```PowerShell
+PS \>                 cd $env:WORKSPACE
+PS Code>              cd ALaDyn
+PS Code\ALaDyn>       cp $env:WORKSPACE\vcpkg\installed\x64-windows\bin\fftw3.dll .\bin\
 ```
 
 #### Upgrade software

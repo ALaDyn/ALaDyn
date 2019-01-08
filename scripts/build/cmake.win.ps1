@@ -7,7 +7,7 @@ $env:Path = "$env:Path;."
 $env:FLEXLM_BATCH = 1
 Write-Host "PGI 18.10 Enabled"
 
-Remove-Item .\build -Force -Recurse -ErrorAction SilentlyContinue
+#Remove-Item .\build -Force -Recurse -ErrorAction SilentlyContinue
 New-Item -Path .\build -ItemType directory -Force
 Set-Location build
 
