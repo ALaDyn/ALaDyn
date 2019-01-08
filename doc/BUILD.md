@@ -64,16 +64,16 @@ PS \>                 cinst -y git cmake powershell javaruntime
 ```
 
 6) Restart the PC if required by chocolatey after the latest step
-7) Install PGI 18.10 Community Edition from the [official website](https://www.pgroup.com/products/community.htm) (it is better to avoid installing MS-MPI, JRE and Cygwin from the PGI installer)
-8) Activate license for PGI 18.10 Community Edition (run as Administrator the link for the License Manager in your start menu)
-9) Define a work folder, which we will call WORKSPACE in this tutorial: this could be a "Code" folder in our home, a "cpp" folder on our desktop, whatever you want. Create it if you don't already have, using your favourite method (mkdir in Powershell, or from the graphical interface in explorer). We will now define an environment variable to tell the system where our folder is. Please note down its full path. Open a Powershell (as a standard user) and type
+7) Install PGI 18.10 from the [official website](https://www.pgroup.com/products/community.htm) (the community edition is enough and is free; it is better to avoid installing MS-MPI, JRE and Cygwin from the PGI installer)
+8) Activate license for PGI 18.10 Community Edition (rename the file `%PROGRAMFILES%\PGI\license.dat-COMMUNITY-18.10` to `%PROGRAMFILES%\PGI\license.dat`) if necessary, otherwise enable a Professional License if available
+9) Define a work folder, which we will call `WORKSPACE` in this tutorial: this could be a "Code" folder in our home, a "cpp" folder on our desktop, whatever you want. Create it if you don't already have, using your favourite method (mkdir in Powershell, or from the graphical interface in explorer). We will now define an environment variable to tell the system where our folder is. Please note down its full path. Open a Powershell (as a standard user) and type
 
 ```PowerShell
 PS \>                 rundll32 sysdm.cpl,EditEnvironmentVariables
 ```
 
-10) In the upper part of the window that pops-up, we have to create two new environment variables: one with name `WORKSPACE` and value the full path noted down before and one with name `VCPKG_ROOT` and value `%WORKSPACE%\vcpkg`.
-If it not already in the `PATH` (this is possible only if you did it before), we also need to modify the "Path" variable adding the following string (on Windows 10 you need to add a new line to insert it, on Windows Windows 7/8 it is necessary to append it using a `;` as a separator between other records):
+10) In the upper part of the window that pops-up, we have to create a new environment variable, with name `WORKSPACE` and value the full path noted down before.
+If it not already in the `PATH` (this is possible only if you did it before), we also need to modify the "Path" variable adding the following string (on Windows 10 you need to add a new line to insert it, on Windows 7/8 it is necessary to append it using a `;` as a separator between other records):
 
 ```cmd
                       %PROGRAMFILES%\CMake\bin

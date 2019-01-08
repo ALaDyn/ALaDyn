@@ -7,11 +7,13 @@ $env:Path = "$env:Path;."
 $env:FLEXLM_BATCH = 1
 Write-Host "PGI 18.10 Enabled"
 
+Remove-Item .\build -Force -Recurse -ErrorAction SilentlyContinue
 New-Item -Path .\build -ItemType directory -Force
 Set-Location build
 
-cmake -G "NMake Makefiles" "-DCMAKE_TOOLCHAIN_FILE=$env:WORKSPACE\vcpkg\scripts\buildsystems\vcpkg.cmake" "-DVCPKG_TARGET_TRIPLET=x64-windows-static" "-DCMAKE_BUILD_TYPE=Release" ..
-cmake --build . --target install
-#nmake VERBOSE=1
+#cmake -G "NMake Makefiles" "-DCMAKE_TOOLCHAIN_FILE=$env:WORKSPACE\vcpkg\scripts\buildsystems\vcpkg.cmake" "-DVCPKG_TARGET_TRIPLET=x64-windows-static" "-DCMAKE_BUILD_TYPE=Release" ..
+cmake -G "NMake Makefiles" "-DCMAKE_TOOLCHAIN_FILE=$env:WORKSPACE\vcpkg\scripts\buildsystems\vcpkg.cmake" "-DVCPKG_TARGET_TRIPLET=x64-windows-static" "-DCMAKE_BUILD_TYPE=Debug" ..
+#cmake --build . --target install
+nmake VERBOSE=1
 
 Set-Location ..
