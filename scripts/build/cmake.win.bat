@@ -15,13 +15,11 @@ set PATH=%PROGRAMFILES%\PGI\flexlm;%PATH%
 set PATH=%PGI%\win64\18.10\bin;%PATH%
 set PATH=%PATH%;.
 set FLEXLM_BATCH=1
-title PGI 18.10
 echo PGI 18.10 Enabled
 
 rmdir /S /Q build
 mkdir build
 cd build
-cmake -G "NMake Makefiles" "-DCMAKE_TOOLCHAIN_FILE=%WORKSPACE%\vcpkg\scripts\buildsystems\vcpkg.cmake" -DCMAKE_BUILD_TYPE="Release" -DVCPKG_TARGET_TRIPLET="x64-windows-static" ..
+cmake -G "NMake Makefiles" "-DCMAKE_TOOLCHAIN_FILE=%WORKSPACE%\vcpkg\scripts\buildsystems\vcpkg.cmake" "-DVCPKG_TARGET_TRIPLET=x64-windows" "-DCMAKE_BUILD_TYPE=Release" ..
 cmake --build . --target install
-REM nmake VERBOSE=1
 cd ..

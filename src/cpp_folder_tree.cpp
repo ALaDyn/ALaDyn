@@ -19,7 +19,7 @@
  *  along with ALaDyn.  If not, see <http://www.gnu.org/licenses/>.                                    *
  ******************************************************************************************************/
 
-#ifndef _WIN32
+#ifdef USE_BOOST
 #include <boost/filesystem.hpp>
 #include <cstring>
 

@@ -19,7 +19,7 @@
  *  along with ALaDyn.  If not, see <http://www.gnu.org/licenses/>.                                    *
  ******************************************************************************************************/
 
-#ifndef _WIN32
+#ifdef USE_GDB_ATTACH
 #include <cstdio>
 #include <sys/types.h>
 #include <unistd.h>

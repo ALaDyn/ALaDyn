@@ -27,10 +27,16 @@
 #if !defined (_CRESCO)
 #define ENABLE_MPI_LONG_INT
 #endif
+
  use fft_lib
+
+#if !defined (USE_MPI_MODULE)
  implicit none
  include 'mpif.h'
-
+#else
+ use mpi
+ implicit none
+#endif
 
  integer, parameter :: offset_kind = MPI_OFFSET_KIND
 
