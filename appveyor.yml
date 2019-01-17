@@ -122,7 +122,7 @@ install:
   #- if [%COMPILER%]==[pgi] copy %PROGRAMFILES%\PGI\license.dat-COMMUNITY-18.10 %PROGRAMFILES%\PGI\license.dat
   #download & install msmpi
   - ps: if($env:COMPILER -eq "pgi") { if($env:INSTALLED_MPI_VERSION -eq "MSMPI_HPC2012") { Invoke-WebRequest https://download.microsoft.com/download/B/C/8/BC826318-B57E-490D-82C1-06C99F52C608/MSMPISetup.exe -OutFile $env:WORKSPACE\msmpi.exe } }
-  - ps: if($env:COMPILER -eq "pgi") { if($env:INSTALLED_MPI_VERSION -eq "MSMPI_VCPKG")   { Invoke-WebRequest https://download.microsoft.com/download/2/E/C/2EC96D7F-687B-4613-80F6-E10F670A2D97/msmpisetup.exe -OutFile $env:WORKSPACE\msmpi.exe } }
+  - ps: if($env:COMPILER -eq "pgi") { if($env:INSTALLED_MPI_VERSION -eq "MSMPI_VCPKG")   { Invoke-WebRequest https://download.microsoft.com/download/A/E/0/AE002626-9D9D-448D-8197-1EA510E297CE/msmpisetup.exe -OutFile $env:WORKSPACE\msmpi.exe } }
   - if [%COMPILER%]==[pgi] if NOT [%INSTALLED_MPI_VERSION%]==[MSMPI_PGI] %WORKSPACE%\msmpi.exe -unattend
   #download & install libs for pgi - first of all update vcpkg and then install necessary libs
   - if [%COMPILER%]==[pgi] cd C:\Tools\vcpkg
@@ -149,10 +149,13 @@ install:
   - if [%COMPILER%]==[pgi] echo PGI 18.10 Enabled
 
 build_script:
-  - if [%COMPILER%]==[pgi]    if [%INSTALLED_MPI_VERSION%]==[MSMPI_PGI]     cmake -G "%GENERATOR%" "-DCMAKE_TOOLCHAIN_FILE=C:\Tools\vcpkg\scripts\buildsystems\vcpkg.cmake" "-DVCPKG_TARGET_TRIPLET=x64-windows" "-DCMAKE_BUILD_TYPE=Release" "-DFORCE_MSMPI_PATH_R1:BOOL=TRUE" ..
-  - if [%COMPILER%]==[pgi]    if [%INSTALLED_MPI_VERSION%]==[MSMPI_HPC2012] cmake -G "%GENERATOR%" "-DCMAKE_TOOLCHAIN_FILE=C:\Tools\vcpkg\scripts\buildsystems\vcpkg.cmake" "-DVCPKG_TARGET_TRIPLET=x64-windows" "-DCMAKE_BUILD_TYPE=Release" "-DFORCE_MSMPI_PATH_R2:BOOL=TRUE" ..
-  - if [%COMPILER%]==[pgi]    if [%INSTALLED_MPI_VERSION%]==[MSMPI_VCPKG]   cmake -G "%GENERATOR%" "-DCMAKE_TOOLCHAIN_FILE=C:\Tools\vcpkg\scripts\buildsystems\vcpkg.cmake" "-DVCPKG_TARGET_TRIPLET=x64-windows" "-DCMAKE_BUILD_TYPE=Release" ..
+  - if [%COMPILER%]==[pgi]    if [%INSTALLED_MPI_VERSION%]==[MSMPI_PGI]     cmake -G "%GENERATOR%" "-DCMAKE_TOOLCHAIN_FILE=C:\Tools\vcpkg\scripts\buildsystems\vcpkg.cmake" "-DVCPKG_TARGET_TRIPLET=%VCPKG_DEFAULT_TRIPLET%" "-DCMAKE_BUILD_TYPE=Release" "-DFORCE_MSMPI_PATH_R1:BOOL=TRUE" ..
+  - if [%COMPILER%]==[pgi]    if [%INSTALLED_MPI_VERSION%]==[MSMPI_HPC2012] cmake -G "%GENERATOR%" "-DCMAKE_TOOLCHAIN_FILE=C:\Tools\vcpkg\scripts\buildsystems\vcpkg.cmake" "-DVCPKG_TARGET_TRIPLET=%VCPKG_DEFAULT_TRIPLET%" "-DCMAKE_BUILD_TYPE=Release" "-DFORCE_MSMPI_PATH_R2:BOOL=TRUE" ..
+  - if [%COMPILER%]==[pgi]    if [%INSTALLED_MPI_VERSION%]==[MSMPI_VCPKG]   cmake -G "%GENERATOR%" "-DCMAKE_TOOLCHAIN_FILE=C:\Tools\vcpkg\scripts\buildsystems\vcpkg.cmake" "-DVCPKG_TARGET_TRIPLET=%VCPKG_DEFAULT_TRIPLET%" "-DCMAKE_BUILD_TYPE=Release" ..
   - if [%COMPILER%]==[pgi]    cmake --build . --target install
+  - if [%COMPILER%]==[pgi]    if [%INSTALLED_MPI_VERSION%]==[MSMPI_VCPKG]   echo Adding more debug info for MSMPI 10
+  - if [%COMPILER%]==[pgi]    if [%INSTALLED_MPI_VERSION%]==[MSMPI_VCPKG]   pgf95.exe -DUSE_MPI_MODULE -IC:\Tools\vcpkg\installed\%VCPKG_DEFAULT_TRIPLET%\include -# -Bdynamic -fast -O3 -r8 -c %WORKSPACE%\aladyn\src\parallel.F90 -o CMakeFiles\ALaDyn.dir\src\parallel.F90.obj
+
   - if [%COMPILER%]==[cygwin] %CYGSH% 'cmake -G "Unix Makefiles" "-DCMAKE_BUILD_TYPE=Debug" ..'
   - if [%COMPILER%]==[cygwin] %CYGSH% 'cmake --build . --target install'
 
