@@ -149,12 +149,15 @@ install:
   - if [%COMPILER%]==[pgi] echo PGI 18.10 Enabled
 
 build_script:
-  - if [%COMPILER%]==[pgi]    if [%INSTALLED_MPI_VERSION%]==[MSMPI_PGI]     cmake -G "%GENERATOR%" "-DCMAKE_TOOLCHAIN_FILE=C:\Tools\vcpkg\scripts\buildsystems\vcpkg.cmake" "-DVCPKG_TARGET_TRIPLET=%VCPKG_DEFAULT_TRIPLET%" "-DCMAKE_BUILD_TYPE=Release" "-DFORCE_MSMPI_PATH_R1:BOOL=TRUE" ..
-  - if [%COMPILER%]==[pgi]    if [%INSTALLED_MPI_VERSION%]==[MSMPI_HPC2012] cmake -G "%GENERATOR%" "-DCMAKE_TOOLCHAIN_FILE=C:\Tools\vcpkg\scripts\buildsystems\vcpkg.cmake" "-DVCPKG_TARGET_TRIPLET=%VCPKG_DEFAULT_TRIPLET%" "-DCMAKE_BUILD_TYPE=Release" "-DFORCE_MSMPI_PATH_R2:BOOL=TRUE" ..
-  - if [%COMPILER%]==[pgi]    if [%INSTALLED_MPI_VERSION%]==[MSMPI_VCPKG]   cmake -G "%GENERATOR%" "-DCMAKE_TOOLCHAIN_FILE=C:\Tools\vcpkg\scripts\buildsystems\vcpkg.cmake" "-DVCPKG_TARGET_TRIPLET=%VCPKG_DEFAULT_TRIPLET%" "-DCMAKE_BUILD_TYPE=Release" ..
-  - if [%COMPILER%]==[pgi]    cmake --build . --target install
-  - if [%COMPILER%]==[pgi]    if [%INSTALLED_MPI_VERSION%]==[MSMPI_VCPKG]   echo Adding more debug info for MSMPI 10
-  - if [%COMPILER%]==[pgi]    if [%INSTALLED_MPI_VERSION%]==[MSMPI_VCPKG]   pgf95.exe -DUSE_MPI_MODULE -IC:\Tools\vcpkg\installed\%VCPKG_DEFAULT_TRIPLET%\include -# -Bdynamic -fast -O3 -r8 -c %WORKSPACE%\aladyn\src\parallel.F90 -o CMakeFiles\ALaDyn.dir\src\parallel.F90.obj
+  - if [%COMPILER%]==[pgi]    if [%INSTALLED_MPI_VERSION%]==[MSMPI_PGI]       cmake -G "%GENERATOR%" "-DCMAKE_TOOLCHAIN_FILE=C:\Tools\vcpkg\scripts\buildsystems\vcpkg.cmake" "-DVCPKG_TARGET_TRIPLET=%VCPKG_DEFAULT_TRIPLET%" "-DCMAKE_BUILD_TYPE=Release" "-DFORCE_MSMPI_PATH_R1:BOOL=TRUE" ..
+  - if [%COMPILER%]==[pgi]    if [%INSTALLED_MPI_VERSION%]==[MSMPI_HPC2012]   cmake -G "%GENERATOR%" "-DCMAKE_TOOLCHAIN_FILE=C:\Tools\vcpkg\scripts\buildsystems\vcpkg.cmake" "-DVCPKG_TARGET_TRIPLET=%VCPKG_DEFAULT_TRIPLET%" "-DCMAKE_BUILD_TYPE=Release" "-DFORCE_MSMPI_PATH_R2:BOOL=TRUE" ..
+  - if [%COMPILER%]==[pgi]    if NOT [%INSTALLED_MPI_VERSION%]==[MSMPI_VCPKG] cmake --build . --target install
+
+  - if [%COMPILER%]==[pgi]    if [%INSTALLED_MPI_VERSION%]==[MSMPI_VCPKG]     cmake -G "%GENERATOR%" "-DCMAKE_TOOLCHAIN_FILE=C:\Tools\vcpkg\scripts\buildsystems\vcpkg.cmake" "-DVCPKG_TARGET_TRIPLET=%VCPKG_DEFAULT_TRIPLET%" "-DCMAKE_BUILD_TYPE=Release" ..
+  # wrap nmake inside a powershell call to avoid build stops due to error and be able to reach the extended debug info
+  - ps: if($env:COMPILER -eq "pgi") { if($env:INSTALLED_MPI_VERSION -eq "MSMPI_VCPKG")   { cmake --build . --target install } }
+  - if [%COMPILER%]==[pgi]    if [%INSTALLED_MPI_VERSION%]==[MSMPI_VCPKG]     echo Adding more debug info
+  - if [%COMPILER%]==[pgi]    if [%INSTALLED_MPI_VERSION%]==[MSMPI_VCPKG]     pgf95.exe -DUSE_MPI_MODULE -IC:\Tools\vcpkg\installed\%VCPKG_DEFAULT_TRIPLET%\include -# -Bdynamic -fast -O3 -r8 -c %WORKSPACE%\aladyn\src\parallel.F90 -o CMakeFiles\ALaDyn.dir\src\parallel.F90.obj
 
   - if [%COMPILER%]==[cygwin] %CYGSH% 'cmake -G "Unix Makefiles" "-DCMAKE_BUILD_TYPE=Debug" ..'
   - if [%COMPILER%]==[cygwin] %CYGSH% 'cmake --build . --target install'
