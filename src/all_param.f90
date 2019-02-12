@@ -256,6 +256,7 @@
  Ionization=.false.
  Impact_ioniz=.false.
  Charge_cons=.false.
+ Inject_beam=.false.
  Beam=.false.
  Relativistic=.false.
  Ions=.false.
@@ -446,7 +447,33 @@
   endif
   bet0=0.0
   lpvol=el_lp*el_lp*el_lp
- endif
+  if(nsb >0)Inject_beam=.true.
+!=====================
+  if(Inject_beam)then
+   !ON input phase space coordinates, beam size,
+!         total macro-particle number nb_tot(1), total charge (pC)
+!====================================
+   gam0=gam(1)               !the initial gamma factor
+   u0_b=sqrt(gam0*gam0-1.)   !the beam x-momentum
+   bet0=u0_b/gam0            !the beam velocity
+!==================
+   b_charge=nb_tot(1)*e_charge            !the charge of bunch macro-particle
+   np_per_nmacro= bunch_charge(1)/b_charge  !real particles/macro particles=real charge/macro charge
+!===============
+   if(ndim <3)then
+    bunch_volume(1) = pi2*sxb(1)*syb(1)*dy !the bunch volume (mu^3) in 2D Gaussian
+   else
+    bunch_volume(1) = pi2*sqrt(pi2)*sxb(1)*syb(1)*syb(1) !the bunch volume (mu^3) in 3D Gussian bunch
+   endif
+   rhob(1)=bunch_charge(1)/(e_charge*bunch_volume(1)) !bunch density (1/mu^3)
+   n0_ref=nm_fact*n_over_nc        ! background plasma density (1/mu^3)
+   rhob(1)= rhob(1)/n0_ref         !ratio beam density/background plasma density
+!----------------------------
+   ncell=bunch_volume(1)*gvol_inv
+   nb_per_cell=nb_tot(1)/ncell
+   jb_norm(1)=rhob(1)/nb_per_cell  !
+  endif
+ endif                   !EMD Laser-driven section
  !===================================
  if(Beam)then !  e-Beams section
    !========================================

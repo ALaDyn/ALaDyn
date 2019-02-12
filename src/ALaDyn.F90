@@ -39,13 +39,19 @@
  logical  :: Diag
  real(dp) :: tdia,dtdia,tout,dtout,tstart,mem_max_addr
  real(dp) :: dt_loc
- integer  :: t_ind,ic,tk_ind
+ integer  :: t_ind,ic,tk_ind,inject_ind
+ logical :: Tpart
 
  mem_psize_max=0.0
  mem_max_addr=0.0
 
 
  call start
+ Tpart=.false.
+ inject_ind=-1
+ if(Inject_beam)then
+  inject_ind=nint(t_inject/dt_loc)
+ endif
 
  call cpu_time(unix_time_now)
  unix_time_begin=unix_time_now
@@ -79,11 +85,6 @@
 
  subroutine LP_cycle
 
- if(P_tracking)then
-  tk_ind=tk_ind+1
-  call initial_tparticles_select(spec(1),dt,txmin,txmax,tymin,tymax,tzmin,tzmax)
-  call t_particles_collect(spec(1),tk_ind)
- endif
  call data_out(jump)
  dt_loc=dt
  t_ind=0
@@ -101,9 +102,19 @@
  endif
  do while (tnow < tmax)
 
+!=======================
+  if(P_tracking)then
+   if(tnow < t_in.and.tnow+dt_loc > t_in)then
+    tk_ind=tk_ind+1
+    call initial_tparticles_select(spec(1),dt_loc,txmin,txmax,tymin,tymax,tzmin,tzmax)
+    call t_particles_collect(spec(1),tk_ind)
+    Tpart=.true.
+   endif
+  endif
+!================================
   call LP_run(tnow,dt_loc,iter,LPf_ord)
 
-  if(P_tracking)then
+  if(Tpart)then
    if(mod(iter,tkjump)==0)then
     tk_ind=tk_ind+1
     call t_particles_collect(spec(1),tk_ind)
@@ -126,11 +137,11 @@
 
  subroutine ENV_cycle
 
- if(P_tracking)then
-  tk_ind=tk_ind+1
-  call initial_tparticles_select(spec(1),dt,txmin,txmax,tymin,tymax,tzmin,tzmax)
-  call t_particles_collect(spec(1),tk_ind)
- endif
+  if(inject_ind==iter)then
+   call beam_inject
+   if(pe0)write(6,'(a24,e11.4)')' Injected beam at time =',tnow
+  endif
+
  call data_out(jump)
 !================
  tk_ind=0
@@ -142,9 +153,19 @@
   if(Pe0) call Ioniz_data(lp_max,ion_min,atomic_number,ionz_lev,ionz_model)
  endif
  do while (tnow < tmax)
+!=================================
+  if(P_tracking)then
+   if(tnow < t_in.and.tnow+dt_loc > t_in)then
+    tk_ind=tk_ind+1
+    call initial_tparticles_select(spec(1),dt_loc,txmin,txmax,tymin,tymax,tzmin,tzmax)
+    call t_particles_collect(spec(1),tk_ind)
+    Tpart=.true.
+   endif
+  endif
+!==============================
   call ENV_run(tnow,dt_loc,iter,LPf_ord)
 
-  if(P_tracking)then
+  if(Tpart)then
    if(mod(iter,tkjump)==0)then
     tk_ind=tk_ind+1
     call t_particles_collect(spec(1),tk_ind)
@@ -221,7 +242,7 @@
   if(Diag)then
    if(pe0)call en_data(ienout,iter,idata)
   endif
-  if(P_tracking)then
+  if(Tpart)then
    if(tk_ind >1)then
    if(tk_ind <= track_tot_nstep)call track_part_pdata_out(tnow,tk_ind)
    endif
@@ -253,16 +274,18 @@
     endif
    end do
   endif
-  if (nden>0) then
-   do i=1,nsp
-    call prl_den_energy_interp(i)
-    do ic=1,min(2,nden)
-     call den_energy_out(tnow,i,ic,ic,jump)
-    end do
-   enddo
-   if(nden > 2)then
-    call set_wake_potential
-    call den_energy_out(tnow,0,nden,1,jump)  !data on jc(1) for wake potential
+  if(Part)then
+   if (nden>0) then
+    do i=1,nsp
+     call prl_den_energy_interp(i)
+     do ic=1,min(2,nden)
+      call den_energy_out(tnow,i,ic,ic,jump)
+     end do
+    enddo
+    if(nden > 2)then
+     call set_wake_potential
+     call den_energy_out(tnow,0,nden,1,jump)  !data on jc(1) for wake potential
+    endif
    endif
   endif
   if(Hybrid)then
@@ -281,9 +304,7 @@
     end do
    endif
   endif
-
   call cpu_time(unix_time_now)
-
   if (pe0) then
    write(6,'(a10,i6,a10,e11.4,a10,e11.4)') 'iter = ',iter,' t = ',tnow,' dt = ',dt_loc
    write(6,*)' END DATA WRITE'

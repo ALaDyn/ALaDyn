@@ -40,7 +40,7 @@
  real(dp) :: unix_time_begin, unix_time_now
  real(dp) :: time_interval_dumps, unix_time_last_dump
  real(dp) :: gamma_cut_min,weights_cut_min,weights_cut_max
- logical :: Part,part_dcmp,cmp,test,Stretch,Hybrid,Channel
+ logical :: Part,part_dcmp,cmp,test,Stretch,Hybrid,Channel,Inject_beam
  logical :: Lp_active,Lp_inject,Plane_wave,Lin_lp,Circ_lp,Relativistic,Envelope,Ions,Beam,Pbeam,Two_color
  logical :: Ionization,Wake,Solid_target,Charge_cons,G_prof,High_gamma
  logical :: Impact_ioniz,Comoving,P_tracking,Symmetrization_pulse

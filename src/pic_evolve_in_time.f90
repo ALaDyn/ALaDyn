@@ -1969,7 +1969,7 @@
      envf(ix,iy,iz,2)*envf(ix,iy,iz,2))
     av(ix,iy,iz,1)=av(ix,iy,iz,1)+0.5*(env1f(ix,iy,iz,1)*env1f(ix,iy,iz,1)+&
      env1f(ix,iy,iz,2)*env1f(ix,iy,iz,2))
-    !av(1)=|A0|^2/2+|A1|^2/2 at current t^n time level
+    !|A|^2/2 at current t^n time level
    end do
   end do
  end do
@@ -2366,10 +2366,10 @@
  else
   call env_fields_average(env,jc,i1,i2,j1,nyf,k1,nzf,2,2)
  endif
- ! In jc(1)= F= |A|^2/2 +|A_1|/2 at t^{n+1/2}  in jc(2:4) grad[F]
+ ! In jc(1)= Phi= |A|^2/2 +|A_1|/2 at t^{n+1/2}  in jc(2:4) grad[Phi]
  if(Hybrid)then
   flux(i1:i2,j1:nyf,k1:nzf,curr_ndim+2)=jc(i1:i2,j1:nyf,k1:nzf,1)
-  !stores in flux() fdim+1 last component env F data
+  !stores in flux()
  endif
   call set_env_grad_interp(jc,spec(ic),ebfp,np,curr_ndim,n_st,xm,ym,zm)
   !=============================
@@ -2381,10 +2381,9 @@
    call lpf_env_positions(spec(ic),ebfp,np,dt_loc,vbeam)
    if(ompe==zero_dp)return
   !===========================
-  !Computes x^{n+1}
-  ! stores
-  !ebfp(1:3) dt*V^{n+1/2}  ebfp(4:6) old positions ebfp(7)=dt*gam_inv
-  !==============================
+  ! ebfp(1:3) dt*V^{n+1/2}  ebfp(4:6) old positions for curr J^{n+1/2}
+  ! ebfp(7)=dt*gam_inv
+  !=======collects in jc(1:curr_ndim) currents due to electrons
   jc(:,:,:,:)=0.0
   call curr_accumulate(spec(ic),ebfp,jc,1,np,iform,n_st,xm,ym,zm)
  ! In curr(1:3) exit Dt*J()^{n+1/2)
@@ -2393,11 +2392,10 @@
   !adds contributions in overlapped cells of MPI domains
  !==================================
  if(Hybrid)then
-  !In flux(1:fdim) are stored fluid (P,den) at t^{n+1/2}
-  !In flux(fdim+1) is stored |a|^2/2 at t^{n+1/2}
-  !Enter jc(1:3) currents coming from particles
+  !In flux(1:fdim+1) are stored fluid (P,den) at t^{n+1/2}
+  !In flux(fdim+1) is stored |A|^2/2 at t^{n+1/2}
   call fluid_curr_accumulate(flux,jc,dt_loc,i1,i2,j1,nyf,k1,nzf)
-  !Computes fluid contribution of Dt*J^{n+1/2} and adds to particle contributions
+  !Computes fluid contribution => J^{n+1/2} and adds to particle contribution
  endif
  !====================
  ! Jc(1:3) for total curr Dt*J^{n+1/2}
@@ -2536,7 +2534,7 @@
  endif
   ! exit jc(1)=|a|^2/2 at t^n
   ! exit jc(2:4)=grad|a|^2/2 at t^n
-  ! For two-color |a|^2= |a_0|^2+|a_1|^2
+  ! For two-color |A|= |A_0|+|A_1|
   !======================================
   np=loc_npart(imody,imodz,imodx,ic)
   if(np>0)then
@@ -2761,8 +2759,7 @@
    ! In flux(1:curr_ndim+1) are stored fluid (P,den) at t^{n+1/2}
    flux(i1:i2,j1:j2,k1:k2,curr_ndim+2)=0.0
   call fluid_curr_accumulate(flux,jc,dt_loc,i1,i2,j1,j2,k1,k2)
-!===========================
-  !Computes fluid contribution => Dt*J_f^{n+1/2} added to particle contributions
+  !Computes fluid contribution => J_f^{n+1/2} and adds to particle contribution
 !  ===============  END plasma fluid section
  endif
  call advance_lpf_fields(ebf,jc,dt_loc,vbeam,i1,i2,j1,j2,k1,k2,1)

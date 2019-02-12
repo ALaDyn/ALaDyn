@@ -2678,16 +2678,17 @@
  integer :: i,ih,j,jh,i1,j1,i2,j2,k,kh,k1,k2,n
 
  !===============================================
- ! enters av(1)=|a|^2 envelope at integer grid nodes
+ ! enters av(1)=|a|^2/2 envelope at integer grid nodes
  ! and av(2:4)=[Grad |a|2/2] at staggered grid points
- ! exit |a|^2/2 and grad[|a|^2]/2 at the particle positions
+ ! exit in pt(1:4) grad[|a|^2]/2 and |a|^2/2 at the particle positions
+ ! On output => Reverse ordering of field variables is used
  !=========================
  ! Particle positions assigned using quadratic splines
  !  F=|a|^2/2
  !  ap(1)= [D_x(F)](i+1/2,j,k)
  !  ap(2)= [D_y(F)](i,j+1/2,k)
  !  ap(3)= [D_z(F)](i,j,k+1/2)
- !  ap(4)= [F](i,j,k)
+ !  ap(4)= [Phi](i,j,k)
  !===========================================
  ax1(0:2)=0.0;ay1(0:2)=0.0
  az1(0:2)=0.0
@@ -2771,7 +2772,7 @@
    end do
    !pt(n,1)=dxe*ap(1)    !assigned grad[A^2/2]
    !pt(n,2)=dye*ap(2)
-   pt(n,1:3)=ap(1:3)    !assigned A^2/2 and grad[A^2/2]
+   pt(n,1:3)=ap(1:3)    !assigned grad[Phi] and Phi
   end do
 !=================================
  case(3)
@@ -2858,7 +2859,7 @@
       dvol1=dvol*axh(i1)
       ap(1)=ap(1)+dvol1*av(i2,j2,k2,2)   !Dx[F]
       i2=i1+i
-      ap(4)=ap(4)+ax1(i1)*dvol*av(i2,j2,k2,1)  !F
+      ap(4)=ap(4)+ax1(i1)*dvol*av(i2,j2,k2,1)  !Phi
      end do
     end do
     do j1=0,2
@@ -2880,7 +2881,7 @@
      end do
     end do
    end do
-   pt(n,1:4)=ap(1:4)
+   pt(n,1:4)=ap(1:4)    !Exit grad[Phi] and Phi
    !=================================
   end do
  end select
@@ -2904,7 +2905,7 @@
  ! exit |a|^2/2 at the particle positions
  !=========================
  ! Particle positions assigned using quadratic splines
- !  F=|a|^2/2
+ !  Phi=|a|^2/2
  !===========================================
  ax1(0:2)=0.0;ay1(0:2)=0.0
  az1(0:2)=0.0
@@ -3016,8 +3017,8 @@
       ap(1)=ap(1)+ax1(i1)*dvol*av(i2,j2,k2,1)  !F
      end do
     end do
-     end do
-     pt(n,1)=ap(1)
+   end do
+   pt(n,1)=ap(1)
    !=================================
   end do
  end select
@@ -3261,7 +3262,7 @@
      dvol=ay1(j1)*az1(k1)
      do i1=0,stl
       i2=i1+i
-      ap(10)=ap(10)+ax1(i1)*dvol*av(i2,j2,k2,1)!t^n p-assigned F=a^2/2 field
+      ap(10)=ap(10)+ax1(i1)*dvol*av(i2,j2,k2,1)!t^n p-assigned Phi=a^2/2 field
      end do
      do i1=0,stl
       i2=i1+ih
@@ -4823,6 +4824,7 @@
  integer :: ih,jh,kh
  integer :: ix0,ix1,iy0,iy1,iz0,iz1
  !=======================
+ !Enter pt(4:6) old positions sp_loc(1:3) new positions
 
  ax1(0:2)=zero_dp;ay1(0:2)=zero_dp
  az1(0:2)=zero_dp;az0(0:2)=zero_dp
@@ -5332,16 +5334,16 @@
    !===============[Jx=  rho^{new} - rho_{old}==============
    do j1=1,3
     j2=j+j1
-     dvol(1)=wght*ay1(j1)
-     do i1=1,3
-      i2=i+i1
-      jcurr(i2,j2,1,1)=jcurr(i2,j2,1,1)+dvol(1)*ax1(i1)
-     end do
-     j2=j0+j1
-     dvol(1)=wght*ay0(j1)
-     do i1=1,3
-      i2=i0+i1
-      jcurr(i2,j2,1,1)=jcurr(i2,j2,1,1)-dvol(1)*ax0(i1)
+    dvol(1)=wght*ay1(j1)
+    do i1=1,3
+     i2=i+i1
+     jcurr(i2,j2,1,1)=jcurr(i2,j2,1,1)+dvol(1)*ax1(i1)
+    end do
+    j2=j0+j1
+    dvol(1)=wght*ay0(j1)
+    do i1=1,3
+     i2=i0+i1
+     jcurr(i2,j2,1,1)=jcurr(i2,j2,1,1)-dvol(1)*ax0(i1)
     end do
    end do
    !=============
@@ -5601,15 +5603,15 @@
   kh0=k0
 !======================in jcurr(1)=rho^new-rho_old
   do k1=0,2
-    k2=k+k1
-    do j1=0,2
-     j2=j+j1
-     dvol(1)=wght*ay1(j1)*az1(k1)
-     do i1=0,2
-      i2=i+i1
-      jcurr(i2,j2,k2,1)=jcurr(i2,j2,k2,1)+dvol(1)*ax1(i1)
-     end do
+   k2=k+k1
+   do j1=0,2
+    j2=j+j1
+    dvol(1)=wght*ay1(j1)*az1(k1)
+    do i1=0,2
+     i2=i+i1
+     jcurr(i2,j2,k2,1)=jcurr(i2,j2,k2,1)+dvol(1)*ax1(i1)
     end do
+   end do
    k2=k0+k1
    do j1=0,2
     j2=j0+j1
@@ -5619,7 +5621,7 @@
      jcurr(i2,j2,k2,1)=jcurr(i2,j2,k2,1)-dvol(1)*ax0(i1)
     end do
    end do
-   end do
+  end do
   !================Jy-Jz=============
   do k1=0,2
    k2=k0+k1

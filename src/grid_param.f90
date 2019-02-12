@@ -148,7 +148,7 @@
  do i=1,n_loc+1
   loc_yg(i,1,p)=y(i)
   loc_yg(i,2,p)=yh(i)
-  loc_yg(i,3,p)=dy1(i)
+  loc_yg(i,3,p)=dy1(i)             !dxi/dy
   loc_yg(i,4,p)=dy1h(i)
 
   loc_rg(i,1,p)=r(i) !FIX SERVE SE NON SIAMO IN CILINDRICO???

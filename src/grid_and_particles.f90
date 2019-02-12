@@ -50,13 +50,17 @@
  real(dp) :: lp_amp,lp_max,eb_max,lp_energy
 
  real(dp) :: t0_b,lp_rad,el_lp,el_D,lambda_p,omega_p,lpvol
- real(dp) :: nc0,ncrit,n_over_nc,n1_over_n,n2_over_n,np1,np2,np_per_cell,nmacro
+ real(dp) :: nc0,ncrit,n_over_nc,n1_over_n,n2_over_n,np1,np2
+ real(dp) :: np_per_cell,nb_per_cell,np_per_nmacro,nmacro
  real(dp) :: lpx(7),lpy(3),targ_in,targ_end,lx_fwhm,tau_fwhm
  real(dp) :: lp_in(Ref_nlas),lp_end(Ref_nlas),lp_ionz_in,lp_ionz_end,xf_loc(Ref_nlas),xc_loc(Ref_nlas)
  real(dp) :: ymin_t,ymax_t,zmin_t,zmax_t,rmin_t,rmax_t
  ! tracking param
  real(dp) :: txmin,txmax,tymin,tymax,tzmin,tzmax,t_in,t_out
  integer  :: tkjump,nkjump,track_tot_nstep,track_tot_part
+
+ !External Beam
+ real(dp) :: t_inject
 
  integer :: pot_ndim,nb_max,pe_nbmax,nb_min,pe_nbmin
  integer :: RK_ord,LPf_ord,Tsc_ord,der_ord,t_ord,spl_ord

@@ -2914,31 +2914,32 @@
   '<px>-momentum ','<py>-momentum ','<pz>-momentum ', &
   'sigma_px[KeV] ','sigma_py[KeV] ','sigma_pz[KeV] ', &
   'Mean Charge   ','Charge percell'/)
- character(14),dimension(16), parameter:: fe=(/&
-  'Ex2(J)        ','Ey2(J)        ','Ez2(J)        ',&
-  'Ex_max(TV/m)  ','Ey_max(TV/m)  ','Ez_max(TV/m)  ',&
-  'Bx2(J)        ','By2(J)        ','Bz2(J)        ',&
-  'Bx_max(TV/m)  ','By_max(TV/m)  ','Bz_max(TV/m)  ',&
-  '  E2(x<X_t)   ','  B2(x<X_t)   ',&
-  '  E2(x>X_t)   ','  B2(x>X_t)   '/)
- character(14),dimension(6), parameter:: fe2=(/&
-  'Ex2(J)        ','Ey2(J)        ','Bz2(J)        ',&
-  'Ex_max(TV/m)  ','Ey_max(TV/m)  ','Bz_max(TV/m)  '/)
- character(14),dimension(6), parameter:: feb2=(/&
-  'Ex2(J)        ','Ey2(J)        ','Bz2(J)        ',&
-  'Ex_max(GV/m)  ','Ey_max(GV/m)  ','Bz_max(GV/m)  '/)
- character(14),dimension(16), parameter:: feb=(/&
-  'Ex2(J)        ','Ey2(J)        ','Ez2(J)        ',&
-  'Ex_max(GV/m)  ','Ey_max(GV/m)  ','Ez_max(GV/m)  ',&
-  'Bx2(J)        ','By2(J)        ','Bz2(J)        ',&
-  'Bx_max(GV/m)  ','By_max(GV/m)  ','Bz_max(GV/m)  ',&
-  '  E2(x<X_t)   ','  B2(x<X_t)   ',&
-  '  E2(x>X_t)   ','  B2(x>X_t)   '/)
-!  character(14),dimension(6), parameter:: lfenv=(/&
-!   '  COM(1)      ','   COM(2)     ',' COM(3)       ','  COM(4)      ',&
-!   '  COM(5)      ','   COM(6)     '/)
- character(14),dimension(5), parameter:: fenv=(/&
-  '  Env_max     ','   Centroid   ','  Env radius  ',' Env_energy   ','  Env_action  '/)
+ character(18),dimension(16), parameter:: fe=(/&
+  '  Ex2(J)          ','  Ey2(J)          ','  Ez2(J)          ',&
+  '  Ex_max(TV/m)    ','  Ey_max(TV/m)    ','  Ez_max(TV/m)    ',&
+  '  Bx2(J)          ','  By2(J)          ','  Bz2(J)          ',&
+  '  Bx_max(TV/m)    ','  By_max(TV/m)    ','  Bz_max(TV/m)    ',&
+  '  E2(x<X_t)       ','  B2(x<X_t)       ',&
+  '  E2(x>X_t)       ','  B2(x>X_t)       '/)
+ character(18),dimension(6), parameter:: fe2=(/&
+  '  Ex2(J)          ','  Ey2(J)          ','  Bz2(J)          ',&
+  '  Ex_max(TV/m)    ','  Ey_max(TV/m)    ','  Bz_max(TV/m)    '/)
+ character(18),dimension(6), parameter:: feb2=(/&
+  '  Ex2(J)          ','  Ey2(J)          ','  Bz2(J)          ',&
+  '  Ex_max(GV/m)    ','  Ey_max(GV/m)    ','  Bz_max(GV/m)    '/)
+ character(18),dimension(16), parameter:: feb=(/&
+  '  Ex2(J)          ','  Ey2(J)          ','  Ez2(J)          ',&
+  '  Ex_max(GV/m)    ','  Ey_max(GV/m)    ','  Ez_max(GV/m)    ',&
+  '  Bx2(J)          ','  By2(J)          ','  Bz2(J)          ',&
+  '  Bx_max(GV/m)    ','  By_max(GV/m)    ','  Bz_max(GV/m)    ',&
+  '  E2(x<X_t)       ','  B2(x<X_t)       ',&
+  '  E2(x>X_t)       ','  B2(x>X_t)       '/)
+ character(14),dimension(6), parameter:: lfenv=(/&
+  '  COM(1)      ','   COM(2)     ',' COM(3)       ','  COM(4)      ',&
+  '  COM(5)      ','   COM(6)     '/)
+ character(18),dimension(5), parameter:: fenv=(/&
+  '  Env_max         ','  Centroid        ','  Env radius      ',&
+  '  Env_energy      ','  Env_action      '/)
  !character(14),dimension(5), parameter:: flaser=(/&
  ! '  Int_max     ',' Las_energy(J)','  < X_c >     ','   <W_y>      ',&
  ! '   < W_z >    '/)
@@ -3038,26 +3039,26 @@
  write(lun,*)'========== Fields section======='
  if(nfield < 6)then
   if(Beam)then
-   write(lun,'(6a14)')feb2(1:6)
+   write(lun,'(6a18)')feb2(1:6)
   else
-   write(lun,'(6a14)')fe2(1:6)
+   write(lun,'(6a18)')fe2(1:6)
   endif
   do ik=1,nst
    write(lun,'(6e18.10)')favg(1:6,ik)
   end do
  else
   if(Beam)then
-   write(lun,'(6a14)')feb(1:6)
+   write(lun,'(6a18)')feb(1:6)
   else
-   write(lun,'(6a14)')fe(1:6)
+   write(lun,'(6a18)')fe(1:6)
   endif
   do ik=1,nst
    write(lun,'(6e18.10)')favg(1:6,ik)
   end do
   if(Beam)then
-   write(lun,'(6a14)')feb(7:12)
+   write(lun,'(6a18)')feb(7:12)
   else
-   write(lun,'(6a14)')fe(7:12)
+   write(lun,'(6a18)')fe(7:12)
   endif
   do ik=1,nst
    write(lun,'(6e18.10)')favg(7:12,ik)
@@ -3066,12 +3067,12 @@
  if(Beam)then
   write(lun,*)'========== BUNCH fields section======='
   if(nfield < 6)then
-   write(lun,'(6a14)')feb2(1:6)
+   write(lun,'(6a18)')feb2(1:6)
    do ik=1,nst
     write(lun,'(6e18.10)')favg(13:18,ik)
    end do
   else
-   write(lun,'(6a14)')feb(1:6)
+   write(lun,'(6a18)')feb(1:6)
    do ik=1,nst
     write(lun,'(6e18.10)')favg(13:18,ik)
    end do
@@ -3084,13 +3085,13 @@
  if(Wake)then
   if(Envelope)then
    write(lun,*)'====  the leading pulse integrated variables'
-   write(lun,'(5a14)')fenv(1:5)
+   write(lun,'(5a18)')fenv(1:5)
    do ik=1,nst
     write(lun,'(5e18.10)')eavg(1:5,ik)
    end do
    if(Two_color)then
     write(lun,*)'====  the injection pulse integrated variables'
-    write(lun,'(5a14)')fenv(1:5)
+    write(lun,'(5a18)')fenv(1:5)
     do ik=1,nst
      write(lun,'(5e18.10)')eavg1(1:5,ik)
     end do
@@ -3100,12 +3101,12 @@
  if(Solid_target)then
   write(lun,*)'====  Field energy on solid targets'
   if(nfield==6)then
-   write(lun,'(6a14)')flt(1:6)
+   write(lun,'(6a18)')flt(1:6)
    do ik=1,nst
     write(lun,'(6e18.10)')eavg(1:6,ik)
    end do
   else
-   write(lun,'(3a14)')flt(1:3)
+   write(lun,'(3a18)')flt(1:3)
    do ik=1,nst
     write(lun,'(3e18.10)')eavg(1:3,ik)
    end do

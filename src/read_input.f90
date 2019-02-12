@@ -60,6 +60,9 @@
  !C Reads the input namelist
  !C
  !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+ integer :: nb_1
+ real(dp) ::xc_1,gam_1,sxb_1,syb_1,epsy_1,epsz_1,dg_1,charge_1
+
  NAMELIST/GRID/nx,ny,nz,ny_targ,k0,yx_rat,zx_rat
  NAMELIST/SIMULATION/LPf_ord,der_ord,str_flag,iform,model_id,&
   dmodel_id,ibx,iby,ibz,ibeam,ch_opt,fl_opt
@@ -68,6 +71,7 @@
   n_over_nc,np1,np2,r_c,L_disable_rng_seed
  NAMELIST/LASER/G_prof,nb_laser,t0_lp,xc_lp,tau_fwhm,w0_y,a0,lam0,lp_delay,&
  lp_offset,t1_lp,tau1_fwhm,w1_y,a1,lam1,Symmetrization_pulse,a_symm,Enable_ionization
+ NAMELIST/BEAM_INJECT/nb_1,xc_1,gam_1,sxb_1,syb_1,epsy_1,epsz_1,dg_1,charge_1,t_inject
  NAMELIST/MOVING_WINDOW/w_sh,wi_time,wf_time,w_speed
  NAMELIST/OUTPUT/nouts,iene,nvout,nden,npout,nbout,jump,pjump,gam_min,xp0_out,xp1_out,yp_out,tmax,cfl, &
   new_sim,id_new,dump,P_tracking,L_force_singlefile_output,time_interval_dumps,L_print_J_on_grid, &
@@ -119,6 +123,25 @@
  nml_error_message='LASER'
  close(nml_iounit)
  if(nml_ierr>0) call print_at_screen_nml_error
+
+ if(nsb >0)then
+ !--- reading injected beam parameters ---!
+ open(nml_iounit,file=input_namelist_filename, status='old')
+ read(nml_iounit,BEAM_INJECT,iostat=nml_ierr)
+ nml_error_message='BEAM'
+ close(nml_iounit)
+ if(nml_ierr>0) call print_at_screen_nml_error
+ n_bunches = nsb
+ nb_tot(1)=nb_1*100000
+ xc_bunch(1)=xc_1
+ gam(1)=gam_1
+ sxb(1)=sxb_1
+ syb(1)=syb_1
+ epsy(1)=epsy_1
+ epsz(1)=epsz_1
+ dg(1)=dg_1
+ bunch_charge(1)=charge_1
+ endif
 
 
  !--- reading moving window parameters ---!
@@ -294,6 +317,8 @@ end subroutine read_nml_integrated_background_diagnostic
 
  subroutine write_read_nml
  character(len=12) :: output_filename
+ integer :: nb_1
+ real(dp) ::xc_1,gam_1,sxb_1,syb_1,epsy_1,epsz_1,dg_1,charge_1
  !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
  !C
  !C write namelist on a file 'input_  .nml'
@@ -307,6 +332,7 @@ end subroutine read_nml_integrated_background_diagnostic
   n_over_nc,np1,np2,r_c
  NAMELIST/LASER/G_prof,nb_laser,t0_lp,xc_lp,tau_fwhm,w0_y,a0,lam0,lp_delay,&
   lp_offset,t1_lp,tau1_fwhm,w1_y,a1,lam1,Symmetrization_pulse,a_symm,Enable_ionization
+ NAMELIST/BEAM_INJECT/nb_1,xc_1,gam_1,sxb_1,syb_1,epsy_1,epsz_1,dg_1,charge_1,t_inject
  NAMELIST/MOVING_WINDOW/w_sh,wi_time,wf_time,w_speed
  NAMELIST/OUTPUT/nouts,iene,nvout,nden,npout,nbout,jump,pjump,gam_min,xp0_out,xp1_out,yp_out,tmax,cfl, &
   new_sim,id_new,dump,P_tracking,L_force_singlefile_output,time_interval_dumps,L_print_J_on_grid, &
