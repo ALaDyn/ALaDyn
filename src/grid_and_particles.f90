@@ -60,7 +60,8 @@
  integer  :: tkjump,nkjump,track_tot_nstep,track_tot_part
 
  !External Beam
- real(dp) :: t_inject
+ integer :: nb_1
+ real(dp) :: xc_1,gam_1,sxb_1,syb_1,epsy_1,epsz_1,dg_1,charge_1,t_inject
 
  integer :: pot_ndim,nb_max,pe_nbmax,nb_min,pe_nbmin
  integer :: RK_ord,LPf_ord,Tsc_ord,der_ord,t_ord,spl_ord

@@ -60,8 +60,6 @@
  !C Reads the input namelist
  !C
  !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
- integer :: nb_1
- real(dp) ::xc_1,gam_1,sxb_1,syb_1,epsy_1,epsz_1,dg_1,charge_1
 
  NAMELIST/GRID/nx,ny,nz,ny_targ,k0,yx_rat,zx_rat
  NAMELIST/SIMULATION/LPf_ord,der_ord,str_flag,iform,model_id,&
@@ -124,7 +122,6 @@
  close(nml_iounit)
  if(nml_ierr>0) call print_at_screen_nml_error
 
- if(nsb >0)then
  !--- reading injected beam parameters ---!
  open(nml_iounit,file=input_namelist_filename, status='old')
  read(nml_iounit,BEAM_INJECT,iostat=nml_ierr)
@@ -141,7 +138,7 @@
  epsz(1)=epsz_1
  dg(1)=dg_1
  bunch_charge(1)=charge_1
- endif
+
 
 
  !--- reading moving window parameters ---!
@@ -317,8 +314,7 @@ end subroutine read_nml_integrated_background_diagnostic
 
  subroutine write_read_nml
  character(len=12) :: output_filename
- integer :: nb_1
- real(dp) ::xc_1,gam_1,sxb_1,syb_1,epsy_1,epsz_1,dg_1,charge_1
+ 
  !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
  !C
  !C write namelist on a file 'input_  .nml'
@@ -354,6 +350,7 @@ end subroutine read_nml_integrated_background_diagnostic
  write(nml_iounit,nml=SIMULATION,ERR=30)
  write(nml_iounit,nml=TARGET_DESCRIPTION,ERR=30)
  write(nml_iounit,nml=LASER,ERR=30)
+ write(nml_iounit,nml=BEAM_INJECT,ERR=30)
  write(nml_iounit,nml=MOVING_WINDOW,ERR=30)
  write(nml_iounit,nml=OUTPUT,ERR=30)
  if(P_tracking)write(nml_iounit,nml=TRACKING,ERR=30)
