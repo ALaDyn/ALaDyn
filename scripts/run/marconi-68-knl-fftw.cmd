@@ -9,9 +9,9 @@
 module purge
 
 module load env-knl
-module load intel
-module load intelmpi
-module load boost
-module load fftw
+module load intel/pe-xe-2018--binary
+module load intelmpi/2018--binary
+module load boost/1.66.0--intelmpi--2018--binary
+module load fftw/3.3.7--intelmpi--2018--binary
 
 mpirun ./ALaDyn >> opic.txt 2>> epic.txt
