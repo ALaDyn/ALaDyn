@@ -230,8 +230,7 @@
  integer,intent(inout) :: vsize
  integer :: lenw,n3m,stl
 
- stl=3
- if(ifrm <2)stl=5
+ stl=5
  n3m=max(n2_loc,n3_loc)
  lenw=nvd*(n1_loc+2)*n3m*stl
  allocate(aux1(lenw),aux2(lenw))

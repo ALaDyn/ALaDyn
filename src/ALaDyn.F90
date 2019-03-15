@@ -40,14 +40,12 @@
  real(dp) :: tdia,dtdia,tout,dtout,tstart,mem_max_addr
  real(dp) :: dt_loc
  integer  :: t_ind,ic,tk_ind,inject_ind
- logical :: Tpart
 
  mem_psize_max=0.0
  mem_max_addr=0.0
 
 
  call start
- Tpart=.false.
  inject_ind=-1
  if(Inject_beam)then
   inject_ind=nint(t_inject/dt_loc)
@@ -86,13 +84,13 @@
  subroutine LP_cycle
 
  call data_out(jump)
- dt_loc=dt
+
  t_ind=0
  tk_ind=0
  if(Ionization)then
   lp_max=2.*lp_max
   do ic=2,nsp_ionz
-   call set_field_ioniz_wfunction(ion_min(ic-1),atomic_number(ic-1),ic,ionz_lev,ionz_model,lp_max,dt)
+   call set_field_ioniz_wfunction(ion_min(ic-1),atomic_number(ic-1),ic,ionz_lev,ionz_model,lp_max,dt_loc)
   end do
   if(Pe0) call Ioniz_data(lp_max,ion_min,atomic_number,ionz_lev,ionz_model)
   if(Impact_ioniz)then
@@ -102,19 +100,16 @@
  endif
  do while (tnow < tmax)
 
-!=======================
   if(P_tracking)then
-   if(tnow < t_in.and.tnow+dt_loc > t_in)then
+   if(tnow>=t_in .and. tnow <t_in+dt_loc)then
     tk_ind=tk_ind+1
     call initial_tparticles_select(spec(1),dt_loc,txmin,txmax,tymin,tymax,tzmin,tzmax)
     call t_particles_collect(spec(1),tk_ind)
-    Tpart=.true.
    endif
   endif
-!================================
   call LP_run(tnow,dt_loc,iter,LPf_ord)
 
-  if(Tpart)then
+  if(P_tracking)then
    if(mod(iter,tkjump)==0)then
     tk_ind=tk_ind+1
     call t_particles_collect(spec(1),tk_ind)
@@ -137,10 +132,10 @@
 
  subroutine ENV_cycle
 
-  if(inject_ind==iter)then
-   call beam_inject
-   if(pe0)write(6,'(a24,e11.4)')' Injected beam at time =',tnow
-  endif
+ if(inject_ind==iter)then
+  call beam_inject
+  if(pe0)write(6,'(a24,e11.4)')' Injected beam at time =',tnow
+ endif
 
  call data_out(jump)
 !================
@@ -148,24 +143,23 @@
  if(Ionization)then
   !lp_max=1.2*oml*a0
   do ic=2,nsp_ionz
-   call set_field_ioniz_wfunction(ion_min(ic-1),atomic_number(ic-1),ic,ionz_lev,ionz_model,lp_max,dt)
+   call set_field_ioniz_wfunction(ion_min(ic-1),atomic_number(ic-1),ic,ionz_lev,ionz_model,lp_max,dt_loc)
   end do
   if(Pe0) call Ioniz_data(lp_max,ion_min,atomic_number,ionz_lev,ionz_model)
  endif
  do while (tnow < tmax)
-!=================================
+
+  
   if(P_tracking)then
-   if(tnow < t_in.and.tnow+dt_loc > t_in)then
+   if(tnow>=t_in .and. tnow<t_in+dt_loc)then
     tk_ind=tk_ind+1
     call initial_tparticles_select(spec(1),dt_loc,txmin,txmax,tymin,tymax,tzmin,tzmax)
     call t_particles_collect(spec(1),tk_ind)
-    Tpart=.true.
    endif
   endif
-!==============================
   call ENV_run(tnow,dt_loc,iter,LPf_ord)
 
-  if(Tpart)then
+  if(P_tracking)then
    if(mod(iter,tkjump)==0)then
     tk_ind=tk_ind+1
     call t_particles_collect(spec(1),tk_ind)
@@ -192,12 +186,11 @@
   call bunch_output_struct(tdia,dtdia,tout,dtout)
  endif
  call bdata_out(jump)
- dt_loc=dt
  t_ind=0
  if(Ionization)then
   eb_max=0.8   !max beam field in atomic unit 0.514[TV/m] => here Ef_{max}=410[GV/m]
   do ic=2,nsp_ionz
-   call set_field_ioniz_wfunction(ion_min(ic-1),atomic_number(ic-1),ic,ionz_lev,ionz_model,eb_max,dt)
+   call set_field_ioniz_wfunction(ion_min(ic-1),atomic_number(ic-1),ic,ionz_lev,ionz_model,eb_max,dt_loc)
   end do
   if(Pe0) call Ioniz_data(eb_max,ion_min,atomic_number,ionz_lev,ionz_model)
  endif
@@ -546,7 +539,7 @@
 
  subroutine start
 
- integer :: nxp,nyp,nzp,ns_ioniz
+ integer :: nxp,nyp,nzp,ns_ioniz,ncmp
  !real(dp), parameter :: opt_der=1.0
 
  !enable loop to attach with gdb only if really needed
@@ -616,10 +609,14 @@
  nzp=loc_zgrid(imodz)%p_ind(2)  !Nz_loc+2
  nxp=loc_xgrid(imodx)%p_ind(2)  !Nx_loc+2
  !====== Fields and current arrays allocated on [1: N_loc+5]
+ ncmp=nfield
  !==========================
  call v_alloc(nxp,nyp,nzp,nfield,nj_dim,&
              ndim,ns_ioniz,ibeam,LPf_ord,der_ord,Envelope,Two_color,Comoving,mem_size)
- if(Hybrid)call fluid_alloc(nxp,nyp,nzp,nfcomp,ndim,LPF_ord,mem_size)
+ if(Hybrid)then
+  call fluid_alloc(nxp,nyp,nzp,nfcomp,ndim,LPF_ord,mem_size)
+  ncmp=max(ncmp,nfcomp)
+ endif
  if (Beam) then
   call bv_alloc(nxp,nyp,nzp,nbfield,ndim,ibeam,mem_size)
  endif
@@ -627,7 +624,7 @@
   if (pe0) call str_grid_data
  endif
  if (iform==1) iform=0    !only esirkepov schemes used
- call mpi_valloc(loc_nxc_max,loc_nyc_max,loc_nzc_max,nfield,iform,mem_size)
+ call mpi_valloc(loc_nxc_max,loc_nyc_max,loc_nzc_max,ncmp,iform,mem_size)
  call set_output_grid(jump)   !allocates wdata(); counts nhx,nhy,nhz local grid points
  if(pe0)then
   write(6,*)'START OF RUN'
@@ -1070,7 +1067,7 @@
   write(60,*)' Longitudinal scales'
   write(60,'(a8,f6.2,a18,f6.2)')'  w0_x= ',w0_x,'   tau_fwhm(fs) = ',tau_FWHM
   write(60,'(a13,f5.2,a13,f5.2)')'  wavelength=',lam0,'   frequency=',oml
-  write(60,'(a17,f6.2,a17,f6.2)')'  Initial focus =',xf,'   Pulse center= ',xc_lp
+  write(60,'(a17,e13.3,a17,f6.2)')'  Initial focus =',xf,'   Pulse center= ',xc_lp
   write(60,'(a29,e11.4)')'  Diffraction length Z_Rayl= ',ZR
   write(60,'(a25,f5.2)')'  Strength parameter a0= ',a0
   write(60,'(a33,f5.2,a6)')'  Max transverse field at focus= ',E0*a0*oml,'(TV/m)'
@@ -1138,18 +1135,20 @@
     do i=1,nsp_ionz-1
       write(60,*)' Ionization active on ion species:',species_name(atomic_number(i))
     end do
-    if(Symmetrization_pulse)then
+    if(Symmetrization_pulse .and. (curr_ndim>2))then
      write(60,*)' A symmetrization pulse is implied when ionizing'
-     write(60,*)' The sym. formula is sin(2*pi*u)*a_symm'
-     if(a_symm>zero_dp)then
-      write(60,'(a32,e11.4)')' Symmetrization amplitude a_symm',a_symm
+     write(60,*)' The sym. formula is sin(2*pi*u)*\Delta*a_1*a_symm_rat'
+     if(a_symm_rat>zero_dp)then
+      write(60,'(a32,e11.4)')' Symmetrization amplitude a_symm_rat',a_symm_rat
+     else
+      write(60,'(a32,e11.4)')' Symmetrization amplitude a_symm_rat',sqrt(2.)
      endif
     endif
    end if
  write(60,*)'**********TARGET PLASMA PARAMETERS***********'
   if(Part.or.Hybrid)then
    write(60,'(a26,e11.4,a10)')'  Electron number density ',n0_ref,'[10^18/cc]'
-   write(60,'(a21,f5.2)')'  Plasma wavelength= ',lambda_p
+   write(60,'(a21,e11.4)')'  Plasma wavelength= ',lambda_p
    write(60,'(a20,e11.4)')' Chanelling fact  = ',chann_fact
    if(model_id < 5)then
     write(60,'(a20,f5.2,a10)')'  Critical density= ',ncrit,'[10^21/cc]'

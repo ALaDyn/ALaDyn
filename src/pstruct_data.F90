@@ -32,7 +32,7 @@
  real(dp),allocatable :: loc_ypt(:,:),loc_zpt(:,:),loc_wghyz(:,:,:)
  real(dp),allocatable :: loc_xpt(:,:),loc_wghx(:,:)
  real(dp),allocatable :: track_aux(:)
- real(sp),allocatable :: pdata_tracking(:,:,:)
+ real(dp),allocatable :: pdata_tracking(:,:,:)
  !=====================
 
  contains

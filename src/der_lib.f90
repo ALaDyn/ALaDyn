@@ -107,16 +107,21 @@
   if(n3 >1)call set_lpl_mat(n3,3)
  endif
 
- if(filt >0)then
   allocate(fmat(nd_max,3,nd))
   fmat=0.0
-  aph=0.475                      !Lele  tridiag C.2.4
+  aph=0.475                      !Lele  tridiag C.2.4 (d=0, beta=0)
+                                 !Optimized transfer function x=T[u]
+  !aph(x_{i-1}+x_{i+1})+x_i  =   au_i +b/2(u_{i-1}+u_{i+1})+c/2(u_{i-2}+u_{i+2})
   filt_coeff(0)=aph
   filt_coeff(1)=(6.*aph+5.)/8.   !a
-  filt_coeff(2)=0.25*(2.*aph+1.) !b/2
-  filt_coeff(3)=(2.*aph-1.)/16.  !c/2
- endif
+  filt_coeff(2)=0.25*(2.*aph+1.) !b
+  filt_coeff(3)=(2.*aph-1.)/16.  !c
+                                 !explicit filtering aph=0
+  filt_coeff(4)=5./8.            !a
+  filt_coeff(5)=0.25             !b
+  filt_coeff(6)=-1./16.          !c
  !++++++++++++++++++++++++++++
+  
  select case(ib1)
  case(0)
   if(derinv)call set_der_inv(n1,aph_der,aph_der,ib1)
@@ -124,6 +129,23 @@
   if(derinv)call set_der_inv(n1-1,aph_der,aph_der,ib1)
  end select
  end subroutine set_mat_der
+!==============================
+ subroutine set_filt_mat(ng1,dir)
+ integer,intent(in) :: ng1,dir
+ integer :: i
+
+ fmat(1:ng1,1,dir)=filt_coeff(0)
+ fmat(1:ng1,2,dir)=1.0
+ fmat(1:ng1,3,dir)=filt_coeff(0)
+ !        LU Factorize
+ fmat(1,2,dir)=1.0/fmat(1,2,dir)
+ do i=2,ng1
+  fmat(i-1,3,dir)=fmat(i-1,3,dir)*fmat(i-1,2,dir)
+  fmat(i,2,dir)=fmat(i,2,dir)- &
+   fmat(i-1,3,dir)*fmat(i,1,dir)
+  fmat(i,2,dir)=1.0/fmat(i,2,dir)
+ end do
+ end subroutine set_filt_mat
  !=============================
  subroutine trid_lpl_inv(n,dir)
  integer,intent(in) :: n,dir

@@ -51,11 +51,11 @@ With those parameters, the full box size (in μm) is: `Lx = nx / k0`, `Ly = yx_r
   + der_ord=3 assures optimized wave (Laser) propagation in under dense plasma.
 + `str_flag` has three possible different values:
   + `0` for uniform grid
-  + `1` to enable stretching along transverse axes
-  + `2` to enable stretching along all axes, but for *x* it is only on the right side of the box (need testing)
+  + `1` to enable stretching along transverse axes. The number of stretched cells is `ny/6` and `nz/6`, starting from both the boundaries.
+  + `2` to enable stretching along transverse axes. The number of stretched cells is `ny/4` and `nz/4`, starting from both the boundaries. This stretching is stronger.
 + `iform` has two possible different values:
-  + `0`:  Esirkepov's scheme for charge conservation (particle by particle) (to be preferred)
-  + `1`: Esirkepov's scheme for charge conservation (inverted on grid along x) (not allowed for MPI decomposition along the x coordinate)
+  + `0`: Esirkepov's scheme for charge conservation (particle by particle, to be preferred)
+  + `1`: Esirkepov's scheme for charge conservation (inverted on grid along x, not allowed for MPI decomposition along the x coordinate) (***fallback on*** `iform=0`)
   + `2`: no charge preserving (better energy conservation assured)
 + `model_id` has five possible different values
   + `1` laser is p-polarized
@@ -65,7 +65,7 @@ With those parameters, the full box size (in μm) is: `Lx = nx / k0`, `Ly = yx_r
   + `5` the driver is an electron beam. Its description must be given in a separate namelist block
   + `6` the driver is a proton bunch. Its description must be given in a separate namelist block
 + `dmodel_id` has five possible different values
-  + `1` uniform - the simulation is done using  `nsp` species (electrons, Z_1,Z_2,Z_3) all distributed along the target x-profile
+  + `1` uniform - the simulation is done using `nsp` species (electrons, Z_1,Z_2,Z_3) all distributed along the target x-profile
   + `2` empty model
   + `3` preplasma - the simulation is tested in this configuration: three `nsp=3` species (electrons, Z_1, Z_2), with a preplasma made of Z_1 + e, a bulk made of Z_1 + e and a contaminant layer made of Z_2 + e
   + `4` foam - the simulation is tested in this configuration: three `nsp=3` species (electrons, Z_1, Z_2), with a foam made of Z_2 + e, a bulk made of Z_1 + e and a contaminant layer made of Z_2 + e
@@ -128,7 +128,8 @@ With those parameters, the full box size (in μm) is: `Lx = nx / k0`, `Ly = yx_r
  n_over_nc        = 100.0,
  np1              = 1.0,
  np2              = 10.0,
- r_c              = 0.0
+ r_c              = 0.0,
+ incid_angle      = 0.0, 
 /
 ```
 
@@ -142,7 +143,7 @@ With those parameters, the full box size (in μm) is: `Lx = nx / k0`, `Ly = yx_r
   + 1 (pure ADK as in chen et al (2013), the best one for wake sims)
   + 2 (ADK averaged over cycles, as in chen et al (2013), `W_AC=<W_DC>`, best for envelope simulations)
   + 3 (`W_AC+BSI`, added barrier suppression ionization)
-  + 4 (Minimum between ADK and BSI ionization values. Here the ADK value is computed averaging on `m`, the magnetic quantum number of the ionized electrons as in Alistair Lawrence-Douglas PhD thesis)
+  + 4 (Minimum between ADK and BSI ionization values. Here the ADK value is computed averaging on `m`, the magnetic quantum number of the ionized electrons as in [Lawrence-Douglas, 2013](http://wrap.warwick.ac.uk/57465/))
 + `mass_number(i)` are the mass number (A) that define the exact isotope of a given `atomic_number(i)`. Here following you can find the only elements known by ALaDyn
 
 ```fortran
@@ -166,20 +167,34 @@ Copper    (atomic_number = 29) - mass_number = 63.54
   + `dmodel_id=1` : i=1 indicates the number of electrons, i=2 the number of macroparticles of Z_1 species, i=3 the number of macroparticles of Z_2 species and i=4 the number of macroparticles of Z_3 species.
   + `dmodel_id=3,4` : i=1,2 are the number of electrons and ions per cell along x/y in the bulk, i=3,4 refer to the front layer and i=5,6 to the contaminants.
 + `np_per_yc(i)`: the same as `np_per_xc`, this describes the number of particles per cell along transverse directions (valid also for *z* for 3D simulations)
-+ `lpx(1)` is the length [μm] of the upstream layer (foam or preplasma), having density `n1/nc`
-+ `lpx(2)` is the length [μm] of the ramp (linear or exponential depending on the `mdl`) connecting the upstream layer with the central one (made with bulk particles)
-+ `lpx(3)` is the length [μm] of the central layer (bulk), having density `n2/nc`
-+ `lpx(4)` is the length [μm] of the ramp (linear), connecting the bulk with the contaminants (made with bulk particles)
-+ `lpx(5)` is the length [μm] of the downstream layer (contaminants), having density `n3/nc`
-+ `lpx(6)` is the angle *α* of incidence, between the laser axis and the target plane
-+ `lpx(7)` is the offset [μm] between the end of the laser and the beginning of the target (if zero, the target starts right at the end of the laser pulse). In the gaussian case, the end of the pulse is defined as the center position + the FWHM. The offset is calculated *before* laser rotation, so mind the transverse size if `lx(6) ≠ 0`, in order to avoid laser initialization *inside the target*.
-+ `lpy(1)` defines the wire size [μm]
-+ `lpy(2)` defines the distance [μm] between wires (interwire size)
-+ `n_over_nc` is the density in the central layer (bulk)
-  + *LWFA* case: density is in units of critical density
-  + *PWFA* case: the density is in units of (a nominal value) nc=1e18 cm-3
-+ `np1` is the density in the upstream layer (foam/preplasma)
-+ `np2` is the density in the downstream layer (contaminants)
++ `dmodel_id=1`
+    + `lpx(1)` is the length [μm] of the upstream layer (foam or preplasma), having density `n1/nc`
+    + `lpx(2)` is the length [μm] of the ramp (linear or exponential depending on the `mdl`) connecting the upstream layer with the central one (made with bulk particles)
+    + `lpx(3)` is the length [μm] of the central layer (bulk), having density `n2/nc`
+    + `lpx(4)` is the length [μm] of the ramp (linear), connecting the bulk with the contaminants (made with bulk particles)
+    + `lpx(5)` is the length [μm] of the downstream layer (contaminants), having density `n3/nc`
+    + `lpx(7)` is the offset [μm] between the end of the laser and the beginning of the target (if zero, the target starts right at the end of the laser pulse). In the gaussian case, the end of the pulse is defined as the center position + the FWHM. The offset is calculated *before* laser rotation, so mind the transverse size if `incid_angle ≠ 0`, in order to avoid laser initialization *inside the target*.
+    + `n_over_nc` is the density in the central layer (bulk)
+    + *LWFA* case: density is in units of critical density
+    + *PWFA* case: the density is in units of (a nominal value) nc=1e18 cm-3
+    + `np1` is the density in the upstream layer (foam/preplasma)
+    + `np2` is the density in the downstream layer (contaminants)
++ `dmodel_id=4` (Ramps are all `cos^2`)
+    + `lpx(1)` is the length [μm] of the upramp to the plateau
+    + `lpx(2)` is the length [μm] of the first plateau (plasma bulk) with density `n_over_nc`
+    + `lpx(3)` is the length [μm] of the connecting ramp from the first plateau to the second one
+    + `lpx(4)` is the length [μm] of the second plateau (plasma bulk) with density `np1*n_over_nc`
+    + `lpx(5)` is the length [μm] of the connecting ramp from the second plateau to the third one
+    + `lpx(6)` is the length [μm] of the third plateau (plasma bulk) with density `np2*n_over_nc`
+    + `lpx(7)` is the offset [μm] between the end of the laser and the beginning of the target (if zero, the target starts right at the end of the laser pulse). In the gaussian case, the end of the pulse is defined as the center position + the FWHM. The offset is calculated *before* laser rotation, so mind the transverse size if `incid_angle ≠ 0`, in order to avoid laser initialization *inside the target*.
+    + `n_over_nc` is the density of the first plateau
+    + *LWFA* case: density is in units of critical density
+    + *PWFA* case: the density is in units of (a nominal value) nc=1e18 cm-3
+    + `np1` is the density of the second plateau
+    + `np2` is the density of the third plateau
++ `lpy(1)` defines the wire size [μm].
++ `lpy(2)` defines the distance [μm] between wires (interwire size).
++ `incid_angle` Angle of incidence (degrees) of the laser pulse on the target.
 + `r_c` is the plasma channel depth ==> `n/n_over_nc = 1 + w0_y^2*lambda_0^2/(r_c^2 *\pi ^2 *n_over_nc)(y^2+z^2)/w0_y^2`, where `w0_y` is the laser waist. If `r_c`=`w0_y` the channel is matched
 
 ## LASER namelist block (**only for `ibeam=1`**)
@@ -192,15 +207,23 @@ Copper    (atomic_number = 29) - mass_number = 63.54
  xc_lp          = 16.5,
  tau_fwhm       = 33.0,
  w0_y           = 6.2,
- a0             = 3.0
- lam0           = 0.8
- lp_delay       = 20.59
+ a0             = 3.0,
+ lam0           = 0.8,
+ y0_cent         = 0.0, 
+ z0_cent         = 0.0,
+ Enable_ionization(0) = .true. 
+ lp_delay       = 20.59,
  lp_offset      = 0,
  t1_lp          = 200.0,
  tau1_fwhm      = 24.74,
  w1_y           = 3.5,
  a1             = 0.45,
  lam1           = 0.4,
+ y1_cent         = 0.0, 
+ z1_cent         = 0.0,
+ Enable_ionization(1) = .true.,
+ Symmetrization_pulse=.true.,
+ a_symm_rat       = 1.0,
 /
 ```
 
@@ -212,13 +235,22 @@ Copper    (atomic_number = 29) - mass_number = 63.54
 + `w0_y` is the transverse waist FWHM (in μm)
 + `a_0` is the laser adimensional parameter: a<sub>0</sub>=eA/(m<sub>e</sub> c<sup>2</sup>) of all the pulses injected
 + `lam0` is the laser wavelength (in μm) of all the pulses injected
-+ `lp_delay`is the distance between the center of every injected laser pulse
++ `y0_cent(1:nb_laser)` is the array of the pulse center positions on the `y` axis
++ `z0_cent(1:nb_laser)` is the array of the pulse center positions on the `z` axis
++ `lp_delay(1:nb_laser)` is the array distance between the center of every injected laser pulse
 + `lp_offset` is the distance between the center of the last injected pulse and the center of another different pulse injected (if different from 0)
 + `t1_lp` same as `t0_lp`, but for the additional pulse injected with `lp_offset!=0`
 + `tau1_fwhm` same as `tau_fwhm`, but for the additional pulse injected with `lp_offset!=0`
 + `w1_y` same as `w0_y`, but for the additional pulse injected with `lp_offset!=0`
 + `a1` same as `a0`, but for the additional pulse injected with `lp_offset!=0`
 + `lam1` same as `lam0`, but for the additional pulse injected with `lp_offset!=0`
++ `y1_cent(1:nb_laser)` is the secondary pulse center positions on the `y` axis
++ `z1_cent(1:nb_laser)` is the secondary pulse center positions on the `z` axis
++ `Enable_ionization(0)` logical flag: indicates if the main pulse ( *i.e.* `a_0`) ionizes atoms
++ `Enable_ionization(1)` logical flag: indicates if the secondary pulse ( *i.e.* `a_1`) ionizes atoms
++ `Symmetrization_pulse` logical flag: when ionization is enabled, new electrons possess a nonzero temperature also in the transverse axis
++ `a_symm_rat` is the pseudo-temperature that electrons acquire on the transverse axis, if `Symmetrization_pulse=.true.`. Formula is ```sin(2.*pi*u)*a_symm_rat*Delta_a```
+
 
 ## MOVING_WINDOW namelist block
 
@@ -257,7 +289,6 @@ Copper    (atomic_number = 29) - mass_number = 63.54
  id_new         = 0,
  dump           = 0,
  L_env_modulus  = .true.,
- P_tracking     = .true.,
 /
 ```
 
@@ -287,12 +318,12 @@ Copper    (atomic_number = 29) - mass_number = 63.54
   + `1`: each processor will dump a binary file for every `nout` in order to enable restart
   + `0`: dumps are suppressed
 + `L_env_modulus` logical flag, only if `model_id=4`: if true the code generates the absolute value of the laser envelope amplitude, otherwise gives the real and imaginary part in two separate files
-+ `P_tracking` logical flag, if true the particle tracking is enabled
 
 ## TRACKING namelist block
 
 ```fortran
 &TRACKING
+ P_tracking     = .true.,
  nkjump           = 1,
  tkjump           = 4,
  txmin            = 55.,
@@ -305,7 +336,7 @@ Copper    (atomic_number = 29) - mass_number = 63.54
  t_out            = 200.,
 /
 ```
-
++ `P_tracking` logical flag: if true the particle tracking is enabled
 + `nkjump` a tracked particle every `nkjump` is written in the output file
 + `tkjump` a snapshot of the tracked particles phase space is taken every `tkjump` timestep
 + `txmin` to select particles with initial longitudinal coordinate `x > txmin` to be tracked

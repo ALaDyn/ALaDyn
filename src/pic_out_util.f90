@@ -146,13 +146,9 @@
  nst=0
  if(Stretch)nst=str_indx(imody,imodz)
 !===================
- if(Envelope)then
-  call loc_env_amp(env,jc)
-  call  set_env_interp(jc,sp_loc,ebfp,np,ndim,nst,xm,ym,zm)
-  !In ebfp(:,1) exit particle assigned |A|^2/2
- endif
+
  ndv=size(sp_loc%part,2)
- ndvp=ndv+1
+ ndvp=ndv
  ik=0
  kk=0
  do p=1,np
@@ -171,14 +167,10 @@
   wgh_cmp=sp_loc%part(p,ndv)
   if(part_ind >0)then
    ik=ik+1
-   do ip=1,ndv-1
+   do ip=1,ndv
     kk=kk+1
     track_aux(kk)=sp_loc%part(p,ip)
    enddo
-   kk=kk+1
-   track_aux(kk)=ebfp(p,1)
-   kk=kk+1
-   track_aux(kk)=wgh_cmp
   endif
  enddo
 !=================
@@ -191,17 +183,16 @@
    if(ik >0)then
     call exchange_1d_grdata(sr,track_aux,ik*ndvp,ipe,ipe+10)
     !pe0 receives from ipe ik sp_aux data and collects on track array
-    wgh_cmp=track_aux(ndvp)
     kk=0
     do p=1,ik
      ik2=ik1+p
-     do ip=1,ndv
+     do ip=1,ndv-1
       kk=kk+1
-      pdata_tracking(ip,ik2,time_ind)=real(track_aux(kk),sp)
+      pdata_tracking(ip,ik2,time_ind)=track_aux(kk)
      enddo
      kk=kk+1
      wgh_cmp=track_aux(kk)
-     pdata_tracking(ndv,ik2,time_ind)=real(part_ind,sp)
+     pdata_tracking(ndv,ik2,time_ind)=part_ind
     enddo
     ik1=ik2
    endif
@@ -212,7 +203,6 @@
   if(ik >0)then
    sr=.true.
    call exchange_1d_grdata(sr,track_aux,ik*ndvp,0,mype+10)    !sends ik data to pe0
-   wgh_cmp=track_aux(ndvp)
   endif
  endif
  end subroutine t_particles_collect

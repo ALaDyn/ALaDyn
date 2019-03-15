@@ -1875,13 +1875,12 @@
  integer :: i,ih,j,jh,i1,j1,i2,j2,k,kh,k1,k2,n
  !==============================
  ! Enter ef(1:2)<=  A=(A_R,A_I)
- ! Exit interpolated |E|^2= |E_y|^2 + |E_x|^2
+ ! Exit pt=|E|^2= |E_y|^2 + |E_x|^2 assigned to each particle
  !===========================
  !  Up to O(epsilon)^2:
  ! |E_y|^2= k_0^2*|A|^2+2*k_0*[A_RDx(A_I)-A_IDx(A_R)] +(Dx[A_R])^2 +Dx[A_I}^2)
  ! |E_x|^2= (Dy[A_r])^2 +Dy[A_I}^2)
  !===============================================
-
  !===============================================
  ! Only linear shape at half-index and at integer index
  !====================================

@@ -2073,17 +2073,22 @@
   do ic=1,fdim
    do k=k1,k2
     do j=j1,j2
-     do i=i1,i2
+     u(i1,j,k,ic)=u(i1,j,k,ic)+u0(i1,j,k,ic)   !Euler first order update
+     do i=i1+1,i2
       u(i,j,k,ic)=u(i,j,k,ic)+abf_1*u0(i,j,k,ic)   !updates u^{n+1}=u^{n}+Dt*(3/2*F^n-1/2F^{n-1})
+     end do
+     do i=i1,i2
       flx(i,j,k,ic)=0.5*(flx(i,j,k,ic)+u(i,j,k,ic))   ! (P,den) at t(n+1/2)
      end do
     end do
    end do
   end do
  endif
-!=========================
+!==========================
  contains
  subroutine add_lorentz_force
+   real(dp) :: qp,qm
+                           !in u0() -flux derivatives
  do k=k1,k2
   do j=j1,j2
    do i=i1,i2
@@ -2145,7 +2150,7 @@
   do k=k1,k2
    do j=j1,j2
     do i=i1,i2
-     av2= flx(i,j,k,fdim+1)     !time centered |a|^{n+1/2}/2 (+|a_1|^2/2 for wo-color)
+     av2= flx(i,j,k,fdim+1)                 !time centered |A|^{n+1/2}/2
      den= flx(i,j,k,fdim)  !den^{n+1/2}
      pp(1:curr_ndim)= flx(i,j,k,1:curr_ndim) !p momenta at t^{n+1/2}
      gam2=1.+dot_product(pp(1:curr_ndim),pp(1:curr_ndim))
@@ -2245,6 +2250,7 @@
  k1=loc_zgrid(imodz)%p_ind(1)
  nzf=loc_zgrid(imodz)%p_ind(2)
  n_st=0
+ ef2_ion=zero_dp
  if(Stretch)n_st=str_indx(imody,imodz)
  !====================
  call pfields_prepare(ebf,i1,i2,j1,nyf,k1,nzf,nfield,2,2)
@@ -2260,14 +2266,16 @@
     np=loc_npart(imody,imodz,imodx,ic)
     if(np>0)then
      call set_ion_env_field(env,spec(ic),ebfp,np,ndim,n_st,xm,ym,zm,oml)
-     loc_ef2_ion(1)=maxval(ebfp(1:np,id_ch))
-     loc_ef2_ion(1)=sqrt(loc_ef2_ion(1))
-     ef2_ion=loc_ef2_ion(1)
-     if(ef2_ion > lp_max)then
-      write(6,'(a22,i6,2E11.4)')'reset high ionz field ',mype,ef2_ion,lp_max
-      lp_max=1.1*ef2_ion
-      call set_field_ioniz_wfunction(&
-      ion_min(ic-1),atomic_number(ic-1),ic,ionz_lev,ionz_model,lp_max,dt_loc)
+     if(mod(it_loc,100)==0)then
+      loc_ef2_ion(1)=maxval(ebfp(1:np,id_ch))
+      loc_ef2_ion(1)=sqrt(loc_ef2_ion(1))
+      ef2_ion=max(loc_ef2_ion(1),ef2_ion)
+      if(ef2_ion > lp_max)then
+       write(6,'(a22,i6,2E11.4)')'reset high ionz field ',mype,ef2_ion,lp_max
+       lp_max=1.1*ef2_ion
+       call set_field_ioniz_wfunction(&
+       ion_min(ic-1),atomic_number(ic-1),ic,ionz_lev,ionz_model,lp_max,dt_loc)
+      endif
      endif
      call ionization_cycle(spec(ic),ebfp,np,ic,1,de_inv)
     endif
@@ -2280,14 +2288,16 @@
      np=loc_npart(imody,imodz,imodx,ic)
      if(np>0)then
       call set_ion_env_field(env1,spec(ic),ebfp,np,ndim,n_st,xm,ym,zm,om1)
-      loc_ef2_ion(1)=maxval(ebfp(1:np,id_ch))
-      loc_ef2_ion(1)=sqrt(loc_ef2_ion(1))
-!=================
-      if(ef2_ion > lp_max)then
-       write(6,'(a22,i6,2E11.4)')'reset high ionz field ',mype,ef2_ion,lp_max
-       lp_max=1.1*ef2_ion
-       call set_field_ioniz_wfunction(&
-       ion_min(ic-1),atomic_number(ic-1),ic,ionz_lev,ionz_model,lp_max,dt_loc)
+      if(mod(it_loc,100)==0)then
+       loc_ef2_ion(1)=maxval(ebfp(1:np,id_ch))
+       loc_ef2_ion(1)=sqrt(loc_ef2_ion(1))
+       ef2_ion=max(loc_ef2_ion(1),ef2_ion)
+       if(ef2_ion > lp_max)then
+        write(6,'(a22,i6,2E11.4)')'reset high ionz field ',mype,ef2_ion,lp_max
+        lp_max=1.1*ef2_ion
+        call set_field_ioniz_wfunction(&
+        ion_min(ic-1),atomic_number(ic-1),ic,ionz_lev,ionz_model,lp_max,dt_loc)
+       endif
       endif
       call ionization_cycle(spec(ic),ebfp,np,ic,1,de_inv)
      endif
@@ -2379,7 +2389,6 @@
   ! in ebfp(1:2)=grad|A|^2/2 ebfp(3)=|A|^2/2 in 2D
   !=====================================
    call lpf_env_positions(spec(ic),ebfp,np,dt_loc,vbeam)
-   if(ompe==zero_dp)return
   !===========================
   ! ebfp(1:3) dt*V^{n+1/2}  ebfp(4:6) old positions for curr J^{n+1/2}
   ! ebfp(7)=dt*gam_inv

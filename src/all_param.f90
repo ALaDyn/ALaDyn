@@ -399,6 +399,9 @@
   lp1_amp=a1*om1             !field in unit 0.51 MV/m
   lp_max=lp_amp
   if(Two_color)lp_max=max(lp_amp,lp1_amp)
+  if(Symmetrization_pulse)then
+   if(a_symm_rat<=zero_dp)a_symm_rat=sqrt(2.0)
+  endif
 !=============================
   nc0=oml*oml              !nc0=(2*pi/lam0)** 2
   ompe=nc0*n_over_nc       !squared adimensional plasma frequency :
@@ -627,7 +630,7 @@
   ! here the total initial nmacro particles
  endif
  !========================= Memory allocation
- nx_alloc=nint(dx_inv*sum(lpx(1:5)))
+ nx_alloc=nint(dx_inv*sum(lpx(1:6)))
  nx_alloc=min(nx_loc,nx_alloc)
  npt_buffer=0
  do i=1,nsp

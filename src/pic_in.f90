@@ -419,7 +419,7 @@
  integer :: n_peak,npmax,nxtot
  real(dp) :: uu,u2,xp_min,xp_max,u3,ramp_prefactor
  real(dp) :: xfsh,un(2),wgh_sp(3)
- integer :: nxl(5)
+ integer :: nxl(6)
  integer :: loc_nptx(4),nps_loc(4),last_particle_index(4),nptx_alloc(4)
  !==========================
  p=0
@@ -440,7 +440,7 @@
  ! Layers nxl(1:5) all containing the same ion species
  xtot=0.0
  nxtot=0
- do i=1,5
+ do i=1,6
   nxl(i)=nint(dx_inv*lpx(i))
   lpx(i)=nxl(i)*dx
   xtot=xtot+lpx(i)
@@ -448,15 +448,15 @@
  end do
  if(xf0 >0.0)then
   targ_in=xf0
- targ_end=targ_in+xtot
-  else
+  targ_end=targ_in+xtot
+ else
   targ_in= xmin
   targ_end=xtot+xf0
  endif
  xfsh=xf0
  !=============================
  loc_nptx=0
- loc_nptx(1:nsp)=(nxl(1)+nxl(2)+nxl(3)+nxl(4)+nxl(5))*np_per_xc(1:nsp)
+ loc_nptx(1:nsp)=(nxl(1)+nxl(2)+nxl(3)+nxl(4)+nxl(5)+nxl(6))*np_per_xc(1:nsp)
 
  nptx_max=maxval(loc_nptx(1:nsp))
  allocate(xpt(nptx_max,nsp))
@@ -720,7 +720,7 @@
    nptx_alloc(ic)=min(nptx(ic)+10,nx*np_per_xc(ic))
   end do
  case(4)
-  !================ cos^2 upramp with peak np2/n0 =================
+  !================ cos^2 upramp with peak n0 =================
   if(nxl(1)>0)then
    do ic=1,nsp
     n_peak=nxl(1)*np_per_xc(ic)
@@ -729,13 +729,13 @@
      i1=nptx(ic)+i
      xpt(i1,ic)=xfsh+lpx(1)*uu
      uu=uu-1.
-     wghpt(i1,ic)=(np1+(np2-np1)*cos(0.5*pi*(uu))*cos(0.5*pi*(uu)))*wgh_sp(ic)
+     wghpt(i1,ic)=one_dp*cos(0.5*pi*(uu))*cos(0.5*pi*(uu))*wgh_sp(ic)
     end do
     nptx(ic)=nptx(ic)+n_peak
    end do
    xfsh=xfsh+lpx(1)
   endif
-   !================ uniform layer np2/n0=================
+   !================ uniform layer n0=================
   if(nxl(2)>0)then
    do ic=1,nsp
     n_peak=nxl(2)*np_per_xc(ic)
@@ -743,13 +743,13 @@
      uu=(real(i,dp)-0.5)/real(n_peak,dp)
      i1=nptx(ic)+i
      xpt(i1,ic)=xfsh+lpx(2)*uu
-     wghpt(i1,ic)=np2*wgh_sp(ic)
+     wghpt(i1,ic)=one_dp*wgh_sp(ic)
     end do
     nptx(ic)=nptx(ic)+n_peak
    end do
    xfsh=xfsh+lpx(2)
   endif
-  !================ cos^2 downramp to the plateau =================
+  !================ cos^2 downramp to the plateau np1*n0 =================
   if(nxl(3)>0)then
     do ic=1,nsp
      n_peak=nxl(3)*np_per_xc(ic)
@@ -758,13 +758,14 @@
       i1=nptx(ic)+i
       xpt(i1,ic)=xfsh+lpx(3)*uu
       uu=uu-1.
-      wghpt(i1,ic)=(1+(np2-1)*sin(0.5*pi*(uu))*sin(0.5*pi*(uu)))*wgh_sp(ic)
+      wghpt(i1,ic)=(np1+(one_dp-np1)*&
+      sin(0.5*pi*(uu))*sin(0.5*pi*(uu)))*wgh_sp(ic)
      end do
      nptx(ic)=nptx(ic)+n_peak
     end do
     xfsh=xfsh+lpx(3)
    endif
-  !================ Central layer=================
+  !================ Central layer of density np1*n0 =================
   if(nxl(4)>0)then
    do ic=1,nsp
     n_peak=nxl(4)*np_per_xc(ic)
@@ -772,13 +773,13 @@
      uu=(real(i,dp)-0.5)/real(n_peak,dp)
      i1=nptx(ic)+i
      xpt(i1,ic)=xfsh+lpx(4)*uu
-     wghpt(i1,ic)=wgh_sp(ic)
+     wghpt(i1,ic)=np1*wgh_sp(ic)
     end do
     nptx(ic)=nptx(ic)+n_peak
    end do
    xfsh=xfsh+lpx(4)
   endif
-  !================ cos^2 downramp =================
+  !================ cos^2 downramp to second plateau np2*n0 =================
   if(nxl(5)>0)then
    do ic=1,nsp
     n_peak=nxl(5)*np_per_xc(ic)
@@ -786,13 +787,29 @@
      uu=(real(i,dp)-0.5)/real(n_peak,dp)
      i1=nptx(ic)+i
      xpt(i1,ic)=xfsh+lpx(5)*uu
-     wghpt(i1,ic)=(cos(0.5*pi*(uu))*cos(0.5*pi*(uu)))*wgh_sp(ic)
+     wghpt(i1,ic)=(np2+(np1-np2)*&
+     cos(0.5*pi*(uu))*cos(0.5*pi*(uu)))*wgh_sp(ic)
     end do
     nptx(ic)=nptx(ic)+n_peak
    end do
    xfsh=xfsh+lpx(5)
   endif
+  !================ Second plateau of density np2*n0 =================
+  if(nxl(6) >0)then
    do ic=1,nsp
+    n_peak=nxl(6)*np_per_xc(ic)
+    do i=1,n_peak
+     uu=(real(i,dp)-0.5)/real(n_peak,dp)
+     i1=nptx(ic)+i
+     xpt(i1,ic)=xfsh+lpx(6)*uu
+     wghpt(i1,ic)=np2*wgh_sp(ic)
+    end do
+    nptx(ic)=nptx(ic)+n_peak
+   end do
+   xfsh=xfsh+lpx(6)
+  end if
+
+  do ic=1,nsp
    nptx_alloc(ic)=min(nptx(ic)+10,nx*np_per_xc(ic))
   end do
   !=========================================
@@ -1641,7 +1658,7 @@
  integer :: np_per_zcell(6),n_peak
  integer :: nptx_loc(8)
  integer :: npty_layer(8),npyc(8),npty_ne,nptz_ne
- integer :: npmax,nps_loc(4),nps_bulk
+ integer :: npmax,nps_loc(4)
  real(dp) :: uu,yy,dxip,dpy
  real(dp) :: zp_min,zp_max,yp_min,yp_max,xp_min,xp_max
  real(dp) :: xfsh,dlpy,tot_lpy,loc_ymp
@@ -1650,12 +1667,11 @@
  real(dp),allocatable :: wy(:,:),wz(:,:),wyz(:,:,:)
  !=================
  !++++++++++++++++ WARNING
- ! ONLY layers (3) n_over_nc, (4) and (5)
+ ! ONLY layers (3) and (4) n_over_nc, np2*n_over_nc layer (5)
  !============================
  xp_min=xmin
  xp_max=xmax
  np_per_zcell(1:6)=1
- nps_bulk=min(3,nsp)        !
  !!+++++++++++++++++++++++++++++++
  nxl=0
  z2=ion_min(nsp-1)
@@ -1690,20 +1706,23 @@
  allocate(zpt(nptz+1,8))
  allocate(wy(npty+1,8))
  allocate(wz(nptz+1,8))
+ allocate(wyz(npty+1,nptz+1,8))
  ypt=0.
  zpt=0.
  wy=1.
  wz=1.
+ wyz=1.
  !==================
  allocate(loc_jmax(0:npe_yloc-1,1:8))
  allocate(loc_kmax(0:npe_zloc-1,1:8))
  allocate(loc_imax(0:npe_xloc-1,1:8))
  !====================
- ! Layers space ordering(1:4)
- ! [1:2 electon-ions wires,1:2 electron-ion target, 3:4 electron-proton coat]
- !===============
- npyc(1:2)=np_per_yc(1:2)  !layer of nano_wires
- npyc(3:4)=np_per_yc(1:2)  !layer inter wire plasma
+ !layers in y-z transverse coordinates
+ !====================================
+ npyc(1:2)=np_per_yc(1:2)  !layer of nano_wires electron+Z1_ion
+ npyc(3:4)=np_per_yc(1:2)  !layer of inter wire plasma of np1 density layer[1:4] of x-length=lpx(3)
+ npyc(5:6)=np_per_yc(3:4)  !bulk of electron-Z1_ion      x-length lpx(4)        
+ npyc(7:8)=np_per_yc(5:6)  ! coating of electron-Z2_ion      x-length lpx(5)        
  nptz_ne=1
  if(nwires >2)then
   do ic=1,2
@@ -1765,8 +1784,7 @@
    !===========================
   end do
  endif
- !============= Uniform y-z distribution
- npyc(5:8)=np_per_yc(3:6)  ! bulk target + contaminants
+ !============= Uniform y-z distribution in layers [5-8]
  do ic=5,8
   npty_layer(ic)=nyh*npyc(ic)
   npty_ne=npty_layer(ic)
@@ -1809,37 +1827,7 @@
   endif
   call set_pgrid_ind(npty_ne,nptz_ne,ic)
  enddo
- !===========================
- xtot=0.0
- lpx(1:2)=0.0
- do i=1,5
-  nxl(i)=nint(dx_inv*lpx(i))
-  lpx(i)=nxl(i)*dx
-  xtot=xtot+lpx(i)
- end do
- xfsh=xf0+lpx(7)
- targ_in=xfsh
- targ_end=targ_in+xtot
- ! Input particles
- !====np_per_xc(1:2) electrons and Z1 ions in the nanowires target => lpx(3)
- !====np_per_xc(3:4) electrons and Z2 ions in bulk layer
- !=== np_per_xc(5:6) electrons and Z3=proton in contaminant layer
- !  Particles grid ordering
- !  only nxl(3) nxl(4) and nxl(5) layers activated
- nptx_loc(1:2)=nxl(3)*np_per_xc(1:2) !inter-wire  electrons+Z1-ion plasma
- nptx_loc(3:4)=nptx_loc(1:2)         !nanowires electron-Z1 ions
- nptx_loc(5:6)=nxl(4)*np_per_xc(3:4) !bulk layer electrons +Z2 ions
- nptx_loc(7:8)=nxl(5)*np_per_xc(5:6) !contaminant electrons +Z3 ions (proton)
-
- nptx_max=maxval(nptx_loc(1:8))
- !=======================
- allocate(xpt(nptx_max,8))
- allocate(wghpt(nptx_max,8))
-
- allocate(loc_xpt(nptx_max,8))
- allocate(loc_wghx(nptx_max,8))
- wghpt(1:nptx_max,1:8)=1.
-!=================
+!=================== y-z data on local arrays
  loc_npty(1:8)=loc_jmax(imody,1:8)
  loc_nptz(1:8)=loc_kmax(imodz,1:8)
  npty_ne=1
@@ -1854,6 +1842,38 @@
  call mpi_yz_part_distrib(8,loc_npty,loc_nptz,npty_layer,npty_layer,&
   ymin_t,zmin_t,wyz)
  !=======================
+ !Longitudinal layer distribution
+ !===========================
+ xtot=0.0
+ lpx(1:2)=0.0   !only layers 3-4-5
+ do i=1,5
+  nxl(i)=nint(dx_inv*lpx(i))
+  lpx(i)=nxl(i)*dx
+  xtot=xtot+lpx(i)
+ end do
+ xfsh=xf0
+ targ_in=xfsh
+ targ_end=targ_in+xtot
+ ! Input particles
+ !====np_per_xc(1:2) electrons and Z1 ions in the nanowires target +
+ !internanow-plasma => lpx(3)
+ !====np_per_xc(3:4) electrons and Z1 ions in bulk layer
+ !=== np_per_xc(5:6) electrons and Z2=proton in contaminant layer
+ !  Particles grid ordering
+ !  only nxl(3) nxl(4) and nxl(5) layers activated
+ nptx_loc(1:2)=nxl(3)*np_per_xc(1:2) !inter-wire  electrons+Z1-ion plasma
+ nptx_loc(3:4)=nptx_loc(1:2)         !nanowires electron-Z1 ions
+ nptx_loc(5:6)=nxl(4)*np_per_xc(3:4) !bulk layer electrons +Z1 ions
+ nptx_loc(7:8)=nxl(5)*np_per_xc(5:6) !contaminant electrons +Z2 ions (proton)
+
+ nptx_max=maxval(nptx_loc(1:8))
+ !=======================
+ allocate(xpt(nptx_max,8))
+ allocate(wghpt(nptx_max,8))
+ allocate(loc_xpt(nptx_max,8))
+ allocate(loc_wghx(nptx_max,8))
+ wghpt(1:nptx_max,1:8)=one_dp
+!=================
  !========================
  loc_imax(imodx,1:8)=nptx_loc(1:8)
  nps_loc(1:nsp)=0
@@ -1862,13 +1882,15 @@
  if(nxl(3) >0)then
   do ic=1,2
    n_peak=nptx_loc(ic)
-   do i=1,n_peak
-    uu=(real(i,dp)-0.5)/real(n_peak,dp)
-    xpt(i,ic)=xfsh+lpx(3)*uu
-    wghpt(i,ic)=ratio_mpc(ic)*j0_norm
-    xpt(i,ic+2)=xpt(i,ic)
-    wghpt(i,ic+2)=np1*wghpt(i,ic)
-   end do
+   if(n_peak >0)then
+    do i=1,n_peak
+     uu=(real(i,dp)-0.5)/real(n_peak,dp)
+     xpt(i,ic)=xfsh+lpx(3)*uu
+     wghpt(i,ic)=ratio_mpc(ic)*j0_norm
+     xpt(i,ic+2)=xpt(i,ic)
+     wghpt(i,ic+2)=np1*wghpt(i,ic)    !inter-wire plasma (or vacuum)
+    end do
+   endif
    !========================= np1>0 a low density  interwire plasma
   end do
   xfsh=xfsh+lpx(3)
@@ -1878,11 +1900,11 @@
    do i=1,nptx_loc(ic)
     if(xpt(i,ic)>=loc_xgrid(imodx)%gmin&
      .and.xpt(i,ic)<loc_xgrid(imodx)%gmax)then
-    i1=i1+1
-    loc_xpt(i1,ic)=xpt(i,ic)
-    loc_wghx(i1,ic)=wghpt(i,ic)
-    loc_xpt(i1,ic+2)=xpt(i,ic+2)
-    loc_wghx(i1,ic+2)=wghpt(i,ic+2)
+     i1=i1+1
+     loc_xpt(i1,ic)=xpt(i,ic)
+     loc_wghx(i1,ic)=wghpt(i,ic)
+     loc_xpt(i1,ic+2)=xpt(i,ic+2)
+     loc_wghx(i1,ic+2)=wghpt(i,ic+2)
     endif
    end do
    loc_imax(imodx,ic)=i1
@@ -1896,80 +1918,94 @@
   ! Counts particles
 
   nps_loc(1)=nps_loc(1)+&
-   loc_imax(p,1)*loc_jmax(l,1)*loc_kmax(ip,1)
+  loc_imax(p,1)*loc_jmax(l,1)*loc_kmax(ip,1)
   nps_loc(2)=nps_loc(2)+&
-   loc_imax(p,2)*loc_jmax(l,2)*loc_kmax(ip,2)
+  loc_imax(p,2)*loc_jmax(l,2)*loc_kmax(ip,2)
   if(np1 >0.0)then
    nps_loc(1)=nps_loc(1)+&
-    loc_imax(p,3)*loc_jmax(l,3)*loc_kmax(ip,3)
+   loc_imax(p,3)*loc_jmax(l,3)*loc_kmax(ip,3)
    nps_loc(2)=nps_loc(2)+&
-    loc_imax(p,4)*loc_jmax(l,4)*loc_kmax(ip,4)
+   loc_imax(p,4)*loc_jmax(l,4)*loc_kmax(ip,4)
   endif
  endif
  !------------------------------
- !  Electrons and Z2_ions: bulk layer  species nps_bulk
+ !  Electrons and Z1_ions: bulk layer 
  !     x distribution. Density given by the particle density mpc(3:4)
  !====================
  if(nxl(4) >0)then
   do ic=5,6
    n_peak=nptx_loc(ic)
-   do i=1,n_peak
-    xpt(i,ic)=xfsh+lpx(4)*(real(i,dp)-0.5)/real(n_peak,dp)
-    uu=j0_norm*ratio_mpc(ic-2)
-    wghpt(i,ic)=uu
-   end do
+   if(n_peak >0)then
+    do i=1,n_peak
+     xpt(i,ic)=xfsh+lpx(4)*(real(i,dp)-0.5)/real(n_peak,dp)
+     uu=j0_norm*ratio_mpc(ic-2)
+     wghpt(i,ic)=uu
+    end do
+   endif
   end do
-  if(nps_bulk >2)then
-   ic=6
-   n_peak=nptx_loc(ic)
-   wghpt(1:n_peak,ic)=wghpt(1:n_peak,ic)/real(ion_min(nps_bulk-1),dp)
-  endif
+  xfsh=xfsh+lpx(4)
+  do ic=5,6
+   i1=0
+   do i=1,nptx_loc(ic)
+    if(xpt(i,ic)>=loc_xgrid(imodx)%gmin&
+    .and.xpt(i,ic)<loc_xgrid(imodx)%gmax)then
+     i1=i1+1
+     loc_xpt(i1,ic)=xpt(i,ic)
+     loc_wghx(i1,ic)=wghpt(i,ic)
+    endif
+   end do
+   loc_imax(imodx,ic)=i1
+  end do
+  p=imodx
+  l=imody
+  ip=imodz
+
+  nps_loc(1)=nps_loc(1)+&
+  loc_imax(p,5)*loc_jmax(l,5)*loc_kmax(ip,5)
+  nps_loc(2)=nps_loc(2)+&
+  loc_imax(p,6)*loc_jmax(l,6)*loc_kmax(ip,6)
  endif
- xfsh=xfsh+lpx(4)
  !  Electrons and Z3_ions contaminants
  !     x distribution density given by np2
  !====================
  if(nxl(5) >0)then
   do ic=7,8
    n_peak=nptx_loc(ic)
-   do i=1,n_peak
-    xpt(i,ic)=xfsh+lpx(4)*(real(i,dp)-0.5)/real(n_peak,dp)
-    uu=j0_norm*ratio_mpc(ic-2)
-    wghpt(i,ic)=uu*np2
-   end do
+   if(n_peak >0)then
+    do i=1,n_peak
+     xpt(i,ic)=xfsh+lpx(5)*(real(i,dp)-0.5)/real(n_peak,dp)
+     uu=j0_norm*ratio_mpc(ic-2)
+     wghpt(i,ic)=uu*np2
+    end do
+   endif
   end do
   ic=8
   n_peak=nptx_loc(ic)
   wghpt(1:n_peak,ic)=wghpt(1:n_peak,ic)/real(ion_min(nsp-1),dp)
- endif
- xfsh=xfsh+lpx(5)
+  xfsh=xfsh+lpx(5)
  !===============
- do ic=5,8
-  i1=0
-  do i=1,nptx_loc(ic)
-   if(xpt(i,ic)>=loc_xgrid(imodx)%gmin&
+  do ic=7,8
+   i1=0
+   do i=1,nptx_loc(ic)
+    if(xpt(i,ic)>=loc_xgrid(imodx)%gmin&
     .and.xpt(i,ic)<loc_xgrid(imodx)%gmax)then
-   i1=i1+1
-   loc_xpt(i1,ic)=xpt(i,ic)
-   loc_wghx(i1,ic)=wghpt(i,ic)
-   endif
+     i1=i1+1
+     loc_xpt(i1,ic)=xpt(i,ic)
+     loc_wghx(i1,ic)=wghpt(i,ic)
+    endif
+   end do
+   loc_imax(imodx,ic)=i1-1
   end do
-  loc_imax(imodx,ic)=i1
- end do
- p=imodx
- l=imody
- ip=imodz
-
- nps_loc(1)=nps_loc(1)+&
-  loc_imax(p,5)*loc_jmax(l,5)*loc_kmax(ip,5)
- nps_loc(nps_bulk)=nps_loc(nps_bulk)+&
-  loc_imax(p,6)*loc_jmax(l,6)*loc_kmax(ip,6)
- if(nsp==4)then   !contaminants added
+  p=imodx
+  l=imody
+  ip=imodz
+ 
   nps_loc(1)=nps_loc(1)+&
-   loc_imax(p,7)*loc_jmax(l,7)*loc_kmax(ip,7)
+  loc_imax(p,7)*loc_jmax(l,7)*loc_kmax(ip,7)
   nps_loc(nsp)=nps_loc(nsp)+&
-   loc_imax(p,8)*loc_jmax(l,8)*loc_kmax(ip,8)
+  loc_imax(p,8)*loc_jmax(l,8)*loc_kmax(ip,8)
  endif
+!+++++++++++++++++END target x-distribution
  !==============
  npmax=maxval(nps_loc(1:nsp))
  npmax=max(npmax,1)
@@ -1996,16 +2032,14 @@
   endif
  endif
  !=========================
- ! The second electron-ion solid layer with Z2 A2 ion element
+ ! The second electron-ion solid layer with Z1 A1 ion element
  if(nxl(4) >0)then
   p=ip_el
   i2=loc_imax(imodx,5)
   call pspecies_distribute(spec(1),t0_pl(1),unit_charge(1),p,5,i2,ip_el)
-
   p=ip_ion
-  if(nps_bulk==3)p=0
   i2=loc_imax(imodx,6)
-  call pspecies_distribute(spec(nps_bulk),t0_pl(nps_bulk),unit_charge(nps_bulk),p,6,i2,ip_ion)
+  call pspecies_distribute(spec(2),t0_pl(2),unit_charge(2),p,6,i2,ip_ion)
  endif
  !============
  ! The contaminant electron-ion solid layer Z3=proton ion element
@@ -2431,14 +2465,14 @@
  real(dp),intent(inout) :: uf(:,:,:,:),uf0(:,:,:,:)
  real(dp),intent(in) :: xf0
  integer,intent(in) :: nfluid,dmodel,i1,i2,j1,j2,k1,k2
- integer :: i,i0,j,k,ic,nxl(5),ntot,i0_targ,i1_targ
+ integer :: i,i0,j,k,ic,nxl(6),ntot,i0_targ,i1_targ
  integer :: j01,j02,k01,k02,jj,kk
  real(dp) :: uu,xtot,l_inv,np1_loc,peak_fluid_density,u2,u3,ramp_prefactor
  real(dp) :: yy,zz,r2
 
  xtot=zero_dp
  ntot=0
- do i=1,5
+ do i=1,6
   nxl(i)=nint(dx_inv*lpx(i))
   lpx(i)=nxl(i)*dx
   xtot=xtot+lpx(i)
@@ -2497,153 +2531,160 @@
  i0=i0_targ
  select case(dmodel)
   !initial plateau, cubic ramp (exponential still available but commented), central plateau and exit ramp
-  case(1)
-   if(nxl(1) >0)then
-    ramp_prefactor=one_dp-np1
-    do i=1,nxl(1)
-     i0=i0+1
-     fluid_x_profile(i0)=peak_fluid_density*np1
-    end do
-   endif
-   if(nxl(2) >0)then    !sigma=nxl(2)/3
-    do i=1,nxl(2)
-     i0=i0+1
-     !uu=-(float(i)-float(nxl(2)))/float(nxl(2))
-     uu=(real(i)-0.5)/real(nxl(2))
-     u2=uu*uu
-     u3=u2*uu
-     !fluid_x_profile(i0)=peak_fluid_density*exp(-4.5*uu*uu)
-     fluid_x_profile(i0)=peak_fluid_density*&
-     (-2.*ramp_prefactor*u3+3.*ramp_prefactor*u2+one_dp-ramp_prefactor)
-    end do
-   endif
+ case(1)
+  if(nxl(1) >0)then
+   ramp_prefactor=one_dp-np1
+   do i=1,nxl(1)
+    i0=i0+1
+    fluid_x_profile(i0)=peak_fluid_density*np1
+   end do
+  endif
+  if(nxl(2) >0)then    !sigma=nxl(2)/3
+   do i=1,nxl(2)
+    i0=i0+1
+    !uu=-(float(i)-float(nxl(2)))/float(nxl(2))
+    uu=(real(i)-0.5)/real(nxl(2))
+    u2=uu*uu
+    u3=u2*uu
+    !fluid_x_profile(i0)=peak_fluid_density*exp(-4.5*uu*uu)
+    fluid_x_profile(i0)=peak_fluid_density*&
+    (-2.*ramp_prefactor*u3+3.*ramp_prefactor*u2+one_dp-ramp_prefactor)
+   end do
+  endif
+  do i=1,nxl(3)
+   i0=i0+1
+   fluid_x_profile(i0)=peak_fluid_density
+  end do
+  if(nxl(4) >0)then
+   do i=1,nxl(4)
+    i0=i0+1
+    uu=peak_fluid_density*real(i)/nxl(4)
+    fluid_x_profile(i0)=peak_fluid_density-uu*(1.-np2)
+   end do
+  endif
+  if(nxl(5) >0)then
+   do i=1,nxl(5)
+    i0=i0+1
+    fluid_x_profile(i0)=peak_fluid_density*np2
+   end do
+  endif
+ case(2)
+  if(nxl(1) >0)then            !a ramp 0==>np1
+   do i=1,nxl(1)
+    i0=i0+1
+    uu=(real(i)-real(nxl(1)))/real(nxl(1))
+    fluid_x_profile(i0)=np1*peak_fluid_density*exp(-4.5*uu*uu)
+   end do
+  endif
+  if(nxl(2) >0)then    ! np1 plateau
+   do i=1,nxl(2)
+    i0=i0+1
+    fluid_x_profile(i0)=np1*peak_fluid_density
+   end do
+  endif
+  if(nxl(3) >0)then  ! a down ramp np1=> np2
    do i=1,nxl(3)
+    i0=i0+1
+    uu=peak_fluid_density*real(i)/nxl(3)
+    fluid_x_profile(i0)=np1*peak_fluid_density-uu*(np1-np2)
+   end do
+  endif
+  if(nxl(4) >0)then   !a np2 plateau
+   do i=1,nxl(4)
+    i0=i0+1
+    fluid_x_profile(i0)=np2*peak_fluid_density
+   end do
+  endif
+  if(nxl(5) >0)then
+   do i=1,nxl(5)
+    i0=i0+1
+    uu=peak_fluid_density*real(i)/nxl(5)
+    fluid_x_profile(i0)=peak_fluid_density*np2*(1.-uu)
+   end do
+  endif
+ case(3)
+  if(pe0)then
+   write(6,*)'dmodel_id =3 not activated for one-species fluid scheme'
+  endif
+ return
+ !initial plateau, cos^2 bump, central plateau and exit ramp.
+ !See model_id=4 for pic case
+ case(4)
+  !================ cos^2 upramp with peak n0 =================
+  if(nxl(1) >0)then
+   do i=1,nxl(1)
+    i0=i0+1
+    uu=(real(i)-0.5)/real(nxl(1))-one_dp
+    fluid_x_profile(i0)=peak_fluid_density*&
+    cos(0.5*pi*(uu))*cos(0.5*pi*(uu))
+   end do
+  endif
+  !================ uniform layer n0 =================
+  if(nxl(2) >0)then
+   do i=1,nxl(2)
     i0=i0+1
     fluid_x_profile(i0)=peak_fluid_density
    end do
-   if(nxl(4) >0)then
-    do i=1,nxl(4)
-     i0=i0+1
-     uu=peak_fluid_density*real(i)/nxl(4)
-     fluid_x_profile(i0)=peak_fluid_density-uu*(1.-np2)
-    end do
-   endif
-   if(nxl(5) >0)then
-    do i=1,nxl(5)
-     i0=i0+1
-     fluid_x_profile(i0)=peak_fluid_density*np2
-    end do
-   endif
-  case(2)
-    if(nxl(1) >0)then            !a ramp 0==>np1
-     do i=1,nxl(1)
-      i0=i0+1
-      uu=(real(i)-real(nxl(1)))/real(nxl(1))
-      fluid_x_profile(i0)=np1*peak_fluid_density*exp(-4.5*uu*uu)
-     end do
-    endif
-    if(nxl(2) >0)then    ! np1 plateau
-     do i=1,nxl(2)
-      i0=i0+1
-      fluid_x_profile(i0)=np1*peak_fluid_density
-     end do
-    endif
-    if(nxl(3) >0)then  ! a down ramp np1=> np2
-     do i=1,nxl(3)
-      i0=i0+1
-      uu=peak_fluid_density*real(i)/nxl(3)
-      fluid_x_profile(i0)=np1*peak_fluid_density-uu*(np1-np2)
-     end do
-    endif
-    if(nxl(4) >0)then   !a np2 plateau
-     do i=1,nxl(4)
-      i0=i0+1
-      fluid_x_profile(i0)=np2*peak_fluid_density
-     end do
-    endif
-    if(nxl(5) >0)then
-     do i=1,nxl(5)
-      i0=i0+1
-      uu=peak_fluid_density*real(i)/nxl(5)
-      fluid_x_profile(i0)=peak_fluid_density*np2*(1.-uu)
-     end do
-    endif
-   case(3)
-    if(pe0)then
-     write(6,*)'dmodel_id =3 not activated for one-species fluid scheme'
-    endif
-   return
-  !initial plateau, cos^2 bump, central plateau and exit ramp.
-  !See model_id=4 for pic case
-  case(4)
-    !================ cos^2 upramp with peak np2/n0 =================
-    if(nxl(1) >0)then
-      do i=1,nxl(1)
-       i0=i0+1
-       uu=(real(i)-0.5)/real(nxl(1))-one_dp
-       fluid_x_profile(i0)=peak_fluid_density*&
-       (np1+(np2-np1)*cos(0.5*pi*(uu))*cos(0.5*pi*(uu)))
-      end do
-    endif
-    !================ uniform layer np2/n0=================
-    if(nxl(2) >0)then
-      do i=1,nxl(2)
-       i0=i0+1
-       fluid_x_profile(i0)=peak_fluid_density*np2
-      end do
-    endif
-    !================ cos^2 downramp to the plateau =================
-    if(nxl(3) >0)then
-      do i=1,nxl(3)
-        i0=i0+1
-        uu=(real(i,dp)-0.5)/real(nxl(3))-one_dp
-        fluid_x_profile(i0)=peak_fluid_density*&
-        (one_dp+(np2-one_dp)*sin(0.5*pi*(uu))*sin(0.5*pi*(uu)))
-      end do
-    end if
-    !================ Central layer=================
-    if(nxl(4) >0)then
-      do i=1,nxl(4)
-        i0=i0+1
-        fluid_x_profile(i0)=peak_fluid_density
-      end do
-    end if
-    !================ cos^2 downramp =================
-    if(nxl(5) >0)then
-      do i=1,nxl(5)
-        i0=i0+1
-        uu=(real(i,dp)-0.5)/real(nxl(5))
-        fluid_x_profile(i0)=peak_fluid_density*&
-        cos(0.5*pi*(uu))*cos(0.5*pi*(uu))
-      end do
-    end if
-    !=========================================
-  end select
-  if(xf0 < 0.0)then
-   i1_targ=nint(dx_inv*abs(xf0))
-   i0=0
-   do i=1,ntot-i1_targ
-    i0=i0+1
-    fluid_x_profile(i0)=fluid_x_profile(i+i1_targ)
-   end do
   endif
+  !================ cos^2 downramp to the plateau np1/n0 =================
+  if(nxl(3) >0)then
+   do i=1,nxl(3)
+    i0=i0+1
+    uu=(real(i,dp)-0.5)/real(nxl(3))-one_dp
+    fluid_x_profile(i0)=peak_fluid_density*&
+    (np1+(one_dp-np1)*sin(0.5*pi*(uu))*sin(0.5*pi*(uu)))
+   end do
+  end if
+  !================ Central layer of density np1/n0 =================
+  if(nxl(4) >0)then
+   do i=1,nxl(4)
+    i0=i0+1
+    fluid_x_profile(i0)=peak_fluid_density*np1
+   end do
+  end if
+  !================ cos^2 downramp to second plateau np2/n0 =================
+  if(nxl(5) >0)then
+   do i=1,nxl(5)
+    i0=i0+1
+    uu=(real(i,dp)-0.5)/real(nxl(5))
+    fluid_x_profile(i0)=peak_fluid_density*&
+    (np2+(np1-np2)*cos(0.5*pi*(uu))*cos(0.5*pi*(uu)))
+   end do
+  end if
+  !================ Second plateau of density np2/n0 =================
+  if(nxl(6) >0)then
+   do i=1,nxl(6)
+    i0=i0+1
+    fluid_x_profile(i0)=peak_fluid_density*np2
+   end do
+  end if
+  !=========================================
+ end select
+ if(xf0 < 0.0)then
+  i1_targ=nint(dx_inv*abs(xf0))
+  i0=0
+  do i=1,ntot-i1_targ
+   i0=i0+1
+   fluid_x_profile(i0)=fluid_x_profile(i+i1_targ)
+  end do
+ endif
 !-------------------------------
 ! target profile of length nxf (xtot)
 ! now put target on the computationale grid
 !
-  ic=nfluid     !the particle number density
-  do k=k1,k2
-   do j=j1,j2
-    do i=i1,i2
-     uf(i,j,k,ic)=fluid_x_profile(i)*fluid_yz_profile(j,k)
-     uf0(i,j,k,ic)=uf(i,j,k,ic)
-    end do
+ ic=nfluid     !the particle number density
+ do k=k1,k2
+  do j=j1,j2
+   do i=i1,i2
+    uf(i,j,k,ic)=fluid_x_profile(i)*fluid_yz_profile(j,k)
+    uf0(i,j,k,ic)=uf(i,j,k,ic)
    end do
   end do
-  ! if(pe0)then
-  !  write(6,*)'xt_in=',targ_in,'off_set= ',xf0
-  !  write(6,'(a22,e11.4)')'Max init fluid density',maxval(uf(i1:i2,j1:j2,k1:k2,ic))
-  ! endif
+ end do
+ ! if(pe0)then
+ !  write(6,*)'xt_in=',targ_in,'off_set= ',xf0
+ !  write(6,'(a22,e11.4)')'Max init fluid density',maxval(uf(i1:i2,j1:j2,k1:k2,ic))
+ ! endif
  !========================
  end subroutine init_fluid_density_momenta
 
@@ -2680,7 +2721,7 @@
  lp_end(1)=xc_lp+tau
  eps=1./(oml*w0_y)
  sigm=lam0/w0_x
- angle=lpx(6)
+ angle=incid_angle
  xf=xc_lp+t0_lp
   !=======================
  lp_ind=lp_mod
@@ -2692,11 +2733,11 @@
    shx_lp=lpx(7)
   if(lp_end(1) > xm)then
    call init_lp_fields(ebf,lp_amp,tt,t0_lp,w0_x,w0_y,xf,oml,&
-                                       angle,shx_lp,lp_ind,i1,i2)
+                                       angle,shx_lp,lp_ind,i1,i2,y0_cent(1),z0_cent(1))
   endif
  else         !normal incidence
   if(lp_end(1) > xm)then
-   call init_lp_inc0_fields(ebf,lp_amp,tt,t0_lp,w0_x,w0_y,xf,oml,lp_ind,i1,i2)
+   call init_lp_inc0_fields(ebf,lp_amp,tt,t0_lp,w0_x,w0_y,xf,oml,lp_ind,i1,i2,y0_cent(1),z0_cent(1))
   endif
  endif
  if(nb_laser >1)then
@@ -2706,7 +2747,7 @@
    xc_loc(ic)=xc_loc(ic-1)-lp_delay(ic-1)
    xf_loc(ic)=xc_loc(ic)+t0_lp
    if(lp_end(ic) > xm)call init_lp_inc0_fields(ebf,lp_amp,tt,t0_lp,w0_x,w0_y,xf_loc(ic),oml,&
-                                              lp_ind,i1,i2)
+                                              lp_ind,i1,i2,y0_cent(ic),z0_cent(ic))
   end do
  endif
 !=================TWO-COLOR
@@ -2717,7 +2758,7 @@
   lp_ionz_in=xc1_lp-tau1
   lp_ionz_end=xc1_lp+tau1
   call init_lp_inc0_fields(ebf,lp1_amp,tt,t1_lp,w1_x,w1_y,xf1,om1,&
-                                              lp_ind,i1,i2)
+                                              lp_ind,i1,i2,y1_cent,z1_cent)
   if(pe0)write(6,'(a30,e11.4)')'two-color activated at xc1_lp=',xc1_lp
  endif
 
@@ -2744,7 +2785,7 @@
  lp_end(1)=lp_in(1)+w0_x
  eps=1./(oml*w0_y)
  sigm=lam0/w0_x
- angle=lpx(6)
+ angle=incid_angle
  xf=xc_lp+t0_lp
  shx_cp=0.0
  if(angle >0.0)shx_cp=lpx(7)
@@ -2803,10 +2844,10 @@
  if(lp_end(1) > xm)then
   if(G_prof)then
    call init_gprof_envelope_field(&
-   env,a0,dt,tt,t0_lp,w0_x,w0_y,xf,oml,i1,i2)
+   env,a0,dt,tt,t0_lp,w0_x,w0_y,xf,oml,i1,i2,y0_cent(1),z0_cent(1))
   else
    call init_envelope_field(&
-   env,a0,dt,tt,t0_lp,w0_x,w0_y,xf,oml,i1,i2)
+   env,a0,dt,tt,t0_lp,w0_x,w0_y,xf,oml,i1,i2,y0_cent(1),z0_cent(1))
    !call init_env_filtering(env,i1,i2,j1,nyp,k1,nzp)
   endif
  endif
@@ -2819,10 +2860,10 @@
    if(lp_end(ic) > xm)then
     if(G_prof)then
      call init_gprof_envelope_field(&
-     env,a0,dt,tt,t0_lp,w0_x,w0_y,xf_loc(ic),oml,i1,i2)
+     env,a0,dt,tt,t0_lp,w0_x,w0_y,xf_loc(ic),oml,i1,i2,y0_cent(ic),z0_cent(ic))
     else
      call init_envelope_field(&
-     env,a0,dt,tt,t0_lp,w0_x,w0_y,xf_loc(ic),oml,i1,i2)
+     env,a0,dt,tt,t0_lp,w0_x,w0_y,xf_loc(ic),oml,i1,i2,y0_cent(ic),z0_cent(ic))
     endif
    endif
   end do
@@ -2838,10 +2879,10 @@
   if(lp_ionz_end > xm)then
    if(G_prof)then
     call init_gprof_envelope_field(&
-    env1,a1,dt,tt,t1_lp,w1_x,w1_y,xf1,om1,i1,i2)
+    env1,a1,dt,tt,t1_lp,w1_x,w1_y,xf1,om1,i1,i2,y1_cent,z1_cent)
    else
     call init_envelope_field(&
-    env1,a1,dt,tt,t1_lp,w1_x,w1_y,xf1,om1,i1,i2)
+    env1,a1,dt,tt,t1_lp,w1_x,w1_y,xf1,om1,i1,i2,y1_cent,z1_cent)
    endif
   endif
  endif

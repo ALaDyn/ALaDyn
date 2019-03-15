@@ -45,14 +45,13 @@
 
  real(dp) :: t0_lp,xc_lp,xf,w0_x,w0_y,lam0,a0
  real(dp) :: lp_offset,t1_lp,xc1_lp,xf1,w1_x,w1_y,lam1,a1,lp1_rad,ZR1,tau1_fwhm
- real(dp) :: lp1_amp,om1,a_symm
+ real(dp) :: lp1_amp,om1,a_symm_rat
  real(dp) :: oml,ZR,E0,lp_pow,lp_intensity,lp_xsize,lp_delay(Ref_nlas),P_c,r_c
- real(dp) :: lp_amp,lp_max,eb_max,lp_energy
+ real(dp) :: lp_amp,lp_max,eb_max,lp_energy,y0_cent(Ref_nlas),z0_cent(Ref_nlas),y1_cent,z1_cent
 
  real(dp) :: t0_b,lp_rad,el_lp,el_D,lambda_p,omega_p,lpvol
- real(dp) :: nc0,ncrit,n_over_nc,n1_over_n,n2_over_n,np1,np2
- real(dp) :: np_per_cell,nb_per_cell,np_per_nmacro,nmacro
- real(dp) :: lpx(7),lpy(3),targ_in,targ_end,lx_fwhm,tau_fwhm
+ real(dp) :: nc0,ncrit,n_over_nc,n1_over_n,n2_over_n,np1,np2,np_per_cell,nmacro,nb_per_cell,np_per_nmacro
+ real(dp) :: lpx(7),lpy(3),targ_in,targ_end,lx_fwhm,tau_fwhm,incid_angle
  real(dp) :: lp_in(Ref_nlas),lp_end(Ref_nlas),lp_ionz_in,lp_ionz_end,xf_loc(Ref_nlas),xc_loc(Ref_nlas)
  real(dp) :: ymin_t,ymax_t,zmin_t,zmax_t,rmin_t,rmax_t
  ! tracking param

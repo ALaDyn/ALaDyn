@@ -315,7 +315,7 @@
  integer,intent(in) :: ic,np
  integer,intent(inout) :: np_el
  integer(sp) :: inc,id_ch
- real(dp) :: u,temp(3)
+ real(dp) :: u,temp(3),a_symm
 
  integer :: n,i,ii
  !========== Enter sp_field(n,1)= the rms momenta Delta*a (n) for env model
@@ -360,7 +360,7 @@
       call gasdev(u)
       spec(1)%part(ii,4)=temp(1)*u
       call random_number(u)
-      a_symm=sp_field(n,1)*sqrt(2.0)
+      a_symm=sp_field(n,1)*a_symm_rat
       spec(1)%part(ii,6)=sin(2.*pi*u)*a_symm
       call gasdev(u)
       spec(1)%part(ii,5)=sp_field(n,1)*u

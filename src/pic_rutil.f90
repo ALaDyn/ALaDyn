@@ -364,10 +364,12 @@
  do ic=ic1,ic2-1
   do iz=k1,k2
    do iy=j1,j2
+    fld(i1-1,iy,iz,ic)=fld(i1+xsh-1,iy,iz,ic)
     do ix=i1,i2
      fld(ix,iy,iz,ic)=fld(ix+xsh,iy,iz,ic)
     end do
-    fld(i1,iy,iz,ic)=2.*fld(i1+1,iy,iz,ic)-fld(i1+2,iy,iz,ic)
+    fld(i1,iy,iz,ic)=0.5*fld(i1,iy,iz,ic)+&
+                     0.25*(fld(i1+1,iy,iz,ic)+fld(i1-1,iy,iz,ic))
     fld(i2+1:i2+xsh,iy,iz,ic)=0.0
    end do
   end do
@@ -375,10 +377,12 @@
  ic=ic2
  do iz=k1,k2
   do iy=j1,j2
+   fld(i1-1,iy,iz,ic)=fld(i1+xsh-1,iy,iz,ic)
    do ix=i1,i2
     fld(ix,iy,iz,ic)=fld(ix+xsh,iy,iz,ic)
    end do
-   fld(i1,iy,iz,ic)=2.*fld(i1+1,iy,iz,ic)-fld(i1+2,iy,iz,ic)
+   fld(i1,iy,iz,ic)=0.5*fld(i1,iy,iz,ic)+&
+                    0.25*(fld(i1+1,iy,iz,ic)+fld(i1-1,iy,iz,ic))
    do ix=i2+1,i2+xsh
     fld(ix,iy,iz,ic)=den_x(ix)*den_yz(iy,iz)
    end do

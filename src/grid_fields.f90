@@ -869,14 +869,14 @@
  ! SECTION for initial fields in ENVELOPE MODEL
  !======================================
  subroutine init_envelope_field(ef,e0,dt_loc,t_loc,tf,wx,&
-  wy,xf0,om0,i1,i2)
+  wy,xf0,om0,i1,i2,ycent,zcent)
 
  real(dp),intent(inout) :: ef(:,:,:,:)
  real(dp),intent(in) :: e0,dt_loc,t_loc,tf,wx,wy,xf0,om0
  integer,intent(in) :: i1,i2
  integer :: j1,j2,k1,k2
  real(dp) :: xx,yy,zz,r2,w2
- real(dp) :: t,tm,zra
+ real(dp) :: t,tm,zra,ycent,zcent
  real(dp) :: pih,phi,phi0,phi1,phx
  real(dp) :: A0,Ar,Ai
  integer :: i,j,k,ii,jj,kk
@@ -897,7 +897,7 @@
   do j=j1,j2
    jj=j-2
    yy=loc_rg(jj,1,imody)
-   yy=yy/wy
+   yy=(yy-ycent)/wy
    r2=yy*yy
    do i=i1,i2
     ii=i-2
@@ -934,11 +934,11 @@
  do k=k1,k2
   kk=k-2
   zz=loc_zg(kk,1,imodz)
-  zz=zz/wy
+  zz=(zz-zcent)/wy
   do j=j1,j2
    jj=j-2
    yy=loc_yg(jj,1,imody)
-   yy=yy/wy
+   yy=(yy-ycent)/wy
    r2=(yy*yy+zz*zz)
    do i=i1,i2
     ii=i-2
@@ -967,14 +967,14 @@
  end subroutine init_envelope_field
 !========================
  subroutine init_gprof_envelope_field(ef,e0,dt_loc,t_loc,tf,wx,&
-  wy,xf0,om0,i1,i2)
+  wy,xf0,om0,i1,i2,ycent,zcent)
 
  real(dp),intent(inout) :: ef(:,:,:,:)
  real(dp),intent(in) :: e0,dt_loc,t_loc,tf,wx,wy,xf0,om0
  integer,intent(in) :: i1,i2
  integer :: j1,j2,k1,k2
  real(dp) :: xx,yy,zz,r2,w2
- real(dp) :: t,tm,zra
+ real(dp) :: t,tm,zra,ycent,zcent
  real(dp) :: pih,phi,phi0,phi1,phx
  real(dp) :: A0,Ar,Ai
  integer :: i,j,k,ii,jj,kk
@@ -996,7 +996,7 @@
   do j=j1,j2
    jj=j-2
    yy=loc_rg(jj,1,imody)
-   yy=yy/wy
+   yy=(yy-ycent)/wy
    r2=yy*yy
    do i=i1,i2
     ii=i-2
@@ -1029,11 +1029,11 @@
  do k=k1,k2
   kk=k-2
   zz=loc_zg(kk,1,imodz)
-  zz=zz/wy
+  zz=(zz-zcent)/wy
   do j=j1,j2
    jj=j-2
    yy=loc_yg(jj,1,imody)
-   yy=yy/wy
+   yy=(yy-ycent)/wy
    r2=(yy*yy+zz*zz)
    do i=i1,i2
     ii=i-2
@@ -2949,13 +2949,13 @@ call pp_lapl(evf,curr,1,ic,der_ord,i1,n1p,j1,n2p,k1,n3p,dhy,dhz)
  end subroutine inflow_lp_fields
  !===================================
  subroutine init_lp_inc0_fields(ef,e0,t_loc,tf,wx,wy,xf0,om0,&
-                              lp,i1,i2)
+                              lp,i1,i2,ycent,zcent)
  !==========================
  real(dp),intent(inout) :: ef(:,:,:,:)
  real(dp),intent(in) :: e0,t_loc,tf,wx,wy,xf0,om0
  integer,intent(in) :: lp,i1,i2
  real(dp) :: xxh,xx,yy,yyh,zz,zzh,sigma,eps
- real(dp) :: xp,xc,yc,zra
+ real(dp) :: xp,xc,yc,zc,zra,ycent,zcent
  real(dp) :: Ex,Ey,Ez,Bx,By,Bz
  integer :: i,j,k,ii,jj,kk
  integer :: j1,j2,k1,k2
@@ -2970,7 +2970,8 @@ call pp_lapl(evf,curr,1,ic,der_ord,i1,n1p,j1,n2p,k1,n3p,dhy,dhz)
  eps=1./(om0*wy)
  zra=0.5*om0*wy*wy
  xc=xf0-tf
- yc=0.0 ! yc centroid y coordinate
+ yc=ycent ! yc centroid y coordinate
+ zc=zcent ! zc centroid z coordinate
  par_lp(1)=om0
  par_lp(2)=xc
  par_lp(3)=wx
@@ -3096,7 +3097,7 @@ call pp_lapl(evf,curr,1,ic,der_ord,i1,n1p,j1,n2p,k1,n3p,dhy,dhz)
      xxh=loc_xg(ii,2,imodx)
      !===ora Ex(xxh,yy)=========
      coords(1)=xxh-xf0
-     coords(2)=yy
+     coords(2)=yy-yc
      !==== Ex(xxh,yy)!
      if(G_prof)then
       call get_2Dlaser_gprof_fields_lp(coords,par_lp,fields)
@@ -3107,7 +3108,7 @@ call pp_lapl(evf,curr,1,ic,der_ord,i1,n1p,j1,n2p,k1,n3p,dhy,dhz)
      ef(i,j,k,1)=ef(i,j,k,1)+Ex
      !==== Ey(xx,yyh)!
      coords(1)=xx-xf0
-     coords(2)=yyh
+     coords(2)=yyh-yc
      if(G_prof)then
       call get_2Dlaser_gprof_fields_lp(coords,par_lp,fields)
      else
@@ -3117,7 +3118,7 @@ call pp_lapl(evf,curr,1,ic,der_ord,i1,n1p,j1,n2p,k1,n3p,dhy,dhz)
      ef(i,j,k,2)=ef(i,j,k,2)+Ey
      !===ora Bz(xxh,yyh)=========
      coords(1)=xxh-xf0
-     coords(2)=yyh
+     coords(2)=yyh-yc
      if(G_prof)then
       call get_2Dlaser_gprof_fields_lp(coords,par_lp,fields)
      else
@@ -3144,8 +3145,8 @@ call pp_lapl(evf,curr,1,ic,der_ord,i1,n1p,j1,n2p,k1,n3p,dhy,dhz)
      xxh=loc_xg(ii,2,imodx)
      !==== Ex(xxh,yy,zz)=========
      coords(1)=xxh-xf0
-     coords(2)=yy
-     coords(3)=zz
+     coords(2)=yy-yc
+     coords(3)=zz-zc
      if(G_prof)then
       call get_laser_gprof_fields_lp(coords,par_lp,fields)
      else
@@ -3155,7 +3156,7 @@ call pp_lapl(evf,curr,1,ic,der_ord,i1,n1p,j1,n2p,k1,n3p,dhy,dhz)
      ef(i,j,k,1)=ef(i,j,k,1)+Ex
      !==== Ey(xx,yyh,zz) =========
      coords(1)=xx-xf0
-     coords(2)=yyh
+     coords(2)=yyh-yc
      if(G_prof)then
       call get_laser_gprof_fields_lp(coords,par_lp,fields)
      else
@@ -3165,8 +3166,8 @@ call pp_lapl(evf,curr,1,ic,der_ord,i1,n1p,j1,n2p,k1,n3p,dhy,dhz)
      ef(i,j,k,2)=ef(i,j,k,2)+Ey
      !==== Ez(xx,yy,zzh) =========
      coords(1)=xx-xf0
-     coords(2)=yy
-     coords(3)=zzh
+     coords(2)=yy-yc
+     coords(3)=zzh-zc
      if(G_prof)then
       call get_laser_gprof_fields_lp(coords,par_lp,fields)
      else
@@ -3176,8 +3177,8 @@ call pp_lapl(evf,curr,1,ic,der_ord,i1,n1p,j1,n2p,k1,n3p,dhy,dhz)
      ef(i,j,k,3)=ef(i,j,k,3)+Ez
      !==== Bx(xx,yyh,zzh)=========
      coords(1)=xx-xf0
-     coords(2)=yyh
-     coords(3)=zzh
+     coords(2)=yyh-yc
+     coords(3)=zzh-zc
      if(G_prof)then
       call get_laser_gprof_fields_lp(coords,par_lp,fields)
      else
@@ -3187,8 +3188,8 @@ call pp_lapl(evf,curr,1,ic,der_ord,i1,n1p,j1,n2p,k1,n3p,dhy,dhz)
      ef(i,j,k,4)=ef(i,j,k,4)+Bx
      !==== By(xxh,yy,zzh) =========
      coords(1)=xxh-xf0
-     coords(2)=yy
-     coords(3)=zzh
+     coords(2)=yy-yc
+     coords(3)=zzh-zc
      if(G_prof)then
       call get_laser_gprof_fields_lp(coords,par_lp,fields)
      else
@@ -3198,8 +3199,8 @@ call pp_lapl(evf,curr,1,ic,der_ord,i1,n1p,j1,n2p,k1,n3p,dhy,dhz)
      ef(i,j,k,5)=ef(i,j,k,5)+By
      !==== Bz(xxh,yyh,zz)=========
      coords(1)=xxh-xf0
-     coords(2)=yyh
-     coords(3)=zz
+     coords(2)=yyh-yc
+     coords(3)=zz-zc
      if(G_prof)then
       call get_laser_gprof_fields_lp(coords,par_lp,fields)
      else
@@ -3225,7 +3226,7 @@ call pp_lapl(evf,curr,1,ic,der_ord,i1,n1p,j1,n2p,k1,n3p,dhy,dhz)
      xxh=loc_xg(ii,2,imodx)
      !===ora Ez(xx,yy)=========
      coords(1)=xx-xf0
-     coords(2)=yy
+     coords(2)=yy-yc
      if(G_prof)then
       call get_2Dlaser_gprof_fields_lp(coords,par_lp,fields)
      else
@@ -3235,7 +3236,7 @@ call pp_lapl(evf,curr,1,ic,der_ord,i1,n1p,j1,n2p,k1,n3p,dhy,dhz)
      ef(i,j,k,3)=ef(i,j,k,3)+Ez
      !==== Bx(xx,yyh)=========
      coords(1)=xx-xf0
-     coords(2)=yyh
+     coords(2)=yyh-yc
      if(G_prof)then
       call get_2Dlaser_gprof_fields_lp(coords,par_lp,fields)
      else
@@ -3245,7 +3246,7 @@ call pp_lapl(evf,curr,1,ic,der_ord,i1,n1p,j1,n2p,k1,n3p,dhy,dhz)
      ef(i,j,k,4)=ef(i,j,k,4)+Bx
      !==== By(xx,yyh) =======
      coords(1)=xx-xf0
-     coords(2)=yyh
+     coords(2)=yyh-yc
      if(G_prof)then
       call get_2Dlaser_gprof_fields_lp(coords,par_lp,fields)
      else
@@ -3272,8 +3273,8 @@ call pp_lapl(evf,curr,1,ic,der_ord,i1,n1p,j1,n2p,k1,n3p,dhy,dhz)
      xxh=loc_xg(ii,2,imodx)
      !==== Ex(xxh,yy,zz)=========
      coords(1)=xxh-xf0
-     coords(2)=yy
-     coords(3)=zz
+     coords(2)=yy-yc
+     coords(3)=zz-zc
      if(G_prof)then
       call get_laser_gprof_fields_lp(coords,par_lp,fields)
      else
@@ -3283,8 +3284,8 @@ call pp_lapl(evf,curr,1,ic,der_ord,i1,n1p,j1,n2p,k1,n3p,dhy,dhz)
      ef(i,j,k,1)=ef(i,j,k,1)+Ex
      !==== Ey(xx,yyh,zz) =========
      coords(1)=xx-xf0
-     coords(2)=yyh
-     coords(3)=zz
+     coords(2)=yyh-yc
+     coords(3)=zz-zc
      if(G_prof)then
       call get_laser_gprof_fields_lp(coords,par_lp,fields)
      else
@@ -3294,8 +3295,8 @@ call pp_lapl(evf,curr,1,ic,der_ord,i1,n1p,j1,n2p,k1,n3p,dhy,dhz)
      ef(i,j,k,2)=ef(i,j,k,2)+Ey
      !==== Ez(xx,yy,zzh) =========
      coords(1)=xx-xf0
-     coords(2)=yy
-     coords(3)=zzh
+     coords(2)=yy-yc
+     coords(3)=zzh-zc
      if(G_prof)then
       call get_laser_gprof_fields_lp(coords,par_lp,fields)
      else
@@ -3305,8 +3306,8 @@ call pp_lapl(evf,curr,1,ic,der_ord,i1,n1p,j1,n2p,k1,n3p,dhy,dhz)
      ef(i,j,k,3)=ef(i,j,k,3)+Ez
      !==== Bx(xx,yyh,zzh)=========
      coords(1)=xx-xf0
-     coords(2)=yyh
-     coords(3)=zzh
+     coords(2)=yyh-yc
+     coords(3)=zzh-zc
      if(G_prof)then
       call get_laser_gprof_fields_lp(coords,par_lp,fields)
      else
@@ -3316,8 +3317,8 @@ call pp_lapl(evf,curr,1,ic,der_ord,i1,n1p,j1,n2p,k1,n3p,dhy,dhz)
      ef(i,j,k,4)=ef(i,j,k,4)+Bx
      !==== By(xxh,yy,zzh) =========
      coords(1)=xxh-xf0
-     coords(2)=yy
-     coords(3)=zzh
+     coords(2)=yy-yc
+     coords(3)=zzh-zc
      if(G_prof)then
       call get_laser_gprof_fields_lp(coords,par_lp,fields)
      else
@@ -3327,8 +3328,8 @@ call pp_lapl(evf,curr,1,ic,der_ord,i1,n1p,j1,n2p,k1,n3p,dhy,dhz)
      ef(i,j,k,5)=ef(i,j,k,5)+By
      !==== Bz(xxh,yyh,zz)=========
      coords(1)=xxh-xf0
-     coords(2)=yyh
-     coords(3)=zz
+     coords(2)=yyh-yc
+     coords(3)=zz-zc
      if(G_prof)then
       call get_laser_gprof_fields_lp(coords,par_lp,fields)
      else
@@ -3343,13 +3344,13 @@ call pp_lapl(evf,curr,1,ic,der_ord,i1,n1p,j1,n2p,k1,n3p,dhy,dhz)
  end subroutine init_lp_inc0_fields
 !=====================================
  subroutine init_lp_fields(ef,e0,t_loc,tf,wx,wy,xf0,om0,&
-                              angle,lp_shx,lp,i1,i2)
+                              angle,lp_shx,lp,i1,i2,ycent,zcent)
  !==========================
  real(dp),intent(inout) :: ef(:,:,:,:)
  real(dp),intent(in) :: e0,t_loc,tf,wx,wy,xf0,angle,lp_shx,om0
  integer,intent(in) :: lp,i1,i2
  real(dp) :: xxh,xx,yy,yyh,zz,zzh,sigma,eps
- real(dp) :: xp,xc,yp,yc
+ real(dp) :: xp,xc,yp,yc,zc,ycent,zcent
  real(dp) :: zra,sf,cf
  real(dp) :: Ex,Ey,Ez,Bx,By,Bz
  integer :: i,j,k,ii,jj,kk
@@ -3369,7 +3370,8 @@ call pp_lapl(evf,curr,1,ic,der_ord,i1,n1p,j1,n2p,k1,n3p,dhy,dhz)
  eps=1./(om0*wy)
  zra=0.5*om0*wy*wy
  xc=xf0-tf+lp_shx
- yc=0.0 ! yc centroid y coordinate
+ yc=ycent
+ zc=zcent ! yc centroid y coordinate
  par_lp(1)=om0
  par_lp(2)=xc
  par_lp(3)=wx
@@ -3491,6 +3493,8 @@ call pp_lapl(evf,curr,1,ic,der_ord,i1,n1p,j1,n2p,k1,n3p,dhy,dhz)
     jj=j-2
     yy=loc_yg(jj,1,imody)
     yyh=loc_yg(jj,2,imody)
+    yy=yy-yc
+    yyh=yyh-yc
     do i=i1,i2
      ii=i-2
      xx=loc_xg(ii,1,imodx)
@@ -3502,7 +3506,7 @@ call pp_lapl(evf,curr,1,ic,der_ord,i1,n1p,j1,n2p,k1,n3p,dhy,dhz)
      coords(2)=yp
      !==== Ex(xxh,yy)!
      call get_2Dlaser_fields_lp(coords,par_lp,fields)
-                                       !call get_2Dlaser_gprof_fields_lp(coords,par_lp,fields)
+     !call get_2Dlaser_gprof_fields_lp(coords,par_lp,fields)
      Ex=e0*fields(1)
      Ey=e0*fields(2)
      ef(i,j,k,1)=ef(i,j,k,1)+Ex*cf-Ey*sf
@@ -3512,17 +3516,17 @@ call pp_lapl(evf,curr,1,ic,der_ord,i1,n1p,j1,n2p,k1,n3p,dhy,dhz)
      coords(1)=xp-xf0
      coords(2)=yp
      call get_2Dlaser_fields_lp(coords,par_lp,fields)
-                                       !call get_2Dlaser_gprof_fields_lp(coords,par_lp,fields)
+     !call get_2Dlaser_gprof_fields_lp(coords,par_lp,fields)
      Ex=e0*fields(1)
-    Ey=e0*fields(2)
+     Ey=e0*fields(2)
      ef(i,j,k,2)=ef(i,j,k,2)+Ey*cf+Ex*sf
      !===ora Bz(xxh,yyh)=========
      xp=xc+(xxh-xc)*cf+yyh*sf
      yp=yyh*cf-(xxh-xc)*sf
-    coords(1)=xp-xf0
+     coords(1)=xp-xf0
      coords(2)=yp
      call get_2Dlaser_fields_lp(coords,par_lp,fields)
-                           !call get_2Dlaser_gprof_fields_lp(coords,par_lp,fields)
+     !call get_2Dlaser_gprof_fields_lp(coords,par_lp,fields)
      Bz=e0*fields(6)
      ef(i,j,k,3)=ef(i,j,k,3)+Bz
    end do
@@ -3531,96 +3535,100 @@ call pp_lapl(evf,curr,1,ic,der_ord,i1,n1p,j1,n2p,k1,n3p,dhy,dhz)
  endif
   !====3D ========================
  do k=k1,k2
-   kk=k-2
+  kk=k-2
   zz=loc_zg(kk,1,imodz)
   zzh=loc_zg(kk,2,imodz)
+  zz=zz-zc
+  zzh=zzh-zc
   do j=j1,j2
-    jj=j-2
+   jj=j-2
    yy=loc_yg(jj,1,imody)
    yyh=loc_yg(jj,2,imody)
-    do i=i1,i2          !xp=x*cos+y*sin  yp=y*cos-x*sin
-     ii=i-2
-     xx=loc_xg(ii,1,imodx)
-     xxh=loc_xg(ii,2,imodx)
-     !==== Ex(xxh,yy,zz)=========
-     xp=xc+(xxh-xc)*cf+yy*sf
-     yp=yy*cf-(xxh-xc)*sf
-   coords(1)=xp-xf0
-   coords(2)=yp
-   coords(3)=zz
-     if(G_prof)then
-      call get_laser_gprof_fields_lp(coords,par_lp,fields)
-     else
-      call get_laser_fields_lp(coords,par_lp,fields)
-     endif
-   Ex=e0*fields(1)
-     Ey=e0*fields(2)
-     ef(i,j,k,1)=Ex*cf-Ey*sf
-     !==== Ey(xx,yyh,zz) =========
-     xp=xc+(xx-xc)*cf+yyh*sf
-     yp=yyh*cf-(xx-xc)*sf
-   coords(1)=xp-xf0
-   coords(2)=yp
-     Ex=e0*fields(1)
-   Ey=e0*fields(2)
-     ef(i,j,k,2)=Ey*cf+Ex*sf
-     !==== Ez(xx,yy,zzh) =========
-     xp=xc+(xx-xc)*cf+yy*sf
-     yp=yy*cf-(xx-xc)*sf
-     coords(1)=xp-xf0
-   coords(2)=yp
-   coords(3)=zzh
-     if(G_prof)then
-      call get_laser_gprof_fields_lp(coords,par_lp,fields)
-     else
-      call get_laser_fields_lp(coords,par_lp,fields)
-     endif
-   Ez=e0*fields(3)
-   ef(i,j,k,3)=Ez
-     !==== Bx(xx,yyh,zzh)=========
-     xp=xc+(xx-xc)*cf+yyh*sf
-     yp=yyh*cf-(xx-xc)*sf
-     coords(1)=xp-xf0
-   coords(2)=yp
-   coords(3)=zzh
-     if(G_prof)then
-      call get_laser_gprof_fields_lp(coords,par_lp,fields)
-     else
-      call get_laser_fields_lp(coords,par_lp,fields)
-     endif
-   Bx=e0*fields(4)
-     By=e0*fields(5)
-     ef(i,j,k,4)=Bx*cf-By*sf
-     !==== By(xxh,yy,zzh) =========
-     xp=xc+(xxh-xc)*cf+yy*sf
-     yp=yy*cf-(xxh-xc)*sf
-   coords(1)=xp-xf0
-   coords(2)=yp
-     coords(3)=zzh
-     if(G_prof)then
-      call get_laser_gprof_fields_lp(coords,par_lp,fields)
-     else
-      call get_laser_fields_lp(coords,par_lp,fields)
-     endif
-     Bx=e0*fields(4)
-   By=e0*fields(5)
-     ef(i,j,k,5)=By*cf+Bx*sf
-     !==== Bz(xxh,yyh,zz)=========
-     xp=xc+(xxh-xc)*cf+yyh*sf
-     yp=yyh*cf-(xxh-xc)*sf
-     coords(1)=xp-xf0
-   coords(2)=yp
-   coords(3)=zz
-     if(G_prof)then
-      call get_laser_gprof_fields_lp(coords,par_lp,fields)
-     else
-      call get_laser_fields_lp(coords,par_lp,fields)
-     endif
-   Bz=e0*fields(6)
-   ef(i,j,k,6)=Bz
-  end do
+   yy=yy-yc
+   yyh=yyh-yc
+   do i=i1,i2          !xp=x*cos+y*sin  yp=y*cos-x*sin
+    ii=i-2
+    xx=loc_xg(ii,1,imodx)
+    xxh=loc_xg(ii,2,imodx)
+    !==== Ex(xxh,yy,zz)=========
+    xp=xc+(xxh-xc)*cf+yy*sf
+    yp=yy*cf-(xxh-xc)*sf
+    coords(1)=xp-xf0
+    coords(2)=yp
+    coords(3)=zz
+    if(G_prof)then
+     call get_laser_gprof_fields_lp(coords,par_lp,fields)
+    else
+     call get_laser_fields_lp(coords,par_lp,fields)
+    endif
+    Ex=e0*fields(1)
+    Ey=e0*fields(2)
+    ef(i,j,k,1)=Ex*cf-Ey*sf
+    !==== Ey(xx,yyh,zz) =========
+    xp=xc+(xx-xc)*cf+yyh*sf
+    yp=yyh*cf-(xx-xc)*sf
+    coords(1)=xp-xf0
+    coords(2)=yp
+    Ex=e0*fields(1)
+    Ey=e0*fields(2)
+    ef(i,j,k,2)=Ey*cf+Ex*sf
+    !==== Ez(xx,yy,zzh) =========
+    xp=xc+(xx-xc)*cf+yy*sf
+    yp=yy*cf-(xx-xc)*sf
+    coords(1)=xp-xf0
+    coords(2)=yp
+    coords(3)=zzh
+    if(G_prof)then
+     call get_laser_gprof_fields_lp(coords,par_lp,fields)
+    else
+     call get_laser_fields_lp(coords,par_lp,fields)
+    endif
+    Ez=e0*fields(3)
+    ef(i,j,k,3)=Ez
+    !==== Bx(xx,yyh,zzh)=========
+    xp=xc+(xx-xc)*cf+yyh*sf
+    yp=yyh*cf-(xx-xc)*sf
+    coords(1)=xp-xf0
+    coords(2)=yp
+    coords(3)=zzh
+    if(G_prof)then
+     call get_laser_gprof_fields_lp(coords,par_lp,fields)
+    else
+     call get_laser_fields_lp(coords,par_lp,fields)
+    endif
+    Bx=e0*fields(4)
+    By=e0*fields(5)
+    ef(i,j,k,4)=Bx*cf-By*sf
+    !==== By(xxh,yy,zzh) =========
+    xp=xc+(xxh-xc)*cf+yy*sf
+    yp=yy*cf-(xxh-xc)*sf
+    coords(1)=xp-xf0
+    coords(2)=yp
+    coords(3)=zzh
+    if(G_prof)then
+     call get_laser_gprof_fields_lp(coords,par_lp,fields)
+    else
+     call get_laser_fields_lp(coords,par_lp,fields)
+    endif
+    Bx=e0*fields(4)
+    By=e0*fields(5)
+    ef(i,j,k,5)=By*cf+Bx*sf
+    !==== Bz(xxh,yyh,zz)=========
+    xp=xc+(xxh-xc)*cf+yyh*sf
+    yp=yyh*cf-(xxh-xc)*sf
+    coords(1)=xp-xf0
+    coords(2)=yp
+    coords(3)=zz
+    if(G_prof)then
+     call get_laser_gprof_fields_lp(coords,par_lp,fields)
+    else
+     call get_laser_fields_lp(coords,par_lp,fields)
+    endif
+    Bz=e0*fields(6)
+    ef(i,j,k,6)=Bz
    end do
   end do
+ end do
   !====== S POLARIZATION ==============================================
  case(2)
   if(ndim<3)then
@@ -3630,6 +3638,8 @@ call pp_lapl(evf,curr,1,ic,der_ord,i1,n1p,j1,n2p,k1,n3p,dhy,dhz)
     jj=j-2
     yy=loc_yg(jj,1,imody)
     yyh=loc_yg(jj,2,imody)
+    yy=yy-yc
+    yyh=yyh-yc
     do i=i1,i2          !xp=x*cos+y*sin  yp=y*cos-x*sin
      ii=i-2
      xx=loc_xg(ii,1,imodx)
@@ -3639,7 +3649,7 @@ call pp_lapl(evf,curr,1,ic,der_ord,i1,n1p,j1,n2p,k1,n3p,dhy,dhz)
      yp=yy*cf-(xx-xc)*sf
      coords(1)=xp-xf0
      coords(2)=yp
-                              !call get_2Dlaser_fields_lp(coords,par_lp,fields)
+     !call get_2Dlaser_fields_lp(coords,par_lp,fields)
      call get_2Dlaser_gprof_fields_lp(coords,par_lp,fields)
      Ez=e0*fields(2)    !  Ez(s-pol)=Ey(p-pol)
      ef(i,j,k,3)=Ez
@@ -3648,7 +3658,7 @@ call pp_lapl(evf,curr,1,ic,der_ord,i1,n1p,j1,n2p,k1,n3p,dhy,dhz)
      yp=yyh*cf-(xx-xc)*sf
      coords(1)=xp-xf0
      coords(2)=yp
-                           !call get_2Dlaser_fields_lp(coords,par_lp,fields)
+     !call get_2Dlaser_fields_lp(coords,par_lp,fields)
      call get_2Dlaser_gprof_fields_lp(coords,par_lp,fields)
      Bx=e0*fields(1)     !  Bx(s-pol)= Ex(p-pol)
      By=-e0*fields(6)    !  By(s-pol)=-Bz(p-pol)
@@ -3658,7 +3668,7 @@ call pp_lapl(evf,curr,1,ic,der_ord,i1,n1p,j1,n2p,k1,n3p,dhy,dhz)
      yp=yyh*cf-(xx-xc)*sf
      coords(1)=xp-xf0
      coords(2)=yp
-     !                   call get_2Dlaser_fields_lp(coords,par_lp,fields)
+     !call get_2Dlaser_fields_lp(coords,par_lp,fields)
      call get_2Dlaser_gprof_fields_lp(coords,par_lp,fields)
      Bx=e0*fields(1)   !  Bx(s-pol)= Ex(p-pol
      By=-e0*fields(2)  !  By(s-pol)=-Bz(p-pol)
@@ -3672,10 +3682,14 @@ call pp_lapl(evf,curr,1,ic,der_ord,i1,n1p,j1,n2p,k1,n3p,dhy,dhz)
    kk=k-2
    zz=loc_zg(kk,1,imodz)
    zzh=loc_zg(kk,2,imodz)
+   zz=zz-zc
+   zzh=zzh-zc
    do j=j1,j2
     jj=j-2
     yy=loc_yg(jj,1,imody)
     yyh=loc_yg(jj,2,imody)
+    yy=yy-yc
+    yyh=yyh-yc
     do i=i1,i2          !xp=x*cos+y*sin  yp=y*cos-x*sin
      ii=i-2
      xx=loc_xg(ii,1,imodx)
@@ -4385,6 +4399,79 @@ call pp_lapl(evf,curr,1,ic,der_ord,i1,n1p,j1,n2p,k1,n3p,dhy,dhz)
  endif
  end subroutine ef_bds
  !=========================================
+ subroutine enforce_continuity(curr,i1,n1p,j1,j2,k1,k2)
+
+ real(dp),intent(inout) :: curr(:,:,:,:)
+ integer,intent(in) :: i1,n1p,j1,j2,k1,k2
+ real(dp) :: aphy,aphz,shy,shz
+ integer :: i,ii,j,k,jj,kk,j01,k01
+ !===================== 3D Cartesian 
+ !Solves DJ_x/Dx =-[DJ_y/Dy+DJ_z/Dz +[Rho^{n+1}-Rho^n]/Dt]=
+ ! Eneter curr(1)= Drho, curr(2)=J_y*Dt  curr(3)= J_z*Dt
+ !=======================================
+ aphy=dy_inv
+ aphz=dz_inv
+ j01=j1
+ k01=k1
+                           !shy(3)=Dxi/Dy centered on node y_j
+ if(ndim==1)return
+ if(pe0y)then
+  j=j1
+  shy=loc_yg(j-1,3,imody)*aphy
+  do k=k1,k2
+   do i=i1,n1p
+    curr(i,j,k,1)=curr(i,j,k,1)+shy*(curr(i,j+1,k,2)-curr(i,j,k,2))
+   end do
+  end do
+  j01=j1+1
+ endif
+ do k=k1,k2
+  do j=j01,j2
+   jj=j-2
+   shy=loc_yg(jj,3,imody)*aphy
+   do i=i1,n1p
+    curr(i,j,k,1)=curr(i,j,k,1)+aphy*(curr(i,j,k,2)-curr(i,j-1,k,2))
+   end do
+  end do
+ end do
+ !================ ndim >2
+ if(ndim ==3)then
+  if(pe0z)then
+   k=k1
+   shz=loc_zg(k-1,3,imodz)*aphz
+   do j=j1,j2
+    do i=i1,n1p
+     curr(i,j,k,1)=curr(i,j,k,1)+shz*(curr(i,j,k+1,3)-curr(i,j,k,3))
+    end do
+   end do
+   k01=k1+1
+  endif
+  do k=k01,k2
+   shz=loc_zg(k-2,3,imodz)*aphz
+   do j=j1,j2
+    do i=i1,n1p
+     curr(i,j,k,1)=curr(i,j,k,1)+shz*(curr(i,j,k,3)-curr(i,j,k-1,3))
+    end do
+   end do
+  end do
+ endif
+!++++++++++++ 1D invertion of first derivative
+ ww0(:,1)=0.0
+ do k=k1,k2
+  do j=j1,j2
+   do i=n1p,i1,-1
+    ii=i-2
+    ww0(ii,1)=ww0(ii+1,1)+dx*curr(i+1,j,k,1)
+   end do
+   do i=1,n1p
+    ii=i-2
+    curr(i,j,k,1)=ww0(ii,1)
+   end do
+  end do
+ end do
+
+ end subroutine enforce_continuity
+!===============================
  subroutine divA(ef,curr,i1,n1p,j1,j2,k1,k2,ic,aphx,aphy,aphz)
 
  real(dp),intent(inout) :: ef(:,:,:,:),curr(:,:,:,:)
@@ -5192,117 +5279,122 @@ call pp_lapl(evf,curr,1,ic,der_ord,i1,n1p,j1,n2p,k1,n3p,dhy,dhz)
  endif
  end subroutine rotE_rk4
  !========= FLUID SECTION
- subroutine weno3(nc,i1,np)
-  integer,intent(in)  :: nc,i1,np
-  real(dp) :: dw(2),sl(2),sr(2),omgl(2),vv,s0
-  real(dp),parameter :: eps=1.e-06
-  real(dp),dimension(2),parameter :: w03=(/1./3.,2./3./)
-  !real(dp),dimension(2),parameter :: w03=(/0.1250,0.3750/)
-!  enter data [i1,np]
-  integer :: i,ic
+!=============================
+ subroutine fluid_filter(fdata,i1,if2,jf1,jf2,kf1,kf2,ic1,ic2)
+  real(dp),intent(inout) :: fdata(:,:,:,:)
+  integer,intent (in) :: i1,if2,jf1,jf2,kf1,kf2,ic1,ic2 
+  real(dp) :: aph
+  integer :: i,ii,j,k,ng,ic,j01,j02,k01,k02
 
-!=======ENTER DATA [i1,np]
-!wl_{i+1/2}in range [i=i1+1,np-1]
-!wr_{i+1/2} in range[i=i1,np-2]
-!(wr+wl)_{i+1/2} in common range [i1+1,np-2]
-! Dw first derivative in range[i1+2,np-2]
+!  filtered data overwrite input data
+!===========================
+!  filtering data along the x coordinte  i1=3  if2 assigned on input data available at if2+1,if2+2 grid point
 !===========================================
-
-  do ic=1,nc-1
-   do i=i1,np
-    var(i,ic)=var(i,ic)*var(i,nc)
+  j01=jf1-2
+  if(yl_bd)j01=jf1
+  j02=jf2+2
+  if(yr_bd)j02=jf2
+  if(ndim==2)then
+   k01=kf1
+   k02=kf2
+  endif
+  if(ndim==3)then
+   k01=kf1-2
+   if(zl_bd)k01=kf1
+   k02=kf2+2
+   if(zr_bd)k02=kf2
+  endif
+!===================
+ aph=filt_coeff(0)
+ ng=if2-4
+ do ic=ic1,ic2
+  do k=k01,k02
+   do j=j01,j02
+    do i=i1+2,if2
+     ii=i-4
+     ww0(ii,j)=filt_coeff(4)*fdata(i,j,k,ic)+&
+                filt_coeff(5)*(fdata(i-1,j,k,ic)+fdata(i+1,j,k,ic))+&
+                filt_coeff(6)*(fdata(i-2,j,k,ic)+fdata(i+2,j,k,ic))
+    end do
+    i=i1+1
+    fdata(i,j,k,ic)=0.5*fdata(i,j,k,ic)+0.25*(fdata(i+1,j,k,ic)+fdata(i-1,j,k,ic))
+!==============
+   end do
+                           !call tridx_inv
+   do j=j01,j02
+    do i=i1+2,if2
+     ii=i-4
+     fdata(i,j,k,ic)=ww0(ii,j)
    end do
   end do
-  do ic=1,nc
-   do i=i1+1,np-1
-    dw(1)=var(i,ic)-var(i-1,ic)    !DW_{i-1}
-    dw(2)=var(i+1,ic)-var(i,ic)    !DW_i
-    omgl(1)=1./(dw(1)*dw(1)+eps)
-    omgl(2)=1./(dw(2)*dw(2)+eps)
-    !omgl(1)=omgl(1)*omgl(1)
-    !omgl(2)=omgl(2)*omgl(2)
-    sl(1)=w03(1)*omgl(1)
-    sl(2)=w03(2)*omgl(2)
-    sr(1)=w03(2)*omgl(1)
-    sr(2)=w03(1)*omgl(2)
-    s0=sl(1)+sl(2)
-    wl(i,ic)=var(i,ic)+0.5*(dw(1)*sl(1)+dw(2)*sl(2))/s0
-    s0=sr(1)+sr(2)
-    wr(i-1,ic)=var(i,ic)-0.5*(dw(1)*sr(1)+dw(2)*sr(2))/s0
-    !s0=0.5*(sign(dw(1),1.)+sign(dw(2),1.))
-    !s0=s0*min(abs(dw(1)),abs(dw(2)))
-    !wl(i,ic)=var(i,ic)+0.5*s0
-    !wr(i-1,ic)=var(i,ic)-0.5*s0
    end do
   end do
-!===================================
-   do ic=1,nc-1
-    do i=i1+1,np-2
-     vv=wr(i,nc)+wl(i,nc)
-     s0=sign(one_dp,vv)        !s0=1*sign(vv)
-     !if(vv>0.0)then
-      var(i,ic)=max(0.,s0)*wl(i,ic)-min(0.,s0)*wr(i,ic)
-     !else
-     ! var(i,ic)=wr(i,ic)
-     !endif
-     !var(i,ic)=var(i,ic)-0.5*vv*(wr(i,ic)-wl(i,ic))
+!============== filtering along the y coordinate
+ do ic=ic1,ic2
+  do k=k01,k02
+   do j=j01+2,j02-2     !jf1,jf2 for interior points
+    do i=i1,if2
+     ii=i-2
+     ww0(ii,j)=filt_coeff(4)*fdata(i,j,k,ic)+&
+                filt_coeff(5)*(fdata(i,j-1,k,ic)+fdata(i,j+1,k,ic))+&
+                filt_coeff(6)*(fdata(i,j-2,k,ic)+fdata(i,j+2,k,ic))
     end do
    end do
- end subroutine weno3
-!=============================
- subroutine weno3_nc(nc,i1,np)
-  integer,intent(in)  :: nc,i1,np
-  real(dp) :: dw(2),sl(2),sr(2),omgl(2),vv,s0
-  real(dp),parameter :: eps=1.e-06
-  real(dp),dimension(2),parameter :: w03=(/1./3.,2./3./)
-  !real(dp),dimension(2),parameter :: w03=(/0.1250,0.8750/)
-!  enter data [i1,np]
-  integer :: i,ic
-
-!=======ENTER DATA [i1,np]
-!wl_{i+1/2}in range [i=i1+1,np-1]
-!wr_{i+1/2} in range[i=i1,np-2]
-!(wr+wl)_{i+1/2} in common range [i1+1,np-2]
-! Dw first derivative in range[i1+2,np-2]
-!===========================================
-
-  ic=nc-1
-  do i=i1,np
-   var(i,ic)=var(i,ic)*var(i,nc)
+!==============
+   do j=j01+2,j02-2
+    do i=i1,if2
+     ii=i-2
+     fdata(i,j,k,ic)=ww0(ii,j)
+    end do
   end do
-!========== the flux for continuity equation  den*v
-  do ic=1,nc
-   do i=i1+1,np-1
-    dw(1)=var(i,ic)-var(i-1,ic)    !DW_{i-1}
-    dw(2)=var(i+1,ic)-var(i,ic)    !DW_i
-    omgl(1)=1./(dw(1)*dw(1)+eps)
-    omgl(2)=1./(dw(2)*dw(2)+eps)
-    !omgl(1)=omgl(1)*omgl(1)
-    !omgl(2)=omgl(2)*omgl(2)
-    sl(1)=w03(1)*omgl(1)
-    sl(2)=w03(2)*omgl(2)
-    sr(1)=w03(2)*omgl(1)
-    sr(2)=w03(1)*omgl(2)
-    s0=sl(1)+sl(2)
-    wl(i,ic)=var(i,ic)+0.5*(dw(1)*sl(1)+dw(2)*sl(2))/s0
-    s0=sr(1)+sr(2)
-    wr(i-1,ic)=var(i,ic)-0.5*(dw(1)*sr(1)+dw(2)*sr(2))/s0
-    !s0=0.5*(sign(dw(1),1.)+sign(dw(2),1.))
-    !s0=s0*min(abs(dw(1)),abs(dw(2)))
-    !wl(i,ic)=var(i,ic)+0.5*s0
-    !wr(i-1,ic)=var(i,ic)-0.5*s0
+  end do
+ end do
+ if(ndim <3)return
+!============== filtering along the z coordinate
+ do ic=ic1,ic2
+  do j=j01,j02
+   do k=k01+2,k02-2
+    do i=i1,if2
+     ii=i-2
+     ww0(ii,k)=filt_coeff(4)*fdata(i,j,k,ic)+&
+                filt_coeff(5)*(fdata(i,j,k-1,ic)+fdata(i,j,k+1,ic))+&
+                filt_coeff(6)*(fdata(i,j,k-2,ic)+fdata(i,j,k+2,ic))
+    end do
+   end do
+!==============
+   do k=k01+2,k02-2
+    do i=i1,if2
+     ii=i-2
+     fdata(i,j,k,ic)=ww0(ii,k)
+    end do
+   end do
    end do
   end do
-!===================================
-  do ic=1,nc-1
-   do i=i1+1,np-2
-    vv=wr(i,nc)+wl(i,nc)
-    s0=sign(one_dp,vv)        !s0=1*sign(vv)
-    var(i,ic)=max(0.,s0)*wl(i,ic)-min(0.,s0)*wr(i,ic)
+
+ contains
+  subroutine tridx_inv
+   real(dp) :: bet
+  do j=jf1,jf2
+   dw(1)=0.0
+   bet=1.
+   ww0(1,j)=ww0(1,j)/bet
+   do i=2,ng-1
+    dw(i)=aph/bet
+    bet=1.-aph*dw(i)
+    ww0(i,j)=(ww0(i,j)-aph*ww0(i-1,j))/bet
+   end do
+   i=ng
+   dw(i)=aph/bet
+   bet=1.-aph*dw(i)
+   ww0(i,j)=(ww0(i,j)-aph*ww0(i-1,j))/bet
+   do i=ng-1,1,-1
+    ww0(i,j)=ww0(i,j)-dw(i+1)*ww0(i+1,j)
    end do
   end do
-  end subroutine weno3_nc
-!===========================================
+
+  end subroutine tridx_inv
+ end subroutine fluid_filter
+    
  subroutine weno5(nc,i0,ng)
  integer,intent(in)  :: nc,i0,ng
  real(dp) :: pl(0:2),pr(0:2),dw(0:3),sl(0:2),sr(0:2),omgl(0:2),vv,s0,s1,ssl,ssr
@@ -5310,7 +5402,7 @@ call pp_lapl(evf,curr,1,ic,der_ord,i1,n1p,j1,n2p,k1,n3p,dhy,dhz)
  real(dp),parameter :: eps=1.e-06,cs2=13./12.
  real(dp),dimension(6),parameter :: lw5=(/-3./8.,7./8.,1./8.,3./8.,5./8.,-1./8./)
  real(dp),dimension(6),parameter :: rw5=(/-1./8.,5./8.,3./8.,1./8.,7./8.,-3./8./)
- real(dp),dimension(3),parameter :: dw5=(/1./16.,5./8.,5./16./)
+ real(dp),dimension(3),parameter :: dw5=(/1./16.,5./8.,5./16./) !?Check if correct
  integer :: i,l,ic
  ! enter data [i0,ng]
 
@@ -5376,7 +5468,7 @@ call pp_lapl(evf,curr,1,ic,der_ord,i1,n1p,j1,n2p,k1,n3p,dhy,dhz)
  real(dp),intent(in) :: aphx,aphy,aphz
  integer :: i,ii,j,k,ic,j01,j02,k01,k02
  real(dp) :: vx,vy,vz,shy,shz
- real(dp) :: dw(2),sl(2),sr(2),omgl(2),vv,s0
+  real(dp) :: dw(3),sl(2),sr(2),omgl(2),vv,s0
  real(dp) :: vl,vr
  real(dp),parameter :: eps=1.e-06
  real(dp),dimension(2),parameter :: w03=(/1./3.,2./3./)
@@ -5475,9 +5567,9 @@ call pp_lapl(evf,curr,1,ic,der_ord,i1,n1p,j1,n2p,k1,n3p,dhy,dhz)
 
   ic=nc-1
   do i=i1,np
-   var(i,ic)=var(i,ic)*var(i,nc)  !in den array => den*v
+   var(i,nc+1)=var(i,ic)*var(i,nc)  !in den array var(nc+1) => den*v
   end do
-!========== the flux for continuity equation  den*v
+!================= reconstract nc primitives (Px,Py,Pz,Den,V)
   do ic=1,nc
    do i=i1+1,np-1
     dw(1)=var(i,ic)-var(i-1,ic)    !DW_{i-1/2}
@@ -5498,55 +5590,70 @@ call pp_lapl(evf,curr,1,ic,der_ord,i1,n1p,j1,n2p,k1,n3p,dhy,dhz)
   !upwind boundary derivatives
   if(lbd)then
    do ic=1,nc-2
-    do i=i1,i1+1
+    i=i1
     ww0(i,ic)=0.0
      vv=var(i,nc)
+    if(vv <0.0)ww0(i,ic)=vv*(var(i+1,ic)-var(i,ic))
+    i=i1+1
+    vv=var(i,nc)
+    ww0(i,ic)=vv*(var(i,ic)-var(i-1,ic))
      if(vv <0.0)ww0(i,ic)=vv*dot_product(rder(1:3),var(i:i+2,ic))
     end do
-   end do
    ic=nc-1
-    do i=i1,i1+1
+   i=i1
      ww0(i,ic)=0.0
      vv=var(i,nc)
-     if(vv <0.0)ww0(i,ic)=vv*dot_product(rder(1:3),var(i:i+2,ic))
-    !i=i1+1
-    !vv=var(i,nc)
-    !if(vv< 0.0)ww0(i,ic)=vv*(wr(i,ic)-wr(i-1,ic))
-    end do
+   if(vv <0.0)ww0(i,ic)=var(i+1,nc+1)-var(i,nc+1)
+   i=i1+1
+   vv=var(i,nc)
+   ww0(i,ic)=var(i,nc+1)-var(i-1,nc+1)
+   if(vv <0.0)ww0(i,ic)=dot_product(rder(1:3),var(i:i+2,nc+1))
   end if
   if(rbd)then
    do ic=1,nc-2
-    do i=np-1,np
-     ww0(i,ic)=0.0
-     vv=var(i,ic)
+    i=np-1
+    vv=var(i,nc)
+    ww0(i,ic)=vv*(var(i+1,ic)-var(i,ic))
      if(vv >0.0)ww0(i,ic)=vv*dot_product(lder(1:3),var(i-2:i,ic))
-    end do
+    i=np
+    vv=var(i,nc)
+    ww0(i,ic)=0.0
+    if(vv >0.0)ww0(i,ic)=vv*(var(i,ic)-var(i-1,ic))
    end do
    ic=nc-1
-   do i=np-1,np
+   i=np-1
+   vv=var(i,nc)
+   ww0(i,ic)=var(i+1,nc+1)-var(i,nc+1)
+   if(vv >0.0)ww0(i,ic)=dot_product(lder(1:3),var(i-2:i,nc+1))
+   i=np
+   vv=var(i,nc)
     ww0(i,ic)=0.0
-    vv=var(i,ic)
-    if(vv >0.0)ww0(i,ic)=dot_product(lder(1:3),var(i-2:i,ic))
-   end do
+   if(vv >0.0)ww0(i,ic)=var(i,nc+1)-var(i-1,nc+1)
   endif
 !===================================
 !   UPWINDING at interior points
-  do ic=1,nc-1
+!          Momenta
+   do ic=1,nc-2
    do i=i1+1,np-2
     vv=wr(i,nc)+wl(i,nc)
     s0=sign(one_dp,vv)        !s0=1*sign(vv)
     var(i,ic)=max(0.,s0)*wl(i,ic)-min(0.,s0)*wr(i,ic)
    end do
-  end do
-  !  Derivatives
-   do ic=1,nc-2
-    !interior points momentum derivatives v*(p_{i+1/2}-p_{i-1/2})
     do i=i1+2,np-2 
      ww0(i,ic)=var(i,nc)*(var(i,ic)-var(i-1,ic))
     end do
    end do
+! LxF flux for density variable
+!   F=nv=> 1/2(F_L+F_R)-|V_{max}|(den_R-den_L)]
    ic=nc-1
-   !interior points density flux derivatives (nv)_{j+1/2}-(nv)_{j-1/2}
+    do i=i1+1,np-2
+     dw(1)=var(i-1,nc)
+     dw(2)=var(i,nc)
+     dw(3)=var(i+1,nc)
+     vv=maxval(abs(dw(1:3)))
+     var(i,ic)=wr(i,nc)*wr(i,ic)+wl(i,nc)*wl(i,ic)-vv*(wr(i,ic)-wl(i,ic))
+     var(i,ic)=0.5*var(i,ic)
+    end do
    do i=i1+2,np-2 
     ww0(i,ic)=var(i,ic)-var(i-1,ic)
    end do
@@ -5581,7 +5688,7 @@ call pp_lapl(evf,curr,1,ic,der_ord,i1,n1p,j1,n2p,k1,n3p,dhy,dhz)
       var(i,ic)=flx(i,j,k,ic)
      end do
     end do
-   call weno3(fcomp+1,i1,n1p)   !ww0() first derivative
+   call weno3(fcomp+1,i1,n1p)   !Exit ww0() first derivative
    do ic=1,fcomp
     do i=i1+2,n1p-2
      ef(i,j,k,ic)=ef(i,j,k,ic)+aphx*(var(i,ic)-var(i-1,ic))
@@ -5609,8 +5716,6 @@ call pp_lapl(evf,curr,1,ic,der_ord,i1,n1p,j1,n2p,k1,n3p,dhy,dhz)
    end do
   end do
   if(ndim <3)return
-  if(pe0z)call z_left_boundary_closure  !boundary at k=k1,k1+1 ==> k01=k1+2
-  if(pe1z)call z_right_boundary_closure !boundary at k=n3-,n3p-1 ==> k02=n3p-2
   do j=j1,n2p
    do i=i1,n1p
     do ic=1,fcomp
@@ -5632,114 +5737,64 @@ call pp_lapl(evf,curr,1,ic,der_ord,i1,n1p,j1,n2p,k1,n3p,dhy,dhz)
   end do
 !=================================
  contains
- subroutine x_boundary_closure
-  do k=k1,n3p
-   do j=j1,n2p
-    do i=i1,i1+1
-     vx=flx(i,j,k,fcomp+1)
-     if(vx <0.0)then
-      do ic=1,fcomp
-       do ii=1,3
-        ww(ii)=flx(i-1+ii,j,k,ic)*flx(i-1+ii,j,k,fcomp+1)
-        ef(i,j,k,ic)=ef(i,j,k,ic)+aphx*ww(ii)*rder(ii)
-       end do
-      end do
-     endif
-    end do
-   end do
-  end do
-  do k=k1,n3p
-   do j=j1,n2p
-    do i=n1p-1,n1p
-     vx=flx(i,j,k,fcomp+1)
-     if(vx >0.0)then
-      do ic=1,fcomp
-       do ii=1,3
-        ww(ii)=flx(i-3+ii,j,k,ic)*flx(i-3+ii,j,k,fcomp+1)
-        ef(i,j,k,ic)=ef(i,j,k,ic)+aphx*ww(ii)*lder(ii)
-       end do
-      end do
-     endif
-    end do
-   end do
-  end do
-!=================================
- end subroutine x_boundary_closure
- subroutine y_left_boundary_closure
-   do k=k1,n3p
-    do i=i1,n1p
-    do j=j1,j1+1
-     vy=flx(i,j,k,fcomp+2)
-     if(vy <0.0)then
-      do ic=1,fcomp
-       do ii=1,3
-        ww(ii)=flx(i,j-1+ii,k,ic)*flx(i,j-1+ii,k,fcomp+2)
-        ef(i,j,k,ic)=ef(i,j,k,ic)+aphy*ww(ii)*rder(ii)
-    end do
-   end do
-  endif
-   end do
-  end do
- end do
-  j01=j1+2
- end subroutine y_left_boundary_closure
+ subroutine weno3(nc,i1,np)
+  integer,intent(in)  :: nc,i1,np
+  real(dp) :: dw(3),sl(2),sr(2),omgl(2),vv,s0
+  real(dp) :: vl,vr
+  real(dp),parameter :: eps=1.e-06
+  real(dp),dimension(2),parameter :: w03=(/1./3.,2./3./)
+  !real(dp),dimension(2),parameter :: w03=(/0.1250,0.3750/)
+!  enter data [i1,np]  
+  integer :: i,l,ic
 
- subroutine y_right_boundary_closure
-  do k=k1,n3p
-    do i=i1,n1p
-    do j=n2p-1,n2p
-     vy=flx(i,j,k,fcomp+2)
-     if(vy >0.0)then
-      do ic=1,fcomp
-       do ii=1,3
-        ww(ii)=flx(i,j-3+ii,k,ic)*flx(i,j-3+ii,k,fcomp+2)
-        ef(i,j,k,ic)=ef(i,j,k,ic)+aphy*ww(ii)*lder(ii)
+!=======ENTER DATA [i1,np]
+!wl_{i+1/2}in range [i=i1+1,np-1] 
+!wr_{i+1/2} in range[i=i1,np-2]
+!(wr+wl)_{i+1/2} in common range [i1+1,np-2]
+! Dw first derivative in range[i1+2,np-2]
+!===========================================
+
+  do ic=1,nc-1
+   do i=i1,np
+    var(i,ic)=var(i,ic)*var(i,nc)
        end do
       end do
-     endif
-    end do
+  do ic=1,nc
+   do i=i1+1,np-1
+    dw(1)=var(i,ic)-var(i-1,ic)    !DW_{i-1}
+    dw(2)=var(i+1,ic)-var(i,ic)    !DW_i
+    omgl(1)=1./(dw(1)*dw(1)+eps)
+    omgl(2)=1./(dw(2)*dw(2)+eps)
+    !omgl(1)=omgl(1)*omgl(1)
+    !omgl(2)=omgl(2)*omgl(2)
+    sl(1)=w03(1)*omgl(1)
+    sl(2)=w03(2)*omgl(2)
+    sr(1)=w03(2)*omgl(1)
+    sr(2)=w03(1)*omgl(2)
+    s0=sl(1)+sl(2)
+    wl(i,ic)=var(i,ic)+0.5*(dw(1)*sl(1)+dw(2)*sl(2))/s0
+    s0=sr(1)+sr(2)
+    wr(i-1,ic)=var(i,ic)-0.5*(dw(1)*sr(1)+dw(2)*sr(2))/s0
+    !s0=0.5*(sign(dw(1),1.)+sign(dw(2),1.))
+    !s0=s0*min(abs(dw(1)),abs(dw(2)))
+    !wl(i,ic)=var(i,ic)+0.5*s0
+    !wr(i-1,ic)=var(i,ic)-0.5*s0
    end do
   end do
-  j02=n2p-2
- end subroutine y_right_boundary_closure
-!====================
- subroutine z_left_boundary_closure
-   do j=j1,n2p
-    do i=i1,n1p
-    do k=k1,k1+1
-     vz=flx(i,j,k,fcomp+3)
-     if(vz <0.0)then
-      do ic=1,fcomp
-       do ii=1,3
-        ww(ii)=flx(i,j,k-1+ii,ic)*flx(i,j,k-1+ii,fcomp+3)
-        ef(i,j,k,ic)=ef(i,j,k,ic)+aphz*ww(ii)*rder(ii)
-    end do
-   end do
-  endif
-    end do
+!===================================
+   do ic=1,nc-1
+    do i=i1+1,np-2
+     vv=wr(i,nc)+wl(i,nc)
+     s0=sign(1.,vv)        !s0=1*sign(vv)
+     !if(vv>0.0)then
+      var(i,ic)=max(0.,s0)*wl(i,ic)-min(0.,s0)*wr(i,ic)
+     !else
+     ! var(i,ic)=wr(i,ic)
+     !endif
+     !var(i,ic)=var(i,ic)-0.5*vv*(wr(i,ic)-wl(i,ic))
    end do
   end do
-  k01=k1+2
- end subroutine z_left_boundary_closure
-
- subroutine z_right_boundary_closure
-   do j=j1,n2p
-    do i=i1,n1p
-    do k=n3p-1,n3p
-     vz=flx(i,j,k,fcomp+3)
-     if(vz >0.0)then
-      do ic=1,fcomp
-       do ii=1,3
-        ww(ii)=flx(i,j,k-3+ii,ic)*flx(i,j,k-3+ii,fcomp+3)
-        ef(i,j,k,ic)=ef(i,j,k,ic)+aphz*ww(ii)*lder(ii)
-    end do
-   end do
-  endif
-    end do
-   end do
-  end do
-  k02=n3p-2
- end subroutine z_right_boundary_closure
+ end subroutine weno3
  end subroutine cons_fluid_density_momenta
  !================================
  !================================
