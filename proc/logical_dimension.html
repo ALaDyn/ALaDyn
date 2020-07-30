@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+   <meta name="description" content="A High-Accuracy PIC Code for the Maxwell-Vlasov Equations">
+    
+    <meta name="author" content="The ALaDyn Collaboration" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>logical_dimension &ndash; ALaDyn</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">ALaDyn <small>3.0.1</small></a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+        
+            <li><a href='../page/index.html'>Guide</a></li>
+      
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+     aria-expanded="false">Contents <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          
+              
+            <li><a href="../lists/files.html">Source Files</a></li>
+        
+        
+        
+            <li><a href="../lists/modules.html">Modules</a></li>
+        
+            
+                                
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+        
+               
+            <li><a href="../lists/types.html">Derived Types</a></li>
+        
+        
+            <li><a href="../program/aladyn.html">Program</a></li>
+      
+            </ul>
+            </li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+
+                             
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../program/aladyn.html">Program</a></li>
+
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>logical_dimension
+      <small>Function</small>
+    
+    </h1>
+    
+<div class="row">
+  <div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+     <li><i class="fa fa-list-ol"></i>
+       <a data-toggle="tooltip"
+    data-placement="bottom" data-html="true"
+    title=" 0.0% of total for procedures.">13 statements</a>
+     </li> 
+     
+     
+     
+    <li><i class="fa fa-code"></i><a href="../src/modern_fft_lib.F90"> Source File</a></li>
+     
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+    
+     <li><a href='../sourcefile/modern_fft_lib.f90.html'>modern_fft_lib.F90</a></li>
+    
+     <li><a href='../module/modern_fft_lib.html'>modern_fft_lib</a></li>
+    
+  
+     <li class="active">logical_dimension</li>
+  </ol>
+</div>
+</div>
+</div>
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+    
+<div id="sidebar">
+  
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<em>None</em>
+
+
+</div>
+
+    </div>
+    
+    <div class="col-md-9" id='text'>
+    <h2>
+public pure function logical_dimension(kind_flag, N) result(log_dim)
+    
+    
+   
+</h2>
+    
+  
+
+
+    
+    <p>Returns the logical dimension given the FFT Kind.
+ To be generalized for other applications than
+ FFTW_RODFT00 and FFTW_REDFT00</p>
+    
+
+    <h3>Arguments</h3>
+    
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-kind_flag"></span>integer(kind=C_INTPTR_T),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>kind_flag</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-n"></span>integer,</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>N</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+    
+    
+    
+    
+    
+    
+    
+   <h3>Return Value <small><span class="anchor" id="variable-log_dim"></span>integer
+  </small></h3>
+    
+    
+    
+    <br>
+    
+    
+     
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Called by</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: proc~~logical_dimension~~CalledByGraph Pages: 1 -->
+<svg id="proclogical_dimensionCalledByGraph" width="574pt" height="74pt"
+ viewBox="0.00 0.00 574.00 74.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~logical_dimension~~CalledByGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 70)">
+<title>proc~~logical_dimension~~CalledByGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-70 570,-70 570,4 -4,4"/>
+<!-- proc~logical_dimension -->
+<g id="proc~~logical_dimension~~CalledByGraph_node1" class="node">
+<title>proc~logical_dimension</title>
+<polygon fill="none" stroke="#000000" points="566,-46 457,-46 457,-22 566,-22 566,-46"/>
+<text text-anchor="middle" x="511.5" y="-31.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">logical_dimension</text>
+</g>
+<!-- proc~ftw1d_sc -->
+<g id="proc~~logical_dimension~~CalledByGraph_node2" class="node">
+<title>proc~ftw1d_sc</title>
+<g id="a_proc~~logical_dimension~~CalledByGraph_node2"><a xlink:href=".././proc/ftw1d_sc.html" xlink:title="ftw1d_sc">
+<polygon fill="#d9534f" stroke="#d9534f" points="421,-46 363,-46 363,-22 421,-22 421,-46"/>
+<text text-anchor="middle" x="392" y="-31.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">ftw1d_sc</text>
+</a>
+</g>
+</g>
+<!-- proc~ftw1d_sc&#45;&gt;proc~logical_dimension -->
+<g id="proc~~logical_dimension~~CalledByGraph_edge1" class="edge">
+<title>proc~ftw1d_sc&#45;&gt;proc~logical_dimension</title>
+<path fill="none" stroke="#ff0000" d="M421.233,-34C429.0647,-34 437.8527,-34 446.7896,-34"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="446.9001,-37.5001 456.9,-34 446.9,-30.5001 446.9001,-37.5001"/>
+</g>
+<!-- proc~pftw2d_sc -->
+<g id="proc~~logical_dimension~~CalledByGraph_node3" class="node">
+<title>proc~pftw2d_sc</title>
+<g id="a_proc~~logical_dimension~~CalledByGraph_node3"><a xlink:href=".././proc/pftw2d_sc.html" xlink:title="pftw2d_sc">
+<polygon fill="#d9534f" stroke="#d9534f" points="327,-26 262,-26 262,-2 327,-2 327,-26"/>
+<text text-anchor="middle" x="294.5" y="-11.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">pftw2d_sc</text>
+</a>
+</g>
+</g>
+<!-- proc~pftw2d_sc&#45;&gt;proc~ftw1d_sc -->
+<g id="proc~~logical_dimension~~CalledByGraph_edge2" class="edge">
+<title>proc~pftw2d_sc&#45;&gt;proc~ftw1d_sc</title>
+<path fill="none" stroke="#ff0000" d="M327.2373,-20.7153C335.418,-22.3934 344.2755,-24.2104 352.7364,-25.9459"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="352.2887,-29.4269 362.7881,-28.0078 353.6954,-22.5697 352.2887,-29.4269"/>
+</g>
+<!-- proc~pftw3d_sc -->
+<g id="proc~~logical_dimension~~CalledByGraph_node4" class="node">
+<title>proc~pftw3d_sc</title>
+<g id="a_proc~~logical_dimension~~CalledByGraph_node4"><a xlink:href=".././proc/pftw3d_sc.html" xlink:title="pftw3d_sc">
+<polygon fill="#d9534f" stroke="#d9534f" points="220.5,-66 155.5,-66 155.5,-42 220.5,-42 220.5,-66"/>
+<text text-anchor="middle" x="188" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">pftw3d_sc</text>
+</a>
+</g>
+</g>
+<!-- proc~pftw3d_sc&#45;&gt;proc~ftw1d_sc -->
+<g id="proc~~logical_dimension~~CalledByGraph_edge3" class="edge">
+<title>proc~pftw3d_sc&#45;&gt;proc~ftw1d_sc</title>
+<path fill="none" stroke="#ff0000" d="M220.7761,-50.7867C256.7057,-47.2641 314.3327,-41.6144 352.6715,-37.8557"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="353.3286,-41.3082 362.9394,-36.8491 352.6456,-34.3416 353.3286,-41.3082"/>
+</g>
+<!-- proc~pftw3d_sc&#45;&gt;proc~pftw2d_sc -->
+<g id="proc~~logical_dimension~~CalledByGraph_edge4" class="edge">
+<title>proc~pftw3d_sc&#45;&gt;proc~pftw2d_sc</title>
+<path fill="none" stroke="#ff0000" d="M219.9535,-41.9987C230.2842,-38.1186 241.8952,-33.7577 252.823,-29.6533"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="254.0701,-32.9237 262.2009,-26.1311 251.6088,-26.3707 254.0701,-32.9237"/>
+</g>
+<!-- proc~fft_2d_psolv -->
+<g id="proc~~logical_dimension~~CalledByGraph_node5" class="node">
+<title>proc~fft_2d_psolv</title>
+<g id="a_proc~~logical_dimension~~CalledByGraph_node5"><a xlink:href=".././proc/fft_2d_psolv.html" xlink:title="fft_2d_psolv">
+<polygon fill="#d9534f" stroke="#d9534f" points="226,-24 150,-24 150,0 226,0 226,-24"/>
+<text text-anchor="middle" x="188" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">fft_2d_psolv</text>
+</a>
+</g>
+</g>
+<!-- proc~fft_2d_psolv&#45;&gt;proc~pftw2d_sc -->
+<g id="proc~~logical_dimension~~CalledByGraph_edge5" class="edge">
+<title>proc~fft_2d_psolv&#45;&gt;proc~pftw2d_sc</title>
+<path fill="none" stroke="#ff0000" d="M226.1481,-12.7164C234.465,-12.8726 243.3176,-13.0388 251.7983,-13.1981"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="251.8336,-16.6993 261.8975,-13.3877 251.9651,-9.7005 251.8336,-16.6993"/>
+</g>
+<!-- proc~fft_3d_psolv -->
+<g id="proc~~logical_dimension~~CalledByGraph_node6" class="node">
+<title>proc~fft_3d_psolv</title>
+<g id="a_proc~~logical_dimension~~CalledByGraph_node6"><a xlink:href=".././proc/fft_3d_psolv.html" xlink:title="fft_3d_psolv">
+<polygon fill="#d9534f" stroke="#d9534f" points="95,-66 19,-66 19,-42 95,-42 95,-66"/>
+<text text-anchor="middle" x="57" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">fft_3d_psolv</text>
+</a>
+</g>
+</g>
+<!-- proc~fft_3d_psolv&#45;&gt;proc~pftw3d_sc -->
+<g id="proc~~logical_dimension~~CalledByGraph_edge6" class="edge">
+<title>proc~fft_3d_psolv&#45;&gt;proc~pftw3d_sc</title>
+<path fill="none" stroke="#00ffff" d="M95.2428,-54C110.8543,-54 128.9801,-54 145.0451,-54"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="145.2574,-57.5001 155.2574,-54 145.2573,-50.5001 145.2574,-57.5001"/>
+</g>
+<!-- proc~set_wake_potential -->
+<g id="proc~~logical_dimension~~CalledByGraph_node7" class="node">
+<title>proc~set_wake_potential</title>
+<g id="a_proc~~logical_dimension~~CalledByGraph_node7"><a xlink:href=".././proc/set_wake_potential.html" xlink:title="set_wake_potential">
+<polygon fill="#d9534f" stroke="#d9534f" points="114,-24 0,-24 0,0 114,0 114,-24"/>
+<text text-anchor="middle" x="57" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">set_wake_potential</text>
+</a>
+</g>
+</g>
+<!-- proc~set_wake_potential&#45;&gt;proc~fft_2d_psolv -->
+<g id="proc~~logical_dimension~~CalledByGraph_edge7" class="edge">
+<title>proc~set_wake_potential&#45;&gt;proc~fft_2d_psolv</title>
+<path fill="none" stroke="#ff0000" d="M114.0774,-12C122.7046,-12 131.5301,-12 139.9416,-12"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="139.9554,-15.5001 149.9554,-12 139.9554,-8.5001 139.9554,-15.5001"/>
+</g>
+</g>
+</svg>
+</div><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="599pt" height="32pt"
+ viewBox="0.00 0.00 598.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 594.5,-28 594.5,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="71,-24 0,-24 0,0 71,0 71,-24"/>
+<text text-anchor="middle" x="35.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="147.5,-24 89.5,-24 89.5,0 147.5,0 147.5,-24"/>
+<text text-anchor="middle" x="118.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="227,-24 166,-24 166,0 227,0 227,-24"/>
+<text text-anchor="middle" x="196.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node4" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="392,-24 245,-24 245,0 392,0 392,-24"/>
+<text text-anchor="middle" x="318.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="468.5,-24 410.5,-24 410.5,0 468.5,0 468.5,-24"/>
+<text text-anchor="middle" x="439.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="590.5,-24 486.5,-24 486.5,0 590.5,0 590.5,-24"/>
+<text text-anchor="middle" x="538.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a procedure to one which it calls. Dashed 
+    arrows point from an interface to procedures which implement that interface.
+    This could include the module procedures in a generic interface or the
+    implementation in a submodule of an interface in a parent module. Where possible, edges connecting nodes are given different colours to make them easier to distinguish in large graphs.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+     
+    <br>
+
+    <section class="visible-xs visible-sm hidden-md">
+      
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<em>None</em>
+
+
+    </section>
+    <br class="visible-xs visible-sm hidden-md">
+
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+
+    
+    
+    
+    
+    </div>
+  </div>
+
+
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2020 <a rel="license" href="http://www.gnu.org/licenses/old-licenses/fdl-1.2.en.html">GNU Free Documentation License</a>
+                                          </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+             on 2020-07-30 
+          </p>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> ALaDyn was developed by The ALaDyn Collaboration</p></div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+      });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+    
+  </body>
+</html>

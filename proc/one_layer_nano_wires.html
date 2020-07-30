@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+   <meta name="description" content="A High-Accuracy PIC Code for the Maxwell-Vlasov Equations">
+    
+    <meta name="author" content="The ALaDyn Collaboration" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>one_layer_nano_wires &ndash; ALaDyn</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">ALaDyn <small>3.0.1</small></a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+        
+            <li><a href='../page/index.html'>Guide</a></li>
+      
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+     aria-expanded="false">Contents <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          
+              
+            <li><a href="../lists/files.html">Source Files</a></li>
+        
+        
+        
+            <li><a href="../lists/modules.html">Modules</a></li>
+        
+            
+                                
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+        
+               
+            <li><a href="../lists/types.html">Derived Types</a></li>
+        
+        
+            <li><a href="../program/aladyn.html">Program</a></li>
+      
+            </ul>
+            </li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+
+                             
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../program/aladyn.html">Program</a></li>
+
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>one_layer_nano_wires
+      <small>Subroutine</small>
+    
+    </h1>
+    
+<div class="row">
+  <div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+     <li><i class="fa fa-list-ol"></i>
+       <a data-toggle="tooltip"
+    data-placement="bottom" data-html="true"
+    title=" 0.2% of total for procedures.">375 statements</a>
+     </li> 
+     
+     
+     
+    <li><i class="fa fa-code"></i><a href="../src/init_part_distrib.f90"> Source File</a></li>
+     
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+    
+     <li><a href='../sourcefile/init_part_distrib.f90.html'>init_part_distrib.f90</a></li>
+    
+     <li><a href='../module/init_part_distrib.html'>init_part_distrib</a></li>
+    
+  
+     <li class="active">one_layer_nano_wires</li>
+  </ol>
+</div>
+</div>
+</div>
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+    
+<div id="sidebar">
+  
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<em>None</em>
+
+
+</div>
+
+    </div>
+    
+    <div class="col-md-9" id='text'>
+    <h2>
+private subroutine one_layer_nano_wires(nyh_in, xf0)
+    
+    
+   
+</h2>
+    
+  
+
+
+    
+
+    <h3>Arguments</h3>
+    
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-nyh_in~6"></span>integer,</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>nyh_in</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-xf0~5"></span>real(kind=dp),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>xf0</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+    
+    
+    
+    <br>
+    
+    
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Calls</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: proc~~one_layer_nano_wires~~CallsGraph Pages: 1 -->
+<svg id="procone_layer_nano_wiresCallsGraph" width="392pt" height="503pt"
+ viewBox="0.00 0.00 392.00 503.03" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~one_layer_nano_wires~~CallsGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 499.0321)">
+<title>proc~~one_layer_nano_wires~~CallsGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-499.0321 388,-499.0321 388,4 -4,4"/>
+<!-- proc~one_layer_nano_wires -->
+<g id="proc~~one_layer_nano_wires~~CallsGraph_node1" class="node">
+<title>proc~one_layer_nano_wires</title>
+<polygon fill="none" stroke="#000000" points="130,-274 0,-274 0,-250 130,-250 130,-274"/>
+<text text-anchor="middle" x="65" y="-259.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">one_layer_nano_wires</text>
+</g>
+<!-- ypt -->
+<g id="proc~~one_layer_nano_wires~~CallsGraph_node2" class="node">
+<title>ypt</title>
+<polygon fill="#777777" stroke="#777777" points="377.5,-471 323.5,-471 323.5,-447 377.5,-447 377.5,-471"/>
+<text text-anchor="middle" x="350.5" y="-456.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">ypt</text>
+</g>
+<!-- proc~one_layer_nano_wires&#45;&gt;ypt -->
+<g id="proc~~one_layer_nano_wires~~CallsGraph_edge11" class="edge">
+<title>proc~one_layer_nano_wires&#45;&gt;ypt</title>
+<path fill="none" stroke="#ff0000" d="M66.2414,-274.0129C70.9131,-312.2337 91.1925,-431.3048 166,-479 211.4558,-507.9814 276.3081,-490.5349 315.7839,-474.9701"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="317.3263,-478.1204 325.2462,-471.0829 314.6663,-471.6455 317.3263,-478.1204"/>
+</g>
+<!-- zpt -->
+<g id="proc~~one_layer_nano_wires~~CallsGraph_node3" class="node">
+<title>zpt</title>
+<polygon fill="#777777" stroke="#777777" points="377.5,-429 323.5,-429 323.5,-405 377.5,-405 377.5,-429"/>
+<text text-anchor="middle" x="350.5" y="-414.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">zpt</text>
+</g>
+<!-- proc~one_layer_nano_wires&#45;&gt;zpt -->
+<g id="proc~~one_layer_nano_wires~~CallsGraph_edge1" class="edge">
+<title>proc~one_layer_nano_wires&#45;&gt;zpt</title>
+<path fill="none" stroke="#ff0000" d="M71.1657,-274.1037C84.6235,-299.1719 119.2118,-356.7027 166,-384 211.8269,-410.7364 274.1228,-416.802 313.3187,-417.6819"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="313.4449,-421.1836 323.4866,-417.8051 313.5298,-414.1841 313.4449,-421.1836"/>
+</g>
+<!-- xpt -->
+<g id="proc~~one_layer_nano_wires~~CallsGraph_node4" class="node">
+<title>xpt</title>
+<polygon fill="#777777" stroke="#777777" points="250.5,-234 196.5,-234 196.5,-210 250.5,-210 250.5,-234"/>
+<text text-anchor="middle" x="223.5" y="-219.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">xpt</text>
+</g>
+<!-- proc~one_layer_nano_wires&#45;&gt;xpt -->
+<g id="proc~~one_layer_nano_wires~~CallsGraph_edge2" class="edge">
+<title>proc~one_layer_nano_wires&#45;&gt;xpt</title>
+<path fill="none" stroke="#ff0000" d="M112.5552,-249.9987C136.1709,-244.0389 164.2823,-236.9445 186.2988,-231.3883"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="187.419,-234.7154 196.2585,-228.8748 185.7061,-227.9282 187.419,-234.7154"/>
+</g>
+<!-- loc_wghx -->
+<g id="proc~~one_layer_nano_wires~~CallsGraph_node5" class="node">
+<title>loc_wghx</title>
+<polygon fill="#777777" stroke="#777777" points="254,-192 193,-192 193,-168 254,-168 254,-192"/>
+<text text-anchor="middle" x="223.5" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">loc_wghx</text>
+</g>
+<!-- proc~one_layer_nano_wires&#45;&gt;loc_wghx -->
+<g id="proc~~one_layer_nano_wires~~CallsGraph_edge3" class="edge">
+<title>proc~one_layer_nano_wires&#45;&gt;loc_wghx</title>
+<path fill="none" stroke="#ff0000" d="M82.6583,-249.8917C102.3714,-236.7222 135.5175,-215.6026 166,-201 171.4647,-198.3821 177.3474,-195.8887 183.1908,-193.5941"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="184.7833,-196.7344 192.9072,-189.9334 182.3153,-190.1839 184.7833,-196.7344"/>
+</g>
+<!-- proc~set_pgrid_ind -->
+<g id="proc~~one_layer_nano_wires~~CallsGraph_node6" class="node">
+<title>proc~set_pgrid_ind</title>
+<g id="a_proc~~one_layer_nano_wires~~CallsGraph_node6"><a xlink:href=".././proc/set_pgrid_ind.html" xlink:title="set_pgrid_ind">
+<polygon fill="#d9534f" stroke="#d9534f" points="265,-470 182,-470 182,-446 265,-446 265,-470"/>
+<text text-anchor="middle" x="223.5" y="-455.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">set_pgrid_ind</text>
+</a>
+</g>
+</g>
+<!-- proc~one_layer_nano_wires&#45;&gt;proc~set_pgrid_ind -->
+<g id="proc~~one_layer_nano_wires~~CallsGraph_edge5" class="edge">
+<title>proc~one_layer_nano_wires&#45;&gt;proc~set_pgrid_ind</title>
+<path fill="none" stroke="#ff0000" d="M69.3473,-274.4142C80.6572,-305.082 113.7987,-385.3136 166,-432 169.8317,-435.4269 174.1906,-438.4711 178.7545,-441.1577"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="177.2234,-444.3073 187.6994,-445.89 180.4969,-438.1198 177.2234,-444.3073"/>
+</g>
+<!-- loc_xpt -->
+<g id="proc~~one_layer_nano_wires~~CallsGraph_node7" class="node">
+<title>loc_xpt</title>
+<polygon fill="#777777" stroke="#777777" points="250.5,-150 196.5,-150 196.5,-126 250.5,-126 250.5,-150"/>
+<text text-anchor="middle" x="223.5" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">loc_xpt</text>
+</g>
+<!-- proc~one_layer_nano_wires&#45;&gt;loc_xpt -->
+<g id="proc~~one_layer_nano_wires~~CallsGraph_edge6" class="edge">
+<title>proc~one_layer_nano_wires&#45;&gt;loc_xpt</title>
+<path fill="none" stroke="#ff0000" d="M73.9585,-249.7983C90.1256,-228.5672 126.218,-184.6499 166,-159 172.3249,-154.9219 179.5503,-151.4931 186.694,-148.6665"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="188.088,-151.884 196.2927,-145.1807 185.6985,-145.3044 188.088,-151.884"/>
+</g>
+<!-- loc_ypt -->
+<g id="proc~~one_layer_nano_wires~~CallsGraph_node8" class="node">
+<title>loc_ypt</title>
+<polygon fill="#777777" stroke="#777777" points="377.5,-384 323.5,-384 323.5,-360 377.5,-360 377.5,-384"/>
+<text text-anchor="middle" x="350.5" y="-369.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">loc_ypt</text>
+</g>
+<!-- proc~one_layer_nano_wires&#45;&gt;loc_ypt -->
+<g id="proc~~one_layer_nano_wires~~CallsGraph_edge7" class="edge">
+<title>proc~one_layer_nano_wires&#45;&gt;loc_ypt</title>
+<path fill="none" stroke="#ff0000" d="M72.9362,-274.2285C88.0081,-296.2352 123.1305,-341.9854 166,-361 213.4564,-382.0491 274.6201,-380.8861 313.2108,-377.1794"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="313.8954,-380.6263 323.4666,-376.0828 313.1511,-373.6659 313.8954,-380.6263"/>
+</g>
+<!-- proc~p_alloc -->
+<g id="proc~~one_layer_nano_wires~~CallsGraph_node9" class="node">
+<title>proc~p_alloc</title>
+<g id="a_proc~~one_layer_nano_wires~~CallsGraph_node9"><a xlink:href=".././proc/p_alloc.html" xlink:title="p_alloc">
+<polygon fill="#d9534f" stroke="#d9534f" points="250.5,-108 196.5,-108 196.5,-84 250.5,-84 250.5,-108"/>
+<text text-anchor="middle" x="223.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">p_alloc</text>
+</a>
+</g>
+</g>
+<!-- proc~one_layer_nano_wires&#45;&gt;proc~p_alloc -->
+<g id="proc~~one_layer_nano_wires~~CallsGraph_edge8" class="edge">
+<title>proc~one_layer_nano_wires&#45;&gt;proc~p_alloc</title>
+<path fill="none" stroke="#ff0000" d="M70.4062,-249.5946C83.087,-221.8803 117.3886,-154.4385 166,-117 172.0781,-112.3189 179.3004,-108.608 186.5384,-105.6923"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="188.0771,-108.859 196.312,-102.1929 185.7175,-102.2687 188.0771,-108.859"/>
+</g>
+<!-- spec -->
+<g id="proc~~one_layer_nano_wires~~CallsGraph_node10" class="node">
+<title>spec</title>
+<polygon fill="#777777" stroke="#777777" points="250.5,-66 196.5,-66 196.5,-42 250.5,-42 250.5,-66"/>
+<text text-anchor="middle" x="223.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">spec</text>
+</g>
+<!-- proc~one_layer_nano_wires&#45;&gt;spec -->
+<g id="proc~~one_layer_nano_wires~~CallsGraph_edge9" class="edge">
+<title>proc~one_layer_nano_wires&#45;&gt;spec</title>
+<path fill="none" stroke="#ff0000" d="M68.3338,-249.5599C77.8451,-216.3875 108.2205,-124.9525 166,-75 172.0485,-69.7708 179.5081,-65.8014 187.0269,-62.8031"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="188.1931,-66.1031 196.4807,-59.5026 185.8859,-59.4943 188.1931,-66.1031"/>
+</g>
+<!-- loc_zpt -->
+<g id="proc~~one_layer_nano_wires~~CallsGraph_node11" class="node">
+<title>loc_zpt</title>
+<polygon fill="#777777" stroke="#777777" points="377.5,-335 323.5,-335 323.5,-311 377.5,-311 377.5,-335"/>
+<text text-anchor="middle" x="350.5" y="-320.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">loc_zpt</text>
+</g>
+<!-- proc~one_layer_nano_wires&#45;&gt;loc_zpt -->
+<g id="proc~~one_layer_nano_wires~~CallsGraph_edge10" class="edge">
+<title>proc~one_layer_nano_wires&#45;&gt;loc_zpt</title>
+<path fill="none" stroke="#ff0000" d="M121.4056,-274.0516C178.2988,-286.2075 264.5023,-304.6257 313.3312,-315.0585"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="312.6488,-318.4916 323.1594,-317.1584 314.1115,-311.6461 312.6488,-318.4916"/>
+</g>
+<!-- proc~mpi_yz_part_distrib -->
+<g id="proc~~one_layer_nano_wires~~CallsGraph_node12" class="node">
+<title>proc~mpi_yz_part_distrib</title>
+<g id="a_proc~~one_layer_nano_wires~~CallsGraph_node12"><a xlink:href=".././proc/mpi_yz_part_distrib.html" xlink:title="mpi_yz_part_distrib">
+<polygon fill="#d9534f" stroke="#d9534f" points="281,-352 166,-352 166,-328 281,-328 281,-352"/>
+<text text-anchor="middle" x="223.5" y="-337.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">mpi_yz_part_distrib</text>
+</a>
+</g>
+</g>
+<!-- proc~one_layer_nano_wires&#45;&gt;proc~mpi_yz_part_distrib -->
+<g id="proc~~one_layer_nano_wires~~CallsGraph_edge4" class="edge">
+<title>proc~one_layer_nano_wires&#45;&gt;proc~mpi_yz_part_distrib</title>
+<path fill="none" stroke="#ff0000" d="M87.6982,-274.1048C108.0599,-284.8631 138.8297,-300.8733 166,-314 172.7142,-317.2438 179.9227,-320.6006 186.888,-323.781"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="185.6128,-327.0456 196.1662,-327.9815 188.4998,-320.6687 185.6128,-327.0456"/>
+</g>
+<!-- loc_wghyz -->
+<g id="proc~~one_layer_nano_wires~~CallsGraph_node13" class="node">
+<title>loc_wghyz</title>
+<polygon fill="#777777" stroke="#777777" points="384,-279 317,-279 317,-255 384,-255 384,-279"/>
+<text text-anchor="middle" x="350.5" y="-264.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">loc_wghyz</text>
+</g>
+<!-- proc~one_layer_nano_wires&#45;&gt;loc_wghyz -->
+<g id="proc~~one_layer_nano_wires~~CallsGraph_edge12" class="edge">
+<title>proc~one_layer_nano_wires&#45;&gt;loc_wghyz</title>
+<path fill="none" stroke="#ff0000" d="M130.1416,-263.1408C184.1518,-264.0867 259.4578,-265.4056 306.5693,-266.2306"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="306.6935,-269.7333 316.7533,-266.409 306.8161,-262.7343 306.6935,-269.7333"/>
+</g>
+<!-- wghpt -->
+<g id="proc~~one_layer_nano_wires~~CallsGraph_node14" class="node">
+<title>wghpt</title>
+<polygon fill="#777777" stroke="#777777" points="250.5,-24 196.5,-24 196.5,0 250.5,0 250.5,-24"/>
+<text text-anchor="middle" x="223.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">wghpt</text>
+</g>
+<!-- proc~one_layer_nano_wires&#45;&gt;wghpt -->
+<g id="proc~~one_layer_nano_wires~~CallsGraph_edge13" class="edge">
+<title>proc~one_layer_nano_wires&#45;&gt;wghpt</title>
+<path fill="none" stroke="#ff0000" d="M66.9207,-249.8791C73.5076,-212.2414 98.6149,-96.1277 166,-33 171.8896,-27.4825 179.3445,-23.3906 186.9179,-20.3639"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="188.152,-23.6407 196.4654,-17.0727 185.8706,-17.0229 188.152,-23.6407"/>
+</g>
+<!-- proc~set_pgrid_ind&#45;&gt;ypt -->
+<g id="proc~~one_layer_nano_wires~~CallsGraph_edge14" class="edge">
+<title>proc~set_pgrid_ind&#45;&gt;ypt</title>
+<path fill="none" stroke="#27ff00" d="M265.0845,-458.3274C280.6017,-458.4496 298.1089,-458.5875 313.2152,-458.7064"/>
+<polygon fill="#27ff00" stroke="#27ff00" points="313.2085,-462.2064 323.2358,-458.7853 313.2637,-455.2066 313.2085,-462.2064"/>
+</g>
+<!-- proc~set_pgrid_ind&#45;&gt;zpt -->
+<g id="proc~~one_layer_nano_wires~~CallsGraph_edge15" class="edge">
+<title>proc~set_pgrid_ind&#45;&gt;zpt</title>
+<path fill="none" stroke="#27ff00" d="M260.9173,-445.9204C277.5195,-440.5606 297.0008,-434.2714 313.5486,-428.9292"/>
+<polygon fill="#27ff00" stroke="#27ff00" points="314.9797,-432.1451 323.4208,-425.7421 312.8291,-425.4836 314.9797,-432.1451"/>
+</g>
+<!-- proc~mpi_yz_part_distrib&#45;&gt;ypt -->
+<g id="proc~~one_layer_nano_wires~~CallsGraph_edge19" class="edge">
+<title>proc~mpi_yz_part_distrib&#45;&gt;ypt</title>
+<path fill="none" stroke="#9c00ff" d="M233.3087,-352.0863C249.4751,-371.5653 283.2941,-410.4963 317,-438 318.3163,-439.0741 319.6912,-440.1368 321.101,-441.1802"/>
+<polygon fill="#9c00ff" stroke="#9c00ff" points="319.1726,-444.1018 329.3936,-446.8915 323.1432,-438.3368 319.1726,-444.1018"/>
+</g>
+<!-- proc~mpi_yz_part_distrib&#45;&gt;zpt -->
+<g id="proc~~one_layer_nano_wires~~CallsGraph_edge16" class="edge">
+<title>proc~mpi_yz_part_distrib&#45;&gt;zpt</title>
+<path fill="none" stroke="#9c00ff" d="M243.3438,-352.0313C264.3763,-364.7832 297.7935,-385.0441 321.7177,-399.5493"/>
+<polygon fill="#9c00ff" stroke="#9c00ff" points="320.0108,-402.6074 330.3765,-404.7991 323.64,-396.6217 320.0108,-402.6074"/>
+</g>
+<!-- proc~mpi_yz_part_distrib&#45;&gt;loc_ypt -->
+<g id="proc~~one_layer_nano_wires~~CallsGraph_edge17" class="edge">
+<title>proc~mpi_yz_part_distrib&#45;&gt;loc_ypt</title>
+<path fill="none" stroke="#9c00ff" d="M271.1514,-352.0067C285.1733,-355.5397 300.2966,-359.3503 313.5413,-362.6876"/>
+<polygon fill="#9c00ff" stroke="#9c00ff" points="312.702,-366.0854 323.2541,-365.1349 314.4124,-359.2976 312.702,-366.0854"/>
+</g>
+<!-- proc~mpi_yz_part_distrib&#45;&gt;loc_zpt -->
+<g id="proc~~one_layer_nano_wires~~CallsGraph_edge18" class="edge">
+<title>proc~mpi_yz_part_distrib&#45;&gt;loc_zpt</title>
+<path fill="none" stroke="#9c00ff" d="M281.0546,-332.2958C291.9656,-330.8353 303.1128,-329.3432 313.1924,-327.9939"/>
+<polygon fill="#9c00ff" stroke="#9c00ff" points="313.8081,-331.4428 323.2553,-326.6469 312.8793,-324.5047 313.8081,-331.4428"/>
+</g>
+<!-- proc~mpi_yz_part_distrib&#45;&gt;loc_wghyz -->
+<g id="proc~~one_layer_nano_wires~~CallsGraph_edge20" class="edge">
+<title>proc~mpi_yz_part_distrib&#45;&gt;loc_wghyz</title>
+<path fill="none" stroke="#9c00ff" d="M244.4715,-327.9455C265.245,-316.0049 297.2568,-297.6043 320.6731,-284.1446"/>
+<polygon fill="#9c00ff" stroke="#9c00ff" points="322.5718,-287.0903 329.4974,-279.0724 319.0833,-281.0214 322.5718,-287.0903"/>
+</g>
+</g>
+</svg>
+</div><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="599pt" height="32pt"
+ viewBox="0.00 0.00 598.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 594.5,-28 594.5,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="71,-24 0,-24 0,0 71,0 71,-24"/>
+<text text-anchor="middle" x="35.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="147.5,-24 89.5,-24 89.5,0 147.5,0 147.5,-24"/>
+<text text-anchor="middle" x="118.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="227,-24 166,-24 166,0 227,0 227,-24"/>
+<text text-anchor="middle" x="196.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node4" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="392,-24 245,-24 245,0 392,0 392,-24"/>
+<text text-anchor="middle" x="318.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="468.5,-24 410.5,-24 410.5,0 468.5,0 468.5,-24"/>
+<text text-anchor="middle" x="439.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="590.5,-24 486.5,-24 486.5,0 590.5,0 590.5,-24"/>
+<text text-anchor="middle" x="538.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a procedure to one which it calls. Dashed 
+    arrows point from an interface to procedures which implement that interface.
+    This could include the module procedures in a generic interface or the
+    implementation in a submodule of an interface in a parent module. Where possible, edges connecting nodes are given different colours to make them easier to distinguish in large graphs.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+     
+     
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Called by</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: proc~~one_layer_nano_wires~~CalledByGraph Pages: 1 -->
+<svg id="procone_layer_nano_wiresCalledByGraph" width="534pt" height="32pt"
+ viewBox="0.00 0.00 534.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~one_layer_nano_wires~~CalledByGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>proc~~one_layer_nano_wires~~CalledByGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 530,-28 530,4 -4,4"/>
+<!-- proc~one_layer_nano_wires -->
+<g id="proc~~one_layer_nano_wires~~CalledByGraph_node1" class="node">
+<title>proc~one_layer_nano_wires</title>
+<polygon fill="none" stroke="#000000" points="526,-24 396,-24 396,0 526,0 526,-24"/>
+<text text-anchor="middle" x="461" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">one_layer_nano_wires</text>
+</g>
+<!-- proc~part_distribute -->
+<g id="proc~~one_layer_nano_wires~~CalledByGraph_node2" class="node">
+<title>proc~part_distribute</title>
+<g id="a_proc~~one_layer_nano_wires~~CalledByGraph_node2"><a xlink:href=".././proc/part_distribute.html" xlink:title="part_distribute">
+<polygon fill="#d9534f" stroke="#d9534f" points="360,-24 270,-24 270,0 360,0 360,-24"/>
+<text text-anchor="middle" x="315" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">part_distribute</text>
+</a>
+</g>
+</g>
+<!-- proc~part_distribute&#45;&gt;proc~one_layer_nano_wires -->
+<g id="proc~~one_layer_nano_wires~~CalledByGraph_edge1" class="edge">
+<title>proc~part_distribute&#45;&gt;proc~one_layer_nano_wires</title>
+<path fill="none" stroke="#ff0000" d="M360.395,-12C368.4572,-12 377.0461,-12 385.6784,-12"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="385.8029,-15.5001 395.8029,-12 385.8029,-8.5001 385.8029,-15.5001"/>
+</g>
+<!-- proc~init -->
+<g id="proc~~one_layer_nano_wires~~CalledByGraph_node3" class="node">
+<title>proc~init</title>
+<g id="a_proc~~one_layer_nano_wires~~CalledByGraph_node3"><a xlink:href=".././proc/init.html" xlink:title="init">
+<polygon fill="#d9534f" stroke="#d9534f" points="234,-24 180,-24 180,0 234,0 234,-24"/>
+<text text-anchor="middle" x="207" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">init</text>
+</a>
+</g>
+</g>
+<!-- proc~init&#45;&gt;proc~part_distribute -->
+<g id="proc~~one_layer_nano_wires~~CalledByGraph_edge2" class="edge">
+<title>proc~init&#45;&gt;proc~part_distribute</title>
+<path fill="none" stroke="#ff0000" d="M234.253,-12C241.9781,-12 250.6803,-12 259.4373,-12"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="259.6873,-15.5001 269.6872,-12 259.6872,-8.5001 259.6873,-15.5001"/>
+</g>
+<!-- proc~start -->
+<g id="proc~~one_layer_nano_wires~~CalledByGraph_node4" class="node">
+<title>proc~start</title>
+<g id="a_proc~~one_layer_nano_wires~~CalledByGraph_node4"><a xlink:href=".././proc/start.html" xlink:title="Start">
+<polygon fill="#d9534f" stroke="#d9534f" points="144,-24 90,-24 90,0 144,0 144,-24"/>
+<text text-anchor="middle" x="117" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Start</text>
+</a>
+</g>
+</g>
+<!-- proc~start&#45;&gt;proc~init -->
+<g id="proc~~one_layer_nano_wires~~CalledByGraph_edge3" class="edge">
+<title>proc~start&#45;&gt;proc~init</title>
+<path fill="none" stroke="#ff0000" d="M144.003,-12C152.0277,-12 160.9665,-12 169.5309,-12"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="169.7051,-15.5001 179.705,-12 169.705,-8.5001 169.7051,-15.5001"/>
+</g>
+<!-- program~aladyn -->
+<g id="proc~~one_layer_nano_wires~~CalledByGraph_node5" class="node">
+<title>program~aladyn</title>
+<g id="a_proc~~one_layer_nano_wires~~CalledByGraph_node5"><a xlink:href=".././program/aladyn.html" xlink:title="aladyn">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="54,-24 0,-24 0,0 54,0 54,-24"/>
+<text text-anchor="middle" x="27" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">aladyn</text>
+</a>
+</g>
+</g>
+<!-- program~aladyn&#45;&gt;proc~start -->
+<g id="proc~~one_layer_nano_wires~~CalledByGraph_edge4" class="edge">
+<title>program~aladyn&#45;&gt;proc~start</title>
+<path fill="none" stroke="#ff0000" d="M54.003,-12C62.0277,-12 70.9665,-12 79.5309,-12"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="79.7051,-15.5001 89.705,-12 79.705,-8.5001 79.7051,-15.5001"/>
+</g>
+</g>
+</svg>
+</div><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="599pt" height="32pt"
+ viewBox="0.00 0.00 598.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 594.5,-28 594.5,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="71,-24 0,-24 0,0 71,0 71,-24"/>
+<text text-anchor="middle" x="35.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="147.5,-24 89.5,-24 89.5,0 147.5,0 147.5,-24"/>
+<text text-anchor="middle" x="118.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="227,-24 166,-24 166,0 227,0 227,-24"/>
+<text text-anchor="middle" x="196.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node4" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="392,-24 245,-24 245,0 392,0 392,-24"/>
+<text text-anchor="middle" x="318.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="468.5,-24 410.5,-24 410.5,0 468.5,0 468.5,-24"/>
+<text text-anchor="middle" x="439.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="590.5,-24 486.5,-24 486.5,0 590.5,0 590.5,-24"/>
+<text text-anchor="middle" x="538.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a procedure to one which it calls. Dashed 
+    arrows point from an interface to procedures which implement that interface.
+    This could include the module procedures in a generic interface or the
+    implementation in a submodule of an interface in a parent module. Where possible, edges connecting nodes are given different colours to make them easier to distinguish in large graphs.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+     
+    <br>
+
+    <section class="visible-xs visible-sm hidden-md">
+      
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<em>None</em>
+
+
+    </section>
+    <br class="visible-xs visible-sm hidden-md">
+
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+
+    
+    
+    
+    
+    </div>
+  </div>
+
+
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2020 <a rel="license" href="http://www.gnu.org/licenses/old-licenses/fdl-1.2.en.html">GNU Free Documentation License</a>
+                                          </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+             on 2020-07-30 
+          </p>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> ALaDyn was developed by The ALaDyn Collaboration</p></div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+      });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+    
+  </body>
+</html>

@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+   <meta name="description" content="A High-Accuracy PIC Code for the Maxwell-Vlasov Equations">
+    
+    <meta name="author" content="The ALaDyn Collaboration" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>allreduce_dpreal &ndash; ALaDyn</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">ALaDyn <small>3.0.1</small></a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+        
+            <li><a href='../page/index.html'>Guide</a></li>
+      
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+     aria-expanded="false">Contents <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          
+              
+            <li><a href="../lists/files.html">Source Files</a></li>
+        
+        
+        
+            <li><a href="../lists/modules.html">Modules</a></li>
+        
+            
+                                
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+        
+               
+            <li><a href="../lists/types.html">Derived Types</a></li>
+        
+        
+            <li><a href="../program/aladyn.html">Program</a></li>
+      
+            </ul>
+            </li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+
+                             
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../program/aladyn.html">Program</a></li>
+
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>allreduce_dpreal
+      <small>Subroutine</small>
+    
+    </h1>
+    
+<div class="row">
+  <div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+     <li><i class="fa fa-list-ol"></i>
+       <a data-toggle="tooltip"
+    data-placement="bottom" data-html="true"
+    title=" 0.0% of total for procedures.">17 statements</a>
+     </li> 
+     
+     
+     
+    <li><i class="fa fa-code"></i><a href="../src/parallel.F90"> Source File</a></li>
+     
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+    
+     <li><a href='../sourcefile/parallel.f90.html'>parallel.F90</a></li>
+    
+     <li><a href='../module/parallel.html'>parallel</a></li>
+    
+  
+     <li class="active">allreduce_dpreal</li>
+  </ol>
+</div>
+</div>
+</div>
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+    
+<div id="sidebar">
+  
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<em>None</em>
+
+
+</div>
+
+    </div>
+    
+    <div class="col-md-9" id='text'>
+    <h2>
+public subroutine allreduce_dpreal(ib, rv_loc, rv, nt)
+    
+    
+   
+</h2>
+    
+  
+
+
+    
+
+    <h3>Arguments</h3>
+    
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-ib~3"></span>integer,</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>ib</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-rv_loc"></span>real(kind=dp),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>rv_loc</strong>(:)</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-rv~2"></span>real(kind=dp),</td>
+  <td>intent(out)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>rv</strong>(:)</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-nt~3"></span>integer,</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>nt</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+    
+    
+    
+    <br>
+    
+    
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Calls</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: proc~~allreduce_dpreal~~CallsGraph Pages: 1 -->
+<svg id="procallreduce_dprealCallsGraph" width="235pt" height="32pt"
+ viewBox="0.00 0.00 235.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~allreduce_dpreal~~CallsGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>proc~~allreduce_dpreal~~CallsGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 231,-28 231,4 -4,4"/>
+<!-- proc~allreduce_dpreal -->
+<g id="proc~~allreduce_dpreal~~CallsGraph_node1" class="node">
+<title>proc~allreduce_dpreal</title>
+<polygon fill="none" stroke="#000000" points="103,-24 0,-24 0,0 103,0 103,-24"/>
+<text text-anchor="middle" x="51.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">allreduce_dpreal</text>
+</g>
+<!-- mpi_allreduce -->
+<g id="proc~~allreduce_dpreal~~CallsGraph_node2" class="node">
+<title>mpi_allreduce</title>
+<polygon fill="#777777" stroke="#777777" points="227,-24 139,-24 139,0 227,0 227,-24"/>
+<text text-anchor="middle" x="183" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">mpi_allreduce</text>
+</g>
+<!-- proc~allreduce_dpreal&#45;&gt;mpi_allreduce -->
+<g id="proc~~allreduce_dpreal~~CallsGraph_edge1" class="edge">
+<title>proc~allreduce_dpreal&#45;&gt;mpi_allreduce</title>
+<path fill="none" stroke="#ff0000" d="M103.0949,-12C111.4843,-12 120.1964,-12 128.6493,-12"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="128.7923,-15.5001 138.7922,-12 128.7922,-8.5001 128.7923,-15.5001"/>
+</g>
+</g>
+</svg>
+</div><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="599pt" height="32pt"
+ viewBox="0.00 0.00 598.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 594.5,-28 594.5,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="71,-24 0,-24 0,0 71,0 71,-24"/>
+<text text-anchor="middle" x="35.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="147.5,-24 89.5,-24 89.5,0 147.5,0 147.5,-24"/>
+<text text-anchor="middle" x="118.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="227,-24 166,-24 166,0 227,0 227,-24"/>
+<text text-anchor="middle" x="196.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node4" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="392,-24 245,-24 245,0 392,0 392,-24"/>
+<text text-anchor="middle" x="318.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="468.5,-24 410.5,-24 410.5,0 468.5,0 468.5,-24"/>
+<text text-anchor="middle" x="439.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="590.5,-24 486.5,-24 486.5,0 590.5,0 590.5,-24"/>
+<text text-anchor="middle" x="538.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a procedure to one which it calls. Dashed 
+    arrows point from an interface to procedures which implement that interface.
+    This could include the module procedures in a generic interface or the
+    implementation in a submodule of an interface in a parent module. Where possible, edges connecting nodes are given different colours to make them easier to distinguish in large graphs.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+     
+     
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Called by</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: proc~~allreduce_dpreal~~CalledByGraph Pages: 1 -->
+<svg id="procallreduce_dprealCalledByGraph" width="641pt" height="247pt"
+ viewBox="0.00 0.00 641.00 247.48" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~allreduce_dpreal~~CalledByGraph" class="graph" transform="scale(.7714 .7714) rotate(0) translate(4 316.8326)">
+<title>proc~~allreduce_dpreal~~CalledByGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-316.8326 827,-316.8326 827,4 -4,4"/>
+<!-- proc~allreduce_dpreal -->
+<g id="proc~~allreduce_dpreal~~CalledByGraph_node1" class="node">
+<title>proc~allreduce_dpreal</title>
+<polygon fill="none" stroke="#000000" points="823,-186 720,-186 720,-162 823,-162 823,-186"/>
+<text text-anchor="middle" x="771.5" y="-171.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">allreduce_dpreal</text>
+</g>
+<!-- proc~enb_bunch -->
+<g id="proc~~allreduce_dpreal~~CalledByGraph_node2" class="node">
+<title>proc~enb_bunch</title>
+<g id="a_proc~~allreduce_dpreal~~CalledByGraph_node2"><a xlink:href=".././proc/enb_bunch.html" xlink:title="enb_bunch">
+<polygon fill="#d9534f" stroke="#d9534f" points="521,-310 450,-310 450,-286 521,-286 521,-310"/>
+<text text-anchor="middle" x="485.5" y="-295.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">enb_bunch</text>
+</a>
+</g>
+</g>
+<!-- proc~enb_bunch&#45;&gt;proc~allreduce_dpreal -->
+<g id="proc~~allreduce_dpreal~~CalledByGraph_edge1" class="edge">
+<title>proc~enb_bunch&#45;&gt;proc~allreduce_dpreal</title>
+<path fill="none" stroke="#ff0000" d="M521.1688,-306.0655C562.8011,-313.5368 632.5038,-319.8736 684,-293 723.8876,-272.1844 750.201,-224.0042 762.8106,-195.7464"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="766.1256,-196.8956 766.8359,-186.3246 759.6885,-194.1454 766.1256,-196.8956"/>
+</g>
+<!-- proc~bunch_corr -->
+<g id="proc~~allreduce_dpreal~~CalledByGraph_node3" class="node">
+<title>proc~bunch_corr</title>
+<g id="a_proc~~allreduce_dpreal~~CalledByGraph_node3"><a xlink:href=".././proc/bunch_corr.html" xlink:title="bunch_corr">
+<polygon fill="#d9534f" stroke="#d9534f" points="657,-264 584,-264 584,-240 657,-240 657,-264"/>
+<text text-anchor="middle" x="620.5" y="-249.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">bunch_corr</text>
+</a>
+</g>
+</g>
+<!-- proc~enb_bunch&#45;&gt;proc~bunch_corr -->
+<g id="proc~~allreduce_dpreal~~CalledByGraph_edge11" class="edge">
+<title>proc~enb_bunch&#45;&gt;proc~bunch_corr</title>
+<path fill="none" stroke="#ffaa00" d="M520.9697,-285.914C537.7121,-280.2092 557.877,-273.3382 575.6658,-267.2768"/>
+<polygon fill="#ffaa00" stroke="#ffaa00" points="576.9305,-270.5436 585.2672,-264.0052 574.6728,-263.9177 576.9305,-270.5436"/>
+</g>
+<!-- proc~bunch_corr&#45;&gt;proc~allreduce_dpreal -->
+<g id="proc~~allreduce_dpreal~~CalledByGraph_edge2" class="edge">
+<title>proc~bunch_corr&#45;&gt;proc~allreduce_dpreal</title>
+<path fill="none" stroke="#ff0000" d="M652.5631,-239.9435C662.7546,-235.8279 673.9782,-230.9955 684,-226 704.6833,-215.6902 727.0698,-202.3431 744.0214,-191.7527"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="746.2465,-194.4872 752.8344,-186.1896 742.51,-188.5678 746.2465,-194.4872"/>
+</g>
+<!-- proc~max_pmemory_check -->
+<g id="proc~~allreduce_dpreal~~CalledByGraph_node4" class="node">
+<title>proc~max_pmemory_check</title>
+<g id="a_proc~~allreduce_dpreal~~CalledByGraph_node4"><a xlink:href=".././proc/max_pmemory_check.html" xlink:title="Max_pmemory_check">
+<polygon fill="#d9534f" stroke="#d9534f" points="414,-70 286,-70 286,-46 414,-46 414,-70"/>
+<text text-anchor="middle" x="350" y="-55.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Max_pmemory_check</text>
+</a>
+</g>
+</g>
+<!-- proc~max_pmemory_check&#45;&gt;proc~allreduce_dpreal -->
+<g id="proc~~allreduce_dpreal~~CalledByGraph_edge3" class="edge">
+<title>proc~max_pmemory_check&#45;&gt;proc~allreduce_dpreal</title>
+<path fill="none" stroke="#ff0000" d="M413.3315,-45.9745C483.3455,-35.8636 597.6363,-28.989 684,-71 719.9498,-88.4875 746.8059,-128.3228 760.7485,-153.0119"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="757.7588,-154.8407 765.6093,-161.9555 763.9091,-151.498 757.7588,-154.8407"/>
+</g>
+<!-- proc~enb_hgam -->
+<g id="proc~~allreduce_dpreal~~CalledByGraph_node5" class="node">
+<title>proc~enb_hgam</title>
+<g id="a_proc~~allreduce_dpreal~~CalledByGraph_node5"><a xlink:href=".././proc/enb_hgam.html" xlink:title="enb_hgam">
+<polygon fill="#d9534f" stroke="#d9534f" points="520,-268 451,-268 451,-244 520,-244 520,-268"/>
+<text text-anchor="middle" x="485.5" y="-253.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">enb_hgam</text>
+</a>
+</g>
+</g>
+<!-- proc~enb_hgam&#45;&gt;proc~allreduce_dpreal -->
+<g id="proc~~allreduce_dpreal~~CalledByGraph_edge4" class="edge">
+<title>proc~enb_hgam&#45;&gt;proc~allreduce_dpreal</title>
+<path fill="none" stroke="#ff0000" d="M517.7174,-268.0715C558.389,-281.2759 629.6065,-297.5188 684,-273 719.4461,-257.0221 746.3128,-218.8019 760.422,-194.7977"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="763.4788,-196.5024 765.3565,-186.0752 757.3862,-193.0556 763.4788,-196.5024"/>
+</g>
+<!-- proc~enb_hgam&#45;&gt;proc~bunch_corr -->
+<g id="proc~~allreduce_dpreal~~CalledByGraph_edge12" class="edge">
+<title>proc~enb_hgam&#45;&gt;proc~bunch_corr</title>
+<path fill="none" stroke="#ffaa00" d="M520.2659,-254.9699C536.5926,-254.4861 556.2905,-253.9025 573.8876,-253.3811"/>
+<polygon fill="#ffaa00" stroke="#ffaa00" points="574.0724,-256.8773 583.9643,-253.0825 573.865,-249.8803 574.0724,-256.8773"/>
+</g>
+<!-- proc~envar -->
+<g id="proc~~allreduce_dpreal~~CalledByGraph_node6" class="node">
+<title>proc~envar</title>
+<g id="a_proc~~allreduce_dpreal~~CalledByGraph_node6"><a xlink:href=".././proc/envar.html" xlink:title="Envar">
+<polygon fill="#d9534f" stroke="#d9534f" points="377,-157 323,-157 323,-133 377,-133 377,-157"/>
+<text text-anchor="middle" x="350" y="-142.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Envar</text>
+</a>
+</g>
+</g>
+<!-- proc~envar&#45;&gt;proc~allreduce_dpreal -->
+<g id="proc~~allreduce_dpreal~~CalledByGraph_edge5" class="edge">
+<title>proc~envar&#45;&gt;proc~allreduce_dpreal</title>
+<path fill="none" stroke="#ff0000" d="M377.0079,-146.8582C443.4709,-151.431 616.3199,-163.3233 709.6211,-169.7426"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="709.5521,-173.2461 719.7688,-170.4408 710.0327,-166.2626 709.5521,-173.2461"/>
+</g>
+<!-- proc~envar&#45;&gt;proc~enb_bunch -->
+<g id="proc~~allreduce_dpreal~~CalledByGraph_edge10" class="edge">
+<title>proc~envar&#45;&gt;proc~enb_bunch</title>
+<path fill="none" stroke="#ff0000" d="M356.9743,-157.1729C371.669,-182.0421 407.946,-239.4919 450,-277 451.1356,-278.0129 452.3273,-279.0023 453.5579,-279.9651"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="451.8598,-283.0481 462.0631,-285.9018 455.8664,-277.3081 451.8598,-283.0481"/>
+</g>
+<!-- proc~envelope_struct_data -->
+<g id="proc~~allreduce_dpreal~~CalledByGraph_node9" class="node">
+<title>proc~envelope_struct_data</title>
+<g id="a_proc~~allreduce_dpreal~~CalledByGraph_node9"><a xlink:href=".././proc/envelope_struct_data.html" xlink:title="envelope_struct_data">
+<polygon fill="#d9534f" stroke="#d9534f" points="684,-104 557,-104 557,-80 684,-80 684,-104"/>
+<text text-anchor="middle" x="620.5" y="-89.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">envelope_struct_data</text>
+</a>
+</g>
+</g>
+<!-- proc~envar&#45;&gt;proc~envelope_struct_data -->
+<g id="proc~~allreduce_dpreal~~CalledByGraph_edge17" class="edge">
+<title>proc~envar&#45;&gt;proc~envelope_struct_data</title>
+<path fill="none" stroke="#aa00ff" d="M377.1751,-139.6755C417.05,-131.8627 492.7899,-117.0227 549.223,-105.9655"/>
+<polygon fill="#aa00ff" stroke="#aa00ff" points="550.0268,-109.3747 559.1672,-104.0171 548.6808,-102.5053 550.0268,-109.3747"/>
+</g>
+<!-- proc~fields_on_target -->
+<g id="proc~~allreduce_dpreal~~CalledByGraph_node7" class="node">
+<title>proc~fields_on_target</title>
+<g id="a_proc~~allreduce_dpreal~~CalledByGraph_node7"><a xlink:href=".././proc/fields_on_target.html" xlink:title="fields_on_target">
+<polygon fill="#d9534f" stroke="#d9534f" points="669,-146 572,-146 572,-122 669,-122 669,-146"/>
+<text text-anchor="middle" x="620.5" y="-131.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">fields_on_target</text>
+</a>
+</g>
+</g>
+<!-- proc~fields_on_target&#45;&gt;proc~allreduce_dpreal -->
+<g id="proc~~allreduce_dpreal~~CalledByGraph_edge6" class="edge">
+<title>proc~fields_on_target&#45;&gt;proc~allreduce_dpreal</title>
+<path fill="none" stroke="#ff0000" d="M665.805,-146.0013C681.5599,-150.1748 699.415,-154.9046 715.9057,-159.273"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="715.4034,-162.7606 725.9662,-161.9381 717.1959,-155.994 715.4034,-162.7606"/>
+</g>
+<!-- proc~enb_ionz -->
+<g id="proc~~allreduce_dpreal~~CalledByGraph_node8" class="node">
+<title>proc~enb_ionz</title>
+<g id="a_proc~~allreduce_dpreal~~CalledByGraph_node8"><a xlink:href=".././proc/enb_ionz.html" xlink:title="enb_ionz">
+<polygon fill="#d9534f" stroke="#d9534f" points="515.5,-226 455.5,-226 455.5,-202 515.5,-202 515.5,-226"/>
+<text text-anchor="middle" x="485.5" y="-211.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">enb_ionz</text>
+</a>
+</g>
+</g>
+<!-- proc~enb_ionz&#45;&gt;proc~allreduce_dpreal -->
+<g id="proc~~allreduce_dpreal~~CalledByGraph_edge7" class="edge">
+<title>proc~enb_ionz&#45;&gt;proc~allreduce_dpreal</title>
+<path fill="none" stroke="#ff0000" d="M515.8033,-210.3025C554.7657,-205.4861 624.498,-196.6552 684,-188 692.3161,-186.7903 701.0672,-185.4595 709.6889,-184.1142"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="710.3833,-187.5481 719.7169,-182.5348 709.2941,-180.6333 710.3833,-187.5481"/>
+</g>
+<!-- proc~enb_ionz&#45;&gt;proc~bunch_corr -->
+<g id="proc~~allreduce_dpreal~~CalledByGraph_edge13" class="edge">
+<title>proc~enb_ionz&#45;&gt;proc~bunch_corr</title>
+<path fill="none" stroke="#ffaa00" d="M515.7966,-222.5279C532.8762,-227.3355 554.5772,-233.444 573.7885,-238.8516"/>
+<polygon fill="#ffaa00" stroke="#ffaa00" points="572.9959,-242.2644 583.5702,-241.605 574.8926,-235.5263 572.9959,-242.2644"/>
+</g>
+<!-- proc~envelope_struct_data&#45;&gt;proc~allreduce_dpreal -->
+<g id="proc~~allreduce_dpreal~~CalledByGraph_edge8" class="edge">
+<title>proc~envelope_struct_data&#45;&gt;proc~allreduce_dpreal</title>
+<path fill="none" stroke="#ff0000" d="M662.8641,-104.1055C670.0633,-106.6979 677.3547,-109.6736 684,-113 707.4082,-124.7172 731.6446,-142.0937 748.6571,-155.3069"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="746.837,-158.3295 756.8525,-161.785 751.1778,-152.8379 746.837,-158.3295"/>
+</g>
+<!-- proc~laser_struct_data -->
+<g id="proc~~allreduce_dpreal~~CalledByGraph_node10" class="node">
+<title>proc~laser_struct_data</title>
+<g id="a_proc~~allreduce_dpreal~~CalledByGraph_node10"><a xlink:href=".././proc/laser_struct_data.html" xlink:title="laser_struct_data">
+<polygon fill="#d9534f" stroke="#d9534f" points="672,-24 569,-24 569,0 672,0 672,-24"/>
+<text text-anchor="middle" x="620.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">laser_struct_data</text>
+</a>
+</g>
+</g>
+<!-- proc~laser_struct_data&#45;&gt;proc~allreduce_dpreal -->
+<g id="proc~~allreduce_dpreal~~CalledByGraph_edge9" class="edge">
+<title>proc~laser_struct_data&#45;&gt;proc~allreduce_dpreal</title>
+<path fill="none" stroke="#ff0000" d="M660.5419,-24.0441C668.837,-27.6889 677.1313,-32.2864 684,-38 722.2294,-69.8008 749.4439,-122.6978 762.5856,-152.2774"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="759.4715,-153.8952 766.642,-161.6948 765.9004,-151.126 759.4715,-153.8952"/>
+</g>
+<!-- program~aladyn -->
+<g id="proc~~allreduce_dpreal~~CalledByGraph_node11" class="node">
+<title>program~aladyn</title>
+<g id="a_proc~~allreduce_dpreal~~CalledByGraph_node11"><a xlink:href=".././program/aladyn.html" xlink:title="aladyn">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="54,-110 0,-110 0,-86 54,-86 54,-110"/>
+<text text-anchor="middle" x="27" y="-95.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">aladyn</text>
+</a>
+</g>
+</g>
+<!-- program~aladyn&#45;&gt;proc~max_pmemory_check -->
+<g id="proc~~allreduce_dpreal~~CalledByGraph_edge14" class="edge">
+<title>program~aladyn&#45;&gt;proc~max_pmemory_check</title>
+<path fill="none" stroke="#aaff00" d="M54.1983,-87.2876C65.1554,-83.4084 78.0163,-79.3962 90,-77 151.7863,-64.6457 223.2644,-60.1094 275.62,-58.5416"/>
+<polygon fill="#aaff00" stroke="#aaff00" points="275.9257,-62.0347 285.8276,-58.2661 275.7368,-55.0372 275.9257,-62.0347"/>
+</g>
+<!-- proc~lp_cycle -->
+<g id="proc~~allreduce_dpreal~~CalledByGraph_node14" class="node">
+<title>proc~lp_cycle</title>
+<g id="a_proc~~allreduce_dpreal~~CalledByGraph_node14"><a xlink:href=".././proc/lp_cycle.html" xlink:title="Lp_cycle">
+<polygon fill="#d9534f" stroke="#d9534f" points="151.5,-152 93.5,-152 93.5,-128 151.5,-128 151.5,-152"/>
+<text text-anchor="middle" x="122.5" y="-137.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Lp_cycle</text>
+</a>
+</g>
+</g>
+<!-- program~aladyn&#45;&gt;proc~lp_cycle -->
+<g id="proc~~allreduce_dpreal~~CalledByGraph_edge22" class="edge">
+<title>program~aladyn&#45;&gt;proc~lp_cycle</title>
+<path fill="none" stroke="#ff0000" d="M54.111,-109.9232C63.9061,-114.2309 75.1359,-119.1697 85.626,-123.7832"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="84.4267,-127.0792 94.9896,-127.9012 87.2447,-120.6715 84.4267,-127.0792"/>
+</g>
+<!-- proc~env_cycle -->
+<g id="proc~~allreduce_dpreal~~CalledByGraph_node15" class="node">
+<title>proc~env_cycle</title>
+<g id="a_proc~~allreduce_dpreal~~CalledByGraph_node15"><a xlink:href=".././proc/env_cycle.html" xlink:title="Env_cycle">
+<polygon fill="#d9534f" stroke="#d9534f" points="155,-110 90,-110 90,-86 155,-86 155,-110"/>
+<text text-anchor="middle" x="122.5" y="-95.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Env_cycle</text>
+</a>
+</g>
+</g>
+<!-- program~aladyn&#45;&gt;proc~env_cycle -->
+<g id="proc~~allreduce_dpreal~~CalledByGraph_edge23" class="edge">
+<title>program~aladyn&#45;&gt;proc~env_cycle</title>
+<path fill="none" stroke="#00ffff" d="M54.111,-98C62.1173,-98 71.0822,-98 79.8182,-98"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="79.8973,-101.5001 89.8973,-98 79.8972,-94.5001 79.8973,-101.5001"/>
+</g>
+<!-- proc~data_out -->
+<g id="proc~~allreduce_dpreal~~CalledByGraph_node12" class="node">
+<title>proc~data_out</title>
+<g id="a_proc~~allreduce_dpreal~~CalledByGraph_node12"><a xlink:href=".././proc/data_out.html" xlink:title="data_out">
+<polygon fill="#d9534f" stroke="#d9534f" points="250,-152 191,-152 191,-128 250,-128 250,-152"/>
+<text text-anchor="middle" x="220.5" y="-137.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">data_out</text>
+</a>
+</g>
+</g>
+<!-- proc~data_out&#45;&gt;proc~envar -->
+<g id="proc~~allreduce_dpreal~~CalledByGraph_edge16" class="edge">
+<title>proc~data_out&#45;&gt;proc~envar</title>
+<path fill="none" stroke="#00ffa9" d="M250.2099,-141.1471C268.6928,-141.8607 292.6266,-142.7848 312.4216,-143.5491"/>
+<polygon fill="#00ffa9" stroke="#00ffa9" points="312.5102,-147.055 322.6378,-143.9435 312.7803,-140.0602 312.5102,-147.055"/>
+</g>
+<!-- proc~timing -->
+<g id="proc~~allreduce_dpreal~~CalledByGraph_node13" class="node">
+<title>proc~timing</title>
+<g id="a_proc~~allreduce_dpreal~~CalledByGraph_node13"><a xlink:href=".././proc/timing.html" xlink:title="timing">
+<polygon fill="#d9534f" stroke="#d9534f" points="247.5,-110 193.5,-110 193.5,-86 247.5,-86 247.5,-110"/>
+<text text-anchor="middle" x="220.5" y="-95.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">timing</text>
+</a>
+</g>
+</g>
+<!-- proc~timing&#45;&gt;proc~max_pmemory_check -->
+<g id="proc~~allreduce_dpreal~~CalledByGraph_edge15" class="edge">
+<title>proc~timing&#45;&gt;proc~max_pmemory_check</title>
+<path fill="none" stroke="#aaff00" d="M247.6474,-89.6147C263.2388,-84.7988 283.2815,-78.608 301.4919,-72.9832"/>
+<polygon fill="#aaff00" stroke="#aaff00" points="302.5747,-76.312 311.0964,-70.0166 300.5088,-69.6238 302.5747,-76.312"/>
+</g>
+<!-- proc~lp_cycle&#45;&gt;proc~data_out -->
+<g id="proc~~allreduce_dpreal~~CalledByGraph_edge18" class="edge">
+<title>proc~lp_cycle&#45;&gt;proc~data_out</title>
+<path fill="none" stroke="#00ff00" d="M151.6379,-140C160.7535,-140 170.973,-140 180.692,-140"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="180.966,-143.5001 190.9659,-140 180.9659,-136.5001 180.966,-143.5001"/>
+</g>
+<!-- proc~lp_cycle&#45;&gt;proc~timing -->
+<g id="proc~~allreduce_dpreal~~CalledByGraph_edge20" class="edge">
+<title>proc~lp_cycle&#45;&gt;proc~timing</title>
+<path fill="none" stroke="#0000ff" d="M150.5829,-127.9645C160.9944,-123.5024 172.9569,-118.3756 184.0094,-113.6388"/>
+<polygon fill="#0000ff" stroke="#0000ff" points="185.6134,-116.7594 193.4261,-109.6031 182.8559,-110.3253 185.6134,-116.7594"/>
+</g>
+<!-- proc~env_cycle&#45;&gt;proc~data_out -->
+<g id="proc~~allreduce_dpreal~~CalledByGraph_edge19" class="edge">
+<title>proc~env_cycle&#45;&gt;proc~data_out</title>
+<path fill="none" stroke="#00ff00" d="M150.5829,-110.0355C160.7319,-114.3851 172.3547,-119.3663 183.1718,-124.0022"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="181.8428,-127.2405 192.413,-127.9627 184.6003,-120.8065 181.8428,-127.2405"/>
+</g>
+<!-- proc~env_cycle&#45;&gt;proc~timing -->
+<g id="proc~~allreduce_dpreal~~CalledByGraph_edge21" class="edge">
+<title>proc~env_cycle&#45;&gt;proc~timing</title>
+<path fill="none" stroke="#0000ff" d="M155.1326,-98C164.1136,-98 173.9235,-98 183.1486,-98"/>
+<polygon fill="#0000ff" stroke="#0000ff" points="183.2402,-101.5001 193.2402,-98 183.2402,-94.5001 183.2402,-101.5001"/>
+</g>
+</g>
+</svg>
+</div><script>var panprocallreduce_dprealCalledByGraph = svgPanZoom('#procallreduce_dprealCalledByGraph', {zoomEnabled: true,controlIconsEnabled: true, fit: true, center: true,}); </script><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="599pt" height="32pt"
+ viewBox="0.00 0.00 598.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 594.5,-28 594.5,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="71,-24 0,-24 0,0 71,0 71,-24"/>
+<text text-anchor="middle" x="35.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="147.5,-24 89.5,-24 89.5,0 147.5,0 147.5,-24"/>
+<text text-anchor="middle" x="118.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="227,-24 166,-24 166,0 227,0 227,-24"/>
+<text text-anchor="middle" x="196.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node4" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="392,-24 245,-24 245,0 392,0 392,-24"/>
+<text text-anchor="middle" x="318.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="468.5,-24 410.5,-24 410.5,0 468.5,0 468.5,-24"/>
+<text text-anchor="middle" x="439.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="590.5,-24 486.5,-24 486.5,0 590.5,0 590.5,-24"/>
+<text text-anchor="middle" x="538.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a procedure to one which it calls. Dashed 
+    arrows point from an interface to procedures which implement that interface.
+    This could include the module procedures in a generic interface or the
+    implementation in a submodule of an interface in a parent module. Where possible, edges connecting nodes are given different colours to make them easier to distinguish in large graphs.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+     
+    <br>
+
+    <section class="visible-xs visible-sm hidden-md">
+      
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<em>None</em>
+
+
+    </section>
+    <br class="visible-xs visible-sm hidden-md">
+
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+
+    
+    
+    
+    
+    </div>
+  </div>
+
+
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2020 <a rel="license" href="http://www.gnu.org/licenses/old-licenses/fdl-1.2.en.html">GNU Free Documentation License</a>
+                                          </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+             on 2020-07-30 
+          </p>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> ALaDyn was developed by The ALaDyn Collaboration</p></div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+      });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+    
+  </body>
+</html>

@@ -1,0 +1,1456 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+   <meta name="description" content="A High-Accuracy PIC Code for the Maxwell-Vlasov Equations">
+    
+    <meta name="author" content="The ALaDyn Collaboration" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>util.f90 &ndash; ALaDyn</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">ALaDyn <small>3.0.1</small></a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+        
+            <li><a href='../page/index.html'>Guide</a></li>
+      
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+     aria-expanded="false">Contents <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          
+              
+            <li><a href="../lists/files.html">Source Files</a></li>
+        
+        
+        
+            <li><a href="../lists/modules.html">Modules</a></li>
+        
+            
+                                
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+        
+               
+            <li><a href="../lists/types.html">Derived Types</a></li>
+        
+        
+            <li><a href="../program/aladyn.html">Program</a></li>
+      
+            </ul>
+            </li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+
+                             
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../program/aladyn.html">Program</a></li>
+
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>util.f90
+    <small>Source File</small>
+    
+    </h1>
+    
+<div class="row">
+  <div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+     <li><i class="fa fa-list-ol"></i>
+       <a data-toggle="tooltip"
+    data-placement="bottom" data-html="true"
+    title=" 1.4% of total for source files.">333 statements</a>
+     </li> 
+     
+     
+     
+    <li><i class="fa fa-code"></i><a href="../src/util.f90"> Source File</a></li>
+     
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+    
+  
+     <li class="active">util.f90</li>
+  </ol>
+</div>
+</div>
+</div>
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+
+  </div>
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+    
+<div id="sidebar">
+  
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#mods-0">Modules</a></h3></div>
+  <div id="mods-0" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/util.html">util</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../sourcefile/util.f90.html#src">util.f90</a>
+  </div>
+</div>
+
+
+
+</div>
+
+    </div>
+    <div class="col-md-9" id='text'>
+      
+      <br>
+    
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">This file depends on</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: sourcefile~~util.f90~~EfferentGraph Pages: 1 -->
+<svg id="sourcefileutilf90EfferentGraph" width="321pt" height="52pt"
+ viewBox="0.00 0.00 321.00 52.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="sourcefile~~util.f90~~EfferentGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 48)">
+<title>sourcefile~~util.f90~~EfferentGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-48 317,-48 317,4 -4,4"/>
+<!-- sourcefile~util.f90 -->
+<g id="sourcefile~~util.f90~~EfferentGraph_node1" class="node">
+<title>sourcefile~util.f90</title>
+<polygon fill="none" stroke="#000000" points="313,-44 259,-44 259,-20 313,-20 313,-44"/>
+<text text-anchor="middle" x="286" y="-29.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">util.f90</text>
+</g>
+<!-- sourcefile~precision_def.f90 -->
+<g id="sourcefile~~util.f90~~EfferentGraph_node2" class="node">
+<title>sourcefile~precision_def.f90</title>
+<g id="a_sourcefile~~util.f90~~EfferentGraph_node2"><a xlink:href=".././sourcefile/precision_def.f90.html" xlink:title="precision_def.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="106,-44 0,-44 0,-20 106,-20 106,-44"/>
+<text text-anchor="middle" x="53" y="-29.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">precision_def.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~util.f90&#45;&gt;sourcefile~precision_def.f90 -->
+<g id="sourcefile~~util.f90~~EfferentGraph_edge1" class="edge">
+<title>sourcefile~util.f90&#45;&gt;sourcefile~precision_def.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M258.7124,-32.5275C247.6304,-32.7172 234.7042,-32.9071 223,-33 187.0011,-33.2857 177.9994,-33.2022 142,-33 133.6703,-32.9532 124.9024,-32.8818 116.25,-32.7982"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="116.2145,-29.2977 106.1792,-32.6952 116.1429,-36.2974 116.2145,-29.2977"/>
+</g>
+<!-- sourcefile~code_util.f90 -->
+<g id="sourcefile~~util.f90~~EfferentGraph_node3" class="node">
+<title>sourcefile~code_util.f90</title>
+<g id="a_sourcefile~~util.f90~~EfferentGraph_node3"><a xlink:href=".././sourcefile/code_util.f90.html" xlink:title="code_util.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="223,-24 142,-24 142,0 223,0 223,-24"/>
+<text text-anchor="middle" x="182.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">code_util.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~util.f90&#45;&gt;sourcefile~code_util.f90 -->
+<g id="sourcefile~~util.f90~~EfferentGraph_edge2" class="edge">
+<title>sourcefile~util.f90&#45;&gt;sourcefile~code_util.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M258.8066,-26.7452C250.8867,-25.2148 241.9678,-23.4914 233.0942,-21.7767"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="233.6331,-18.3161 223.1506,-19.8552 232.3049,-25.189 233.6331,-18.3161"/>
+</g>
+<!-- sourcefile~code_util.f90&#45;&gt;sourcefile~precision_def.f90 -->
+<g id="sourcefile~~util.f90~~EfferentGraph_edge3" class="edge">
+<title>sourcefile~code_util.f90&#45;&gt;sourcefile~precision_def.f90</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M141.8807,-18.2733C133.777,-19.5248 125.0848,-20.8672 116.4242,-22.2048"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="115.6578,-18.7815 106.3092,-23.7669 116.7263,-25.6995 115.6578,-18.7815"/>
+</g>
+</g>
+</svg>
+</div><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="202pt" height="32pt"
+ viewBox="0.00 0.00 201.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 197.5,-28 197.5,4 -4,4"/>
+<!-- Source File -->
+<g id="node1" class="node">
+<title>Source File</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="71,-24 0,-24 0,0 71,0 71,-24"/>
+<text text-anchor="middle" x="35.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Source File</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node2" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="193.5,-24 89.5,-24 89.5,0 193.5,0 193.5,-24"/>
+<text text-anchor="middle" x="141.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a file to a file which it depends on. A file
+    is dependent upon another if the latter must be compiled before the former
+    can be. Where possible, edges connecting nodes are given different colours to make them easier to distinguish in large graphs.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+    
+      
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Files dependent on this one</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: sourcefile~~util.f90~~AfferentGraph Pages: 1 -->
+<svg id="sourcefileutilf90AfferentGraph" width="641pt" height="346pt"
+ viewBox="0.00 0.00 641.00 345.79" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="sourcefile~~util.f90~~AfferentGraph" class="graph" transform="scale(.6163 .6163) rotate(0) translate(4 557.027)">
+<title>sourcefile~~util.f90~~AfferentGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-557.027 1036,-557.027 1036,4 -4,4"/>
+<!-- sourcefile~util.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_node1" class="node">
+<title>sourcefile~util.f90</title>
+<polygon fill="none" stroke="#000000" points="54,-311.9991 0,-311.9991 0,-287.9991 54,-287.9991 54,-311.9991"/>
+<text text-anchor="middle" x="27" y="-297.5991" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">util.f90</text>
+</g>
+<!-- sourcefile~init_part_distrib.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_node2" class="node">
+<title>sourcefile~init_part_distrib.f90</title>
+<g id="a_sourcefile~~util.f90~~AfferentGraph_node2"><a xlink:href=".././sourcefile/init_part_distrib.f90.html" xlink:title="init_part_distrib.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="205,-512.9991 90,-512.9991 90,-488.9991 205,-488.9991 205,-512.9991"/>
+<text text-anchor="middle" x="147.5" y="-498.5991" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">init_part_distrib.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~init_part_distrib.f90&#45;&gt;sourcefile~util.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_edge1" class="edge">
+<title>sourcefile~init_part_distrib.f90&#45;&gt;sourcefile~util.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M139.772,-488.7251C128.6373,-470.9898 107.4964,-437.1272 90,-407.9991 71.8901,-377.8498 51.4681,-342.6024 38.9149,-320.787"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="41.9086,-318.9717 33.8919,-312.0446 35.839,-322.459 41.9086,-318.9717"/>
+</g>
+<!-- sourcefile~env_evolve_in_time.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_node3" class="node">
+<title>sourcefile~env_evolve_in_time.f90</title>
+<g id="a_sourcefile~~util.f90~~AfferentGraph_node3"><a xlink:href=".././sourcefile/env_evolve_in_time.f90.html" xlink:title="env_evolve_in_time.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="920,-341.9991 783,-341.9991 783,-317.9991 920,-317.9991 920,-341.9991"/>
+<text text-anchor="middle" x="851.5" y="-327.5991" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">env_evolve_in_time.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~env_evolve_in_time.f90&#45;&gt;sourcefile~util.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_edge2" class="edge">
+<title>sourcefile~env_evolve_in_time.f90&#45;&gt;sourcefile~util.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M835.44,-342.2169C815.698,-356.6152 780.6605,-380.1957 747,-392.9991 565.3329,-462.0995 506.0677,-448.7467 312,-437.9991"/>
+</g>
+<!-- sourcefile~ionize.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_node5" class="node">
+<title>sourcefile~ionize.f90</title>
+<g id="a_sourcefile~~util.f90~~AfferentGraph_node5"><a xlink:href=".././sourcefile/ionize.f90.html" xlink:title="ionize.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="700.5,-383.9991 636.5,-383.9991 636.5,-359.9991 700.5,-359.9991 700.5,-383.9991"/>
+<text text-anchor="middle" x="668.5" y="-369.5991" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">ionize.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~env_evolve_in_time.f90&#45;&gt;sourcefile~ionize.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_edge11" class="edge">
+<title>sourcefile~env_evolve_in_time.f90&#45;&gt;sourcefile~ionize.f90</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M799.0595,-342.0346C770.9942,-348.4759 736.8932,-356.3023 710.5812,-362.3411"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="709.5107,-358.9957 700.5471,-364.6441 711.0766,-365.8184 709.5107,-358.9957"/>
+</g>
+<!-- sourcefile~window.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_node7" class="node">
+<title>sourcefile~window.f90</title>
+<g id="a_sourcefile~~util.f90~~AfferentGraph_node7"><a xlink:href=".././sourcefile/window.f90.html" xlink:title="window.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="704.5,-341.9991 632.5,-341.9991 632.5,-317.9991 704.5,-317.9991 704.5,-341.9991"/>
+<text text-anchor="middle" x="668.5" y="-327.5991" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">window.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~env_evolve_in_time.f90&#45;&gt;sourcefile~window.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_edge23" class="edge">
+<title>sourcefile~env_evolve_in_time.f90&#45;&gt;sourcefile~window.f90</title>
+<path fill="none" stroke="#ff00ff" stroke-dasharray="5,2" d="M782.8369,-329.9991C760.1054,-329.9991 735.365,-329.9991 714.7306,-329.9991"/>
+<polygon fill="#ff00ff" stroke="#ff00ff" points="714.6532,-326.4992 704.6532,-329.9991 714.6532,-333.4992 714.6532,-326.4992"/>
+</g>
+<!-- sourcefile~mpi_part_interface.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_node18" class="node">
+<title>sourcefile~mpi_part_interface.f90</title>
+<g id="a_sourcefile~~util.f90~~AfferentGraph_node18"><a xlink:href=".././sourcefile/mpi_part_interface.f90.html" xlink:title="mpi_part_interface.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="553,-301.9991 420,-301.9991 420,-277.9991 553,-277.9991 553,-301.9991"/>
+<text text-anchor="middle" x="486.5" y="-287.5991" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">mpi_part_interface.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~env_evolve_in_time.f90&#45;&gt;sourcefile~mpi_part_interface.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_edge45" class="edge">
+<title>sourcefile~env_evolve_in_time.f90&#45;&gt;sourcefile~mpi_part_interface.f90</title>
+<path fill="none" stroke="#9c00ff" stroke-dasharray="5,2" d="M813.7901,-317.967C777.131,-307.1776 719.652,-292.6474 668.5,-289.9991"/>
+</g>
+<!-- sourcefile~fluid_density_momenta.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_node21" class="node">
+<title>sourcefile~fluid_density_momenta.f90</title>
+<g id="a_sourcefile~~util.f90~~AfferentGraph_node21"><a xlink:href=".././sourcefile/fluid_density_momenta.f90.html" xlink:title="fluid_density_momenta.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="747,-261.9991 590,-261.9991 590,-237.9991 747,-237.9991 747,-261.9991"/>
+<text text-anchor="middle" x="668.5" y="-247.5991" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">fluid_density_momenta.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~env_evolve_in_time.f90&#45;&gt;sourcefile~fluid_density_momenta.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_edge50" class="edge">
+<title>sourcefile~env_evolve_in_time.f90&#45;&gt;sourcefile~fluid_density_momenta.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M802.4699,-317.9084C795.7246,-315.4092 789.0459,-312.4585 783,-308.9991 764.1608,-298.2198 765.7175,-286.9885 747,-275.9991 740.2101,-272.0127 732.7266,-268.541 725.1584,-265.5464"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="726.1656,-262.1874 715.5724,-262.0058 723.7402,-268.7538 726.1656,-262.1874"/>
+</g>
+<!-- sourcefile~curr_and_fields_util.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_node22" class="node">
+<title>sourcefile~curr_and_fields_util.f90</title>
+<g id="a_sourcefile~~util.f90~~AfferentGraph_node22"><a xlink:href=".././sourcefile/curr_and_fields_util.f90.html" xlink:title="curr_and_fields_util.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="736.5,-219.9991 600.5,-219.9991 600.5,-195.9991 736.5,-195.9991 736.5,-219.9991"/>
+<text text-anchor="middle" x="668.5" y="-205.5991" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">curr_and_fields_util.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~env_evolve_in_time.f90&#45;&gt;sourcefile~curr_and_fields_util.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_edge52" class="edge">
+<title>sourcefile~env_evolve_in_time.f90&#45;&gt;sourcefile~curr_and_fields_util.f90</title>
+<path fill="none" stroke="#cbff00" stroke-dasharray="5,2" d="M796.48,-317.9247C791.6081,-315.4785 787.0116,-312.5368 783,-308.9991 753.757,-283.2106 776.7034,-254.2559 747,-228.9991 745.4282,-227.6626 743.7797,-226.4102 742.0685,-225.2368"/>
+<polygon fill="#cbff00" stroke="#cbff00" points="743.4597,-221.9973 733.0543,-220.0028 739.9448,-228.0509 743.4597,-221.9973"/>
+</g>
+<!-- sourcefile~init_beam_part_distrib.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_node4" class="node">
+<title>sourcefile~init_beam_part_distrib.f90</title>
+<g id="a_sourcefile~~util.f90~~AfferentGraph_node4"><a xlink:href=".././sourcefile/init_beam_part_distrib.f90.html" xlink:title="init_beam_part_distrib.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="744,-135.9991 593,-135.9991 593,-111.9991 744,-111.9991 744,-135.9991"/>
+<text text-anchor="middle" x="668.5" y="-121.5991" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">init_beam_part_distrib.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~init_beam_part_distrib.f90&#45;&gt;sourcefile~util.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_edge3" class="edge">
+<title>sourcefile~init_beam_part_distrib.f90&#45;&gt;sourcefile~util.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M650.9266,-111.8253C590.8791,-71.8478 389.3638,48.8933 241,-21.9991 127.9333,-76.0256 58.3834,-222.7703 35.4324,-278.3078"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="32.0742,-277.2769 31.5764,-287.86 38.5653,-279.8972 32.0742,-277.2769"/>
+</g>
+<!-- sourcefile~mpi_curr_interface.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_node12" class="node">
+<title>sourcefile~mpi_curr_interface.f90</title>
+<g id="a_sourcefile~~util.f90~~AfferentGraph_node12"><a xlink:href=".././sourcefile/mpi_curr_interface.f90.html" xlink:title="mpi_curr_interface.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="553,-179.9991 420,-179.9991 420,-155.9991 553,-155.9991 553,-179.9991"/>
+<text text-anchor="middle" x="486.5" y="-165.5991" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">mpi_curr_interface.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~init_beam_part_distrib.f90&#45;&gt;sourcefile~mpi_curr_interface.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_edge32" class="edge">
+<title>sourcefile~init_beam_part_distrib.f90&#45;&gt;sourcefile~mpi_curr_interface.f90</title>
+<path fill="none" stroke="#27ff00" stroke-dasharray="5,2" d="M618.7677,-136.0223C596.2973,-141.4547 569.5678,-147.9168 546.0385,-153.6052"/>
+<polygon fill="#27ff00" stroke="#27ff00" points="545.0697,-150.2385 536.1722,-155.9905 546.7146,-157.0425 545.0697,-150.2385"/>
+</g>
+<!-- sourcefile~mpi_field_interface.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_node16" class="node">
+<title>sourcefile~mpi_field_interface.f90</title>
+<g id="a_sourcefile~~util.f90~~AfferentGraph_node16"><a xlink:href=".././sourcefile/mpi_field_interface.f90.html" xlink:title="mpi_field_interface.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="554,-221.9991 419,-221.9991 419,-197.9991 554,-197.9991 554,-221.9991"/>
+<text text-anchor="middle" x="486.5" y="-207.5991" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">mpi_field_interface.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~init_beam_part_distrib.f90&#45;&gt;sourcefile~mpi_field_interface.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_edge38" class="edge">
+<title>sourcefile~init_beam_part_distrib.f90&#45;&gt;sourcefile~mpi_field_interface.f90</title>
+<path fill="none" stroke="#004eff" stroke-dasharray="5,2" d="M607.6994,-136.1035C601.4796,-138.5467 595.4522,-141.4795 590,-144.9991 568.7719,-158.7027 574.9482,-174.8715 554,-188.9991 551.5675,-190.6396 549.0007,-192.1568 546.3459,-193.5595"/>
+<polygon fill="#004eff" stroke="#004eff" points="544.6286,-190.4986 537.0477,-197.8999 547.5895,-196.8415 544.6286,-190.4986"/>
+</g>
+<!-- sourcefile~psolve.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_node24" class="node">
+<title>sourcefile~psolve.f90</title>
+<g id="a_sourcefile~~util.f90~~AfferentGraph_node24"><a xlink:href=".././sourcefile/psolve.f90.html" xlink:title="psolve.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="520,-137.9991 453,-137.9991 453,-113.9991 520,-113.9991 520,-137.9991"/>
+<text text-anchor="middle" x="486.5" y="-123.5991" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">psolve.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~init_beam_part_distrib.f90&#45;&gt;sourcefile~psolve.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_edge54" class="edge">
+<title>sourcefile~init_beam_part_distrib.f90&#45;&gt;sourcefile~psolve.f90</title>
+<path fill="none" stroke="#0066ff" stroke-dasharray="5,2" d="M592.8967,-124.8299C571.6364,-125.0636 549.2212,-125.3099 530.4765,-125.5159"/>
+<polygon fill="#0066ff" stroke="#0066ff" points="530.4319,-122.016 520.471,-125.6258 530.5089,-129.0156 530.4319,-122.016"/>
+</g>
+<!-- sourcefile~ionize.f90&#45;&gt;sourcefile~util.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_edge4" class="edge">
+<title>sourcefile~ionize.f90&#45;&gt;sourcefile~util.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M636.4142,-367.7393C587.5511,-362.5924 492.4196,-357.8961 419,-386.9991 399.6383,-394.674 401.3653,-407.176 383,-416.9991 353.9831,-432.5196 344.8728,-439.4976 312,-437.9991"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M312,-437.9991C236.4345,-433.8143 218.488,-420.2356 147.5,-393.9991"/>
+</g>
+<!-- sourcefile~parallel.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_node6" class="node">
+<title>sourcefile~parallel.f90</title>
+<g id="a_sourcefile~~util.f90~~AfferentGraph_node6"><a xlink:href=".././sourcefile/parallel.f90.html" xlink:title="parallel.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="185.5,-241.9991 109.5,-241.9991 109.5,-217.9991 185.5,-217.9991 185.5,-241.9991"/>
+<text text-anchor="middle" x="147.5" y="-227.5991" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">parallel.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~parallel.f90&#45;&gt;sourcefile~util.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_edge5" class="edge">
+<title>sourcefile~parallel.f90&#45;&gt;sourcefile~util.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M126.7853,-242.0326C107.4729,-253.2514 78.4577,-270.1067 56.6857,-282.7543"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="54.7364,-279.8389 47.8476,-287.8885 58.2526,-285.8917 54.7364,-279.8389"/>
+</g>
+<!-- sourcefile~window.f90&#45;&gt;sourcefile~util.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_edge6" class="edge">
+<title>sourcefile~window.f90&#45;&gt;sourcefile~util.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M632.2941,-332.4816C558.4066,-337.8398 385.0599,-351.905 241,-374.9991 199.1297,-381.7113 187.5787,-407.8507 147.5,-393.9991"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M147.5,-393.9991C105.2015,-378.366 65.9542,-342.0579 44.3509,-319.4181"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="46.8484,-316.9643 37.4693,-312.0365 41.7282,-321.7376 46.8484,-316.9643"/>
+</g>
+<!-- sourcefile~window.f90&#45;&gt;sourcefile~mpi_field_interface.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_edge40" class="edge">
+<title>sourcefile~window.f90&#45;&gt;sourcefile~mpi_field_interface.f90</title>
+<path fill="none" stroke="#004eff" stroke-dasharray="5,2" d="M651.1728,-317.941C634.9354,-306.419 610.2053,-288.2931 590,-270.9991 573.0466,-256.4885 572.7934,-248.0317 554,-235.9991 548.1733,-232.2685 541.7282,-228.9395 535.2008,-226.0119"/>
+<polygon fill="#004eff" stroke="#004eff" points="536.2168,-222.643 525.6409,-222.0099 533.5137,-229.1 536.2168,-222.643"/>
+</g>
+<!-- sourcefile~run_data_info.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_node17" class="node">
+<title>sourcefile~run_data_info.f90</title>
+<g id="a_sourcefile~~util.f90~~AfferentGraph_node17"><a xlink:href=".././sourcefile/run_data_info.f90.html" xlink:title="run_data_info.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="539.5,-419.9991 433.5,-419.9991 433.5,-395.9991 539.5,-395.9991 539.5,-419.9991"/>
+<text text-anchor="middle" x="486.5" y="-405.5991" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">run_data_info.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~window.f90&#45;&gt;sourcefile~run_data_info.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_edge43" class="edge">
+<title>sourcefile~window.f90&#45;&gt;sourcefile~run_data_info.f90</title>
+<path fill="none" stroke="#2700ff" stroke-dasharray="5,2" d="M632.3436,-337.7259C618.8221,-341.1185 603.4814,-345.577 590,-350.9991 563.0982,-361.8189 534.3497,-378.0682 513.9956,-390.4524"/>
+<polygon fill="#2700ff" stroke="#2700ff" points="511.9426,-387.6065 505.2712,-395.8371 515.6192,-393.5633 511.9426,-387.6065"/>
+</g>
+<!-- sourcefile~window.f90&#45;&gt;sourcefile~mpi_part_interface.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_edge46" class="edge">
+<title>sourcefile~window.f90&#45;&gt;sourcefile~mpi_part_interface.f90</title>
+<path fill="none" stroke="#9c00ff" stroke-dasharray="5,2" d="M632.107,-322.0007C608.9174,-316.9041 578.2202,-310.1574 550.992,-304.1732"/>
+<polygon fill="#9c00ff" stroke="#9c00ff" points="551.656,-300.7357 541.1378,-302.0074 550.1534,-307.5725 551.656,-300.7357"/>
+</g>
+<!-- sourcefile~pic_evolve_in_time.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_node8" class="node">
+<title>sourcefile~pic_evolve_in_time.f90</title>
+<g id="a_sourcefile~~util.f90~~AfferentGraph_node8"><a xlink:href=".././sourcefile/pic_evolve_in_time.f90.html" xlink:title="pic_evolve_in_time.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="918,-299.9991 785,-299.9991 785,-275.9991 918,-275.9991 918,-299.9991"/>
+<text text-anchor="middle" x="851.5" y="-285.5991" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">pic_evolve_in_time.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~pic_evolve_in_time.f90&#45;&gt;sourcefile~ionize.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_edge10" class="edge">
+<title>sourcefile~pic_evolve_in_time.f90&#45;&gt;sourcefile~ionize.f90</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M800.6387,-300.0009C794.45,-302.4849 788.411,-305.4554 783,-308.9991 762.4328,-322.4689 767.8068,-337.9026 747,-350.9991 736.1799,-357.8097 723.183,-362.43 710.9064,-365.5573"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="709.8026,-362.2189 700.8271,-367.8484 711.3542,-369.0448 709.8026,-362.2189"/>
+</g>
+<!-- sourcefile~pic_evolve_in_time.f90&#45;&gt;sourcefile~window.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_edge22" class="edge">
+<title>sourcefile~pic_evolve_in_time.f90&#45;&gt;sourcefile~window.f90</title>
+<path fill="none" stroke="#ff00ff" stroke-dasharray="5,2" d="M799.0595,-300.0346C772.3928,-306.1549 740.277,-313.5257 714.5712,-319.4254"/>
+<polygon fill="#ff00ff" stroke="#ff00ff" points="713.6647,-316.0424 704.701,-321.6907 715.2306,-322.865 713.6647,-316.0424"/>
+</g>
+<!-- sourcefile~pic_evolve_in_time.f90&#45;&gt;sourcefile~mpi_part_interface.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_edge44" class="edge">
+<title>sourcefile~pic_evolve_in_time.f90&#45;&gt;sourcefile~mpi_part_interface.f90</title>
+<path fill="none" stroke="#9c00ff" stroke-dasharray="5,2" d="M784.9616,-290.7281C750.2315,-291.646 707.0522,-291.9951 668.5,-289.9991"/>
+<path fill="none" stroke="#9c00ff" stroke-dasharray="5,2" d="M668.5,-289.9991C634.0472,-288.2154 595.8765,-287.9532 563.4264,-288.2391"/>
+<polygon fill="#9c00ff" stroke="#9c00ff" points="563.0654,-284.7427 553.1036,-288.3499 563.1406,-291.7423 563.0654,-284.7427"/>
+</g>
+<!-- sourcefile~pic_evolve_in_time.f90&#45;&gt;sourcefile~fluid_density_momenta.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_edge49" class="edge">
+<title>sourcefile~pic_evolve_in_time.f90&#45;&gt;sourcefile~fluid_density_momenta.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M793.5977,-275.9757C775.4017,-272.1973 755.1471,-267.9914 736.3273,-264.0835"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="736.8423,-260.6158 726.3395,-262.0095 735.419,-267.4696 736.8423,-260.6158"/>
+</g>
+<!-- sourcefile~pic_evolve_in_time.f90&#45;&gt;sourcefile~curr_and_fields_util.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_edge51" class="edge">
+<title>sourcefile~pic_evolve_in_time.f90&#45;&gt;sourcefile~curr_and_fields_util.f90</title>
+<path fill="none" stroke="#cbff00" stroke-dasharray="5,2" d="M833.3384,-275.8603C813.0372,-262.7483 778.8253,-241.9951 747,-228.9991 741.8573,-226.8991 736.4396,-224.9483 730.953,-223.1505"/>
+<polygon fill="#cbff00" stroke="#cbff00" points="731.6353,-219.6977 721.0474,-220.0804 729.563,-226.384 731.6353,-219.6977"/>
+</g>
+<!-- sourcefile~grid_fields.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_node9" class="node">
+<title>sourcefile~grid_fields.f90</title>
+<g id="a_sourcefile~~util.f90~~AfferentGraph_node9"><a xlink:href=".././sourcefile/grid_fields.f90.html" xlink:title="grid_fields.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="356,-261.9991 268,-261.9991 268,-237.9991 356,-237.9991 356,-261.9991"/>
+<text text-anchor="middle" x="312" y="-247.5991" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">grid_fields.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~grid_fields.f90&#45;&gt;sourcefile~parallel.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_edge13" class="edge">
+<title>sourcefile~grid_fields.f90&#45;&gt;sourcefile~parallel.f90</title>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M267.917,-244.6395C245.6339,-241.9303 218.5486,-238.6372 195.7132,-235.8609"/>
+<polygon fill="#0000ff" stroke="#0000ff" points="195.9022,-232.3582 185.5528,-234.6256 195.0573,-239.307 195.9022,-232.3582"/>
+</g>
+<!-- sourcefile~pic_in.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_node10" class="node">
+<title>sourcefile~pic_in.f90</title>
+<g id="a_sourcefile~~util.f90~~AfferentGraph_node10"><a xlink:href=".././sourcefile/pic_in.f90.html" xlink:title="pic_in.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="700.5,-539.9991 636.5,-539.9991 636.5,-515.9991 700.5,-515.9991 700.5,-539.9991"/>
+<text text-anchor="middle" x="668.5" y="-525.5991" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">pic_in.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~pic_in.f90&#45;&gt;sourcefile~init_part_distrib.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_edge7" class="edge">
+<title>sourcefile~pic_in.f90&#45;&gt;sourcefile~init_part_distrib.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M636.1427,-535.5546C613.3286,-540.4824 581.9765,-546.4548 554,-548.9991 494.2466,-554.4334 478.7705,-554.2421 419,-548.9991 346.5037,-542.6399 264.3567,-526.904 209.5922,-515.1719"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="210.2076,-511.7241 199.6936,-513.031 208.7277,-518.5659 210.2076,-511.7241"/>
+</g>
+<!-- sourcefile~init_laser_field.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_node23" class="node">
+<title>sourcefile~init_laser_field.f90</title>
+<g id="a_sourcefile~~util.f90~~AfferentGraph_node23"><a xlink:href=".././sourcefile/init_laser_field.f90.html" xlink:title="init_laser_field.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="541,-539.9991 432,-539.9991 432,-515.9991 541,-515.9991 541,-539.9991"/>
+<text text-anchor="middle" x="486.5" y="-525.5991" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">init_laser_field.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~pic_in.f90&#45;&gt;sourcefile~init_laser_field.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_edge53" class="edge">
+<title>sourcefile~pic_in.f90&#45;&gt;sourcefile~init_laser_field.f90</title>
+<path fill="none" stroke="#00ff66" stroke-dasharray="5,2" d="M636.381,-527.9991C612.8294,-527.9991 580.0566,-527.9991 551.1609,-527.9991"/>
+<polygon fill="#00ff66" stroke="#00ff66" points="551.1234,-524.4992 541.1233,-527.9991 551.1233,-531.4992 551.1234,-524.4992"/>
+</g>
+<!-- sourcefile~start_all.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_node11" class="node">
+<title>sourcefile~start_all.f90</title>
+<g id="a_sourcefile~~util.f90~~AfferentGraph_node11"><a xlink:href=".././sourcefile/start_all.f90.html" xlink:title="start_all.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="890,-501.9991 813,-501.9991 813,-477.9991 890,-477.9991 890,-501.9991"/>
+<text text-anchor="middle" x="851.5" y="-487.5991" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">start_all.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~start_all.f90&#45;&gt;sourcefile~ionize.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_edge12" class="edge">
+<title>sourcefile~start_all.f90&#45;&gt;sourcefile~ionize.f90</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M832.605,-477.8155C800.056,-456.8276 733.2966,-413.7805 695.7313,-389.5581"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="697.5932,-386.5942 687.2922,-384.1165 693.7998,-392.4772 697.5932,-386.5942"/>
+</g>
+<!-- sourcefile~start_all.f90&#45;&gt;sourcefile~pic_in.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_edge29" class="edge">
+<title>sourcefile~start_all.f90&#45;&gt;sourcefile~pic_in.f90</title>
+<path fill="none" stroke="#ffeb00" stroke-dasharray="5,2" d="M812.6904,-498.0579C782.715,-504.2823 741.2951,-512.8832 710.5367,-519.2702"/>
+<polygon fill="#ffeb00" stroke="#ffeb00" points="709.6258,-515.8846 700.5463,-521.3447 711.049,-522.7384 709.6258,-515.8846"/>
+</g>
+<!-- sourcefile~start_all.f90&#45;&gt;sourcefile~run_data_info.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_edge42" class="edge">
+<title>sourcefile~start_all.f90&#45;&gt;sourcefile~run_data_info.f90</title>
+<path fill="none" stroke="#2700ff" stroke-dasharray="5,2" d="M812.7996,-491.8709C775.6615,-493.1261 718.0615,-493.6554 668.5,-487.9991"/>
+<path fill="none" stroke="#2700ff" stroke-dasharray="5,2" d="M668.5,-487.9991C609.004,-481.2091 546.558,-446.8783 512.4872,-425.4552"/>
+<polygon fill="#2700ff" stroke="#2700ff" points="514.3631,-422.5003 504.0555,-420.0501 510.5853,-428.3934 514.3631,-422.5003"/>
+</g>
+<!-- sourcefile~pic_dump.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_node19" class="node">
+<title>sourcefile~pic_dump.f90</title>
+<g id="a_sourcefile~~util.f90~~AfferentGraph_node19"><a xlink:href=".././sourcefile/pic_dump.f90.html" xlink:title="pic_dump.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="354.5,-407.9991 269.5,-407.9991 269.5,-383.9991 354.5,-383.9991 354.5,-407.9991"/>
+<text text-anchor="middle" x="312" y="-393.5991" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">pic_dump.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~start_all.f90&#45;&gt;sourcefile~pic_dump.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_edge47" class="edge">
+<title>sourcefile~start_all.f90&#45;&gt;sourcefile~pic_dump.f90</title>
+<path fill="none" stroke="#ff00eb" stroke-dasharray="5,2" d="M668.5,-487.9991C553.1229,-474.8316 421.9623,-434.0198 355.5266,-411.4315"/>
+<polygon fill="#ff00eb" stroke="#ff00eb" points="356.4125,-408.0353 345.8179,-408.1031 354.1423,-414.657 356.4125,-408.0353"/>
+</g>
+<!-- sourcefile~mpi_curr_interface.f90&#45;&gt;sourcefile~parallel.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_edge14" class="edge">
+<title>sourcefile~mpi_curr_interface.f90&#45;&gt;sourcefile~parallel.f90</title>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M447.8151,-180.0443C412.7633,-190.2992 359.4849,-204.2552 312,-209.9991"/>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M312,-209.9991C272.9555,-214.722 228.7019,-220.104 195.9366,-224.0944"/>
+<polygon fill="#0000ff" stroke="#0000ff" points="195.2267,-220.655 185.7233,-225.3385 196.0732,-227.6036 195.2267,-220.655"/>
+</g>
+<!-- sourcefile~prl_fft.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_node13" class="node">
+<title>sourcefile~prl_fft.f90</title>
+<g id="a_sourcefile~~util.f90~~AfferentGraph_node13"><a xlink:href=".././sourcefile/prl_fft.f90.html" xlink:title="prl_fft.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="344,-159.9991 280,-159.9991 280,-135.9991 344,-135.9991 344,-159.9991"/>
+<text text-anchor="middle" x="312" y="-145.5991" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">prl_fft.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~prl_fft.f90&#45;&gt;sourcefile~parallel.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_edge15" class="edge">
+<title>sourcefile~prl_fft.f90&#45;&gt;sourcefile~parallel.f90</title>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M287.7275,-160.0985C259.4608,-174.1889 212.6062,-197.545 180.9151,-213.3423"/>
+<polygon fill="#0000ff" stroke="#0000ff" points="178.9924,-210.39 171.6042,-217.9837 182.1153,-216.6548 178.9924,-210.39"/>
+</g>
+<!-- sourcefile~aladyn.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_node14" class="node">
+<title>sourcefile~aladyn.f90</title>
+<g id="a_sourcefile~~util.f90~~AfferentGraph_node14"><a xlink:href=".././sourcefile/aladyn.f90.html" xlink:title="ALaDyn.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="1032,-341.9991 956,-341.9991 956,-317.9991 1032,-317.9991 1032,-341.9991"/>
+<text text-anchor="middle" x="994" y="-327.5991" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">ALaDyn.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~aladyn.f90&#45;&gt;sourcefile~env_evolve_in_time.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_edge8" class="edge">
+<title>sourcefile~aladyn.f90&#45;&gt;sourcefile~env_evolve_in_time.f90</title>
+<path fill="none" stroke="#ffff00" stroke-dasharray="5,2" d="M955.8126,-329.9991C947.7861,-329.9991 939.0404,-329.9991 930.1391,-329.9991"/>
+<polygon fill="#ffff00" stroke="#ffff00" points="930.0533,-326.4992 920.0533,-329.9991 930.0532,-333.4992 930.0533,-326.4992"/>
+</g>
+<!-- sourcefile~aladyn.f90&#45;&gt;sourcefile~init_beam_part_distrib.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_edge9" class="edge">
+<title>sourcefile~aladyn.f90&#45;&gt;sourcefile~init_beam_part_distrib.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M851.5,-123.9991C814.1691,-104.5171 766.4406,-105.2079 729.0873,-110.4055"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="728.1972,-107.0011 718.8441,-111.978 729.2594,-113.92 728.1972,-107.0011"/>
+</g>
+<!-- sourcefile~aladyn.f90&#45;&gt;sourcefile~pic_evolve_in_time.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_edge24" class="edge">
+<title>sourcefile~aladyn.f90&#45;&gt;sourcefile~pic_evolve_in_time.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M955.8126,-318.7439C939.2573,-313.8644 919.6419,-308.0831 901.9136,-302.8579"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="902.8716,-299.4914 892.2901,-300.0215 900.8926,-306.2059 902.8716,-299.4914"/>
+</g>
+<!-- sourcefile~aladyn.f90&#45;&gt;sourcefile~start_all.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_edge30" class="edge">
+<title>sourcefile~aladyn.f90&#45;&gt;sourcefile~start_all.f90</title>
+<path fill="none" stroke="#9cff00" stroke-dasharray="5,2" d="M990.447,-342.2079C982.2789,-368.2165 959.7499,-429.5207 920,-463.9991 913.9868,-469.2149 906.8203,-473.4343 899.4236,-476.8328"/>
+<polygon fill="#9cff00" stroke="#9cff00" points="897.9156,-473.6685 890.0008,-480.7118 900.5803,-480.1415 897.9156,-473.6685"/>
+</g>
+<!-- sourcefile~pic_out.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_node15" class="node">
+<title>sourcefile~pic_out.f90</title>
+<g id="a_sourcefile~~util.f90~~AfferentGraph_node15"><a xlink:href=".././sourcefile/pic_out.f90.html" xlink:title="pic_out.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="347.5,-96.9991 276.5,-96.9991 276.5,-72.9991 347.5,-72.9991 347.5,-96.9991"/>
+<text text-anchor="middle" x="312" y="-82.5991" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">pic_out.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~aladyn.f90&#45;&gt;sourcefile~pic_out.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_edge35" class="edge">
+<title>sourcefile~aladyn.f90&#45;&gt;sourcefile~pic_out.f90</title>
+<path fill="none" stroke="#00c4ff" stroke-dasharray="5,2" d="M486.5,-84.9991C443.0549,-82.5141 393.4259,-82.8178 358.2303,-83.563"/>
+<polygon fill="#00c4ff" stroke="#00c4ff" points="357.7096,-80.0741 347.7937,-83.8059 357.8725,-87.0722 357.7096,-80.0741"/>
+</g>
+<!-- sourcefile~aladyn.f90&#45;&gt;sourcefile~run_data_info.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_edge41" class="edge">
+<title>sourcefile~aladyn.f90&#45;&gt;sourcefile~run_data_info.f90</title>
+<path fill="none" stroke="#2700ff" stroke-dasharray="5,2" d="M955.6693,-341.1789C944.2201,-344.4365 931.6233,-347.9402 920,-350.9991 843.4831,-371.1365 825.2592,-381.3441 747,-392.9991 680.2104,-402.946 602.8796,-406.3949 549.9279,-407.5406"/>
+<polygon fill="#2700ff" stroke="#2700ff" points="549.603,-404.0462 539.673,-407.7403 549.7393,-411.0449 549.603,-404.0462"/>
+</g>
+<!-- sourcefile~diag_part_and_fields.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_node20" class="node">
+<title>sourcefile~diag_part_and_fields.f90</title>
+<g id="a_sourcefile~~util.f90~~AfferentGraph_node20"><a xlink:href=".././sourcefile/diag_part_and_fields.f90.html" xlink:title="diag_part_and_fields.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="383,-54.9991 241,-54.9991 241,-30.9991 383,-30.9991 383,-54.9991"/>
+<text text-anchor="middle" x="312" y="-40.5991" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">diag_part_and_fields.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~aladyn.f90&#45;&gt;sourcefile~diag_part_and_fields.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_edge48" class="edge">
+<title>sourcefile~aladyn.f90&#45;&gt;sourcefile~diag_part_and_fields.f90</title>
+<path fill="none" stroke="#ff0075" stroke-dasharray="5,2" d="M990.1512,-317.8801C977.5282,-280.469 933.4243,-166.7533 851.5,-123.9991"/>
+<path fill="none" stroke="#ff0075" stroke-dasharray="5,2" d="M851.5,-123.9991C777.3185,-85.2857 530.2498,-87.5016 486.5,-84.9991"/>
+<path fill="none" stroke="#ff0075" stroke-dasharray="5,2" d="M486.5,-84.9991C463.2835,-83.0947 407.6637,-69.0885 365.4092,-57.766"/>
+<polygon fill="#ff0075" stroke="#ff0075" points="366.0943,-54.3259 355.528,-55.1023 364.2723,-61.0846 366.0943,-54.3259"/>
+</g>
+<!-- sourcefile~pic_out_util.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_node25" class="node">
+<title>sourcefile~pic_out_util.f90</title>
+<g id="a_sourcefile~~util.f90~~AfferentGraph_node25"><a xlink:href=".././sourcefile/pic_out_util.f90.html" xlink:title="pic_out_util.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="715,-177.9991 622,-177.9991 622,-153.9991 715,-153.9991 715,-177.9991"/>
+<text text-anchor="middle" x="668.5" y="-163.5991" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">pic_out_util.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~aladyn.f90&#45;&gt;sourcefile~pic_out_util.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_edge56" class="edge">
+<title>sourcefile~aladyn.f90&#45;&gt;sourcefile~pic_out_util.f90</title>
+<path fill="none" stroke="#cc00ff" stroke-dasharray="5,2" d="M851.5,-123.9991C845.714,-120.9795 775.5261,-138.1811 723.7927,-151.4816"/>
+<polygon fill="#cc00ff" stroke="#cc00ff" points="722.8504,-148.1101 714.0424,-153.9982 724.5998,-154.888 722.8504,-148.1101"/>
+</g>
+<!-- sourcefile~pic_out.f90&#45;&gt;sourcefile~parallel.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_edge16" class="edge">
+<title>sourcefile~pic_out.f90&#45;&gt;sourcefile~parallel.f90</title>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M287.4886,-97.1342C273.2362,-104.7522 255.3196,-115.3257 241,-126.9991 210.0976,-152.191 180.1688,-187.7249 162.8088,-209.7863"/>
+<polygon fill="#0000ff" stroke="#0000ff" points="159.9526,-207.7579 156.587,-217.8039 165.4828,-212.0494 159.9526,-207.7579"/>
+</g>
+<!-- sourcefile~mpi_field_interface.f90&#45;&gt;sourcefile~parallel.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_edge17" class="edge">
+<title>sourcefile~mpi_field_interface.f90&#45;&gt;sourcefile~parallel.f90</title>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M418.7363,-206.2235C386.3247,-205.38 347.0384,-205.7608 312,-209.9991"/>
+</g>
+<!-- sourcefile~run_data_info.f90&#45;&gt;sourcefile~parallel.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_edge18" class="edge">
+<title>sourcefile~run_data_info.f90&#45;&gt;sourcefile~parallel.f90</title>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M469.6371,-395.8274C439.5616,-374.757 373.9916,-331.6676 312,-309.9991"/>
+</g>
+<!-- sourcefile~mpi_part_interface.f90&#45;&gt;sourcefile~parallel.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_edge19" class="edge">
+<title>sourcefile~mpi_part_interface.f90&#45;&gt;sourcefile~parallel.f90</title>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M454.032,-302.0773C418.2578,-313.4936 359.4963,-326.6009 312,-309.9991"/>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M312,-309.9991C263.023,-292.8798 209.5622,-265.0293 177.2873,-247.1165"/>
+<polygon fill="#0000ff" stroke="#0000ff" points="178.8083,-243.9568 168.3735,-242.1222 175.3868,-250.0636 178.8083,-243.9568"/>
+</g>
+<!-- sourcefile~pic_dump.f90&#45;&gt;sourcefile~parallel.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_edge20" class="edge">
+<title>sourcefile~pic_dump.f90&#45;&gt;sourcefile~parallel.f90</title>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M299.9039,-383.7928C271.6218,-355.2528 200.9813,-283.9681 166.7273,-249.4017"/>
+<polygon fill="#0000ff" stroke="#0000ff" points="169.1388,-246.8629 159.6138,-242.2234 164.1666,-251.7901 169.1388,-246.8629"/>
+</g>
+<!-- sourcefile~diag_part_and_fields.f90&#45;&gt;sourcefile~parallel.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_edge21" class="edge">
+<title>sourcefile~diag_part_and_fields.f90&#45;&gt;sourcefile~parallel.f90</title>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M255.6724,-55.1007C250.4241,-57.5418 245.4237,-60.4749 241,-63.9991 192.9375,-102.2889 165.3917,-172.4285 153.8966,-208.0252"/>
+<polygon fill="#0000ff" stroke="#0000ff" points="150.4565,-207.3021 150.8395,-217.89 157.1428,-209.3742 150.4565,-207.3021"/>
+</g>
+<!-- sourcefile~fluid_density_momenta.f90&#45;&gt;sourcefile~grid_fields.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_edge26" class="edge">
+<title>sourcefile~fluid_density_momenta.f90&#45;&gt;sourcefile~grid_fields.f90</title>
+<path fill="none" stroke="#ff7500" stroke-dasharray="5,2" d="M589.6092,-248.0267C557.5859,-247.7398 520.2533,-248.0583 486.5,-249.9991"/>
+</g>
+<!-- sourcefile~fluid_density_momenta.f90&#45;&gt;sourcefile~mpi_field_interface.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_edge36" class="edge">
+<title>sourcefile~fluid_density_momenta.f90&#45;&gt;sourcefile~mpi_field_interface.f90</title>
+<path fill="none" stroke="#004eff" stroke-dasharray="5,2" d="M613.894,-237.9978C594.1881,-233.6668 571.7561,-228.7367 551.2648,-224.2331"/>
+<polygon fill="#004eff" stroke="#004eff" points="551.9,-220.7893 541.3818,-222.0611 550.3973,-227.6261 551.9,-220.7893"/>
+</g>
+<!-- sourcefile~curr_and_fields_util.f90&#45;&gt;sourcefile~grid_fields.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_edge25" class="edge">
+<title>sourcefile~curr_and_fields_util.f90&#45;&gt;sourcefile~grid_fields.f90</title>
+<path fill="none" stroke="#ff7500" stroke-dasharray="5,2" d="M624.3403,-219.9998C579.4551,-231.8696 512.885,-248.482 486.5,-249.9991"/>
+<path fill="none" stroke="#ff7500" stroke-dasharray="5,2" d="M486.5,-249.9991C446.3448,-252.3081 400.9059,-252.2221 366.464,-251.6043"/>
+<polygon fill="#ff7500" stroke="#ff7500" points="366.2143,-248.0987 356.1462,-251.3976 366.074,-255.0973 366.2143,-248.0987"/>
+</g>
+<!-- sourcefile~curr_and_fields_util.f90&#45;&gt;sourcefile~mpi_curr_interface.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_edge31" class="edge">
+<title>sourcefile~curr_and_fields_util.f90&#45;&gt;sourcefile~mpi_curr_interface.f90</title>
+<path fill="none" stroke="#27ff00" stroke-dasharray="5,2" d="M613.894,-195.9978C594.1881,-191.6668 571.7561,-186.7367 551.2648,-182.2331"/>
+<polygon fill="#27ff00" stroke="#27ff00" points="551.9,-178.7893 541.3818,-180.0611 550.3973,-185.6261 551.9,-178.7893"/>
+</g>
+<!-- sourcefile~curr_and_fields_util.f90&#45;&gt;sourcefile~mpi_field_interface.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_edge37" class="edge">
+<title>sourcefile~curr_and_fields_util.f90&#45;&gt;sourcefile~mpi_field_interface.f90</title>
+<path fill="none" stroke="#004eff" stroke-dasharray="5,2" d="M600.4711,-208.7467C588.6392,-208.8767 576.2529,-209.0128 564.1858,-209.1454"/>
+<polygon fill="#004eff" stroke="#004eff" points="564.1047,-205.646 554.1438,-209.2558 564.1817,-212.6456 564.1047,-205.646"/>
+</g>
+<!-- sourcefile~init_laser_field.f90&#45;&gt;sourcefile~grid_fields.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_edge27" class="edge">
+<title>sourcefile~init_laser_field.f90&#45;&gt;sourcefile~grid_fields.f90</title>
+<path fill="none" stroke="#ff7500" stroke-dasharray="5,2" d="M476.3246,-515.9972C461.667,-498.139 434.6564,-463.0131 419,-428.9991 393.3947,-373.371 419.0844,-345.4768 383,-295.9991 374.2948,-284.0629 361.4694,-274.405 349.1053,-267.0777"/>
+<polygon fill="#ff7500" stroke="#ff7500" points="350.6904,-263.9544 340.2495,-262.155 347.2894,-270.0727 350.6904,-263.9544"/>
+</g>
+<!-- sourcefile~psolve.f90&#45;&gt;sourcefile~grid_fields.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_edge28" class="edge">
+<title>sourcefile~psolve.f90&#45;&gt;sourcefile~grid_fields.f90</title>
+<path fill="none" stroke="#ff7500" stroke-dasharray="5,2" d="M452.8474,-130.7183C441.0631,-133.7622 428.4316,-138.768 419,-146.9991 390.5372,-171.8392 410.8405,-198.4635 383,-223.9991 377.9303,-228.6492 371.9608,-232.4849 365.6725,-235.645"/>
+<polygon fill="#ff7500" stroke="#ff7500" points="364.0177,-232.5501 356.2988,-239.8074 366.8587,-238.9477 364.0177,-232.5501"/>
+</g>
+<!-- sourcefile~psolve.f90&#45;&gt;sourcefile~prl_fft.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_edge34" class="edge">
+<title>sourcefile~psolve.f90&#45;&gt;sourcefile~prl_fft.f90</title>
+<path fill="none" stroke="#00ff4e" stroke-dasharray="5,2" d="M452.8546,-130.2409C424.7707,-133.7816 384.5891,-138.8475 354.3247,-142.6631"/>
+<polygon fill="#00ff4e" stroke="#00ff4e" points="353.5531,-139.2325 344.0695,-143.956 354.4288,-146.1776 353.5531,-139.2325"/>
+</g>
+<!-- sourcefile~pic_out_util.f90&#45;&gt;sourcefile~mpi_curr_interface.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_edge33" class="edge">
+<title>sourcefile~pic_out_util.f90&#45;&gt;sourcefile~mpi_curr_interface.f90</title>
+<path fill="none" stroke="#27ff00" stroke-dasharray="5,2" d="M621.6305,-166.5142C603.8721,-166.7093 583.1552,-166.937 563.3542,-167.1546"/>
+<polygon fill="#27ff00" stroke="#27ff00" points="563.0645,-163.6575 553.1036,-167.2672 563.1415,-170.657 563.0645,-163.6575"/>
+</g>
+<!-- sourcefile~pic_out_util.f90&#45;&gt;sourcefile~mpi_field_interface.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_edge39" class="edge">
+<title>sourcefile~pic_out_util.f90&#45;&gt;sourcefile~mpi_field_interface.f90</title>
+<path fill="none" stroke="#004eff" stroke-dasharray="5,2" d="M621.6305,-177.3302C598.6734,-182.8803 570.7722,-189.6256 546.2971,-195.5427"/>
+<polygon fill="#004eff" stroke="#004eff" points="545.2953,-192.184 536.3978,-197.9359 546.9402,-198.988 545.2953,-192.184"/>
+</g>
+<!-- sourcefile~pic_out_util.f90&#45;&gt;sourcefile~psolve.f90 -->
+<g id="sourcefile~~util.f90~~AfferentGraph_edge55" class="edge">
+<title>sourcefile~pic_out_util.f90&#45;&gt;sourcefile~psolve.f90</title>
+<path fill="none" stroke="#0066ff" stroke-dasharray="5,2" d="M621.6305,-155.6981C593.3957,-149.4927 557.6823,-141.6436 530.0622,-135.5732"/>
+<polygon fill="#0066ff" stroke="#0066ff" points="530.7996,-132.1518 520.2813,-133.4236 529.2969,-138.9887 530.7996,-132.1518"/>
+</g>
+</g>
+</svg>
+</div><script>var pansourcefileutilf90AfferentGraph = svgPanZoom('#sourcefileutilf90AfferentGraph', {zoomEnabled: true,controlIconsEnabled: true, fit: true, center: true,}); </script><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="202pt" height="32pt"
+ viewBox="0.00 0.00 201.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 197.5,-28 197.5,4 -4,4"/>
+<!-- Source File -->
+<g id="node1" class="node">
+<title>Source File</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="71,-24 0,-24 0,0 71,0 71,-24"/>
+<text text-anchor="middle" x="35.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Source File</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node2" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="193.5,-24 89.5,-24 89.5,0 193.5,0 193.5,-24"/>
+<text text-anchor="middle" x="141.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a file to a file which it depends on. A file
+    is dependent upon another if the latter must be compiled before the former
+    can be. Where possible, edges connecting nodes are given different colours to make them easier to distinguish in large graphs.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+      
+      <br>
+
+    <section class="visible-xs visible-sm hidden-md">
+      
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#mods-1">Modules</a></h3></div>
+  <div id="mods-1" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/util.html">util</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../sourcefile/util.f90.html#src">util.f90</a>
+  </div>
+</div>
+
+
+
+    </section>
+    <br class="visible-xs visible-sm hidden-md">
+
+    <section>
+      <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="hl"><pre><span></span><a name="ln-1"></a><span class="c">!*****************************************************************************************************!</span>
+<a name="ln-2"></a><span class="c">!                            Copyright 2008-2020  The ALaDyn Collaboration                            !</span>
+<a name="ln-3"></a><span class="c">!*****************************************************************************************************!</span>
+<a name="ln-4"></a>
+<a name="ln-5"></a><span class="c">!*****************************************************************************************************!</span>
+<a name="ln-6"></a><span class="c">!  This file is part of ALaDyn.                                                                       !</span>
+<a name="ln-7"></a><span class="c">!                                                                                                     !</span>
+<a name="ln-8"></a><span class="c">!  ALaDyn is free software: you can redistribute it and/or modify                                     !</span>
+<a name="ln-9"></a><span class="c">!  it under the terms of the GNU General Public License as published by                               !</span>
+<a name="ln-10"></a><span class="c">!  the Free Software Foundation, either version 3 of the License, or                                  !</span>
+<a name="ln-11"></a><span class="c">!  (at your option) any later version.                                                                !</span>
+<a name="ln-12"></a><span class="c">!                                                                                                     !</span>
+<a name="ln-13"></a><span class="c">!  ALaDyn is distributed in the hope that it will be useful,                                          !</span>
+<a name="ln-14"></a><span class="c">!  but WITHOUT ANY WARRANTY; without even the implied warranty of                                     !</span>
+<a name="ln-15"></a><span class="c">!  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                                      !</span>
+<a name="ln-16"></a><span class="c">!  GNU General Public License for more details.                                                       !</span>
+<a name="ln-17"></a><span class="c">!                                                                                                     !</span>
+<a name="ln-18"></a><span class="c">!  You should have received a copy of the GNU General Public License                                  !</span>
+<a name="ln-19"></a><span class="c">!  along with ALaDyn.  If not, see &lt;http://www.gnu.org/licenses/&gt;.                                    !</span>
+<a name="ln-20"></a><span class="c">!*****************************************************************************************************!</span>
+<a name="ln-21"></a>
+<a name="ln-22"></a> <span class="k">module </span><span class="n">util</span>
+<a name="ln-23"></a>
+<a name="ln-24"></a>  <span class="k">use </span><span class="n">precision_def</span>
+<a name="ln-25"></a>  <span class="k">use </span><span class="n">code_util</span>
+<a name="ln-26"></a>
+<a name="ln-27"></a>  <span class="k">implicit none</span>
+<a name="ln-28"></a><span class="k">  private</span>
+<a name="ln-29"></a><span class="k">  public</span> <span class="kd">::</span> <span class="n">gasdev</span><span class="p">,</span> <span class="n">init_random_seed</span><span class="p">,</span> <span class="n">bunch_gen</span>
+<a name="ln-30"></a>
+<a name="ln-31"></a> <span class="k">contains</span>
+<a name="ln-32"></a>
+<a name="ln-33"></a><span class="k">  subroutine </span><span class="n">init_random_seed</span><span class="p">(</span><span class="n">myrank</span><span class="p">)</span>
+<a name="ln-34"></a>   <span class="kt">integer</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">myrank</span>
+<a name="ln-35"></a>   <span class="kt">integer</span><span class="p">,</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">seed</span><span class="p">(:)</span>
+<a name="ln-36"></a>   <span class="kt">integer</span> <span class="kd">::</span> <span class="n">i</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">un</span><span class="p">,</span> <span class="n">istat</span><span class="p">,</span> <span class="n">dt</span><span class="p">(</span><span class="mi">8</span><span class="p">),</span> <span class="n">pid</span><span class="p">,</span> <span class="n">t</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">s</span>
+<a name="ln-37"></a>   <span class="kt">integer</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span> <span class="kd">::</span> <span class="nb">count</span><span class="p">,</span> <span class="n">tms</span>
+<a name="ln-38"></a>
+<a name="ln-39"></a>   <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+<a name="ln-40"></a>   <span class="k">call </span><span class="nb">random_seed</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">n</span><span class="p">)</span>
+<a name="ln-41"></a>   <span class="k">allocate</span> <span class="p">(</span><span class="n">seed</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+<a name="ln-42"></a>
+<a name="ln-43"></a>   <span class="k">if</span> <span class="p">(.</span><span class="nb">not</span><span class="p">.</span> <span class="n">l_disable_rng_seed</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-44"></a><span class="k">    </span><span class="n">un</span> <span class="o">=</span> <span class="mi">123</span>
+<a name="ln-45"></a>    <span class="c">! First try if the OS provides a random number generator</span>
+<a name="ln-46"></a>    <span class="k">open</span> <span class="p">(</span><span class="n">unit</span><span class="o">=</span><span class="n">un</span><span class="p">,</span> <span class="k">file</span><span class="o">=</span><span class="s1">&#39;/dev/urandom&#39;</span><span class="p">,</span> <span class="nb">access</span><span class="o">=</span><span class="s1">&#39;stream&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-47"></a>          <span class="n">form</span><span class="o">=</span><span class="s1">&#39;unformatted&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;read&#39;</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="s1">&#39;old&#39;</span><span class="p">,</span> <span class="n">iostat</span><span class="o">=</span><span class="n">istat</span><span class="p">)</span>
+<a name="ln-48"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">istat</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-49"></a><span class="k">     read</span> <span class="p">(</span><span class="n">un</span><span class="p">)</span> <span class="n">seed</span>
+<a name="ln-50"></a>     <span class="k">close</span> <span class="p">(</span><span class="n">un</span><span class="p">)</span>
+<a name="ln-51"></a>    <span class="k">else</span>
+<a name="ln-52"></a>     <span class="c">! Fallback to XOR:ing the current time and pid. The PID is</span>
+<a name="ln-53"></a>     <span class="c">! useful in case one launches multiple instances of the same</span>
+<a name="ln-54"></a>     <span class="c">! program in parallel.</span>
+<a name="ln-55"></a>     <span class="k">call </span><span class="nb">system_clock</span><span class="p">(</span><span class="nb">count</span><span class="p">)</span>
+<a name="ln-56"></a>     <span class="k">if</span> <span class="p">(</span><span class="nb">count</span> <span class="o">/=</span> <span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-57"></a><span class="k">      </span><span class="n">t</span> <span class="o">=</span> <span class="nb">transfer</span><span class="p">(</span><span class="nb">count</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+<a name="ln-58"></a>     <span class="k">else</span>
+<a name="ln-59"></a><span class="k">      call </span><span class="nb">date_and_time</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="n">dt</span><span class="p">)</span>
+<a name="ln-60"></a>      <span class="n">tms</span> <span class="o">=</span> <span class="p">(</span><span class="n">dt</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1970</span><span class="p">)</span><span class="o">*</span><span class="mi">365</span><span class="err">_</span><span class="mi">8</span><span class="o">*</span><span class="mi">24</span><span class="o">*</span><span class="mi">60</span><span class="o">*</span><span class="mi">60</span><span class="o">*</span><span class="mi">1000</span> <span class="o">+</span> <span class="n">dt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="mi">31</span><span class="err">_</span><span class="mi">8</span><span class="o">*</span><span class="mi">24</span><span class="o">*</span><span class="mi">60</span><span class="o">*</span><span class="mi">60</span><span class="o">*</span><span class="mi">1000</span> <span class="p">&amp;</span>
+<a name="ln-61"></a>            <span class="o">+</span> <span class="n">dt</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">*</span><span class="mi">24</span><span class="o">*</span><span class="mi">60</span><span class="o">*</span><span class="mi">60</span><span class="o">*</span><span class="mi">60</span><span class="o">*</span><span class="mi">1000</span> <span class="o">+</span> <span class="n">dt</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span><span class="o">*</span><span class="mi">60</span><span class="o">*</span><span class="mi">60</span><span class="o">*</span><span class="mi">1000</span> <span class="o">+</span> <span class="n">dt</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span><span class="o">*</span><span class="mi">60</span><span class="o">*</span><span class="mi">1000</span> <span class="o">+</span> <span class="p">&amp;</span>
+<a name="ln-62"></a>            <span class="n">dt</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span><span class="o">*</span><span class="mi">1000</span> <span class="o">+</span> <span class="n">dt</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span>
+<a name="ln-63"></a>      <span class="n">t</span> <span class="o">=</span> <span class="nb">transfer</span><span class="p">(</span><span class="n">tms</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+<a name="ln-64"></a>     <span class="k">end if</span>
+<a name="ln-65"></a><span class="k">     </span><span class="n">s</span> <span class="o">=</span> <span class="nb">ieor</span><span class="p">(</span><span class="n">t</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">t</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+<a name="ln-66"></a>     <span class="n">pid</span> <span class="o">=</span> <span class="n">myrank</span> <span class="o">+</span> <span class="mi">1099279</span> <span class="c">! Add a prime</span>
+<a name="ln-67"></a>     <span class="n">s</span> <span class="o">=</span> <span class="nb">ieor</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">pid</span><span class="p">)</span>
+<a name="ln-68"></a>     <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-69"></a><span class="k">      </span><span class="n">seed</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">t</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="mi">36269</span>
+<a name="ln-70"></a>      <span class="n">seed</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="n">t</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="mi">72551</span>
+<a name="ln-71"></a>      <span class="n">seed</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">=</span> <span class="n">pid</span>
+<a name="ln-72"></a>      <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-73"></a><span class="k">       </span><span class="n">seed</span><span class="p">(</span><span class="mi">4</span><span class="p">:)</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="mi">37</span><span class="o">*</span><span class="p">[(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">4</span><span class="p">)]</span>
+<a name="ln-74"></a>      <span class="k">end if</span>
+<a name="ln-75"></a><span class="k">     else</span>
+<a name="ln-76"></a><span class="k">      </span><span class="n">seed</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="mi">37</span><span class="o">*</span><span class="p">[(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)]</span>
+<a name="ln-77"></a>     <span class="k">end if</span>
+<a name="ln-78"></a><span class="k">    end if</span>
+<a name="ln-79"></a><span class="k">   else</span>
+<a name="ln-80"></a><span class="k">    </span><span class="n">seed</span> <span class="o">=</span> <span class="n">myrank</span>
+<a name="ln-81"></a>   <span class="k">end if</span>
+<a name="ln-82"></a><span class="k">   call </span><span class="nb">random_seed</span><span class="p">(</span><span class="n">put</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
+<a name="ln-83"></a>  <span class="k">end subroutine</span>
+<a name="ln-84"></a>  <span class="c">!========================</span>
+<a name="ln-85"></a>
+<a name="ln-86"></a>  <span class="k">subroutine </span><span class="n">gasdev</span><span class="p">(</span><span class="n">dev</span><span class="p">)</span>
+<a name="ln-87"></a>
+<a name="ln-88"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span> <span class="kd">::</span> <span class="n">dev</span>
+<a name="ln-89"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">rsq</span>
+<a name="ln-90"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span> <span class="k">save</span> <span class="kd">::</span> <span class="n">g</span>
+<a name="ln-91"></a>   <span class="kt">logical</span><span class="p">,</span> <span class="k">save</span> <span class="kd">::</span> <span class="n">gaus_store</span> <span class="o">=</span> <span class="p">.</span><span class="n">false</span><span class="p">.</span>
+<a name="ln-92"></a>
+<a name="ln-93"></a>   <span class="k">if</span> <span class="p">(</span><span class="n">gaus_store</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-94"></a><span class="k">    </span><span class="n">dev</span> <span class="o">=</span> <span class="n">g</span>
+<a name="ln-95"></a>    <span class="n">gaus_store</span> <span class="o">=</span> <span class="p">.</span><span class="n">false</span><span class="p">.</span>
+<a name="ln-96"></a>   <span class="k">else</span>
+<a name="ln-97"></a><span class="k">    do</span>
+<a name="ln-98"></a><span class="k">     call </span><span class="nb">random_number</span><span class="p">(</span><span class="n">v1</span><span class="p">)</span>
+<a name="ln-99"></a>     <span class="k">call </span><span class="nb">random_number</span><span class="p">(</span><span class="n">v2</span><span class="p">)</span>
+<a name="ln-100"></a>     <span class="n">v1</span> <span class="o">=</span> <span class="mf">2.0</span><span class="o">*</span><span class="n">v1</span> <span class="o">-</span> <span class="mf">1.0</span>
+<a name="ln-101"></a>     <span class="n">v2</span> <span class="o">=</span> <span class="mf">2.0</span><span class="o">*</span><span class="n">v2</span> <span class="o">-</span> <span class="mf">1.0</span>
+<a name="ln-102"></a>     <span class="n">rsq</span> <span class="o">=</span> <span class="n">v1</span><span class="o">*</span><span class="n">v1</span> <span class="o">+</span> <span class="n">v2</span><span class="o">*</span><span class="n">v2</span>
+<a name="ln-103"></a>     <span class="k">if</span> <span class="p">(</span><span class="n">rsq</span> <span class="o">&lt;</span> <span class="mf">1.0</span><span class="p">)</span> <span class="k">exit</span>
+<a name="ln-104"></a><span class="k">    end do</span>
+<a name="ln-105"></a><span class="k">    </span><span class="n">rsq</span> <span class="o">=</span> <span class="nb">sqrt</span><span class="p">(</span><span class="o">-</span><span class="mf">2.0</span><span class="o">*</span><span class="nb">log</span><span class="p">(</span><span class="n">rsq</span><span class="p">)</span><span class="o">/</span><span class="n">rsq</span><span class="p">)</span>
+<a name="ln-106"></a>    <span class="n">dev</span> <span class="o">=</span> <span class="n">v1</span><span class="o">*</span><span class="n">rsq</span>
+<a name="ln-107"></a>    <span class="n">g</span> <span class="o">=</span> <span class="n">v2</span><span class="o">*</span><span class="n">rsq</span>
+<a name="ln-108"></a>    <span class="n">gaus_store</span> <span class="o">=</span> <span class="p">.</span><span class="n">true</span><span class="p">.</span>
+<a name="ln-109"></a>   <span class="k">end if</span>
+<a name="ln-110"></a><span class="k">  end subroutine</span>
+<a name="ln-111"></a>
+<a name="ln-112"></a>  <span class="c">!===============================</span>
+<a name="ln-113"></a>
+<a name="ln-114"></a>  <span class="k">subroutine </span><span class="n">sort</span><span class="p">(</span><span class="n">part</span><span class="p">,</span> <span class="n">np</span><span class="p">)</span>
+<a name="ln-115"></a>
+<a name="ln-116"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">part</span><span class="p">(:)</span>
+<a name="ln-117"></a>   <span class="kt">integer</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">np</span>
+<a name="ln-118"></a>   <span class="kt">integer</span> <span class="kd">::</span> <span class="n">ir</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">jstack</span>
+<a name="ln-119"></a>   <span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span> <span class="kd">::</span> <span class="n">m</span> <span class="o">=</span> <span class="mi">7</span><span class="p">,</span> <span class="n">nstack</span> <span class="o">=</span> <span class="mi">50</span>
+<a name="ln-120"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">a</span>
+<a name="ln-121"></a>   <span class="kt">integer</span> <span class="kd">::</span> <span class="n">istack</span><span class="p">(</span><span class="n">nstack</span><span class="p">)</span>
+<a name="ln-122"></a>
+<a name="ln-123"></a>   <span class="n">jstack</span> <span class="o">=</span> <span class="mi">0</span>
+<a name="ln-124"></a>   <span class="n">ir</span> <span class="o">=</span> <span class="n">np</span>
+<a name="ln-125"></a>   <span class="n">l</span> <span class="o">=</span> <span class="mi">1</span>
+<a name="ln-126"></a>   <span class="k">do</span>
+<a name="ln-127"></a><span class="k">    if</span> <span class="p">(</span><span class="n">ir</span> <span class="o">-</span> <span class="n">l</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-128"></a><span class="k">     do </span><span class="n">j</span> <span class="o">=</span> <span class="n">l</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ir</span>
+<a name="ln-129"></a>      <span class="n">a</span> <span class="o">=</span> <span class="n">part</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+<a name="ln-130"></a>      <span class="k">do </span><span class="n">i</span> <span class="o">=</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span>
+<a name="ln-131"></a>       <span class="k">if</span> <span class="p">(</span><span class="n">part</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">a</span><span class="p">)</span> <span class="k">exit</span>
+<a name="ln-132"></a><span class="k">       </span><span class="n">part</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">part</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+<a name="ln-133"></a>      <span class="k">end do</span>
+<a name="ln-134"></a><span class="k">      </span><span class="n">part</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">a</span>
+<a name="ln-135"></a>     <span class="k">end do</span>
+<a name="ln-136"></a><span class="k">     if</span> <span class="p">(</span><span class="n">jstack</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">return</span>
+<a name="ln-137"></a><span class="k">     </span><span class="n">ir</span> <span class="o">=</span> <span class="n">istack</span><span class="p">(</span><span class="n">jstack</span><span class="p">)</span>
+<a name="ln-138"></a>     <span class="n">l</span> <span class="o">=</span> <span class="n">istack</span><span class="p">(</span><span class="n">jstack</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+<a name="ln-139"></a>     <span class="n">jstack</span> <span class="o">=</span> <span class="n">jstack</span> <span class="o">-</span> <span class="mi">2</span>
+<a name="ln-140"></a>    <span class="k">else</span>
+<a name="ln-141"></a><span class="k">     </span><span class="n">k</span> <span class="o">=</span> <span class="p">(</span><span class="n">l</span> <span class="o">+</span> <span class="n">ir</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+<a name="ln-142"></a>     <span class="k">call </span><span class="n">swap</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">l</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<a name="ln-143"></a>
+<a name="ln-144"></a>     <span class="k">if</span> <span class="p">(</span><span class="n">part</span><span class="p">(</span><span class="n">l</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">part</span><span class="p">(</span><span class="n">ir</span><span class="p">))</span> <span class="k">call </span><span class="n">swap</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">ir</span><span class="p">)</span>
+<a name="ln-145"></a>     <span class="k">if</span> <span class="p">(</span><span class="n">part</span><span class="p">(</span><span class="n">l</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">part</span><span class="p">(</span><span class="n">ir</span><span class="p">))</span> <span class="k">call </span><span class="n">swap</span><span class="p">(</span><span class="n">l</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ir</span><span class="p">)</span>
+<a name="ln-146"></a>     <span class="k">if</span> <span class="p">(</span><span class="n">part</span><span class="p">(</span><span class="n">l</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">part</span><span class="p">(</span><span class="n">l</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span> <span class="k">call </span><span class="n">swap</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">l</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<a name="ln-147"></a>
+<a name="ln-148"></a>     <span class="n">i</span> <span class="o">=</span> <span class="n">l</span> <span class="o">+</span> <span class="mi">1</span>
+<a name="ln-149"></a>     <span class="n">j</span> <span class="o">=</span> <span class="n">ir</span>
+<a name="ln-150"></a>     <span class="n">a</span> <span class="o">=</span> <span class="n">part</span><span class="p">(</span><span class="n">l</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<a name="ln-151"></a>     <span class="k">do</span>
+<a name="ln-152"></a><span class="k">      do</span>
+<a name="ln-153"></a><span class="k">       </span><span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+<a name="ln-154"></a>       <span class="k">if</span> <span class="p">(</span><span class="n">part</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">a</span><span class="p">)</span> <span class="k">exit</span>
+<a name="ln-155"></a><span class="k">      end do</span>
+<a name="ln-156"></a><span class="k">      do</span>
+<a name="ln-157"></a><span class="k">       </span><span class="n">j</span> <span class="o">=</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span>
+<a name="ln-158"></a>       <span class="k">if</span> <span class="p">(</span><span class="n">part</span><span class="p">(</span><span class="n">j</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">a</span><span class="p">)</span> <span class="k">exit</span>
+<a name="ln-159"></a><span class="k">      end do</span>
+<a name="ln-160"></a><span class="k">      if</span> <span class="p">(</span><span class="n">j</span> <span class="o">&lt;</span> <span class="n">i</span><span class="p">)</span> <span class="k">exit</span>
+<a name="ln-161"></a><span class="k">      call </span><span class="n">swap</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+<a name="ln-162"></a>     <span class="k">end do</span>
+<a name="ln-163"></a><span class="k">     </span><span class="n">part</span><span class="p">(</span><span class="n">l</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">part</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+<a name="ln-164"></a>     <span class="n">part</span><span class="p">(</span><span class="n">j</span><span class="p">)</span> <span class="o">=</span> <span class="n">a</span>
+<a name="ln-165"></a>     <span class="n">jstack</span> <span class="o">=</span> <span class="n">jstack</span> <span class="o">+</span> <span class="mi">2</span>
+<a name="ln-166"></a>     <span class="k">if</span> <span class="p">(</span><span class="n">jstack</span> <span class="o">&gt;</span> <span class="n">nstack</span><span class="p">)</span> <span class="k">exit</span>
+<a name="ln-167"></a><span class="k">     if</span> <span class="p">(</span><span class="n">ir</span> <span class="o">-</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&gt;=</span> <span class="n">j</span> <span class="o">-</span> <span class="n">l</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-168"></a><span class="k">      </span><span class="n">istack</span><span class="p">(</span><span class="n">jstack</span><span class="p">)</span> <span class="o">=</span> <span class="n">ir</span>
+<a name="ln-169"></a>      <span class="n">istack</span><span class="p">(</span><span class="n">jstack</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">i</span>
+<a name="ln-170"></a>      <span class="n">ir</span> <span class="o">=</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span>
+<a name="ln-171"></a>     <span class="k">else</span>
+<a name="ln-172"></a><span class="k">      </span><span class="n">istack</span><span class="p">(</span><span class="n">jstack</span><span class="p">)</span> <span class="o">=</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span>
+<a name="ln-173"></a>      <span class="n">istack</span><span class="p">(</span><span class="n">jstack</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">l</span>
+<a name="ln-174"></a>      <span class="n">l</span> <span class="o">=</span> <span class="n">i</span>
+<a name="ln-175"></a>     <span class="k">end if</span>
+<a name="ln-176"></a><span class="k">    end if</span>
+<a name="ln-177"></a><span class="k">   end do</span>
+<a name="ln-178"></a>
+<a name="ln-179"></a><span class="k">  contains</span>
+<a name="ln-180"></a>
+<a name="ln-181"></a><span class="k">   subroutine </span><span class="n">swap</span><span class="p">(</span><span class="n">i1</span><span class="p">,</span> <span class="n">i2</span><span class="p">)</span>
+<a name="ln-182"></a>    <span class="kt">integer</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">i1</span><span class="p">,</span> <span class="n">i2</span>
+<a name="ln-183"></a>    <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">temp</span>
+<a name="ln-184"></a>
+<a name="ln-185"></a>    <span class="n">temp</span> <span class="o">=</span> <span class="n">part</span><span class="p">(</span><span class="n">i1</span><span class="p">)</span>
+<a name="ln-186"></a>    <span class="n">part</span><span class="p">(</span><span class="n">i1</span><span class="p">)</span> <span class="o">=</span> <span class="n">part</span><span class="p">(</span><span class="n">i2</span><span class="p">)</span>
+<a name="ln-187"></a>    <span class="n">part</span><span class="p">(</span><span class="n">i2</span><span class="p">)</span> <span class="o">=</span> <span class="n">temp</span>
+<a name="ln-188"></a>
+<a name="ln-189"></a>   <span class="k">end subroutine</span>
+<a name="ln-190"></a>
+<a name="ln-191"></a><span class="k">  end subroutine</span>
+<a name="ln-192"></a>
+<a name="ln-193"></a>  <span class="c">!=========================</span>
+<a name="ln-194"></a>
+<a name="ln-195"></a>  <span class="k">subroutine </span><span class="n">vsort</span><span class="p">(</span><span class="n">part</span><span class="p">,</span> <span class="n">np</span><span class="p">,</span> <span class="n">ndv</span><span class="p">,</span> <span class="n">dir</span><span class="p">)</span>
+<a name="ln-196"></a>
+<a name="ln-197"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">part</span><span class="p">(:,</span> <span class="p">:)</span>
+<a name="ln-198"></a>   <span class="kt">integer</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">np</span><span class="p">,</span> <span class="n">ndv</span><span class="p">,</span> <span class="n">dir</span>
+<a name="ln-199"></a>   <span class="kt">integer</span> <span class="kd">::</span> <span class="n">ir</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">jstack</span>
+<a name="ln-200"></a>   <span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span> <span class="kd">::</span> <span class="n">m</span> <span class="o">=</span> <span class="mi">7</span><span class="p">,</span> <span class="n">nstack</span> <span class="o">=</span> <span class="mi">50</span>
+<a name="ln-201"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">a</span><span class="p">(</span><span class="n">ndv</span><span class="p">),</span> <span class="n">temp</span><span class="p">(</span><span class="n">ndv</span><span class="p">)</span>
+<a name="ln-202"></a>   <span class="kt">integer</span> <span class="kd">::</span> <span class="n">istack</span><span class="p">(</span><span class="n">nstack</span><span class="p">)</span>
+<a name="ln-203"></a>
+<a name="ln-204"></a>   <span class="n">jstack</span> <span class="o">=</span> <span class="mi">0</span>
+<a name="ln-205"></a>   <span class="n">ir</span> <span class="o">=</span> <span class="n">np</span>
+<a name="ln-206"></a>   <span class="n">l</span> <span class="o">=</span> <span class="mi">1</span>
+<a name="ln-207"></a>   <span class="k">do</span>
+<a name="ln-208"></a><span class="k">    if</span> <span class="p">(</span><span class="n">ir</span> <span class="o">-</span> <span class="n">l</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-209"></a><span class="k">     do </span><span class="n">j</span> <span class="o">=</span> <span class="n">l</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ir</span>
+<a name="ln-210"></a>      <span class="n">a</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">ndv</span><span class="p">)</span> <span class="o">=</span> <span class="n">part</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">ndv</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+<a name="ln-211"></a>      <span class="k">do </span><span class="n">i</span> <span class="o">=</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span>
+<a name="ln-212"></a>       <span class="k">if</span> <span class="p">(</span><span class="n">part</span><span class="p">(</span><span class="n">dir</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">a</span><span class="p">(</span><span class="n">dir</span><span class="p">))</span> <span class="k">exit</span>
+<a name="ln-213"></a><span class="k">       </span><span class="n">part</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">ndv</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">part</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">ndv</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+<a name="ln-214"></a>      <span class="k">end do</span>
+<a name="ln-215"></a><span class="k">      </span><span class="n">part</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">ndv</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">a</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">ndv</span><span class="p">)</span>
+<a name="ln-216"></a>     <span class="k">end do</span>
+<a name="ln-217"></a><span class="k">     if</span> <span class="p">(</span><span class="n">jstack</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">return</span>
+<a name="ln-218"></a><span class="k">     </span><span class="n">ir</span> <span class="o">=</span> <span class="n">istack</span><span class="p">(</span><span class="n">jstack</span><span class="p">)</span>
+<a name="ln-219"></a>     <span class="n">l</span> <span class="o">=</span> <span class="n">istack</span><span class="p">(</span><span class="n">jstack</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+<a name="ln-220"></a>     <span class="n">jstack</span> <span class="o">=</span> <span class="n">jstack</span> <span class="o">-</span> <span class="mi">2</span>
+<a name="ln-221"></a>    <span class="k">else</span>
+<a name="ln-222"></a><span class="k">     </span><span class="n">k</span> <span class="o">=</span> <span class="p">(</span><span class="n">l</span> <span class="o">+</span> <span class="n">ir</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+<a name="ln-223"></a>     <span class="k">call </span><span class="n">swap</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">l</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ndv</span><span class="p">)</span>
+<a name="ln-224"></a>
+<a name="ln-225"></a>     <span class="k">if</span> <span class="p">(</span><span class="n">part</span><span class="p">(</span><span class="n">dir</span><span class="p">,</span> <span class="n">l</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">part</span><span class="p">(</span><span class="n">dir</span><span class="p">,</span> <span class="n">ir</span><span class="p">))</span> <span class="k">call </span><span class="n">swap</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">ir</span><span class="p">,</span> <span class="n">ndv</span><span class="p">)</span>
+<a name="ln-226"></a>     <span class="k">if</span> <span class="p">(</span><span class="n">part</span><span class="p">(</span><span class="n">dir</span><span class="p">,</span> <span class="n">l</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">part</span><span class="p">(</span><span class="n">dir</span><span class="p">,</span> <span class="n">ir</span><span class="p">))</span> <span class="k">call </span><span class="n">swap</span><span class="p">(</span><span class="n">l</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ir</span><span class="p">,</span> <span class="n">ndv</span><span class="p">)</span>
+<a name="ln-227"></a>     <span class="k">if</span> <span class="p">(</span><span class="n">part</span><span class="p">(</span><span class="n">dir</span><span class="p">,</span> <span class="n">l</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">part</span><span class="p">(</span><span class="n">dir</span><span class="p">,</span> <span class="n">l</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span> <span class="k">call </span><span class="n">swap</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">l</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ndv</span><span class="p">)</span>
+<a name="ln-228"></a>
+<a name="ln-229"></a>     <span class="n">i</span> <span class="o">=</span> <span class="n">l</span> <span class="o">+</span> <span class="mi">1</span>
+<a name="ln-230"></a>     <span class="n">j</span> <span class="o">=</span> <span class="n">ir</span>
+<a name="ln-231"></a>     <span class="n">a</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">ndv</span><span class="p">)</span> <span class="o">=</span> <span class="n">part</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">ndv</span><span class="p">,</span> <span class="n">l</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<a name="ln-232"></a>     <span class="k">do</span>
+<a name="ln-233"></a><span class="k">      do</span>
+<a name="ln-234"></a><span class="k">       </span><span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+<a name="ln-235"></a>       <span class="k">if</span> <span class="p">(</span><span class="n">part</span><span class="p">(</span><span class="n">dir</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">a</span><span class="p">(</span><span class="n">dir</span><span class="p">))</span> <span class="k">exit</span>
+<a name="ln-236"></a><span class="k">      end do</span>
+<a name="ln-237"></a><span class="k">      do</span>
+<a name="ln-238"></a><span class="k">       </span><span class="n">j</span> <span class="o">=</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span>
+<a name="ln-239"></a>       <span class="k">if</span> <span class="p">(</span><span class="n">part</span><span class="p">(</span><span class="n">dir</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">a</span><span class="p">(</span><span class="n">dir</span><span class="p">))</span> <span class="k">exit</span>
+<a name="ln-240"></a><span class="k">      end do</span>
+<a name="ln-241"></a><span class="k">      if</span> <span class="p">(</span><span class="n">j</span> <span class="o">&lt;</span> <span class="n">i</span><span class="p">)</span> <span class="k">exit</span>
+<a name="ln-242"></a><span class="k">      call </span><span class="n">swap</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">ndv</span><span class="p">)</span>
+<a name="ln-243"></a>     <span class="k">end do</span>
+<a name="ln-244"></a><span class="k">     </span><span class="n">part</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">ndv</span><span class="p">,</span> <span class="n">l</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">part</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">ndv</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+<a name="ln-245"></a>     <span class="n">part</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">ndv</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span> <span class="o">=</span> <span class="n">a</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">ndv</span><span class="p">)</span>
+<a name="ln-246"></a>     <span class="n">jstack</span> <span class="o">=</span> <span class="n">jstack</span> <span class="o">+</span> <span class="mi">2</span>
+<a name="ln-247"></a>     <span class="k">if</span> <span class="p">(</span><span class="n">jstack</span> <span class="o">&gt;</span> <span class="n">nstack</span><span class="p">)</span> <span class="k">exit</span>
+<a name="ln-248"></a><span class="k">     if</span> <span class="p">(</span><span class="n">ir</span> <span class="o">-</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&gt;=</span> <span class="n">j</span> <span class="o">-</span> <span class="n">l</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-249"></a><span class="k">      </span><span class="n">istack</span><span class="p">(</span><span class="n">jstack</span><span class="p">)</span> <span class="o">=</span> <span class="n">ir</span>
+<a name="ln-250"></a>      <span class="n">istack</span><span class="p">(</span><span class="n">jstack</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">i</span>
+<a name="ln-251"></a>      <span class="n">ir</span> <span class="o">=</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span>
+<a name="ln-252"></a>     <span class="k">else</span>
+<a name="ln-253"></a><span class="k">      </span><span class="n">istack</span><span class="p">(</span><span class="n">jstack</span><span class="p">)</span> <span class="o">=</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span>
+<a name="ln-254"></a>      <span class="n">istack</span><span class="p">(</span><span class="n">jstack</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">l</span>
+<a name="ln-255"></a>      <span class="n">l</span> <span class="o">=</span> <span class="n">i</span>
+<a name="ln-256"></a>     <span class="k">end if</span>
+<a name="ln-257"></a><span class="k">    end if</span>
+<a name="ln-258"></a><span class="k">   end do</span>
+<a name="ln-259"></a>
+<a name="ln-260"></a><span class="k">  contains</span>
+<a name="ln-261"></a>
+<a name="ln-262"></a><span class="k">   subroutine </span><span class="n">swap</span><span class="p">(</span><span class="n">i1</span><span class="p">,</span> <span class="n">i2</span><span class="p">,</span> <span class="n">nd</span><span class="p">)</span>
+<a name="ln-263"></a>    <span class="kt">integer</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">i1</span><span class="p">,</span> <span class="n">i2</span><span class="p">,</span> <span class="n">nd</span>
+<a name="ln-264"></a>
+<a name="ln-265"></a>    <span class="n">temp</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">nd</span><span class="p">)</span> <span class="o">=</span> <span class="n">part</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">nd</span><span class="p">,</span> <span class="n">i1</span><span class="p">)</span>
+<a name="ln-266"></a>    <span class="n">part</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">nd</span><span class="p">,</span> <span class="n">i1</span><span class="p">)</span> <span class="o">=</span> <span class="n">part</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">nd</span><span class="p">,</span> <span class="n">i2</span><span class="p">)</span>
+<a name="ln-267"></a>    <span class="n">part</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">nd</span><span class="p">,</span> <span class="n">i2</span><span class="p">)</span> <span class="o">=</span> <span class="n">temp</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">nd</span><span class="p">)</span>
+<a name="ln-268"></a>
+<a name="ln-269"></a>   <span class="k">end subroutine</span>
+<a name="ln-270"></a>
+<a name="ln-271"></a><span class="k">  end subroutine</span>
+<a name="ln-272"></a>
+<a name="ln-273"></a>  <span class="c">!===========================</span>
+<a name="ln-274"></a>  <span class="k">subroutine </span><span class="n">bunch_gen</span><span class="p">(</span><span class="n">ndm</span><span class="p">,</span> <span class="n">n1</span><span class="p">,</span> <span class="n">n2</span><span class="p">,</span> <span class="n">sx</span><span class="p">,</span> <span class="n">sy</span><span class="p">,</span> <span class="n">sz</span><span class="p">,</span> <span class="n">gm</span><span class="p">,</span> <span class="n">ey</span><span class="p">,</span> <span class="n">ez</span><span class="p">,</span> <span class="n">cut</span><span class="p">,</span> <span class="n">dg</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-275"></a>                       <span class="n">bunch</span><span class="p">)</span>
+<a name="ln-276"></a>   <span class="kt">integer</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">ndm</span><span class="p">,</span> <span class="n">n1</span><span class="p">,</span> <span class="n">n2</span>
+<a name="ln-277"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">sx</span><span class="p">,</span> <span class="n">sy</span><span class="p">,</span> <span class="n">sz</span><span class="p">,</span> <span class="n">gm</span><span class="p">,</span> <span class="n">ey</span><span class="p">,</span> <span class="n">ez</span><span class="p">,</span> <span class="n">cut</span><span class="p">,</span> <span class="n">dg</span>
+<a name="ln-278"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">bunch</span><span class="p">(:,</span> <span class="p">:)</span>
+<a name="ln-279"></a>   <span class="kt">integer</span> <span class="kd">::</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">np</span>
+<a name="ln-280"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">sigs</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
+<a name="ln-281"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">xm</span><span class="p">,</span> <span class="n">ym</span><span class="p">,</span> <span class="n">zm</span><span class="p">,</span> <span class="n">pxm</span><span class="p">,</span> <span class="n">pym</span><span class="p">,</span> <span class="n">pzm</span>
+<a name="ln-282"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">rnd</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">np_norm</span>
+<a name="ln-283"></a>
+<a name="ln-284"></a>   <span class="c">!============= ey,ez are emittances (in mm-microns)</span>
+<a name="ln-285"></a>   <span class="c">! FIX emittances are ALWAYS a dimension times an angle...</span>
+<a name="ln-286"></a>   <span class="c">! so this (in mm-micron) doesn&#39;t make any sense</span>
+<a name="ln-287"></a>   <span class="c">! dg=d(gamma)/gamma (%)</span>
+<a name="ln-288"></a>   <span class="c">! dp_y=ey/s_y dp_z=ez/s_z dp_x=d(gamma)</span>
+<a name="ln-289"></a>   <span class="c">!=============================================</span>
+<a name="ln-290"></a>
+<a name="ln-291"></a>   <span class="c">!Distribute (x,y,z,px,py,pz) centered on 0; px=&gt; px+gamma</span>
+<a name="ln-292"></a>
+<a name="ln-293"></a>   <span class="k">select case</span> <span class="p">(</span><span class="n">ndm</span><span class="p">)</span>
+<a name="ln-294"></a>   <span class="k">case</span> <span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-295"></a>    <span class="n">sigs</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">sx</span>
+<a name="ln-296"></a>    <span class="n">sigs</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="n">sy</span>
+<a name="ln-297"></a>    <span class="n">sigs</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">=</span> <span class="nb">sqrt</span><span class="p">(</span><span class="mf">3.0</span><span class="p">)</span><span class="o">*</span><span class="mf">0.01</span><span class="o">*</span><span class="n">dg</span><span class="o">*</span><span class="n">gm</span> <span class="c">!dpz</span>
+<a name="ln-298"></a>    <span class="n">sigs</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="o">=</span> <span class="n">ey</span><span class="o">/</span><span class="n">sy</span>
+<a name="ln-299"></a>    <span class="k">do </span><span class="n">i</span> <span class="o">=</span> <span class="n">n1</span><span class="p">,</span> <span class="n">n2</span>
+<a name="ln-300"></a>     <span class="k">do</span>
+<a name="ln-301"></a><span class="k">      call </span><span class="nb">random_number</span><span class="p">(</span><span class="n">v1</span><span class="p">)</span>
+<a name="ln-302"></a>      <span class="k">call </span><span class="nb">random_number</span><span class="p">(</span><span class="n">v2</span><span class="p">)</span>
+<a name="ln-303"></a>      <span class="n">v1</span> <span class="o">=</span> <span class="mf">2.0</span><span class="o">*</span><span class="n">v1</span> <span class="o">-</span> <span class="mf">1.0</span>
+<a name="ln-304"></a>      <span class="n">v2</span> <span class="o">=</span> <span class="mf">2.0</span><span class="o">*</span><span class="n">v2</span> <span class="o">-</span> <span class="mf">1.0</span>
+<a name="ln-305"></a>      <span class="n">rnd</span> <span class="o">=</span> <span class="n">v1</span><span class="o">*</span><span class="n">v1</span> <span class="o">+</span> <span class="n">v2</span><span class="o">*</span><span class="n">v2</span>
+<a name="ln-306"></a>      <span class="k">if</span> <span class="p">(</span><span class="n">rnd</span> <span class="o">&lt;</span> <span class="mf">1.0</span><span class="p">)</span> <span class="k">exit</span>
+<a name="ln-307"></a><span class="k">     end do</span>
+<a name="ln-308"></a><span class="k">     </span><span class="n">rnd</span> <span class="o">=</span> <span class="nb">sqrt</span><span class="p">(</span><span class="o">-</span><span class="mf">2.0</span><span class="o">*</span><span class="nb">log</span><span class="p">(</span><span class="n">rnd</span><span class="p">)</span><span class="o">/</span><span class="n">rnd</span><span class="p">)</span>
+<a name="ln-309"></a>     <span class="n">bunch</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="n">v1</span><span class="o">*</span><span class="n">rnd</span>
+<a name="ln-310"></a>     <span class="n">bunch</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="o">=</span> <span class="n">v2</span><span class="o">*</span><span class="n">rnd</span>
+<a name="ln-311"></a>     <span class="k">call </span><span class="n">gasdev</span><span class="p">(</span><span class="n">rnd</span><span class="p">)</span>
+<a name="ln-312"></a>     <span class="n">bunch</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">rnd</span>
+<a name="ln-313"></a>     <span class="k">do</span>
+<a name="ln-314"></a><span class="k">      call </span><span class="nb">random_number</span><span class="p">(</span><span class="n">rnd</span><span class="p">)</span>
+<a name="ln-315"></a>      <span class="n">rnd</span> <span class="o">=</span> <span class="mf">2.</span><span class="o">*</span><span class="n">rnd</span> <span class="o">-</span> <span class="mf">1.</span>
+<a name="ln-316"></a>      <span class="n">a</span> <span class="o">=</span> <span class="n">cut</span><span class="o">*</span><span class="n">rnd</span>
+<a name="ln-317"></a>      <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="o">*</span><span class="n">a</span> <span class="o">&lt;</span> <span class="mf">1.</span><span class="p">)</span> <span class="k">exit</span>
+<a name="ln-318"></a><span class="k">     end do</span>
+<a name="ln-319"></a><span class="k">     </span><span class="n">bunch</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">=</span> <span class="n">a</span>
+<a name="ln-320"></a>    <span class="k">end do</span>
+<a name="ln-321"></a><span class="k">    do </span><span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span>
+<a name="ln-322"></a>     <span class="n">bunch</span><span class="p">(</span><span class="n">n1</span><span class="p">:</span><span class="n">n2</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span> <span class="o">=</span> <span class="n">sigs</span><span class="p">(</span><span class="n">j</span><span class="p">)</span><span class="o">*</span><span class="n">bunch</span><span class="p">(</span><span class="n">n1</span><span class="p">:</span><span class="n">n2</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+<a name="ln-323"></a>    <span class="k">end do</span>
+<a name="ln-324"></a><span class="k">    </span><span class="n">bunch</span><span class="p">(</span><span class="n">n1</span><span class="p">:</span><span class="n">n2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">=</span> <span class="n">bunch</span><span class="p">(</span><span class="n">n1</span><span class="p">:</span><span class="n">n2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">+</span> <span class="n">gm</span>
+<a name="ln-325"></a>    <span class="n">xm</span> <span class="o">=</span> <span class="mf">0.0</span>
+<a name="ln-326"></a>    <span class="n">ym</span> <span class="o">=</span> <span class="mf">0.0</span>
+<a name="ln-327"></a>    <span class="n">pxm</span> <span class="o">=</span> <span class="mf">0.0</span>
+<a name="ln-328"></a>    <span class="n">pym</span> <span class="o">=</span> <span class="mf">0.0</span>
+<a name="ln-329"></a>    <span class="c">! Reset centering</span>
+<a name="ln-330"></a>    <span class="n">xm</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">bunch</span><span class="p">(</span><span class="n">n1</span><span class="p">:</span><span class="n">n2</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<a name="ln-331"></a>    <span class="n">ym</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">bunch</span><span class="p">(</span><span class="n">n1</span><span class="p">:</span><span class="n">n2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<a name="ln-332"></a>    <span class="n">pxm</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">bunch</span><span class="p">(</span><span class="n">n1</span><span class="p">:</span><span class="n">n2</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<a name="ln-333"></a>    <span class="n">pym</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">bunch</span><span class="p">(</span><span class="n">n1</span><span class="p">:</span><span class="n">n2</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<a name="ln-334"></a>
+<a name="ln-335"></a>    <span class="n">np</span> <span class="o">=</span> <span class="n">n2</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">n1</span>
+<a name="ln-336"></a>    <span class="n">xm</span> <span class="o">=</span> <span class="n">xm</span><span class="o">/</span><span class="kt">real</span><span class="p">(</span><span class="n">np</span><span class="p">,</span> <span class="n">dp</span><span class="p">)</span>
+<a name="ln-337"></a>    <span class="n">ym</span> <span class="o">=</span> <span class="n">ym</span><span class="o">/</span><span class="kt">real</span><span class="p">(</span><span class="n">np</span><span class="p">,</span> <span class="n">dp</span><span class="p">)</span>
+<a name="ln-338"></a>    <span class="n">pxm</span> <span class="o">=</span> <span class="n">pxm</span><span class="o">/</span><span class="kt">real</span><span class="p">(</span><span class="n">np</span><span class="p">,</span> <span class="n">dp</span><span class="p">)</span>
+<a name="ln-339"></a>    <span class="n">pym</span> <span class="o">=</span> <span class="n">pym</span><span class="o">/</span><span class="kt">real</span><span class="p">(</span><span class="n">np</span><span class="p">,</span> <span class="n">dp</span><span class="p">)</span>
+<a name="ln-340"></a>    <span class="k">do </span><span class="n">i</span> <span class="o">=</span> <span class="n">n1</span><span class="p">,</span> <span class="n">n2</span>
+<a name="ln-341"></a>     <span class="n">bunch</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">bunch</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">xm</span>
+<a name="ln-342"></a>     <span class="n">bunch</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="n">bunch</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">ym</span>
+<a name="ln-343"></a>     <span class="n">bunch</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">=</span> <span class="n">bunch</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">pxm</span> <span class="o">-</span> <span class="n">gm</span><span class="p">)</span>
+<a name="ln-344"></a>     <span class="n">bunch</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="o">=</span> <span class="n">bunch</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="o">-</span> <span class="n">pym</span>
+<a name="ln-345"></a>    <span class="k">end do</span>
+<a name="ln-346"></a><span class="k">   case</span> <span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<a name="ln-347"></a>    <span class="n">sigs</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">sx</span>
+<a name="ln-348"></a>    <span class="n">sigs</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="n">sy</span>
+<a name="ln-349"></a>    <span class="n">sigs</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">=</span> <span class="n">sz</span>
+<a name="ln-350"></a>    <span class="n">sigs</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="o">=</span> <span class="nb">sqrt</span><span class="p">(</span><span class="mf">3.0</span><span class="p">)</span><span class="o">*</span><span class="mf">0.01</span><span class="o">*</span><span class="n">dg</span><span class="o">*</span><span class="n">gm</span> <span class="c">!dpz</span>
+<a name="ln-351"></a>    <span class="n">sigs</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="o">=</span> <span class="n">ey</span><span class="o">/</span><span class="n">sy</span>
+<a name="ln-352"></a>    <span class="n">sigs</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span> <span class="o">=</span> <span class="n">ez</span><span class="o">/</span><span class="n">sz</span>
+<a name="ln-353"></a>    <span class="k">do </span><span class="n">j</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">3</span>
+<a name="ln-354"></a>     <span class="k">do </span><span class="n">i</span> <span class="o">=</span> <span class="n">n1</span><span class="p">,</span> <span class="n">n2</span>
+<a name="ln-355"></a>      <span class="k">do</span>
+<a name="ln-356"></a><span class="k">       call </span><span class="nb">random_number</span><span class="p">(</span><span class="n">v1</span><span class="p">)</span>
+<a name="ln-357"></a>       <span class="k">call </span><span class="nb">random_number</span><span class="p">(</span><span class="n">v2</span><span class="p">)</span>
+<a name="ln-358"></a>       <span class="n">v1</span> <span class="o">=</span> <span class="mf">2.0</span><span class="o">*</span><span class="n">v1</span> <span class="o">-</span> <span class="mf">1.0</span>
+<a name="ln-359"></a>       <span class="n">v2</span> <span class="o">=</span> <span class="mf">2.0</span><span class="o">*</span><span class="n">v2</span> <span class="o">-</span> <span class="mf">1.0</span>
+<a name="ln-360"></a>       <span class="n">rnd</span> <span class="o">=</span> <span class="n">v1</span><span class="o">*</span><span class="n">v1</span> <span class="o">+</span> <span class="n">v2</span><span class="o">*</span><span class="n">v2</span>
+<a name="ln-361"></a>       <span class="k">if</span> <span class="p">(</span><span class="n">rnd</span> <span class="o">&lt;</span> <span class="mf">1.0</span><span class="p">)</span> <span class="k">exit</span>
+<a name="ln-362"></a><span class="k">      end do</span>
+<a name="ln-363"></a><span class="k">      </span><span class="n">rnd</span> <span class="o">=</span> <span class="nb">sqrt</span><span class="p">(</span><span class="o">-</span><span class="mf">2.0</span><span class="o">*</span><span class="nb">log</span><span class="p">(</span><span class="n">rnd</span><span class="p">)</span><span class="o">/</span><span class="n">rnd</span><span class="p">)</span>
+<a name="ln-364"></a>      <span class="n">bunch</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span> <span class="o">=</span> <span class="n">v1</span><span class="o">*</span><span class="n">rnd</span>
+<a name="ln-365"></a>      <span class="n">bunch</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">v2</span><span class="o">*</span><span class="n">rnd</span>
+<a name="ln-366"></a>     <span class="k">end do</span>
+<a name="ln-367"></a><span class="k">    </span><span class="n">enddo</span>
+<a name="ln-368"></a>    <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span>
+<a name="ln-369"></a>    <span class="k">do </span><span class="n">i</span> <span class="o">=</span> <span class="n">n1</span><span class="p">,</span> <span class="n">n2</span>
+<a name="ln-370"></a>     <span class="k">call </span><span class="n">gasdev</span><span class="p">(</span><span class="n">rnd</span><span class="p">)</span>
+<a name="ln-371"></a>     <span class="n">bunch</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span> <span class="o">=</span> <span class="n">rnd</span>
+<a name="ln-372"></a>     <span class="k">do</span>
+<a name="ln-373"></a><span class="k">      call </span><span class="nb">random_number</span><span class="p">(</span><span class="n">rnd</span><span class="p">)</span>
+<a name="ln-374"></a>      <span class="n">rnd</span> <span class="o">=</span> <span class="mf">2.</span><span class="o">*</span><span class="n">rnd</span> <span class="o">-</span> <span class="mf">1.</span>
+<a name="ln-375"></a>      <span class="n">a</span> <span class="o">=</span> <span class="n">cut</span><span class="o">*</span><span class="n">rnd</span>
+<a name="ln-376"></a>      <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="o">*</span><span class="n">a</span> <span class="o">&lt;</span> <span class="mf">1.</span><span class="p">)</span> <span class="k">exit</span>
+<a name="ln-377"></a><span class="k">     end do</span>
+<a name="ln-378"></a><span class="k">     </span><span class="n">bunch</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">3</span><span class="p">)</span> <span class="o">=</span> <span class="n">a</span>
+<a name="ln-379"></a>    <span class="k">end do</span>
+<a name="ln-380"></a><span class="c">!======================</span>
+<a name="ln-381"></a>    <span class="k">do </span><span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">6</span>
+<a name="ln-382"></a>     <span class="k">do </span><span class="n">i</span> <span class="o">=</span> <span class="n">n1</span><span class="p">,</span> <span class="n">n2</span>
+<a name="ln-383"></a>      <span class="n">bunch</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span> <span class="o">=</span> <span class="n">sigs</span><span class="p">(</span><span class="n">j</span><span class="p">)</span><span class="o">*</span><span class="n">bunch</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+<a name="ln-384"></a>     <span class="k">end do</span>
+<a name="ln-385"></a><span class="k">    end do</span>
+<a name="ln-386"></a><span class="k">    </span><span class="n">bunch</span><span class="p">(</span><span class="n">n1</span><span class="p">:</span><span class="n">n2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="o">=</span> <span class="n">bunch</span><span class="p">(</span><span class="n">n1</span><span class="p">:</span><span class="n">n2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="n">gm</span>
+<a name="ln-387"></a>
+<a name="ln-388"></a>    <span class="n">xm</span> <span class="o">=</span> <span class="mf">0.0</span>
+<a name="ln-389"></a>    <span class="n">ym</span> <span class="o">=</span> <span class="mf">0.0</span>
+<a name="ln-390"></a>    <span class="n">zm</span> <span class="o">=</span> <span class="mf">0.0</span>
+<a name="ln-391"></a>    <span class="n">pxm</span> <span class="o">=</span> <span class="mf">0.0</span>
+<a name="ln-392"></a>    <span class="n">pym</span> <span class="o">=</span> <span class="mf">0.0</span>
+<a name="ln-393"></a>    <span class="n">pzm</span> <span class="o">=</span> <span class="mf">0.0</span>
+<a name="ln-394"></a>
+<a name="ln-395"></a>    <span class="c">! Reset centering</span>
+<a name="ln-396"></a>    <span class="n">np</span> <span class="o">=</span> <span class="n">n2</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">n1</span>
+<a name="ln-397"></a>    <span class="n">np_norm</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="kt">real</span><span class="p">(</span><span class="n">np</span><span class="p">,</span> <span class="n">dp</span><span class="p">)</span>
+<a name="ln-398"></a>    <span class="n">xm</span> <span class="o">=</span> <span class="n">np_norm</span><span class="o">*</span><span class="nb">sum</span><span class="p">(</span><span class="n">bunch</span><span class="p">(</span><span class="n">n1</span><span class="p">:</span><span class="n">n2</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<a name="ln-399"></a>    <span class="n">ym</span> <span class="o">=</span> <span class="n">np_norm</span><span class="o">*</span><span class="nb">sum</span><span class="p">(</span><span class="n">bunch</span><span class="p">(</span><span class="n">n1</span><span class="p">:</span><span class="n">n2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<a name="ln-400"></a>    <span class="n">zm</span> <span class="o">=</span> <span class="n">np_norm</span><span class="o">*</span><span class="nb">sum</span><span class="p">(</span><span class="n">bunch</span><span class="p">(</span><span class="n">n1</span><span class="p">:</span><span class="n">n2</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<a name="ln-401"></a>    <span class="n">pxm</span> <span class="o">=</span> <span class="n">np_norm</span><span class="o">*</span><span class="nb">sum</span><span class="p">(</span><span class="n">bunch</span><span class="p">(</span><span class="n">n1</span><span class="p">:</span><span class="n">n2</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<a name="ln-402"></a>    <span class="n">pym</span> <span class="o">=</span> <span class="n">np_norm</span><span class="o">*</span><span class="nb">sum</span><span class="p">(</span><span class="n">bunch</span><span class="p">(</span><span class="n">n1</span><span class="p">:</span><span class="n">n2</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<a name="ln-403"></a>    <span class="n">pzm</span> <span class="o">=</span> <span class="n">np_norm</span><span class="o">*</span><span class="nb">sum</span><span class="p">(</span><span class="n">bunch</span><span class="p">(</span><span class="n">n1</span><span class="p">:</span><span class="n">n2</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<a name="ln-404"></a>
+<a name="ln-405"></a>    <span class="k">do </span><span class="n">i</span> <span class="o">=</span> <span class="n">n1</span><span class="p">,</span> <span class="n">n2</span>
+<a name="ln-406"></a>     <span class="n">bunch</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">bunch</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">xm</span>
+<a name="ln-407"></a>     <span class="n">bunch</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="n">bunch</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">ym</span>
+<a name="ln-408"></a>     <span class="n">bunch</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">=</span> <span class="n">bunch</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">-</span> <span class="n">zm</span>
+<a name="ln-409"></a>     <span class="n">bunch</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="o">=</span> <span class="n">bunch</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">pxm</span> <span class="o">-</span> <span class="n">gm</span><span class="p">)</span>
+<a name="ln-410"></a>     <span class="n">bunch</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span> <span class="o">=</span> <span class="n">bunch</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span> <span class="o">-</span> <span class="n">pym</span>
+<a name="ln-411"></a>     <span class="n">bunch</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span> <span class="o">=</span> <span class="n">bunch</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span> <span class="o">-</span> <span class="n">pzm</span>
+<a name="ln-412"></a>    <span class="k">end do</span>
+<a name="ln-413"></a><span class="k">   end select</span>
+<a name="ln-414"></a><span class="k">  end subroutine</span>
+<a name="ln-415"></a>
+<a name="ln-416"></a><span class="k"> end module</span>
+</pre></div>
+
+    </section>
+    </div>
+  </div>
+
+  
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2020 <a rel="license" href="http://www.gnu.org/licenses/old-licenses/fdl-1.2.en.html">GNU Free Documentation License</a>
+                                          </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+             on 2020-07-30 
+          </p>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> ALaDyn was developed by The ALaDyn Collaboration</p></div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+      });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+    
+  </body>
+</html>

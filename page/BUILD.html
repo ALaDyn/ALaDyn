@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+   <meta name="description" content="A High-Accuracy PIC Code for the Maxwell-Vlasov Equations">
+    
+    <meta name="author" content="The ALaDyn Collaboration" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>How to build &ndash; ALaDyn</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">ALaDyn <small>3.0.1</small></a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+        
+            <li><a href='../page/index.html'>Guide</a></li>
+      
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+     aria-expanded="false">Contents <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          
+              
+            <li><a href="../lists/files.html">Source Files</a></li>
+        
+        
+        
+            <li><a href="../lists/modules.html">Modules</a></li>
+        
+            
+                                
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+        
+               
+            <li><a href="../lists/types.html">Derived Types</a></li>
+        
+        
+            <li><a href="../program/aladyn.html">Program</a></li>
+      
+            </ul>
+            </li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+
+                             
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../program/aladyn.html">Program</a></li>
+
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  <div class="row">
+    <h1>How to build</h1>
+    <div class="row">
+    <div class="col-lg-12">
+    <div class="well well-sm" style="min-height: 40px;">
+      <ul class="list-inline" style="margin-bottom:0px; display:inline">
+         
+         
+<!--
+        
+-->
+      </ul>
+        <ol class="breadcrumb in-well">
+      
+         <li><a href='../page/index.html'>Guide</a></li>
+      
+         <li class="active">How to build</li>
+      </ol>
+    </div>
+    </div>
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="col-md-9 col-md-push-3" id='text'>
+      <h1>How to build the code</h1>
+<p>1) Follow your system prerequisites (below)
+2) Clone ALaDyn from this repository, or download a stable release </p>
+<div class="codehilite"><pre><span></span><code>git clone https://github.com/ALaDyn/ALaDyn.git
+<span class="nb">cd</span> ALaDyn
+</code></pre></div>
+
+
+<p>3) Use the best script depending to your configuration. There are many examples inside <code>scripts/build</code>. For example:</p>
+<div class="codehilite"><pre><span></span><code>./scripts/build/cmake.generic
+</code></pre></div>
+
+
+<p>Note that some scripts only work in a specific environment or shell.<br>
+We support running <code>ALaDyn</code> only on x86-64 CPUs, with 64 bit operating systems.</p>
+<h2>Prerequisites</h2>
+<h3>Ubuntu</h3>
+<p>1) Open a Bash terminal and type the following commands</p>
+<div class="codehilite"><pre><span></span><code>sudo apt-get update
+sudo apt-get dist-upgrade
+sudo apt-get install -y g++ gfortran cmake make git ninja-build libboost-all-dev libopenmpi-dev pkgconf libfftw3-dev pkg-config
+</code></pre></div>
+
+
+<h3>macOS</h3>
+<p>1) If not already installed, install the XCode Command Line Tools, typing this command in a terminal:</p>
+<div class="codehilite"><pre><span></span><code>xcode-select --install
+</code></pre></div>
+
+
+<p>2) If not already installed, install Homebrew following the <a href="https://brew.sh/index_it.html">official guide</a>.
+3) Open the terminal and type these commands</p>
+<div class="codehilite"><pre><span></span><code>brew update
+brew upgrade
+brew install gcc cmake make git ninja boost open-mpi fftw pkg-config
+</code></pre></div>
+
+
+<h3>Windows (7+) - PGI Compiler</h3>
+<p>1) Install Visual Studio 2017 from the <a href="https://www.visualstudio.com/">official website</a>
+2) Open your Powershell with Administrator privileges, type the following command and confirm it:</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">PS </span><span class="p">\&gt;</span>                 <span class="nb">Set-ExecutionPolicy</span> <span class="n">unrestricted</span>
+</code></pre></div>
+
+
+<p>3) If not already installed, please install chocolatey using the <a href="http://chocolatey.org">official guide</a>
+4) If you are not sure about having them updated, or even installed, please install <code>git</code>, <code>javaruntime</code>, <code>cmake</code> and an updated <code>Powershell</code>. To do so, open your Powershell with Administrator privileges and type</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">PS </span><span class="p">\&gt;</span>                 <span class="n">cinst</span> <span class="n">-y</span> <span class="n">git</span> <span class="n">cmake</span> <span class="n">powershell</span> <span class="n">javaruntime</span>
+</code></pre></div>
+
+
+<p>5) Restart the PC if required by chocolatey after the latest step
+6) Install PGI 18.10 from the <a href="https://www.pgroup.com/products/community.htm">official website</a> (the community edition is enough and is free; NOTE: install included MS-MPI, but avoid JRE and Cygwin). Note that for some time it was necessary to activate license for PGI 18.10 Community Edition (renaming the file <code>%PROGRAMFILES%\PGI\license.dat-COMMUNITY-18.10</code> to <code>%PROGRAMFILES%\PGI\license.dat</code>)
+7) Define a work folder, which we will call <code>WORKSPACE</code> in this tutorial: this could be a "Code" folder in our home, a "cpp" folder on our desktop, whatever you want. Create it if you don't already have, using your favourite method (mkdir in Powershell, or from the graphical interface in explorer). We will now define an environment variable to tell the system where our folder is. Please note down its full path. Open a Powershell (as a standard user) and type</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">PS </span><span class="p">\&gt;</span>                 <span class="n">rundll32</span> <span class="n">sysdm</span><span class="p">.</span><span class="n">cpl</span><span class="p">,</span><span class="n">EditEnvironmentVariables</span>
+</code></pre></div>
+
+
+<p>8) In the upper part of the window that pops-up, we have to create a new environment variable, with name <code>WORKSPACE</code> and value the full path noted down before.
+If it not already in the <code>PATH</code> (this is possible only if you did it before), we also need to modify the "Path" variable adding the following string (on Windows 10 you need to add a new line to insert it, on Windows 7/8 it is necessary to append it using a <code>;</code> as a separator between other records):</p>
+<div class="codehilite"><pre><span></span><code>                      <span class="c">%PROGRAMFILES%\CMake\bin</span>
+</code></pre></div>
+
+
+<p>9) If <code>vcpkg</code> is not installed, please follow the next procedure, otherwise please jump to #11</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">PS </span><span class="p">\&gt;</span>                 <span class="nb">cd </span><span class="nv">$env:WORKSPACE</span>
+<span class="nb">PS </span><span class="n">Code</span><span class="p">&gt;</span>              <span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="err">:</span><span class="p">//</span><span class="n">github</span><span class="p">.</span><span class="n">com</span><span class="p">/</span><span class="n">Microsoft</span><span class="p">/</span><span class="n">vcpkg</span><span class="p">.</span><span class="n">git</span>
+<span class="nb">PS </span><span class="n">Code</span><span class="p">&gt;</span>              <span class="nb">cd </span><span class="n">vcpkg</span>
+<span class="nb">PS </span><span class="n">Code</span><span class="p">\</span><span class="n">vcpkg</span><span class="p">&gt;</span>        <span class="p">.\</span><span class="n">bootstrap-vcpkg</span><span class="p">.</span><span class="n">bat</span>
+</code></pre></div>
+
+
+<p>10) Open a Powershell with Administrator privileges and type</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">PS </span><span class="p">\&gt;</span>                 <span class="nb">cd </span><span class="nv">$env:WORKSPACE</span>
+<span class="nb">PS </span><span class="n">Code</span><span class="p">&gt;</span>              <span class="nb">cd </span><span class="n">vcpkg</span>
+<span class="nb">PS </span><span class="n">Code</span><span class="p">\</span><span class="n">vcpkg</span><span class="p">&gt;</span>        <span class="p">.\</span><span class="n">vcpkg</span> <span class="n">integrate</span> <span class="n">install</span>
+</code></pre></div>
+
+
+<p>11) Open a Powershell (as a standard user) and type (the last command requires a confirmation and is used to clean up unnecessary files). Note: do NOT install msmpi from vcpkg because it will be preferred from the one included in PGI and it is incompatible with PGI compiler</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">PS </span><span class="p">\&gt;</span>                 <span class="nb">cd </span><span class="nv">$env:WORKSPACE</span>
+<span class="nb">PS </span><span class="n">Code</span><span class="p">&gt;</span>              <span class="nb">cd </span><span class="n">vcpkg</span>
+<span class="nb">PS </span><span class="n">Code</span><span class="p">\</span><span class="n">vcpkg</span><span class="p">&gt;</span>        <span class="p">.\</span><span class="n">vcpkg</span> <span class="n">install</span> <span class="n">fftw3</span><span class="err">:</span><span class="n">x64-windows</span>
+<span class="nb">PS </span><span class="n">Code</span><span class="p">\</span><span class="n">vcpkg</span><span class="p">&gt;</span>        <span class="nb">rmdir </span><span class="p">.\</span><span class="n">buildtrees</span><span class="p">\</span>
+<span class="nb">PS </span><span class="n">Code</span><span class="p">\</span><span class="n">vcpkg</span><span class="p">&gt;</span>        <span class="nb">cd </span><span class="nv">$env:WORKSPACE</span>
+<span class="nb">PS </span><span class="n">Code</span><span class="p">&gt;</span>              <span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="err">:</span><span class="p">//</span><span class="n">github</span><span class="p">.</span><span class="n">com</span><span class="p">/</span><span class="n">ALaDyn</span><span class="p">/</span><span class="n">ALaDyn</span>
+</code></pre></div>
+
+
+<p>12) Open a Powershell and build <code>ALaDyn</code> using the <code>scripts\build\cmake.win.ps1</code> script</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">PS </span><span class="p">\&gt;</span>                 <span class="nb">cd </span><span class="nv">$env:WORKSPACE</span>
+<span class="nb">PS </span><span class="n">Code</span><span class="p">&gt;</span>              <span class="nb">cd </span><span class="n">ALaDyn</span>
+<span class="nb">PS </span><span class="n">Code</span><span class="p">\</span><span class="n">ALaDyn</span><span class="p">&gt;</span>       <span class="p">.\</span><span class="n">scripts</span><span class="p">\</span><span class="n">build</span><span class="p">\</span><span class="n">cmake</span><span class="p">.</span><span class="n">win</span><span class="p">.</span><span class="n">ps1</span>
+</code></pre></div>
+
+
+<p>13) You may have to manually copy the <code>fftw3.dll</code> from the vcpkg folder to the install folder</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">PS </span><span class="p">\&gt;</span>                 <span class="nb">cd </span><span class="nv">$env:WORKSPACE</span>
+<span class="nb">PS </span><span class="n">Code</span><span class="p">&gt;</span>              <span class="nb">cd </span><span class="n">ALaDyn</span>
+<span class="nb">PS </span><span class="n">Code</span><span class="p">\</span><span class="n">ALaDyn</span><span class="p">&gt;</span>       <span class="nb">cp </span><span class="nv">$env:WORKSPACE</span><span class="p">\</span><span class="n">vcpkg</span><span class="p">\</span><span class="n">installed</span><span class="p">\</span><span class="n">x64-windows</span><span class="p">\</span><span class="n">bin</span><span class="p">\</span><span class="n">fftw3</span><span class="p">.</span><span class="n">dll</span> <span class="p">.\</span><span class="n">bin</span><span class="p">\</span>
+</code></pre></div>
+
+
+<p>Note: in case you need to re-download a compatible MS-MPI runtime, please use this link <a href="https://download.microsoft.com/download/B/C/8/BC826318-B57E-490D-82C1-06C99F52C608/MSMPISetup.exe">MS-MPI Redistributable 2012 R2 v4.2.4400.0</a>; in case you need to re-download a compatible MS-MPI Client Utilities, please use this link <a href="https://download.microsoft.com/download/7/A/3/7A3BA65C-669D-4F2F-A295-6A16AA730B59/HpcClient_x64.Msi">MS-MPI CU 2012 R2 v4.2.4400.0</a>; in case you need to re-download a compatible MS-MPI SDK, please use this link <a href="https://download.microsoft.com/download/3/F/3/3F3BE6EA-EB22-4445-9A72-D1A642256217/sdk_x64.msi">MS-MPI SDK 2012 R2 v4.2.4400.0</a></p>
+<h4>Upgrade software</h4>
+<p>1) To update software installed with Chocolatey, open a Powershell with Administrator privileges and type</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">PS </span><span class="p">\&gt;</span>                 <span class="n">cup</span> <span class="n">all</span> <span class="n">-y</span>
+</code></pre></div>
+
+
+<p>2) To update libraries installed with vcpkg, open a Powershell (as a standard user), type these commands and follow on-screen instructions</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">PS </span><span class="p">\&gt;</span>                 <span class="nb">cd </span><span class="nv">$env:WORKSPACE</span>
+<span class="nb">PS </span><span class="n">Code</span><span class="p">&gt;</span>              <span class="nb">cd </span><span class="n">vcpkg</span>
+<span class="nb">PS </span><span class="n">Code</span><span class="p">&gt;</span>              <span class="n">git</span> <span class="n">pull</span>
+<span class="nb">PS </span><span class="n">Code</span><span class="p">&gt;</span>              <span class="p">.\</span><span class="n">bootstrap-vcpkg</span><span class="p">.</span><span class="n">bat</span>
+<span class="nb">PS </span><span class="n">Code</span><span class="p">&gt;</span>              <span class="p">.\</span><span class="n">vcpkg</span> <span class="n">update</span>
+<span class="nb">PS </span><span class="n">Code</span><span class="p">&gt;</span>              <span class="p">.\</span><span class="n">vcpkg</span> <span class="n">upgrade</span> <span class="p">-</span><span class="n">-no-dry-run</span>
+</code></pre></div>
+
+
+<h3>Cygwin</h3>
+<p>1) If not already installed, please install chocolatey using the <a href="http://chocolatey.org">official guide</a>
+2) Open a Powershell with Administrator privileges and type</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">PS </span><span class="p">\&gt;</span>                 <span class="n">cinst</span> <span class="n">-y</span> <span class="n">cygwin</span>
+</code></pre></div>
+
+
+<p>3) Open a Powershell (as a standard user) and type</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">PS </span><span class="p">\&gt;</span>                 <span class="nb">Invoke-WebRequest</span> <span class="n">https</span><span class="err">:</span><span class="p">//</span><span class="n">cygwin</span><span class="p">.</span><span class="n">com</span><span class="p">/</span><span class="n">setup-x86_64</span><span class="p">.</span><span class="n">exe</span> <span class="n">-OutFile</span> <span class="nv">$env:WORKSPACE</span><span class="p">\</span><span class="n">cygwin-setup</span><span class="p">.</span><span class="n">exe</span>
+<span class="nb">PS </span><span class="p">\&gt;</span>                 <span class="nb">cd </span><span class="nv">$env:WORKSPACE</span>
+<span class="nb">PS </span><span class="n">Code</span><span class="p">&gt;</span>              <span class="p">.\</span><span class="n">cygwin-setup</span> <span class="p">-</span><span class="n">-quiet-mode</span> <span class="p">-</span><span class="n">-no-shortcuts</span> <span class="p">-</span><span class="n">-no-startmenu</span> <span class="p">-</span><span class="n">-no-desktop</span> <span class="p">-</span><span class="n">-upgrade-also</span> <span class="p">-</span><span class="n">-packages</span> <span class="n">gcc-g</span><span class="p">++,</span><span class="n">libopenmpi-devel</span><span class="p">,</span><span class="n">gcc-fortran</span><span class="p">,</span><span class="n">cmake</span><span class="p">,</span><span class="n">fftw3</span><span class="p">,</span><span class="n">libfftw3-devel</span><span class="p">,</span><span class="n">libboost-devel</span><span class="p">,</span><span class="n">zlib-devel</span><span class="p">,</span><span class="n">pkg-config</span>
+</code></pre></div>
+    </div>
+    
+    <div class="col-md-3 col-md-pull-9">
+      <hr class="visible-xs visible-sm">
+        <div class="well toc">
+          <ul class="nav nav-stacked nav-pills">
+            <li role="presentation" class="title"><a href='../page/index.html'>Guide</a></li>
+          </ul>
+          <hr>
+          <ul class="nav nav-stacked nav-pills">
+            
+            <li role="presentation" class="disabled">
+            <a href='../page/./BUILD.html'>How to build</a>
+            
+            </li>
+            
+            <li role="presentation">
+            <a href='../page/./CONTRIBUTING.html'>Contributing guidelines</a>
+            
+            </li>
+            
+            <li role="presentation">
+            <a href='../page/./DESCRIPTION.html'>Code description</a>
+            
+            </li>
+            
+            <li role="presentation">
+            <a href='../page/./NAMELIST_GUIDE.html'>Write a Namelist</a>
+            
+            </li>
+            
+            <li role="presentation">
+            <a href='../page/deprecated/index.html'>Deprecated Guide</a>
+            
+            <ul class="nav nav-stacked nav-pills">
+              
+            <li role="presentation">
+            <a href='../page/deprecated/input_data_guide.html'>Old input guide</a>
+            
+            </li>
+            
+            </ul>
+            
+            </li>
+            
+          </ul>
+        </div>
+    </div>
+    
+  </div>
+
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2020 <a rel="license" href="http://www.gnu.org/licenses/old-licenses/fdl-1.2.en.html">GNU Free Documentation License</a>
+                                          </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+             on 2020-07-30 
+          </p>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> ALaDyn was developed by The ALaDyn Collaboration</p></div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+      });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+    
+  </body>
+</html>

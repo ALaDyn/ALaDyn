@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+   <meta name="description" content="A High-Accuracy PIC Code for the Maxwell-Vlasov Equations">
+    
+    <meta name="author" content="The ALaDyn Collaboration" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>set_grid_env_den_energy &ndash; ALaDyn</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">ALaDyn <small>3.0.1</small></a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+        
+            <li><a href='../page/index.html'>Guide</a></li>
+      
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+     aria-expanded="false">Contents <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          
+              
+            <li><a href="../lists/files.html">Source Files</a></li>
+        
+        
+        
+            <li><a href="../lists/modules.html">Modules</a></li>
+        
+            
+                                
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+        
+               
+            <li><a href="../lists/types.html">Derived Types</a></li>
+        
+        
+            <li><a href="../program/aladyn.html">Program</a></li>
+      
+            </ul>
+            </li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+
+                             
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../program/aladyn.html">Program</a></li>
+
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>set_grid_env_den_energy
+      <small>Subroutine</small>
+    
+    </h1>
+    
+<div class="row">
+  <div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+     <li><i class="fa fa-list-ol"></i>
+       <a data-toggle="tooltip"
+    data-placement="bottom" data-html="true"
+    title=" 0.1% of total for procedures.">151 statements</a>
+     </li> 
+     
+     
+     
+    <li><i class="fa fa-code"></i><a href="../src/grid_part_util.f90"> Source File</a></li>
+     
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+    
+     <li><a href='../sourcefile/grid_part_util.f90.html'>grid_part_util.f90</a></li>
+    
+     <li><a href='../module/grid_part_util.html'>grid_part_util</a></li>
+    
+  
+     <li class="active">set_grid_env_den_energy</li>
+  </ol>
+</div>
+</div>
+</div>
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+    
+<div id="sidebar">
+  
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<em>None</em>
+
+
+</div>
+
+    </div>
+    
+    <div class="col-md-9" id='text'>
+    <h2>
+public subroutine set_grid_env_den_energy(sp_loc, pt, eden, np, icp)
+    
+    
+   
+</h2>
+    
+  
+
+
+    
+
+    <h3>Arguments</h3>
+    
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-sp_loc~13"></span>type(species),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>sp_loc</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-pt~9"></span>real(kind=dp),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>pt</strong>(:,:)</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-eden"></span>real(kind=dp),</td>
+  <td>intent(inout)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>eden</strong>(:,:,:,:)</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-np~24"></span>integer,</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>np</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-icp"></span>integer,</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>icp</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+    
+    
+    
+    <br>
+    
+    
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Calls</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: proc~~set_grid_env_den_energy~~CallsGraph Pages: 1 -->
+<svg id="procset_grid_env_den_energyCallsGraph" width="641pt" height="158pt"
+ viewBox="0.00 0.00 641.00 158.03" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~set_grid_env_den_energy~~CallsGraph" class="graph" transform="scale(.8063 .8063) rotate(0) translate(4 192)">
+<title>proc~~set_grid_env_den_energy~~CallsGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-192 791,-192 791,4 -4,4"/>
+<!-- proc~set_grid_env_den_energy -->
+<g id="proc~~set_grid_env_den_energy~~CallsGraph_node1" class="node">
+<title>proc~set_grid_env_den_energy</title>
+<polygon fill="none" stroke="#000000" points="148,-106 0,-106 0,-82 148,-82 148,-106"/>
+<text text-anchor="middle" x="74" y="-91.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">set_grid_env_den_energy</text>
+</g>
+<!-- proc~qden_3d_wgh -->
+<g id="proc~~set_grid_env_den_energy~~CallsGraph_node2" class="node">
+<title>proc~qden_3d_wgh</title>
+<g id="a_proc~~set_grid_env_den_energy~~CallsGraph_node2"><a xlink:href=".././proc/qden_3d_wgh.html" xlink:title="qden_3d_wgh">
+<polygon fill="#d9534f" stroke="#d9534f" points="291.5,-188 206.5,-188 206.5,-164 291.5,-164 291.5,-188"/>
+<text text-anchor="middle" x="249" y="-173.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">qden_3d_wgh</text>
+</a>
+</g>
+</g>
+<!-- proc~set_grid_env_den_energy&#45;&gt;proc~qden_3d_wgh -->
+<g id="proc~~set_grid_env_den_energy~~CallsGraph_edge1" class="edge">
+<title>proc~set_grid_env_den_energy&#45;&gt;proc~qden_3d_wgh</title>
+<path fill="none" stroke="#ff0000" d="M93.2869,-106.2067C114.8048,-119.4625 150.9466,-140.6572 184,-155 188.457,-156.934 193.1521,-158.7868 197.8951,-160.5349"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="197.0419,-163.9452 207.6367,-163.9685 199.3689,-157.3433 197.0419,-163.9452"/>
+</g>
+<!-- proc~qden_2d_wgh -->
+<g id="proc~~set_grid_env_den_energy~~CallsGraph_node3" class="node">
+<title>proc~qden_2d_wgh</title>
+<g id="a_proc~~set_grid_env_den_energy~~CallsGraph_node3"><a xlink:href=".././proc/qden_2d_wgh.html" xlink:title="qden_2d_wgh">
+<polygon fill="#d9534f" stroke="#d9534f" points="291.5,-146 206.5,-146 206.5,-122 291.5,-122 291.5,-146"/>
+<text text-anchor="middle" x="249" y="-131.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">qden_2d_wgh</text>
+</a>
+</g>
+</g>
+<!-- proc~set_grid_env_den_energy&#45;&gt;proc~qden_2d_wgh -->
+<g id="proc~~set_grid_env_den_energy~~CallsGraph_edge2" class="edge">
+<title>proc~set_grid_env_den_energy&#45;&gt;proc~qden_2d_wgh</title>
+<path fill="none" stroke="#ff0000" d="M126.5058,-106.0013C148.5945,-111.0502 174.2453,-116.9132 196.3495,-121.9656"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="195.7019,-125.4078 206.2304,-124.2241 197.2617,-118.5838 195.7019,-125.4078"/>
+</g>
+<!-- proc~set_local_3d_positions -->
+<g id="proc~~set_grid_env_den_energy~~CallsGraph_node4" class="node">
+<title>proc~set_local_3d_positions</title>
+<g id="a_proc~~set_grid_env_den_energy~~CallsGraph_node4"><a xlink:href=".././proc/set_local_3d_positions.html" xlink:title="set_local_3d_positions">
+<polygon fill="#d9534f" stroke="#d9534f" points="314,-66 184,-66 184,-42 314,-42 314,-66"/>
+<text text-anchor="middle" x="249" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">set_local_3d_positions</text>
+</a>
+</g>
+</g>
+<!-- proc~set_grid_env_den_energy&#45;&gt;proc~set_local_3d_positions -->
+<g id="proc~~set_grid_env_den_energy~~CallsGraph_edge3" class="edge">
+<title>proc~set_grid_env_den_energy&#45;&gt;proc~set_local_3d_positions</title>
+<path fill="none" stroke="#ff0000" d="M126.5058,-81.9987C145.3676,-77.6874 166.827,-72.7824 186.4574,-68.2955"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="187.2604,-71.7023 196.2291,-66.0619 185.7006,-64.8782 187.2604,-71.7023"/>
+</g>
+<!-- proc~set_local_2d_positions -->
+<g id="proc~~set_grid_env_den_energy~~CallsGraph_node5" class="node">
+<title>proc~set_local_2d_positions</title>
+<g id="a_proc~~set_grid_env_den_energy~~CallsGraph_node5"><a xlink:href=".././proc/set_local_2d_positions.html" xlink:title="set_local_2d_positions">
+<polygon fill="#d9534f" stroke="#d9534f" points="480,-107 350,-107 350,-83 480,-83 480,-107"/>
+<text text-anchor="middle" x="415" y="-92.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">set_local_2d_positions</text>
+</a>
+</g>
+</g>
+<!-- proc~set_grid_env_den_energy&#45;&gt;proc~set_local_2d_positions -->
+<g id="proc~~set_grid_env_den_energy~~CallsGraph_edge4" class="edge">
+<title>proc~set_grid_env_den_energy&#45;&gt;proc~set_local_2d_positions</title>
+<path fill="none" stroke="#ff0000" d="M148.4125,-94.2182C205.1671,-94.3847 283.012,-94.6129 339.9288,-94.7798"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="339.9352,-98.2798 349.9455,-94.8092 339.9558,-91.2798 339.9352,-98.2798"/>
+</g>
+<!-- proc~qden_1d_wgh -->
+<g id="proc~~set_grid_env_den_energy~~CallsGraph_node6" class="node">
+<title>proc~qden_1d_wgh</title>
+<g id="a_proc~~set_grid_env_den_energy~~CallsGraph_node6"><a xlink:href=".././proc/qden_1d_wgh.html" xlink:title="qden_1d_wgh">
+<polygon fill="#d9534f" stroke="#d9534f" points="291.5,-24 206.5,-24 206.5,0 291.5,0 291.5,-24"/>
+<text text-anchor="middle" x="249" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">qden_1d_wgh</text>
+</a>
+</g>
+</g>
+<!-- proc~set_grid_env_den_energy&#45;&gt;proc~qden_1d_wgh -->
+<g id="proc~~set_grid_env_den_energy~~CallsGraph_edge5" class="edge">
+<title>proc~set_grid_env_den_energy&#45;&gt;proc~qden_1d_wgh</title>
+<path fill="none" stroke="#ff0000" d="M93.2869,-81.7933C114.8048,-68.5375 150.9466,-47.3428 184,-33 188.457,-31.066 193.1521,-29.2132 197.8951,-27.4651"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="199.3689,-30.6567 207.6367,-24.0315 197.0419,-24.0548 199.3689,-30.6567"/>
+</g>
+<!-- proc~map3d_part_sind -->
+<g id="proc~~set_grid_env_den_energy~~CallsGraph_node8" class="node">
+<title>proc~map3d_part_sind</title>
+<g id="a_proc~~set_grid_env_den_energy~~CallsGraph_node8"><a xlink:href=".././proc/map3d_part_sind.html" xlink:title="map3d_part_sind">
+<polygon fill="#d9534f" stroke="#d9534f" points="467,-65 363,-65 363,-41 467,-41 467,-65"/>
+<text text-anchor="middle" x="415" y="-50.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">map3d_part_sind</text>
+</a>
+</g>
+</g>
+<!-- proc~set_local_3d_positions&#45;&gt;proc~map3d_part_sind -->
+<g id="proc~~set_grid_env_den_energy~~CallsGraph_edge6" class="edge">
+<title>proc~set_local_3d_positions&#45;&gt;proc~map3d_part_sind</title>
+<path fill="none" stroke="#00ff66" d="M314.1312,-53.6076C326.7624,-53.5316 339.9734,-53.452 352.5172,-53.3764"/>
+<polygon fill="#00ff66" stroke="#00ff66" points="352.8911,-56.8743 362.8698,-53.314 352.8489,-49.8744 352.8911,-56.8743"/>
+</g>
+<!-- proc~map2dy_part_sind -->
+<g id="proc~~set_grid_env_den_energy~~CallsGraph_node7" class="node">
+<title>proc~map2dy_part_sind</title>
+<g id="a_proc~~set_grid_env_den_energy~~CallsGraph_node7"><a xlink:href=".././proc/map2dy_part_sind.html" xlink:title="map2dy_part_sind">
+<polygon fill="#d9534f" stroke="#d9534f" points="626,-107 516,-107 516,-83 626,-83 626,-107"/>
+<text text-anchor="middle" x="571" y="-92.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">map2dy_part_sind</text>
+</a>
+</g>
+</g>
+<!-- proc~set_local_2d_positions&#45;&gt;proc~map2dy_part_sind -->
+<g id="proc~~set_grid_env_den_energy~~CallsGraph_edge7" class="edge">
+<title>proc~set_local_2d_positions&#45;&gt;proc~map2dy_part_sind</title>
+<path fill="none" stroke="#0066ff" d="M480.2542,-95C488.683,-95 497.3159,-95 505.7447,-95"/>
+<polygon fill="#0066ff" stroke="#0066ff" points="505.8974,-98.5001 515.8974,-95 505.8973,-91.5001 505.8974,-98.5001"/>
+</g>
+<!-- proc~invert_uniform_grid -->
+<g id="proc~~set_grid_env_den_energy~~CallsGraph_node10" class="node">
+<title>proc~invert_uniform_grid</title>
+<g id="a_proc~~set_grid_env_den_energy~~CallsGraph_node10"><a xlink:href=".././proc/invert_uniform_grid.html" xlink:title="invert_uniform_grid">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="783,-107 666,-107 666,-83 783,-83 783,-107"/>
+<text text-anchor="middle" x="724.5" y="-92.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">invert_uniform_grid</text>
+</a>
+</g>
+</g>
+<!-- proc~map2dy_part_sind&#45;&gt;proc~invert_uniform_grid -->
+<g id="proc~~set_grid_env_den_energy~~CallsGraph_edge8" class="edge">
+<title>proc~map2dy_part_sind&#45;&gt;proc~invert_uniform_grid</title>
+<path fill="none" stroke="#ff0000" d="M626.417,-95C635.9136,-95 645.8836,-95 655.6794,-95"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="655.7975,-98.5001 665.7975,-95 655.7975,-91.5001 655.7975,-98.5001"/>
+</g>
+<!-- proc~invert_stretched_grid -->
+<g id="proc~~set_grid_env_den_energy~~CallsGraph_node11" class="node">
+<title>proc~invert_stretched_grid</title>
+<g id="a_proc~~set_grid_env_den_energy~~CallsGraph_node11"><a xlink:href=".././proc/invert_stretched_grid.html" xlink:title="invert_stretched_grid">
+<polygon fill="#d94e8f" stroke="#d94e8f" points="787,-65 662,-65 662,-41 787,-41 787,-65"/>
+<text text-anchor="middle" x="724.5" y="-50.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">invert_stretched_grid</text>
+</a>
+</g>
+</g>
+<!-- proc~map2dy_part_sind&#45;&gt;proc~invert_stretched_grid -->
+<g id="proc~~set_grid_env_den_energy~~CallsGraph_edge9" class="edge">
+<title>proc~map2dy_part_sind&#45;&gt;proc~invert_stretched_grid</title>
+<path fill="none" stroke="#ff0000" d="M614.9869,-82.9645C632.3288,-78.2195 652.4179,-72.7228 670.6188,-67.7427"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="671.7849,-71.0524 680.5066,-65.0373 669.9374,-64.3006 671.7849,-71.0524"/>
+</g>
+<!-- proc~map3d_part_sind&#45;&gt;proc~map2dy_part_sind -->
+<g id="proc~~set_grid_env_den_energy~~CallsGraph_edge11" class="edge">
+<title>proc~map3d_part_sind&#45;&gt;proc~map2dy_part_sind</title>
+<path fill="none" stroke="#00ffff" d="M459.7033,-65.0355C477.4092,-69.8025 497.933,-75.3281 516.498,-80.3264"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="515.724,-83.7426 526.2901,-82.9627 517.5439,-76.9833 515.724,-83.7426"/>
+</g>
+<!-- proc~map2dz_part_sind -->
+<g id="proc~~set_grid_env_den_energy~~CallsGraph_node9" class="node">
+<title>proc~map2dz_part_sind</title>
+<g id="a_proc~~set_grid_env_den_energy~~CallsGraph_node9"><a xlink:href=".././proc/map2dz_part_sind.html" xlink:title="map2dz_part_sind">
+<polygon fill="#d9534f" stroke="#d9534f" points="625.5,-65 516.5,-65 516.5,-41 625.5,-41 625.5,-65"/>
+<text text-anchor="middle" x="571" y="-50.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">map2dz_part_sind</text>
+</a>
+</g>
+</g>
+<!-- proc~map3d_part_sind&#45;&gt;proc~map2dz_part_sind -->
+<g id="proc~~set_grid_env_den_energy~~CallsGraph_edge10" class="edge">
+<title>proc~map3d_part_sind&#45;&gt;proc~map2dz_part_sind</title>
+<path fill="none" stroke="#00ffff" d="M467.3797,-53C479.8119,-53 493.221,-53 506.1354,-53"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="506.3583,-56.5001 516.3583,-53 506.3583,-49.5001 506.3583,-56.5001"/>
+</g>
+<!-- proc~map2dz_part_sind&#45;&gt;proc~invert_uniform_grid -->
+<g id="proc~~set_grid_env_den_energy~~CallsGraph_edge12" class="edge">
+<title>proc~map2dz_part_sind&#45;&gt;proc~invert_uniform_grid</title>
+<path fill="none" stroke="#ff0000" d="M614.9869,-65.0355C632.3288,-69.7805 652.4179,-75.2772 670.6188,-80.2573"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="669.9374,-83.6994 680.5066,-82.9627 671.7849,-76.9476 669.9374,-83.6994"/>
+</g>
+<!-- proc~map2dz_part_sind&#45;&gt;proc~invert_stretched_grid -->
+<g id="proc~~set_grid_env_den_energy~~CallsGraph_edge13" class="edge">
+<title>proc~map2dz_part_sind&#45;&gt;proc~invert_stretched_grid</title>
+<path fill="none" stroke="#ff0000" d="M625.5506,-53C633.9739,-53 642.7876,-53 651.5356,-53"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="651.7474,-56.5001 661.7474,-53 651.7474,-49.5001 651.7474,-56.5001"/>
+</g>
+</g>
+</svg>
+</div><script>var panprocset_grid_env_den_energyCallsGraph = svgPanZoom('#procset_grid_env_den_energyCallsGraph', {zoomEnabled: true,controlIconsEnabled: true, fit: true, center: true,}); </script><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="599pt" height="32pt"
+ viewBox="0.00 0.00 598.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 594.5,-28 594.5,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="71,-24 0,-24 0,0 71,0 71,-24"/>
+<text text-anchor="middle" x="35.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="147.5,-24 89.5,-24 89.5,0 147.5,0 147.5,-24"/>
+<text text-anchor="middle" x="118.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="227,-24 166,-24 166,0 227,0 227,-24"/>
+<text text-anchor="middle" x="196.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node4" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="392,-24 245,-24 245,0 392,0 392,-24"/>
+<text text-anchor="middle" x="318.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="468.5,-24 410.5,-24 410.5,0 468.5,0 468.5,-24"/>
+<text text-anchor="middle" x="439.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="590.5,-24 486.5,-24 486.5,0 590.5,0 590.5,-24"/>
+<text text-anchor="middle" x="538.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a procedure to one which it calls. Dashed 
+    arrows point from an interface to procedures which implement that interface.
+    This could include the module procedures in a generic interface or the
+    implementation in a submodule of an interface in a parent module. Where possible, edges connecting nodes are given different colours to make them easier to distinguish in large graphs.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+     
+     
+    <br>
+
+    <section class="visible-xs visible-sm hidden-md">
+      
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<em>None</em>
+
+
+    </section>
+    <br class="visible-xs visible-sm hidden-md">
+
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+
+    
+    
+    
+    
+    </div>
+  </div>
+
+
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2020 <a rel="license" href="http://www.gnu.org/licenses/old-licenses/fdl-1.2.en.html">GNU Free Documentation License</a>
+                                          </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+             on 2020-07-30 
+          </p>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> ALaDyn was developed by The ALaDyn Collaboration</p></div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+      });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+    
+  </body>
+</html>

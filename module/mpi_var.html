@@ -1,0 +1,2439 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+   <meta name="description" content="A High-Accuracy PIC Code for the Maxwell-Vlasov Equations">
+    
+    <meta name="author" content="The ALaDyn Collaboration" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>mpi_var &ndash; ALaDyn</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">ALaDyn <small>3.0.1</small></a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+        
+            <li><a href='../page/index.html'>Guide</a></li>
+      
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+     aria-expanded="false">Contents <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          
+              
+            <li><a href="../lists/files.html">Source Files</a></li>
+        
+        
+        
+            <li><a href="../lists/modules.html">Modules</a></li>
+        
+            
+                                
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+        
+               
+            <li><a href="../lists/types.html">Derived Types</a></li>
+        
+        
+            <li><a href="../program/aladyn.html">Program</a></li>
+      
+            </ul>
+            </li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+
+                             
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../program/aladyn.html">Program</a></li>
+
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>mpi_var 
+    <small>Module</small>
+    
+    </h1>
+    
+<div class="row">
+  <div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+     <li><i class="fa fa-list-ol"></i>
+       <a data-toggle="tooltip"
+    data-placement="bottom" data-html="true"
+    title=" 0.1% of total for modules and submodules.">21 statements</a>
+     </li> 
+     
+     
+     
+    <li><i class="fa fa-code"></i><a href="../src/mpi_var.f90"> Source File</a></li>
+     
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+    
+     <li><a href='../sourcefile/mpi_var.f90.html'>mpi_var.f90</a></li>
+    
+  
+     <li class="active">mpi_var</li>
+  </ol>
+</div>
+</div>
+</div>
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+    
+<div id="sidebar">
+  
+<h3>Contents</h3>
+ 
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#vars-0">Variables</a></h3></div>
+  <div id="vars-0" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-loc_npart">loc_npart</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-loc_nbpart">loc_nbpart</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-loc_ne_ionz">loc_ne_ionz</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-loc_tpart">loc_tpart</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-yp_next">yp_next</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-yp_prev">yp_prev</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-zp_next">zp_next</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-zp_prev">zp_prev</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-xp_next">xp_next</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-xp_prev">xp_prev</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-np_max">np_max</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-pe_npmax">pe_npmax</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-np_min">np_min</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-pe_npmin">pe_npmin</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-mype">mype</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-imodx">imodx</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-imody">imody</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-imodz">imodz</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-npe">npe</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-npe_yloc">npe_yloc</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-npe_zloc">npe_zloc</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-npe_xloc">npe_xloc</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-npe_yz">npe_yz</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-mpi_size">mpi_size</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-mpi_rank">mpi_rank</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-partype">partype</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-imodzx">imodzx</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-imodyz">imodyz</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-imodyx">imodyx</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-pe_min">pe_min</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-pe_max">pe_max</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-pe_min_y">pe_min_y</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-pe_max_y">pe_max_y</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-pe_min_z">pe_min_z</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-pe_max_z">pe_max_z</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-pe_min_x">pe_min_x</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-pe_max_x">pe_max_x</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-ndims">ndims</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-dims~57">dims</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-pe0y">pe0y</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-pe0z">pe0z</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-pe1y">pe1y</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-pe1z">pe1z</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-pe0">pe0</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-pe1">pe1</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-prl">prl</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-prlx">prlx</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-prly">prly</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-prlz">prlz</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-xl_bd">xl_bd</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-yl_bd">yl_bd</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-zl_bd">zl_bd</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-xr_bd">xr_bd</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-yr_bd">yr_bd</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-zr_bd">zr_bd</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-pe0x">pe0x</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-pe1x">pe1x</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-pex0">pex0</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-pex1">pex1</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-comm">comm</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-coor">coor</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-comm_col">comm_col</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-col_or">col_or</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+    </div>
+    
+    <div class="col-md-9" id='text'>
+    
+      <br>
+    
+  
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Uses</h3>
+      </div>
+      <ul class="list-group">
+      
+      <li class="list-group-item">
+  <ul class="list-inline">
+    
+    <li><a href='../module/precision_def.html'>precision_def</a></li>
+    
+  </ul>
+      </li>
+      
+      
+      
+      <li class="list-group-item">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: module~~mpi_var~~UsesGraph Pages: 1 -->
+<svg id="modulempi_varUsesGraph" width="183pt" height="32pt"
+ viewBox="0.00 0.00 183.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="module~~mpi_var~~UsesGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>module~~mpi_var~~UsesGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 179,-28 179,4 -4,4"/>
+<!-- module~mpi_var -->
+<g id="module~~mpi_var~~UsesGraph_node1" class="node">
+<title>module~mpi_var</title>
+<polygon fill="none" stroke="#000000" points="175,-24 120,-24 120,0 175,0 175,-24"/>
+<text text-anchor="middle" x="147.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">mpi_var</text>
+</g>
+<!-- module~precision_def -->
+<g id="module~~mpi_var~~UsesGraph_node2" class="node">
+<title>module~precision_def</title>
+<g id="a_module~~mpi_var~~UsesGraph_node2"><a xlink:href=".././module/precision_def.html" xlink:title="precision_def">
+<polygon fill="#337ab7" stroke="#337ab7" points="84,-24 0,-24 0,0 84,0 84,-24"/>
+<text text-anchor="middle" x="42" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">precision_def</text>
+</a>
+</g>
+</g>
+<!-- module~mpi_var&#45;&gt;module~precision_def -->
+<g id="module~~mpi_var~~UsesGraph_edge1" class="edge">
+<title>module~mpi_var&#45;&gt;module~precision_def</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M119.7811,-12C111.9705,-12 103.2067,-12 94.4537,-12"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="94.2414,-8.5001 84.2413,-12 94.2413,-15.5001 94.2414,-8.5001"/>
+</g>
+</g>
+</svg>
+</div><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="517pt" height="32pt"
+ viewBox="0.00 0.00 517.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 513,-28 513,4 -4,4"/>
+<!-- Module -->
+<g id="node1" class="node">
+<title>Module</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="54,-24 0,-24 0,0 54,0 54,-24"/>
+<text text-anchor="middle" x="27" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Module</text>
+</g>
+<!-- Submodule -->
+<g id="node2" class="node">
+<title>Submodule</title>
+<polygon fill="#5bc0de" stroke="#5bc0de" points="145.5,-24 72.5,-24 72.5,0 145.5,0 145.5,-24"/>
+<text text-anchor="middle" x="109" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Submodule</text>
+</g>
+<!-- Subroutine -->
+<g id="node3" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="234.5,-24 163.5,-24 163.5,0 234.5,0 234.5,-24"/>
+<text text-anchor="middle" x="199" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node4" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="311,-24 253,-24 253,0 311,0 311,-24"/>
+<text text-anchor="middle" x="282" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Function</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="387,-24 329,-24 329,0 387,0 387,-24"/>
+<text text-anchor="middle" x="358" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="509,-24 405,-24 405,0 509,0 509,-24"/>
+<text text-anchor="middle" x="457" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a submodule to the (sub)module which it is
+    descended from. Dashed arrows point from a module or program unit to 
+    modules which it uses. Where possible, edges connecting nodes are given different colours to make them easier to distinguish in large graphs.
+    </p>
+    </div></div></div></div>
+      </li>
+      
+      </ul>
+    </div>
+    
+
+    
+    
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Used by</h3>
+      </div>
+      <ul class="list-group">
+  
+  
+  <li class="list-group-item">
+    <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: module~~mpi_var~~UsedByGraph Pages: 1 -->
+<svg id="modulempi_varUsedByGraph" width="641pt" height="565pt"
+ viewBox="0.00 0.00 641.00 565.27" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="module~~mpi_var~~UsedByGraph" class="graph" transform="scale(.7099 .7099) rotate(0) translate(4 792.3189)">
+<title>module~~mpi_var~~UsedByGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-792.3189 899,-792.3189 899,4 -4,4"/>
+<!-- module~mpi_var -->
+<g id="module~~mpi_var~~UsedByGraph_node1" class="node">
+<title>module~mpi_var</title>
+<polygon fill="none" stroke="#000000" points="55,-188.1914 0,-188.1914 0,-164.1914 55,-164.1914 55,-188.1914"/>
+<text text-anchor="middle" x="27.5" y="-173.7914" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">mpi_var</text>
+</g>
+<!-- module~parallel -->
+<g id="module~~mpi_var~~UsedByGraph_node2" class="node">
+<title>module~parallel</title>
+<g id="a_module~~mpi_var~~UsedByGraph_node2"><a xlink:href=".././module/parallel.html" xlink:title="parallel">
+<polygon fill="#337ab7" stroke="#337ab7" points="169.5,-380.1914 115.5,-380.1914 115.5,-356.1914 169.5,-356.1914 169.5,-380.1914"/>
+<text text-anchor="middle" x="142.5" y="-365.7914" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">parallel</text>
+</a>
+</g>
+</g>
+<!-- module~parallel&#45;&gt;module~mpi_var -->
+<g id="module~~mpi_var~~UsedByGraph_edge1" class="edge">
+<title>module~parallel&#45;&gt;module~mpi_var</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M135.3062,-356.1809C116.1866,-324.2594 63.9315,-237.0161 39.896,-196.8873"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="42.8321,-194.9777 34.691,-188.1973 36.8269,-198.5746 42.8321,-194.9777"/>
+</g>
+<!-- module~read_input -->
+<g id="module~~mpi_var~~UsedByGraph_node3" class="node">
+<title>module~read_input</title>
+<g id="a_module~~mpi_var~~UsedByGraph_node3"><a xlink:href=".././module/read_input.html" xlink:title="read_input">
+<polygon fill="#337ab7" stroke="#337ab7" points="177.5,-129.1914 107.5,-129.1914 107.5,-105.1914 177.5,-105.1914 177.5,-129.1914"/>
+<text text-anchor="middle" x="142.5" y="-114.7914" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">read_input</text>
+</a>
+</g>
+</g>
+<!-- module~read_input&#45;&gt;module~mpi_var -->
+<g id="module~~mpi_var~~UsedByGraph_edge2" class="edge">
+<title>module~read_input&#45;&gt;module~mpi_var</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M118.9505,-129.2733C101.9736,-137.9832 78.845,-149.8492 60.0954,-159.4685"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="58.3177,-156.4467 51.018,-164.1256 61.513,-162.6749 58.3177,-156.4467"/>
+</g>
+<!-- module~set_grid_param -->
+<g id="module~~mpi_var~~UsedByGraph_node4" class="node">
+<title>module~set_grid_param</title>
+<g id="a_module~~mpi_var~~UsedByGraph_node4"><a xlink:href=".././module/set_grid_param.html" xlink:title="set_grid_param">
+<polygon fill="#337ab7" stroke="#337ab7" points="465,-68.1914 370,-68.1914 370,-44.1914 465,-44.1914 465,-68.1914"/>
+<text text-anchor="middle" x="417.5" y="-53.7914" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">set_grid_param</text>
+</a>
+</g>
+</g>
+<!-- module~set_grid_param&#45;&gt;module~mpi_var -->
+<g id="module~~mpi_var~~UsedByGraph_edge3" class="edge">
+<title>module~set_grid_param&#45;&gt;module~mpi_var</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M369.7345,-51.2261C302.884,-46.5651 179.6719,-46.4882 91,-96.1914 67.0269,-109.629 48.8068,-136.1176 38.1606,-154.9297"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="34.9581,-153.4945 33.2933,-163.9578 41.1197,-156.8165 34.9581,-153.4945"/>
+</g>
+<!-- module~system_utilities -->
+<g id="module~~mpi_var~~UsedByGraph_node5" class="node">
+<title>module~system_utilities</title>
+<g id="a_module~~mpi_var~~UsedByGraph_node5"><a xlink:href=".././module/system_utilities.html" xlink:title="system_utilities">
+<polygon fill="#337ab7" stroke="#337ab7" points="189.5,-29.1914 95.5,-29.1914 95.5,-5.1914 189.5,-5.1914 189.5,-29.1914"/>
+<text text-anchor="middle" x="142.5" y="-14.7914" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">system_utilities</text>
+</a>
+</g>
+</g>
+<!-- module~system_utilities&#45;&gt;module~mpi_var -->
+<g id="module~~mpi_var~~UsedByGraph_edge4" class="edge">
+<title>module~system_utilities&#45;&gt;module~mpi_var</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M111.7065,-29.2611C104.2821,-33.2084 96.8218,-38.1652 91,-44.1914 60.1347,-76.1401 41.8254,-125.9487 33.308,-154.3678"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="29.9005,-153.5537 30.5173,-164.1306 36.631,-155.4777 29.9005,-153.5537"/>
+</g>
+<!-- module~grid_field_param -->
+<g id="module~~mpi_var~~UsedByGraph_node6" class="node">
+<title>module~grid_field_param</title>
+<g id="a_module~~mpi_var~~UsedByGraph_node6"><a xlink:href=".././module/grid_field_param.html" xlink:title="grid_field_param">
+<polygon fill="#337ab7" stroke="#337ab7" points="194,-459.1914 91,-459.1914 91,-435.1914 194,-435.1914 194,-459.1914"/>
+<text text-anchor="middle" x="142.5" y="-444.7914" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">grid_field_param</text>
+</a>
+</g>
+</g>
+<!-- module~grid_field_param&#45;&gt;module~mpi_var -->
+<g id="module~~mpi_var~~UsedByGraph_edge5" class="edge">
+<title>module~grid_field_param&#45;&gt;module~mpi_var</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M128.8362,-435.1069C117.2442,-424.1697 100.955,-407.0758 91,-389.1914 55.3184,-325.0886 37.612,-238.7171 30.8621,-198.5108"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="34.2877,-197.7683 29.243,-188.4516 27.3767,-198.8808 34.2877,-197.7683"/>
+</g>
+<!-- module~stretched_grid -->
+<g id="module~~mpi_var~~UsedByGraph_node7" class="node">
+<title>module~stretched_grid</title>
+<g id="a_module~~mpi_var~~UsedByGraph_node7"><a xlink:href=".././module/stretched_grid.html" xlink:title="stretched_grid">
+<polygon fill="#337ab7" stroke="#337ab7" points="187,-541.1914 98,-541.1914 98,-517.1914 187,-517.1914 187,-541.1914"/>
+<text text-anchor="middle" x="142.5" y="-526.7914" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">stretched_grid</text>
+</a>
+</g>
+</g>
+<!-- module~stretched_grid&#45;&gt;module~mpi_var -->
+<g id="module~~mpi_var~~UsedByGraph_edge6" class="edge">
+<title>module~stretched_grid&#45;&gt;module~mpi_var</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M128.9792,-516.9758C117.1517,-505.5243 100.4306,-487.3391 91,-468.1914 45.0762,-374.9481 32.1409,-248.8079 28.6871,-198.3708"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="32.1731,-198.0353 28.0561,-188.2731 25.1867,-198.472 32.1731,-198.0353"/>
+</g>
+<!-- module~init_part_distrib -->
+<g id="module~~mpi_var~~UsedByGraph_node8" class="node">
+<title>module~init_part_distrib</title>
+<g id="a_module~~mpi_var~~UsedByGraph_node8"><a xlink:href=".././module/init_part_distrib.html" xlink:title="init_part_distrib">
+<polygon fill="#337ab7" stroke="#337ab7" points="324,-148.1914 230,-148.1914 230,-124.1914 324,-124.1914 324,-148.1914"/>
+<text text-anchor="middle" x="277" y="-133.7914" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">init_part_distrib</text>
+</a>
+</g>
+</g>
+<!-- module~init_part_distrib&#45;&gt;module~mpi_var -->
+<g id="module~~mpi_var~~UsedByGraph_edge7" class="edge">
+<title>module~init_part_distrib&#45;&gt;module~mpi_var</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M249.3266,-148.2454C222.5888,-158.9654 180.6433,-173.3709 142.5,-176.1914"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M142.5,-176.1914C116.8888,-178.0851 87.9814,-178.0758 65.5561,-177.5978"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="65.5136,-174.0957 55.4281,-177.3411 65.3362,-181.0934 65.5136,-174.0957"/>
+</g>
+<!-- module~ionize -->
+<g id="module~~mpi_var~~UsedByGraph_node9" class="node">
+<title>module~ionize</title>
+<g id="a_module~~mpi_var~~UsedByGraph_node9"><a xlink:href=".././module/ionize.html" xlink:title="ionize">
+<polygon fill="#337ab7" stroke="#337ab7" points="606,-380.1914 552,-380.1914 552,-356.1914 606,-356.1914 606,-380.1914"/>
+<text text-anchor="middle" x="579" y="-365.7914" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">ionize</text>
+</a>
+</g>
+</g>
+<!-- module~ionize&#45;&gt;module~mpi_var -->
+<g id="module~~mpi_var~~UsedByGraph_edge8" class="edge">
+<title>module~ionize&#45;&gt;module~mpi_var</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M565.2581,-356.18C513.337,-312.1532 322.9,-162.8521 142.5,-176.1914"/>
+</g>
+<!-- module~pic_out -->
+<g id="module~~mpi_var~~UsedByGraph_node10" class="node">
+<title>module~pic_out</title>
+<g id="a_module~~mpi_var~~UsedByGraph_node10"><a xlink:href=".././module/pic_out.html" xlink:title="pic_out">
+<polygon fill="#337ab7" stroke="#337ab7" points="304,-323.1914 250,-323.1914 250,-299.1914 304,-299.1914 304,-323.1914"/>
+<text text-anchor="middle" x="277" y="-308.7914" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">pic_out</text>
+</a>
+</g>
+</g>
+<!-- module~pic_out&#45;&gt;module~parallel -->
+<g id="module~~mpi_var~~UsedByGraph_edge9" class="edge">
+<title>module~pic_out&#45;&gt;module~parallel</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M249.7819,-322.7262C229.4548,-331.3406 201.4558,-343.2064 179.1585,-352.6558"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="177.5192,-349.5491 169.6776,-356.6737 180.2506,-355.9942 177.5192,-349.5491"/>
+</g>
+<!-- module~set_init_param -->
+<g id="module~~mpi_var~~UsedByGraph_node11" class="node">
+<title>module~set_init_param</title>
+<g id="a_module~~mpi_var~~UsedByGraph_node11"><a xlink:href=".././module/set_init_param.html" xlink:title="set_init_param">
+<polygon fill="#337ab7" stroke="#337ab7" points="624.5,-104.1914 533.5,-104.1914 533.5,-80.1914 624.5,-80.1914 624.5,-104.1914"/>
+<text text-anchor="middle" x="579" y="-89.7914" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">set_init_param</text>
+</a>
+</g>
+</g>
+<!-- module~set_init_param&#45;&gt;module~set_grid_param -->
+<g id="module~~mpi_var~~UsedByGraph_edge19" class="edge">
+<title>module~set_init_param&#45;&gt;module~set_grid_param</title>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M533.1526,-81.9715C515.0466,-77.9355 494.0416,-73.2533 474.9399,-68.9953"/>
+<polygon fill="#7fff00" stroke="#7fff00" points="475.6719,-65.5726 465.1499,-66.813 474.1488,-72.405 475.6719,-65.5726"/>
+</g>
+<!-- module~prl_fft -->
+<g id="module~~mpi_var~~UsedByGraph_node12" class="node">
+<title>module~prl_fft</title>
+<g id="a_module~~mpi_var~~UsedByGraph_node12"><a xlink:href=".././module/prl_fft.html" xlink:title="prl_fft">
+<polygon fill="#337ab7" stroke="#337ab7" points="304,-539.1914 250,-539.1914 250,-515.1914 304,-515.1914 304,-539.1914"/>
+<text text-anchor="middle" x="277" y="-524.7914" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">prl_fft</text>
+</a>
+</g>
+</g>
+<!-- module~prl_fft&#45;&gt;module~parallel -->
+<g id="module~~mpi_var~~UsedByGraph_edge10" class="edge">
+<title>module~prl_fft&#45;&gt;module~parallel</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M249.6308,-515.738C242.6148,-511.8713 235.5045,-507.0234 230,-501.1914 204.6211,-474.3023 214.4731,-456.9803 194,-426.1914 184.76,-412.2956 172.398,-398.2621 162.1016,-387.4803"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="164.5342,-384.9619 155.0435,-380.2527 159.5261,-389.8525 164.5342,-384.9619"/>
+</g>
+<!-- module~pic_evolve -->
+<g id="module~~mpi_var~~UsedByGraph_node13" class="node">
+<title>module~pic_evolve</title>
+<g id="a_module~~mpi_var~~UsedByGraph_node13"><a xlink:href=".././module/pic_evolve.html" xlink:title="pic_evolve">
+<polygon fill="#337ab7" stroke="#337ab7" points="778.5,-500.1914 709.5,-500.1914 709.5,-476.1914 778.5,-476.1914 778.5,-500.1914"/>
+<text text-anchor="middle" x="744" y="-485.7914" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">pic_evolve</text>
+</a>
+</g>
+</g>
+<!-- module~pic_evolve&#45;&gt;module~ionize -->
+<g id="module~~mpi_var~~UsedByGraph_edge28" class="edge">
+<title>module~pic_evolve&#45;&gt;module~ionize</title>
+<path fill="none" stroke="#ff00bf" stroke-dasharray="5,2" d="M724.7931,-476.1217C712.6559,-468.3664 696.7274,-457.9511 683,-448.1914 654.4446,-427.8895 622.6605,-403.1047 601.8352,-386.5523"/>
+<polygon fill="#ff00bf" stroke="#ff00bf" points="603.8886,-383.7131 593.8886,-380.2127 599.5231,-389.1851 603.8886,-383.7131"/>
+</g>
+<!-- module~init_grid_field -->
+<g id="module~~mpi_var~~UsedByGraph_node16" class="node">
+<title>module~init_grid_field</title>
+<g id="a_module~~mpi_var~~UsedByGraph_node16"><a xlink:href=".././module/init_grid_field.html" xlink:title="init_grid_field">
+<polygon fill="#337ab7" stroke="#337ab7" points="319,-623.1914 235,-623.1914 235,-599.1914 319,-599.1914 319,-623.1914"/>
+<text text-anchor="middle" x="277" y="-608.7914" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">init_grid_field</text>
+</a>
+</g>
+</g>
+<!-- module~pic_evolve&#45;&gt;module~init_grid_field -->
+<g id="module~~mpi_var~~UsedByGraph_edge39" class="edge">
+<title>module~pic_evolve&#45;&gt;module~init_grid_field</title>
+<path fill="none" stroke="#00ff3f" stroke-dasharray="5,2" d="M740.275,-500.4602C727.1355,-542.9867 681.8672,-683.1143 647,-713.1914 567.0836,-782.1288 518.1581,-805.924 417.5,-774.1914"/>
+</g>
+<!-- module~mpi_part_interface -->
+<g id="module~~mpi_var~~UsedByGraph_node22" class="node">
+<title>module~mpi_part_interface</title>
+<g id="a_module~~mpi_var~~UsedByGraph_node22"><a xlink:href=".././module/mpi_part_interface.html" xlink:title="mpi_part_interface">
+<polygon fill="#337ab7" stroke="#337ab7" points="474,-422.1914 361,-422.1914 361,-398.1914 474,-398.1914 474,-422.1914"/>
+<text text-anchor="middle" x="417.5" y="-407.7914" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">mpi_part_interface</text>
+</a>
+</g>
+</g>
+<!-- module~pic_evolve&#45;&gt;module~mpi_part_interface -->
+<g id="module~~mpi_var~~UsedByGraph_edge54" class="edge">
+<title>module~pic_evolve&#45;&gt;module~mpi_part_interface</title>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M709.1382,-492.1581C662.0435,-496.0352 576.4634,-497.7728 511,-469.1914 491.1082,-460.5066 493.1161,-448.1462 475,-436.1914 469.7192,-432.7066 463.8949,-429.4709 458.0409,-426.5493"/>
+<polygon fill="#7f00ff" stroke="#7f00ff" points="459.4281,-423.3338 448.8914,-422.2261 456.4376,-429.6628 459.4281,-423.3338"/>
+</g>
+<!-- module~curr_and_fields_util -->
+<g id="module~~mpi_var~~UsedByGraph_node29" class="node">
+<title>module~curr_and_fields_util</title>
+<g id="a_module~~mpi_var~~UsedByGraph_node29"><a xlink:href=".././module/curr_and_fields_util.html" xlink:title="curr_and_fields_util">
+<polygon fill="#337ab7" stroke="#337ab7" points="636.5,-582.1914 521.5,-582.1914 521.5,-558.1914 636.5,-558.1914 636.5,-582.1914"/>
+<text text-anchor="middle" x="579" y="-567.7914" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">curr_and_fields_util</text>
+</a>
+</g>
+</g>
+<!-- module~pic_evolve&#45;&gt;module~curr_and_fields_util -->
+<g id="module~~mpi_var~~UsedByGraph_edge67" class="edge">
+<title>module~pic_evolve&#45;&gt;module~curr_and_fields_util</title>
+<path fill="none" stroke="#33ff00" stroke-dasharray="5,2" d="M727.5908,-500.3989C708.8869,-513.8536 677.0106,-535.4114 647,-549.1914 642.6665,-551.1812 638.0941,-553.0483 633.4533,-554.7846"/>
+<polygon fill="#33ff00" stroke="#33ff00" points="632.1508,-551.5326 623.8862,-558.1619 634.481,-558.1334 632.1508,-551.5326"/>
+</g>
+<!-- module~fluid_density_momenta -->
+<g id="module~~mpi_var~~UsedByGraph_node31" class="node">
+<title>module~fluid_density_momenta</title>
+<g id="a_module~~mpi_var~~UsedByGraph_node31"><a xlink:href=".././module/fluid_density_momenta.html" xlink:title="fluid_density_momenta">
+<polygon fill="#337ab7" stroke="#337ab7" points="647,-540.1914 511,-540.1914 511,-516.1914 647,-516.1914 647,-540.1914"/>
+<text text-anchor="middle" x="579" y="-525.7914" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">fluid_density_momenta</text>
+</a>
+</g>
+</g>
+<!-- module~pic_evolve&#45;&gt;module~fluid_density_momenta -->
+<g id="module~~mpi_var~~UsedByGraph_edge69" class="edge">
+<title>module~pic_evolve&#45;&gt;module~fluid_density_momenta</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M709.4106,-496.5767C688.9044,-501.5479 662.3547,-507.9842 638.5679,-513.7507"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="637.4622,-510.4172 628.5683,-516.1748 639.1115,-517.2202 637.4622,-510.4172"/>
+</g>
+<!-- module~window -->
+<g id="module~~mpi_var~~UsedByGraph_node33" class="node">
+<title>module~window</title>
+<g id="a_module~~mpi_var~~UsedByGraph_node33"><a xlink:href=".././module/window.html" xlink:title="window">
+<polygon fill="#337ab7" stroke="#337ab7" points="606,-460.1914 552,-460.1914 552,-436.1914 606,-436.1914 606,-460.1914"/>
+<text text-anchor="middle" x="579" y="-445.7914" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">window</text>
+</a>
+</g>
+</g>
+<!-- module~pic_evolve&#45;&gt;module~window -->
+<g id="module~~mpi_var~~UsedByGraph_edge72" class="edge">
+<title>module~pic_evolve&#45;&gt;module~window</title>
+<path fill="none" stroke="#3200ff" stroke-dasharray="5,2" d="M709.4106,-479.806C682.0577,-473.175 643.9519,-463.9373 615.9934,-457.1595"/>
+<polygon fill="#3200ff" stroke="#3200ff" points="616.7339,-453.7377 606.1908,-454.7831 615.0846,-460.5406 616.7339,-453.7377"/>
+</g>
+<!-- module~grid_part_lib -->
+<g id="module~~mpi_var~~UsedByGraph_node14" class="node">
+<title>module~grid_part_lib</title>
+<g id="a_module~~mpi_var~~UsedByGraph_node14"><a xlink:href=".././module/grid_part_lib.html" xlink:title="grid_part_lib">
+<polygon fill="#337ab7" stroke="#337ab7" points="316.5,-581.1914 237.5,-581.1914 237.5,-557.1914 316.5,-557.1914 316.5,-581.1914"/>
+<text text-anchor="middle" x="277" y="-566.7914" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">grid_part_lib</text>
+</a>
+</g>
+</g>
+<!-- module~grid_part_lib&#45;&gt;module~stretched_grid -->
+<g id="module~~mpi_var~~UsedByGraph_edge24" class="edge">
+<title>module~grid_part_lib&#45;&gt;module~stretched_grid</title>
+<path fill="none" stroke="#003fff" stroke-dasharray="5,2" d="M237.373,-557.4064C223.5219,-553.2871 207.7786,-548.6051 193.1525,-544.2553"/>
+<polygon fill="#003fff" stroke="#003fff" points="193.8251,-540.8039 183.2423,-541.308 191.8296,-547.5135 193.8251,-540.8039"/>
+</g>
+<!-- module~pic_in -->
+<g id="module~~mpi_var~~UsedByGraph_node15" class="node">
+<title>module~pic_in</title>
+<g id="a_module~~mpi_var~~UsedByGraph_node15"><a xlink:href=".././module/pic_in.html" xlink:title="pic_in">
+<polygon fill="#337ab7" stroke="#337ab7" points="606,-202.1914 552,-202.1914 552,-178.1914 606,-178.1914 606,-202.1914"/>
+<text text-anchor="middle" x="579" y="-187.7914" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">pic_in</text>
+</a>
+</g>
+</g>
+<!-- module~pic_in&#45;&gt;module~init_part_distrib -->
+<g id="module~~mpi_var~~UsedByGraph_edge25" class="edge">
+<title>module~pic_in&#45;&gt;module~init_part_distrib</title>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M551.9939,-180.3491C531.2125,-173.1519 501.6357,-163.7177 475,-158.1914 428.1141,-148.4634 374.0304,-142.823 334.2473,-139.694"/>
+<polygon fill="#7f00ff" stroke="#7f00ff" points="334.4332,-136.1982 324.1974,-138.933 333.9045,-143.1782 334.4332,-136.1982"/>
+</g>
+<!-- module~init_laser_field -->
+<g id="module~~mpi_var~~UsedByGraph_node35" class="node">
+<title>module~init_laser_field</title>
+<g id="a_module~~mpi_var~~UsedByGraph_node35"><a xlink:href=".././module/init_laser_field.html" xlink:title="init_laser_field">
+<polygon fill="#337ab7" stroke="#337ab7" points="462,-338.1914 373,-338.1914 373,-314.1914 462,-314.1914 462,-338.1914"/>
+<text text-anchor="middle" x="417.5" y="-323.7914" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">init_laser_field</text>
+</a>
+</g>
+</g>
+<!-- module~pic_in&#45;&gt;module~init_laser_field -->
+<g id="module~~mpi_var~~UsedByGraph_edge75" class="edge">
+<title>module~pic_in&#45;&gt;module~init_laser_field</title>
+<path fill="none" stroke="#ff0098" stroke-dasharray="5,2" d="M564.668,-202.2605C536.486,-225.9926 473.674,-278.887 439.9425,-307.2924"/>
+<polygon fill="#ff0098" stroke="#ff0098" points="437.4267,-304.8352 432.0321,-313.9538 441.9357,-310.1896 437.4267,-304.8352"/>
+</g>
+<!-- module~init_grid_field&#45;&gt;module~grid_field_param -->
+<g id="module~~mpi_var~~UsedByGraph_edge23" class="edge">
+<title>module~init_grid_field&#45;&gt;module~grid_field_param</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M241.7449,-598.9952C237.4591,-596.5287 233.4014,-593.615 230,-590.1914 201.9475,-561.9557 215.0552,-541.9682 194,-508.1914 184.7962,-493.4267 172.2356,-478.4745 161.8232,-467.0689"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="164.0841,-464.3619 154.6998,-459.444 158.969,-469.1406 164.0841,-464.3619"/>
+</g>
+<!-- module~env_evolve -->
+<g id="module~~mpi_var~~UsedByGraph_node17" class="node">
+<title>module~env_evolve</title>
+<g id="a_module~~mpi_var~~UsedByGraph_node17"><a xlink:href=".././module/env_evolve.html" xlink:title="env_evolve">
+<polygon fill="#337ab7" stroke="#337ab7" points="780.5,-439.1914 707.5,-439.1914 707.5,-415.1914 780.5,-415.1914 780.5,-439.1914"/>
+<text text-anchor="middle" x="744" y="-424.7914" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">env_evolve</text>
+</a>
+</g>
+</g>
+<!-- module~env_evolve&#45;&gt;module~ionize -->
+<g id="module~~mpi_var~~UsedByGraph_edge26" class="edge">
+<title>module~env_evolve&#45;&gt;module~ionize</title>
+<path fill="none" stroke="#ff00bf" stroke-dasharray="5,2" d="M710.2116,-415.1095C682.7171,-405.2781 643.9768,-391.4255 615.7205,-381.3217"/>
+<polygon fill="#ff00bf" stroke="#ff00bf" points="616.7933,-377.9884 606.1987,-377.917 614.4364,-384.5797 616.7933,-377.9884"/>
+</g>
+<!-- module~env_evolve&#45;&gt;module~mpi_part_interface -->
+<g id="module~~mpi_var~~UsedByGraph_edge52" class="edge">
+<title>module~env_evolve&#45;&gt;module~mpi_part_interface</title>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M707.4967,-425.2907C653.6026,-422.4846 551.8524,-417.1867 484.3555,-413.6724"/>
+<polygon fill="#7f00ff" stroke="#7f00ff" points="484.4111,-410.1706 474.2426,-413.1458 484.0471,-417.1611 484.4111,-410.1706"/>
+</g>
+<!-- module~env_evolve&#45;&gt;module~curr_and_fields_util -->
+<g id="module~~mpi_var~~UsedByGraph_edge66" class="edge">
+<title>module~env_evolve&#45;&gt;module~curr_and_fields_util</title>
+<path fill="none" stroke="#33ff00" stroke-dasharray="5,2" d="M718.9535,-439.2397C706.8305,-446.0739 692.8139,-455.5882 683,-467.1914 657.2967,-497.5811 676.704,-522.6985 647,-549.1914 645.5131,-550.5175 643.9438,-551.7599 642.3082,-552.9238"/>
+<polygon fill="#33ff00" stroke="#33ff00" points="640.4298,-549.9691 633.6543,-558.1142 644.0303,-555.9722 640.4298,-549.9691"/>
+</g>
+<!-- module~env_evolve&#45;&gt;module~fluid_density_momenta -->
+<g id="module~~mpi_var~~UsedByGraph_edge68" class="edge">
+<title>module~env_evolve&#45;&gt;module~fluid_density_momenta</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M724.0971,-439.3743C695.0305,-457.1667 640.8148,-490.3532 607.5157,-510.7363"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="605.4183,-507.9164 598.7166,-516.1224 609.0729,-513.8867 605.4183,-507.9164"/>
+</g>
+<!-- module~env_evolve&#45;&gt;module~window -->
+<g id="module~~mpi_var~~UsedByGraph_edge71" class="edge">
+<title>module~env_evolve&#45;&gt;module~window</title>
+<path fill="none" stroke="#3200ff" stroke-dasharray="5,2" d="M707.3812,-431.8519C680.1888,-435.3128 643.2456,-440.0146 615.9698,-443.4861"/>
+<polygon fill="#3200ff" stroke="#3200ff" points="615.508,-440.0166 606.0299,-444.7512 616.3918,-446.9606 615.508,-440.0166"/>
+</g>
+<!-- module~grid_fields -->
+<g id="module~~mpi_var~~UsedByGraph_node18" class="node">
+<title>module~grid_fields</title>
+<g id="a_module~~mpi_var~~UsedByGraph_node18"><a xlink:href=".././module/grid_fields.html" xlink:title="grid_fields">
+<polygon fill="#337ab7" stroke="#337ab7" points="310.5,-459.1914 243.5,-459.1914 243.5,-435.1914 310.5,-435.1914 310.5,-459.1914"/>
+<text text-anchor="middle" x="277" y="-444.7914" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">grid_fields</text>
+</a>
+</g>
+</g>
+<!-- module~grid_fields&#45;&gt;module~parallel -->
+<g id="module~~mpi_var~~UsedByGraph_edge11" class="edge">
+<title>module~grid_fields&#45;&gt;module~parallel</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M256.2791,-435.0207C233.7029,-421.7604 197.4046,-400.4402 171.8904,-385.4541"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="173.419,-382.2929 163.0237,-380.2462 169.8737,-388.3287 173.419,-382.2929"/>
+</g>
+<!-- module~grid_fields&#45;&gt;module~grid_field_param -->
+<g id="module~~mpi_var~~UsedByGraph_edge22" class="edge">
+<title>module~grid_fields&#45;&gt;module~grid_field_param</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M243.4069,-447.1914C231.5642,-447.1914 217.8453,-447.1914 204.4123,-447.1914"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="204.2315,-443.6915 194.2314,-447.1914 204.2314,-450.6915 204.2315,-443.6915"/>
+</g>
+<!-- module~start_all -->
+<g id="module~~mpi_var~~UsedByGraph_node19" class="node">
+<title>module~start_all</title>
+<g id="a_module~~mpi_var~~UsedByGraph_node19"><a xlink:href=".././module/start_all.html" xlink:title="start_all">
+<polygon fill="#337ab7" stroke="#337ab7" points="771.5,-202.1914 716.5,-202.1914 716.5,-178.1914 771.5,-178.1914 771.5,-202.1914"/>
+<text text-anchor="middle" x="744" y="-187.7914" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">start_all</text>
+</a>
+</g>
+</g>
+<!-- module~start_all&#45;&gt;module~read_input -->
+<g id="module~~mpi_var~~UsedByGraph_edge18" class="edge">
+<title>module~start_all&#45;&gt;module~read_input</title>
+<path fill="none" stroke="#ffbf00" stroke-dasharray="5,2" d="M579,-141.1914C440.114,-105.2814 268.3639,-109.3153 187.9912,-113.885"/>
+<polygon fill="#ffbf00" stroke="#ffbf00" points="187.5019,-110.408 177.7293,-114.5002 187.9209,-117.3954 187.5019,-110.408"/>
+</g>
+<!-- module~start_all&#45;&gt;module~set_grid_param -->
+<g id="module~~mpi_var~~UsedByGraph_edge20" class="edge">
+<title>module~start_all&#45;&gt;module~set_grid_param</title>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M716.3296,-180.4588C683.8371,-169.386 628.131,-151.5072 579,-141.1914"/>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M579,-141.1914C547.0134,-134.4753 538.851,-130.296 511,-113.1914 493.0076,-102.1414 492.8016,-93.5461 475,-82.1914 469.6052,-78.7503 463.679,-75.526 457.7448,-72.5987"/>
+<polygon fill="#7fff00" stroke="#7fff00" points="459.0277,-69.3346 448.4881,-68.2547 456.0539,-75.6715 459.0277,-69.3346"/>
+</g>
+<!-- module~start_all&#45;&gt;module~system_utilities -->
+<g id="module~~mpi_var~~UsedByGraph_edge21" class="edge">
+<title>module~start_all&#45;&gt;module~system_utilities</title>
+<path fill="none" stroke="#00ff3f" stroke-dasharray="5,2" d="M737.8672,-178.1199C724.7796,-153.6758 691.6292,-98.3461 647,-71.1914 505.2742,15.0422 299.0285,3.621 199.9015,-8.4412"/>
+<polygon fill="#00ff3f" stroke="#00ff3f" points="199.2695,-4.9932 189.7875,-9.7199 200.1476,-11.9379 199.2695,-4.9932"/>
+</g>
+<!-- module~start_all&#45;&gt;module~ionize -->
+<g id="module~~mpi_var~~UsedByGraph_edge27" class="edge">
+<title>module~start_all&#45;&gt;module~ionize</title>
+<path fill="none" stroke="#ff00bf" stroke-dasharray="5,2" d="M732.9471,-202.3583C719.9694,-217.0234 698.2793,-242.7524 683,-267.1914 663.399,-298.5428 674.1986,-317.1444 647,-342.1914 638.2271,-350.2703 626.6829,-355.9259 615.6024,-359.8471"/>
+<polygon fill="#ff00bf" stroke="#ff00bf" points="614.5444,-356.5107 606.0656,-362.8637 616.6555,-363.1848 614.5444,-356.5107"/>
+</g>
+<!-- module~start_all&#45;&gt;module~set_init_param -->
+<g id="module~~mpi_var~~UsedByGraph_edge30" class="edge">
+<title>module~start_all&#45;&gt;module~set_init_param</title>
+<path fill="none" stroke="#ff5f00" stroke-dasharray="5,2" d="M726.4582,-178.0327C707.2828,-164.9241 675.4856,-143.7166 647,-127.1914 636.0535,-120.841 623.832,-114.3677 612.8024,-108.7432"/>
+<polygon fill="#ff5f00" stroke="#ff5f00" points="614.3768,-105.6174 603.8719,-104.2397 611.2248,-111.8676 614.3768,-105.6174"/>
+</g>
+<!-- module~start_all&#45;&gt;module~pic_in -->
+<g id="module~~mpi_var~~UsedByGraph_edge35" class="edge">
+<title>module~start_all&#45;&gt;module~pic_in</title>
+<path fill="none" stroke="#1fff00" stroke-dasharray="5,2" d="M716.3827,-190.1914C688.9729,-190.1914 646.7709,-190.1914 616.3741,-190.1914"/>
+<polygon fill="#1fff00" stroke="#1fff00" points="616.1583,-186.6915 606.1583,-190.1914 616.1583,-193.6915 616.1583,-186.6915"/>
+</g>
+<!-- module~run_data_info -->
+<g id="module~~mpi_var~~UsedByGraph_node20" class="node">
+<title>module~run_data_info</title>
+<g id="a_module~~mpi_var~~UsedByGraph_node20"><a xlink:href=".././module/run_data_info.html" xlink:title="run_data_info">
+<polygon fill="#337ab7" stroke="#337ab7" points="460,-380.1914 375,-380.1914 375,-356.1914 460,-356.1914 460,-380.1914"/>
+<text text-anchor="middle" x="417.5" y="-365.7914" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">run_data_info</text>
+</a>
+</g>
+</g>
+<!-- module~start_all&#45;&gt;module~run_data_info -->
+<g id="module~~mpi_var~~UsedByGraph_edge48" class="edge">
+<title>module~start_all&#45;&gt;module~run_data_info</title>
+<path fill="none" stroke="#003fff" stroke-dasharray="5,2" d="M734.9665,-202.4259C712.5535,-231.5597 650.9737,-304.385 579,-328.1914"/>
+<path fill="none" stroke="#003fff" stroke-dasharray="5,2" d="M579,-328.1914C558.9863,-334.8112 509.296,-346.8851 470.2748,-356.042"/>
+<polygon fill="#003fff" stroke="#003fff" points="469.0389,-352.7364 460.0982,-358.4209 470.6324,-359.5527 469.0389,-352.7364"/>
+</g>
+<!-- module~pic_dump -->
+<g id="module~~mpi_var~~UsedByGraph_node24" class="node">
+<title>module~pic_dump</title>
+<g id="a_module~~mpi_var~~UsedByGraph_node24"><a xlink:href=".././module/pic_dump.html" xlink:title="pic_dump">
+<polygon fill="#337ab7" stroke="#337ab7" points="309,-246.1914 245,-246.1914 245,-222.1914 309,-222.1914 309,-246.1914"/>
+<text text-anchor="middle" x="277" y="-231.7914" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">pic_dump</text>
+</a>
+</g>
+</g>
+<!-- module~start_all&#45;&gt;module~pic_dump -->
+<g id="module~~mpi_var~~UsedByGraph_edge56" class="edge">
+<title>module~start_all&#45;&gt;module~pic_dump</title>
+<path fill="none" stroke="#ff00bf" stroke-dasharray="5,2" d="M579,-141.1914C474.9172,-119.3376 355.2884,-183.9132 303.3452,-216.5501"/>
+<polygon fill="#ff00bf" stroke="#ff00bf" points="301.2753,-213.7194 294.739,-222.0578 305.0485,-219.6154 301.2753,-213.7194"/>
+</g>
+<!-- module~run_data_info&#45;&gt;module~parallel -->
+<g id="module~~mpi_var~~UsedByGraph_edge12" class="edge">
+<title>module~run_data_info&#45;&gt;module~parallel</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M374.7085,-369.796C346.843,-370.4454 309.7217,-370.566 277,-368.1914"/>
+</g>
+<!-- module~mpi_curr_interface -->
+<g id="module~~mpi_var~~UsedByGraph_node21" class="node">
+<title>module~mpi_curr_interface</title>
+<g id="a_module~~mpi_var~~UsedByGraph_node21"><a xlink:href=".././module/mpi_curr_interface.html" xlink:title="mpi_curr_interface">
+<polygon fill="#337ab7" stroke="#337ab7" points="474,-662.1914 361,-662.1914 361,-638.1914 474,-638.1914 474,-662.1914"/>
+<text text-anchor="middle" x="417.5" y="-647.7914" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">mpi_curr_interface</text>
+</a>
+</g>
+</g>
+<!-- module~mpi_curr_interface&#45;&gt;module~parallel -->
+<g id="module~~mpi_var~~UsedByGraph_edge13" class="edge">
+<title>module~mpi_curr_interface&#45;&gt;module~parallel</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M402.6992,-637.8558C390.0483,-626.7026 372.0336,-609.2977 360,-591.1914 337.2915,-557.0229 353.2477,-534.9617 324,-506.1914 291.875,-474.5907 266.5921,-494.4903 230,-468.1914 210.0358,-453.843 210.1625,-444.7175 194,-426.1914 182.8872,-413.4534 170.2897,-399.2617 160.3357,-388.1047"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="162.8865,-385.7065 153.6138,-380.5813 157.6664,-390.3704 162.8865,-385.7065"/>
+</g>
+<!-- module~mpi_part_interface&#45;&gt;module~parallel -->
+<g id="module~~mpi_var~~UsedByGraph_edge14" class="edge">
+<title>module~mpi_part_interface&#45;&gt;module~parallel</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M383.5388,-398.1846C348.9961,-386.3098 297.6946,-369.6932 277,-368.1914"/>
+</g>
+<!-- module~diag_part_and_fields -->
+<g id="module~~mpi_var~~UsedByGraph_node23" class="node">
+<title>module~diag_part_and_fields</title>
+<g id="a_module~~mpi_var~~UsedByGraph_node23"><a xlink:href=".././module/diag_part_and_fields.html" xlink:title="diag_part_and_fields">
+<polygon fill="#337ab7" stroke="#337ab7" points="805,-300.1914 683,-300.1914 683,-276.1914 805,-276.1914 805,-300.1914"/>
+<text text-anchor="middle" x="744" y="-285.7914" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">diag_part_and_fields</text>
+</a>
+</g>
+</g>
+<!-- module~diag_part_and_fields&#45;&gt;module~parallel -->
+<g id="module~~mpi_var~~UsedByGraph_edge15" class="edge">
+<title>module~diag_part_and_fields&#45;&gt;module~parallel</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M682.9816,-279.9863C605.373,-271.9699 468.4183,-266.0144 360,-305.1914 316.4445,-320.9302 323.1904,-371.5434 277,-368.1914"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M277,-368.1914C244.2193,-365.6404 206.8084,-365.8957 179.7781,-366.6419"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="179.4837,-363.1493 169.5977,-366.9596 179.7021,-370.1459 179.4837,-363.1493"/>
+</g>
+<!-- module~pic_dump&#45;&gt;module~parallel -->
+<g id="module~~mpi_var~~UsedByGraph_edge16" class="edge">
+<title>module~pic_dump&#45;&gt;module~parallel</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M264.5876,-246.5576C241.1668,-269.8913 190.289,-320.5801 162.1685,-348.5959"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="159.4963,-346.3176 154.8824,-355.855 164.4369,-351.2766 159.4963,-346.3176"/>
+</g>
+<!-- module~mpi_field_interface -->
+<g id="module~~mpi_var~~UsedByGraph_node25" class="node">
+<title>module~mpi_field_interface</title>
+<g id="a_module~~mpi_var~~UsedByGraph_node25"><a xlink:href=".././module/mpi_field_interface.html" xlink:title="mpi_field_interface">
+<polygon fill="#337ab7" stroke="#337ab7" points="475,-502.1914 360,-502.1914 360,-478.1914 475,-478.1914 475,-502.1914"/>
+<text text-anchor="middle" x="417.5" y="-487.7914" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">mpi_field_interface</text>
+</a>
+</g>
+</g>
+<!-- module~mpi_field_interface&#45;&gt;module~parallel -->
+<g id="module~~mpi_var~~UsedByGraph_edge17" class="edge">
+<title>module~mpi_field_interface&#45;&gt;module~parallel</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M405.4136,-478.1853C374.4586,-447.6594 293.5934,-369.3955 277,-368.1914"/>
+</g>
+<!-- module~grid_part_util -->
+<g id="module~~mpi_var~~UsedByGraph_node26" class="node">
+<title>module~grid_part_util</title>
+<g id="a_module~~mpi_var~~UsedByGraph_node26"><a xlink:href=".././module/grid_part_util.html" xlink:title="grid_part_util">
+<polygon fill="#337ab7" stroke="#337ab7" points="458.5,-746.1914 376.5,-746.1914 376.5,-722.1914 458.5,-722.1914 458.5,-746.1914"/>
+<text text-anchor="middle" x="417.5" y="-731.7914" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">grid_part_util</text>
+</a>
+</g>
+</g>
+<!-- module~grid_part_util&#45;&gt;module~grid_part_lib -->
+<g id="module~~mpi_var~~UsedByGraph_edge33" class="edge">
+<title>module~grid_part_util&#45;&gt;module~grid_part_lib</title>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M376.2445,-724.5753C370.1995,-721.7119 364.5043,-718.0005 360,-713.1914 321.0623,-671.6185 361.4585,-633.1018 324,-590.1914 323.1404,-589.2067 322.2257,-588.266 321.2649,-587.3675"/>
+<polygon fill="#7fff00" stroke="#7fff00" points="323.2467,-584.4787 313.148,-581.2744 319.0443,-590.077 323.2467,-584.4787"/>
+</g>
+<!-- module~init_beam_part_distrib -->
+<g id="module~~mpi_var~~UsedByGraph_node27" class="node">
+<title>module~init_beam_part_distrib</title>
+<g id="a_module~~mpi_var~~UsedByGraph_node27"><a xlink:href=".././module/init_beam_part_distrib.html" xlink:title="init_beam_part_distrib">
+<polygon fill="#337ab7" stroke="#337ab7" points="644,-704.1914 514,-704.1914 514,-680.1914 644,-680.1914 644,-704.1914"/>
+<text text-anchor="middle" x="579" y="-689.7914" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">init_beam_part_distrib</text>
+</a>
+</g>
+</g>
+<!-- module~init_beam_part_distrib&#45;&gt;module~init_grid_field -->
+<g id="module~~mpi_var~~UsedByGraph_edge37" class="edge">
+<title>module~init_beam_part_distrib&#45;&gt;module~init_grid_field</title>
+<path fill="none" stroke="#00ff3f" stroke-dasharray="5,2" d="M568.1869,-704.5513C542.9618,-731.8064 477.7805,-793.1949 417.5,-774.1914"/>
+<path fill="none" stroke="#00ff3f" stroke-dasharray="5,2" d="M417.5,-774.1914C391.8308,-766.0991 380.8682,-772.1888 360,-755.1914 319.5974,-722.2828 294.8944,-664.1469 283.8462,-632.7507"/>
+<polygon fill="#00ff3f" stroke="#00ff3f" points="287.1372,-631.5566 280.62,-623.2034 280.5056,-633.7977 287.1372,-631.5566"/>
+</g>
+<!-- module~init_beam_part_distrib&#45;&gt;module~mpi_curr_interface -->
+<g id="module~~mpi_var~~UsedByGraph_edge50" class="edge">
+<title>module~init_beam_part_distrib&#45;&gt;module~mpi_curr_interface</title>
+<path fill="none" stroke="#1f00ff" stroke-dasharray="5,2" d="M532.7206,-680.1558C514.306,-675.3669 492.9471,-669.8123 473.658,-664.7959"/>
+<polygon fill="#1f00ff" stroke="#1f00ff" points="474.3452,-661.3583 463.7862,-662.2286 472.5833,-668.1329 474.3452,-661.3583"/>
+</g>
+<!-- module~init_beam_part_distrib&#45;&gt;module~mpi_field_interface -->
+<g id="module~~mpi_var~~UsedByGraph_edge57" class="edge">
+<title>module~init_beam_part_distrib&#45;&gt;module~mpi_field_interface</title>
+<path fill="none" stroke="#ff005f" stroke-dasharray="5,2" d="M522.8783,-680.0799C518.5202,-677.6384 514.4726,-674.708 511,-671.1914 471.2772,-630.9651 503.5665,-597.9766 475,-549.1914 466.0743,-533.9483 452.3785,-519.6812 440.5923,-508.9961"/>
+<polygon fill="#ff005f" stroke="#ff005f" points="442.6525,-506.1484 432.8197,-502.2029 438.046,-511.4191 442.6525,-506.1484"/>
+</g>
+<!-- module~init_beam_part_distrib&#45;&gt;module~grid_part_util -->
+<g id="module~~mpi_var~~UsedByGraph_edge62" class="edge">
+<title>module~init_beam_part_distrib&#45;&gt;module~grid_part_util</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M532.7206,-704.2269C512.6151,-709.4555 488.9999,-715.597 468.4007,-720.954"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="467.3563,-717.6091 458.5592,-723.5134 469.1182,-724.3838 467.3563,-717.6091"/>
+</g>
+<!-- module~psolve -->
+<g id="module~~mpi_var~~UsedByGraph_node34" class="node">
+<title>module~psolve</title>
+<g id="a_module~~mpi_var~~UsedByGraph_node34"><a xlink:href=".././module/psolve.html" xlink:title="psolve">
+<polygon fill="#337ab7" stroke="#337ab7" points="444.5,-704.1914 390.5,-704.1914 390.5,-680.1914 444.5,-680.1914 444.5,-704.1914"/>
+<text text-anchor="middle" x="417.5" y="-689.7914" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">psolve</text>
+</a>
+</g>
+</g>
+<!-- module~init_beam_part_distrib&#45;&gt;module~psolve -->
+<g id="module~~mpi_var~~UsedByGraph_edge73" class="edge">
+<title>module~init_beam_part_distrib&#45;&gt;module~psolve</title>
+<path fill="none" stroke="#cc00ff" stroke-dasharray="5,2" d="M513.7773,-692.1914C493.7682,-692.1914 472.4372,-692.1914 454.9521,-692.1914"/>
+<polygon fill="#cc00ff" stroke="#cc00ff" points="454.6083,-688.6915 444.6083,-692.1914 454.6082,-695.6915 454.6083,-688.6915"/>
+</g>
+<!-- module~pic_out_util -->
+<g id="module~~mpi_var~~UsedByGraph_node28" class="node">
+<title>module~pic_out_util</title>
+<g id="a_module~~mpi_var~~UsedByGraph_node28"><a xlink:href=".././module/pic_out_util.html" xlink:title="pic_out_util">
+<polygon fill="#337ab7" stroke="#337ab7" points="615.5,-662.1914 542.5,-662.1914 542.5,-638.1914 615.5,-638.1914 615.5,-662.1914"/>
+<text text-anchor="middle" x="579" y="-647.7914" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">pic_out_util</text>
+</a>
+</g>
+</g>
+<!-- module~pic_out_util&#45;&gt;module~mpi_curr_interface -->
+<g id="module~~mpi_var~~UsedByGraph_edge51" class="edge">
+<title>module~pic_out_util&#45;&gt;module~mpi_curr_interface</title>
+<path fill="none" stroke="#1f00ff" stroke-dasharray="5,2" d="M542.3532,-650.1914C525.235,-650.1914 504.3025,-650.1914 484.5055,-650.1914"/>
+<polygon fill="#1f00ff" stroke="#1f00ff" points="484.2827,-646.6915 474.2827,-650.1914 484.2827,-653.6915 484.2827,-646.6915"/>
+</g>
+<!-- module~pic_out_util&#45;&gt;module~mpi_field_interface -->
+<g id="module~~mpi_var~~UsedByGraph_edge58" class="edge">
+<title>module~pic_out_util&#45;&gt;module~mpi_field_interface</title>
+<path fill="none" stroke="#ff005f" stroke-dasharray="5,2" d="M563.8468,-638.1327C549.6799,-626.6104 528.189,-608.4843 511,-591.1914 493.6679,-573.7545 491.5881,-567.3374 475,-549.1914 462.7682,-535.8107 448.5531,-521.2167 437.3172,-509.891"/>
+<polygon fill="#ff005f" stroke="#ff005f" points="439.6145,-507.238 430.0755,-502.6274 434.6573,-512.1803 439.6145,-507.238"/>
+</g>
+<!-- module~pic_out_util&#45;&gt;module~grid_part_util -->
+<g id="module~~mpi_var~~UsedByGraph_edge63" class="edge">
+<title>module~pic_out_util&#45;&gt;module~grid_part_util</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M542.3829,-657.4281C531.7091,-660.5846 520.3997,-665.0216 511,-671.1914 490.4467,-684.6823 495.2052,-699.1845 475,-713.1914 472.7441,-714.7552 470.3582,-716.2172 467.8913,-717.5821"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="466.1207,-714.5525 458.6927,-722.1074 469.2107,-720.8336 466.1207,-714.5525"/>
+</g>
+<!-- module~pic_out_util&#45;&gt;module~psolve -->
+<g id="module~~mpi_var~~UsedByGraph_edge74" class="edge">
+<title>module~pic_out_util&#45;&gt;module~psolve</title>
+<path fill="none" stroke="#cc00ff" stroke-dasharray="5,2" d="M542.3532,-659.7218C516.1445,-666.5377 480.9944,-675.6789 454.6682,-682.5253"/>
+<polygon fill="#cc00ff" stroke="#cc00ff" points="453.4894,-679.2154 444.6923,-685.1197 455.2513,-685.99 453.4894,-679.2154"/>
+</g>
+<!-- module~curr_and_fields_util&#45;&gt;module~init_grid_field -->
+<g id="module~~mpi_var~~UsedByGraph_edge36" class="edge">
+<title>module~curr_and_fields_util&#45;&gt;module~init_grid_field</title>
+<path fill="none" stroke="#00ff3f" stroke-dasharray="5,2" d="M524.6641,-582.215C508.7187,-585.4578 491.2098,-588.7422 475,-591.1914 425.8175,-598.6224 369.3325,-604.0207 329.3132,-607.3224"/>
+<polygon fill="#00ff3f" stroke="#00ff3f" points="328.9372,-603.8413 319.2523,-608.1369 329.5021,-610.8184 328.9372,-603.8413"/>
+</g>
+<!-- module~curr_and_fields_util&#45;&gt;module~grid_fields -->
+<g id="module~~mpi_var~~UsedByGraph_edge42" class="edge">
+<title>module~curr_and_fields_util&#45;&gt;module~grid_fields</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M521.3796,-558.387C466.0841,-546.3997 387.0968,-527.3527 360,-511.1914 340.0195,-499.2744 342.3951,-487.4341 324,-473.1914 319.9562,-470.0604 315.488,-467.0776 310.9627,-464.3233"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="312.6996,-461.2847 302.2868,-459.3292 309.2074,-467.3514 312.6996,-461.2847"/>
+</g>
+<!-- module~curr_and_fields_util&#45;&gt;module~mpi_curr_interface -->
+<g id="module~~mpi_var~~UsedByGraph_edge49" class="edge">
+<title>module~curr_and_fields_util&#45;&gt;module~mpi_curr_interface</title>
+<path fill="none" stroke="#1f00ff" stroke-dasharray="5,2" d="M556.4569,-582.3465C535.5113,-593.5325 503.37,-610.4245 475,-624.1914 468.3592,-627.4139 461.2311,-630.7411 454.3322,-633.8947"/>
+<polygon fill="#1f00ff" stroke="#1f00ff" points="452.7988,-630.7468 445.134,-638.0612 455.6872,-637.1232 452.7988,-630.7468"/>
+</g>
+<!-- module~curr_and_fields_util&#45;&gt;module~mpi_field_interface -->
+<g id="module~~mpi_var~~UsedByGraph_edge60" class="edge">
+<title>module~curr_and_fields_util&#45;&gt;module~mpi_field_interface</title>
+<path fill="none" stroke="#ff005f" stroke-dasharray="5,2" d="M530.3282,-558.0697C523.6321,-555.5751 517.0021,-552.6338 511,-549.1914 492.1719,-538.3926 493.1161,-528.1462 475,-516.1914 469.7192,-512.7066 463.8949,-509.4709 458.0409,-506.5493"/>
+<polygon fill="#ff005f" stroke="#ff005f" points="459.4281,-503.3338 448.8914,-502.2261 456.4376,-509.6628 459.4281,-503.3338"/>
+</g>
+<!-- module~grid_part_connect -->
+<g id="module~~mpi_var~~UsedByGraph_node32" class="node">
+<title>module~grid_part_connect</title>
+<g id="a_module~~mpi_var~~UsedByGraph_node32"><a xlink:href=".././module/grid_part_connect.html" xlink:title="grid_part_connect">
+<polygon fill="#337ab7" stroke="#337ab7" points="472,-582.1914 363,-582.1914 363,-558.1914 472,-558.1914 472,-582.1914"/>
+<text text-anchor="middle" x="417.5" y="-567.7914" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">grid_part_connect</text>
+</a>
+</g>
+</g>
+<!-- module~curr_and_fields_util&#45;&gt;module~grid_part_connect -->
+<g id="module~~mpi_var~~UsedByGraph_edge70" class="edge">
+<title>module~curr_and_fields_util&#45;&gt;module~grid_part_connect</title>
+<path fill="none" stroke="#0066ff" stroke-dasharray="5,2" d="M521.151,-570.1914C508.5815,-570.1914 495.205,-570.1914 482.384,-570.1914"/>
+<polygon fill="#0066ff" stroke="#0066ff" points="482.247,-566.6915 472.2469,-570.1914 482.2469,-573.6915 482.247,-566.6915"/>
+</g>
+<!-- program~aladyn -->
+<g id="module~~mpi_var~~UsedByGraph_node30" class="node">
+<title>program~aladyn</title>
+<g id="a_module~~mpi_var~~UsedByGraph_node30"><a xlink:href=".././program/aladyn.html" xlink:title="aladyn">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="895,-340.1914 841,-340.1914 841,-316.1914 895,-316.1914 895,-340.1914"/>
+<text text-anchor="middle" x="868" y="-325.7914" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">aladyn</text>
+</a>
+</g>
+</g>
+<!-- program~aladyn&#45;&gt;module~pic_out -->
+<g id="module~~mpi_var~~UsedByGraph_edge29" class="edge">
+<title>program~aladyn&#45;&gt;module~pic_out</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M859.9425,-315.9721C849.3682,-301.1757 829.2727,-277.0169 805,-267.1914 755.7671,-247.262 555.6344,-226.9272 360,-272.1914 340.9888,-276.59 321.1567,-285.7161 305.6473,-294.0348"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="303.6391,-291.1464 296.5951,-299.0605 307.0369,-297.2665 303.6391,-291.1464"/>
+</g>
+<!-- program~aladyn&#45;&gt;module~pic_evolve -->
+<g id="module~~mpi_var~~UsedByGraph_edge32" class="edge">
+<title>program~aladyn&#45;&gt;module~pic_evolve</title>
+<path fill="none" stroke="#dfff00" stroke-dasharray="5,2" d="M863.9763,-340.3067C855.8281,-363.4342 835.5179,-414.5614 805,-448.1914 797.0507,-456.9513 786.7815,-464.6439 776.9435,-470.8819"/>
+<polygon fill="#dfff00" stroke="#dfff00" points="774.8776,-468.0399 768.1088,-476.1906 778.4831,-474.04 774.8776,-468.0399"/>
+</g>
+<!-- program~aladyn&#45;&gt;module~env_evolve -->
+<g id="module~~mpi_var~~UsedByGraph_edge40" class="edge">
+<title>program~aladyn&#45;&gt;module~env_evolve</title>
+<path fill="none" stroke="#00ff9f" stroke-dasharray="5,2" d="M852.7952,-340.3307C831.4133,-357.4017 792.2791,-388.646 767.2359,-408.6401"/>
+<polygon fill="#00ff9f" stroke="#00ff9f" points="764.9603,-405.9782 759.3292,-414.9527 769.3278,-411.4486 764.9603,-405.9782"/>
+</g>
+<!-- program~aladyn&#45;&gt;module~start_all -->
+<g id="module~~mpi_var~~UsedByGraph_edge45" class="edge">
+<title>program~aladyn&#45;&gt;module~start_all</title>
+<path fill="none" stroke="#009fff" stroke-dasharray="5,2" d="M861.647,-315.9272C851.4396,-296.9712 829.9802,-260.0469 805,-234.1914 795.4784,-224.3361 783.5121,-215.1667 772.7058,-207.777"/>
+<polygon fill="#009fff" stroke="#009fff" points="774.6279,-204.8521 764.3568,-202.2531 770.7654,-210.69 774.6279,-204.8521"/>
+</g>
+<!-- program~aladyn&#45;&gt;module~run_data_info -->
+<g id="module~~mpi_var~~UsedByGraph_edge46" class="edge">
+<title>program~aladyn&#45;&gt;module~run_data_info</title>
+<path fill="none" stroke="#003fff" stroke-dasharray="5,2" d="M840.8107,-322.6664C788.5102,-313.2243 670.9364,-297.7821 579,-328.1914"/>
+</g>
+<!-- program~aladyn&#45;&gt;module~diag_part_and_fields -->
+<g id="module~~mpi_var~~UsedByGraph_edge55" class="edge">
+<title>program~aladyn&#45;&gt;module~diag_part_and_fields</title>
+<path fill="none" stroke="#df00ff" stroke-dasharray="5,2" d="M840.7877,-319.4132C826.2464,-314.7224 807.9303,-308.814 791.1548,-303.4026"/>
+<polygon fill="#df00ff" stroke="#df00ff" points="792.0875,-300.0259 781.4959,-300.2868 789.9384,-306.6879 792.0875,-300.0259"/>
+</g>
+<!-- program~aladyn&#45;&gt;module~init_beam_part_distrib -->
+<g id="module~~mpi_var~~UsedByGraph_edge64" class="edge">
+<title>program~aladyn&#45;&gt;module~init_beam_part_distrib</title>
+<path fill="none" stroke="#ff9900" stroke-dasharray="5,2" d="M744,-671.1914C718.3044,-689.2252 684.6779,-695.7297 654.4898,-697.2448"/>
+<polygon fill="#ff9900" stroke="#ff9900" points="654.2798,-693.7497 644.4003,-697.5768 654.5101,-700.7459 654.2798,-693.7497"/>
+</g>
+<!-- program~aladyn&#45;&gt;module~pic_out_util -->
+<g id="module~~mpi_var~~UsedByGraph_edge65" class="edge">
+<title>program~aladyn&#45;&gt;module~pic_out_util</title>
+<path fill="none" stroke="#cbff00" stroke-dasharray="5,2" d="M865.5505,-340.262C853.9086,-396.3212 802.3084,-630.2691 744,-671.1914"/>
+<path fill="none" stroke="#cbff00" stroke-dasharray="5,2" d="M744,-671.1914C725.4,-684.2453 667.3079,-673.3118 625.3112,-662.9509"/>
+<polygon fill="#cbff00" stroke="#cbff00" points="626.1026,-659.5409 615.5497,-660.4827 624.3866,-666.3273 626.1026,-659.5409"/>
+</g>
+<!-- module~fluid_density_momenta&#45;&gt;module~grid_fields -->
+<g id="module~~mpi_var~~UsedByGraph_edge41" class="edge">
+<title>module~fluid_density_momenta&#45;&gt;module~grid_fields</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M551.297,-516.0783C538.7303,-510.2485 523.8412,-502.8652 511,-495.1914 494.0581,-485.067 493.4146,-476.2929 475,-469.1914 424.6824,-449.7866 362.2047,-445.8585 321.0473,-445.7527"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="320.7882,-442.2539 310.806,-445.8043 320.8235,-449.2538 320.7882,-442.2539"/>
+</g>
+<!-- module~fluid_density_momenta&#45;&gt;module~mpi_field_interface -->
+<g id="module~~mpi_var~~UsedByGraph_edge59" class="edge">
+<title>module~fluid_density_momenta&#45;&gt;module~mpi_field_interface</title>
+<path fill="none" stroke="#ff005f" stroke-dasharray="5,2" d="M527.9004,-516.1679C512.2122,-512.4766 494.79,-508.3772 478.5086,-504.5463"/>
+<polygon fill="#ff005f" stroke="#ff005f" points="479.08,-501.0853 468.5442,-502.2018 477.4767,-507.8992 479.08,-501.0853"/>
+</g>
+<!-- module~grid_part_connect&#45;&gt;module~grid_part_lib -->
+<g id="module~~mpi_var~~UsedByGraph_edge34" class="edge">
+<title>module~grid_part_connect&#45;&gt;module~grid_part_lib</title>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M362.7767,-569.8019C350.8579,-569.717 338.3114,-569.6277 326.6044,-569.5444"/>
+<polygon fill="#7fff00" stroke="#7fff00" points="326.5942,-566.0444 316.5695,-569.473 326.5443,-573.0442 326.5942,-566.0444"/>
+</g>
+<!-- module~window&#45;&gt;module~run_data_info -->
+<g id="module~~mpi_var~~UsedByGraph_edge47" class="edge">
+<title>module~window&#45;&gt;module~run_data_info</title>
+<path fill="none" stroke="#003fff" stroke-dasharray="5,2" d="M559.9563,-436.1118C539.4773,-423.4284 505.7125,-403.3922 475,-389.1914 471.1475,-387.41 467.0976,-385.6734 463.0057,-384.0109"/>
+<polygon fill="#003fff" stroke="#003fff" points="464.0427,-380.6585 453.4546,-380.28 461.4957,-387.1787 464.0427,-380.6585"/>
+</g>
+<!-- module~window&#45;&gt;module~mpi_part_interface -->
+<g id="module~~mpi_var~~UsedByGraph_edge53" class="edge">
+<title>module~window&#45;&gt;module~mpi_part_interface</title>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M551.9685,-441.831C531.9919,-437.1306 503.9879,-430.5415 478.704,-424.5923"/>
+<polygon fill="#7f00ff" stroke="#7f00ff" points="479.34,-421.1464 468.8042,-422.2629 477.7367,-427.9604 479.34,-421.1464"/>
+</g>
+<!-- module~window&#45;&gt;module~mpi_field_interface -->
+<g id="module~~mpi_var~~UsedByGraph_edge61" class="edge">
+<title>module~window&#45;&gt;module~mpi_field_interface</title>
+<path fill="none" stroke="#ff005f" stroke-dasharray="5,2" d="M551.9685,-455.2212C530.7092,-460.75 500.3584,-468.643 473.8699,-475.5317"/>
+<polygon fill="#ff005f" stroke="#ff005f" points="472.7312,-472.2113 463.9341,-478.1156 474.4931,-478.986 472.7312,-472.2113"/>
+</g>
+<!-- module~psolve&#45;&gt;module~prl_fft -->
+<g id="module~~mpi_var~~UsedByGraph_edge31" class="edge">
+<title>module~psolve&#45;&gt;module~prl_fft</title>
+<path fill="none" stroke="#ffbf00" stroke-dasharray="5,2" d="M390.2288,-687.7339C379.5184,-684.7082 367.9188,-679.6461 360,-671.1914 321.0623,-629.6185 361.4585,-591.1018 324,-548.1914 321.0099,-544.7661 317.352,-541.8728 313.4099,-539.4354"/>
+<polygon fill="#ffbf00" stroke="#ffbf00" points="314.9629,-536.2982 304.4748,-534.7982 311.7383,-542.5113 314.9629,-536.2982"/>
+</g>
+<!-- module~psolve&#45;&gt;module~grid_fields -->
+<g id="module~~mpi_var~~UsedByGraph_edge43" class="edge">
+<title>module~psolve&#45;&gt;module~grid_fields</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M390.2276,-688.0841C379.3859,-685.1134 367.6884,-679.9977 360,-671.1914 310.6362,-614.6494 356.2243,-573.9805 324,-506.1914 317.1899,-491.8653 306.3025,-477.8877 296.7205,-467.136"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="299.0981,-464.5521 289.7368,-459.5906 293.9608,-469.307 299.0981,-464.5521"/>
+</g>
+<!-- module~init_laser_field&#45;&gt;module~init_grid_field -->
+<g id="module~~mpi_var~~UsedByGraph_edge38" class="edge">
+<title>module~init_laser_field&#45;&gt;module~init_grid_field</title>
+<path fill="none" stroke="#00ff3f" stroke-dasharray="5,2" d="M372.8048,-336.7834C367.9369,-339.4978 363.4915,-342.9077 360,-347.1914 291.0225,-431.8206 389.9725,-503.1993 324,-590.1914 323.433,-590.9391 322.8334,-591.6608 322.2048,-592.3573"/>
+<polygon fill="#00ff3f" stroke="#00ff3f" points="319.8698,-589.7487 314.5288,-598.8988 324.4102,-595.0765 319.8698,-589.7487"/>
+</g>
+<!-- module~init_laser_field&#45;&gt;module~grid_fields -->
+<g id="module~~mpi_var~~UsedByGraph_edge44" class="edge">
+<title>module~init_laser_field&#45;&gt;module~grid_fields</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M376.2574,-338.204C370.5478,-340.7235 364.9509,-343.7008 360,-347.1914 343.9173,-358.5302 311.2163,-400.8449 292.0106,-426.6584"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="288.9577,-424.9004 285.8295,-435.0229 294.5874,-429.0606 288.9577,-424.9004"/>
+</g>
+</g>
+</svg>
+</div><script>var panmodulempi_varUsedByGraph = svgPanZoom('#modulempi_varUsedByGraph', {zoomEnabled: true,controlIconsEnabled: true, fit: true, center: true,}); </script><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="517pt" height="32pt"
+ viewBox="0.00 0.00 517.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 513,-28 513,4 -4,4"/>
+<!-- Module -->
+<g id="node1" class="node">
+<title>Module</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="54,-24 0,-24 0,0 54,0 54,-24"/>
+<text text-anchor="middle" x="27" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Module</text>
+</g>
+<!-- Submodule -->
+<g id="node2" class="node">
+<title>Submodule</title>
+<polygon fill="#5bc0de" stroke="#5bc0de" points="145.5,-24 72.5,-24 72.5,0 145.5,0 145.5,-24"/>
+<text text-anchor="middle" x="109" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Submodule</text>
+</g>
+<!-- Subroutine -->
+<g id="node3" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="234.5,-24 163.5,-24 163.5,0 234.5,0 234.5,-24"/>
+<text text-anchor="middle" x="199" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node4" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="311,-24 253,-24 253,0 311,0 311,-24"/>
+<text text-anchor="middle" x="282" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Function</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="387,-24 329,-24 329,0 387,0 387,-24"/>
+<text text-anchor="middle" x="358" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="509,-24 405,-24 405,0 509,0 509,-24"/>
+<text text-anchor="middle" x="457" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a submodule to the (sub)module which it is
+    descended from. Dashed arrows point from a module or program unit to 
+    modules which it uses. Where possible, edges connecting nodes are given different colours to make them easier to distinguish in large graphs.
+    </p>
+    </div></div></div></div>
+  </li>
+  
+      </ul>
+    </div>
+    
+
+    <br>
+
+    <section class="visible-xs visible-sm hidden-md">
+      
+<h3>Contents</h3>
+ 
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#vars-1">Variables</a></h3></div>
+  <div id="vars-1" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-loc_npart">loc_npart</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-loc_nbpart">loc_nbpart</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-loc_ne_ionz">loc_ne_ionz</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-loc_tpart">loc_tpart</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-yp_next">yp_next</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-yp_prev">yp_prev</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-zp_next">zp_next</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-zp_prev">zp_prev</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-xp_next">xp_next</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-xp_prev">xp_prev</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-np_max">np_max</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-pe_npmax">pe_npmax</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-np_min">np_min</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-pe_npmin">pe_npmin</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-mype">mype</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-imodx">imodx</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-imody">imody</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-imodz">imodz</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-npe">npe</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-npe_yloc">npe_yloc</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-npe_zloc">npe_zloc</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-npe_xloc">npe_xloc</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-npe_yz">npe_yz</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-mpi_size">mpi_size</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-mpi_rank">mpi_rank</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-partype">partype</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-imodzx">imodzx</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-imodyz">imodyz</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-imodyx">imodyx</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-pe_min">pe_min</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-pe_max">pe_max</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-pe_min_y">pe_min_y</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-pe_max_y">pe_max_y</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-pe_min_z">pe_min_z</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-pe_max_z">pe_max_z</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-pe_min_x">pe_min_x</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-pe_max_x">pe_max_x</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-ndims">ndims</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-dims~57">dims</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-pe0y">pe0y</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-pe0z">pe0z</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-pe1y">pe1y</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-pe1z">pe1z</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-pe0">pe0</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-pe1">pe1</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-prl">prl</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-prlx">prlx</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-prly">prly</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-prlz">prlz</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-xl_bd">xl_bd</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-yl_bd">yl_bd</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-zl_bd">zl_bd</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-xr_bd">xr_bd</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-yr_bd">yr_bd</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-zr_bd">zr_bd</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-pe0x">pe0x</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-pe1x">pe1x</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-pex0">pex0</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-pex1">pex1</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-comm">comm</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-coor">coor</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-comm_col">comm_col</a>
+      
+      <a class="list-group-item" href="../module/mpi_var.html#variable-col_or">col_or</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </section>
+    <br class="visible-xs visible-sm hidden-md">
+
+    
+
+    
+    <section>
+    <h2>Variables</h2>
+    
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th><th>Visibility</th>
+
+<th>Attributes</th><th></th><th>Name</th><th></th><th>Initial</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-loc_npart"></span>integer,</td>
+  
+  <td>public,</td>
+  <td>allocatable</td><td>::</td>
+  <td><strong>loc_npart</strong>(:,:,:,:)</td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-loc_nbpart"></span>integer,</td>
+  
+  <td>public,</td>
+  <td>allocatable</td><td>::</td>
+  <td><strong>loc_nbpart</strong>(:,:,:,:)</td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-loc_ne_ionz"></span>integer,</td>
+  
+  <td>public,</td>
+  <td>allocatable</td><td>::</td>
+  <td><strong>loc_ne_ionz</strong>(:,:,:)</td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-loc_tpart"></span>integer,</td>
+  
+  <td>public,</td>
+  <td>allocatable</td><td>::</td>
+  <td><strong>loc_tpart</strong>(:)</td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-yp_next"></span>integer,</td>
+  
+  <td>public,</td>
+  <td>allocatable</td><td>::</td>
+  <td><strong>yp_next</strong>(:)</td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-yp_prev"></span>integer,</td>
+  
+  <td>public,</td>
+  <td>allocatable</td><td>::</td>
+  <td><strong>yp_prev</strong>(:)</td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-zp_next"></span>integer,</td>
+  
+  <td>public,</td>
+  <td>allocatable</td><td>::</td>
+  <td><strong>zp_next</strong>(:)</td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-zp_prev"></span>integer,</td>
+  
+  <td>public,</td>
+  <td>allocatable</td><td>::</td>
+  <td><strong>zp_prev</strong>(:)</td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-xp_next"></span>integer,</td>
+  
+  <td>public,</td>
+  <td>allocatable</td><td>::</td>
+  <td><strong>xp_next</strong>(:)</td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-xp_prev"></span>integer,</td>
+  
+  <td>public,</td>
+  <td>allocatable</td><td>::</td>
+  <td><strong>xp_prev</strong>(:)</td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-np_max"></span>integer,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>np_max</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-pe_npmax"></span>integer,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>pe_npmax</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-np_min"></span>integer,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>np_min</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-pe_npmin"></span>integer,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>pe_npmin</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-mype"></span>integer,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>mype</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-imodx"></span>integer,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>imodx</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-imody"></span>integer,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>imody</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-imodz"></span>integer,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>imodz</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-npe"></span>integer,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>npe</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-npe_yloc"></span>integer,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>npe_yloc</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-npe_zloc"></span>integer,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>npe_zloc</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-npe_xloc"></span>integer,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>npe_xloc</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-npe_yz"></span>integer,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>npe_yz</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-mpi_size"></span>integer,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>mpi_size</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-mpi_rank"></span>integer,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>mpi_rank</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-partype"></span>integer,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>partype</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-imodzx"></span>integer,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>imodzx</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-imodyz"></span>integer,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>imodyz</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-imodyx"></span>integer,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>imodyx</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-pe_min"></span>integer,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>pe_min</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-pe_max"></span>integer,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>pe_max</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-pe_min_y"></span>integer,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>pe_min_y</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-pe_max_y"></span>integer,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>pe_max_y</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-pe_min_z"></span>integer,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>pe_min_z</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-pe_max_z"></span>integer,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>pe_max_z</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-pe_min_x"></span>integer,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>pe_min_x</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-pe_max_x"></span>integer,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>pe_max_x</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-ndims"></span>integer,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>ndims</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-dims~57"></span>integer,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>dims</strong>(3)</td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-pe0y"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>pe0y</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-pe0z"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>pe0z</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-pe1y"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>pe1y</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-pe1z"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>pe1z</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-pe0"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>pe0</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-pe1"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>pe1</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-prl"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>prl</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-prlx"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>prlx</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-prly"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>prly</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-prlz"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>prlz</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-xl_bd"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>xl_bd</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-yl_bd"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>yl_bd</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-zl_bd"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>zl_bd</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-xr_bd"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>xr_bd</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-yr_bd"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>yr_bd</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-zr_bd"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>zr_bd</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-pe0x"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>pe0x</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-pe1x"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>pe1x</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-pex0"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>pex0</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-pex1"></span>logical,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>pex1</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-comm"></span>integer,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>comm</strong></td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-coor"></span>integer,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>coor</strong>(3)</td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-comm_col"></span>integer,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>comm_col</strong>(3)</td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-col_or"></span>integer,</td>
+  
+  <td>public</td>
+  <td></td><td>::</td>
+  <td><strong>col_or</strong>(3)</td><td></td><td></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+    </section>
+    <br>
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+    </div>
+  </div>
+
+  
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2020 <a rel="license" href="http://www.gnu.org/licenses/old-licenses/fdl-1.2.en.html">GNU Free Documentation License</a>
+                                          </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+             on 2020-07-30 
+          </p>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> ALaDyn was developed by The ALaDyn Collaboration</p></div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+      });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+    
+  </body>
+</html>

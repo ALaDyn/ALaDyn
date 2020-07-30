@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+   <meta name="description" content="A High-Accuracy PIC Code for the Maxwell-Vlasov Equations">
+    
+    <meta name="author" content="The ALaDyn Collaboration" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>fluid_density_momenta.f90 &ndash; ALaDyn</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">ALaDyn <small>3.0.1</small></a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+        
+            <li><a href='../page/index.html'>Guide</a></li>
+      
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+     aria-expanded="false">Contents <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          
+              
+            <li><a href="../lists/files.html">Source Files</a></li>
+        
+        
+        
+            <li><a href="../lists/modules.html">Modules</a></li>
+        
+            
+                                
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+        
+               
+            <li><a href="../lists/types.html">Derived Types</a></li>
+        
+        
+            <li><a href="../program/aladyn.html">Program</a></li>
+      
+            </ul>
+            </li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+
+                             
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../program/aladyn.html">Program</a></li>
+
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>fluid_density_momenta.f90
+    <small>Source File</small>
+    
+    </h1>
+    
+<div class="row">
+  <div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+     <li><i class="fa fa-list-ol"></i>
+       <a data-toggle="tooltip"
+    data-placement="bottom" data-html="true"
+    title=" 0.9% of total for source files.">231 statements</a>
+     </li> 
+     
+     
+     
+    <li><i class="fa fa-code"></i><a href="../src/fluid_density_momenta.f90"> Source File</a></li>
+     
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+    
+  
+     <li class="active">fluid_density_momenta.f90</li>
+  </ol>
+</div>
+</div>
+</div>
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+
+  </div>
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+    
+<div id="sidebar">
+  
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#mods-0">Modules</a></h3></div>
+  <div id="mods-0" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/fluid_density_momenta.html">fluid_density_momenta</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../sourcefile/fluid_density_momenta.f90.html#src">fluid_density_momenta.f90</a>
+  </div>
+</div>
+
+
+
+</div>
+
+    </div>
+    <div class="col-md-9" id='text'>
+      
+      <br>
+    
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">This file depends on</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: sourcefile~~fluid_density_momenta.f90~~EfferentGraph Pages: 1 -->
+<svg id="sourcefilefluid_density_momentaf90EfferentGraph" width="641pt" height="190pt"
+ viewBox="0.00 0.00 641.00 189.67" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="sourcefile~~fluid_density_momenta.f90~~EfferentGraph" class="graph" transform="scale(.6922 .6922) rotate(0) translate(4 270)">
+<title>sourcefile~~fluid_density_momenta.f90~~EfferentGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-270 922,-270 922,4 -4,4"/>
+<!-- sourcefile~fluid_density_momenta.f90 -->
+<g id="sourcefile~~fluid_density_momenta.f90~~EfferentGraph_node1" class="node">
+<title>sourcefile~fluid_density_momenta.f90</title>
+<polygon fill="none" stroke="#000000" points="918,-108 761,-108 761,-84 918,-84 918,-108"/>
+<text text-anchor="middle" x="839.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">fluid_density_momenta.f90</text>
+</g>
+<!-- sourcefile~mpi_field_interface.f90 -->
+<g id="sourcefile~~fluid_density_momenta.f90~~EfferentGraph_node2" class="node">
+<title>sourcefile~mpi_field_interface.f90</title>
+<g id="a_sourcefile~~fluid_density_momenta.f90~~EfferentGraph_node2"><a xlink:href=".././sourcefile/mpi_field_interface.f90.html" xlink:title="mpi_field_interface.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="725,-129 590,-129 590,-105 725,-105 725,-129"/>
+<text text-anchor="middle" x="657.5" y="-114.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">mpi_field_interface.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~fluid_density_momenta.f90&#45;&gt;sourcefile~mpi_field_interface.f90 -->
+<g id="sourcefile~~fluid_density_momenta.f90~~EfferentGraph_edge2" class="edge">
+<title>sourcefile~fluid_density_momenta.f90&#45;&gt;sourcefile~mpi_field_interface.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M760.9951,-105.0583C752.4206,-106.0476 743.6953,-107.0544 735.1314,-108.0425"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="734.7039,-104.5685 725.1711,-109.1918 735.5064,-111.5224 734.7039,-104.5685"/>
+</g>
+<!-- sourcefile~grid_fields.f90 -->
+<g id="sourcefile~~fluid_density_momenta.f90~~EfferentGraph_node3" class="node">
+<title>sourcefile~grid_fields.f90</title>
+<g id="a_sourcefile~~fluid_density_momenta.f90~~EfferentGraph_node3"><a xlink:href=".././sourcefile/grid_fields.f90.html" xlink:title="grid_fields.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="701.5,-87 613.5,-87 613.5,-63 701.5,-63 701.5,-87"/>
+<text text-anchor="middle" x="657.5" y="-72.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">grid_fields.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~fluid_density_momenta.f90&#45;&gt;sourcefile~grid_fields.f90 -->
+<g id="sourcefile~~fluid_density_momenta.f90~~EfferentGraph_edge1" class="edge">
+<title>sourcefile~fluid_density_momenta.f90&#45;&gt;sourcefile~grid_fields.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M760.9951,-86.9417C744.5015,-85.0386 727.4498,-83.0711 712.0629,-81.2957"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="712.039,-77.7698 701.7037,-80.1004 711.2365,-84.7237 712.039,-77.7698"/>
+</g>
+<!-- sourcefile~grid_param.f90 -->
+<g id="sourcefile~~fluid_density_momenta.f90~~EfferentGraph_node4" class="node">
+<title>sourcefile~grid_param.f90</title>
+<g id="a_sourcefile~~fluid_density_momenta.f90~~EfferentGraph_node4"><a xlink:href=".././sourcefile/grid_param.f90.html" xlink:title="grid_param.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="381.5,-150 287.5,-150 287.5,-126 381.5,-126 381.5,-150"/>
+<text text-anchor="middle" x="334.5" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">grid_param.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~mpi_field_interface.f90&#45;&gt;sourcefile~grid_param.f90 -->
+<g id="sourcefile~~fluid_density_momenta.f90~~EfferentGraph_edge5" class="edge">
+<title>sourcefile~mpi_field_interface.f90&#45;&gt;sourcefile~grid_param.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M645.724,-129.2747C620.5148,-154.3302 558.2472,-209.8568 492.5,-220"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M492.5,-220C441.9822,-227.7937 441.1026,-181.0758 395,-159 391.1643,-157.1633 387.1242,-155.4067 383.0264,-153.7472"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="384.0192,-150.3792 373.4292,-150.0593 381.5083,-156.9134 384.0192,-150.3792"/>
+</g>
+<!-- sourcefile~parallel.f90 -->
+<g id="sourcefile~~fluid_density_momenta.f90~~EfferentGraph_node5" class="node">
+<title>sourcefile~parallel.f90</title>
+<g id="a_sourcefile~~fluid_density_momenta.f90~~EfferentGraph_node5"><a xlink:href=".././sourcefile/parallel.f90.html" xlink:title="parallel.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="530.5,-108 454.5,-108 454.5,-84 530.5,-84 530.5,-108"/>
+<text text-anchor="middle" x="492.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">parallel.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~mpi_field_interface.f90&#45;&gt;sourcefile~parallel.f90 -->
+<g id="sourcefile~~fluid_density_momenta.f90~~EfferentGraph_edge3" class="edge">
+<title>sourcefile~mpi_field_interface.f90&#45;&gt;sourcefile~parallel.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M589.9121,-108.3979C573.5698,-106.318 556.4201,-104.1353 541.144,-102.1911"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="541.2625,-98.678 530.9006,-100.8873 540.3786,-105.622 541.2625,-98.678"/>
+</g>
+<!-- sourcefile~fstruct_data.f90 -->
+<g id="sourcefile~~fluid_density_momenta.f90~~EfferentGraph_node7" class="node">
+<title>sourcefile~fstruct_data.f90</title>
+<g id="a_sourcefile~~fluid_density_momenta.f90~~EfferentGraph_node7"><a xlink:href=".././sourcefile/fstruct_data.f90.html" xlink:title="fstruct_data.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="238,-266 142,-266 142,-242 238,-242 238,-266"/>
+<text text-anchor="middle" x="190" y="-251.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">fstruct_data.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~mpi_field_interface.f90&#45;&gt;sourcefile~fstruct_data.f90 -->
+<g id="sourcefile~~fluid_density_momenta.f90~~EfferentGraph_edge6" class="edge">
+<title>sourcefile~mpi_field_interface.f90&#45;&gt;sourcefile~fstruct_data.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M492.5,-220C407.9474,-233.0444 309.3662,-243.1872 248.3098,-248.8819"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="247.7355,-245.42 238.1,-249.8253 248.3796,-252.3903 247.7355,-245.42"/>
+</g>
+<!-- sourcefile~pstruct_data.f90 -->
+<g id="sourcefile~~fluid_density_momenta.f90~~EfferentGraph_node8" class="node">
+<title>sourcefile~pstruct_data.f90</title>
+<g id="a_sourcefile~~fluid_density_momenta.f90~~EfferentGraph_node8"><a xlink:href=".././sourcefile/pstruct_data.f90.html" xlink:title="pstruct_data.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="384,-192 285,-192 285,-168 384,-168 384,-192"/>
+<text text-anchor="middle" x="334.5" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">pstruct_data.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~mpi_field_interface.f90&#45;&gt;sourcefile~pstruct_data.f90 -->
+<g id="sourcefile~~fluid_density_momenta.f90~~EfferentGraph_edge4" class="edge">
+<title>sourcefile~mpi_field_interface.f90&#45;&gt;sourcefile~pstruct_data.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M492.5,-220C470.7801,-223.3509 417.2457,-207.9079 378.5026,-195.2449"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="379.593,-191.9191 368.9997,-192.0985 377.3927,-198.5644 379.593,-191.9191"/>
+</g>
+<!-- sourcefile~grid_fields.f90&#45;&gt;sourcefile~parallel.f90 -->
+<g id="sourcefile~~fluid_density_momenta.f90~~EfferentGraph_edge8" class="edge">
+<title>sourcefile~grid_fields.f90&#45;&gt;sourcefile~parallel.f90</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M613.283,-80.6276C590.9322,-83.4723 563.7645,-86.93 540.8597,-89.8451"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="540.1465,-86.4076 530.6685,-91.1422 541.0304,-93.3516 540.1465,-86.4076"/>
+</g>
+<!-- sourcefile~grid_field_param.f90 -->
+<g id="sourcefile~~fluid_density_momenta.f90~~EfferentGraph_node6" class="node">
+<title>sourcefile~grid_field_param.f90</title>
+<g id="a_sourcefile~~fluid_density_momenta.f90~~EfferentGraph_node6"><a xlink:href=".././sourcefile/grid_field_param.f90.html" xlink:title="grid_field_param.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="554,-66 431,-66 431,-42 554,-42 554,-66"/>
+<text text-anchor="middle" x="492.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">grid_field_param.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~grid_fields.f90&#45;&gt;sourcefile~grid_field_param.f90 -->
+<g id="sourcefile~~fluid_density_momenta.f90~~EfferentGraph_edge7" class="edge">
+<title>sourcefile~grid_fields.f90&#45;&gt;sourcefile~grid_field_param.f90</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M613.283,-69.3724C598.2632,-67.4608 581.068,-65.2723 564.4531,-63.1577"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="564.5695,-59.6443 554.2076,-61.8537 563.6856,-66.5883 564.5695,-59.6443"/>
+</g>
+<!-- sourcefile~struct_def.f90 -->
+<g id="sourcefile~~fluid_density_momenta.f90~~EfferentGraph_node9" class="node">
+<title>sourcefile~struct_def.f90</title>
+<g id="a_sourcefile~~fluid_density_momenta.f90~~EfferentGraph_node9"><a xlink:href=".././sourcefile/struct_def.f90.html" xlink:title="struct_def.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="232.5,-186 147.5,-186 147.5,-162 232.5,-162 232.5,-186"/>
+<text text-anchor="middle" x="190" y="-171.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">struct_def.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~grid_param.f90&#45;&gt;sourcefile~struct_def.f90 -->
+<g id="sourcefile~~fluid_density_momenta.f90~~EfferentGraph_edge10" class="edge">
+<title>sourcefile~grid_param.f90&#45;&gt;sourcefile~struct_def.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M287.1853,-149.7877C272.8738,-153.3532 257.0745,-157.2894 242.4484,-160.9333"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="241.4,-157.5874 232.5428,-163.4011 243.0923,-164.3798 241.4,-157.5874"/>
+</g>
+<!-- sourcefile~precision_def.f90 -->
+<g id="sourcefile~~fluid_density_momenta.f90~~EfferentGraph_node11" class="node">
+<title>sourcefile~precision_def.f90</title>
+<g id="a_sourcefile~~fluid_density_momenta.f90~~EfferentGraph_node11"><a xlink:href=".././sourcefile/precision_def.f90.html" xlink:title="precision_def.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="106,-166 0,-166 0,-142 106,-142 106,-166"/>
+<text text-anchor="middle" x="53" y="-151.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">precision_def.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~grid_param.f90&#45;&gt;sourcefile~precision_def.f90 -->
+<g id="sourcefile~~fluid_density_momenta.f90~~EfferentGraph_edge9" class="edge">
+<title>sourcefile~grid_param.f90&#45;&gt;sourcefile~precision_def.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M287.4503,-132.9489C259.103,-130.8353 222.3456,-129.7372 190,-134"/>
+</g>
+<!-- sourcefile~common_param.f90 -->
+<g id="sourcefile~~fluid_density_momenta.f90~~EfferentGraph_node10" class="node">
+<title>sourcefile~common_param.f90</title>
+<g id="a_sourcefile~~fluid_density_momenta.f90~~EfferentGraph_node10"><a xlink:href=".././sourcefile/common_param.f90.html" xlink:title="common_param.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="395,-24 274,-24 274,0 395,0 395,-24"/>
+<text text-anchor="middle" x="334.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">common_param.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~parallel.f90&#45;&gt;sourcefile~common_param.f90 -->
+<g id="sourcefile~~fluid_density_momenta.f90~~EfferentGraph_edge11" class="edge">
+<title>sourcefile~parallel.f90&#45;&gt;sourcefile~common_param.f90</title>
+<path fill="none" stroke="#cbff00" stroke-dasharray="5,2" d="M454.2477,-86.4705C446.1837,-83.5153 438.0047,-79.7472 431,-75 410.648,-61.2072 415.3171,-46.8441 395,-33 392.5882,-31.3566 390.0348,-29.8294 387.3944,-28.4119"/>
+<polygon fill="#cbff00" stroke="#cbff00" points="388.6927,-25.1534 378.1602,-24.0053 385.6779,-31.4709 388.6927,-25.1534"/>
+</g>
+<!-- sourcefile~util.f90 -->
+<g id="sourcefile~~fluid_density_momenta.f90~~EfferentGraph_node12" class="node">
+<title>sourcefile~util.f90</title>
+<g id="a_sourcefile~~fluid_density_momenta.f90~~EfferentGraph_node12"><a xlink:href=".././sourcefile/util.f90.html" xlink:title="util.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="361.5,-108 307.5,-108 307.5,-84 361.5,-84 361.5,-108"/>
+<text text-anchor="middle" x="334.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">util.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~parallel.f90&#45;&gt;sourcefile~util.f90 -->
+<g id="sourcefile~~fluid_density_momenta.f90~~EfferentGraph_edge12" class="edge">
+<title>sourcefile~parallel.f90&#45;&gt;sourcefile~util.f90</title>
+<path fill="none" stroke="#cbff00" stroke-dasharray="5,2" d="M454.2526,-96C429.1599,-96 396.5135,-96 371.6461,-96"/>
+<polygon fill="#cbff00" stroke="#cbff00" points="371.5097,-92.5001 361.5097,-96 371.5096,-99.5001 371.5097,-92.5001"/>
+</g>
+<!-- sourcefile~mpi_var.f90 -->
+<g id="sourcefile~~fluid_density_momenta.f90~~EfferentGraph_node13" class="node">
+<title>sourcefile~mpi_var.f90</title>
+<g id="a_sourcefile~~fluid_density_momenta.f90~~EfferentGraph_node13"><a xlink:href=".././sourcefile/mpi_var.f90.html" xlink:title="mpi_var.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="372,-66 297,-66 297,-42 372,-42 372,-66"/>
+<text text-anchor="middle" x="334.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">mpi_var.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~parallel.f90&#45;&gt;sourcefile~mpi_var.f90 -->
+<g id="sourcefile~~fluid_density_momenta.f90~~EfferentGraph_edge13" class="edge">
+<title>sourcefile~parallel.f90&#45;&gt;sourcefile~mpi_var.f90</title>
+<path fill="none" stroke="#cbff00" stroke-dasharray="5,2" d="M454.2526,-85.833C432.5337,-80.0596 405.1559,-72.7819 382.0614,-66.6429"/>
+<polygon fill="#cbff00" stroke="#cbff00" points="382.6858,-63.1874 372.1223,-64.0009 380.8875,-69.9525 382.6858,-63.1874"/>
+</g>
+<!-- sourcefile~grid_field_param.f90&#45;&gt;sourcefile~grid_param.f90 -->
+<g id="sourcefile~~fluid_density_momenta.f90~~EfferentGraph_edge14" class="edge">
+<title>sourcefile~grid_field_param.f90&#45;&gt;sourcefile~grid_param.f90</title>
+<path fill="none" stroke="#00ff66" stroke-dasharray="5,2" d="M447.7964,-66.0703C441.9051,-68.564 436.1368,-71.5187 431,-75 410.648,-88.7928 415.3171,-103.1559 395,-117 392.5882,-118.6434 390.0348,-120.1706 387.3944,-121.5881"/>
+<polygon fill="#00ff66" stroke="#00ff66" points="385.6779,-118.5291 378.1602,-125.9947 388.6927,-124.8466 385.6779,-118.5291"/>
+</g>
+<!-- sourcefile~grid_field_param.f90&#45;&gt;sourcefile~common_param.f90 -->
+<g id="sourcefile~~fluid_density_momenta.f90~~EfferentGraph_edge16" class="edge">
+<title>sourcefile~grid_field_param.f90&#45;&gt;sourcefile~common_param.f90</title>
+<path fill="none" stroke="#00ff66" stroke-dasharray="5,2" d="M447.2235,-41.9645C429.2907,-37.1975 408.5037,-31.6719 389.7007,-26.6736"/>
+<polygon fill="#00ff66" stroke="#00ff66" points="390.3466,-23.2238 379.7831,-24.0373 388.5483,-29.9889 390.3466,-23.2238"/>
+</g>
+<!-- sourcefile~grid_field_param.f90&#45;&gt;sourcefile~mpi_var.f90 -->
+<g id="sourcefile~~fluid_density_momenta.f90~~EfferentGraph_edge15" class="edge">
+<title>sourcefile~grid_field_param.f90&#45;&gt;sourcefile~mpi_var.f90</title>
+<path fill="none" stroke="#00ff66" stroke-dasharray="5,2" d="M430.9607,-54C414.9091,-54 397.8452,-54 382.6029,-54"/>
+<polygon fill="#00ff66" stroke="#00ff66" points="382.3764,-50.5001 372.3763,-54 382.3763,-57.5001 382.3764,-50.5001"/>
+</g>
+<!-- sourcefile~fstruct_data.f90&#45;&gt;sourcefile~precision_def.f90 -->
+<g id="sourcefile~~fluid_density_momenta.f90~~EfferentGraph_edge17" class="edge">
+<title>sourcefile~fstruct_data.f90&#45;&gt;sourcefile~precision_def.f90</title>
+<path fill="none" stroke="#0066ff" stroke-dasharray="5,2" d="M165.5255,-241.9412C157.8089,-237.8255 149.3776,-232.9936 142,-228 117.2594,-211.254 91.238,-189.0005 73.7676,-173.2844"/>
+<polygon fill="#0066ff" stroke="#0066ff" points="75.6738,-170.2869 65.9213,-166.1471 70.9636,-175.4651 75.6738,-170.2869"/>
+</g>
+<!-- sourcefile~pstruct_data.f90&#45;&gt;sourcefile~struct_def.f90 -->
+<g id="sourcefile~~fluid_density_momenta.f90~~EfferentGraph_edge19" class="edge">
+<title>sourcefile~pstruct_data.f90&#45;&gt;sourcefile~struct_def.f90</title>
+<path fill="none" stroke="#cc00ff" stroke-dasharray="5,2" d="M284.7713,-177.9351C271.2398,-177.3733 256.5372,-176.7628 242.84,-176.194"/>
+<polygon fill="#cc00ff" stroke="#cc00ff" points="242.7342,-172.6867 232.5976,-175.7688 242.4437,-179.6807 242.7342,-172.6867"/>
+</g>
+<!-- sourcefile~pstruct_data.f90&#45;&gt;sourcefile~precision_def.f90 -->
+<g id="sourcefile~~fluid_density_momenta.f90~~EfferentGraph_edge18" class="edge">
+<title>sourcefile~pstruct_data.f90&#45;&gt;sourcefile~precision_def.f90</title>
+<path fill="none" stroke="#cc00ff" stroke-dasharray="5,2" d="M284.8982,-191.7343C245.6948,-199.1291 189.8056,-205.482 142,-195 120.6882,-190.3271 98.3929,-180.0462 81.4482,-170.949"/>
+<polygon fill="#cc00ff" stroke="#cc00ff" points="83.0685,-167.8454 72.6252,-166.0599 79.6756,-173.9682 83.0685,-167.8454"/>
+</g>
+<!-- sourcefile~struct_def.f90&#45;&gt;sourcefile~precision_def.f90 -->
+<g id="sourcefile~~fluid_density_momenta.f90~~EfferentGraph_edge20" class="edge">
+<title>sourcefile~struct_def.f90&#45;&gt;sourcefile~precision_def.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M147.4033,-167.7815C137.5222,-166.339 126.7978,-164.7734 116.2409,-163.2322"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="116.6044,-159.7483 106.2037,-161.767 115.5932,-166.6749 116.6044,-159.7483"/>
+</g>
+<!-- sourcefile~common_param.f90&#45;&gt;sourcefile~precision_def.f90 -->
+<g id="sourcefile~~fluid_density_momenta.f90~~EfferentGraph_edge21" class="edge">
+<title>sourcefile~common_param.f90&#45;&gt;sourcefile~precision_def.f90</title>
+<path fill="none" stroke="#cbff00" stroke-dasharray="5,2" d="M283.4628,-24.046C255.3961,-31.3596 220.236,-41.6623 190,-54"/>
+<path fill="none" stroke="#cbff00" stroke-dasharray="5,2" d="M190,-54C168.7566,-62.6683 161.468,-60.8584 142,-73 114.4823,-90.162 87.6133,-116.2923 70.7237,-134.2052"/>
+<polygon fill="#cbff00" stroke="#cbff00" points="67.9227,-132.0788 63.6993,-141.7955 73.0603,-136.8334 67.9227,-132.0788"/>
+</g>
+<!-- sourcefile~util.f90&#45;&gt;sourcefile~precision_def.f90 -->
+<g id="sourcefile~~fluid_density_momenta.f90~~EfferentGraph_edge22" class="edge">
+<title>sourcefile~util.f90&#45;&gt;sourcefile~precision_def.f90</title>
+<path fill="none" stroke="#0066ff" stroke-dasharray="5,2" d="M307.4773,-105.3003C278.7498,-114.6656 231.7907,-128.4924 190,-134"/>
+<path fill="none" stroke="#0066ff" stroke-dasharray="5,2" d="M190,-134C165.9198,-137.1735 139.5046,-140.9578 116.3495,-144.3762"/>
+<polygon fill="#0066ff" stroke="#0066ff" points="115.6804,-140.9371 106.3022,-145.8666 116.7076,-147.8613 115.6804,-140.9371"/>
+</g>
+<!-- sourcefile~code_util.f90 -->
+<g id="sourcefile~~fluid_density_momenta.f90~~EfferentGraph_node14" class="node">
+<title>sourcefile~code_util.f90</title>
+<g id="a_sourcefile~~fluid_density_momenta.f90~~EfferentGraph_node14"><a xlink:href=".././sourcefile/code_util.f90.html" xlink:title="code_util.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="230.5,-106 149.5,-106 149.5,-82 230.5,-82 230.5,-106"/>
+<text text-anchor="middle" x="190" y="-91.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">code_util.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~util.f90&#45;&gt;sourcefile~code_util.f90 -->
+<g id="sourcefile~~fluid_density_momenta.f90~~EfferentGraph_edge23" class="edge">
+<title>sourcefile~util.f90&#45;&gt;sourcefile~code_util.f90</title>
+<path fill="none" stroke="#0066ff" stroke-dasharray="5,2" d="M307.3207,-95.6238C288.6041,-95.3648 263.1687,-95.0127 240.7652,-94.7026"/>
+<polygon fill="#0066ff" stroke="#0066ff" points="240.7676,-91.2024 230.7201,-94.5636 240.6707,-98.2018 240.7676,-91.2024"/>
+</g>
+<!-- sourcefile~mpi_var.f90&#45;&gt;sourcefile~precision_def.f90 -->
+<g id="sourcefile~~fluid_density_momenta.f90~~EfferentGraph_edge24" class="edge">
+<title>sourcefile~mpi_var.f90&#45;&gt;sourcefile~precision_def.f90</title>
+<path fill="none" stroke="#cc00ff" stroke-dasharray="5,2" d="M296.7889,-46.4225C266.7217,-42.1356 224.1444,-40.0675 190,-54"/>
+</g>
+<!-- sourcefile~code_util.f90&#45;&gt;sourcefile~precision_def.f90 -->
+<g id="sourcefile~~fluid_density_momenta.f90~~EfferentGraph_edge25" class="edge">
+<title>sourcefile~code_util.f90&#45;&gt;sourcefile~precision_def.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M162.276,-106.1419C141.4782,-115.2504 112.7957,-127.8121 90.0347,-137.7804"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="88.4387,-134.6584 80.6828,-141.8762 91.2469,-141.0704 88.4387,-134.6584"/>
+</g>
+</g>
+</svg>
+</div><script>var pansourcefilefluid_density_momentaf90EfferentGraph = svgPanZoom('#sourcefilefluid_density_momentaf90EfferentGraph', {zoomEnabled: true,controlIconsEnabled: true, fit: true, center: true,}); </script><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="202pt" height="32pt"
+ viewBox="0.00 0.00 201.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 197.5,-28 197.5,4 -4,4"/>
+<!-- Source File -->
+<g id="node1" class="node">
+<title>Source File</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="71,-24 0,-24 0,0 71,0 71,-24"/>
+<text text-anchor="middle" x="35.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Source File</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node2" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="193.5,-24 89.5,-24 89.5,0 193.5,0 193.5,-24"/>
+<text text-anchor="middle" x="141.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a file to a file which it depends on. A file
+    is dependent upon another if the latter must be compiled before the former
+    can be. Where possible, edges connecting nodes are given different colours to make them easier to distinguish in large graphs.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+    
+      
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Files dependent on this one</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: sourcefile~~fluid_density_momenta.f90~~AfferentGraph Pages: 1 -->
+<svg id="sourcefilefluid_density_momentaf90AfferentGraph" width="450pt" height="74pt"
+ viewBox="0.00 0.00 450.00 74.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="sourcefile~~fluid_density_momenta.f90~~AfferentGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 70)">
+<title>sourcefile~~fluid_density_momenta.f90~~AfferentGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-70 446,-70 446,4 -4,4"/>
+<!-- sourcefile~fluid_density_momenta.f90 -->
+<g id="sourcefile~~fluid_density_momenta.f90~~AfferentGraph_node1" class="node">
+<title>sourcefile~fluid_density_momenta.f90</title>
+<polygon fill="none" stroke="#000000" points="157,-45 0,-45 0,-21 157,-21 157,-45"/>
+<text text-anchor="middle" x="78.5" y="-30.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">fluid_density_momenta.f90</text>
+</g>
+<!-- sourcefile~pic_evolve_in_time.f90 -->
+<g id="sourcefile~~fluid_density_momenta.f90~~AfferentGraph_node2" class="node">
+<title>sourcefile~pic_evolve_in_time.f90</title>
+<g id="a_sourcefile~~fluid_density_momenta.f90~~AfferentGraph_node2"><a xlink:href=".././sourcefile/pic_evolve_in_time.f90.html" xlink:title="pic_evolve_in_time.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="328,-66 195,-66 195,-42 328,-42 328,-66"/>
+<text text-anchor="middle" x="261.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">pic_evolve_in_time.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~pic_evolve_in_time.f90&#45;&gt;sourcefile~fluid_density_momenta.f90 -->
+<g id="sourcefile~~fluid_density_momenta.f90~~AfferentGraph_edge1" class="edge">
+<title>sourcefile~pic_evolve_in_time.f90&#45;&gt;sourcefile~fluid_density_momenta.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M194.9151,-46.3591C185.9091,-45.3256 176.5545,-44.2522 167.2382,-43.1831"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="167.4961,-39.6898 157.1622,-42.0268 166.698,-46.6441 167.4961,-39.6898"/>
+</g>
+<!-- sourcefile~env_evolve_in_time.f90 -->
+<g id="sourcefile~~fluid_density_momenta.f90~~AfferentGraph_node3" class="node">
+<title>sourcefile~env_evolve_in_time.f90</title>
+<g id="a_sourcefile~~fluid_density_momenta.f90~~AfferentGraph_node3"><a xlink:href=".././sourcefile/env_evolve_in_time.f90.html" xlink:title="env_evolve_in_time.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="330,-24 193,-24 193,0 330,0 330,-24"/>
+<text text-anchor="middle" x="261.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">env_evolve_in_time.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~env_evolve_in_time.f90&#45;&gt;sourcefile~fluid_density_momenta.f90 -->
+<g id="sourcefile~~fluid_density_momenta.f90~~AfferentGraph_edge2" class="edge">
+<title>sourcefile~env_evolve_in_time.f90&#45;&gt;sourcefile~fluid_density_momenta.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M192.8369,-19.8794C184.4539,-20.8414 175.7977,-21.8347 167.175,-22.8242"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="166.6222,-19.3646 157.0864,-23.9819 167.4203,-26.3189 166.6222,-19.3646"/>
+</g>
+<!-- sourcefile~aladyn.f90 -->
+<g id="sourcefile~~fluid_density_momenta.f90~~AfferentGraph_node4" class="node">
+<title>sourcefile~aladyn.f90</title>
+<g id="a_sourcefile~~fluid_density_momenta.f90~~AfferentGraph_node4"><a xlink:href=".././sourcefile/aladyn.f90.html" xlink:title="ALaDyn.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="442,-45 366,-45 366,-21 442,-21 442,-45"/>
+<text text-anchor="middle" x="404" y="-30.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">ALaDyn.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~aladyn.f90&#45;&gt;sourcefile~pic_evolve_in_time.f90 -->
+<g id="sourcefile~~fluid_density_momenta.f90~~AfferentGraph_edge3" class="edge">
+<title>sourcefile~aladyn.f90&#45;&gt;sourcefile~pic_evolve_in_time.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M365.8126,-38.6276C357.1852,-39.899 347.7268,-41.2929 338.1375,-42.7061"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="337.5092,-39.2608 328.1264,-44.1814 338.5298,-46.186 337.5092,-39.2608"/>
+</g>
+<!-- sourcefile~aladyn.f90&#45;&gt;sourcefile~env_evolve_in_time.f90 -->
+<g id="sourcefile~~fluid_density_momenta.f90~~AfferentGraph_edge4" class="edge">
+<title>sourcefile~aladyn.f90&#45;&gt;sourcefile~env_evolve_in_time.f90</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M365.8126,-27.3724C357.7861,-26.1895 349.0404,-24.9007 340.1391,-23.5889"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="340.4567,-20.098 330.0533,-22.1026 339.4361,-27.0232 340.4567,-20.098"/>
+</g>
+</g>
+</svg>
+</div><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="202pt" height="32pt"
+ viewBox="0.00 0.00 201.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 197.5,-28 197.5,4 -4,4"/>
+<!-- Source File -->
+<g id="node1" class="node">
+<title>Source File</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="71,-24 0,-24 0,0 71,0 71,-24"/>
+<text text-anchor="middle" x="35.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Source File</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node2" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="193.5,-24 89.5,-24 89.5,0 193.5,0 193.5,-24"/>
+<text text-anchor="middle" x="141.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a file to a file which it depends on. A file
+    is dependent upon another if the latter must be compiled before the former
+    can be. Where possible, edges connecting nodes are given different colours to make them easier to distinguish in large graphs.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+      
+      <br>
+
+    <section class="visible-xs visible-sm hidden-md">
+      
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#mods-1">Modules</a></h3></div>
+  <div id="mods-1" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/fluid_density_momenta.html">fluid_density_momenta</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../sourcefile/fluid_density_momenta.f90.html#src">fluid_density_momenta.f90</a>
+  </div>
+</div>
+
+
+
+    </section>
+    <br class="visible-xs visible-sm hidden-md">
+
+    <section>
+      <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="hl"><pre><span></span><a name="ln-1"></a><span class="c">!*****************************************************************************************************!</span>
+<a name="ln-2"></a><span class="c">!                            Copyright 2008-2020  The ALaDyn Collaboration                            !</span>
+<a name="ln-3"></a><span class="c">!*****************************************************************************************************!</span>
+<a name="ln-4"></a>
+<a name="ln-5"></a><span class="c">!*****************************************************************************************************!</span>
+<a name="ln-6"></a><span class="c">!  This file is part of ALaDyn.                                                                       !</span>
+<a name="ln-7"></a><span class="c">!                                                                                                     !</span>
+<a name="ln-8"></a><span class="c">!  ALaDyn is free software: you can redistribute it and/or modify                                     !</span>
+<a name="ln-9"></a><span class="c">!  it under the terms of the GNU General Public License as published by                               !</span>
+<a name="ln-10"></a><span class="c">!  the Free Software Foundation, either version 3 of the License, or                                  !</span>
+<a name="ln-11"></a><span class="c">!  (at your option) any later version.                                                                !</span>
+<a name="ln-12"></a><span class="c">!                                                                                                     !</span>
+<a name="ln-13"></a><span class="c">!  ALaDyn is distributed in the hope that it will be useful,                                          !</span>
+<a name="ln-14"></a><span class="c">!  but WITHOUT ANY WARRANTY; without even the implied warranty of                                     !</span>
+<a name="ln-15"></a><span class="c">!  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                                      !</span>
+<a name="ln-16"></a><span class="c">!  GNU General Public License for more details.                                                       !</span>
+<a name="ln-17"></a><span class="c">!                                                                                                     !</span>
+<a name="ln-18"></a><span class="c">!  You should have received a copy of the GNU General Public License                                  !</span>
+<a name="ln-19"></a><span class="c">!  along with ALaDyn.  If not, see &lt;http://www.gnu.org/licenses/&gt;.                                    !</span>
+<a name="ln-20"></a><span class="c">!*****************************************************************************************************!</span>
+<a name="ln-21"></a>
+<a name="ln-22"></a> <span class="k">module </span><span class="n">fluid_density_momenta</span>
+<a name="ln-23"></a>
+<a name="ln-24"></a>  <span class="k">use </span><span class="n">mpi_field_interface</span>
+<a name="ln-25"></a>  <span class="k">use </span><span class="n">grid_fields</span>
+<a name="ln-26"></a>  <span class="k">implicit none</span>
+<a name="ln-27"></a><span class="k"> contains</span>
+<a name="ln-28"></a>
+<a name="ln-29"></a><span class="k">  subroutine </span><span class="n">fluid_curr_accumulate</span><span class="p">(</span><span class="n">flx</span><span class="p">,</span> <span class="n">curr</span><span class="p">)</span>
+<a name="ln-30"></a>
+<a name="ln-31"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">flx</span><span class="p">(:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="p">:),</span> <span class="n">curr</span><span class="p">(:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="p">:)</span>
+<a name="ln-32"></a>   <span class="kt">integer</span> <span class="kd">::</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">ic</span><span class="p">,</span> <span class="n">str</span><span class="p">,</span> <span class="n">stl</span><span class="p">,</span> <span class="n">fdim</span>
+<a name="ln-33"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">pp</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">),</span> <span class="n">den</span><span class="p">,</span> <span class="n">gam2</span><span class="p">,</span> <span class="n">ch</span><span class="p">,</span> <span class="n">gam_inv</span>
+<a name="ln-34"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">qx</span><span class="p">,</span> <span class="n">qy</span><span class="p">,</span> <span class="n">qz</span><span class="p">,</span> <span class="n">av2</span>
+<a name="ln-35"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span> <span class="k">parameter</span> <span class="kd">::</span> <span class="n">WK1</span> <span class="o">=</span> <span class="mf">0.5</span>
+<a name="ln-36"></a>
+<a name="ln-37"></a>   <span class="n">stl</span> <span class="o">=</span> <span class="mi">1</span>
+<a name="ln-38"></a>   <span class="n">str</span> <span class="o">=</span> <span class="mi">1</span>
+<a name="ln-39"></a>   <span class="c">! Enter fluid variables at t^{n+1/2} and flx(fdim+1)= |a|^2/2 at t^{n+1/2}</span>
+<a name="ln-40"></a>   <span class="n">ch</span> <span class="o">=</span> <span class="n">dt_loc</span><span class="o">*</span><span class="n">WK1</span><span class="o">*</span><span class="n">unit_charge</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<a name="ln-41"></a>   <span class="n">fdim</span> <span class="o">=</span> <span class="n">curr_ndim</span> <span class="o">+</span> <span class="mi">1</span>
+<a name="ln-42"></a>   <span class="k">if</span> <span class="p">(</span><span class="n">envelope</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-43"></a><span class="k">    do </span><span class="n">k</span> <span class="o">=</span> <span class="n">kz1</span><span class="p">,</span> <span class="n">kz2</span>
+<a name="ln-44"></a>     <span class="k">do </span><span class="n">j</span> <span class="o">=</span> <span class="n">jy1</span><span class="p">,</span> <span class="n">jy2</span>
+<a name="ln-45"></a>      <span class="k">do </span><span class="n">i</span> <span class="o">=</span> <span class="n">ix1</span><span class="p">,</span> <span class="n">ix2</span>
+<a name="ln-46"></a>       <span class="n">av2</span> <span class="o">=</span> <span class="n">flx</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">fdim</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="c">!time centered |A|^{n+1/2}/2</span>
+<a name="ln-47"></a>       <span class="n">den</span> <span class="o">=</span> <span class="n">flx</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">fdim</span><span class="p">)</span> <span class="c">!den^{n+1/2}</span>
+<a name="ln-48"></a>       <span class="n">pp</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">curr_ndim</span><span class="p">)</span> <span class="o">=</span> <span class="n">flx</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="n">curr_ndim</span><span class="p">)</span> <span class="c">!p momenta at t^{n+1/2}</span>
+<a name="ln-49"></a>       <span class="n">gam2</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">+</span><span class="nb">dot_product</span><span class="p">(</span><span class="n">pp</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">curr_ndim</span><span class="p">),</span> <span class="n">pp</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">curr_ndim</span><span class="p">))</span>
+<a name="ln-50"></a>       <span class="n">gam2</span> <span class="o">=</span> <span class="n">gam2</span> <span class="o">+</span> <span class="n">av2</span>
+<a name="ln-51"></a>       <span class="n">gam_inv</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="nb">sqrt</span><span class="p">(</span><span class="n">gam2</span><span class="p">)</span>
+<a name="ln-52"></a>       <span class="k">do </span><span class="n">ic</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">curr_ndim</span>
+<a name="ln-53"></a>        <span class="n">flx</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">ic</span><span class="p">)</span> <span class="o">=</span> <span class="n">den</span><span class="o">*</span><span class="n">gam_inv</span><span class="o">*</span><span class="n">pp</span><span class="p">(</span><span class="n">ic</span><span class="p">)</span> <span class="c">!n*v= density flux at t^{n+1/2}</span>
+<a name="ln-54"></a>       <span class="k">end do</span>
+<a name="ln-55"></a><span class="k">      end do</span>
+<a name="ln-56"></a><span class="k">     end do</span>
+<a name="ln-57"></a><span class="k">    end do</span>
+<a name="ln-58"></a><span class="k">   else</span>
+<a name="ln-59"></a><span class="k">    do </span><span class="n">k</span> <span class="o">=</span> <span class="n">kz1</span><span class="p">,</span> <span class="n">kz2</span>
+<a name="ln-60"></a>     <span class="k">do </span><span class="n">j</span> <span class="o">=</span> <span class="n">jy1</span><span class="p">,</span> <span class="n">jy2</span>
+<a name="ln-61"></a>      <span class="k">do </span><span class="n">i</span> <span class="o">=</span> <span class="n">ix1</span><span class="p">,</span> <span class="n">ix2</span>
+<a name="ln-62"></a>       <span class="n">den</span> <span class="o">=</span> <span class="n">flx</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">fdim</span><span class="p">)</span> <span class="c">!den^{n+1/2}</span>
+<a name="ln-63"></a>       <span class="n">pp</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">curr_ndim</span><span class="p">)</span> <span class="o">=</span> <span class="n">flx</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="n">curr_ndim</span><span class="p">)</span> <span class="c">!p momenta at t^{n+1/2}</span>
+<a name="ln-64"></a>       <span class="n">gam2</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">+</span><span class="nb">dot_product</span><span class="p">(</span><span class="n">pp</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">curr_ndim</span><span class="p">),</span> <span class="n">pp</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">curr_ndim</span><span class="p">))</span>
+<a name="ln-65"></a>       <span class="n">gam_inv</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="nb">sqrt</span><span class="p">(</span><span class="n">gam2</span><span class="p">)</span>
+<a name="ln-66"></a>       <span class="k">do </span><span class="n">ic</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">curr_ndim</span>
+<a name="ln-67"></a>        <span class="n">flx</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">ic</span><span class="p">)</span> <span class="o">=</span> <span class="n">den</span><span class="o">*</span><span class="n">gam_inv</span><span class="o">*</span><span class="n">pp</span><span class="p">(</span><span class="n">ic</span><span class="p">)</span> <span class="c">!n*v= density flux at t^{n+1/2}</span>
+<a name="ln-68"></a>       <span class="k">end do</span>
+<a name="ln-69"></a><span class="k">      end do</span>
+<a name="ln-70"></a><span class="k">     end do</span>
+<a name="ln-71"></a><span class="k">    end do</span>
+<a name="ln-72"></a><span class="k">   end if</span>
+<a name="ln-73"></a><span class="k">   call </span><span class="n">fill_ebfield_yzxbdsdata</span><span class="p">(</span><span class="n">flx</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">curr_ndim</span><span class="p">,</span> <span class="n">str</span><span class="p">,</span> <span class="n">stl</span><span class="p">)</span>
+<a name="ln-74"></a>   <span class="k">call </span><span class="n">field_xyzbd</span><span class="p">(</span><span class="n">flx</span><span class="p">,</span> <span class="n">curr_ndim</span><span class="p">)</span>
+<a name="ln-75"></a>   <span class="k">if</span> <span class="p">(</span><span class="n">pe1x</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-76"></a><span class="k">    do </span><span class="n">k</span> <span class="o">=</span> <span class="n">kz1</span><span class="p">,</span> <span class="n">kz2</span>
+<a name="ln-77"></a>     <span class="k">do </span><span class="n">j</span> <span class="o">=</span> <span class="n">jy1</span><span class="p">,</span> <span class="n">jy2</span>
+<a name="ln-78"></a>      <span class="n">i</span> <span class="o">=</span> <span class="n">ix2</span>
+<a name="ln-79"></a>      <span class="n">flx</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">flx</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<a name="ln-80"></a>     <span class="k">end do</span>
+<a name="ln-81"></a><span class="k">    end do</span>
+<a name="ln-82"></a><span class="k">   </span><span class="n">endif</span>
+<a name="ln-83"></a>   <span class="k">do </span><span class="n">k</span> <span class="o">=</span> <span class="n">kz1</span><span class="p">,</span> <span class="n">kz2</span>
+<a name="ln-84"></a>    <span class="k">do </span><span class="n">j</span> <span class="o">=</span> <span class="n">jy1</span><span class="p">,</span> <span class="n">jy2</span>
+<a name="ln-85"></a>     <span class="k">do </span><span class="n">i</span> <span class="o">=</span> <span class="n">ix1</span><span class="p">,</span> <span class="n">ix2</span>
+<a name="ln-86"></a>      <span class="n">qx</span> <span class="o">=</span> <span class="n">ch</span><span class="o">*</span><span class="p">(</span><span class="n">flx</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">flx</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span> <span class="c">!Dt*Jx(i+1/2,j,k)</span>
+<a name="ln-87"></a>      <span class="n">qy</span> <span class="o">=</span> <span class="n">ch</span><span class="o">*</span><span class="p">(</span><span class="n">flx</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">flx</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span> <span class="c">!Dt*Jy(i,j+1/2,k)</span>
+<a name="ln-88"></a>      <span class="n">curr</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">curr</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">qx</span>
+<a name="ln-89"></a>      <span class="n">curr</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="n">curr</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">qy</span>
+<a name="ln-90"></a>     <span class="k">end do</span>
+<a name="ln-91"></a><span class="k">    end do</span>
+<a name="ln-92"></a><span class="k">   end do</span>
+<a name="ln-93"></a><span class="k">   if</span> <span class="p">(</span><span class="n">curr_ndim</span> <span class="o">==</span> <span class="mi">3</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-94"></a><span class="k">    do </span><span class="n">k</span> <span class="o">=</span> <span class="n">kz1</span><span class="p">,</span> <span class="n">kz2</span>
+<a name="ln-95"></a>     <span class="k">do </span><span class="n">j</span> <span class="o">=</span> <span class="n">jy1</span><span class="p">,</span> <span class="n">jy2</span>
+<a name="ln-96"></a>      <span class="k">do </span><span class="n">i</span> <span class="o">=</span> <span class="n">ix1</span><span class="p">,</span> <span class="n">ix2</span>
+<a name="ln-97"></a>       <span class="n">qz</span> <span class="o">=</span> <span class="n">ch</span><span class="o">*</span><span class="p">(</span><span class="n">flx</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">+</span> <span class="n">flx</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span> <span class="c">!Dt*Jz(i,j,k+1/2)</span>
+<a name="ln-98"></a>       <span class="n">curr</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">=</span> <span class="n">curr</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">+</span> <span class="n">qz</span>
+<a name="ln-99"></a>      <span class="k">end do</span>
+<a name="ln-100"></a><span class="k">     end do</span>
+<a name="ln-101"></a><span class="k">    end do</span>
+<a name="ln-102"></a><span class="k">   end if</span>
+<a name="ln-103"></a>   <span class="c">!In curr(1:curr_ndim) exit  Dt*J^{n+1/2}</span>
+<a name="ln-104"></a>  <span class="k">end subroutine</span>
+<a name="ln-105"></a>  <span class="c">!============================</span>
+<a name="ln-106"></a>  <span class="k">subroutine </span><span class="n">set_env_momentum_density_flux</span><span class="p">(</span><span class="n">uv</span><span class="p">,</span> <span class="n">ef</span><span class="p">,</span> <span class="n">curr</span><span class="p">,</span> <span class="n">eb_tot</span><span class="p">,</span> <span class="n">flx</span><span class="p">)</span>
+<a name="ln-107"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">uv</span><span class="p">(:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="p">:),</span> <span class="n">ef</span><span class="p">(:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="p">:)</span>
+<a name="ln-108"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">curr</span><span class="p">(:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="p">:)</span>
+<a name="ln-109"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span> <span class="kd">::</span> <span class="n">flx</span><span class="p">(:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="p">:),</span> <span class="n">eb_tot</span><span class="p">(:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="p">:)</span>
+<a name="ln-110"></a>   <span class="kt">integer</span> <span class="kd">::</span> <span class="n">fdim</span><span class="p">,</span> <span class="n">ic</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span>
+<a name="ln-111"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">den</span><span class="p">,</span> <span class="n">pp</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="n">gam2</span><span class="p">,</span> <span class="n">gam_inv</span>
+<a name="ln-112"></a>   <span class="c">!================ set density and momenta flux</span>
+<a name="ln-113"></a>   <span class="c">!fdim = curr_ndim + 1</span>
+<a name="ln-114"></a>   <span class="n">fdim</span> <span class="o">=</span> <span class="n">size</span><span class="p">(</span><span class="n">uv</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<a name="ln-115"></a>   <span class="n">flx</span><span class="p">(:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">:</span><span class="n">fdim</span><span class="p">)</span> <span class="o">=</span> <span class="n">uv</span><span class="p">(:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">:</span><span class="n">fdim</span><span class="p">)</span>
+<a name="ln-116"></a>   <span class="c">! Enter curr(1)= |A|^2/2 and curr(2:4) grad|A|^2/2 at t^n time level</span>
+<a name="ln-117"></a>   <span class="c">!=====================</span>
+<a name="ln-118"></a>
+<a name="ln-119"></a>   <span class="n">eb_tot</span><span class="p">(</span><span class="n">ix1</span><span class="p">:</span><span class="n">ix2</span><span class="p">,</span> <span class="n">jy1</span><span class="p">:</span><span class="n">jy2</span><span class="p">,</span> <span class="n">kz1</span><span class="p">:</span><span class="n">kz2</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="n">nfield</span><span class="p">)</span> <span class="o">=</span> <span class="n">ef</span><span class="p">(</span><span class="n">ix1</span><span class="p">:</span><span class="n">ix2</span><span class="p">,</span> <span class="n">jy1</span><span class="p">:</span><span class="n">jy2</span><span class="p">,</span> <span class="n">kz1</span><span class="p">:</span><span class="n">kz2</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="n">nfield</span><span class="p">)</span>
+<a name="ln-120"></a>
+<a name="ln-121"></a>   <span class="k">do </span><span class="n">k</span> <span class="o">=</span> <span class="n">kz1</span><span class="p">,</span> <span class="n">kz2</span>
+<a name="ln-122"></a>    <span class="k">do </span><span class="n">j</span> <span class="o">=</span> <span class="n">jy1</span><span class="p">,</span> <span class="n">jy2</span>
+<a name="ln-123"></a>     <span class="k">do </span><span class="n">i</span> <span class="o">=</span> <span class="n">ix1</span><span class="p">,</span> <span class="n">ix2</span>
+<a name="ln-124"></a>      <span class="n">den</span> <span class="o">=</span> <span class="n">uv</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">fdim</span><span class="p">)</span>
+<a name="ln-125"></a>      <span class="n">pp</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">curr_ndim</span><span class="p">)</span> <span class="o">=</span> <span class="n">uv</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="n">curr_ndim</span><span class="p">)</span> <span class="c">!p momenta</span>
+<a name="ln-126"></a>      <span class="n">gam2</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">+</span><span class="nb">dot_product</span><span class="p">(</span><span class="n">pp</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">curr_ndim</span><span class="p">),</span> <span class="n">pp</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">curr_ndim</span><span class="p">))</span>
+<a name="ln-127"></a>      <span class="n">gam2</span> <span class="o">=</span> <span class="n">gam2</span> <span class="o">+</span> <span class="n">curr</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<a name="ln-128"></a>      <span class="n">gam_inv</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="nb">sqrt</span><span class="p">(</span><span class="n">gam2</span><span class="p">)</span>
+<a name="ln-129"></a>      <span class="n">pp</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">curr_ndim</span><span class="p">)</span> <span class="o">=</span> <span class="n">gam_inv</span><span class="o">*</span><span class="n">pp</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">curr_ndim</span><span class="p">)</span> <span class="c">!(vx,vy,vz)=pp/gam at time t^n</span>
+<a name="ln-130"></a>      <span class="n">curr</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">gam_inv</span><span class="o">*</span><span class="n">den</span> <span class="c">!n/gam fluid contribution of the sorce of envelope equation</span>
+<a name="ln-131"></a>      <span class="k">do </span><span class="n">ic</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">curr_ndim</span>
+<a name="ln-132"></a>       <span class="n">eb_tot</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">ic</span><span class="p">)</span> <span class="o">=</span> <span class="n">eb_tot</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">ic</span><span class="p">)</span> <span class="o">+</span> <span class="p">&amp;</span>
+<a name="ln-133"></a>                             <span class="mf">0.5</span><span class="o">*</span><span class="n">gam_inv</span><span class="o">*</span><span class="n">curr</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">ic</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="c">!Envelope grad|A|^2/(4*gam_p):wq</span>
+<a name="ln-134"></a>       <span class="n">flx</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">fdim</span> <span class="o">+</span> <span class="n">ic</span><span class="p">)</span> <span class="o">=</span> <span class="n">pp</span><span class="p">(</span><span class="n">ic</span><span class="p">)</span> <span class="c">!(vx,vy,vz)</span>
+<a name="ln-135"></a>      <span class="k">end do</span>
+<a name="ln-136"></a><span class="k">     end do</span>
+<a name="ln-137"></a><span class="k">    end do</span>
+<a name="ln-138"></a><span class="k">   end do</span>
+<a name="ln-139"></a>   <span class="c">!Exit flx(1:4)=uv(1:4)=[Px,Py,Pz,den] flx(5:8)=[vx,vy,vz]</span>
+<a name="ln-140"></a>   <span class="c">!======================================</span>
+<a name="ln-141"></a>  <span class="k">end subroutine</span>
+<a name="ln-142"></a>  <span class="c">!====================</span>
+<a name="ln-143"></a>  <span class="k">subroutine </span><span class="n">set_momentum_density_flux</span><span class="p">(</span><span class="n">uv</span><span class="p">,</span> <span class="n">flx</span><span class="p">)</span>
+<a name="ln-144"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">uv</span><span class="p">(:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="p">:)</span>
+<a name="ln-145"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">flx</span><span class="p">(:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="p">:)</span>
+<a name="ln-146"></a>   <span class="kt">integer</span> <span class="kd">::</span> <span class="n">fdim</span><span class="p">,</span> <span class="n">ic</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span>
+<a name="ln-147"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">den</span><span class="p">,</span> <span class="n">pp</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="n">gam2</span><span class="p">,</span> <span class="n">gam_inv</span>
+<a name="ln-148"></a>   <span class="c">!================ set density and momenta flux</span>
+<a name="ln-149"></a>   <span class="n">fdim</span> <span class="o">=</span> <span class="n">curr_ndim</span> <span class="o">+</span> <span class="mi">1</span>
+<a name="ln-150"></a>   <span class="n">flx</span><span class="p">(:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">:</span><span class="n">fdim</span><span class="p">)</span> <span class="o">=</span> <span class="n">uv</span><span class="p">(:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">:</span><span class="n">fdim</span><span class="p">)</span>
+<a name="ln-151"></a>   <span class="c">!stores the modentum-density at current time level t^n</span>
+<a name="ln-152"></a>   <span class="c">!=====================</span>
+<a name="ln-153"></a>   <span class="k">do </span><span class="n">k</span> <span class="o">=</span> <span class="n">kz1</span><span class="p">,</span> <span class="n">kz2</span>
+<a name="ln-154"></a>    <span class="k">do </span><span class="n">j</span> <span class="o">=</span> <span class="n">jy1</span><span class="p">,</span> <span class="n">jy2</span>
+<a name="ln-155"></a>     <span class="k">do </span><span class="n">i</span> <span class="o">=</span> <span class="n">ix1</span><span class="p">,</span> <span class="n">ix2</span>
+<a name="ln-156"></a>      <span class="n">den</span> <span class="o">=</span> <span class="n">uv</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">fdim</span><span class="p">)</span>
+<a name="ln-157"></a>      <span class="n">pp</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">curr_ndim</span><span class="p">)</span> <span class="o">=</span> <span class="n">uv</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="n">curr_ndim</span><span class="p">)</span> <span class="c">!p momenta</span>
+<a name="ln-158"></a>      <span class="n">gam2</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">+</span><span class="nb">dot_product</span><span class="p">(</span><span class="n">pp</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">curr_ndim</span><span class="p">),</span> <span class="n">pp</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">curr_ndim</span><span class="p">))</span>
+<a name="ln-159"></a>      <span class="n">gam_inv</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="nb">sqrt</span><span class="p">(</span><span class="n">gam2</span><span class="p">)</span>
+<a name="ln-160"></a>      <span class="n">pp</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">curr_ndim</span><span class="p">)</span> <span class="o">=</span> <span class="n">gam_inv</span><span class="o">*</span><span class="n">pp</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">curr_ndim</span><span class="p">)</span> <span class="c">!(vx,vy,vz)=pp/gam at time t^n</span>
+<a name="ln-161"></a>      <span class="k">do </span><span class="n">ic</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">curr_ndim</span>
+<a name="ln-162"></a>       <span class="n">flx</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">fdim</span> <span class="o">+</span> <span class="n">ic</span><span class="p">)</span> <span class="o">=</span> <span class="n">gam_inv</span><span class="o">*</span><span class="n">uv</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">ic</span><span class="p">)</span> <span class="c">!(vx,vy,vz)</span>
+<a name="ln-163"></a>      <span class="k">end do</span>
+<a name="ln-164"></a><span class="k">     end do</span>
+<a name="ln-165"></a><span class="k">    end do</span>
+<a name="ln-166"></a><span class="k">   end do</span>
+<a name="ln-167"></a>   <span class="c">!Exit non-conservative variables flx(1:4)=uv(1:4)=[Px,Py,Pz,den] flx(5:8)=[vx,vy,vz]</span>
+<a name="ln-168"></a>  <span class="k">end subroutine</span>
+<a name="ln-169"></a>  <span class="c">!=======================================</span>
+<a name="ln-170"></a>  <span class="k">subroutine </span><span class="n">update_adam_bash_fluid_variables</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">u0</span><span class="p">,</span> <span class="n">flx</span><span class="p">,</span> <span class="n">ef</span><span class="p">)</span>
+<a name="ln-171"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">u</span><span class="p">(:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="p">:),</span> <span class="n">u0</span><span class="p">(:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="p">:)</span>
+<a name="ln-172"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">ef</span><span class="p">(:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="p">:),</span> <span class="n">flx</span><span class="p">(:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="p">:)</span>
+<a name="ln-173"></a>   <span class="kt">integer</span> <span class="kd">::</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">ic</span><span class="p">,</span> <span class="n">str</span><span class="p">,</span> <span class="n">stl</span><span class="p">,</span> <span class="n">fdim</span><span class="p">,</span> <span class="n">fldim</span>
+<a name="ln-174"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">den</span><span class="p">,</span> <span class="n">lzf</span>
+<a name="ln-175"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">ex</span><span class="p">,</span> <span class="n">ey</span><span class="p">,</span> <span class="n">ez</span><span class="p">,</span> <span class="n">bx</span><span class="p">,</span> <span class="n">by</span><span class="p">,</span> <span class="n">bz</span><span class="p">,</span> <span class="n">vx</span><span class="p">,</span> <span class="n">vy</span><span class="p">,</span> <span class="n">vz</span><span class="p">,</span> <span class="n">b1p</span><span class="p">,</span> <span class="n">b1m</span>
+<a name="ln-176"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span> <span class="k">parameter</span> <span class="kd">::</span> <span class="n">WK1</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">EPS</span> <span class="o">=</span> <span class="mf">1.e-06</span>
+<a name="ln-177"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">abf_0</span><span class="p">,</span> <span class="n">abf_1</span>
+<a name="ln-178"></a>   <span class="c">!===================================</span>
+<a name="ln-179"></a>   <span class="c">! INTEGRATES by a one-step adam-bashfort (dissipative leap-frog)</span>
+<a name="ln-180"></a>   <span class="c">!===============================</span>
+<a name="ln-181"></a>   <span class="c">!   NON-CONSERVATIVE FORM of RELATIVISTC COLD FLUID</span>
+<a name="ln-182"></a>   <span class="c">!==========================================</span>
+<a name="ln-183"></a>   <span class="c">!   D_t(p)+v*grad(p)=charge*[E +vxB]</span>
+<a name="ln-184"></a>   <span class="c">!   D_t(n) +div(nv) =0</span>
+<a name="ln-185"></a>   <span class="c">!   arrays :  q(1:3)=v,  u(1:3)=p   gamm^2=1+p*p</span>
+<a name="ln-186"></a>   <span class="c">!===============================</span>
+<a name="ln-187"></a>   <span class="c">! enter ef=total (E,B) fields on staggered grid at t^n time level</span>
+<a name="ln-188"></a>   <span class="c">!================================</span>
+<a name="ln-189"></a>   <span class="n">lzf</span> <span class="o">=</span> <span class="n">lorentz_fact</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">unit_charge</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">dt_loc</span>
+<a name="ln-190"></a>   <span class="n">fdim</span> <span class="o">=</span> <span class="n">size</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<a name="ln-191"></a>   <span class="c">!fdim=curr_ndim+1</span>
+<a name="ln-192"></a>   <span class="n">fldim</span> <span class="o">=</span> <span class="n">size</span><span class="p">(</span><span class="n">flx</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<a name="ln-193"></a>   <span class="c">!fldim = 2*curr_ndim + 1 !(five or seven components)</span>
+<a name="ln-194"></a>   <span class="n">abf_0</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.5</span>
+<a name="ln-195"></a>   <span class="n">abf_1</span> <span class="o">=</span> <span class="mf">1.5</span>
+<a name="ln-196"></a>   <span class="c">!================== Enter</span>
+<a name="ln-197"></a>   <span class="c">! flx[Px,Py,Pz,den,vx,vy,vz]^n fldim components</span>
+<a name="ln-198"></a>   <span class="c">! ef[1:nfield] = total (E,B) fields and ponderomotive force</span>
+<a name="ln-199"></a>   <span class="c">!===============================================</span>
+<a name="ln-200"></a>   <span class="n">str</span> <span class="o">=</span> <span class="mi">1</span>
+<a name="ln-201"></a>   <span class="n">stl</span> <span class="o">=</span> <span class="mi">1</span>
+<a name="ln-202"></a>   <span class="k">if</span> <span class="p">(</span><span class="n">prl</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-203"></a>    <span class="c">!extends flux data to j1-2,j2+2 and k1-2,k2+2</span>
+<a name="ln-204"></a>    <span class="k">call </span><span class="n">fill_ebfield_yzxbdsdata</span><span class="p">(</span><span class="n">flx</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">fldim</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<a name="ln-205"></a>    <span class="k">call </span><span class="n">fill_ebfield_yzxbdsdata</span><span class="p">(</span><span class="n">ef</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">nfield</span><span class="p">,</span> <span class="n">str</span><span class="p">,</span> <span class="n">stl</span><span class="p">)</span>
+<a name="ln-206"></a>    <span class="k">call </span><span class="n">field_xyzbd</span><span class="p">(</span><span class="n">ef</span><span class="p">,</span> <span class="n">nfield</span><span class="p">)</span>
+<a name="ln-207"></a>   <span class="k">end if</span>
+<a name="ln-208"></a><span class="k">   if</span> <span class="p">(</span><span class="n">initial_time</span><span class="p">)</span> <span class="k">then</span> <span class="c">!a one_step update</span>
+<a name="ln-209"></a>    <span class="n">u0</span><span class="p">(:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="p">:)</span> <span class="o">=</span> <span class="n">zero_dp</span>
+<a name="ln-210"></a>    <span class="k">call </span><span class="n">nc_fluid_density_momenta</span><span class="p">(</span><span class="n">flx</span><span class="p">,</span> <span class="n">u0</span><span class="p">,</span> <span class="n">dt_loc</span><span class="p">,</span> <span class="n">fdim</span><span class="p">)</span>
+<a name="ln-211"></a>    <span class="c">! - F_adv(u) = - grad(Flux)</span>
+<a name="ln-212"></a>    <span class="k">call </span><span class="n">add_lorentz_force</span> <span class="c">!in u_0 is stored Dt*(-F_adv(u)+ F_{Lorentz}) at t^n</span>
+<a name="ln-213"></a>    <span class="k">do </span><span class="n">ic</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">fdim</span>
+<a name="ln-214"></a>     <span class="k">do </span><span class="n">k</span> <span class="o">=</span> <span class="n">kz1</span><span class="p">,</span> <span class="n">kz2</span>
+<a name="ln-215"></a>      <span class="k">do </span><span class="n">j</span> <span class="o">=</span> <span class="n">jy1</span><span class="p">,</span> <span class="n">jy2</span>
+<a name="ln-216"></a>       <span class="k">do </span><span class="n">i</span> <span class="o">=</span> <span class="n">ix1</span><span class="p">,</span> <span class="n">ix2</span>
+<a name="ln-217"></a>        <span class="n">u</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">ic</span><span class="p">)</span> <span class="o">=</span> <span class="n">u</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">ic</span><span class="p">)</span> <span class="o">+</span> <span class="n">u0</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">ic</span><span class="p">)</span> <span class="c">!updates u^{n+1}=u^{n-1}+2*Dt*F^n</span>
+<a name="ln-218"></a>        <span class="n">flx</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">ic</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">flx</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">ic</span><span class="p">)</span> <span class="o">+</span> <span class="n">u</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">ic</span><span class="p">))</span> <span class="c">! (P,den) at t(n+1/2)</span>
+<a name="ln-219"></a>       <span class="k">end do</span>
+<a name="ln-220"></a><span class="k">      end do</span>
+<a name="ln-221"></a><span class="k">     end do</span>
+<a name="ln-222"></a><span class="k">    end do</span>
+<a name="ln-223"></a><span class="k">   else</span> <span class="c">!in u_0 enter F^{n-1}</span>
+<a name="ln-224"></a>    <span class="k">do </span><span class="n">ic</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">fdim</span>
+<a name="ln-225"></a>     <span class="k">do </span><span class="n">k</span> <span class="o">=</span> <span class="n">kz1</span><span class="p">,</span> <span class="n">kz2</span>
+<a name="ln-226"></a>      <span class="k">do </span><span class="n">j</span> <span class="o">=</span> <span class="n">jy1</span><span class="p">,</span> <span class="n">jy2</span>
+<a name="ln-227"></a>       <span class="k">do </span><span class="n">i</span> <span class="o">=</span> <span class="n">ix1</span><span class="p">,</span> <span class="n">ix2</span>
+<a name="ln-228"></a>        <span class="n">u</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">ic</span><span class="p">)</span> <span class="o">=</span> <span class="n">u</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">ic</span><span class="p">)</span> <span class="o">+</span> <span class="n">abf_0</span><span class="o">*</span><span class="n">u0</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">ic</span><span class="p">)</span>
+<a name="ln-229"></a>       <span class="k">end do</span>
+<a name="ln-230"></a><span class="k">      end do</span>
+<a name="ln-231"></a><span class="k">     end do</span>
+<a name="ln-232"></a><span class="k">    end do</span>
+<a name="ln-233"></a><span class="k">    </span><span class="n">u0</span><span class="p">(:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="p">:)</span> <span class="o">=</span> <span class="mf">0.0</span>
+<a name="ln-234"></a>    <span class="k">call </span><span class="n">nc_fluid_density_momenta</span><span class="p">(</span><span class="n">flx</span><span class="p">,</span> <span class="n">u0</span><span class="p">,</span> <span class="n">dt_loc</span><span class="p">,</span> <span class="n">fdim</span><span class="p">)</span>
+<a name="ln-235"></a>    <span class="k">call </span><span class="n">add_lorentz_force</span> <span class="c">!in u_0 is ftored Dt*(F_adv(u)+ F_{Lorentz}) for next timestep</span>
+<a name="ln-236"></a>    <span class="k">do </span><span class="n">ic</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">fdim</span>
+<a name="ln-237"></a>     <span class="k">do </span><span class="n">k</span> <span class="o">=</span> <span class="n">kz1</span><span class="p">,</span> <span class="n">kz2</span>
+<a name="ln-238"></a>      <span class="k">do </span><span class="n">j</span> <span class="o">=</span> <span class="n">jy1</span><span class="p">,</span> <span class="n">jy2</span>
+<a name="ln-239"></a>       <span class="k">do </span><span class="n">i</span> <span class="o">=</span> <span class="n">ix1</span><span class="p">,</span> <span class="n">ix2</span>
+<a name="ln-240"></a>        <span class="n">u</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">ic</span><span class="p">)</span> <span class="o">=</span> <span class="n">u</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">ic</span><span class="p">)</span> <span class="o">+</span> <span class="n">abf_1</span><span class="o">*</span><span class="n">u0</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">ic</span><span class="p">)</span> <span class="c">!updates u^{n+1}=u^{n}+Dt*(3/2*F^n-1/2F^{n-1})</span>
+<a name="ln-241"></a>       <span class="k">end do</span>
+<a name="ln-242"></a><span class="k">       do </span><span class="n">i</span> <span class="o">=</span> <span class="n">ix1</span><span class="p">,</span> <span class="n">ix2</span>
+<a name="ln-243"></a>        <span class="n">flx</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">ic</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">flx</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">ic</span><span class="p">)</span> <span class="o">+</span> <span class="n">u</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">ic</span><span class="p">))</span> <span class="c">! (P,den) at t(n+1/2)</span>
+<a name="ln-244"></a>       <span class="k">end do</span>
+<a name="ln-245"></a><span class="k">      end do</span>
+<a name="ln-246"></a><span class="k">     end do</span>
+<a name="ln-247"></a><span class="k">    end do</span>
+<a name="ln-248"></a><span class="k">   end if</span>
+<a name="ln-249"></a>   <span class="c">!==========================</span>
+<a name="ln-250"></a>  <span class="k">contains</span>
+<a name="ln-251"></a><span class="k">   subroutine </span><span class="n">add_lorentz_force</span>
+<a name="ln-252"></a>    <span class="c">!in u0() -flux derivatives</span>
+<a name="ln-253"></a>    <span class="k">do </span><span class="n">k</span> <span class="o">=</span> <span class="n">kz1</span><span class="p">,</span> <span class="n">kz2</span>
+<a name="ln-254"></a>     <span class="k">do </span><span class="n">j</span> <span class="o">=</span> <span class="n">jy1</span><span class="p">,</span> <span class="n">jy2</span>
+<a name="ln-255"></a>      <span class="k">do </span><span class="n">i</span> <span class="o">=</span> <span class="n">ix1</span><span class="p">,</span> <span class="n">ix2</span>
+<a name="ln-256"></a>       <span class="n">den</span> <span class="o">=</span> <span class="mf">1.</span>
+<a name="ln-257"></a>       <span class="k">if</span> <span class="p">(</span><span class="n">flx</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">fdim</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">EPS</span><span class="p">)</span> <span class="n">den</span> <span class="o">=</span> <span class="mf">0.0</span>
+<a name="ln-258"></a>       <span class="n">ex</span> <span class="o">=</span> <span class="n">WK1</span><span class="o">*</span><span class="p">(</span><span class="n">ef</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">ef</span><span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span> <span class="c">!Ex(i,j,k)</span>
+<a name="ln-259"></a>       <span class="n">ey</span> <span class="o">=</span> <span class="n">WK1</span><span class="o">*</span><span class="p">(</span><span class="n">ef</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">ef</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span> <span class="c">!Ey(i,j,k)</span>
+<a name="ln-260"></a>       <span class="n">b1p</span> <span class="o">=</span> <span class="n">WK1</span><span class="o">*</span><span class="p">(</span><span class="n">ef</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">nfield</span><span class="p">)</span> <span class="o">+</span> <span class="n">ef</span><span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">nfield</span><span class="p">))</span> <span class="c">!bz(i,j+1/2,k)</span>
+<a name="ln-261"></a>       <span class="n">b1m</span> <span class="o">=</span> <span class="n">WK1</span><span class="o">*</span><span class="p">(</span><span class="n">ef</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">nfield</span><span class="p">)</span> <span class="o">+</span> <span class="n">ef</span><span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">nfield</span><span class="p">))</span> <span class="c">!bz(i,j-1/2,k)</span>
+<a name="ln-262"></a>       <span class="n">bz</span> <span class="o">=</span> <span class="n">WK1</span><span class="o">*</span><span class="p">(</span><span class="n">b1p</span> <span class="o">+</span> <span class="n">b1m</span><span class="p">)</span> <span class="c">!Bz(i,j,k)</span>
+<a name="ln-263"></a>       <span class="n">vx</span> <span class="o">=</span> <span class="n">flx</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">fdim</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="c">!vx^n</span>
+<a name="ln-264"></a>       <span class="n">vy</span> <span class="o">=</span> <span class="n">flx</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">fdim</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span> <span class="c">!vy^n</span>
+<a name="ln-265"></a>       <span class="n">u0</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">u0</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">den</span><span class="o">*</span><span class="n">lzf</span><span class="o">*</span><span class="p">(</span><span class="n">ex</span> <span class="o">+</span> <span class="n">vy</span><span class="o">*</span><span class="n">bz</span><span class="p">)</span> <span class="c">!=&gt; u^{n+1}</span>
+<a name="ln-266"></a>       <span class="n">u0</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="n">u0</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">den</span><span class="o">*</span><span class="n">lzf</span><span class="o">*</span><span class="p">(</span><span class="n">ey</span> <span class="o">-</span> <span class="n">vx</span><span class="o">*</span><span class="n">bz</span><span class="p">)</span>
+<a name="ln-267"></a>      <span class="k">end do</span>
+<a name="ln-268"></a><span class="k">     end do</span>
+<a name="ln-269"></a><span class="k">    end do</span>
+<a name="ln-270"></a><span class="k">    if</span> <span class="p">(</span><span class="n">curr_ndim</span> <span class="o">==</span> <span class="mi">3</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-271"></a><span class="k">     do </span><span class="n">k</span> <span class="o">=</span> <span class="n">kz1</span><span class="p">,</span> <span class="n">kz2</span>
+<a name="ln-272"></a>      <span class="k">do </span><span class="n">j</span> <span class="o">=</span> <span class="n">jy1</span><span class="p">,</span> <span class="n">jy2</span>
+<a name="ln-273"></a>       <span class="k">do </span><span class="n">i</span> <span class="o">=</span> <span class="n">ix1</span><span class="p">,</span> <span class="n">ix2</span>
+<a name="ln-274"></a>        <span class="n">den</span> <span class="o">=</span> <span class="mf">1.</span>
+<a name="ln-275"></a>        <span class="k">if</span> <span class="p">(</span><span class="n">flx</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">fdim</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">EPS</span><span class="p">)</span> <span class="n">den</span> <span class="o">=</span> <span class="mf">0.0</span>
+<a name="ln-276"></a>        <span class="n">ez</span> <span class="o">=</span> <span class="n">WK1</span><span class="o">*</span><span class="p">(</span><span class="n">ef</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">+</span> <span class="n">ef</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span> <span class="c">!Ez(i,j,k)</span>
+<a name="ln-277"></a>        <span class="n">b1p</span> <span class="o">=</span> <span class="n">WK1</span><span class="o">*</span><span class="p">(</span><span class="n">ef</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span> <span class="o">+</span> <span class="n">ef</span><span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span> <span class="c">!by(i+1/2,j,k+1/2)</span>
+<a name="ln-278"></a>        <span class="n">b1m</span> <span class="o">=</span> <span class="n">WK1</span><span class="o">*</span><span class="p">(</span><span class="n">ef</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span> <span class="o">+</span> <span class="n">ef</span><span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<a name="ln-279"></a>        <span class="n">by</span> <span class="o">=</span> <span class="n">WK1</span><span class="o">*</span><span class="p">(</span><span class="n">b1p</span> <span class="o">+</span> <span class="n">b1m</span><span class="p">)</span> <span class="c">!By(i,j,k)</span>
+<a name="ln-280"></a>        <span class="n">b1p</span> <span class="o">=</span> <span class="n">WK1</span><span class="o">*</span><span class="p">(</span><span class="n">ef</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="n">ef</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span> <span class="c">!bx(i,j+1/2,k+1/2)</span>
+<a name="ln-281"></a>        <span class="n">b1m</span> <span class="o">=</span> <span class="n">WK1</span><span class="o">*</span><span class="p">(</span><span class="n">ef</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="o">+</span> <span class="n">ef</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<a name="ln-282"></a>        <span class="n">bx</span> <span class="o">=</span> <span class="n">WK1</span><span class="o">*</span><span class="p">(</span><span class="n">b1p</span> <span class="o">+</span> <span class="n">b1m</span><span class="p">)</span> <span class="c">!Bx(i,j,k)</span>
+<a name="ln-283"></a>        <span class="n">vx</span> <span class="o">=</span> <span class="n">flx</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">fdim</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="c">!vx^n</span>
+<a name="ln-284"></a>        <span class="n">vy</span> <span class="o">=</span> <span class="n">flx</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">fdim</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span> <span class="c">!vy^n</span>
+<a name="ln-285"></a>        <span class="n">vz</span> <span class="o">=</span> <span class="n">flx</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">fdim</span> <span class="o">+</span> <span class="mi">3</span><span class="p">)</span> <span class="c">!vz^n</span>
+<a name="ln-286"></a>        <span class="n">u0</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">u0</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">den</span><span class="o">*</span><span class="n">lzf</span><span class="o">*</span><span class="n">vz</span><span class="o">*</span><span class="n">by</span>
+<a name="ln-287"></a>        <span class="n">u0</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="n">u0</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">den</span><span class="o">*</span><span class="n">lzf</span><span class="o">*</span><span class="n">vz</span><span class="o">*</span><span class="n">bx</span>
+<a name="ln-288"></a>        <span class="n">u0</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">=</span> <span class="n">u0</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">+</span> <span class="n">den</span><span class="o">*</span><span class="n">lzf</span><span class="o">*</span><span class="p">(</span><span class="n">ez</span> <span class="o">+</span> <span class="n">vx</span><span class="o">*</span><span class="n">by</span> <span class="o">-</span> <span class="n">vy</span><span class="o">*</span><span class="n">bx</span><span class="p">)</span>
+<a name="ln-289"></a>        <span class="c">!=&gt; u^{n+1}</span>
+<a name="ln-290"></a>       <span class="k">end do</span>
+<a name="ln-291"></a><span class="k">      end do</span>
+<a name="ln-292"></a><span class="k">     end do</span>
+<a name="ln-293"></a><span class="k">    end if</span>
+<a name="ln-294"></a><span class="k">   end subroutine</span>
+<a name="ln-295"></a><span class="k">  end subroutine</span>
+<a name="ln-296"></a>
+<a name="ln-297"></a><span class="k"> end module</span>
+</pre></div>
+
+    </section>
+    </div>
+  </div>
+
+  
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2020 <a rel="license" href="http://www.gnu.org/licenses/old-licenses/fdl-1.2.en.html">GNU Free Documentation License</a>
+                                          </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+             on 2020-07-30 
+          </p>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> ALaDyn was developed by The ALaDyn Collaboration</p></div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+      });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+    
+  </body>
+</html>

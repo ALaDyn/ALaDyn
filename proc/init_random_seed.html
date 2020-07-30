@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+   <meta name="description" content="A High-Accuracy PIC Code for the Maxwell-Vlasov Equations">
+    
+    <meta name="author" content="The ALaDyn Collaboration" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>init_random_seed &ndash; ALaDyn</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">ALaDyn <small>3.0.1</small></a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+        
+            <li><a href='../page/index.html'>Guide</a></li>
+      
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+     aria-expanded="false">Contents <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          
+              
+            <li><a href="../lists/files.html">Source Files</a></li>
+        
+        
+        
+            <li><a href="../lists/modules.html">Modules</a></li>
+        
+            
+                                
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+        
+               
+            <li><a href="../lists/types.html">Derived Types</a></li>
+        
+        
+            <li><a href="../program/aladyn.html">Program</a></li>
+      
+            </ul>
+            </li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+
+                             
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../program/aladyn.html">Program</a></li>
+
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>init_random_seed
+      <small>Subroutine</small>
+    
+    </h1>
+    
+<div class="row">
+  <div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+     <li><i class="fa fa-list-ol"></i>
+       <a data-toggle="tooltip"
+    data-placement="bottom" data-html="true"
+    title=" 0.0% of total for procedures.">42 statements</a>
+     </li> 
+     
+     
+     
+    <li><i class="fa fa-code"></i><a href="../src/util.f90"> Source File</a></li>
+     
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+    
+     <li><a href='../sourcefile/util.f90.html'>util.f90</a></li>
+    
+     <li><a href='../module/util.html'>util</a></li>
+    
+  
+     <li class="active">init_random_seed</li>
+  </ol>
+</div>
+</div>
+</div>
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+    
+<div id="sidebar">
+  
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<em>None</em>
+
+
+</div>
+
+    </div>
+    
+    <div class="col-md-9" id='text'>
+    <h2>
+public subroutine init_random_seed(myrank)
+    
+    
+   
+</h2>
+    
+  
+
+
+    
+
+    <h3>Arguments</h3>
+    
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-myrank"></span>integer,</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>myrank</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+    
+    
+    
+    <br>
+    
+    
+     
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Called by</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: proc~~init_random_seed~~CalledByGraph Pages: 1 -->
+<svg id="procinit_random_seedCalledByGraph" width="641pt" height="170pt"
+ viewBox="0.00 0.00 641.00 170.45" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="proc~~init_random_seed~~CalledByGraph" class="graph" transform="scale(.7284 .7284) rotate(0) translate(4 230)">
+<title>proc~~init_random_seed~~CalledByGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-230 876,-230 876,4 -4,4"/>
+<!-- proc~init_random_seed -->
+<g id="proc~~init_random_seed~~CalledByGraph_node1" class="node">
+<title>proc~init_random_seed</title>
+<polygon fill="none" stroke="#000000" points="872,-122 765,-122 765,-98 872,-98 872,-122"/>
+<text text-anchor="middle" x="818.5" y="-107.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">init_random_seed</text>
+</g>
+<!-- proc~add_particles -->
+<g id="proc~~init_random_seed~~CalledByGraph_node2" class="node">
+<title>proc~add_particles</title>
+<g id="a_proc~~init_random_seed~~CalledByGraph_node2"><a xlink:href=".././proc/add_particles.html" xlink:title="add_particles">
+<polygon fill="#d9534f" stroke="#d9534f" points="713.5,-222 629.5,-222 629.5,-198 713.5,-198 713.5,-222"/>
+<text text-anchor="middle" x="671.5" y="-207.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">add_particles</text>
+</a>
+</g>
+</g>
+<!-- proc~add_particles&#45;&gt;proc~init_random_seed -->
+<g id="proc~~init_random_seed~~CalledByGraph_edge1" class="edge">
+<title>proc~add_particles&#45;&gt;proc~init_random_seed</title>
+<path fill="none" stroke="#ff0000" d="M702.124,-197.9643C711.0439,-193.9818 720.6343,-189.2189 729,-184 754.811,-167.8979 781.2885,-145.069 798.6798,-129.0371"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="801.0808,-131.5838 805.9959,-122.198 796.3006,-126.4701 801.0808,-131.5838"/>
+</g>
+<!-- proc~one_layer_nano_tubes -->
+<g id="proc~~init_random_seed~~CalledByGraph_node3" class="node">
+<title>proc~one_layer_nano_tubes</title>
+<g id="a_proc~~init_random_seed~~CalledByGraph_node3"><a xlink:href=".././proc/one_layer_nano_tubes.html" xlink:title="one_layer_nano_tubes">
+<polygon fill="#d9534f" stroke="#d9534f" points="578,-62 446,-62 446,-38 578,-38 578,-62"/>
+<text text-anchor="middle" x="512" y="-47.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">one_layer_nano_tubes</text>
+</a>
+</g>
+</g>
+<!-- proc~one_layer_nano_tubes&#45;&gt;proc~init_random_seed -->
+<g id="proc~~init_random_seed~~CalledByGraph_edge2" class="edge">
+<title>proc~one_layer_nano_tubes&#45;&gt;proc~init_random_seed</title>
+<path fill="none" stroke="#ff0000" d="M578.2715,-53.736C621.6334,-57.2056 679.259,-63.767 729,-76 747.0448,-80.4378 766.3978,-87.4838 782.475,-94.0136"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="781.4438,-97.3754 792.0211,-97.9847 784.1324,-90.9123 781.4438,-97.3754"/>
+</g>
+<!-- proc~start_parallel -->
+<g id="proc~~init_random_seed~~CalledByGraph_node4" class="node">
+<title>proc~start_parallel</title>
+<g id="a_proc~~init_random_seed~~CalledByGraph_node4"><a xlink:href=".././proc/start_parallel.html" xlink:title="start_parallel">
+<polygon fill="#d9534f" stroke="#d9534f" points="712.5,-142 630.5,-142 630.5,-118 712.5,-118 712.5,-142"/>
+<text text-anchor="middle" x="671.5" y="-127.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">start_parallel</text>
+</a>
+</g>
+</g>
+<!-- proc~start_parallel&#45;&gt;proc~init_random_seed -->
+<g id="proc~~init_random_seed~~CalledByGraph_edge3" class="edge">
+<title>proc~start_parallel&#45;&gt;proc~init_random_seed</title>
+<path fill="none" stroke="#ff0000" d="M712.8389,-124.3757C725.8223,-122.6092 740.4736,-120.6158 754.6388,-118.6886"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="755.3997,-122.1174 764.8365,-117.3012 754.456,-115.1813 755.3997,-122.1174"/>
+</g>
+<!-- proc~env_lpf2_evolve -->
+<g id="proc~~init_random_seed~~CalledByGraph_node5" class="node">
+<title>proc~env_lpf2_evolve</title>
+<g id="a_proc~~init_random_seed~~CalledByGraph_node5"><a xlink:href=".././proc/env_lpf2_evolve.html" xlink:title="env_lpf2_evolve">
+<polygon fill="#d9534f" stroke="#d9534f" points="561,-162 463,-162 463,-138 561,-138 561,-162"/>
+<text text-anchor="middle" x="512" y="-147.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">env_lpf2_evolve</text>
+</a>
+</g>
+</g>
+<!-- proc~env_lpf2_evolve&#45;&gt;proc~init_random_seed -->
+<g id="proc~~init_random_seed~~CalledByGraph_edge4" class="edge">
+<title>proc~env_lpf2_evolve&#45;&gt;proc~init_random_seed</title>
+<path fill="none" stroke="#ff0000" d="M561.3327,-156.2804C605.7369,-160.5106 672.4992,-163.3256 729,-151 750.4156,-146.3282 772.8362,-136.0472 789.8801,-126.9498"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="791.6852,-129.9514 798.7552,-122.0605 788.3075,-123.8202 791.6852,-129.9514"/>
+</g>
+<!-- proc~beam_inject -->
+<g id="proc~~init_random_seed~~CalledByGraph_node6" class="node">
+<title>proc~beam_inject</title>
+<g id="a_proc~~init_random_seed~~CalledByGraph_node6"><a xlink:href=".././proc/beam_inject.html" xlink:title="beam_inject">
+<polygon fill="#d9534f" stroke="#d9534f" points="385,-104 307,-104 307,-80 385,-80 385,-104"/>
+<text text-anchor="middle" x="346" y="-89.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">beam_inject</text>
+</a>
+</g>
+</g>
+<!-- proc~beam_inject&#45;&gt;proc~init_random_seed -->
+<g id="proc~~init_random_seed~~CalledByGraph_edge5" class="edge">
+<title>proc~beam_inject&#45;&gt;proc~init_random_seed</title>
+<path fill="none" stroke="#ff0000" d="M385.0686,-93.4883C466.5366,-96.5919 655.2198,-103.7798 754.6117,-107.5662"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="754.6937,-111.0717 764.8197,-107.955 754.9602,-104.0768 754.6937,-111.0717"/>
+</g>
+<!-- proc~pspecies_distribute -->
+<g id="proc~~init_random_seed~~CalledByGraph_node7" class="node">
+<title>proc~pspecies_distribute</title>
+<g id="a_proc~~init_random_seed~~CalledByGraph_node7"><a xlink:href=".././proc/pspecies_distribute.html" xlink:title="pspecies_distribute">
+<polygon fill="#d9534f" stroke="#d9534f" points="729,-24 614,-24 614,0 729,0 729,-24"/>
+<text text-anchor="middle" x="671.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">pspecies_distribute</text>
+</a>
+</g>
+</g>
+<!-- proc~pspecies_distribute&#45;&gt;proc~init_random_seed -->
+<g id="proc~~init_random_seed~~CalledByGraph_edge6" class="edge">
+<title>proc~pspecies_distribute&#45;&gt;proc~init_random_seed</title>
+<path fill="none" stroke="#ff0000" d="M702.08,-24.1067C710.9987,-28.0911 720.5994,-32.8373 729,-38 754.2594,-53.5235 780.3657,-75.2999 797.816,-90.8309"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="795.8773,-93.7959 805.6455,-97.8987 800.5678,-88.5999 795.8773,-93.7959"/>
+</g>
+<!-- proc~part_distribute -->
+<g id="proc~~init_random_seed~~CalledByGraph_node8" class="node">
+<title>proc~part_distribute</title>
+<g id="a_proc~~init_random_seed~~CalledByGraph_node8"><a xlink:href=".././proc/part_distribute.html" xlink:title="part_distribute">
+<polygon fill="#d9534f" stroke="#d9534f" points="391,-62 301,-62 301,-38 391,-38 391,-62"/>
+<text text-anchor="middle" x="346" y="-47.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">part_distribute</text>
+</a>
+</g>
+</g>
+<!-- proc~part_distribute&#45;&gt;proc~one_layer_nano_tubes -->
+<g id="proc~~init_random_seed~~CalledByGraph_edge8" class="edge">
+<title>proc~part_distribute&#45;&gt;proc~one_layer_nano_tubes</title>
+<path fill="none" stroke="#ffff00" d="M391.3602,-50C405.0095,-50 420.3818,-50 435.4675,-50"/>
+<polygon fill="#ffff00" stroke="#ffff00" points="435.8409,-53.5001 445.8409,-50 435.8408,-46.5001 435.8409,-53.5001"/>
+</g>
+<!-- proc~particles_inject -->
+<g id="proc~~init_random_seed~~CalledByGraph_node9" class="node">
+<title>proc~particles_inject</title>
+<g id="a_proc~~init_random_seed~~CalledByGraph_node9"><a xlink:href=".././proc/particles_inject.html" xlink:title="particles_inject">
+<polygon fill="#d9534f" stroke="#d9534f" points="558.5,-222 465.5,-222 465.5,-198 558.5,-198 558.5,-222"/>
+<text text-anchor="middle" x="512" y="-207.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">particles_inject</text>
+</a>
+</g>
+</g>
+<!-- proc~particles_inject&#45;&gt;proc~add_particles -->
+<g id="proc~~init_random_seed~~CalledByGraph_edge7" class="edge">
+<title>proc~particles_inject&#45;&gt;proc~add_particles</title>
+<path fill="none" stroke="#ff0000" d="M558.5628,-210C577.5028,-210 599.4823,-210 618.9903,-210"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="619.237,-213.5001 629.2369,-210 619.2369,-206.5001 619.237,-213.5001"/>
+</g>
+<!-- proc~env_cycle -->
+<g id="proc~~init_random_seed~~CalledByGraph_node10" class="node">
+<title>proc~env_cycle</title>
+<g id="a_proc~~init_random_seed~~CalledByGraph_node10"><a xlink:href=".././proc/env_cycle.html" xlink:title="Env_cycle">
+<polygon fill="#d9534f" stroke="#d9534f" points="155,-133 90,-133 90,-109 155,-109 155,-133"/>
+<text text-anchor="middle" x="122.5" y="-118.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Env_cycle</text>
+</a>
+</g>
+</g>
+<!-- proc~env_cycle&#45;&gt;proc~beam_inject -->
+<g id="proc~~init_random_seed~~CalledByGraph_edge10" class="edge">
+<title>proc~env_cycle&#45;&gt;proc~beam_inject</title>
+<path fill="none" stroke="#0000ff" d="M155.2307,-116.0654C166.5524,-114.4001 179.3267,-112.5673 191,-111 226.3666,-106.2515 266.3396,-101.3633 296.8332,-97.7343"/>
+<polygon fill="#0000ff" stroke="#0000ff" points="297.2724,-101.2068 306.7908,-96.5538 296.4483,-94.2555 297.2724,-101.2068"/>
+</g>
+<!-- proc~env_run -->
+<g id="proc~~init_random_seed~~CalledByGraph_node11" class="node">
+<title>proc~env_run</title>
+<g id="a_proc~~init_random_seed~~CalledByGraph_node11"><a xlink:href=".././proc/env_run.html" xlink:title="env_run">
+<polygon fill="#d9534f" stroke="#d9534f" points="246,-144 191,-144 191,-120 246,-120 246,-144"/>
+<text text-anchor="middle" x="218.5" y="-129.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">env_run</text>
+</a>
+</g>
+</g>
+<!-- proc~env_cycle&#45;&gt;proc~env_run -->
+<g id="proc~~init_random_seed~~CalledByGraph_edge15" class="edge">
+<title>proc~env_cycle&#45;&gt;proc~env_run</title>
+<path fill="none" stroke="#7f00ff" d="M155.0012,-124.7241C163.2769,-125.6724 172.2412,-126.6995 180.7541,-127.675"/>
+<polygon fill="#7f00ff" stroke="#7f00ff" points="180.504,-131.1691 190.8375,-128.8303 181.301,-124.2146 180.504,-131.1691"/>
+</g>
+<!-- proc~env_run&#45;&gt;proc~env_lpf2_evolve -->
+<g id="proc~~init_random_seed~~CalledByGraph_edge9" class="edge">
+<title>proc~env_run&#45;&gt;proc~env_lpf2_evolve</title>
+<path fill="none" stroke="#00ffff" d="M246.1118,-133.6934C293.1528,-136.5784 389.8398,-142.5081 452.744,-146.3659"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="452.7257,-149.8713 462.9212,-146.9901 453.1542,-142.8844 452.7257,-149.8713"/>
+</g>
+<!-- proc~comoving_coordinate -->
+<g id="proc~~init_random_seed~~CalledByGraph_node14" class="node">
+<title>proc~comoving_coordinate</title>
+<g id="a_proc~~init_random_seed~~CalledByGraph_node14"><a xlink:href=".././proc/comoving_coordinate.html" xlink:title="comoving_coordinate">
+<polygon fill="#d9534f" stroke="#d9534f" points="410,-226 282,-226 282,-202 410,-202 410,-226"/>
+<text text-anchor="middle" x="346" y="-211.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">comoving_coordinate</text>
+</a>
+</g>
+</g>
+<!-- proc~env_run&#45;&gt;proc~comoving_coordinate -->
+<g id="proc~~init_random_seed~~CalledByGraph_edge18" class="edge">
+<title>proc~env_run&#45;&gt;proc~comoving_coordinate</title>
+<path fill="none" stroke="#00ffff" d="M235.4805,-144.1802C239.0563,-146.9597 242.7325,-149.986 246,-153 263.5803,-169.2168 261.9614,-179.9423 282,-193 284.6101,-194.7008 287.37,-196.2751 290.2204,-197.7307"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="289.0075,-201.0242 299.5587,-201.9854 291.9099,-194.6542 289.0075,-201.0242"/>
+</g>
+<!-- proc~lp_window_xshift -->
+<g id="proc~~init_random_seed~~CalledByGraph_node15" class="node">
+<title>proc~lp_window_xshift</title>
+<g id="a_proc~~init_random_seed~~CalledByGraph_node15"><a xlink:href=".././proc/lp_window_xshift.html" xlink:title="lp_window_xshift">
+<polygon fill="#d9534f" stroke="#d9534f" points="396.5,-184 295.5,-184 295.5,-160 396.5,-160 396.5,-184"/>
+<text text-anchor="middle" x="346" y="-169.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">lp_window_xshift</text>
+</a>
+</g>
+</g>
+<!-- proc~env_run&#45;&gt;proc~lp_window_xshift -->
+<g id="proc~~init_random_seed~~CalledByGraph_edge20" class="edge">
+<title>proc~env_run&#45;&gt;proc~lp_window_xshift</title>
+<path fill="none" stroke="#7f00ff" d="M246.1656,-140.6794C261.2267,-145.4044 280.2943,-151.3865 297.7206,-156.8535"/>
+<polygon fill="#7f00ff" stroke="#7f00ff" points="297.1593,-160.3456 307.7485,-159.9995 299.2547,-153.6665 297.1593,-160.3456"/>
+</g>
+<!-- program~aladyn -->
+<g id="proc~~init_random_seed~~CalledByGraph_node12" class="node">
+<title>program~aladyn</title>
+<g id="a_proc~~init_random_seed~~CalledByGraph_node12"><a xlink:href=".././program/aladyn.html" xlink:title="aladyn">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="54,-133 0,-133 0,-109 54,-109 54,-133"/>
+<text text-anchor="middle" x="27" y="-118.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">aladyn</text>
+</a>
+</g>
+</g>
+<!-- program~aladyn&#45;&gt;proc~env_cycle -->
+<g id="proc~~init_random_seed~~CalledByGraph_edge14" class="edge">
+<title>program~aladyn&#45;&gt;proc~env_cycle</title>
+<path fill="none" stroke="#00ffff" d="M54.111,-121C62.1173,-121 71.0822,-121 79.8182,-121"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="79.8973,-124.5001 89.8973,-121 79.8972,-117.5001 79.8973,-124.5001"/>
+</g>
+<!-- proc~start -->
+<g id="proc~~init_random_seed~~CalledByGraph_node16" class="node">
+<title>proc~start</title>
+<g id="a_proc~~init_random_seed~~CalledByGraph_node16"><a xlink:href=".././proc/start.html" xlink:title="Start">
+<polygon fill="#d9534f" stroke="#d9534f" points="149.5,-82 95.5,-82 95.5,-58 149.5,-58 149.5,-82"/>
+<text text-anchor="middle" x="122.5" y="-67.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Start</text>
+</a>
+</g>
+</g>
+<!-- program~aladyn&#45;&gt;proc~start -->
+<g id="proc~~init_random_seed~~CalledByGraph_edge21" class="edge">
+<title>program~aladyn&#45;&gt;proc~start</title>
+<path fill="none" stroke="#ff0000" d="M49.6322,-108.9137C61.9116,-102.3561 77.2891,-94.144 90.749,-86.956"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="92.5271,-89.9743 99.6993,-82.1763 89.2296,-83.7997 92.5271,-89.9743"/>
+</g>
+<!-- proc~lp_cycle -->
+<g id="proc~~init_random_seed~~CalledByGraph_node18" class="node">
+<title>proc~lp_cycle</title>
+<g id="a_proc~~init_random_seed~~CalledByGraph_node18"><a xlink:href=".././proc/lp_cycle.html" xlink:title="Lp_cycle">
+<polygon fill="#d9534f" stroke="#d9534f" points="151.5,-180 93.5,-180 93.5,-156 151.5,-156 151.5,-180"/>
+<text text-anchor="middle" x="122.5" y="-165.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Lp_cycle</text>
+</a>
+</g>
+</g>
+<!-- program~aladyn&#45;&gt;proc~lp_cycle -->
+<g id="proc~~init_random_seed~~CalledByGraph_edge23" class="edge">
+<title>program~aladyn&#45;&gt;proc~lp_cycle</title>
+<path fill="none" stroke="#ff0000" d="M51.5936,-133.1037C62.9559,-138.6956 76.6262,-145.4234 88.919,-151.4732"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="87.4719,-154.6619 97.9897,-155.9373 90.5629,-148.3813 87.4719,-154.6619"/>
+</g>
+<!-- proc~init -->
+<g id="proc~~init_random_seed~~CalledByGraph_node13" class="node">
+<title>proc~init</title>
+<g id="a_proc~~init_random_seed~~CalledByGraph_node13"><a xlink:href=".././proc/init.html" xlink:title="init">
+<polygon fill="#d9534f" stroke="#d9534f" points="245.5,-63 191.5,-63 191.5,-39 245.5,-39 245.5,-63"/>
+<text text-anchor="middle" x="218.5" y="-48.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">init</text>
+</a>
+</g>
+</g>
+<!-- proc~init&#45;&gt;proc~part_distribute -->
+<g id="proc~~init_random_seed~~CalledByGraph_edge11" class="edge">
+<title>proc~init&#45;&gt;proc~part_distribute</title>
+<path fill="none" stroke="#ff0000" d="M245.5395,-50.7879C258.7315,-50.6845 275.105,-50.556 290.7782,-50.4331"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="290.9639,-53.9319 300.9361,-50.3534 290.909,-46.9321 290.9639,-53.9319"/>
+</g>
+<!-- proc~comoving_coordinate&#45;&gt;proc~particles_inject -->
+<g id="proc~~init_random_seed~~CalledByGraph_edge12" class="edge">
+<title>proc~comoving_coordinate&#45;&gt;proc~particles_inject</title>
+<path fill="none" stroke="#7fff00" d="M410.1799,-212.4535C425.0099,-212.0961 440.6861,-211.7184 455.1764,-211.3692"/>
+<polygon fill="#7fff00" stroke="#7fff00" points="455.5762,-214.8607 465.489,-211.1207 455.4075,-207.8628 455.5762,-214.8607"/>
+</g>
+<!-- proc~lp_window_xshift&#45;&gt;proc~particles_inject -->
+<g id="proc~~init_random_seed~~CalledByGraph_edge13" class="edge">
+<title>proc~lp_window_xshift&#45;&gt;proc~particles_inject</title>
+<path fill="none" stroke="#7fff00" d="M396.7075,-183.6077C415.3008,-187.864 436.4557,-192.7067 455.5236,-197.0717"/>
+<polygon fill="#7fff00" stroke="#7fff00" points="454.7511,-200.4853 465.28,-199.3051 456.3131,-193.6618 454.7511,-200.4853"/>
+</g>
+<!-- proc~start&#45;&gt;proc~init -->
+<g id="proc~~init_random_seed~~CalledByGraph_edge16" class="edge">
+<title>proc~start&#45;&gt;proc~init</title>
+<path fill="none" stroke="#7fff00" d="M149.753,-64.6062C159.4815,-62.6807 170.618,-60.4766 181.0542,-58.4111"/>
+<polygon fill="#7fff00" stroke="#7fff00" points="182.0487,-61.7823 191.1789,-56.4073 180.6896,-54.9155 182.0487,-61.7823"/>
+</g>
+<!-- proc~lp_run -->
+<g id="proc~~init_random_seed~~CalledByGraph_node17" class="node">
+<title>proc~lp_run</title>
+<g id="a_proc~~init_random_seed~~CalledByGraph_node17"><a xlink:href=".././proc/lp_run.html" xlink:title="lp_run">
+<polygon fill="#d9534f" stroke="#d9534f" points="245.5,-186 191.5,-186 191.5,-162 245.5,-162 245.5,-186"/>
+<text text-anchor="middle" x="218.5" y="-171.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">lp_run</text>
+</a>
+</g>
+</g>
+<!-- proc~lp_run&#45;&gt;proc~comoving_coordinate -->
+<g id="proc~~init_random_seed~~CalledByGraph_edge17" class="edge">
+<title>proc~lp_run&#45;&gt;proc~comoving_coordinate</title>
+<path fill="none" stroke="#00ffff" d="M245.5395,-182.483C260.712,-187.243 280.093,-193.3233 297.7768,-198.8711"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="296.7998,-202.2328 307.389,-201.8867 298.8952,-195.5538 296.7998,-202.2328"/>
+</g>
+<!-- proc~lp_run&#45;&gt;proc~lp_window_xshift -->
+<g id="proc~~init_random_seed~~CalledByGraph_edge19" class="edge">
+<title>proc~lp_run&#45;&gt;proc~lp_window_xshift</title>
+<path fill="none" stroke="#7f00ff" d="M245.5395,-173.5759C257.1861,-173.3932 271.3126,-173.1716 285.2476,-172.953"/>
+<polygon fill="#7f00ff" stroke="#7f00ff" points="285.3786,-176.4515 295.3224,-172.7949 285.2687,-169.4523 285.3786,-176.4515"/>
+</g>
+<!-- proc~lp_cycle&#45;&gt;proc~lp_run -->
+<g id="proc~~init_random_seed~~CalledByGraph_edge22" class="edge">
+<title>proc~lp_cycle&#45;&gt;proc~lp_run</title>
+<path fill="none" stroke="#00ffff" d="M151.5637,-169.8165C160.8039,-170.394 171.1591,-171.0412 180.9119,-171.6507"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="180.978,-175.1616 191.1769,-172.2923 181.4147,-168.1752 180.978,-175.1616"/>
+</g>
+</g>
+</svg>
+</div><script>var panprocinit_random_seedCalledByGraph = svgPanZoom('#procinit_random_seedCalledByGraph', {zoomEnabled: true,controlIconsEnabled: true, fit: true, center: true,}); </script><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="599pt" height="32pt"
+ viewBox="0.00 0.00 598.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 594.5,-28 594.5,4 -4,4"/>
+<!-- Subroutine -->
+<g id="node1" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="71,-24 0,-24 0,0 71,0 71,-24"/>
+<text text-anchor="middle" x="35.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node2" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="147.5,-24 89.5,-24 89.5,0 147.5,0 147.5,-24"/>
+<text text-anchor="middle" x="118.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Function</text>
+</g>
+<!-- Interface -->
+<g id="node3" class="node">
+<title>Interface</title>
+<polygon fill="#a7506f" stroke="#a7506f" points="227,-24 166,-24 166,0 227,0 227,-24"/>
+<text text-anchor="middle" x="196.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Interface</text>
+</g>
+<!-- Unknown Procedure Type -->
+<g id="node4" class="node">
+<title>Unknown Procedure Type</title>
+<polygon fill="#777777" stroke="#777777" points="392,-24 245,-24 245,0 392,0 392,-24"/>
+<text text-anchor="middle" x="318.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Unknown Procedure Type</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="468.5,-24 410.5,-24 410.5,0 468.5,0 468.5,-24"/>
+<text text-anchor="middle" x="439.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="590.5,-24 486.5,-24 486.5,0 590.5,0 590.5,-24"/>
+<text text-anchor="middle" x="538.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a procedure to one which it calls. Dashed 
+    arrows point from an interface to procedures which implement that interface.
+    This could include the module procedures in a generic interface or the
+    implementation in a submodule of an interface in a parent module. Where possible, edges connecting nodes are given different colours to make them easier to distinguish in large graphs.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+     
+    <br>
+
+    <section class="visible-xs visible-sm hidden-md">
+      
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<em>None</em>
+
+
+    </section>
+    <br class="visible-xs visible-sm hidden-md">
+
+    
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+
+    
+    
+    
+    
+    </div>
+  </div>
+
+
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2020 <a rel="license" href="http://www.gnu.org/licenses/old-licenses/fdl-1.2.en.html">GNU Free Documentation License</a>
+                                          </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+             on 2020-07-30 
+          </p>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> ALaDyn was developed by The ALaDyn Collaboration</p></div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+      });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+    
+  </body>
+</html>

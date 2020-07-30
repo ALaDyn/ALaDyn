@@ -1,0 +1,1510 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+   <meta name="description" content="A High-Accuracy PIC Code for the Maxwell-Vlasov Equations">
+    
+    <meta name="author" content="The ALaDyn Collaboration" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>run_data_info.f90 &ndash; ALaDyn</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">ALaDyn <small>3.0.1</small></a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+        
+            <li><a href='../page/index.html'>Guide</a></li>
+      
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+     aria-expanded="false">Contents <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          
+              
+            <li><a href="../lists/files.html">Source Files</a></li>
+        
+        
+        
+            <li><a href="../lists/modules.html">Modules</a></li>
+        
+            
+                                
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+        
+               
+            <li><a href="../lists/types.html">Derived Types</a></li>
+        
+        
+            <li><a href="../program/aladyn.html">Program</a></li>
+      
+            </ul>
+            </li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+
+                             
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../program/aladyn.html">Program</a></li>
+
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>run_data_info.f90
+    <small>Source File</small>
+    
+    </h1>
+    
+<div class="row">
+  <div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+     <li><i class="fa fa-list-ol"></i>
+       <a data-toggle="tooltip"
+    data-placement="bottom" data-html="true"
+    title=" 2.2% of total for source files.">548 statements</a>
+     </li> 
+     
+     
+     
+    <li><i class="fa fa-code"></i><a href="../src/run_data_info.f90"> Source File</a></li>
+     
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+    
+  
+     <li class="active">run_data_info.f90</li>
+  </ol>
+</div>
+</div>
+</div>
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+
+  </div>
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+    
+<div id="sidebar">
+  
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#mods-0">Modules</a></h3></div>
+  <div id="mods-0" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/run_data_info.html">run_data_info</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../sourcefile/run_data_info.f90.html#src">run_data_info.f90</a>
+  </div>
+</div>
+
+
+
+</div>
+
+    </div>
+    <div class="col-md-9" id='text'>
+      
+      <br>
+    
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">This file depends on</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: sourcefile~~run_data_info.f90~~EfferentGraph Pages: 1 -->
+<svg id="sourcefilerun_data_infof90EfferentGraph" width="641pt" height="358pt"
+ viewBox="0.00 0.00 641.00 357.84" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="sourcefile~~run_data_info.f90~~EfferentGraph" class="graph" transform="scale(.9015 .9015) rotate(0) translate(4 392.923)">
+<title>sourcefile~~run_data_info.f90~~EfferentGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-392.923 707,-392.923 707,4 -4,4"/>
+<!-- sourcefile~run_data_info.f90 -->
+<g id="sourcefile~~run_data_info.f90~~EfferentGraph_node1" class="node">
+<title>sourcefile~run_data_info.f90</title>
+<polygon fill="none" stroke="#000000" points="703,-224.6781 597,-224.6781 597,-200.6781 703,-200.6781 703,-224.6781"/>
+<text text-anchor="middle" x="650" y="-210.2781" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">run_data_info.f90</text>
+</g>
+<!-- sourcefile~ionz_data.f90 -->
+<g id="sourcefile~~run_data_info.f90~~EfferentGraph_node2" class="node">
+<title>sourcefile~ionz_data.f90</title>
+<g id="a_sourcefile~~run_data_info.f90~~EfferentGraph_node2"><a xlink:href=".././sourcefile/ionz_data.f90.html" xlink:title="ionz_data.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="226.5,-364.6781 142.5,-364.6781 142.5,-340.6781 226.5,-340.6781 226.5,-364.6781"/>
+<text text-anchor="middle" x="184.5" y="-350.2781" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">ionz_data.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~run_data_info.f90&#45;&gt;sourcefile~ionz_data.f90 -->
+<g id="sourcefile~~run_data_info.f90~~EfferentGraph_edge1" class="edge">
+<title>sourcefile~run_data_info.f90&#45;&gt;sourcefile~ionz_data.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M490.5,-372.6781C403.7845,-402.7573 295.0852,-383.2524 233.3401,-367.3061"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="234.0399,-363.8707 223.4765,-364.6851 232.2422,-370.6359 234.0399,-363.8707"/>
+</g>
+<!-- sourcefile~grid_param.f90 -->
+<g id="sourcefile~~run_data_info.f90~~EfferentGraph_node3" class="node">
+<title>sourcefile~grid_param.f90</title>
+<g id="a_sourcefile~~run_data_info.f90~~EfferentGraph_node3"><a xlink:href=".././sourcefile/grid_param.f90.html" xlink:title="grid_param.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="370.5,-344.6781 276.5,-344.6781 276.5,-320.6781 370.5,-320.6781 370.5,-344.6781"/>
+<text text-anchor="middle" x="323.5" y="-330.2781" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">grid_param.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~run_data_info.f90&#45;&gt;sourcefile~grid_param.f90 -->
+<g id="sourcefile~~run_data_info.f90~~EfferentGraph_edge2" class="edge">
+<title>sourcefile~run_data_info.f90&#45;&gt;sourcefile~grid_param.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M643.1372,-225.0952C624.1492,-257.8807 567.2067,-346.0707 490.5,-372.6781"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M490.5,-372.6781C467.6833,-380.5926 406.861,-362.4692 365.2757,-348.0947"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="366.2694,-344.7342 355.6746,-344.7251 363.9513,-351.3392 366.2694,-344.7342"/>
+</g>
+<!-- sourcefile~common_param.f90 -->
+<g id="sourcefile~~run_data_info.f90~~EfferentGraph_node4" class="node">
+<title>sourcefile~common_param.f90</title>
+<g id="a_sourcefile~~run_data_info.f90~~EfferentGraph_node4"><a xlink:href=".././sourcefile/common_param.f90.html" xlink:title="common_param.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="384,-184.6781 263,-184.6781 263,-160.6781 384,-160.6781 384,-184.6781"/>
+<text text-anchor="middle" x="323.5" y="-170.2781" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">common_param.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~run_data_info.f90&#45;&gt;sourcefile~common_param.f90 -->
+<g id="sourcefile~~run_data_info.f90~~EfferentGraph_edge4" class="edge">
+<title>sourcefile~run_data_info.f90&#45;&gt;sourcefile~common_param.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M490.5,-132.6781C467.4572,-128.6549 409.9165,-144.5931 368.828,-157.5329"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="367.7529,-154.2021 359.2894,-160.5754 369.8801,-160.871 367.7529,-154.2021"/>
+</g>
+<!-- sourcefile~parallel.f90 -->
+<g id="sourcefile~~run_data_info.f90~~EfferentGraph_node5" class="node">
+<title>sourcefile~parallel.f90</title>
+<g id="a_sourcefile~~run_data_info.f90~~EfferentGraph_node5"><a xlink:href=".././sourcefile/parallel.f90.html" xlink:title="parallel.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="528.5,-104.6781 452.5,-104.6781 452.5,-80.6781 528.5,-80.6781 528.5,-104.6781"/>
+<text text-anchor="middle" x="490.5" y="-90.2781" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">parallel.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~run_data_info.f90&#45;&gt;sourcefile~parallel.f90 -->
+<g id="sourcefile~~run_data_info.f90~~EfferentGraph_edge5" class="edge">
+<title>sourcefile~run_data_info.f90&#45;&gt;sourcefile~parallel.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M641.5033,-200.5991C627.0662,-180.8855 595.8959,-141.6915 561,-118.6781 553.9553,-114.0322 545.9693,-110.0741 537.9676,-106.7529"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="539.212,-103.4815 528.6226,-103.1435 536.6899,-110.0114 539.212,-103.4815"/>
+</g>
+<!-- sourcefile~fstruct_data.f90 -->
+<g id="sourcefile~~run_data_info.f90~~EfferentGraph_node6" class="node">
+<title>sourcefile~fstruct_data.f90</title>
+<g id="a_sourcefile~~run_data_info.f90~~EfferentGraph_node6"><a xlink:href=".././sourcefile/fstruct_data.f90.html" xlink:title="fstruct_data.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="538.5,-304.6781 442.5,-304.6781 442.5,-280.6781 538.5,-280.6781 538.5,-304.6781"/>
+<text text-anchor="middle" x="490.5" y="-290.2781" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">fstruct_data.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~run_data_info.f90&#45;&gt;sourcefile~fstruct_data.f90 -->
+<g id="sourcefile~~run_data_info.f90~~EfferentGraph_edge6" class="edge">
+<title>sourcefile~run_data_info.f90&#45;&gt;sourcefile~fstruct_data.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M632.4983,-224.6851C614.9474,-236.3881 586.8837,-254.1959 561,-266.6781 553.3145,-270.3844 544.9541,-273.894 536.7655,-277.0655"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="535.4147,-273.834 527.2823,-280.6248 537.8745,-280.3876 535.4147,-273.834"/>
+</g>
+<!-- sourcefile~pstruct_data.f90 -->
+<g id="sourcefile~~run_data_info.f90~~EfferentGraph_node7" class="node">
+<title>sourcefile~pstruct_data.f90</title>
+<g id="a_sourcefile~~run_data_info.f90~~EfferentGraph_node7"><a xlink:href=".././sourcefile/pstruct_data.f90.html" xlink:title="pstruct_data.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="373,-264.6781 274,-264.6781 274,-240.6781 373,-240.6781 373,-264.6781"/>
+<text text-anchor="middle" x="323.5" y="-250.2781" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">pstruct_data.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~run_data_info.f90&#45;&gt;sourcefile~pstruct_data.f90 -->
+<g id="sourcefile~~run_data_info.f90~~EfferentGraph_edge7" class="edge">
+<title>sourcefile~run_data_info.f90&#45;&gt;sourcefile~pstruct_data.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M604.9863,-224.7011C590.9813,-228.0627 575.4288,-231.4121 561,-233.6781 501.0396,-243.0946 431.7886,-247.9586 383.5964,-250.3952"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="383.1586,-246.9123 373.3401,-250.8932 383.4981,-253.904 383.1586,-246.9123"/>
+</g>
+<!-- sourcefile~phys_param.f90 -->
+<g id="sourcefile~~run_data_info.f90~~EfferentGraph_node8" class="node">
+<title>sourcefile~phys_param.f90</title>
+<g id="a_sourcefile~~run_data_info.f90~~EfferentGraph_node8"><a xlink:href=".././sourcefile/phys_param.f90.html" xlink:title="phys_param.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="539.5,-224.6781 441.5,-224.6781 441.5,-200.6781 539.5,-200.6781 539.5,-224.6781"/>
+<text text-anchor="middle" x="490.5" y="-210.2781" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">phys_param.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~run_data_info.f90&#45;&gt;sourcefile~phys_param.f90 -->
+<g id="sourcefile~~run_data_info.f90~~EfferentGraph_edge3" class="edge">
+<title>sourcefile~run_data_info.f90&#45;&gt;sourcefile~phys_param.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M596.8888,-212.6781C581.8682,-212.6781 565.4231,-212.6781 550.05,-212.6781"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="549.6092,-209.1782 539.6091,-212.6781 549.6091,-216.1782 549.6092,-209.1782"/>
+</g>
+<!-- sourcefile~code_util.f90 -->
+<g id="sourcefile~~run_data_info.f90~~EfferentGraph_node9" class="node">
+<title>sourcefile~code_util.f90</title>
+<g id="a_sourcefile~~run_data_info.f90~~EfferentGraph_node9"><a xlink:href=".././sourcefile/code_util.f90.html" xlink:title="code_util.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="225,-146.6781 144,-146.6781 144,-122.6781 225,-122.6781 225,-146.6781"/>
+<text text-anchor="middle" x="184.5" y="-132.2781" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">code_util.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~run_data_info.f90&#45;&gt;sourcefile~code_util.f90 -->
+<g id="sourcefile~~run_data_info.f90~~EfferentGraph_edge8" class="edge">
+<title>sourcefile~run_data_info.f90&#45;&gt;sourcefile~code_util.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M633.9219,-200.5472C606.3695,-180.736 547.5672,-142.6418 490.5,-132.6781"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M490.5,-132.6781C401.9444,-117.2166 296.766,-123.0684 235.6289,-128.8132"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="235.0848,-125.3496 225.4723,-129.805 235.7652,-132.3165 235.0848,-125.3496"/>
+</g>
+<!-- sourcefile~control_bunch_input.f90 -->
+<g id="sourcefile~~run_data_info.f90~~EfferentGraph_node10" class="node">
+<title>sourcefile~control_bunch_input.f90</title>
+<g id="a_sourcefile~~run_data_info.f90~~EfferentGraph_node10"><a xlink:href=".././sourcefile/control_bunch_input.f90.html" xlink:title="control_bunch_input.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="561,-44.6781 420,-44.6781 420,-20.6781 561,-20.6781 561,-44.6781"/>
+<text text-anchor="middle" x="490.5" y="-30.2781" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">control_bunch_input.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~run_data_info.f90&#45;&gt;sourcefile~control_bunch_input.f90 -->
+<g id="sourcefile~~run_data_info.f90~~EfferentGraph_edge9" class="edge">
+<title>sourcefile~run_data_info.f90&#45;&gt;sourcefile~control_bunch_input.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M644.7835,-200.3031C633.1276,-173.8519 602.6824,-111.0199 561,-71.6781 551.702,-62.9022 540.0559,-55.4212 528.9238,-49.4293"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="530.2547,-46.1791 519.7566,-44.7505 527.0725,-52.414 530.2547,-46.1791"/>
+</g>
+<!-- sourcefile~precision_def.f90 -->
+<g id="sourcefile~~run_data_info.f90~~EfferentGraph_node11" class="node">
+<title>sourcefile~precision_def.f90</title>
+<g id="a_sourcefile~~run_data_info.f90~~EfferentGraph_node11"><a xlink:href=".././sourcefile/precision_def.f90.html" xlink:title="precision_def.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="106,-185.6781 0,-185.6781 0,-161.6781 106,-161.6781 106,-185.6781"/>
+<text text-anchor="middle" x="53" y="-171.2781" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">precision_def.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~ionz_data.f90&#45;&gt;sourcefile~precision_def.f90 -->
+<g id="sourcefile~~run_data_info.f90~~EfferentGraph_edge10" class="edge">
+<title>sourcefile~ionz_data.f90&#45;&gt;sourcefile~precision_def.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M172.4104,-340.6485C163.5917,-331.6282 151.5611,-318.801 142,-306.6781 112.1424,-268.8207 81.8667,-221.1718 65.4603,-194.4031"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="68.4474,-192.5789 60.2589,-185.8557 62.4675,-196.2178 68.4474,-192.5789"/>
+</g>
+<!-- sourcefile~grid_param.f90&#45;&gt;sourcefile~precision_def.f90 -->
+<g id="sourcefile~~run_data_info.f90~~EfferentGraph_edge11" class="edge">
+<title>sourcefile~grid_param.f90&#45;&gt;sourcefile~precision_def.f90</title>
+<path fill="none" stroke="#ffaa00" stroke-dasharray="5,2" d="M276.4613,-323.0828C248.8849,-316.5022 213.8188,-306.453 184.5,-292.6781"/>
+</g>
+<!-- sourcefile~struct_def.f90 -->
+<g id="sourcefile~~run_data_info.f90~~EfferentGraph_node13" class="node">
+<title>sourcefile~struct_def.f90</title>
+<g id="a_sourcefile~~run_data_info.f90~~EfferentGraph_node13"><a xlink:href=".././sourcefile/struct_def.f90.html" xlink:title="struct_def.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="227,-264.6781 142,-264.6781 142,-240.6781 227,-240.6781 227,-264.6781"/>
+<text text-anchor="middle" x="184.5" y="-250.2781" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">struct_def.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~grid_param.f90&#45;&gt;sourcefile~struct_def.f90 -->
+<g id="sourcefile~~run_data_info.f90~~EfferentGraph_edge12" class="edge">
+<title>sourcefile~grid_param.f90&#45;&gt;sourcefile~struct_def.f90</title>
+<path fill="none" stroke="#ffaa00" stroke-dasharray="5,2" d="M302.3889,-320.5278C278.8827,-306.9991 240.7158,-285.0325 214.2031,-269.7734"/>
+<polygon fill="#ffaa00" stroke="#ffaa00" points="215.7673,-266.6354 205.3543,-264.6806 212.2755,-272.7024 215.7673,-266.6354"/>
+</g>
+<!-- sourcefile~common_param.f90&#45;&gt;sourcefile~precision_def.f90 -->
+<g id="sourcefile~~run_data_info.f90~~EfferentGraph_edge13" class="edge">
+<title>sourcefile~common_param.f90&#45;&gt;sourcefile~precision_def.f90</title>
+<path fill="none" stroke="#aaff00" stroke-dasharray="5,2" d="M292.9175,-184.6825C258.7136,-197.5349 205.3747,-215.7084 184.5,-212.6781"/>
+<path fill="none" stroke="#aaff00" stroke-dasharray="5,2" d="M184.5,-212.6781C153.5018,-208.1783 119.6409,-198.0061 94.043,-189.1788"/>
+<polygon fill="#aaff00" stroke="#aaff00" points="94.9069,-185.7723 84.312,-185.751 92.5811,-192.3747 94.9069,-185.7723"/>
+</g>
+<!-- sourcefile~parallel.f90&#45;&gt;sourcefile~common_param.f90 -->
+<g id="sourcefile~~run_data_info.f90~~EfferentGraph_edge14" class="edge">
+<title>sourcefile~parallel.f90&#45;&gt;sourcefile~common_param.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M454.5539,-104.7027C443.336,-108.7818 431.0189,-113.6013 420,-118.6781 396.3245,-129.5863 370.6165,-144.1144 351.6923,-155.3538"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="349.7606,-152.4311 342.9859,-160.5768 353.3617,-158.4338 349.7606,-152.4311"/>
+</g>
+<!-- sourcefile~mpi_var.f90 -->
+<g id="sourcefile~~run_data_info.f90~~EfferentGraph_node12" class="node">
+<title>sourcefile~mpi_var.f90</title>
+<g id="a_sourcefile~~run_data_info.f90~~EfferentGraph_node12"><a xlink:href=".././sourcefile/mpi_var.f90.html" xlink:title="mpi_var.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="222,-66.6781 147,-66.6781 147,-42.6781 222,-42.6781 222,-66.6781"/>
+<text text-anchor="middle" x="184.5" y="-52.2781" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">mpi_var.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~parallel.f90&#45;&gt;sourcefile~mpi_var.f90 -->
+<g id="sourcefile~~run_data_info.f90~~EfferentGraph_edge16" class="edge">
+<title>sourcefile~parallel.f90&#45;&gt;sourcefile~mpi_var.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M452.2223,-84.0746C432.0218,-79.8025 406.7672,-74.883 384,-71.6781 332.3858,-64.4126 272.791,-59.826 232.2724,-57.2727"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="232.3381,-53.7703 222.1426,-56.6517 231.9097,-60.7571 232.3381,-53.7703"/>
+</g>
+<!-- sourcefile~util.f90 -->
+<g id="sourcefile~~run_data_info.f90~~EfferentGraph_node14" class="node">
+<title>sourcefile~util.f90</title>
+<g id="a_sourcefile~~run_data_info.f90~~EfferentGraph_node14"><a xlink:href=".././sourcefile/util.f90.html" xlink:title="util.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="350.5,-104.6781 296.5,-104.6781 296.5,-80.6781 350.5,-80.6781 350.5,-104.6781"/>
+<text text-anchor="middle" x="323.5" y="-90.2781" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">util.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~parallel.f90&#45;&gt;sourcefile~util.f90 -->
+<g id="sourcefile~~run_data_info.f90~~EfferentGraph_edge15" class="edge">
+<title>sourcefile~parallel.f90&#45;&gt;sourcefile~util.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M452.1868,-92.6781C424.8129,-92.6781 388.1671,-92.6781 360.9831,-92.6781"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="360.7017,-89.1782 350.7017,-92.6781 360.7016,-96.1782 360.7017,-89.1782"/>
+</g>
+<!-- sourcefile~fstruct_data.f90&#45;&gt;sourcefile~precision_def.f90 -->
+<g id="sourcefile~~run_data_info.f90~~EfferentGraph_edge17" class="edge">
+<title>sourcefile~fstruct_data.f90&#45;&gt;sourcefile~precision_def.f90</title>
+<path fill="none" stroke="#00ffa9" stroke-dasharray="5,2" d="M442.301,-297.5826C367.8399,-304.344 228.796,-313.4897 184.5,-292.6781"/>
+<path fill="none" stroke="#00ffa9" stroke-dasharray="5,2" d="M184.5,-292.6781C165.9463,-283.5206 158.6945,-285.9007 142,-273.6781 111.1792,-251.1131 83.249,-216.304 67.2015,-194.2735"/>
+<polygon fill="#00ffa9" stroke="#00ffa9" points="69.9269,-192.0671 61.2688,-185.9607 64.2291,-196.1336 69.9269,-192.0671"/>
+</g>
+<!-- sourcefile~pstruct_data.f90&#45;&gt;sourcefile~precision_def.f90 -->
+<g id="sourcefile~~run_data_info.f90~~EfferentGraph_edge18" class="edge">
+<title>sourcefile~pstruct_data.f90&#45;&gt;sourcefile~precision_def.f90</title>
+<path fill="none" stroke="#00a9ff" stroke-dasharray="5,2" d="M291.1921,-240.6634C263.3667,-230.9776 221.9005,-218.1073 184.5,-212.6781"/>
+</g>
+<!-- sourcefile~pstruct_data.f90&#45;&gt;sourcefile~struct_def.f90 -->
+<g id="sourcefile~~run_data_info.f90~~EfferentGraph_edge19" class="edge">
+<title>sourcefile~pstruct_data.f90&#45;&gt;sourcefile~struct_def.f90</title>
+<path fill="none" stroke="#00a9ff" stroke-dasharray="5,2" d="M273.7104,-252.6781C261.9013,-252.6781 249.2646,-252.6781 237.3255,-252.6781"/>
+<polygon fill="#00a9ff" stroke="#00a9ff" points="237.0516,-249.1782 227.0516,-252.6781 237.0515,-256.1782 237.0516,-249.1782"/>
+</g>
+<!-- sourcefile~phys_param.f90&#45;&gt;sourcefile~precision_def.f90 -->
+<g id="sourcefile~~run_data_info.f90~~EfferentGraph_edge20" class="edge">
+<title>sourcefile~phys_param.f90&#45;&gt;sourcefile~precision_def.f90</title>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M441.4309,-216.9944C380.732,-221.3444 274.4015,-225.7286 184.5,-212.6781"/>
+</g>
+<!-- sourcefile~code_util.f90&#45;&gt;sourcefile~precision_def.f90 -->
+<g id="sourcefile~~run_data_info.f90~~EfferentGraph_edge21" class="edge">
+<title>sourcefile~code_util.f90&#45;&gt;sourcefile~precision_def.f90</title>
+<path fill="none" stroke="#aa00ff" stroke-dasharray="5,2" d="M143.9727,-146.6976C131.0989,-150.5157 116.7045,-154.7848 103.2321,-158.7804"/>
+<polygon fill="#aa00ff" stroke="#aa00ff" points="102.2119,-155.4322 93.6199,-161.6312 104.2023,-162.1433 102.2119,-155.4322"/>
+</g>
+<!-- sourcefile~control_bunch_input.f90&#45;&gt;sourcefile~precision_def.f90 -->
+<g id="sourcefile~~run_data_info.f90~~EfferentGraph_edge22" class="edge">
+<title>sourcefile~control_bunch_input.f90&#45;&gt;sourcefile~precision_def.f90</title>
+<path fill="none" stroke="#ff00aa" stroke-dasharray="5,2" d="M448.6872,-20.6778C379.8708,-3.445 240.5602,20.6399 142,-33.6781 96.0231,-59.0167 70.3991,-119.2461 59.4533,-151.836"/>
+<polygon fill="#ff00aa" stroke="#ff00aa" points="56.1178,-150.7758 56.4081,-161.3667 62.7857,-152.9064 56.1178,-150.7758"/>
+</g>
+<!-- sourcefile~mpi_var.f90&#45;&gt;sourcefile~precision_def.f90 -->
+<g id="sourcefile~~run_data_info.f90~~EfferentGraph_edge23" class="edge">
+<title>sourcefile~mpi_var.f90&#45;&gt;sourcefile~precision_def.f90</title>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M162.1509,-66.871C155.4284,-70.9234 148.1967,-75.6855 142,-80.6781 114.1343,-103.1292 86.308,-133.8794 69.3738,-153.7631"/>
+<polygon fill="#7fff00" stroke="#7fff00" points="66.5717,-151.6571 62.8148,-161.5635 71.9294,-156.1621 66.5717,-151.6571"/>
+</g>
+<!-- sourcefile~struct_def.f90&#45;&gt;sourcefile~precision_def.f90 -->
+<g id="sourcefile~~run_data_info.f90~~EfferentGraph_edge24" class="edge">
+<title>sourcefile~struct_def.f90&#45;&gt;sourcefile~precision_def.f90</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M164.2413,-240.5075C142.1687,-227.2471 106.68,-205.9269 81.7348,-190.9409"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="83.4404,-187.8825 73.0659,-185.7329 79.8356,-193.8829 83.4404,-187.8825"/>
+</g>
+<!-- sourcefile~util.f90&#45;&gt;sourcefile~code_util.f90 -->
+<g id="sourcefile~~run_data_info.f90~~EfferentGraph_edge26" class="edge">
+<title>sourcefile~util.f90&#45;&gt;sourcefile~code_util.f90</title>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M296.3694,-100.8758C278.7043,-106.2135 255.1337,-113.3356 234.1843,-119.6656"/>
+<polygon fill="#7f00ff" stroke="#7f00ff" points="233.0222,-116.3604 224.462,-122.6033 235.047,-123.0612 233.0222,-116.3604"/>
+</g>
+<!-- sourcefile~util.f90&#45;&gt;sourcefile~precision_def.f90 -->
+<g id="sourcefile~~run_data_info.f90~~EfferentGraph_edge25" class="edge">
+<title>sourcefile~util.f90&#45;&gt;sourcefile~precision_def.f90</title>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M296.4353,-91.8743C260.1383,-91.6661 194.2143,-94.3707 142,-113.6781 116.4656,-123.12 91.0901,-141.3258 74.008,-155.2177"/>
+<polygon fill="#7f00ff" stroke="#7f00ff" points="71.7569,-152.5377 66.3241,-161.6336 76.2434,-157.9109 71.7569,-152.5377"/>
+</g>
+</g>
+</svg>
+</div><script>var pansourcefilerun_data_infof90EfferentGraph = svgPanZoom('#sourcefilerun_data_infof90EfferentGraph', {zoomEnabled: true,controlIconsEnabled: true, fit: true, center: true,}); </script><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="202pt" height="32pt"
+ viewBox="0.00 0.00 201.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 197.5,-28 197.5,4 -4,4"/>
+<!-- Source File -->
+<g id="node1" class="node">
+<title>Source File</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="71,-24 0,-24 0,0 71,0 71,-24"/>
+<text text-anchor="middle" x="35.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Source File</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node2" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="193.5,-24 89.5,-24 89.5,0 193.5,0 193.5,-24"/>
+<text text-anchor="middle" x="141.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a file to a file which it depends on. A file
+    is dependent upon another if the latter must be compiled before the former
+    can be. Where possible, edges connecting nodes are given different colours to make them easier to distinguish in large graphs.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+    
+      
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Files dependent on this one</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: sourcefile~~run_data_info.f90~~AfferentGraph Pages: 1 -->
+<svg id="sourcefilerun_data_infof90AfferentGraph" width="512pt" height="103pt"
+ viewBox="0.00 0.00 512.00 103.29" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="sourcefile~~run_data_info.f90~~AfferentGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 99.2858)">
+<title>sourcefile~~run_data_info.f90~~AfferentGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-99.2858 508,-99.2858 508,4 -4,4"/>
+<!-- sourcefile~run_data_info.f90 -->
+<g id="sourcefile~~run_data_info.f90~~AfferentGraph_node1" class="node">
+<title>sourcefile~run_data_info.f90</title>
+<polygon fill="none" stroke="#000000" points="106,-66 0,-66 0,-42 106,-42 106,-66"/>
+<text text-anchor="middle" x="53" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">run_data_info.f90</text>
+</g>
+<!-- sourcefile~window.f90 -->
+<g id="sourcefile~~run_data_info.f90~~AfferentGraph_node2" class="node">
+<title>sourcefile~window.f90</title>
+<g id="a_sourcefile~~run_data_info.f90~~AfferentGraph_node2"><a xlink:href=".././sourcefile/window.f90.html" xlink:title="window.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="216.5,-24 144.5,-24 144.5,0 216.5,0 216.5,-24"/>
+<text text-anchor="middle" x="180.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">window.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~window.f90&#45;&gt;sourcefile~run_data_info.f90 -->
+<g id="sourcefile~~run_data_info.f90~~AfferentGraph_edge3" class="edge">
+<title>sourcefile~window.f90&#45;&gt;sourcefile~run_data_info.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M144.3047,-23.9232C130.2934,-28.5386 114.0833,-33.8785 99.2447,-38.7665"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="98.1315,-35.4481 89.7286,-41.9012 100.3216,-42.0966 98.1315,-35.4481"/>
+</g>
+<!-- sourcefile~aladyn.f90 -->
+<g id="sourcefile~~run_data_info.f90~~AfferentGraph_node3" class="node">
+<title>sourcefile~aladyn.f90</title>
+<g id="a_sourcefile~~run_data_info.f90~~AfferentGraph_node3"><a xlink:href=".././sourcefile/aladyn.f90.html" xlink:title="ALaDyn.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="504,-66 428,-66 428,-42 504,-42 504,-66"/>
+<text text-anchor="middle" x="466" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">ALaDyn.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~aladyn.f90&#45;&gt;sourcefile~run_data_info.f90 -->
+<g id="sourcefile~~run_data_info.f90~~AfferentGraph_edge1" class="edge">
+<title>sourcefile~aladyn.f90&#45;&gt;sourcefile~run_data_info.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M323.5,-94C247.2518,-99.1431 159.9349,-82.0009 105.6205,-68.5669"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="106.4254,-65.1604 95.873,-66.1079 104.7131,-71.9477 106.4254,-65.1604"/>
+</g>
+<!-- sourcefile~start_all.f90 -->
+<g id="sourcefile~~run_data_info.f90~~AfferentGraph_node4" class="node">
+<title>sourcefile~start_all.f90</title>
+<g id="a_sourcefile~~run_data_info.f90~~AfferentGraph_node4"><a xlink:href=".././sourcefile/start_all.f90.html" xlink:title="start_all.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="219,-66 142,-66 142,-42 219,-42 219,-66"/>
+<text text-anchor="middle" x="180.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">start_all.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~aladyn.f90&#45;&gt;sourcefile~start_all.f90 -->
+<g id="sourcefile~~run_data_info.f90~~AfferentGraph_edge6" class="edge">
+<title>sourcefile~aladyn.f90&#45;&gt;sourcefile~start_all.f90</title>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M436.6083,-66.1013C408.2278,-76.8556 363.7509,-91.285 323.5,-94"/>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M323.5,-94C284.9613,-96.5995 242.5487,-82.4536 213.9987,-70.2735"/>
+<polygon fill="#0000ff" stroke="#0000ff" points="215.0688,-66.9199 204.5075,-66.078 212.2386,-73.3223 215.0688,-66.9199"/>
+</g>
+<!-- sourcefile~pic_evolve_in_time.f90 -->
+<g id="sourcefile~~run_data_info.f90~~AfferentGraph_node5" class="node">
+<title>sourcefile~pic_evolve_in_time.f90</title>
+<g id="a_sourcefile~~run_data_info.f90~~AfferentGraph_node5"><a xlink:href=".././sourcefile/pic_evolve_in_time.f90.html" xlink:title="pic_evolve_in_time.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="390,-66 257,-66 257,-42 390,-42 390,-66"/>
+<text text-anchor="middle" x="323.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">pic_evolve_in_time.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~aladyn.f90&#45;&gt;sourcefile~pic_evolve_in_time.f90 -->
+<g id="sourcefile~~run_data_info.f90~~AfferentGraph_edge7" class="edge">
+<title>sourcefile~aladyn.f90&#45;&gt;sourcefile~pic_evolve_in_time.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M427.8126,-54C419.1852,-54 409.7268,-54 400.1375,-54"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="400.1264,-50.5001 390.1264,-54 400.1263,-57.5001 400.1264,-50.5001"/>
+</g>
+<!-- sourcefile~env_evolve_in_time.f90 -->
+<g id="sourcefile~~run_data_info.f90~~AfferentGraph_node6" class="node">
+<title>sourcefile~env_evolve_in_time.f90</title>
+<g id="a_sourcefile~~run_data_info.f90~~AfferentGraph_node6"><a xlink:href=".././sourcefile/env_evolve_in_time.f90.html" xlink:title="env_evolve_in_time.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="392,-24 255,-24 255,0 392,0 392,-24"/>
+<text text-anchor="middle" x="323.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">env_evolve_in_time.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~aladyn.f90&#45;&gt;sourcefile~env_evolve_in_time.f90 -->
+<g id="sourcefile~~run_data_info.f90~~AfferentGraph_edge8" class="edge">
+<title>sourcefile~aladyn.f90&#45;&gt;sourcefile~env_evolve_in_time.f90</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M427.8126,-42.7448C411.2573,-37.8653 391.6419,-32.0839 373.9136,-26.8587"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="374.8716,-23.4923 364.2901,-24.0223 372.8926,-30.2068 374.8716,-23.4923"/>
+</g>
+<!-- sourcefile~start_all.f90&#45;&gt;sourcefile~run_data_info.f90 -->
+<g id="sourcefile~~run_data_info.f90~~AfferentGraph_edge2" class="edge">
+<title>sourcefile~start_all.f90&#45;&gt;sourcefile~run_data_info.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M141.8998,-54C133.7871,-54 125.0272,-54 116.2791,-54"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="116.0546,-50.5001 106.0546,-54 116.0545,-57.5001 116.0546,-50.5001"/>
+</g>
+<!-- sourcefile~pic_evolve_in_time.f90&#45;&gt;sourcefile~window.f90 -->
+<g id="sourcefile~~run_data_info.f90~~AfferentGraph_edge4" class="edge">
+<title>sourcefile~pic_evolve_in_time.f90&#45;&gt;sourcefile~window.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M282.5219,-41.9645C264.9736,-36.8104 244.4056,-30.7695 226.3524,-25.4671"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="227.1978,-22.0676 216.6167,-22.6077 225.2251,-28.784 227.1978,-22.0676"/>
+</g>
+<!-- sourcefile~env_evolve_in_time.f90&#45;&gt;sourcefile~window.f90 -->
+<g id="sourcefile~~run_data_info.f90~~AfferentGraph_edge5" class="edge">
+<title>sourcefile~env_evolve_in_time.f90&#45;&gt;sourcefile~window.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M254.9319,-12C245.4522,-12 235.9037,-12 226.9544,-12"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="226.7641,-8.5001 216.764,-12 226.764,-15.5001 226.7641,-8.5001"/>
+</g>
+</g>
+</svg>
+</div><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="202pt" height="32pt"
+ viewBox="0.00 0.00 201.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 197.5,-28 197.5,4 -4,4"/>
+<!-- Source File -->
+<g id="node1" class="node">
+<title>Source File</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="71,-24 0,-24 0,0 71,0 71,-24"/>
+<text text-anchor="middle" x="35.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Source File</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node2" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="193.5,-24 89.5,-24 89.5,0 193.5,0 193.5,-24"/>
+<text text-anchor="middle" x="141.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a file to a file which it depends on. A file
+    is dependent upon another if the latter must be compiled before the former
+    can be. Where possible, edges connecting nodes are given different colours to make them easier to distinguish in large graphs.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+      
+      <br>
+
+    <section class="visible-xs visible-sm hidden-md">
+      
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#mods-1">Modules</a></h3></div>
+  <div id="mods-1" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/run_data_info.html">run_data_info</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../sourcefile/run_data_info.f90.html#src">run_data_info.f90</a>
+  </div>
+</div>
+
+
+
+    </section>
+    <br class="visible-xs visible-sm hidden-md">
+
+    <section>
+      <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="hl"><pre><span></span><a name="ln-1"></a><span class="c">!*****************************************************************************************************!</span>
+<a name="ln-2"></a><span class="c">!                            Copyright 2008-2020  The ALaDyn Collaboration                            !</span>
+<a name="ln-3"></a><span class="c">!*****************************************************************************************************!</span>
+<a name="ln-4"></a>
+<a name="ln-5"></a><span class="c">!*****************************************************************************************************!</span>
+<a name="ln-6"></a><span class="c">!  This file is part of ALaDyn.                                                                       !</span>
+<a name="ln-7"></a><span class="c">!                                                                                                     !</span>
+<a name="ln-8"></a><span class="c">!  ALaDyn is free software: you can redistribute it and/or modify                                     !</span>
+<a name="ln-9"></a><span class="c">!  it under the terms of the GNU General Public License as published by                               !</span>
+<a name="ln-10"></a><span class="c">!  the Free Software Foundation, either version 3 of the License, or                                  !</span>
+<a name="ln-11"></a><span class="c">!  (at your option) any later version.                                                                !</span>
+<a name="ln-12"></a><span class="c">!                                                                                                     !</span>
+<a name="ln-13"></a><span class="c">!  ALaDyn is distributed in the hope that it will be useful,                                          !</span>
+<a name="ln-14"></a><span class="c">!  but WITHOUT ANY WARRANTY; without even the implied warranty of                                     !</span>
+<a name="ln-15"></a><span class="c">!  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                                      !</span>
+<a name="ln-16"></a><span class="c">!  GNU General Public License for more details.                                                       !</span>
+<a name="ln-17"></a><span class="c">!                                                                                                     !</span>
+<a name="ln-18"></a><span class="c">!  You should have received a copy of the GNU General Public License                                  !</span>
+<a name="ln-19"></a><span class="c">!  along with ALaDyn.  If not, see &lt;http://www.gnu.org/licenses/&gt;.                                    !</span>
+<a name="ln-20"></a><span class="c">!*****************************************************************************************************!</span>
+<a name="ln-21"></a>
+<a name="ln-22"></a> <span class="k">module </span><span class="n">run_data_info</span>
+<a name="ln-23"></a>
+<a name="ln-24"></a>  <span class="k">use </span><span class="n">pstruct_data</span>
+<a name="ln-25"></a>  <span class="k">use </span><span class="n">fstruct_data</span>
+<a name="ln-26"></a>  <span class="k">use </span><span class="n">code_util</span>
+<a name="ln-27"></a>  <span class="k">use </span><span class="n">common_param</span>
+<a name="ln-28"></a>  <span class="k">use </span><span class="n">grid_param</span>
+<a name="ln-29"></a>  <span class="k">use </span><span class="n">ionz_data</span>
+<a name="ln-30"></a>  <span class="k">use </span><span class="n">parallel</span>
+<a name="ln-31"></a>  <span class="k">use </span><span class="n">control_bunch_input</span><span class="p">,</span> <span class="n">only</span><span class="p">:</span> <span class="n">reduced_charge</span><span class="p">,</span> <span class="n">bunch_charge</span><span class="p">,</span> <span class="n">epsy</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-32"></a>                                 <span class="n">epsz</span><span class="p">,</span> <span class="n">sxb</span><span class="p">,</span> <span class="n">syb</span><span class="p">,</span> <span class="n">gam</span><span class="p">,</span> <span class="n">rhob</span><span class="p">,</span> <span class="n">jb_norm</span>
+<a name="ln-33"></a>  <span class="k">use </span><span class="n">phys_param</span><span class="p">,</span> <span class="n">only</span><span class="p">:</span> <span class="n">electron_charge_norm</span>
+<a name="ln-34"></a>  <span class="k">implicit none</span>
+<a name="ln-35"></a>
+<a name="ln-36"></a><span class="k"> contains</span>
+<a name="ln-37"></a>
+<a name="ln-38"></a><span class="k">  subroutine </span><span class="n">timing</span>
+<a name="ln-39"></a>
+<a name="ln-40"></a>   <span class="k">if</span> <span class="p">(</span><span class="nb">mod</span><span class="p">(</span><span class="n">iter</span><span class="p">,</span> <span class="n">write_every</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-41"></a><span class="k">    </span><span class="n">mem_psize_max</span> <span class="o">=</span> <span class="mf">0.0</span>
+<a name="ln-42"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">prl</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-43"></a><span class="k">     call </span><span class="n">Part_numbers</span>
+<a name="ln-44"></a>     <span class="k">call </span><span class="n">Max_pmemory_check</span><span class="p">()</span>
+<a name="ln-45"></a>    <span class="k">end if</span>
+<a name="ln-46"></a><span class="k">    if</span> <span class="p">(</span><span class="n">pe0</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-47"></a><span class="k">     call </span><span class="n">tot_num_part</span>
+<a name="ln-48"></a>     <span class="k">write</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;(a10,i6,a10,e11.4,a10,e11.4)&#39;</span><span class="p">)</span> <span class="s1">&#39;iter = &#39;</span><span class="p">,</span> <span class="n">iter</span><span class="p">,</span> <span class="s1">&#39; t = &#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-49"></a>      <span class="n">tnow</span><span class="p">,</span> <span class="s1">&#39; dt = &#39;</span><span class="p">,</span> <span class="n">dt_loc</span>
+<a name="ln-50"></a>     <span class="k">call </span><span class="nb">CPU_TIME</span><span class="p">(</span><span class="n">unix_time_now</span><span class="p">)</span>
+<a name="ln-51"></a>     <span class="k">write</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;(a16,f12.3,a10,i15)&#39;</span><span class="p">)</span> <span class="s1">&#39; Time elapsed = &#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-52"></a>      <span class="n">unix_time_now</span> <span class="o">-</span> <span class="n">unix_time_begin</span><span class="p">,</span> <span class="s1">&#39;, nptot = &#39;</span><span class="p">,</span> <span class="n">nptot_global</span>
+<a name="ln-53"></a>     <span class="k">if</span> <span class="p">(</span><span class="n">prl</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-54"></a><span class="k">      if</span> <span class="p">(</span><span class="n">part</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-55"></a><span class="k">       write</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;(a21,i10,a1,i10)&#39;</span><span class="p">)</span> <span class="s1">&#39; part min/max distr. &#39;</span><span class="p">,</span> <span class="n">np_min</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-56"></a>        <span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">np_max</span>
+<a name="ln-57"></a>       <span class="k">write</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;(a18,2i8)&#39;</span><span class="p">)</span> <span class="s1">&#39; where pmin/pmax  &#39;</span><span class="p">,</span> <span class="n">pe_npmin</span><span class="p">,</span> <span class="n">pe_npmax</span>
+<a name="ln-58"></a>      <span class="n">endif</span>
+<a name="ln-59"></a>      <span class="k">write</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;(a24,e12.5)&#39;</span><span class="p">)</span> <span class="s1">&#39; max part memory in MB= &#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-60"></a>       <span class="n">mem_psize_max</span>
+<a name="ln-61"></a>      <span class="k">write</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;(a20,e12.5)&#39;</span><span class="p">)</span> <span class="s1">&#39; Max part  address= &#39;</span><span class="p">,</span> <span class="n">mem_max_addr</span>
+<a name="ln-62"></a>     <span class="k">end if</span>
+<a name="ln-63"></a><span class="k">     write</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;(a13,2E11.4)&#39;</span><span class="p">)</span> <span class="s1">&#39; xmin/xmax   &#39;</span><span class="p">,</span> <span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span>
+<a name="ln-64"></a>     <span class="k">write</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;========================&#39;</span>
+<a name="ln-65"></a>    <span class="k">end if</span> <span class="c">!end Pe0 write</span>
+<a name="ln-66"></a>   <span class="k">end if</span>  <span class="c">!end mod(write_every)</span>
+<a name="ln-67"></a>
+<a name="ln-68"></a>   <span class="k">if</span> <span class="p">(</span><span class="n">tnow</span> <span class="o">&lt;</span> <span class="n">tmax</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-69"></a><span class="k">    </span><span class="n">tnow</span> <span class="o">=</span> <span class="n">tnow</span> <span class="o">+</span> <span class="n">dt_loc</span>
+<a name="ln-70"></a>    <span class="n">iter</span> <span class="o">=</span> <span class="n">iter</span> <span class="o">+</span> <span class="mi">1</span>
+<a name="ln-71"></a>   <span class="k">end if</span>
+<a name="ln-72"></a><span class="k">  end subroutine</span>
+<a name="ln-73"></a>
+<a name="ln-74"></a>  <span class="c">!---------------------------</span>
+<a name="ln-75"></a>
+<a name="ln-76"></a>  <span class="k">subroutine </span><span class="n">error_message</span>
+<a name="ln-77"></a>   <span class="k">if</span> <span class="p">(</span><span class="n">pe0</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-78"></a><span class="k">    if</span> <span class="p">(</span><span class="n">ier</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="k">write</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;error occurred: &#39;</span>
+<a name="ln-79"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">ier</span> <span class="o">==</span> <span class="mi">20</span><span class="p">)</span> <span class="k">write</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;error: negative density: &#39;</span><span class="p">,</span> <span class="n">ier</span>
+<a name="ln-80"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">ier</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="k">write</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;error: fields values too big: &#39;</span><span class="p">,</span> <span class="n">ier</span>
+<a name="ln-81"></a>   <span class="k">end if</span>
+<a name="ln-82"></a><span class="k">  end subroutine</span>
+<a name="ln-83"></a>  <span class="c">!======================================</span>
+<a name="ln-84"></a>  <span class="k">subroutine </span><span class="n">Part_numbers</span>
+<a name="ln-85"></a>   <span class="kt">integer</span> <span class="kd">::</span> <span class="n">ip</span><span class="p">,</span> <span class="n">iz</span><span class="p">,</span> <span class="n">ix</span><span class="p">,</span> <span class="n">pp</span><span class="p">,</span> <span class="n">ic</span><span class="p">,</span> <span class="n">np_new</span><span class="p">,</span> <span class="n">nploc</span><span class="p">(</span><span class="n">npe</span><span class="p">)</span>
+<a name="ln-86"></a>
+<a name="ln-87"></a>   <span class="k">do </span><span class="n">ic</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">nsp</span>
+<a name="ln-88"></a>    <span class="n">nploc</span><span class="p">(:)</span> <span class="o">=</span> <span class="mi">0</span>
+<a name="ln-89"></a>    <span class="n">np_new</span> <span class="o">=</span> <span class="n">loc_npart</span><span class="p">(</span><span class="n">imody</span><span class="p">,</span> <span class="n">imodz</span><span class="p">,</span> <span class="n">imodx</span><span class="p">,</span> <span class="n">ic</span><span class="p">)</span>
+<a name="ln-90"></a>    <span class="k">call </span><span class="n">intvec_distribute</span><span class="p">(</span><span class="n">np_new</span><span class="p">,</span> <span class="n">nploc</span><span class="p">,</span> <span class="n">npe</span><span class="p">)</span>
+<a name="ln-91"></a>    <span class="n">pp</span> <span class="o">=</span> <span class="mi">0</span>
+<a name="ln-92"></a>    <span class="c">!loc_npart() distribution on each MPI task</span>
+<a name="ln-93"></a>    <span class="k">do </span><span class="n">ix</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">npe_xloc</span> <span class="o">-</span> <span class="mi">1</span>
+<a name="ln-94"></a>     <span class="k">do </span><span class="n">iz</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">npe_zloc</span> <span class="o">-</span> <span class="mi">1</span>
+<a name="ln-95"></a>      <span class="k">do </span><span class="n">ip</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">npe_yloc</span> <span class="o">-</span> <span class="mi">1</span>
+<a name="ln-96"></a>       <span class="n">pp</span> <span class="o">=</span> <span class="n">pp</span> <span class="o">+</span> <span class="mi">1</span>
+<a name="ln-97"></a>       <span class="n">loc_npart</span><span class="p">(</span><span class="n">ip</span><span class="p">,</span> <span class="n">iz</span><span class="p">,</span> <span class="n">ix</span><span class="p">,</span> <span class="n">ic</span><span class="p">)</span> <span class="o">=</span> <span class="n">nploc</span><span class="p">(</span><span class="n">pp</span><span class="p">)</span>
+<a name="ln-98"></a>      <span class="k">end do</span>
+<a name="ln-99"></a><span class="k">     end do</span>
+<a name="ln-100"></a><span class="k">    end do</span>
+<a name="ln-101"></a><span class="k">   end do</span>
+<a name="ln-102"></a><span class="k">   </span><span class="n">np_max</span> <span class="o">=</span> <span class="nb">maxval</span><span class="p">(</span><span class="n">nploc</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">npe</span><span class="p">))</span>
+<a name="ln-103"></a>   <span class="n">np_min</span> <span class="o">=</span> <span class="nb">minval</span><span class="p">(</span><span class="n">nploc</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">npe</span><span class="p">))</span>
+<a name="ln-104"></a>   <span class="k">if</span> <span class="p">(.</span><span class="nb">not</span><span class="p">.</span> <span class="n">part</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-105"></a><span class="k">    if</span> <span class="p">(</span><span class="n">np_max</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="n">part</span> <span class="o">=</span> <span class="p">.</span><span class="n">true</span><span class="p">.</span>
+<a name="ln-106"></a>   <span class="n">endif</span>
+<a name="ln-107"></a>   <span class="k">do </span><span class="n">ip</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">npe</span> <span class="o">-</span> <span class="mi">1</span>
+<a name="ln-108"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">nploc</span><span class="p">(</span><span class="n">ip</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="n">np_min</span><span class="p">)</span> <span class="n">pe_npmin</span> <span class="o">=</span> <span class="n">ip</span>
+<a name="ln-109"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">nploc</span><span class="p">(</span><span class="n">ip</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="n">np_max</span><span class="p">)</span> <span class="n">pe_npmax</span> <span class="o">=</span> <span class="n">ip</span>
+<a name="ln-110"></a>   <span class="k">end do</span>
+<a name="ln-111"></a><span class="k">  end subroutine</span>
+<a name="ln-112"></a>
+<a name="ln-113"></a><span class="k">  subroutine </span><span class="n">tot_num_part</span>
+<a name="ln-114"></a>
+<a name="ln-115"></a>   <span class="kt">integer</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">nptot_local</span>
+<a name="ln-116"></a>   <span class="kt">integer</span> <span class="kd">::</span> <span class="n">iterator_x</span><span class="p">,</span> <span class="n">iterator_y</span><span class="p">,</span> <span class="n">iterator_z</span>
+<a name="ln-117"></a>   <span class="kt">integer</span> <span class="kd">::</span> <span class="n">iterator_species</span>
+<a name="ln-118"></a>
+<a name="ln-119"></a>   <span class="n">nptot_global</span> <span class="o">=</span> <span class="mi">0</span>
+<a name="ln-120"></a>
+<a name="ln-121"></a>   <span class="c">!! WARNING: allreduce_big_int is unsupported on many architectures: MPI_SUM not available for MPI_LONG_INT datatype</span>
+<a name="ln-122"></a>   <span class="c">!do iterator_species=1,nsp_run</span>
+<a name="ln-123"></a>   <span class="c">! nptot_local = loc_npart(imody, imodz, imodx, nsp_run)</span>
+<a name="ln-124"></a>   <span class="c">!end do</span>
+<a name="ln-125"></a>   <span class="c">!call allreduce_big_int(nptot_local, nptot_global)</span>
+<a name="ln-126"></a>
+<a name="ln-127"></a>   <span class="k">if</span> <span class="p">(</span><span class="n">pe0</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-128"></a><span class="k">    do </span><span class="n">iterator_y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">npe_yloc</span> <span class="o">-</span> <span class="mi">1</span>
+<a name="ln-129"></a>     <span class="k">do </span><span class="n">iterator_z</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">npe_zloc</span> <span class="o">-</span> <span class="mi">1</span>
+<a name="ln-130"></a>      <span class="k">do </span><span class="n">iterator_x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">npe_xloc</span> <span class="o">-</span> <span class="mi">1</span>
+<a name="ln-131"></a>       <span class="k">do </span><span class="n">iterator_species</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">nsp_run</span> <span class="c">!nsp_run is the real number of species running!</span>
+<a name="ln-132"></a>        <span class="n">nptot_local</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">loc_npart</span><span class="p">(</span><span class="n">iterator_y</span><span class="p">,</span> <span class="n">iterator_z</span><span class="p">,</span> <span class="n">iterator_x</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-133"></a>                                    <span class="n">iterator_species</span><span class="p">),</span> <span class="n">dp_int</span><span class="p">)</span>
+<a name="ln-134"></a>        <span class="n">nptot_global</span> <span class="o">=</span> <span class="n">nptot_global</span> <span class="o">+</span> <span class="n">nptot_local</span>
+<a name="ln-135"></a>       <span class="k">end do</span>
+<a name="ln-136"></a><span class="k">      end do</span>
+<a name="ln-137"></a><span class="k">     end do</span>
+<a name="ln-138"></a><span class="k">    end do</span>
+<a name="ln-139"></a><span class="k">   end if</span>
+<a name="ln-140"></a><span class="k">  end subroutine</span>
+<a name="ln-141"></a>  <span class="c">!---------------------------</span>
+<a name="ln-142"></a>
+<a name="ln-143"></a>  <span class="k">subroutine </span><span class="n">initial_run_info</span><span class="p">(</span><span class="n">nw</span><span class="p">)</span>
+<a name="ln-144"></a>   <span class="kt">integer</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">nw</span>
+<a name="ln-145"></a>   <span class="kt">integer</span> <span class="kd">::</span> <span class="n">i</span>
+<a name="ln-146"></a>   <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="mi">21</span><span class="p">)</span> <span class="kd">::</span> <span class="n">output_data_in</span>
+<a name="ln-147"></a>   <span class="kt">integer</span><span class="p">(</span><span class="n">hp_int</span><span class="p">)</span> <span class="kd">::</span> <span class="n">chsize</span>
+<a name="ln-148"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">sp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">wgsize</span>
+<a name="ln-149"></a>
+<a name="ln-150"></a>   <span class="k">write</span> <span class="p">(</span><span class="n">output_data_in</span><span class="p">,</span> <span class="s1">&#39;(a15,i2.2,a4)&#39;</span><span class="p">)</span> <span class="s1">&#39;init_data_info_&#39;</span><span class="p">,</span> <span class="n">id_new</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-151"></a>    <span class="s1">&#39;.dat&#39;</span>
+<a name="ln-152"></a>
+<a name="ln-153"></a>   <span class="k">write</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;***********************************************&#39;</span>
+<a name="ln-154"></a>   <span class="k">write</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;Start: new = &#39;</span><span class="p">,</span> <span class="n">nw</span>
+<a name="ln-155"></a>   <span class="k">if</span> <span class="p">(</span><span class="n">nw</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-156"></a><span class="k">    write</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;(a18,3i8)&#39;</span><span class="p">)</span> <span class="s1">&#39;  total grid size &#39;</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">nz</span>
+<a name="ln-157"></a>    <span class="k">write</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;(a18,3i8)&#39;</span><span class="p">)</span> <span class="s1">&#39;  local grid size &#39;</span><span class="p">,</span> <span class="n">nx_loc</span><span class="p">,</span> <span class="n">ny_loc</span><span class="p">,</span> <span class="n">nz_loc</span>
+<a name="ln-158"></a>    <span class="k">write</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;(a27,i3)&#39;</span><span class="p">)</span> <span class="s1">&#39;  Cartesian grid dimension &#39;</span><span class="p">,</span> <span class="n">ndim</span>
+<a name="ln-159"></a>   <span class="k">end if</span>
+<a name="ln-160"></a><span class="k">   if</span> <span class="p">(</span><span class="n">nw</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-161"></a><span class="k">    write</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;(a13,e11.4)&#39;</span><span class="p">)</span> <span class="s1">&#39; restart time&#39;</span><span class="p">,</span> <span class="n">tstart</span>
+<a name="ln-162"></a>    <span class="k">write</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; diag ienout&#39;</span><span class="p">,</span> <span class="n">ienout</span>
+<a name="ln-163"></a>   <span class="k">end if</span>
+<a name="ln-164"></a>   <span class="c">!write(6,*)&#39; kind of dp and int data&#39;,kind(tstart),kind(nx)</span>
+<a name="ln-165"></a>   <span class="c">!======================================</span>
+<a name="ln-166"></a>
+<a name="ln-167"></a>   <span class="k">open</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="k">file</span><span class="o">=</span><span class="n">output_data_in</span><span class="p">)</span>
+<a name="ln-168"></a>   <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; data bsize&#39;</span>
+<a name="ln-169"></a>   <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="nb">huge</span><span class="p">(</span><span class="n">chsize</span><span class="p">),</span> <span class="nb">huge</span><span class="p">(</span><span class="n">wgsize</span><span class="p">)</span>
+<a name="ln-170"></a>   <span class="c">!============================================</span>
+<a name="ln-171"></a>   <span class="k">if</span> <span class="p">(</span><span class="n">nw</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-172"></a><span class="k">    write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;********** INITIAL DATA INFO************* &#39;</span>
+<a name="ln-173"></a>   <span class="k">else</span>
+<a name="ln-174"></a><span class="k">    write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;*********  RESTART DATA INFO*************&#39;</span>
+<a name="ln-175"></a>   <span class="k">end if</span>
+<a name="ln-176"></a><span class="k">   write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a12,f6.2)&#39;</span><span class="p">)</span> <span class="s1">&#39;  Start time=&#39;</span><span class="p">,</span> <span class="n">tstart</span>
+<a name="ln-177"></a>   <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a20,i4,a4)&#39;</span><span class="p">)</span> <span class="s1">&#39;  ALaDyn running on &#39;</span><span class="p">,</span> <span class="n">npe</span><span class="p">,</span> <span class="s1">&#39; cpu&#39;</span>
+<a name="ln-178"></a>   <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a30,3i4)&#39;</span><span class="p">)</span> <span class="s1">&#39;  (x-y-z) MPI decomposition : &#39;</span><span class="p">,</span> <span class="n">npe_xloc</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-179"></a>    <span class="n">npe_yloc</span><span class="p">,</span> <span class="n">npe_zloc</span>
+<a name="ln-180"></a>   <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a26,i4)&#39;</span><span class="p">)</span> <span class="s1">&#39;  Data output initial id= &#39;</span><span class="p">,</span> <span class="n">id_new</span>
+<a name="ln-181"></a>
+<a name="ln-182"></a>   <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;*************IMPLEMENTATION TOOLS********************&#39;</span>
+<a name="ln-183"></a>   <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;  Field collocation on the Yee-module staggered grid&#39;</span>
+<a name="ln-184"></a>   <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;  B-spline shapes of alternating first-second order &#39;</span>
+<a name="ln-185"></a>   <span class="k">if</span> <span class="p">(</span><span class="n">lpf_ord</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-186"></a><span class="k">    if</span> <span class="p">(</span><span class="n">lpf_ord</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="p">&amp;</span>
+<a name="ln-187"></a>     <span class="s1">&#39;  One-step leap-frog time integration &#39;</span>
+<a name="ln-188"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">der_ord</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="p">&amp;</span>
+<a name="ln-189"></a>     <span class="s1">&#39;  Explicit second order space derivative &#39;</span>
+<a name="ln-190"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">der_ord</span> <span class="o">==</span> <span class="mi">3</span><span class="p">)</span> <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="p">&amp;</span>
+<a name="ln-191"></a>     <span class="s1">&#39;  Optmal Explicit second order space derivative&#39;</span>
+<a name="ln-192"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">der_ord</span> <span class="o">==</span> <span class="mi">4</span><span class="p">)</span> <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="p">&amp;</span>
+<a name="ln-193"></a>     <span class="s1">&#39;  Fourth-order Maxwell solver only for (E,B) fields&#39;</span>
+<a name="ln-194"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">lpf_ord</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-195"></a><span class="k">     write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;  RK multi-step fourth order time scheme &#39;</span>
+<a name="ln-196"></a>     <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;  Explicit fourth order Space Derivative&#39;</span>
+<a name="ln-197"></a>    <span class="k">end if</span>
+<a name="ln-198"></a><span class="k">   end if</span>
+<a name="ln-199"></a><span class="k">   if</span> <span class="p">(</span><span class="n">charge_cons</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-200"></a><span class="k">    if</span> <span class="p">(</span><span class="n">iform</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-201"></a><span class="k">     write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;  Continuity equation enforced by Esirkepov scheme&#39;</span>
+<a name="ln-202"></a>    <span class="k">else</span>
+<a name="ln-203"></a><span class="k">     write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; Continuity equation enforced on x-grid &amp;</span>
+<a name="ln-204"></a><span class="s1">       &amp;using non-conservative schemes&#39;</span>
+<a name="ln-205"></a>    <span class="k">end if</span>
+<a name="ln-206"></a><span class="k">   end if</span>
+<a name="ln-207"></a><span class="k">   write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;***************GRID**********************&#39;</span>
+<a name="ln-208"></a>   <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a18,3i8)&#39;</span><span class="p">)</span> <span class="s1">&#39;  total grid size &#39;</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">nz</span>
+<a name="ln-209"></a>   <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a18,3i8)&#39;</span><span class="p">)</span> <span class="s1">&#39;  local grid size &#39;</span><span class="p">,</span> <span class="n">nx_loc</span><span class="p">,</span> <span class="n">ny_loc</span><span class="p">,</span> <span class="n">nz_loc</span>
+<a name="ln-210"></a>   <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a27,i3)&#39;</span><span class="p">)</span> <span class="s1">&#39;  Cartesian grid dimension &#39;</span><span class="p">,</span> <span class="n">ndim</span>
+<a name="ln-211"></a>   <span class="k">if</span> <span class="p">(</span><span class="n">curr_ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-212"></a><span class="k">    write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; Current components: [Jx,Jy] &#39;</span>
+<a name="ln-213"></a>    <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; Field components: [Ex,Ey,Bz] &#39;</span>
+<a name="ln-214"></a>   <span class="k">else</span>
+<a name="ln-215"></a><span class="k">    write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; Current components: [Jx,Jy,Jz] &#39;</span>
+<a name="ln-216"></a>    <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; Field components: [Ex,Ey,Ez,Bx,By,Bz] &#39;</span>
+<a name="ln-217"></a>   <span class="k">end if</span>
+<a name="ln-218"></a><span class="k">   write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;   Box sizes&#39;</span>
+<a name="ln-219"></a>   <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;     xmin,      xmax     &#39;</span>
+<a name="ln-220"></a>   <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a1,2e11.4)&#39;</span><span class="p">)</span> <span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span>
+<a name="ln-221"></a>   <span class="k">if</span> <span class="p">(</span><span class="n">ndim</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-222"></a><span class="k">    write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;    ymin       ymax     &#39;</span>
+<a name="ln-223"></a>    <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a1,2e11.4)&#39;</span><span class="p">)</span> <span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span>
+<a name="ln-224"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">ndim</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-225"></a><span class="k">     write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;    zmin       zmax     &#39;</span>
+<a name="ln-226"></a>     <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a1,2e11.4)&#39;</span><span class="p">)</span> <span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">zmin</span><span class="p">,</span> <span class="n">zmax</span>
+<a name="ln-227"></a>    <span class="k">end if</span>
+<a name="ln-228"></a><span class="k">   end if</span>
+<a name="ln-229"></a><span class="k">   write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;   Cell sizes&#39;</span>
+<a name="ln-230"></a>   <span class="k">if</span> <span class="p">(</span><span class="n">ndim</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-231"></a><span class="k">    write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a6,e11.4,a6,e11.4)&#39;</span><span class="p">)</span> <span class="s1">&#39;  Dx =&#39;</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="s1">&#39;  Dy =&#39;</span><span class="p">,</span> <span class="n">dy</span>
+<a name="ln-232"></a>   <span class="k">else</span>
+<a name="ln-233"></a><span class="k">    write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a6,e11.4,a6,e11.4,a6,e11.4)&#39;</span><span class="p">)</span> <span class="s1">&#39;  Dx =&#39;</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="s1">&#39;  Dy =&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-234"></a>     <span class="n">dy</span><span class="p">,</span> <span class="s1">&#39;  Dz =&#39;</span><span class="p">,</span> <span class="n">dz</span>
+<a name="ln-235"></a>   <span class="k">end if</span>
+<a name="ln-236"></a><span class="k">   if</span> <span class="p">(</span><span class="n">stretch</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-237"></a><span class="k">    write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="p">&amp;</span>
+<a name="ln-238"></a>     <span class="s1">&#39; Grid is stretched on the transverse coordinates: y=tan(a*xi)&#39;</span>
+<a name="ln-239"></a>    <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a28,f8.2,a8,f8.2)&#39;</span><span class="p">)</span> <span class="s1">&#39;  Y grid is uniform from y =&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-240"></a>     <span class="n">str_ygrid</span><span class="p">%</span><span class="n">smin</span><span class="p">,</span> <span class="s1">&#39; to y = &#39;</span><span class="p">,</span> <span class="n">str_ygrid</span><span class="p">%</span><span class="n">smax</span>
+<a name="ln-241"></a>    <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a34, i4)&#39;</span><span class="p">)</span> <span class="s1">&#39;  Number of stretched cells n_y = &#39;</span><span class="p">,</span> <span class="n">ny_stretch</span>
+<a name="ln-242"></a>    <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a28,f8.2,a8,f8.2)&#39;</span><span class="p">)</span> <span class="s1">&#39;  Z grid is uniform from z =&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-243"></a>     <span class="n">str_zgrid</span><span class="p">%</span><span class="n">smin</span><span class="p">,</span> <span class="s1">&#39; to z = &#39;</span><span class="p">,</span> <span class="n">str_zgrid</span><span class="p">%</span><span class="n">smax</span>
+<a name="ln-244"></a>    <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a34, i4)&#39;</span><span class="p">)</span> <span class="s1">&#39;  Number of stretched cells n_z = &#39;</span><span class="p">,</span> <span class="n">nz_stretch</span>
+<a name="ln-245"></a>   <span class="k">end if</span>
+<a name="ln-246"></a><span class="k">   write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;***************PHYSICAL MODEL**********************&#39;</span>
+<a name="ln-247"></a>   <span class="k">if</span> <span class="p">(</span><span class="n">model_id</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-248"></a><span class="k">    write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;  Laser field injected &#39;</span>
+<a name="ln-249"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">model_id</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;  P-polarization on y-axis&#39;</span>
+<a name="ln-250"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">model_id</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;  S-polarization on z-axis&#39;</span>
+<a name="ln-251"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">model_id</span> <span class="o">==</span> <span class="mi">3</span><span class="p">)</span> <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="p">&amp;</span>
+<a name="ln-252"></a>     <span class="s1">&#39;  Circular polarization on y-z plane&#39;</span>
+<a name="ln-253"></a>    <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="p">&amp;</span>
+<a name="ln-254"></a>     <span class="s1">&#39;***************** Laser pulse structure***************&#39;</span>
+<a name="ln-255"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">model_id</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-256"></a><span class="k">     write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;  A plane wave model&#39;</span>
+<a name="ln-257"></a>    <span class="k">else</span>
+<a name="ln-258"></a><span class="k">     write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="p">&amp;</span>
+<a name="ln-259"></a>      <span class="s1">&#39;  Gaussian profile exp(-[r/w0_y]^2) on radial coordinate&#39;</span>
+<a name="ln-260"></a>    <span class="k">end if</span>
+<a name="ln-261"></a><span class="k">    if</span> <span class="p">(</span><span class="n">g_prof</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-262"></a><span class="k">     write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;  Gaussian profile exp(-[(x-t)/w0_x]^2) &amp;</span>
+<a name="ln-263"></a><span class="s1">       &amp;on longitudinal (x-t) coordinate&#39;</span>
+<a name="ln-264"></a>    <span class="k">else</span>
+<a name="ln-265"></a><span class="k">     write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="p">&amp;</span>
+<a name="ln-266"></a>      <span class="s1">&#39;  Cos^2[Pi(x-t)/w0_x] profile on longitudinal (x-t) coordinate&#39;</span>
+<a name="ln-267"></a>    <span class="k">end if</span>
+<a name="ln-268"></a><span class="k">   else</span>
+<a name="ln-269"></a><span class="k">    select case</span> <span class="p">(</span><span class="n">model_id</span><span class="p">)</span>
+<a name="ln-270"></a>    <span class="k">case</span> <span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<a name="ln-271"></a>     <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;  LP(P-pol) laser field injected using &amp;</span>
+<a name="ln-272"></a><span class="s1">       &amp;ENVELOPE integration model&#39;</span>
+<a name="ln-273"></a>    <span class="k">case</span> <span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<a name="ln-274"></a>     <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;  Electron bunch injected&#39;</span>
+<a name="ln-275"></a>    <span class="k">end select</span>
+<a name="ln-276"></a><span class="k">   end if</span>
+<a name="ln-277"></a><span class="k">   write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="p">&amp;</span>
+<a name="ln-278"></a>    <span class="s1">&#39;***********FIELD BOUNDARY CONDITIONS*************************&#39;</span>
+<a name="ln-279"></a>   <span class="k">if</span> <span class="p">(</span><span class="n">ibx</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; Open boundaries on x axis&#39;</span>
+<a name="ln-280"></a>   <span class="k">if</span> <span class="p">(</span><span class="n">ibx</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; Reflecting boundary on right x &#39;</span>
+<a name="ln-281"></a>   <span class="k">if</span> <span class="p">(</span><span class="n">ibx</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; Periodic boundaries on x axis&#39;</span>
+<a name="ln-282"></a>   <span class="k">if</span> <span class="p">(</span><span class="n">ibx</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">)</span> <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; Invalid x-boundary flag&#39;</span>
+<a name="ln-283"></a>   <span class="k">if</span> <span class="p">(</span><span class="n">ndim</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-284"></a><span class="k">    if</span> <span class="p">(</span><span class="n">iby</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; Open boundaries on y axis&#39;</span>
+<a name="ln-285"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">iby</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; Reflecting boundaries on y axis&#39;</span>
+<a name="ln-286"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">iby</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; Periodic boundaries on y axis&#39;</span>
+<a name="ln-287"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">iby</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">)</span> <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; Invalid y-boundary flag&#39;</span>
+<a name="ln-288"></a>   <span class="k">end if</span>
+<a name="ln-289"></a><span class="k">   if</span> <span class="p">(</span><span class="n">ndim</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-290"></a><span class="k">    if</span> <span class="p">(</span><span class="n">ibz</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; Open boundaries on z axis&#39;</span>
+<a name="ln-291"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">ibz</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; Reflecting boundaries on z axis&#39;</span>
+<a name="ln-292"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">ibz</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; Periodic boundaries on z axis&#39;</span>
+<a name="ln-293"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">ibz</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">)</span> <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; Invalid z-boundary flag&#39;</span>
+<a name="ln-294"></a>   <span class="k">end if</span>
+<a name="ln-295"></a><span class="k">   if</span> <span class="p">(</span><span class="n">w_speed</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-296"></a><span class="k">    write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a23,f5.2)&#39;</span><span class="p">)</span> <span class="s1">&#39;  Moving window speed= &#39;</span><span class="p">,</span> <span class="n">w_speed</span>
+<a name="ln-297"></a>   <span class="k">end if</span>
+<a name="ln-298"></a><span class="k">   if</span> <span class="p">(</span><span class="n">w_speed</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-299"></a><span class="k">    write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a35,f5.2)&#39;</span><span class="p">)</span> <span class="s1">&#39;  Comoving x-coordinate system V_b=&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-300"></a>     <span class="n">vbeam</span>
+<a name="ln-301"></a>   <span class="k">end if</span>
+<a name="ln-302"></a><span class="k">   if</span> <span class="p">(</span><span class="n">model_id</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-303"></a><span class="k">    write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;******LASER PHYSICAL PARAMETERS *****************&#39;</span>
+<a name="ln-304"></a>    <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;     Main pulse parameters &#39;</span>
+<a name="ln-305"></a>    <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; Transverse scales&#39;</span>
+<a name="ln-306"></a>    <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a8,f6.2,a18,f6.2)&#39;</span><span class="p">)</span> <span class="s1">&#39;  w0_y= &#39;</span><span class="p">,</span> <span class="n">w0_y</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-307"></a>     <span class="s1">&#39;   focal spot =   &#39;</span><span class="p">,</span> <span class="n">lp_rad</span>
+<a name="ln-308"></a>    <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; Longitudinal scales&#39;</span>
+<a name="ln-309"></a>    <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a8,f6.2,a18,f6.2)&#39;</span><span class="p">)</span> <span class="s1">&#39;  w0_x= &#39;</span><span class="p">,</span> <span class="n">w0_x</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-310"></a>     <span class="s1">&#39;   tau_fwhm(fs) = &#39;</span><span class="p">,</span> <span class="n">tau_fwhm</span>
+<a name="ln-311"></a>    <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a13,f5.2,a13,f5.2)&#39;</span><span class="p">)</span> <span class="s1">&#39;  wavelength=&#39;</span><span class="p">,</span> <span class="n">lam0</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-312"></a>     <span class="s1">&#39;   frequency=&#39;</span><span class="p">,</span> <span class="n">oml</span>
+<a name="ln-313"></a>    <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a17,e13.3,a17,f6.2)&#39;</span><span class="p">)</span> <span class="s1">&#39;  Initial focus =&#39;</span><span class="p">,</span> <span class="n">xf</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-314"></a>     <span class="s1">&#39;   Pulse center= &#39;</span><span class="p">,</span> <span class="n">xc_lp</span>
+<a name="ln-315"></a>    <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a29,e11.4)&#39;</span><span class="p">)</span> <span class="s1">&#39;  Diffraction length Z_Rayl= &#39;</span><span class="p">,</span> <span class="n">zr</span>
+<a name="ln-316"></a>    <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a25,f5.2)&#39;</span><span class="p">)</span> <span class="s1">&#39;  Strength parameter a0= &#39;</span><span class="p">,</span> <span class="n">a0</span>
+<a name="ln-317"></a>    <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a33,f5.2,a6)&#39;</span><span class="p">)</span> <span class="s1">&#39;  Max transverse field at focus= &#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-318"></a>     <span class="n">e0</span><span class="o">*</span><span class="n">a0</span><span class="o">*</span><span class="n">oml</span><span class="p">,</span> <span class="s1">&#39;(TV/m)&#39;</span>
+<a name="ln-319"></a>    <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a13,e13.3,a10)&#39;</span><span class="p">)</span> <span class="s1">&#39;  Intensity= &#39;</span><span class="p">,</span> <span class="n">lp_intensity</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-320"></a>     <span class="s1">&#39;(e18W/cm2)&#39;</span>
+<a name="ln-321"></a>    <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a9,e13.3,a4)&#39;</span><span class="p">)</span> <span class="s1">&#39;  Power = &#39;</span><span class="p">,</span> <span class="n">lp_pow</span><span class="p">,</span> <span class="s1">&#39;(TW)&#39;</span>
+<a name="ln-322"></a>    <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a10,e13.3,a3)&#39;</span><span class="p">)</span> <span class="s1">&#39;  Energy= &#39;</span><span class="p">,</span> <span class="n">lp_energy</span><span class="p">,</span> <span class="s1">&#39;(J)&#39;</span>
+<a name="ln-323"></a>    <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a30,i4)&#39;</span><span class="p">)</span> <span class="s1">&#39;  Number of main laser pulses= &#39;</span><span class="p">,</span> <span class="n">nb_laser</span>
+<a name="ln-324"></a>    <span class="k">if</span> <span class="p">(.</span><span class="nb">not</span><span class="p">.</span> <span class="n">enable_ionization</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span> <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="p">&amp;</span>
+<a name="ln-325"></a>     <span class="s1">&#39; WARNING: Ionization disabled for the main pulse&#39;</span>
+<a name="ln-326"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">nb_laser</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-327"></a><span class="k">     do </span><span class="n">i</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">nb_laser</span>
+<a name="ln-328"></a>      <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a23,i2,a5,i2,a10,f5.2)&#39;</span><span class="p">)</span> <span class="s1">&#39;  Distance between the &#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-329"></a>       <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39; and &#39;</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="s1">&#39; centers= &#39;</span><span class="p">,</span> <span class="n">lp_delay</span><span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+<a name="ln-330"></a>     <span class="k">end do</span>
+<a name="ln-331"></a><span class="k">    end if</span>
+<a name="ln-332"></a><span class="k">    write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;-----------------------------------&#39;</span>
+<a name="ln-333"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">Two_color</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-334"></a><span class="k">     write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;     Injected pulse parameters &#39;</span>
+<a name="ln-335"></a>     <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a20,f5.2)&#39;</span><span class="p">)</span> <span class="s1">&#39;  Offset distance = &#39;</span><span class="p">,</span> <span class="n">lp_offset</span>
+<a name="ln-336"></a>     <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; Transverse scales&#39;</span>
+<a name="ln-337"></a>     <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a8,f5.2,a18,f5.2)&#39;</span><span class="p">)</span> <span class="s1">&#39;  w1_y= &#39;</span><span class="p">,</span> <span class="n">w1_y</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-338"></a>      <span class="s1">&#39;   focal spot =   &#39;</span><span class="p">,</span> <span class="n">lp1_rad</span>
+<a name="ln-339"></a>     <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; Longitudinal scales&#39;</span>
+<a name="ln-340"></a>     <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a8,f5.2,a18,f5.2)&#39;</span><span class="p">)</span> <span class="s1">&#39;  w0_x= &#39;</span><span class="p">,</span> <span class="n">w1_x</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-341"></a>      <span class="s1">&#39;   tau_fwhm(fs) = &#39;</span><span class="p">,</span> <span class="n">tau1_fwhm</span>
+<a name="ln-342"></a>     <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a13,f5.2,a13,f5.2)&#39;</span><span class="p">)</span> <span class="s1">&#39;  wavelength=&#39;</span><span class="p">,</span> <span class="n">lam1</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-343"></a>      <span class="s1">&#39;   frequency=&#39;</span><span class="p">,</span> <span class="n">om1</span>
+<a name="ln-344"></a>     <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a17,f6.2,a17,f6.2)&#39;</span><span class="p">)</span> <span class="s1">&#39;  Initial focus =&#39;</span><span class="p">,</span> <span class="n">xf1</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-345"></a>      <span class="s1">&#39;   Pulse center= &#39;</span><span class="p">,</span> <span class="n">xc1_lp</span>
+<a name="ln-346"></a>     <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a29,e11.4)&#39;</span><span class="p">)</span> <span class="s1">&#39;  Diffraction length Z_Rayl= &#39;</span><span class="p">,</span> <span class="n">zr1</span>
+<a name="ln-347"></a>     <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a25,f5.2)&#39;</span><span class="p">)</span> <span class="s1">&#39;  Strength parameter a0= &#39;</span><span class="p">,</span> <span class="n">a1</span>
+<a name="ln-348"></a>     <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a33,f5.2,a6)&#39;</span><span class="p">)</span> <span class="s1">&#39;  Max transverse field at focus= &#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-349"></a>      <span class="n">e0</span><span class="o">*</span><span class="n">a1</span><span class="o">*</span><span class="n">om1</span><span class="p">,</span> <span class="s1">&#39;(TV/m)&#39;</span>
+<a name="ln-350"></a>     <span class="k">if</span> <span class="p">(.</span><span class="nb">not</span><span class="p">.</span> <span class="n">enable_ionization</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span> <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="p">&amp;</span>
+<a name="ln-351"></a>      <span class="s1">&#39; WARNING: Ionization disabled for the injection pulse&#39;</span>
+<a name="ln-352"></a>    <span class="k">end if</span>
+<a name="ln-353"></a><span class="k">   end if</span>
+<a name="ln-354"></a><span class="k">   if</span> <span class="p">(</span><span class="n">hybrid</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-355"></a><span class="k">    write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;************** FLUID DATA *****************&#39;</span>
+<a name="ln-356"></a>    <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;Fluid density-momenta components&#39;</span><span class="p">,</span> <span class="n">nfcomp</span>
+<a name="ln-357"></a>   <span class="k">end if</span>
+<a name="ln-358"></a><span class="k">   write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;**************PARTICLE DATA *****************&#39;</span>
+<a name="ln-359"></a>   <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a18,i4)&#39;</span><span class="p">)</span> <span class="s1">&#39;  Species number =&#39;</span><span class="p">,</span> <span class="n">nsp</span>
+<a name="ln-360"></a>   <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a32,i4)&#39;</span><span class="p">)</span> <span class="s1">&#39;  Id number of running species: &#39;</span><span class="p">,</span> <span class="n">nsp_run</span>
+<a name="ln-361"></a>   <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;=============================&#39;</span>
+<a name="ln-362"></a>   <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; Species name:&#39;</span><span class="p">,</span> <span class="n">species_name</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<a name="ln-363"></a>   <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a29,i4)&#39;</span><span class="p">)</span> <span class="s1">&#39;  Macropart number per cell =&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-364"></a>    <span class="n">mp_per_cell</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<a name="ln-365"></a>   <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a34,e11.4)&#39;</span><span class="p">)</span> <span class="s1">&#39;  Reference macroparticle weight =&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-366"></a>    <span class="n">j0_norm</span>
+<a name="ln-367"></a>   <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; Initial electron thermal speed V_T/c&#39;</span>
+<a name="ln-368"></a>   <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a2,1E12.4)&#39;</span><span class="p">)</span> <span class="s1">&#39;  &#39;</span><span class="p">,</span> <span class="n">t0_pl</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<a name="ln-369"></a>   <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;=============================&#39;</span>
+<a name="ln-370"></a>   <span class="k">if</span> <span class="p">(</span><span class="n">nsp</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-371"></a><span class="k">    do </span><span class="n">i</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">nsp</span>
+<a name="ln-372"></a>     <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; Ion species name:&#39;</span><span class="p">,</span> <span class="n">species_name</span><span class="p">(</span><span class="n">atomic_number</span><span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="p">&amp;</span>
+<a name="ln-373"></a>                                                      <span class="p">)</span>
+<a name="ln-374"></a>     <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a23,i4)&#39;</span><span class="p">)</span> <span class="s1">&#39;  Ion number per cell =&#39;</span><span class="p">,</span> <span class="n">mp_per_cell</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+<a name="ln-375"></a>     <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a34,e11.4)&#39;</span><span class="p">)</span> <span class="s1">&#39;  Reference macroparticle weight= &#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-376"></a>      <span class="n">wgh_ion</span>
+<a name="ln-377"></a>     <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; Initial charge, atomic number , mass number&#39;</span>
+<a name="ln-378"></a>     <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a4,i8,a4,i8,a6,e11.4)&#39;</span><span class="p">)</span> <span class="s1">&#39;    &#39;</span><span class="p">,</span> <span class="n">ion_min</span><span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="s1">&#39;    &#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-379"></a>      <span class="n">atomic_number</span><span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="s1">&#39;      &#39;</span><span class="p">,</span> <span class="n">mass_number</span><span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+<a name="ln-380"></a>     <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; Initial ion thermal speed V_T/c&#39;</span>
+<a name="ln-381"></a>     <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a2,1E12.4)&#39;</span><span class="p">)</span> <span class="s1">&#39;  &#39;</span><span class="p">,</span> <span class="n">t0_pl</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+<a name="ln-382"></a>    <span class="k">end do</span>
+<a name="ln-383"></a><span class="k">   end if</span>
+<a name="ln-384"></a><span class="k">   write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;-----------------------------------&#39;</span>
+<a name="ln-385"></a>   <span class="k">if</span> <span class="p">(</span><span class="n">ionization</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-386"></a><span class="k">    write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; Field ionization model:&#39;</span>
+<a name="ln-387"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">ionz_model</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; W_DC ADK  &#39;</span>
+<a name="ln-388"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">ionz_model</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; W_AC= &lt;W_DC&gt;  ADK &#39;</span>
+<a name="ln-389"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">ionz_model</span> <span class="o">==</span> <span class="mi">4</span><span class="p">)</span> <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; W_AC ADK +BSI &#39;</span>
+<a name="ln-390"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">beam</span><span class="p">)</span> <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a24,e11.4,a6)&#39;</span><span class="p">)</span> <span class="s1">&#39;  Reference max E_field &#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-391"></a>     <span class="n">eb_max</span><span class="p">,</span> <span class="s1">&#39;(TV/m)&#39;</span>
+<a name="ln-392"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">lp_active</span><span class="p">)</span> <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a24,e11.4,a6)&#39;</span><span class="p">)</span> <span class="p">&amp;</span>
+<a name="ln-393"></a>     <span class="s1">&#39;  Reference max E_field &#39;</span><span class="p">,</span> <span class="n">lp_max</span><span class="p">,</span> <span class="s1">&#39;(TV/m)&#39;</span>
+<a name="ln-394"></a>    <span class="k">do </span><span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">nsp_ionz</span> <span class="o">-</span> <span class="mi">1</span>
+<a name="ln-395"></a>     <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; Ionization active on ion species:&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-396"></a>      <span class="n">species_name</span><span class="p">(</span><span class="n">atomic_number</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+<a name="ln-397"></a>    <span class="k">end do</span>
+<a name="ln-398"></a><span class="k">    if</span> <span class="p">(</span><span class="n">symmetrization_pulse</span> <span class="p">.</span><span class="nb">and</span><span class="p">.</span> <span class="p">(</span><span class="n">curr_ndim</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">))</span> <span class="k">then</span>
+<a name="ln-399"></a><span class="k">     write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; A symmetrization pulse is implied when ionizing&#39;</span>
+<a name="ln-400"></a>     <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="p">&amp;</span>
+<a name="ln-401"></a>      <span class="s1">&#39; The sym. formula is sin(2*pi*u)*\Delta*a_1*a_symm_rat&#39;</span>
+<a name="ln-402"></a>     <span class="k">if</span> <span class="p">(</span><span class="n">a_symm_rat</span> <span class="o">&gt;</span> <span class="n">zero_dp</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-403"></a><span class="k">      write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a32,e11.4)&#39;</span><span class="p">)</span> <span class="s1">&#39; Symmetrization amplitude a_symm_rat&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-404"></a>       <span class="n">a_symm_rat</span>
+<a name="ln-405"></a>     <span class="k">else</span>
+<a name="ln-406"></a><span class="k">      write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a32,e11.4)&#39;</span><span class="p">)</span> <span class="s1">&#39; Symmetrization amplitude a_symm_rat&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-407"></a>       <span class="nb">sqrt</span><span class="p">(</span><span class="mf">2.</span><span class="p">)</span>
+<a name="ln-408"></a>     <span class="k">end if</span>
+<a name="ln-409"></a><span class="k">    end if</span>
+<a name="ln-410"></a><span class="k">   end if</span>
+<a name="ln-411"></a><span class="k">   write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;**********TARGET PLASMA PARAMETERS***********&#39;</span>
+<a name="ln-412"></a>   <span class="k">if</span> <span class="p">(</span><span class="n">part</span> <span class="p">.</span><span class="nb">or</span><span class="p">.</span> <span class="n">hybrid</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-413"></a><span class="k">    write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a26,e11.4,a10)&#39;</span><span class="p">)</span> <span class="s1">&#39;  Electron number density &#39;</span><span class="p">,</span> <span class="n">n0_ref</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-414"></a>     <span class="s1">&#39;[10^18/cc]&#39;</span>
+<a name="ln-415"></a>    <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a21,e11.4)&#39;</span><span class="p">)</span> <span class="s1">&#39;  Plasma wavelength= &#39;</span><span class="p">,</span> <span class="n">lambda_p</span>
+<a name="ln-416"></a>    <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a20,e11.4)&#39;</span><span class="p">)</span> <span class="s1">&#39; Chanelling fact  = &#39;</span><span class="p">,</span> <span class="n">chann_fact</span>
+<a name="ln-417"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">model_id</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-418"></a><span class="k">     write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a20,f5.2,a10)&#39;</span><span class="p">)</span> <span class="s1">&#39;  Critical density= &#39;</span><span class="p">,</span> <span class="n">ncrit</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-419"></a>      <span class="s1">&#39;[10^21/cc]&#39;</span>
+<a name="ln-420"></a>     <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a18,e11.4,a4)&#39;</span><span class="p">)</span> <span class="s1">&#39;  Critical power= &#39;</span><span class="p">,</span> <span class="n">p_c</span><span class="p">,</span> <span class="s1">&#39;(TW)&#39;</span>
+<a name="ln-421"></a>    <span class="k">end if</span>
+<a name="ln-422"></a><span class="k">    write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;     Target sizes &#39;</span>
+<a name="ln-423"></a>    <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;  xmin_t        xmax_t&#39;</span>
+<a name="ln-424"></a>    <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a2,2e11.4)&#39;</span><span class="p">)</span> <span class="s1">&#39;  &#39;</span><span class="p">,</span> <span class="n">targ_in</span><span class="p">,</span> <span class="n">targ_end</span>
+<a name="ln-425"></a>    <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; ymin_t       ymax_t     &#39;</span>
+<a name="ln-426"></a>    <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a2,2e11.4)&#39;</span><span class="p">)</span> <span class="s1">&#39;  &#39;</span><span class="p">,</span> <span class="n">ymin_t</span><span class="p">,</span> <span class="n">ymax_t</span>
+<a name="ln-427"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">ndim</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-428"></a><span class="k">     write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; zmin_t       zmax_t     &#39;</span>
+<a name="ln-429"></a>     <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a2,2e11.4)&#39;</span><span class="p">)</span> <span class="s1">&#39;  &#39;</span><span class="p">,</span> <span class="n">zmin_t</span><span class="p">,</span> <span class="n">zmax_t</span>
+<a name="ln-430"></a>    <span class="k">end if</span>
+<a name="ln-431"></a><span class="k">    write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;********** TARGET CONFIGURATION***********&#39;</span>
+<a name="ln-432"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">wake</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-433"></a><span class="k">     select case</span> <span class="p">(</span><span class="n">dmodel_id</span><span class="p">)</span>
+<a name="ln-434"></a>     <span class="k">case</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<a name="ln-435"></a>      <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="p">&amp;</span>
+<a name="ln-436"></a>       <span class="s1">&#39; Multispecies five-layer x-profile with one central plateau &#39;</span>
+<a name="ln-437"></a>     <span class="k">case</span> <span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-438"></a>      <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; Multispecie five-layer x-profile with &amp;</span>
+<a name="ln-439"></a><span class="s1">        &amp;one central lpx(3) downrump&#39;</span>
+<a name="ln-440"></a>      <span class="k">write</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;        connecting two lpx(2) lpx(4) plateau &#39;</span>
+<a name="ln-441"></a>     <span class="k">case</span> <span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<a name="ln-442"></a>      <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="p">&amp;</span>
+<a name="ln-443"></a>       <span class="s1">&#39; Five-layer x-profile with two lpx(2) lpx(4) plateau and&#39;</span>
+<a name="ln-444"></a>      <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; a ionizing dopant added in lpx(3) layer&#39;</span>
+<a name="ln-445"></a>     <span class="k">end select</span>
+<a name="ln-446"></a><span class="k">    end if</span>
+<a name="ln-447"></a><span class="k">    if</span> <span class="p">(</span><span class="n">solid_target</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-448"></a><span class="k">     select case</span> <span class="p">(</span><span class="n">dmodel_id</span><span class="p">)</span>
+<a name="ln-449"></a>     <span class="k">case</span> <span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<a name="ln-450"></a>      <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; Target preplasma-enabled &#39;</span>
+<a name="ln-451"></a>      <span class="k">if</span> <span class="p">(</span><span class="n">lpx</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">)</span> <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a17,e11.4)&#39;</span><span class="p">)</span> <span class="s1">&#39;  Preplasma size &#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-452"></a>       <span class="n">lpx</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<a name="ln-453"></a>      <span class="k">if</span> <span class="p">(</span><span class="n">lpx</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">)</span> <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a12,e11.4)&#39;</span><span class="p">)</span> <span class="s1">&#39;  Ramp size &#39;</span><span class="p">,</span> <span class="n">lpx</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-454"></a>      <span class="k">if</span> <span class="p">(</span><span class="n">lpx</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">)</span> <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a21,e11.4)&#39;</span><span class="p">)</span> <span class="s1">&#39;  Central layer size &#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-455"></a>       <span class="n">lpx</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<a name="ln-456"></a>      <span class="k">if</span> <span class="p">(</span><span class="n">lpx</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">)</span> <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a33,e11.4)&#39;</span><span class="p">)</span> <span class="p">&amp;</span>
+<a name="ln-457"></a>       <span class="s1">&#39;  Post-layer H contaminants size &#39;</span><span class="p">,</span> <span class="n">lpx</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<a name="ln-458"></a>     <span class="k">case</span> <span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<a name="ln-459"></a>      <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; Target H-foam-enabled &#39;</span>
+<a name="ln-460"></a>      <span class="k">if</span> <span class="p">(</span><span class="n">lpx</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">)</span> <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a12,e11.4)&#39;</span><span class="p">)</span> <span class="s1">&#39;  Foam size &#39;</span><span class="p">,</span> <span class="n">lpx</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<a name="ln-461"></a>      <span class="k">if</span> <span class="p">(</span><span class="n">lpx</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">)</span> <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a12,e11.4)&#39;</span><span class="p">)</span> <span class="s1">&#39;  Ramp size &#39;</span><span class="p">,</span> <span class="n">lpx</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-462"></a>      <span class="k">if</span> <span class="p">(</span><span class="n">lpx</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">)</span> <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(a33,e11.4)&#39;</span><span class="p">)</span> <span class="p">&amp;</span>
+<a name="ln-463"></a>       <span class="s1">&#39;  Post-layer H contaminants size &#39;</span><span class="p">,</span> <span class="n">lpx</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<a name="ln-464"></a>     <span class="k">case</span> <span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<a name="ln-465"></a>      <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="p">&amp;</span>
+<a name="ln-466"></a>       <span class="s1">&#39; Three species [El,Z1,Z3] target +[El,Z2] contaminants &#39;</span>
+<a name="ln-467"></a>      <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;x-layer sizes&#39;</span>
+<a name="ln-468"></a>      <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(3e11.4)&#39;</span><span class="p">)</span> <span class="n">lpx</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">lpx</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="n">lpx</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<a name="ln-469"></a>      <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;Layer density&#39;</span>
+<a name="ln-470"></a>      <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(3e11.4)&#39;</span><span class="p">)</span> <span class="n">n1_over_n</span><span class="p">,</span> <span class="n">n_over_nc</span><span class="p">,</span> <span class="n">n2_over_n</span>
+<a name="ln-471"></a>     <span class="k">case</span> <span class="p">(</span><span class="mi">6</span><span class="p">)</span>
+<a name="ln-472"></a>      <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; Three species [El,Z]nanowires+ bulk &#39;</span>
+<a name="ln-473"></a>      <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;wire size,interwire distance filling fact&#39;</span>
+<a name="ln-474"></a>      <span class="k">if</span> <span class="p">(</span><span class="n">ndim</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-475"></a><span class="k">       write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(3e11.4)&#39;</span><span class="p">)</span> <span class="n">lpy</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">lpy</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="n">lpy</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">lpy</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">lpy</span><span class="p">(</span><span class="mi">2</span><span class="p">)))</span>
+<a name="ln-476"></a>      <span class="k">else</span>
+<a name="ln-477"></a><span class="k">       write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(3e11.4)&#39;</span><span class="p">)</span> <span class="n">lpy</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">lpy</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="n">lpy</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">lpy</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">lpy</span><span class="p">(</span><span class="mi">2</span><span class="p">)))</span><span class="o">**</span> <span class="p">&amp;</span>
+<a name="ln-478"></a>        <span class="mi">2</span>
+<a name="ln-479"></a>      <span class="k">end if</span>
+<a name="ln-480"></a><span class="k">      write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;Boundaries&#39;</span><span class="p">,</span> <span class="n">ibx</span><span class="p">,</span> <span class="n">iby</span>
+<a name="ln-481"></a>     <span class="k">case</span> <span class="p">(</span><span class="mi">7</span><span class="p">)</span>
+<a name="ln-482"></a>      <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; One layer [El,Z] nano-tubes&#39;</span>
+<a name="ln-483"></a>      <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; 2R_ext    2dr   &#39;</span>
+<a name="ln-484"></a>      <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(2e11.4)&#39;</span><span class="p">)</span> <span class="n">lpy</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">lpy</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-485"></a>      <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;Boundaries&#39;</span><span class="p">,</span> <span class="n">ibx</span><span class="p">,</span> <span class="n">iby</span>
+<a name="ln-486"></a>     <span class="k">end select</span>
+<a name="ln-487"></a><span class="k">    end if</span>
+<a name="ln-488"></a><span class="k">    write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;Fully kinetic PIC schemes&#39;</span>
+<a name="ln-489"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">model_id</span> <span class="o">&gt;</span> <span class="mi">4</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-490"></a><span class="k">     write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;******Beam+plasma data *****************&#39;</span>
+<a name="ln-491"></a>     <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; nbfield components&#39;</span><span class="p">,</span> <span class="n">nbfield</span>
+<a name="ln-492"></a>     <span class="k">if</span> <span class="p">(</span><span class="n">ibeam</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-493"></a><span class="k">      write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="p">&amp;</span>
+<a name="ln-494"></a>       <span class="s1">&#39; Bunch fields described by two arrays: ebf_bunch,ebf1_bunch&#39;</span>
+<a name="ln-495"></a>     <span class="k">end if</span>
+<a name="ln-496"></a><span class="k">     write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; Beam parameters: &#39;</span>
+<a name="ln-497"></a>     <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; unit length is 1mu, unit density is n0=10^18/cc&#39;</span>
+<a name="ln-498"></a>     <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;  Lambda , Omega_p,  n_over_n0 &#39;</span>
+<a name="ln-499"></a>     <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(3e11.4)&#39;</span><span class="p">)</span> <span class="n">lambda_p</span><span class="p">,</span> <span class="n">omega_p</span><span class="p">,</span> <span class="n">n_over_nc</span>
+<a name="ln-500"></a>     <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="p">&amp;</span>
+<a name="ln-501"></a>      <span class="s1">&#39;  gamma ,  sigma_x ,     sigma_y,   eps_y       eps_z &#39;</span>
+<a name="ln-502"></a>     <span class="k">do </span><span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">nsb</span>
+<a name="ln-503"></a>      <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(5e11.4)&#39;</span><span class="p">)</span> <span class="n">gam</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">sxb</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">syb</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">epsy</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">epsz</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+<a name="ln-504"></a>     <span class="k">end do</span>
+<a name="ln-505"></a><span class="k">     write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;  nb_over_np  b_charge   Qcharge &#39;</span>
+<a name="ln-506"></a>     <span class="k">do </span><span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">nsb</span>
+<a name="ln-507"></a>      <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(3e11.4)&#39;</span><span class="p">)</span> <span class="n">rhob</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">bunch_charge</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">reduced_charge</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+<a name="ln-508"></a>     <span class="k">end do</span>
+<a name="ln-509"></a><span class="k">    else</span>
+<a name="ln-510"></a><span class="k">     write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; unit length is 1mm, unit density is nc&#39;</span>
+<a name="ln-511"></a>     <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;  Lambda , Omega_p    n_over_nc  &#39;</span>
+<a name="ln-512"></a>     <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(3e11.4)&#39;</span><span class="p">)</span> <span class="n">lambda_p</span><span class="p">,</span> <span class="n">omega_p</span><span class="p">,</span> <span class="n">n_over_nc</span>
+<a name="ln-513"></a>     <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="p">&amp;</span>
+<a name="ln-514"></a>      <span class="s1">&#39;  gamma   bet0        Lx       sigma_y,   eps_y       eps_z &#39;</span>
+<a name="ln-515"></a>     <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span>
+<a name="ln-516"></a>     <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(6e11.4)&#39;</span><span class="p">)</span> <span class="n">gam</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">bet0</span><span class="p">,</span> <span class="n">sxb</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">syb</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">epsy</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="p">&amp;</span>
+<a name="ln-517"></a>      <span class="n">epsz</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+<a name="ln-518"></a>     <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; jb_norm     nb_o_np    b_charge_den  &#39;</span>
+<a name="ln-519"></a>     <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(3e11.4)&#39;</span><span class="p">)</span> <span class="n">jb_norm</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">rhob</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">b_charge</span>
+<a name="ln-520"></a>    <span class="k">end if</span>
+<a name="ln-521"></a><span class="k">    write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; target in  target_end&#39;</span>
+<a name="ln-522"></a>    <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(2e11.4)&#39;</span><span class="p">)</span> <span class="n">targ_in</span><span class="p">,</span> <span class="n">targ_end</span>
+<a name="ln-523"></a>    <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; ymin_t       ymax_t     &#39;</span>
+<a name="ln-524"></a>    <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(2e11.4)&#39;</span><span class="p">)</span> <span class="n">ymin_t</span><span class="p">,</span> <span class="n">ymax_t</span>
+<a name="ln-525"></a>    <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; Electron number per cell &#39;</span>
+<a name="ln-526"></a>    <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(i4)&#39;</span><span class="p">)</span> <span class="n">nref</span>
+<a name="ln-527"></a>    <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; Particle density normalization  &#39;</span>
+<a name="ln-528"></a>    <span class="k">write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="s1">&#39;(e11.4)&#39;</span><span class="p">)</span> <span class="n">j0_norm</span>
+<a name="ln-529"></a>   <span class="k">end if</span>
+<a name="ln-530"></a><span class="k">   write</span> <span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;*******  END INITIAL DATA INFO***********&#39;</span>
+<a name="ln-531"></a>   <span class="k">close</span> <span class="p">(</span><span class="mi">60</span><span class="p">)</span>
+<a name="ln-532"></a>   <span class="k">write</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;********** TARGET *********************&#39;</span>
+<a name="ln-533"></a>   <span class="k">write</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; target in  target_end&#39;</span>
+<a name="ln-534"></a>   <span class="k">write</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;(2e11.4)&#39;</span><span class="p">)</span> <span class="n">targ_in</span><span class="p">,</span> <span class="n">targ_end</span>
+<a name="ln-535"></a>   <span class="k">write</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; ymin_t       ymax_t     &#39;</span>
+<a name="ln-536"></a>   <span class="k">write</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;(2e11.4)&#39;</span><span class="p">)</span> <span class="n">ymin_t</span><span class="p">,</span> <span class="n">ymax_t</span>
+<a name="ln-537"></a>   <span class="k">write</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; Electron number per cell &#39;</span>
+<a name="ln-538"></a>   <span class="k">write</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;(i4)&#39;</span><span class="p">)</span> <span class="n">nref</span>
+<a name="ln-539"></a>   <span class="k">write</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; Particle density normalization  &#39;</span>
+<a name="ln-540"></a>   <span class="k">write</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;(e11.4)&#39;</span><span class="p">)</span> <span class="n">j0_norm</span>
+<a name="ln-541"></a>   <span class="k">write</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;********** ALLOCATED MEMORY (MB) *********************&#39;</span>
+<a name="ln-542"></a>   <span class="k">write</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;(a28,e12.5)&#39;</span><span class="p">)</span> <span class="s1">&#39; Pe0 allocated grid memory= &#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-543"></a>    <span class="mf">1.e-06</span><span class="o">*</span><span class="kt">real</span><span class="p">(</span><span class="n">mem_size</span><span class="p">,</span> <span class="n">dp</span><span class="p">)</span><span class="o">*</span><span class="nb">kind</span><span class="p">(</span><span class="n">electron_charge_norm</span><span class="p">)</span>
+<a name="ln-544"></a>   <span class="k">write</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;(a28,e12.5)&#39;</span><span class="p">)</span> <span class="s1">&#39; Pe0 allocated part memory= &#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-545"></a>    <span class="mf">1.e-06</span><span class="o">*</span><span class="kt">real</span><span class="p">(</span><span class="n">mem_psize</span><span class="p">,</span> <span class="n">dp</span><span class="p">)</span><span class="o">*</span><span class="nb">kind</span><span class="p">(</span><span class="n">electron_charge_norm</span><span class="p">)</span>
+<a name="ln-546"></a>   <span class="k">if</span> <span class="p">(</span><span class="n">prl</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-547"></a><span class="k">    write</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;(a24,e12.5)&#39;</span><span class="p">)</span> <span class="s1">&#39; Max part memory (MB) = &#39;</span><span class="p">,</span> <span class="n">mem_psize_max</span>
+<a name="ln-548"></a>    <span class="c">!write(6,&#39;(a20,e12.5)&#39;)&#39; Max part  address= &#39;,mem_max_addr</span>
+<a name="ln-549"></a>   <span class="k">end if</span>
+<a name="ln-550"></a><span class="k">   write</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; Particle min/max distr. &#39;</span>
+<a name="ln-551"></a>   <span class="k">write</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;(i10,a1,i10)&#39;</span><span class="p">)</span> <span class="n">np_min</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">np_max</span>
+<a name="ln-552"></a>   <span class="k">write</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;(a18,2i8)&#39;</span><span class="p">)</span> <span class="s1">&#39; where pmin/pmax  &#39;</span><span class="p">,</span> <span class="n">pe_npmin</span><span class="p">,</span> <span class="n">pe_npmax</span>
+<a name="ln-553"></a>   <span class="k">write</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;******************************************************&#39;</span>
+<a name="ln-554"></a>  <span class="k">end subroutine</span>
+<a name="ln-555"></a>  <span class="c">!================================</span>
+<a name="ln-556"></a>  <span class="k">subroutine </span><span class="n">ioniz_data</span><span class="p">(</span><span class="n">ef_max</span><span class="p">,</span> <span class="n">z0</span><span class="p">,</span> <span class="n">an</span><span class="p">,</span> <span class="n">zlev</span><span class="p">,</span> <span class="n">zmod</span><span class="p">)</span>
+<a name="ln-557"></a>
+<a name="ln-558"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">ef_max</span>
+<a name="ln-559"></a>   <span class="kt">integer</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">z0</span><span class="p">(:),</span> <span class="n">an</span><span class="p">(:),</span> <span class="n">zlev</span><span class="p">,</span> <span class="n">zmod</span>
+<a name="ln-560"></a>   <span class="kt">integer</span> <span class="kd">::</span> <span class="n">i</span><span class="p">,</span> <span class="n">ic</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">zm_loc</span><span class="p">,</span> <span class="n">lev_max</span>
+<a name="ln-561"></a>
+<a name="ln-562"></a>   <span class="k">if</span> <span class="p">(</span><span class="n">zlev</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="k">open</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="k">file</span><span class="o">=</span><span class="s1">&#39;diag_one_level_ionz.dat&#39;</span><span class="p">)</span>
+<a name="ln-563"></a>   <span class="k">if</span> <span class="p">(</span><span class="n">zlev</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="k">open</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="k">file</span><span class="o">=</span><span class="s1">&#39;diag_two_level_ionz.dat&#39;</span><span class="p">)</span>
+<a name="ln-564"></a>   <span class="k">write</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;nsp_ionz-1,zlev,zmod,N_ge &#39;</span>
+<a name="ln-565"></a>   <span class="k">write</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;(4i8)&#39;</span><span class="p">)</span> <span class="n">nsp_ionz</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">zlev</span><span class="p">,</span> <span class="n">zmod</span><span class="p">,</span> <span class="n">n_ge</span>
+<a name="ln-566"></a>   <span class="k">write</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;  Max Ef       dt      Omega_au  &#39;</span>
+<a name="ln-567"></a>   <span class="k">write</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;(3E11.4)&#39;</span><span class="p">)</span> <span class="n">ef_max</span><span class="p">,</span> <span class="n">dt_fs</span><span class="p">,</span> <span class="n">omega_a</span>
+<a name="ln-568"></a>   <span class="k">if</span> <span class="p">(</span><span class="n">Two_color</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-569"></a><span class="k">    write</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="p">&amp;</span>
+<a name="ln-570"></a>     <span class="s1">&#39; a0        lam0,      om0,      a1,      lam1,         om1&#39;</span>
+<a name="ln-571"></a>    <span class="k">write</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;(6E11.4)&#39;</span><span class="p">)</span> <span class="n">a0</span><span class="p">,</span> <span class="n">lam0</span><span class="p">,</span> <span class="n">oml</span><span class="p">,</span> <span class="n">a1</span><span class="p">,</span> <span class="n">lam1</span><span class="p">,</span> <span class="n">om1</span>
+<a name="ln-572"></a>   <span class="k">else</span>
+<a name="ln-573"></a><span class="k">    write</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; a0        lam0,      om0&#39;</span>
+<a name="ln-574"></a>    <span class="k">write</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;(6E11.4)&#39;</span><span class="p">)</span> <span class="n">a0</span><span class="p">,</span> <span class="n">lam0</span><span class="p">,</span> <span class="n">oml</span>
+<a name="ln-575"></a>   <span class="k">end if</span>
+<a name="ln-576"></a><span class="k">   do </span><span class="n">ic</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">nsp_ionz</span> <span class="o">-</span> <span class="mi">1</span>
+<a name="ln-577"></a>    <span class="k">write</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; z0,     zmax&#39;</span>
+<a name="ln-578"></a>    <span class="k">write</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;(2i6)&#39;</span><span class="p">)</span> <span class="n">z0</span><span class="p">(</span><span class="n">ic</span><span class="p">),</span> <span class="n">an</span><span class="p">(</span><span class="n">ic</span><span class="p">)</span>
+<a name="ln-579"></a>    <span class="k">write</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; E_c       E_b           V_norm(a.u.)  &#39;</span>
+<a name="ln-580"></a>    <span class="n">lev_max</span> <span class="o">=</span> <span class="n">an</span><span class="p">(</span><span class="n">ic</span><span class="p">)</span>
+<a name="ln-581"></a>    <span class="k">do </span><span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">lev_max</span>
+<a name="ln-582"></a>     <span class="k">write</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;(3E12.4)&#39;</span><span class="p">)</span> <span class="n">e_c</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">ic</span><span class="p">),</span> <span class="n">e_b</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">ic</span><span class="p">),</span> <span class="n">v_norm</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">ic</span><span class="p">)</span>
+<a name="ln-583"></a>    <span class="k">end do</span>
+<a name="ln-584"></a><span class="k">    </span><span class="n">zm_loc</span> <span class="o">=</span> <span class="n">lev_max</span> <span class="o">-</span> <span class="n">z0</span><span class="p">(</span><span class="n">ic</span><span class="p">)</span>
+<a name="ln-585"></a>    <span class="k">write</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;ionization rate :Wi(Ef,1:zmax-z0,ic) in fs^{-1}&#39;</span>
+<a name="ln-586"></a>    <span class="k">do </span><span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">zm_loc</span>
+<a name="ln-587"></a>     <span class="k">write</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="n">i</span>
+<a name="ln-588"></a>     <span class="k">write</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;(6e12.4)&#39;</span><span class="p">)</span> <span class="n">wi</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">n_ge</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">ic</span><span class="p">)</span>
+<a name="ln-589"></a>    <span class="k">end do</span>
+<a name="ln-590"></a>    <span class="c">!=========================== cumulative distribution wsp</span>
+<a name="ln-591"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">zlev</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-592"></a><span class="k">     write</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;ionization one level probability  wsp(Ne_g,z0:zmax)&#39;</span>
+<a name="ln-593"></a>     <span class="k">do </span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">zm_loc</span> <span class="o">-</span> <span class="mi">1</span>
+<a name="ln-594"></a>      <span class="k">write</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="n">i</span>
+<a name="ln-595"></a>      <span class="k">write</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;(6e12.4)&#39;</span><span class="p">)</span> <span class="n">w_one_lev</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">n_ge</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="n">z0</span><span class="p">(</span><span class="n">ic</span><span class="p">),</span> <span class="n">ic</span><span class="p">)</span>
+<a name="ln-596"></a>     <span class="k">end do</span>
+<a name="ln-597"></a><span class="k">    else</span> <span class="c">!for multi-level ionization</span>
+<a name="ln-598"></a>     <span class="k">write</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="p">&amp;</span>
+<a name="ln-599"></a>      <span class="s1">&#39;ionization multi level probability  wsp(Ne_g,z0:zmax,z0+i:zmax)&#39;</span>
+<a name="ln-600"></a>     <span class="k">do </span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">zm_loc</span> <span class="o">-</span> <span class="mi">1</span>
+<a name="ln-601"></a>      <span class="k">write</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="n">i</span>
+<a name="ln-602"></a>      <span class="k">do </span><span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">zm_loc</span> <span class="o">-</span> <span class="n">i</span>
+<a name="ln-603"></a>       <span class="k">write</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="n">k</span>
+<a name="ln-604"></a>       <span class="k">write</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;(6e12.4)&#39;</span><span class="p">)</span> <span class="n">wsp</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">n_ge</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="n">z0</span><span class="p">(</span><span class="n">ic</span><span class="p">),</span> <span class="n">ic</span><span class="p">)</span>
+<a name="ln-605"></a>      <span class="k">end do</span>
+<a name="ln-606"></a><span class="k">     end do</span>
+<a name="ln-607"></a><span class="k">    end if</span>
+<a name="ln-608"></a><span class="k">   end do</span>
+<a name="ln-609"></a><span class="k">   close</span> <span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<a name="ln-610"></a>  <span class="k">end subroutine</span>
+<a name="ln-611"></a>  <span class="c">!====================================</span>
+<a name="ln-612"></a>  <span class="k">subroutine </span><span class="n">Final_run_info</span>
+<a name="ln-613"></a>
+<a name="ln-614"></a>   <span class="k">if</span> <span class="p">(</span><span class="n">pe0</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-615"></a><span class="k">    write</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;(a14,i6,a5,e11.4,a11,e11.4)&#39;</span><span class="p">)</span> <span class="s1">&#39; final iter = &#39;</span><span class="p">,</span> <span class="n">iter</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-616"></a>     <span class="s1">&#39; t = &#39;</span><span class="p">,</span> <span class="n">tnow</span><span class="p">,</span> <span class="s1">&#39; last dt = &#39;</span><span class="p">,</span> <span class="n">dt_loc</span>
+<a name="ln-617"></a>    <span class="c">!call tot_num_part</span>
+<a name="ln-618"></a>    <span class="k">call </span><span class="nb">CPU_TIME</span><span class="p">(</span><span class="n">unix_time_now</span><span class="p">)</span>
+<a name="ln-619"></a>    <span class="k">write</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;(a22,f12.3,a10,i15)&#39;</span><span class="p">)</span> <span class="s1">&#39; Total time elapsed = &#39;</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-620"></a>     <span class="n">unix_time_now</span> <span class="o">-</span> <span class="n">unix_time_begin</span>
+<a name="ln-621"></a>    <span class="k">write</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; END OF RUN&#39;</span>
+<a name="ln-622"></a>   <span class="k">end if</span>
+<a name="ln-623"></a><span class="k">  end subroutine</span>
+<a name="ln-624"></a>
+<a name="ln-625"></a>  <span class="c">!---------------------------</span>
+<a name="ln-626"></a>  <span class="k">subroutine </span><span class="n">submem</span><span class="p">(</span><span class="n">rmem</span><span class="p">)</span>
+<a name="ln-627"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span> <span class="kd">::</span> <span class="n">rmem</span>
+<a name="ln-628"></a>   <span class="kt">integer</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span> <span class="kd">::</span> <span class="n">addr</span>
+<a name="ln-629"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">am</span><span class="p">(:)</span>
+<a name="ln-630"></a>
+<a name="ln-631"></a>   <span class="k">allocate</span> <span class="p">(</span><span class="n">am</span><span class="p">(</span><span class="mi">100</span><span class="p">))</span>
+<a name="ln-632"></a>   <span class="k">call </span><span class="n">memaddr</span><span class="p">(</span><span class="n">am</span><span class="p">,</span> <span class="n">addr</span><span class="p">)</span>
+<a name="ln-633"></a>   <span class="k">deallocate</span> <span class="p">(</span><span class="n">am</span><span class="p">)</span>
+<a name="ln-634"></a>   <span class="n">rmem</span> <span class="o">=</span> <span class="n">addr</span>
+<a name="ln-635"></a>  <span class="k">end subroutine</span>
+<a name="ln-636"></a>  <span class="c">!---------------------------</span>
+<a name="ln-637"></a>
+<a name="ln-638"></a>  <span class="k">subroutine </span><span class="n">Max_pmemory_check</span><span class="p">()</span>
+<a name="ln-639"></a>
+<a name="ln-640"></a>   <span class="kt">integer</span> <span class="kd">::</span> <span class="n">ndv1</span><span class="p">,</span> <span class="n">ndv2</span>
+<a name="ln-641"></a>   <span class="kt">integer</span> <span class="kd">::</span> <span class="n">ic</span>
+<a name="ln-642"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">mem_loc</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">max_mem</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<a name="ln-643"></a>   <span class="c">!real(dp) :: adr</span>
+<a name="ln-644"></a>
+<a name="ln-645"></a>   <span class="n">mem_loc</span> <span class="o">=</span> <span class="mf">0.</span>
+<a name="ln-646"></a>   <span class="n">max_mem</span> <span class="o">=</span> <span class="mf">0.</span>
+<a name="ln-647"></a>   <span class="k">do </span><span class="n">ic</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">nsp</span>
+<a name="ln-648"></a>    <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">spec</span><span class="p">(</span><span class="n">ic</span><span class="p">)%</span><span class="n">part</span><span class="p">))</span> <span class="k">then</span>
+<a name="ln-649"></a><span class="k">     </span><span class="n">ndv1</span> <span class="o">=</span> <span class="n">size</span><span class="p">(</span><span class="n">spec</span><span class="p">(</span><span class="n">ic</span><span class="p">)%</span><span class="n">part</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<a name="ln-650"></a>     <span class="n">ndv2</span> <span class="o">=</span> <span class="n">size</span><span class="p">(</span><span class="n">spec</span><span class="p">(</span><span class="n">ic</span><span class="p">)%</span><span class="n">part</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<a name="ln-651"></a>     <span class="n">mem_loc</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">mem_loc</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="kt">real</span><span class="p">(</span><span class="n">ndv1</span><span class="o">*</span><span class="n">ndv2</span><span class="p">,</span> <span class="n">dp</span><span class="p">)</span>
+<a name="ln-652"></a>    <span class="k">end if</span>
+<a name="ln-653"></a><span class="k">   end do</span>
+<a name="ln-654"></a><span class="k">   if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">ebfp</span><span class="p">))</span> <span class="k">then</span>
+<a name="ln-655"></a><span class="k">    </span><span class="n">ndv1</span> <span class="o">=</span> <span class="n">size</span><span class="p">(</span><span class="n">ebfp</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<a name="ln-656"></a>    <span class="n">ndv2</span> <span class="o">=</span> <span class="n">size</span><span class="p">(</span><span class="n">ebfp</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<a name="ln-657"></a>    <span class="n">mem_loc</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">mem_loc</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="kt">real</span><span class="p">(</span><span class="n">ndv1</span><span class="o">*</span><span class="n">ndv2</span><span class="p">,</span> <span class="n">dp</span><span class="p">)</span>
+<a name="ln-658"></a>   <span class="k">end if</span>
+<a name="ln-659"></a><span class="k">   if</span> <span class="p">(</span><span class="n">beam</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-660"></a><span class="k">    do </span><span class="n">ic</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">nsb</span>
+<a name="ln-661"></a>     <span class="k">if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">bunch</span><span class="p">(</span><span class="n">ic</span><span class="p">)%</span><span class="n">part</span><span class="p">))</span> <span class="k">then</span>
+<a name="ln-662"></a><span class="k">      </span><span class="n">ndv1</span> <span class="o">=</span> <span class="n">size</span><span class="p">(</span><span class="n">spec</span><span class="p">(</span><span class="n">ic</span><span class="p">)%</span><span class="n">part</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<a name="ln-663"></a>      <span class="n">ndv2</span> <span class="o">=</span> <span class="n">size</span><span class="p">(</span><span class="n">spec</span><span class="p">(</span><span class="n">ic</span><span class="p">)%</span><span class="n">part</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<a name="ln-664"></a>      <span class="n">mem_loc</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">mem_loc</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="kt">real</span><span class="p">(</span><span class="n">ndv1</span><span class="o">*</span><span class="n">ndv2</span><span class="p">,</span> <span class="n">dp</span><span class="p">)</span>
+<a name="ln-665"></a>     <span class="k">end if</span>
+<a name="ln-666"></a><span class="k">    end do</span>
+<a name="ln-667"></a><span class="k">    if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">ebfb</span><span class="p">))</span> <span class="k">then</span>
+<a name="ln-668"></a><span class="k">     </span><span class="n">ndv1</span> <span class="o">=</span> <span class="n">size</span><span class="p">(</span><span class="n">ebfb</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<a name="ln-669"></a>     <span class="n">ndv2</span> <span class="o">=</span> <span class="n">size</span><span class="p">(</span><span class="n">ebfb</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<a name="ln-670"></a>     <span class="n">mem_loc</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">mem_loc</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="kt">real</span><span class="p">(</span><span class="n">ndv1</span><span class="o">*</span><span class="n">ndv2</span><span class="p">,</span> <span class="n">dp</span><span class="p">)</span>
+<a name="ln-671"></a>    <span class="k">end if</span>
+<a name="ln-672"></a><span class="k">   end if</span>
+<a name="ln-673"></a><span class="k">   if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">ebfp0</span><span class="p">))</span> <span class="k">then</span>
+<a name="ln-674"></a><span class="k">    </span><span class="n">ndv1</span> <span class="o">=</span> <span class="n">size</span><span class="p">(</span><span class="n">ebfp0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<a name="ln-675"></a>    <span class="n">ndv2</span> <span class="o">=</span> <span class="n">size</span><span class="p">(</span><span class="n">ebfp0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<a name="ln-676"></a>    <span class="n">mem_loc</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">mem_loc</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="kt">real</span><span class="p">(</span><span class="n">ndv1</span><span class="o">*</span><span class="n">ndv2</span><span class="p">,</span> <span class="n">dp</span><span class="p">)</span>
+<a name="ln-677"></a>   <span class="k">end if</span>
+<a name="ln-678"></a><span class="k">   if</span> <span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">ebfp1</span><span class="p">))</span> <span class="k">then</span>
+<a name="ln-679"></a><span class="k">    </span><span class="n">ndv1</span> <span class="o">=</span> <span class="n">size</span><span class="p">(</span><span class="n">ebfp1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<a name="ln-680"></a>    <span class="n">ndv2</span> <span class="o">=</span> <span class="n">size</span><span class="p">(</span><span class="n">ebfp1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<a name="ln-681"></a>    <span class="n">mem_loc</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">mem_loc</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="kt">real</span><span class="p">(</span><span class="n">ndv1</span><span class="o">*</span><span class="n">ndv2</span><span class="p">,</span> <span class="n">dp</span><span class="p">)</span>
+<a name="ln-682"></a>   <span class="k">end if</span>
+<a name="ln-683"></a><span class="k">   call </span><span class="n">allreduce_dpreal</span><span class="p">(</span><span class="n">maxv</span><span class="p">,</span> <span class="n">mem_loc</span><span class="p">,</span> <span class="n">max_mem</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<a name="ln-684"></a>   <span class="n">mem_psize_max</span> <span class="o">=</span> <span class="nb">kind</span><span class="p">(</span><span class="n">electron_charge_norm</span><span class="p">)</span><span class="o">*</span><span class="mf">1.e-06</span><span class="o">*</span><span class="n">max_mem</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<a name="ln-685"></a>
+<a name="ln-686"></a>   <span class="c">!call submem(adr)</span>
+<a name="ln-687"></a>   <span class="c">!mem_loc(1)=adr</span>
+<a name="ln-688"></a>   <span class="c">!call allreduce_dpreal(MAXV,mem_loc,max_mem,1)</span>
+<a name="ln-689"></a>   <span class="c">!mem_max_addr=1.e-06*max_mem(1)</span>
+<a name="ln-690"></a>
+<a name="ln-691"></a>  <span class="k">end subroutine</span>
+<a name="ln-692"></a>  <span class="c">!---------------------------</span>
+<a name="ln-693"></a> <span class="k">end module</span>
+</pre></div>
+
+    </section>
+    </div>
+  </div>
+
+  
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2020 <a rel="license" href="http://www.gnu.org/licenses/old-licenses/fdl-1.2.en.html">GNU Free Documentation License</a>
+                                          </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+             on 2020-07-30 
+          </p>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> ALaDyn was developed by The ALaDyn Collaboration</p></div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+      });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+    
+  </body>
+</html>

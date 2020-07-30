@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+   <meta name="description" content="A High-Accuracy PIC Code for the Maxwell-Vlasov Equations">
+    
+    <meta name="author" content="The ALaDyn Collaboration" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>grid_part_lib.f90 &ndash; ALaDyn</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">ALaDyn <small>3.0.1</small></a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+        
+            <li><a href='../page/index.html'>Guide</a></li>
+      
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+     aria-expanded="false">Contents <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          
+              
+            <li><a href="../lists/files.html">Source Files</a></li>
+        
+        
+        
+            <li><a href="../lists/modules.html">Modules</a></li>
+        
+            
+                                
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+        
+               
+            <li><a href="../lists/types.html">Derived Types</a></li>
+        
+        
+            <li><a href="../program/aladyn.html">Program</a></li>
+      
+            </ul>
+            </li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+
+                             
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../program/aladyn.html">Program</a></li>
+
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>grid_part_lib.f90
+    <small>Source File</small>
+    
+    </h1>
+    
+<div class="row">
+  <div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+     <li><i class="fa fa-list-ol"></i>
+       <a data-toggle="tooltip"
+    data-placement="bottom" data-html="true"
+    title=" 1.7% of total for source files.">417 statements</a>
+     </li> 
+     
+     
+     
+    <li><i class="fa fa-code"></i><a href="../src/grid_part_lib.f90"> Source File</a></li>
+     
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+    
+  
+     <li class="active">grid_part_lib.f90</li>
+  </ol>
+</div>
+</div>
+</div>
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+
+  </div>
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+    
+<div id="sidebar">
+  
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#mods-0">Modules</a></h3></div>
+  <div id="mods-0" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/grid_part_lib.html">grid_part_lib</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../sourcefile/grid_part_lib.f90.html#src">grid_part_lib.f90</a>
+  </div>
+</div>
+
+
+
+</div>
+
+    </div>
+    <div class="col-md-9" id='text'>
+      
+      <br>
+    
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">This file depends on</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: sourcefile~~grid_part_lib.f90~~EfferentGraph Pages: 1 -->
+<svg id="sourcefilegrid_part_libf90EfferentGraph" width="641pt" height="145pt"
+ viewBox="0.00 0.00 641.00 144.99" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="sourcefile~~grid_part_lib.f90~~EfferentGraph" class="graph" transform="scale(.9539 .9539) rotate(0) translate(4 148)">
+<title>sourcefile~~grid_part_lib.f90~~EfferentGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-148 668,-148 668,4 -4,4"/>
+<!-- sourcefile~grid_part_lib.f90 -->
+<g id="sourcefile~~grid_part_lib.f90~~EfferentGraph_node1" class="node">
+<title>sourcefile~grid_part_lib.f90</title>
+<polygon fill="none" stroke="#000000" points="664,-104 565,-104 565,-80 664,-80 664,-104"/>
+<text text-anchor="middle" x="614.5" y="-89.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">grid_part_lib.f90</text>
+</g>
+<!-- sourcefile~common_param.f90 -->
+<g id="sourcefile~~grid_part_lib.f90~~EfferentGraph_node2" class="node">
+<title>sourcefile~common_param.f90</title>
+<g id="a_sourcefile~~grid_part_lib.f90~~EfferentGraph_node2"><a xlink:href=".././sourcefile/common_param.f90.html" xlink:title="common_param.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="384,-144 263,-144 263,-120 384,-120 384,-144"/>
+<text text-anchor="middle" x="323.5" y="-129.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">common_param.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~grid_part_lib.f90&#45;&gt;sourcefile~common_param.f90 -->
+<g id="sourcefile~~grid_part_lib.f90~~EfferentGraph_edge3" class="edge">
+<title>sourcefile~grid_part_lib.f90&#45;&gt;sourcefile~common_param.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M570.825,-104.0527C557.4855,-107.3746 542.7169,-110.6945 529,-113 484.4693,-120.4846 433.9784,-125.2047 394.1884,-128.0683"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="393.7841,-124.5878 384.0516,-128.7745 394.2707,-131.5709 393.7841,-124.5878"/>
+</g>
+<!-- sourcefile~grid_param.f90 -->
+<g id="sourcefile~~grid_part_lib.f90~~EfferentGraph_node3" class="node">
+<title>sourcefile~grid_param.f90</title>
+<g id="a_sourcefile~~grid_part_lib.f90~~EfferentGraph_node3"><a xlink:href=".././sourcefile/grid_param.f90.html" xlink:title="grid_param.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="370.5,-64 276.5,-64 276.5,-40 370.5,-40 370.5,-64"/>
+<text text-anchor="middle" x="323.5" y="-49.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">grid_param.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~grid_part_lib.f90&#45;&gt;sourcefile~grid_param.f90 -->
+<g id="sourcefile~~grid_part_lib.f90~~EfferentGraph_edge2" class="edge">
+<title>sourcefile~grid_part_lib.f90&#45;&gt;sourcefile~grid_param.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M570.825,-79.9473C557.4855,-76.6254 542.7169,-73.3055 529,-71 479.3259,-62.6509 422.2353,-57.7418 380.8548,-55.0124"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="380.8892,-51.5076 370.6869,-54.3647 380.4441,-58.4934 380.8892,-51.5076"/>
+</g>
+<!-- sourcefile~stretched_grid.f90 -->
+<g id="sourcefile~~grid_part_lib.f90~~EfferentGraph_node4" class="node">
+<title>sourcefile~stretched_grid.f90</title>
+<g id="a_sourcefile~~grid_part_lib.f90~~EfferentGraph_node4"><a xlink:href=".././sourcefile/stretched_grid.f90.html" xlink:title="stretched_grid.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="529,-104 420,-104 420,-80 529,-80 529,-104"/>
+<text text-anchor="middle" x="474.5" y="-89.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">stretched_grid.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~grid_part_lib.f90&#45;&gt;sourcefile~stretched_grid.f90 -->
+<g id="sourcefile~~grid_part_lib.f90~~EfferentGraph_edge1" class="edge">
+<title>sourcefile~grid_part_lib.f90&#45;&gt;sourcefile~stretched_grid.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M564.747,-92C556.5893,-92 548.0301,-92 539.5675,-92"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="539.3264,-88.5001 529.3264,-92 539.3263,-95.5001 539.3264,-88.5001"/>
+</g>
+<!-- sourcefile~precision_def.f90 -->
+<g id="sourcefile~~grid_part_lib.f90~~EfferentGraph_node5" class="node">
+<title>sourcefile~precision_def.f90</title>
+<g id="a_sourcefile~~grid_part_lib.f90~~EfferentGraph_node5"><a xlink:href=".././sourcefile/precision_def.f90.html" xlink:title="precision_def.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="106,-84 0,-84 0,-60 106,-60 106,-84"/>
+<text text-anchor="middle" x="53" y="-69.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">precision_def.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~common_param.f90&#45;&gt;sourcefile~precision_def.f90 -->
+<g id="sourcefile~~grid_part_lib.f90~~EfferentGraph_edge4" class="edge">
+<title>sourcefile~common_param.f90&#45;&gt;sourcefile~precision_def.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M262.9121,-130.602C227.1904,-128.5626 181.4116,-123.8226 142,-113 121.7041,-107.4267 100.2388,-97.6644 83.4746,-89.0638"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="84.6706,-85.738 74.1917,-84.1746 81.4085,-91.9314 84.6706,-85.738"/>
+</g>
+<!-- sourcefile~grid_param.f90&#45;&gt;sourcefile~precision_def.f90 -->
+<g id="sourcefile~~grid_part_lib.f90~~EfferentGraph_edge5" class="edge">
+<title>sourcefile~grid_param.f90&#45;&gt;sourcefile~precision_def.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M276.3825,-55.4837C232.0094,-58.7646 165.2192,-63.7028 116.2284,-67.3251"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="115.7736,-63.8491 106.0589,-68.077 116.2898,-70.83 115.7736,-63.8491"/>
+</g>
+<!-- sourcefile~struct_def.f90 -->
+<g id="sourcefile~~grid_part_lib.f90~~EfferentGraph_node6" class="node">
+<title>sourcefile~struct_def.f90</title>
+<g id="a_sourcefile~~grid_part_lib.f90~~EfferentGraph_node6"><a xlink:href=".././sourcefile/struct_def.f90.html" xlink:title="struct_def.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="227,-24 142,-24 142,0 227,0 227,-24"/>
+<text text-anchor="middle" x="184.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">struct_def.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~grid_param.f90&#45;&gt;sourcefile~struct_def.f90 -->
+<g id="sourcefile~~grid_part_lib.f90~~EfferentGraph_edge6" class="edge">
+<title>sourcefile~grid_param.f90&#45;&gt;sourcefile~struct_def.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M281.7954,-39.9987C267.495,-35.8835 251.3148,-31.2273 236.3125,-26.9101"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="237.2335,-23.5331 226.6556,-24.1311 235.2976,-30.2601 237.2335,-23.5331"/>
+</g>
+<!-- sourcefile~stretched_grid.f90&#45;&gt;sourcefile~common_param.f90 -->
+<g id="sourcefile~~grid_part_lib.f90~~EfferentGraph_edge9" class="edge">
+<title>sourcefile~stretched_grid.f90&#45;&gt;sourcefile~common_param.f90</title>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M429.195,-104.0013C413.4401,-108.1748 395.585,-112.9046 379.0943,-117.273"/>
+<polygon fill="#0000ff" stroke="#0000ff" points="377.8041,-113.994 369.0338,-119.9381 379.5966,-120.7606 377.8041,-113.994"/>
+</g>
+<!-- sourcefile~stretched_grid.f90&#45;&gt;sourcefile~grid_param.f90 -->
+<g id="sourcefile~~grid_part_lib.f90~~EfferentGraph_edge7" class="edge">
+<title>sourcefile~stretched_grid.f90&#45;&gt;sourcefile~grid_param.f90</title>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M429.195,-79.9987C413.4401,-75.8252 395.585,-71.0954 379.0943,-66.727"/>
+<polygon fill="#0000ff" stroke="#0000ff" points="379.5966,-63.2394 369.0338,-64.0619 377.8041,-70.006 379.5966,-63.2394"/>
+</g>
+<!-- sourcefile~mpi_var.f90 -->
+<g id="sourcefile~~grid_part_lib.f90~~EfferentGraph_node7" class="node">
+<title>sourcefile~mpi_var.f90</title>
+<g id="a_sourcefile~~grid_part_lib.f90~~EfferentGraph_node7"><a xlink:href=".././sourcefile/mpi_var.f90.html" xlink:title="mpi_var.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="222,-104 147,-104 147,-80 222,-80 222,-104"/>
+<text text-anchor="middle" x="184.5" y="-89.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">mpi_var.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~stretched_grid.f90&#45;&gt;sourcefile~mpi_var.f90 -->
+<g id="sourcefile~~grid_part_lib.f90~~EfferentGraph_edge8" class="edge">
+<title>sourcefile~stretched_grid.f90&#45;&gt;sourcefile~mpi_var.f90</title>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M419.9532,-92C365.9216,-92 283.99,-92 232.4008,-92"/>
+<polygon fill="#0000ff" stroke="#0000ff" points="232.1894,-88.5001 222.1894,-92 232.1893,-95.5001 232.1894,-88.5001"/>
+</g>
+<!-- sourcefile~struct_def.f90&#45;&gt;sourcefile~precision_def.f90 -->
+<g id="sourcefile~~grid_part_lib.f90~~EfferentGraph_edge10" class="edge">
+<title>sourcefile~struct_def.f90&#45;&gt;sourcefile~precision_def.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M157.889,-24.1419C138.0153,-33.2097 110.6408,-45.7 88.8408,-55.6468"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="87.2163,-52.5408 79.5714,-59.8762 90.122,-58.9093 87.2163,-52.5408"/>
+</g>
+<!-- sourcefile~mpi_var.f90&#45;&gt;sourcefile~precision_def.f90 -->
+<g id="sourcefile~~grid_part_lib.f90~~EfferentGraph_edge11" class="edge">
+<title>sourcefile~mpi_var.f90&#45;&gt;sourcefile~precision_def.f90</title>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M146.8174,-86.2688C137.2701,-84.8167 126.7508,-83.2169 116.3135,-81.6294"/>
+<polygon fill="#0000ff" stroke="#0000ff" points="116.7787,-78.16 106.3661,-80.1165 115.7261,-85.0804 116.7787,-78.16"/>
+</g>
+</g>
+</svg>
+</div><script>var pansourcefilegrid_part_libf90EfferentGraph = svgPanZoom('#sourcefilegrid_part_libf90EfferentGraph', {zoomEnabled: true,controlIconsEnabled: true, fit: true, center: true,}); </script><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="202pt" height="32pt"
+ viewBox="0.00 0.00 201.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 197.5,-28 197.5,4 -4,4"/>
+<!-- Source File -->
+<g id="node1" class="node">
+<title>Source File</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="71,-24 0,-24 0,0 71,0 71,-24"/>
+<text text-anchor="middle" x="35.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Source File</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node2" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="193.5,-24 89.5,-24 89.5,0 193.5,0 193.5,-24"/>
+<text text-anchor="middle" x="141.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a file to a file which it depends on. A file
+    is dependent upon another if the latter must be compiled before the former
+    can be. Where possible, edges connecting nodes are given different colours to make them easier to distinguish in large graphs.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+    
+      
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Files dependent on this one</h3>
+      </div>
+      <div class="panel-body">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: sourcefile~~grid_part_lib.f90~~AfferentGraph Pages: 1 -->
+<svg id="sourcefilegrid_part_libf90AfferentGraph" width="641pt" height="136pt"
+ viewBox="0.00 0.00 641.00 136.31" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="sourcefile~~grid_part_lib.f90~~AfferentGraph" class="graph" transform="scale(.8627 .8627) rotate(0) translate(4 154)">
+<title>sourcefile~~grid_part_lib.f90~~AfferentGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-154 739,-154 739,4 -4,4"/>
+<!-- sourcefile~grid_part_lib.f90 -->
+<g id="sourcefile~~grid_part_lib.f90~~AfferentGraph_node1" class="node">
+<title>sourcefile~grid_part_lib.f90</title>
+<polygon fill="none" stroke="#000000" points="99,-87 0,-87 0,-63 99,-63 99,-87"/>
+<text text-anchor="middle" x="49.5" y="-72.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">grid_part_lib.f90</text>
+</g>
+<!-- sourcefile~grid_part_connect.f90 -->
+<g id="sourcefile~~grid_part_lib.f90~~AfferentGraph_node2" class="node">
+<title>sourcefile~grid_part_connect.f90</title>
+<g id="a_sourcefile~~grid_part_lib.f90~~AfferentGraph_node2"><a xlink:href=".././sourcefile/grid_part_connect.f90.html" xlink:title="grid_part_connect.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="264,-67 135,-67 135,-43 264,-43 264,-67"/>
+<text text-anchor="middle" x="199.5" y="-52.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">grid_part_connect.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~grid_part_connect.f90&#45;&gt;sourcefile~grid_part_lib.f90 -->
+<g id="sourcefile~~grid_part_lib.f90~~AfferentGraph_edge1" class="edge">
+<title>sourcefile~grid_part_connect.f90&#45;&gt;sourcefile~grid_part_lib.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M134.5802,-63.656C126.1366,-64.7818 117.5194,-65.9307 109.1672,-67.0444"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="108.5899,-63.5903 99.1403,-68.3813 109.5151,-70.5289 108.5899,-63.5903"/>
+</g>
+<!-- sourcefile~grid_part_util.f90 -->
+<g id="sourcefile~~grid_part_lib.f90~~AfferentGraph_node3" class="node">
+<title>sourcefile~grid_part_util.f90</title>
+<g id="a_sourcefile~~grid_part_lib.f90~~AfferentGraph_node3"><a xlink:href=".././sourcefile/grid_part_util.f90.html" xlink:title="grid_part_util.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="419.5,-108 316.5,-108 316.5,-84 419.5,-84 419.5,-108"/>
+<text text-anchor="middle" x="368" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">grid_part_util.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~grid_part_util.f90&#45;&gt;sourcefile~grid_part_lib.f90 -->
+<g id="sourcefile~~grid_part_lib.f90~~AfferentGraph_edge2" class="edge">
+<title>sourcefile~grid_part_util.f90&#45;&gt;sourcefile~grid_part_lib.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M316.4735,-92.6026C259.8037,-88.8662 168.8723,-82.8707 109.1551,-78.9333"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="109.3257,-75.437 99.1171,-78.2715 108.8651,-82.4219 109.3257,-75.437"/>
+</g>
+<!-- sourcefile~curr_and_fields_util.f90 -->
+<g id="sourcefile~~grid_part_lib.f90~~AfferentGraph_node4" class="node">
+<title>sourcefile~curr_and_fields_util.f90</title>
+<g id="a_sourcefile~~grid_part_lib.f90~~AfferentGraph_node4"><a xlink:href=".././sourcefile/curr_and_fields_util.f90.html" xlink:title="curr_and_fields_util.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="436,-66 300,-66 300,-42 436,-42 436,-66"/>
+<text text-anchor="middle" x="368" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">curr_and_fields_util.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~curr_and_fields_util.f90&#45;&gt;sourcefile~grid_part_connect.f90 -->
+<g id="sourcefile~~grid_part_lib.f90~~AfferentGraph_edge3" class="edge">
+<title>sourcefile~curr_and_fields_util.f90&#45;&gt;sourcefile~grid_part_connect.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M299.9503,-54.4039C291.5736,-54.4536 282.9749,-54.5046 274.5025,-54.5549"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="274.233,-51.0563 264.254,-54.6157 274.2746,-58.0562 274.233,-51.0563"/>
+</g>
+<!-- sourcefile~init_beam_part_distrib.f90 -->
+<g id="sourcefile~~grid_part_lib.f90~~AfferentGraph_node5" class="node">
+<title>sourcefile~init_beam_part_distrib.f90</title>
+<g id="a_sourcefile~~grid_part_lib.f90~~AfferentGraph_node5"><a xlink:href=".././sourcefile/init_beam_part_distrib.f90.html" xlink:title="init_beam_part_distrib.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="623,-150 472,-150 472,-126 623,-126 623,-150"/>
+<text text-anchor="middle" x="547.5" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">init_beam_part_distrib.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~init_beam_part_distrib.f90&#45;&gt;sourcefile~grid_part_util.f90 -->
+<g id="sourcefile~~grid_part_lib.f90~~AfferentGraph_edge4" class="edge">
+<title>sourcefile~init_beam_part_distrib.f90&#45;&gt;sourcefile~grid_part_util.f90</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M496.0625,-125.9645C475.22,-121.0877 450.9838,-115.4168 429.2393,-110.329"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="429.9795,-106.9077 419.445,-108.0373 428.3846,-113.7236 429.9795,-106.9077"/>
+</g>
+<!-- sourcefile~pic_out_util.f90 -->
+<g id="sourcefile~~grid_part_lib.f90~~AfferentGraph_node6" class="node">
+<title>sourcefile~pic_out_util.f90</title>
+<g id="a_sourcefile~~grid_part_lib.f90~~AfferentGraph_node6"><a xlink:href=".././sourcefile/pic_out_util.f90.html" xlink:title="pic_out_util.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="594,-108 501,-108 501,-84 594,-84 594,-108"/>
+<text text-anchor="middle" x="547.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">pic_out_util.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~pic_out_util.f90&#45;&gt;sourcefile~grid_part_util.f90 -->
+<g id="sourcefile~~grid_part_lib.f90~~AfferentGraph_edge5" class="edge">
+<title>sourcefile~pic_out_util.f90&#45;&gt;sourcefile~grid_part_util.f90</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M500.8071,-96C479.0903,-96 452.9657,-96 429.6537,-96"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="429.5127,-92.5001 419.5126,-96 429.5126,-99.5001 429.5127,-92.5001"/>
+</g>
+<!-- sourcefile~aladyn.f90 -->
+<g id="sourcefile~~grid_part_lib.f90~~AfferentGraph_node7" class="node">
+<title>sourcefile~aladyn.f90</title>
+<g id="a_sourcefile~~grid_part_lib.f90~~AfferentGraph_node7"><a xlink:href=".././sourcefile/aladyn.f90.html" xlink:title="ALaDyn.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="735,-87 659,-87 659,-63 735,-63 735,-87"/>
+<text text-anchor="middle" x="697" y="-72.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">ALaDyn.F90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~aladyn.f90&#45;&gt;sourcefile~init_beam_part_distrib.f90 -->
+<g id="sourcefile~~grid_part_lib.f90~~AfferentGraph_edge8" class="edge">
+<title>sourcefile~aladyn.f90&#45;&gt;sourcefile~init_beam_part_distrib.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M678.7851,-87.0162C664.1851,-96.2282 642.917,-108.7254 623,-117 617.9744,-119.0879 612.676,-121.0361 607.3128,-122.8371"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="606.1008,-119.5498 597.6339,-125.9187 608.2245,-126.2199 606.1008,-119.5498"/>
+</g>
+<!-- sourcefile~aladyn.f90&#45;&gt;sourcefile~pic_out_util.f90 -->
+<g id="sourcefile~~grid_part_lib.f90~~AfferentGraph_edge9" class="edge">
+<title>sourcefile~aladyn.f90&#45;&gt;sourcefile~pic_out_util.f90</title>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M658.888,-80.3535C642.2457,-82.6912 622.3843,-85.4811 604.0723,-88.0534"/>
+<polygon fill="#0000ff" stroke="#0000ff" points="603.5046,-84.5987 594.0887,-89.4558 604.4783,-91.5306 603.5046,-84.5987"/>
+</g>
+<!-- sourcefile~pic_evolve_in_time.f90 -->
+<g id="sourcefile~~grid_part_lib.f90~~AfferentGraph_node8" class="node">
+<title>sourcefile~pic_evolve_in_time.f90</title>
+<g id="a_sourcefile~~grid_part_lib.f90~~AfferentGraph_node8"><a xlink:href=".././sourcefile/pic_evolve_in_time.f90.html" xlink:title="pic_evolve_in_time.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="614,-66 481,-66 481,-42 614,-42 614,-66"/>
+<text text-anchor="middle" x="547.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">pic_evolve_in_time.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~aladyn.f90&#45;&gt;sourcefile~pic_evolve_in_time.f90 -->
+<g id="sourcefile~~grid_part_lib.f90~~AfferentGraph_edge10" class="edge">
+<title>sourcefile~aladyn.f90&#45;&gt;sourcefile~pic_evolve_in_time.f90</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M658.888,-69.6465C648.2094,-68.1465 636.2055,-66.4603 624.136,-64.7649"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="624.3995,-61.2677 614.0099,-63.3425 623.4258,-68.1996 624.3995,-61.2677"/>
+</g>
+<!-- sourcefile~env_evolve_in_time.f90 -->
+<g id="sourcefile~~grid_part_lib.f90~~AfferentGraph_node9" class="node">
+<title>sourcefile~env_evolve_in_time.f90</title>
+<g id="a_sourcefile~~grid_part_lib.f90~~AfferentGraph_node9"><a xlink:href=".././sourcefile/env_evolve_in_time.f90.html" xlink:title="env_evolve_in_time.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="616,-24 479,-24 479,0 616,0 616,-24"/>
+<text text-anchor="middle" x="547.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">env_evolve_in_time.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~aladyn.f90&#45;&gt;sourcefile~env_evolve_in_time.f90 -->
+<g id="sourcefile~~grid_part_lib.f90~~AfferentGraph_edge11" class="edge">
+<title>sourcefile~aladyn.f90&#45;&gt;sourcefile~env_evolve_in_time.f90</title>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M678.7851,-62.9838C664.1851,-53.7718 642.917,-41.2746 623,-33 617.9744,-30.9121 612.676,-28.9639 607.3128,-27.1629"/>
+<polygon fill="#0000ff" stroke="#0000ff" points="608.2245,-23.7801 597.6339,-24.0813 606.1008,-30.4502 608.2245,-23.7801"/>
+</g>
+<!-- sourcefile~pic_evolve_in_time.f90&#45;&gt;sourcefile~curr_and_fields_util.f90 -->
+<g id="sourcefile~~grid_part_lib.f90~~AfferentGraph_edge6" class="edge">
+<title>sourcefile~pic_evolve_in_time.f90&#45;&gt;sourcefile~curr_and_fields_util.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M480.9159,-54C469.6493,-54 457.8599,-54 446.3264,-54"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="446.2763,-50.5001 436.2762,-54 446.2762,-57.5001 446.2763,-50.5001"/>
+</g>
+<!-- sourcefile~env_evolve_in_time.f90&#45;&gt;sourcefile~curr_and_fields_util.f90 -->
+<g id="sourcefile~~grid_part_lib.f90~~AfferentGraph_edge7" class="edge">
+<title>sourcefile~env_evolve_in_time.f90&#45;&gt;sourcefile~curr_and_fields_util.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M496.0625,-24.0355C475.22,-28.9123 450.9838,-34.5832 429.2393,-39.671"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="428.3846,-36.2764 419.445,-41.9627 429.9795,-43.0923 428.3846,-36.2764"/>
+</g>
+</g>
+</svg>
+</div><script>var pansourcefilegrid_part_libf90AfferentGraph = svgPanZoom('#sourcefilegrid_part_libf90AfferentGraph', {zoomEnabled: true,controlIconsEnabled: true, fit: true, center: true,}); </script><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="202pt" height="32pt"
+ viewBox="0.00 0.00 201.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 197.5,-28 197.5,4 -4,4"/>
+<!-- Source File -->
+<g id="node1" class="node">
+<title>Source File</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="71,-24 0,-24 0,0 71,0 71,-24"/>
+<text text-anchor="middle" x="35.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Source File</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node2" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="193.5,-24 89.5,-24 89.5,0 193.5,0 193.5,-24"/>
+<text text-anchor="middle" x="141.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a file to a file which it depends on. A file
+    is dependent upon another if the latter must be compiled before the former
+    can be. Where possible, edges connecting nodes are given different colours to make them easier to distinguish in large graphs.
+    </p>
+    </div></div></div></div>
+      </div>
+    </div>
+      
+      <br>
+
+    <section class="visible-xs visible-sm hidden-md">
+      
+<h3>Contents</h3>
+ 
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#mods-1">Modules</a></h3></div>
+  <div id="mods-1" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/grid_part_lib.html">grid_part_lib</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../sourcefile/grid_part_lib.f90.html#src">grid_part_lib.f90</a>
+  </div>
+</div>
+
+
+
+    </section>
+    <br class="visible-xs visible-sm hidden-md">
+
+    <section>
+      <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="hl"><pre><span></span><a name="ln-1"></a><span class="c">!*****************************************************************************************************!</span>
+<a name="ln-2"></a><span class="c">!                            Copyright 2008-2020  The ALaDyn Collaboration                            !</span>
+<a name="ln-3"></a><span class="c">!*****************************************************************************************************!</span>
+<a name="ln-4"></a>
+<a name="ln-5"></a><span class="c">!*****************************************************************************************************!</span>
+<a name="ln-6"></a><span class="c">!  This file is part of ALaDyn.                                                                       !</span>
+<a name="ln-7"></a><span class="c">!                                                                                                     !</span>
+<a name="ln-8"></a><span class="c">!  ALaDyn is free software: you can redistribute it and/or modify                                     !</span>
+<a name="ln-9"></a><span class="c">!  it under the terms of the GNU General Public License as published by                               !</span>
+<a name="ln-10"></a><span class="c">!  the Free Software Foundation, either version 3 of the License, or                                  !</span>
+<a name="ln-11"></a><span class="c">!  (at your option) any later version.                                                                !</span>
+<a name="ln-12"></a><span class="c">!                                                                                                     !</span>
+<a name="ln-13"></a><span class="c">!  ALaDyn is distributed in the hope that it will be useful,                                          !</span>
+<a name="ln-14"></a><span class="c">!  but WITHOUT ANY WARRANTY; without even the implied warranty of                                     !</span>
+<a name="ln-15"></a><span class="c">!  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                                      !</span>
+<a name="ln-16"></a><span class="c">!  GNU General Public License for more details.                                                       !</span>
+<a name="ln-17"></a><span class="c">!                                                                                                     !</span>
+<a name="ln-18"></a><span class="c">!  You should have received a copy of the GNU General Public License                                  !</span>
+<a name="ln-19"></a><span class="c">!  along with ALaDyn.  If not, see &lt;http://www.gnu.org/licenses/&gt;.                                    !</span>
+<a name="ln-20"></a><span class="c">!*****************************************************************************************************!</span>
+<a name="ln-21"></a>
+<a name="ln-22"></a> <span class="k">module </span><span class="n">grid_part_lib</span>
+<a name="ln-23"></a>
+<a name="ln-24"></a>  <span class="k">use </span><span class="n">common_param</span>
+<a name="ln-25"></a>  <span class="k">use </span><span class="n">grid_param</span>
+<a name="ln-26"></a>  <span class="k">use </span><span class="n">stretched_grid</span>
+<a name="ln-27"></a>
+<a name="ln-28"></a>  <span class="k">implicit none</span>
+<a name="ln-29"></a>
+<a name="ln-30"></a><span class="k">  </span><span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span> <span class="k">parameter</span> <span class="kd">::</span> <span class="n">half</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">thr</span> <span class="o">=</span> <span class="mf">0.75</span><span class="p">,</span> <span class="n">two_third</span> <span class="o">=</span> <span class="mf">2.</span><span class="o">/</span><span class="mf">3.</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-31"></a>                         <span class="n">one_sixth</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="mf">6.</span>
+<a name="ln-32"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">sp</span><span class="p">),</span> <span class="k">parameter</span> <span class="kd">::</span> <span class="n">shx</span> <span class="o">=</span> <span class="mf">3.</span><span class="p">,</span> <span class="n">shy</span> <span class="o">=</span> <span class="mf">3.</span><span class="p">,</span> <span class="n">shz</span> <span class="o">=</span> <span class="mf">3.</span>
+<a name="ln-33"></a>  <span class="kt">integer</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="kd">::</span> <span class="n">err_ind</span>
+<a name="ln-34"></a>
+<a name="ln-35"></a> <span class="k">contains</span>
+<a name="ln-36"></a>  <span class="c">!    Templates of spl=1,2,3 order shape functions for grid-particle  connection</span>
+<a name="ln-37"></a>  <span class="c">!==================================================</span>
+<a name="ln-38"></a>  <span class="c">! Computes</span>
+<a name="ln-39"></a>  <span class="k">subroutine </span><span class="n">set_int_pshape</span><span class="p">(</span><span class="n">spl</span><span class="p">,</span> <span class="n">xx</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">ind</span><span class="p">)</span>
+<a name="ln-40"></a>   <span class="kt">integer</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">spl</span>
+<a name="ln-41"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">xx</span>
+<a name="ln-42"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span> <span class="kd">::</span> <span class="n">ax</span><span class="p">(</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">)</span>
+<a name="ln-43"></a>   <span class="kt">integer</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span> <span class="kd">::</span> <span class="n">ind</span>
+<a name="ln-44"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">sx</span><span class="p">,</span> <span class="n">sx2</span><span class="p">,</span> <span class="n">sx3</span>
+<a name="ln-45"></a>   <span class="c">!To integer grid points</span>
+<a name="ln-46"></a>   <span class="n">ax</span><span class="p">(</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.0</span>
+<a name="ln-47"></a>   <span class="k">select case</span> <span class="p">(</span><span class="n">spl</span><span class="p">)</span>
+<a name="ln-48"></a>   <span class="k">case</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<a name="ln-49"></a>    <span class="n">ind</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">xx</span><span class="p">)</span>
+<a name="ln-50"></a>    <span class="n">ax</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">xx</span> <span class="o">-</span> <span class="kt">real</span><span class="p">(</span><span class="n">ind</span><span class="p">,</span> <span class="n">dp</span><span class="p">)</span>
+<a name="ln-51"></a>    <span class="n">ax</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">-</span><span class="n">ax</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<a name="ln-52"></a>   <span class="k">case</span> <span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-53"></a>    <span class="n">ind</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">xx</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span>
+<a name="ln-54"></a>    <span class="n">sx</span> <span class="o">=</span> <span class="n">xx</span> <span class="o">-</span> <span class="kt">real</span><span class="p">(</span><span class="n">ind</span><span class="p">,</span> <span class="n">dp</span><span class="p">)</span>
+<a name="ln-55"></a>    <span class="n">sx2</span> <span class="o">=</span> <span class="n">sx</span><span class="o">*</span><span class="n">sx</span>
+<a name="ln-56"></a>    <span class="n">ax</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.75</span> <span class="o">-</span> <span class="n">sx2</span>
+<a name="ln-57"></a>    <span class="n">ax</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="mf">0.25</span> <span class="o">+</span> <span class="n">sx2</span> <span class="o">+</span> <span class="n">sx</span><span class="p">)</span>
+<a name="ln-58"></a>    <span class="n">ax</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">-</span><span class="n">ax</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">ax</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-59"></a>   <span class="k">case</span> <span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<a name="ln-60"></a>    <span class="n">ind</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">xx</span><span class="p">)</span>
+<a name="ln-61"></a>    <span class="n">sx</span> <span class="o">=</span> <span class="n">xx</span> <span class="o">-</span> <span class="kt">real</span><span class="p">(</span><span class="n">ind</span><span class="p">,</span> <span class="n">dp</span><span class="p">)</span>
+<a name="ln-62"></a>    <span class="n">sx2</span> <span class="o">=</span> <span class="n">sx</span><span class="o">*</span><span class="n">sx</span>
+<a name="ln-63"></a>    <span class="n">sx3</span> <span class="o">=</span> <span class="n">sx2</span><span class="o">*</span><span class="n">sx</span>
+<a name="ln-64"></a>    <span class="n">ax</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">two_third</span> <span class="o">-</span> <span class="n">sx2</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">sx3</span>
+<a name="ln-65"></a>    <span class="n">ax</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="n">one_sixth</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">sx</span> <span class="o">+</span> <span class="n">sx2</span> <span class="o">-</span> <span class="n">sx3</span><span class="p">)</span>
+<a name="ln-66"></a>    <span class="n">ax</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">=</span> <span class="n">one_sixth</span><span class="o">*</span><span class="n">sx3</span>
+<a name="ln-67"></a>    <span class="n">ax</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">-</span><span class="n">ax</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">ax</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">ax</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<a name="ln-68"></a>   <span class="k">end select</span>
+<a name="ln-69"></a><span class="k">  end subroutine</span>
+<a name="ln-70"></a>  <span class="c">!========================</span>
+<a name="ln-71"></a>  <span class="k">subroutine </span><span class="n">set_hint_pshape</span><span class="p">(</span><span class="n">spl</span><span class="p">,</span> <span class="n">xx</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">ind</span><span class="p">)</span>
+<a name="ln-72"></a>   <span class="kt">integer</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">spl</span>
+<a name="ln-73"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">xx</span>
+<a name="ln-74"></a>   <span class="kt">integer</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span> <span class="kd">::</span> <span class="n">ind</span>
+<a name="ln-75"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span> <span class="kd">::</span> <span class="n">ax</span><span class="p">(</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">)</span>
+<a name="ln-76"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">sx</span><span class="p">,</span> <span class="n">sx2</span><span class="p">,</span> <span class="n">sx3</span>
+<a name="ln-77"></a>   <span class="c">!To half-integer grid points</span>
+<a name="ln-78"></a>   <span class="n">ax</span><span class="p">(</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.0</span>
+<a name="ln-79"></a>   <span class="k">select case</span> <span class="p">(</span><span class="n">spl</span><span class="p">)</span>
+<a name="ln-80"></a>   <span class="k">case</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<a name="ln-81"></a>    <span class="n">sx</span> <span class="o">=</span> <span class="n">xx</span> <span class="o">+</span> <span class="mf">0.5</span>
+<a name="ln-82"></a>    <span class="n">ind</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sx</span><span class="p">)</span>
+<a name="ln-83"></a>    <span class="n">ax</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">sx</span> <span class="o">-</span> <span class="kt">real</span><span class="p">(</span><span class="n">ind</span><span class="p">,</span> <span class="n">dp</span><span class="p">)</span>
+<a name="ln-84"></a>    <span class="n">ax</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">-</span><span class="n">ax</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<a name="ln-85"></a>   <span class="k">case</span> <span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-86"></a>    <span class="n">ind</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">xx</span><span class="p">)</span>
+<a name="ln-87"></a>    <span class="n">sx</span> <span class="o">=</span> <span class="n">xx</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">-</span> <span class="kt">real</span><span class="p">(</span><span class="n">ind</span><span class="p">,</span> <span class="n">dp</span><span class="p">)</span>
+<a name="ln-88"></a>    <span class="n">sx2</span> <span class="o">=</span> <span class="n">sx</span><span class="o">*</span><span class="n">sx</span>
+<a name="ln-89"></a>    <span class="n">ax</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.75</span> <span class="o">-</span> <span class="n">sx2</span>
+<a name="ln-90"></a>    <span class="n">ax</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="mf">0.25</span> <span class="o">+</span> <span class="n">sx2</span> <span class="o">+</span> <span class="n">sx</span><span class="p">)</span>
+<a name="ln-91"></a>    <span class="n">ax</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">-</span><span class="n">ax</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">ax</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-92"></a>   <span class="k">case</span> <span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<a name="ln-93"></a>    <span class="n">ind</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">xx</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span>
+<a name="ln-94"></a>    <span class="n">sx</span> <span class="o">=</span> <span class="n">xx</span> <span class="o">-</span> <span class="kt">real</span><span class="p">(</span><span class="n">ind</span><span class="p">,</span> <span class="n">dp</span><span class="p">)</span>
+<a name="ln-95"></a>    <span class="n">sx2</span> <span class="o">=</span> <span class="n">sx</span><span class="o">*</span><span class="n">sx</span>
+<a name="ln-96"></a>    <span class="n">sx3</span> <span class="o">=</span> <span class="n">sx2</span><span class="o">*</span><span class="n">sx</span>
+<a name="ln-97"></a>    <span class="n">ax</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">two_third</span> <span class="o">-</span> <span class="n">sx2</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">sx3</span>
+<a name="ln-98"></a>    <span class="n">ax</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="n">one_sixth</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">sx</span> <span class="o">+</span> <span class="n">sx2</span> <span class="o">-</span> <span class="n">sx3</span><span class="p">)</span>
+<a name="ln-99"></a>    <span class="n">ax</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">=</span> <span class="n">one_sixth</span><span class="o">*</span><span class="n">sx3</span>
+<a name="ln-100"></a>    <span class="n">ax</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">-</span><span class="n">ax</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">ax</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">ax</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="c">! to (i-1/2,i+1/2,i+3/2,i+5/2) half-int</span>
+<a name="ln-101"></a>   <span class="k">end select</span>
+<a name="ln-102"></a><span class="k">  end subroutine</span>
+<a name="ln-103"></a>  <span class="c">!=======================</span>
+<a name="ln-104"></a>
+<a name="ln-105"></a>  <span class="c">!===========================================</span>
+<a name="ln-106"></a>  <span class="c">!     Computes particle density charge on grid integer points</span>
+<a name="ln-107"></a>  <span class="c">!==============================================</span>
+<a name="ln-108"></a>  <span class="c">!DIR$ ATTRIBUTES INLINE :: ql_interpolate,qq_interpolate</span>
+<a name="ln-109"></a>  <span class="c">!====================</span>
+<a name="ln-110"></a>  <span class="k">subroutine </span><span class="n">qlh_2d_spline</span><span class="p">(</span><span class="n">xp</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">axh</span><span class="p">,</span> <span class="n">ay</span><span class="p">,</span> <span class="n">ayh</span><span class="p">,</span> <span class="n">ix</span><span class="p">,</span> <span class="n">ihx</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="n">ihy</span><span class="p">)</span>
+<a name="ln-111"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">xp</span><span class="p">(:)</span>
+<a name="ln-112"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">ax</span><span class="p">(</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">),</span> <span class="n">axh</span><span class="p">(</span><span class="mi">0</span><span class="p">:</span><span class="mi">1</span><span class="p">),</span> <span class="n">ay</span><span class="p">(</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">),</span> <span class="n">ayh</span><span class="p">(</span><span class="mi">0</span><span class="p">:</span><span class="mi">1</span><span class="p">)</span>
+<a name="ln-113"></a>   <span class="kt">integer</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">ix</span><span class="p">,</span> <span class="n">ihx</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="n">ihy</span>
+<a name="ln-114"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">xx</span><span class="p">,</span> <span class="n">sx</span><span class="p">,</span> <span class="n">sx2</span>
+<a name="ln-115"></a>   <span class="c">!======================</span>
+<a name="ln-116"></a>   <span class="n">xx</span> <span class="o">=</span> <span class="n">shx</span> <span class="o">+</span> <span class="n">xp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<a name="ln-117"></a>   <span class="n">ix</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">xx</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span>
+<a name="ln-118"></a>   <span class="n">sx</span> <span class="o">=</span> <span class="n">xx</span> <span class="o">-</span> <span class="kt">real</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="n">dp</span><span class="p">)</span>
+<a name="ln-119"></a>   <span class="n">sx2</span> <span class="o">=</span> <span class="n">sx</span><span class="o">*</span><span class="n">sx</span>
+<a name="ln-120"></a>   <span class="n">ax</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.75</span> <span class="o">-</span> <span class="n">sx2</span>
+<a name="ln-121"></a>   <span class="n">ax</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="mf">0.25</span> <span class="o">+</span> <span class="n">sx2</span> <span class="o">+</span> <span class="n">sx</span><span class="p">)</span>
+<a name="ln-122"></a>   <span class="n">ax</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">-</span><span class="n">ax</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">ax</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-123"></a>
+<a name="ln-124"></a>   <span class="n">axh</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">sx</span> <span class="o">+</span> <span class="mf">0.5</span>
+<a name="ln-125"></a>   <span class="n">axh</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">-</span><span class="n">axh</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<a name="ln-126"></a>
+<a name="ln-127"></a>   <span class="n">xx</span> <span class="o">=</span> <span class="n">shy</span> <span class="o">+</span> <span class="n">xp</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-128"></a>   <span class="n">iy</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">xx</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span>
+<a name="ln-129"></a>   <span class="n">sx</span> <span class="o">=</span> <span class="n">xx</span> <span class="o">-</span> <span class="kt">real</span><span class="p">(</span><span class="n">iy</span><span class="p">,</span> <span class="n">dp</span><span class="p">)</span>
+<a name="ln-130"></a>   <span class="n">sx2</span> <span class="o">=</span> <span class="n">sx</span><span class="o">*</span><span class="n">sx</span>
+<a name="ln-131"></a>   <span class="n">ay</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.75</span> <span class="o">-</span> <span class="n">sx2</span>
+<a name="ln-132"></a>   <span class="n">ay</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="mf">0.25</span> <span class="o">+</span> <span class="n">sx2</span> <span class="o">+</span> <span class="n">sx</span><span class="p">)</span>
+<a name="ln-133"></a>   <span class="n">ay</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">-</span><span class="n">ay</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">ay</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-134"></a>
+<a name="ln-135"></a>   <span class="n">ayh</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">sx</span> <span class="o">+</span> <span class="mf">0.5</span>
+<a name="ln-136"></a>   <span class="n">ayh</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">-</span><span class="n">ayh</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<a name="ln-137"></a>
+<a name="ln-138"></a>   <span class="n">ix</span> <span class="o">=</span> <span class="n">ix</span> <span class="o">-</span> <span class="mi">1</span>
+<a name="ln-139"></a>   <span class="n">ihx</span> <span class="o">=</span> <span class="n">ix</span>
+<a name="ln-140"></a>   <span class="n">iy</span> <span class="o">=</span> <span class="n">iy</span> <span class="o">-</span> <span class="mi">1</span>
+<a name="ln-141"></a>   <span class="n">ihy</span> <span class="o">=</span> <span class="n">iy</span>
+<a name="ln-142"></a>
+<a name="ln-143"></a>  <span class="k">end subroutine</span>
+<a name="ln-144"></a>  <span class="c">!====================</span>
+<a name="ln-145"></a>  <span class="k">subroutine </span><span class="n">qqh_1d_spline</span><span class="p">(</span><span class="n">xp</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">axh</span><span class="p">,</span> <span class="n">ix</span><span class="p">,</span> <span class="n">ihx</span><span class="p">)</span>
+<a name="ln-146"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">xp</span><span class="p">(:)</span>
+<a name="ln-147"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">ax</span><span class="p">(</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">),</span> <span class="n">axh</span><span class="p">(</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-148"></a>   <span class="kt">integer</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">ix</span><span class="p">,</span> <span class="n">ihx</span>
+<a name="ln-149"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">xx</span><span class="p">,</span> <span class="n">sx</span><span class="p">,</span> <span class="n">sx2</span>
+<a name="ln-150"></a>   <span class="c">!======================</span>
+<a name="ln-151"></a>   <span class="n">xx</span> <span class="o">=</span> <span class="n">shx</span> <span class="o">+</span> <span class="n">xp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<a name="ln-152"></a>   <span class="n">ix</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">xx</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span>
+<a name="ln-153"></a>   <span class="n">sx</span> <span class="o">=</span> <span class="n">xx</span> <span class="o">-</span> <span class="kt">real</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="n">dp</span><span class="p">)</span>
+<a name="ln-154"></a>   <span class="n">sx2</span> <span class="o">=</span> <span class="n">sx</span><span class="o">*</span><span class="n">sx</span>
+<a name="ln-155"></a>   <span class="n">ax</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.75</span> <span class="o">-</span> <span class="n">sx2</span>
+<a name="ln-156"></a>   <span class="n">ax</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="mf">0.25</span> <span class="o">+</span> <span class="n">sx2</span> <span class="o">+</span> <span class="n">sx</span><span class="p">)</span>
+<a name="ln-157"></a>   <span class="n">ax</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">-</span><span class="n">ax</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">ax</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-158"></a>
+<a name="ln-159"></a>   <span class="n">ihx</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">xx</span><span class="p">)</span>
+<a name="ln-160"></a>   <span class="n">sx</span> <span class="o">=</span> <span class="n">xx</span> <span class="o">-</span> <span class="kt">real</span><span class="p">(</span><span class="n">ihx</span><span class="p">,</span> <span class="n">dp</span><span class="p">)</span>
+<a name="ln-161"></a>   <span class="n">sx2</span> <span class="o">=</span> <span class="n">sx</span><span class="o">*</span><span class="n">sx</span>
+<a name="ln-162"></a>   <span class="n">axh</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.75</span> <span class="o">-</span> <span class="n">sx2</span>
+<a name="ln-163"></a>   <span class="n">axh</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="mf">0.25</span> <span class="o">+</span> <span class="n">sx2</span> <span class="o">+</span> <span class="n">sx</span><span class="p">)</span>
+<a name="ln-164"></a>   <span class="n">axh</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">-</span><span class="n">axh</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">axh</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-165"></a>   <span class="n">ix</span> <span class="o">=</span> <span class="n">ix</span> <span class="o">-</span> <span class="mi">1</span>
+<a name="ln-166"></a>   <span class="n">ihx</span> <span class="o">=</span> <span class="n">ihx</span> <span class="o">-</span> <span class="mi">1</span>
+<a name="ln-167"></a>
+<a name="ln-168"></a>  <span class="k">end subroutine</span>
+<a name="ln-169"></a>  <span class="c">!=======================</span>
+<a name="ln-170"></a>  <span class="k">subroutine </span><span class="n">qqh_2d_spline</span><span class="p">(</span><span class="n">xp</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">axh</span><span class="p">,</span> <span class="n">ay</span><span class="p">,</span> <span class="n">ayh</span><span class="p">,</span> <span class="n">ix</span><span class="p">,</span> <span class="n">ihx</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="n">ihy</span><span class="p">)</span>
+<a name="ln-171"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">xp</span><span class="p">(:)</span>
+<a name="ln-172"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">ax</span><span class="p">(</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">),</span> <span class="n">axh</span><span class="p">(</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">),</span> <span class="n">ay</span><span class="p">(</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">),</span> <span class="n">ayh</span><span class="p">(</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-173"></a>   <span class="kt">integer</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">ix</span><span class="p">,</span> <span class="n">ihx</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="n">ihy</span>
+<a name="ln-174"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">xx</span><span class="p">,</span> <span class="n">sx</span><span class="p">,</span> <span class="n">sx2</span>
+<a name="ln-175"></a>   <span class="c">!======================</span>
+<a name="ln-176"></a>   <span class="n">xx</span> <span class="o">=</span> <span class="n">shx</span> <span class="o">+</span> <span class="n">xp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<a name="ln-177"></a>   <span class="n">ix</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">xx</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span>
+<a name="ln-178"></a>   <span class="n">sx</span> <span class="o">=</span> <span class="n">xx</span> <span class="o">-</span> <span class="kt">real</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="n">dp</span><span class="p">)</span>
+<a name="ln-179"></a>   <span class="n">sx2</span> <span class="o">=</span> <span class="n">sx</span><span class="o">*</span><span class="n">sx</span>
+<a name="ln-180"></a>   <span class="n">ax</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.75</span> <span class="o">-</span> <span class="n">sx2</span>
+<a name="ln-181"></a>   <span class="n">ax</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="mf">0.25</span> <span class="o">+</span> <span class="n">sx2</span> <span class="o">+</span> <span class="n">sx</span><span class="p">)</span>
+<a name="ln-182"></a>   <span class="n">ax</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">-</span><span class="n">ax</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">ax</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-183"></a>
+<a name="ln-184"></a>   <span class="n">ihx</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">xx</span><span class="p">)</span>
+<a name="ln-185"></a>   <span class="n">sx</span> <span class="o">=</span> <span class="n">xx</span> <span class="o">-</span> <span class="kt">real</span><span class="p">(</span><span class="n">ihx</span><span class="p">,</span> <span class="n">dp</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.5</span>
+<a name="ln-186"></a>   <span class="n">sx2</span> <span class="o">=</span> <span class="n">sx</span><span class="o">*</span><span class="n">sx</span>
+<a name="ln-187"></a>   <span class="n">axh</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.75</span> <span class="o">-</span> <span class="n">sx2</span>
+<a name="ln-188"></a>   <span class="n">axh</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="mf">0.25</span> <span class="o">+</span> <span class="n">sx2</span> <span class="o">+</span> <span class="n">sx</span><span class="p">)</span>
+<a name="ln-189"></a>   <span class="n">axh</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">-</span><span class="n">axh</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">axh</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-190"></a>
+<a name="ln-191"></a>   <span class="n">xx</span> <span class="o">=</span> <span class="n">shy</span> <span class="o">+</span> <span class="n">xp</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-192"></a>   <span class="n">iy</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">xx</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span>
+<a name="ln-193"></a>   <span class="n">sx</span> <span class="o">=</span> <span class="n">xx</span> <span class="o">-</span> <span class="kt">real</span><span class="p">(</span><span class="n">iy</span><span class="p">,</span> <span class="n">dp</span><span class="p">)</span>
+<a name="ln-194"></a>   <span class="n">sx2</span> <span class="o">=</span> <span class="n">sx</span><span class="o">*</span><span class="n">sx</span>
+<a name="ln-195"></a>   <span class="n">ay</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.75</span> <span class="o">-</span> <span class="n">sx2</span>
+<a name="ln-196"></a>   <span class="n">ay</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="mf">0.25</span> <span class="o">+</span> <span class="n">sx2</span> <span class="o">+</span> <span class="n">sx</span><span class="p">)</span>
+<a name="ln-197"></a>   <span class="n">ay</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">-</span><span class="n">ay</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">ay</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-198"></a>
+<a name="ln-199"></a>   <span class="n">ihy</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">xx</span><span class="p">)</span>
+<a name="ln-200"></a>   <span class="n">sx</span> <span class="o">=</span> <span class="n">xx</span> <span class="o">-</span> <span class="kt">real</span><span class="p">(</span><span class="n">ihy</span><span class="p">,</span> <span class="n">dp</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.5</span>
+<a name="ln-201"></a>   <span class="n">sx2</span> <span class="o">=</span> <span class="n">sx</span><span class="o">*</span><span class="n">sx</span>
+<a name="ln-202"></a>   <span class="n">ayh</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.75</span> <span class="o">-</span> <span class="n">sx2</span>
+<a name="ln-203"></a>   <span class="n">ayh</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="mf">0.25</span> <span class="o">+</span> <span class="n">sx2</span> <span class="o">+</span> <span class="n">sx</span><span class="p">)</span>
+<a name="ln-204"></a>   <span class="n">ayh</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">-</span><span class="n">ayh</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">ayh</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-205"></a>
+<a name="ln-206"></a>   <span class="n">ix</span> <span class="o">=</span> <span class="n">ix</span> <span class="o">-</span> <span class="mi">1</span>
+<a name="ln-207"></a>   <span class="n">ihx</span> <span class="o">=</span> <span class="n">ihx</span> <span class="o">-</span> <span class="mi">1</span>
+<a name="ln-208"></a>   <span class="n">iy</span> <span class="o">=</span> <span class="n">iy</span> <span class="o">-</span> <span class="mi">1</span>
+<a name="ln-209"></a>   <span class="n">ihy</span> <span class="o">=</span> <span class="n">ihy</span> <span class="o">-</span> <span class="mi">1</span>
+<a name="ln-210"></a>  <span class="k">end subroutine</span>
+<a name="ln-211"></a>  <span class="c">!=======================================</span>
+<a name="ln-212"></a>  <span class="k">subroutine </span><span class="n">qlh_3d_spline</span><span class="p">(</span><span class="n">xp</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">axh</span><span class="p">,</span> <span class="n">ay</span><span class="p">,</span> <span class="n">ayh</span><span class="p">,</span> <span class="n">az</span><span class="p">,</span> <span class="n">azh</span><span class="p">,</span> <span class="n">ix</span><span class="p">,</span> <span class="n">ihx</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-213"></a>                           <span class="n">ihy</span><span class="p">,</span> <span class="n">iz</span><span class="p">,</span> <span class="n">ihz</span><span class="p">)</span>
+<a name="ln-214"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">xp</span><span class="p">(:)</span>
+<a name="ln-215"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">ax</span><span class="p">(</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">),</span> <span class="n">axh</span><span class="p">(</span><span class="mi">0</span><span class="p">:</span><span class="mi">1</span><span class="p">),</span> <span class="n">ay</span><span class="p">(</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">),</span> <span class="n">ayh</span><span class="p">(</span><span class="mi">0</span><span class="p">:</span><span class="mi">1</span><span class="p">),</span> <span class="p">&amp;</span>
+<a name="ln-216"></a>                              <span class="n">az</span><span class="p">(</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">),</span> <span class="n">azh</span><span class="p">(</span><span class="mi">0</span><span class="p">:</span><span class="mi">1</span><span class="p">)</span>
+<a name="ln-217"></a>   <span class="kt">integer</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">ix</span><span class="p">,</span> <span class="n">ihx</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="n">ihy</span><span class="p">,</span> <span class="n">iz</span><span class="p">,</span> <span class="n">ihz</span>
+<a name="ln-218"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">xx</span><span class="p">,</span> <span class="n">sx</span><span class="p">,</span> <span class="n">sx2</span>
+<a name="ln-219"></a>   <span class="c">!======================</span>
+<a name="ln-220"></a>   <span class="n">xx</span> <span class="o">=</span> <span class="n">shx</span> <span class="o">+</span> <span class="n">xp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<a name="ln-221"></a>   <span class="n">ix</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">xx</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span>
+<a name="ln-222"></a>   <span class="n">sx</span> <span class="o">=</span> <span class="n">xx</span> <span class="o">-</span> <span class="kt">real</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="n">dp</span><span class="p">)</span>
+<a name="ln-223"></a>   <span class="n">sx2</span> <span class="o">=</span> <span class="n">sx</span><span class="o">*</span><span class="n">sx</span>
+<a name="ln-224"></a>   <span class="n">ax</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.75</span> <span class="o">-</span> <span class="n">sx2</span>
+<a name="ln-225"></a>   <span class="n">ax</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="mf">0.25</span> <span class="o">+</span> <span class="n">sx2</span> <span class="o">+</span> <span class="n">sx</span><span class="p">)</span>
+<a name="ln-226"></a>   <span class="n">ax</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">-</span><span class="n">ax</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">ax</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-227"></a>
+<a name="ln-228"></a>   <span class="n">axh</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">sx</span> <span class="o">+</span> <span class="mf">0.5</span>
+<a name="ln-229"></a>   <span class="n">axh</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">-</span><span class="n">axh</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<a name="ln-230"></a>
+<a name="ln-231"></a>   <span class="n">xx</span> <span class="o">=</span> <span class="n">shy</span> <span class="o">+</span> <span class="n">xp</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-232"></a>   <span class="n">iy</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">xx</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span>
+<a name="ln-233"></a>   <span class="n">sx</span> <span class="o">=</span> <span class="n">xx</span> <span class="o">-</span> <span class="kt">real</span><span class="p">(</span><span class="n">iy</span><span class="p">,</span> <span class="n">dp</span><span class="p">)</span>
+<a name="ln-234"></a>   <span class="n">sx2</span> <span class="o">=</span> <span class="n">sx</span><span class="o">*</span><span class="n">sx</span>
+<a name="ln-235"></a>   <span class="n">ay</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.75</span> <span class="o">-</span> <span class="n">sx2</span>
+<a name="ln-236"></a>   <span class="n">ay</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="mf">0.25</span> <span class="o">+</span> <span class="n">sx2</span> <span class="o">+</span> <span class="n">sx</span><span class="p">)</span>
+<a name="ln-237"></a>   <span class="n">ay</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">-</span><span class="n">ay</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">ay</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-238"></a>
+<a name="ln-239"></a>   <span class="n">ayh</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">sx</span> <span class="o">+</span> <span class="mf">0.5</span>
+<a name="ln-240"></a>   <span class="n">ayh</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">-</span><span class="n">ayh</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<a name="ln-241"></a>
+<a name="ln-242"></a>   <span class="n">xx</span> <span class="o">=</span> <span class="n">shz</span> <span class="o">+</span> <span class="n">xp</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<a name="ln-243"></a>   <span class="n">iz</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">xx</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span>
+<a name="ln-244"></a>   <span class="n">sx</span> <span class="o">=</span> <span class="n">xx</span> <span class="o">-</span> <span class="kt">real</span><span class="p">(</span><span class="n">iz</span><span class="p">,</span> <span class="n">dp</span><span class="p">)</span>
+<a name="ln-245"></a>   <span class="n">sx2</span> <span class="o">=</span> <span class="n">sx</span><span class="o">*</span><span class="n">sx</span>
+<a name="ln-246"></a>   <span class="n">az</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.75</span> <span class="o">-</span> <span class="n">sx2</span>
+<a name="ln-247"></a>   <span class="n">az</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="mf">0.25</span> <span class="o">+</span> <span class="n">sx2</span> <span class="o">+</span> <span class="n">sx</span><span class="p">)</span>
+<a name="ln-248"></a>   <span class="n">az</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">-</span><span class="n">az</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">az</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-249"></a>
+<a name="ln-250"></a>   <span class="n">azh</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">sx</span> <span class="o">+</span> <span class="mf">0.5</span>
+<a name="ln-251"></a>   <span class="n">azh</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">-</span><span class="n">azh</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<a name="ln-252"></a>
+<a name="ln-253"></a>   <span class="n">ix</span> <span class="o">=</span> <span class="n">ix</span> <span class="o">-</span> <span class="mi">1</span>
+<a name="ln-254"></a>   <span class="n">ihx</span> <span class="o">=</span> <span class="n">ix</span>
+<a name="ln-255"></a>   <span class="n">iy</span> <span class="o">=</span> <span class="n">iy</span> <span class="o">-</span> <span class="mi">1</span>
+<a name="ln-256"></a>   <span class="n">ihy</span> <span class="o">=</span> <span class="n">iy</span>
+<a name="ln-257"></a>   <span class="n">iz</span> <span class="o">=</span> <span class="n">iz</span> <span class="o">-</span> <span class="mi">1</span>
+<a name="ln-258"></a>   <span class="n">ihz</span> <span class="o">=</span> <span class="n">iz</span>
+<a name="ln-259"></a>  <span class="k">end subroutine</span>
+<a name="ln-260"></a>  <span class="c">!=================================</span>
+<a name="ln-261"></a>  <span class="k">subroutine </span><span class="n">qqh_3d_spline</span><span class="p">(</span><span class="n">xp</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">axh</span><span class="p">,</span> <span class="n">ay</span><span class="p">,</span> <span class="n">ayh</span><span class="p">,</span> <span class="n">az</span><span class="p">,</span> <span class="n">azh</span><span class="p">,</span> <span class="n">ix</span><span class="p">,</span> <span class="n">ihx</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="p">&amp;</span>
+<a name="ln-262"></a>                           <span class="n">ihy</span><span class="p">,</span> <span class="n">iz</span><span class="p">,</span> <span class="n">ihz</span><span class="p">)</span>
+<a name="ln-263"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">xp</span><span class="p">(:)</span>
+<a name="ln-264"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">ax</span><span class="p">(</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">),</span> <span class="n">axh</span><span class="p">(</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">),</span> <span class="n">ay</span><span class="p">(</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">),</span> <span class="n">ayh</span><span class="p">(</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">),</span> <span class="p">&amp;</span>
+<a name="ln-265"></a>                              <span class="n">az</span><span class="p">(</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">),</span> <span class="n">azh</span><span class="p">(</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-266"></a>   <span class="kt">integer</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">ix</span><span class="p">,</span> <span class="n">ihx</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="n">ihy</span><span class="p">,</span> <span class="n">iz</span><span class="p">,</span> <span class="n">ihz</span>
+<a name="ln-267"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">xx</span><span class="p">,</span> <span class="n">sx</span><span class="p">,</span> <span class="n">sx2</span>
+<a name="ln-268"></a>
+<a name="ln-269"></a>   <span class="n">xx</span> <span class="o">=</span> <span class="n">shx</span> <span class="o">+</span> <span class="n">xp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<a name="ln-270"></a>   <span class="n">ix</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">xx</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span>
+<a name="ln-271"></a>   <span class="n">sx</span> <span class="o">=</span> <span class="n">xx</span> <span class="o">-</span> <span class="kt">real</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="n">dp</span><span class="p">)</span>
+<a name="ln-272"></a>   <span class="n">sx2</span> <span class="o">=</span> <span class="n">sx</span><span class="o">*</span><span class="n">sx</span>
+<a name="ln-273"></a>   <span class="n">ax</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.75</span> <span class="o">-</span> <span class="n">sx2</span>
+<a name="ln-274"></a>   <span class="n">ax</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="mf">0.25</span> <span class="o">+</span> <span class="n">sx2</span> <span class="o">+</span> <span class="n">sx</span><span class="p">)</span>
+<a name="ln-275"></a>   <span class="n">ax</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">-</span><span class="n">ax</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">ax</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-276"></a>
+<a name="ln-277"></a>   <span class="n">ihx</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">xx</span><span class="p">)</span>
+<a name="ln-278"></a>   <span class="n">sx</span> <span class="o">=</span> <span class="n">xx</span> <span class="o">-</span> <span class="kt">real</span><span class="p">(</span><span class="n">ihx</span><span class="p">,</span> <span class="n">dp</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.5</span>
+<a name="ln-279"></a>   <span class="n">sx2</span> <span class="o">=</span> <span class="n">sx</span><span class="o">*</span><span class="n">sx</span>
+<a name="ln-280"></a>   <span class="n">axh</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.75</span> <span class="o">-</span> <span class="n">sx2</span>
+<a name="ln-281"></a>   <span class="n">axh</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="mf">0.25</span> <span class="o">+</span> <span class="n">sx2</span> <span class="o">+</span> <span class="n">sx</span><span class="p">)</span>
+<a name="ln-282"></a>   <span class="n">axh</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">-</span><span class="n">axh</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">axh</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-283"></a>
+<a name="ln-284"></a>   <span class="n">xx</span> <span class="o">=</span> <span class="n">shy</span> <span class="o">+</span> <span class="n">xp</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-285"></a>   <span class="n">iy</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">xx</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span>
+<a name="ln-286"></a>   <span class="n">sx</span> <span class="o">=</span> <span class="n">xx</span> <span class="o">-</span> <span class="kt">real</span><span class="p">(</span><span class="n">iy</span><span class="p">,</span> <span class="n">dp</span><span class="p">)</span>
+<a name="ln-287"></a>   <span class="n">sx2</span> <span class="o">=</span> <span class="n">sx</span><span class="o">*</span><span class="n">sx</span>
+<a name="ln-288"></a>   <span class="n">ay</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.75</span> <span class="o">-</span> <span class="n">sx2</span>
+<a name="ln-289"></a>   <span class="n">ay</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="mf">0.25</span> <span class="o">+</span> <span class="n">sx2</span> <span class="o">+</span> <span class="n">sx</span><span class="p">)</span>
+<a name="ln-290"></a>   <span class="n">ay</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">-</span><span class="n">ay</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">ay</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-291"></a>
+<a name="ln-292"></a>   <span class="n">ihy</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">xx</span><span class="p">)</span>
+<a name="ln-293"></a>   <span class="n">sx</span> <span class="o">=</span> <span class="n">xx</span> <span class="o">-</span> <span class="kt">real</span><span class="p">(</span><span class="n">ihy</span><span class="p">,</span> <span class="n">dp</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.5</span>
+<a name="ln-294"></a>   <span class="n">sx2</span> <span class="o">=</span> <span class="n">sx</span><span class="o">*</span><span class="n">sx</span>
+<a name="ln-295"></a>   <span class="n">ayh</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.75</span> <span class="o">-</span> <span class="n">sx2</span>
+<a name="ln-296"></a>   <span class="n">ayh</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="mf">0.25</span> <span class="o">+</span> <span class="n">sx2</span> <span class="o">+</span> <span class="n">sx</span><span class="p">)</span>
+<a name="ln-297"></a>   <span class="n">ayh</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">-</span><span class="n">ayh</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">ayh</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-298"></a>
+<a name="ln-299"></a>   <span class="n">xx</span> <span class="o">=</span> <span class="n">shz</span> <span class="o">+</span> <span class="n">xp</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<a name="ln-300"></a>   <span class="n">iz</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">xx</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span>
+<a name="ln-301"></a>   <span class="n">sx</span> <span class="o">=</span> <span class="n">xx</span> <span class="o">-</span> <span class="kt">real</span><span class="p">(</span><span class="n">iz</span><span class="p">,</span> <span class="n">dp</span><span class="p">)</span>
+<a name="ln-302"></a>   <span class="n">sx2</span> <span class="o">=</span> <span class="n">sx</span><span class="o">*</span><span class="n">sx</span>
+<a name="ln-303"></a>   <span class="n">az</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.75</span> <span class="o">-</span> <span class="n">sx2</span>
+<a name="ln-304"></a>   <span class="n">az</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="mf">0.25</span> <span class="o">+</span> <span class="n">sx2</span> <span class="o">+</span> <span class="n">sx</span><span class="p">)</span>
+<a name="ln-305"></a>   <span class="n">az</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">-</span><span class="n">az</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">az</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-306"></a>
+<a name="ln-307"></a>   <span class="n">ihz</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">xx</span><span class="p">)</span>
+<a name="ln-308"></a>   <span class="n">sx</span> <span class="o">=</span> <span class="n">xx</span> <span class="o">-</span> <span class="kt">real</span><span class="p">(</span><span class="n">ihz</span><span class="p">,</span> <span class="n">dp</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.5</span>
+<a name="ln-309"></a>   <span class="n">sx2</span> <span class="o">=</span> <span class="n">sx</span><span class="o">*</span><span class="n">sx</span>
+<a name="ln-310"></a>   <span class="n">azh</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.75</span> <span class="o">-</span> <span class="n">sx2</span>
+<a name="ln-311"></a>   <span class="n">azh</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="mf">0.25</span> <span class="o">+</span> <span class="n">sx2</span> <span class="o">+</span> <span class="n">sx</span><span class="p">)</span>
+<a name="ln-312"></a>   <span class="n">azh</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">-</span><span class="n">azh</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">azh</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-313"></a>
+<a name="ln-314"></a>   <span class="n">ix</span> <span class="o">=</span> <span class="n">ix</span> <span class="o">-</span> <span class="mi">1</span>
+<a name="ln-315"></a>   <span class="n">ihx</span> <span class="o">=</span> <span class="n">ihx</span> <span class="o">-</span> <span class="mi">1</span>
+<a name="ln-316"></a>   <span class="n">iy</span> <span class="o">=</span> <span class="n">iy</span> <span class="o">-</span> <span class="mi">1</span>
+<a name="ln-317"></a>   <span class="n">ihy</span> <span class="o">=</span> <span class="n">ihy</span> <span class="o">-</span> <span class="mi">1</span>
+<a name="ln-318"></a>   <span class="n">iz</span> <span class="o">=</span> <span class="n">iz</span> <span class="o">-</span> <span class="mi">1</span>
+<a name="ln-319"></a>   <span class="n">ihz</span> <span class="o">=</span> <span class="n">ihz</span> <span class="o">-</span> <span class="mi">1</span>
+<a name="ln-320"></a>  <span class="k">end subroutine</span>
+<a name="ln-321"></a>
+<a name="ln-322"></a><span class="k">  subroutine </span><span class="n">qden_1d_wgh</span><span class="p">(</span><span class="n">xp</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">ix</span><span class="p">)</span>
+<a name="ln-323"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">xp</span><span class="p">(:)</span>
+<a name="ln-324"></a>   <span class="kt">integer</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">ix</span>
+<a name="ln-325"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">ax</span><span class="p">(</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-326"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">xx</span><span class="p">,</span> <span class="n">sx</span><span class="p">,</span> <span class="n">sx2</span>
+<a name="ln-327"></a>   <span class="c">!======================</span>
+<a name="ln-328"></a>   <span class="n">xx</span> <span class="o">=</span> <span class="n">shx</span> <span class="o">+</span> <span class="n">xp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<a name="ln-329"></a>   <span class="n">ix</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">xx</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span>
+<a name="ln-330"></a>   <span class="n">sx</span> <span class="o">=</span> <span class="n">xx</span> <span class="o">-</span> <span class="kt">real</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="n">dp</span><span class="p">)</span>
+<a name="ln-331"></a>   <span class="n">sx2</span> <span class="o">=</span> <span class="n">sx</span><span class="o">*</span><span class="n">sx</span>
+<a name="ln-332"></a>   <span class="n">ax</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.75</span> <span class="o">-</span> <span class="n">sx2</span>
+<a name="ln-333"></a>   <span class="n">ax</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="mf">0.25</span> <span class="o">+</span> <span class="n">sx2</span> <span class="o">+</span> <span class="n">sx</span><span class="p">)</span>
+<a name="ln-334"></a>   <span class="n">ax</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">-</span><span class="n">ax</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">ax</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-335"></a>  <span class="k">end subroutine</span>
+<a name="ln-336"></a>
+<a name="ln-337"></a><span class="k">  subroutine </span><span class="n">qden_2d_wgh</span><span class="p">(</span><span class="n">xp</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">ay</span><span class="p">,</span> <span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">)</span>
+<a name="ln-338"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">xp</span><span class="p">(:)</span>
+<a name="ln-339"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">ax</span><span class="p">(</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">),</span> <span class="n">ay</span><span class="p">(</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-340"></a>   <span class="kt">integer</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">ix</span><span class="p">,</span> <span class="n">iy</span>
+<a name="ln-341"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">xx</span><span class="p">,</span> <span class="n">sx</span><span class="p">,</span> <span class="n">sx2</span>
+<a name="ln-342"></a>   <span class="c">!======================</span>
+<a name="ln-343"></a>   <span class="n">xx</span> <span class="o">=</span> <span class="n">shx</span> <span class="o">+</span> <span class="n">xp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<a name="ln-344"></a>   <span class="n">ix</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">xx</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span>
+<a name="ln-345"></a>   <span class="n">sx</span> <span class="o">=</span> <span class="n">xx</span> <span class="o">-</span> <span class="kt">real</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="n">dp</span><span class="p">)</span>
+<a name="ln-346"></a>   <span class="n">sx2</span> <span class="o">=</span> <span class="n">sx</span><span class="o">*</span><span class="n">sx</span>
+<a name="ln-347"></a>   <span class="n">ax</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.75</span> <span class="o">-</span> <span class="n">sx2</span>
+<a name="ln-348"></a>   <span class="n">ax</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="mf">0.25</span> <span class="o">+</span> <span class="n">sx2</span> <span class="o">+</span> <span class="n">sx</span><span class="p">)</span>
+<a name="ln-349"></a>   <span class="n">ax</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">-</span><span class="n">ax</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">ax</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-350"></a>
+<a name="ln-351"></a>   <span class="n">xx</span> <span class="o">=</span> <span class="n">shy</span> <span class="o">+</span> <span class="n">xp</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-352"></a>   <span class="n">iy</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">xx</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span>
+<a name="ln-353"></a>   <span class="n">sx</span> <span class="o">=</span> <span class="n">xx</span> <span class="o">-</span> <span class="kt">real</span><span class="p">(</span><span class="n">iy</span><span class="p">,</span> <span class="n">dp</span><span class="p">)</span>
+<a name="ln-354"></a>   <span class="n">sx2</span> <span class="o">=</span> <span class="n">sx</span><span class="o">*</span><span class="n">sx</span>
+<a name="ln-355"></a>   <span class="n">ay</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.75</span> <span class="o">-</span> <span class="n">sx2</span>
+<a name="ln-356"></a>   <span class="n">ay</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="mf">0.25</span> <span class="o">+</span> <span class="n">sx2</span> <span class="o">+</span> <span class="n">sx</span><span class="p">)</span>
+<a name="ln-357"></a>   <span class="n">ay</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">-</span><span class="n">ay</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">ay</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-358"></a>  <span class="k">end subroutine</span>
+<a name="ln-359"></a><span class="c">!======================</span>
+<a name="ln-360"></a>  <span class="k">subroutine </span><span class="n">cden_2d_wgh</span><span class="p">(</span><span class="n">xp</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">ay</span><span class="p">,</span> <span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">)</span>
+<a name="ln-361"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">xp</span><span class="p">(:)</span>
+<a name="ln-362"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">ax</span><span class="p">(</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">),</span> <span class="n">ay</span><span class="p">(</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">)</span>
+<a name="ln-363"></a>   <span class="kt">integer</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">ix</span><span class="p">,</span> <span class="n">iy</span>
+<a name="ln-364"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">xx</span><span class="p">,</span> <span class="n">sx</span><span class="p">,</span> <span class="n">sx2</span><span class="p">,</span> <span class="n">sx3</span>
+<a name="ln-365"></a>   <span class="c">!======================</span>
+<a name="ln-366"></a>   <span class="c">!cubic spline to integer index</span>
+<a name="ln-367"></a>   <span class="n">xx</span> <span class="o">=</span> <span class="n">shy</span> <span class="o">+</span> <span class="n">xp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<a name="ln-368"></a>   <span class="n">ix</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">xx</span><span class="p">)</span>
+<a name="ln-369"></a>   <span class="n">sx</span> <span class="o">=</span> <span class="n">xx</span> <span class="o">-</span> <span class="kt">real</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="n">dp</span><span class="p">)</span>
+<a name="ln-370"></a>   <span class="n">sx2</span> <span class="o">=</span> <span class="n">sx</span><span class="o">*</span><span class="n">sx</span>
+<a name="ln-371"></a>   <span class="n">sx3</span> <span class="o">=</span> <span class="n">sx2</span><span class="o">*</span><span class="n">sx</span>
+<a name="ln-372"></a>   <span class="n">ax</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">two_third</span> <span class="o">-</span> <span class="n">sx2</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">sx3</span>
+<a name="ln-373"></a>   <span class="n">ax</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="n">one_sixth</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">sx</span> <span class="o">+</span> <span class="n">sx2</span> <span class="o">-</span> <span class="n">sx3</span><span class="p">)</span>
+<a name="ln-374"></a>   <span class="n">ax</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">=</span> <span class="n">one_sixth</span><span class="o">*</span><span class="n">sx3</span>
+<a name="ln-375"></a>   <span class="n">ax</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">-</span><span class="n">ax</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">ax</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">ax</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<a name="ln-376"></a>
+<a name="ln-377"></a>   <span class="n">xx</span> <span class="o">=</span> <span class="n">shy</span> <span class="o">+</span> <span class="n">xp</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-378"></a>   <span class="n">iy</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">xx</span><span class="p">)</span>
+<a name="ln-379"></a>   <span class="n">sx</span> <span class="o">=</span> <span class="n">xx</span> <span class="o">-</span> <span class="kt">real</span><span class="p">(</span><span class="n">iy</span><span class="p">,</span> <span class="n">dp</span><span class="p">)</span>
+<a name="ln-380"></a>   <span class="n">sx2</span> <span class="o">=</span> <span class="n">sx</span><span class="o">*</span><span class="n">sx</span>
+<a name="ln-381"></a>   <span class="n">sx3</span> <span class="o">=</span> <span class="n">sx2</span><span class="o">*</span><span class="n">sx</span>
+<a name="ln-382"></a>   <span class="n">ay</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">two_third</span> <span class="o">-</span> <span class="n">sx2</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">sx3</span>
+<a name="ln-383"></a>   <span class="n">ay</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="n">one_sixth</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">sx</span> <span class="o">+</span> <span class="n">sx2</span> <span class="o">-</span> <span class="n">sx3</span><span class="p">)</span>
+<a name="ln-384"></a>   <span class="n">ay</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">=</span> <span class="n">one_sixth</span><span class="o">*</span><span class="n">sx3</span>
+<a name="ln-385"></a>   <span class="n">ay</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">-</span><span class="n">ay</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">ay</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">ay</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<a name="ln-386"></a>  <span class="k">end subroutine</span>
+<a name="ln-387"></a>  <span class="c">!==========================</span>
+<a name="ln-388"></a>  <span class="k">subroutine </span><span class="n">qden_3d_wgh</span><span class="p">(</span><span class="n">xp</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">ay</span><span class="p">,</span> <span class="n">az</span><span class="p">,</span> <span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="n">iz</span><span class="p">)</span>
+<a name="ln-389"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">xp</span><span class="p">(:)</span>
+<a name="ln-390"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">ax</span><span class="p">(</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">),</span> <span class="n">ay</span><span class="p">(</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">),</span> <span class="n">az</span><span class="p">(</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-391"></a>   <span class="kt">integer</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="n">iz</span>
+<a name="ln-392"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">xx</span><span class="p">,</span> <span class="n">sx</span><span class="p">,</span> <span class="n">sx2</span>
+<a name="ln-393"></a>   <span class="c">!======================</span>
+<a name="ln-394"></a>   <span class="n">xx</span> <span class="o">=</span> <span class="n">shx</span> <span class="o">+</span> <span class="n">xp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<a name="ln-395"></a>   <span class="n">ix</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">xx</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span>
+<a name="ln-396"></a>   <span class="n">sx</span> <span class="o">=</span> <span class="n">xx</span> <span class="o">-</span> <span class="kt">real</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="n">dp</span><span class="p">)</span>
+<a name="ln-397"></a>   <span class="n">sx2</span> <span class="o">=</span> <span class="n">sx</span><span class="o">*</span><span class="n">sx</span>
+<a name="ln-398"></a>   <span class="n">ax</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.75</span> <span class="o">-</span> <span class="n">sx2</span>
+<a name="ln-399"></a>   <span class="n">ax</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="mf">0.25</span> <span class="o">+</span> <span class="n">sx2</span> <span class="o">+</span> <span class="n">sx</span><span class="p">)</span>
+<a name="ln-400"></a>   <span class="n">ax</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">-</span><span class="n">ax</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">ax</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-401"></a>
+<a name="ln-402"></a>   <span class="n">xx</span> <span class="o">=</span> <span class="n">shy</span> <span class="o">+</span> <span class="n">xp</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-403"></a>   <span class="n">iy</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">xx</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span>
+<a name="ln-404"></a>   <span class="n">sx</span> <span class="o">=</span> <span class="n">xx</span> <span class="o">-</span> <span class="kt">real</span><span class="p">(</span><span class="n">iy</span><span class="p">,</span> <span class="n">dp</span><span class="p">)</span>
+<a name="ln-405"></a>   <span class="n">sx2</span> <span class="o">=</span> <span class="n">sx</span><span class="o">*</span><span class="n">sx</span>
+<a name="ln-406"></a>   <span class="n">ay</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.75</span> <span class="o">-</span> <span class="n">sx2</span>
+<a name="ln-407"></a>   <span class="n">ay</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="mf">0.25</span> <span class="o">+</span> <span class="n">sx2</span> <span class="o">+</span> <span class="n">sx</span><span class="p">)</span>
+<a name="ln-408"></a>   <span class="n">ay</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">-</span><span class="n">ay</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">ay</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-409"></a>
+<a name="ln-410"></a>   <span class="n">xx</span> <span class="o">=</span> <span class="n">shz</span> <span class="o">+</span> <span class="n">xp</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<a name="ln-411"></a>   <span class="n">iz</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">xx</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span>
+<a name="ln-412"></a>   <span class="n">sx</span> <span class="o">=</span> <span class="n">xx</span> <span class="o">-</span> <span class="kt">real</span><span class="p">(</span><span class="n">iz</span><span class="p">,</span> <span class="n">dp</span><span class="p">)</span>
+<a name="ln-413"></a>   <span class="n">sx2</span> <span class="o">=</span> <span class="n">sx</span><span class="o">*</span><span class="n">sx</span>
+<a name="ln-414"></a>   <span class="n">az</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.75</span> <span class="o">-</span> <span class="n">sx2</span>
+<a name="ln-415"></a>   <span class="n">az</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="mf">0.25</span> <span class="o">+</span> <span class="n">sx2</span> <span class="o">+</span> <span class="n">sx</span><span class="p">)</span>
+<a name="ln-416"></a>   <span class="n">az</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">-</span><span class="n">az</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">az</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-417"></a>  <span class="k">end subroutine</span>
+<a name="ln-418"></a><span class="c">!---------------------</span>
+<a name="ln-419"></a>  <span class="k">subroutine </span><span class="n">cden_3d_wgh</span><span class="p">(</span><span class="n">xp</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">ay</span><span class="p">,</span> <span class="n">az</span><span class="p">,</span> <span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="n">iz</span><span class="p">)</span>
+<a name="ln-420"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">xp</span><span class="p">(:)</span>
+<a name="ln-421"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">ax</span><span class="p">(</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">),</span> <span class="n">ay</span><span class="p">(</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">),</span> <span class="n">az</span><span class="p">(</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">)</span>
+<a name="ln-422"></a>   <span class="kt">integer</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="n">iz</span>
+<a name="ln-423"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">xx</span><span class="p">,</span> <span class="n">sx</span><span class="p">,</span> <span class="n">sx2</span><span class="p">,</span> <span class="n">sx3</span>
+<a name="ln-424"></a>   <span class="c">!======================</span>
+<a name="ln-425"></a>   <span class="c">!cubic spline to integer index</span>
+<a name="ln-426"></a>   <span class="n">xx</span> <span class="o">=</span> <span class="n">shx</span> <span class="o">+</span> <span class="n">xp</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<a name="ln-427"></a>   <span class="n">ix</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">xx</span><span class="p">)</span>
+<a name="ln-428"></a>   <span class="n">sx</span> <span class="o">=</span> <span class="n">xx</span> <span class="o">-</span> <span class="kt">real</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="n">dp</span><span class="p">)</span>
+<a name="ln-429"></a>   <span class="n">sx2</span> <span class="o">=</span> <span class="n">sx</span><span class="o">*</span><span class="n">sx</span>
+<a name="ln-430"></a>   <span class="n">sx3</span> <span class="o">=</span> <span class="n">sx2</span><span class="o">*</span><span class="n">sx</span>
+<a name="ln-431"></a>   <span class="n">ax</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">two_third</span> <span class="o">-</span> <span class="n">sx2</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">sx3</span>
+<a name="ln-432"></a>   <span class="n">ax</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="n">one_sixth</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">sx</span> <span class="o">+</span> <span class="n">sx2</span> <span class="o">-</span> <span class="n">sx3</span><span class="p">)</span>
+<a name="ln-433"></a>   <span class="n">ax</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">=</span> <span class="n">one_sixth</span><span class="o">*</span><span class="n">sx3</span>
+<a name="ln-434"></a>   <span class="n">ax</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">-</span><span class="n">ax</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">ax</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">ax</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<a name="ln-435"></a>
+<a name="ln-436"></a>   <span class="n">xx</span> <span class="o">=</span> <span class="n">shy</span> <span class="o">+</span> <span class="n">xp</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-437"></a>   <span class="n">iy</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">xx</span><span class="p">)</span>
+<a name="ln-438"></a>   <span class="n">sx</span> <span class="o">=</span> <span class="n">xx</span> <span class="o">-</span> <span class="kt">real</span><span class="p">(</span><span class="n">iy</span><span class="p">,</span> <span class="n">dp</span><span class="p">)</span>
+<a name="ln-439"></a>   <span class="n">sx2</span> <span class="o">=</span> <span class="n">sx</span><span class="o">*</span><span class="n">sx</span>
+<a name="ln-440"></a>   <span class="n">sx3</span> <span class="o">=</span> <span class="n">sx2</span><span class="o">*</span><span class="n">sx</span>
+<a name="ln-441"></a>   <span class="n">ay</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">two_third</span> <span class="o">-</span> <span class="n">sx2</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">sx3</span>
+<a name="ln-442"></a>   <span class="n">ay</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="n">one_sixth</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">sx</span> <span class="o">+</span> <span class="n">sx2</span> <span class="o">-</span> <span class="n">sx3</span><span class="p">)</span>
+<a name="ln-443"></a>   <span class="n">ay</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">=</span> <span class="n">one_sixth</span><span class="o">*</span><span class="n">sx3</span>
+<a name="ln-444"></a>   <span class="n">ay</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">-</span><span class="n">ay</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">ay</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">ay</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<a name="ln-445"></a>
+<a name="ln-446"></a>   <span class="n">xx</span> <span class="o">=</span> <span class="n">shz</span> <span class="o">+</span> <span class="n">xp</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<a name="ln-447"></a>   <span class="n">iz</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">xx</span><span class="p">)</span>
+<a name="ln-448"></a>   <span class="n">sx</span> <span class="o">=</span> <span class="n">xx</span> <span class="o">-</span> <span class="kt">real</span><span class="p">(</span><span class="n">iz</span><span class="p">,</span> <span class="n">dp</span><span class="p">)</span>
+<a name="ln-449"></a>   <span class="n">sx2</span> <span class="o">=</span> <span class="n">sx</span><span class="o">*</span><span class="n">sx</span>
+<a name="ln-450"></a>   <span class="n">az</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">two_third</span> <span class="o">-</span> <span class="n">sx2</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">sx3</span>
+<a name="ln-451"></a>   <span class="n">az</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="n">one_sixth</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">sx</span> <span class="o">+</span> <span class="n">sx2</span> <span class="o">-</span> <span class="n">sx3</span><span class="p">)</span>
+<a name="ln-452"></a>   <span class="n">az</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">=</span> <span class="n">one_sixth</span><span class="o">*</span><span class="n">sx3</span>
+<a name="ln-453"></a>   <span class="n">az</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">-</span><span class="n">az</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">az</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">az</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<a name="ln-454"></a>  <span class="k">end subroutine</span>
+<a name="ln-455"></a>  <span class="c">!====================================</span>
+<a name="ln-456"></a>
+<a name="ln-457"></a>  <span class="c">!DIR$ ATTRIBUTES INLINE :: ql_interpolate</span>
+<a name="ln-458"></a>  <span class="k">subroutine </span><span class="n">set_local_2d_positions</span><span class="p">(</span><span class="n">pt_loc</span><span class="p">,</span> <span class="n">n1</span><span class="p">,</span> <span class="n">np</span><span class="p">)</span>
+<a name="ln-459"></a>
+<a name="ln-460"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">pt_loc</span><span class="p">(:,</span> <span class="p">:)</span>
+<a name="ln-461"></a>   <span class="kt">integer</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">n1</span><span class="p">,</span> <span class="n">np</span>
+<a name="ln-462"></a>   <span class="kt">integer</span> <span class="kd">::</span> <span class="n">n</span>
+<a name="ln-463"></a>   <span class="c">!=========================</span>
+<a name="ln-464"></a>   <span class="k">do </span><span class="n">n</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">np</span>
+<a name="ln-465"></a>    <span class="n">pt_loc</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">dx_inv</span><span class="o">*</span><span class="p">(</span><span class="n">pt_loc</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">xmn</span><span class="p">)</span>
+<a name="ln-466"></a>   <span class="k">end do</span>
+<a name="ln-467"></a><span class="k">   if</span> <span class="p">(</span><span class="n">n1</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">return</span>
+<a name="ln-468"></a><span class="k">   if</span> <span class="p">(</span><span class="n">n_str</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-469"></a><span class="k">    do </span><span class="n">n</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">np</span>
+<a name="ln-470"></a>     <span class="n">pt_loc</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="n">dy_inv</span><span class="o">*</span><span class="p">(</span><span class="n">pt_loc</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">ymn</span><span class="p">)</span>
+<a name="ln-471"></a>    <span class="k">end do</span>
+<a name="ln-472"></a><span class="k">   else</span>
+<a name="ln-473"></a><span class="k">    call </span><span class="n">map2dy_part_sind</span><span class="p">(</span><span class="n">np</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">pt_loc</span><span class="p">)</span>
+<a name="ln-474"></a>   <span class="k">end if</span>
+<a name="ln-475"></a><span class="k">   if</span> <span class="p">(</span><span class="n">n1</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="k">return</span>
+<a name="ln-476"></a>
+<a name="ln-477"></a><span class="k">   do </span><span class="n">n</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">np</span>
+<a name="ln-478"></a>    <span class="n">pt_loc</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">=</span> <span class="n">dx_inv</span><span class="o">*</span><span class="p">(</span><span class="n">pt_loc</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">-</span> <span class="n">xmn</span><span class="p">)</span>
+<a name="ln-479"></a>   <span class="k">end do</span>
+<a name="ln-480"></a><span class="k">   if</span> <span class="p">(</span><span class="n">n_str</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-481"></a><span class="k">    do </span><span class="n">n</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">np</span>
+<a name="ln-482"></a>     <span class="n">pt_loc</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="o">=</span> <span class="n">dy_inv</span><span class="o">*</span><span class="p">(</span><span class="n">pt_loc</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="o">-</span> <span class="n">ymn</span><span class="p">)</span>
+<a name="ln-483"></a>    <span class="k">end do</span>
+<a name="ln-484"></a><span class="k">   else</span>
+<a name="ln-485"></a><span class="k">    call </span><span class="n">map2dy_part_sind</span><span class="p">(</span><span class="n">np</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">pt_loc</span><span class="p">)</span>
+<a name="ln-486"></a>   <span class="k">end if</span>
+<a name="ln-487"></a>
+<a name="ln-488"></a><span class="k">  end subroutine</span>
+<a name="ln-489"></a>  <span class="c">!======================</span>
+<a name="ln-490"></a>  <span class="k">subroutine </span><span class="n">set_local_3d_positions</span><span class="p">(</span><span class="n">pt_loc</span><span class="p">,</span> <span class="n">n1</span><span class="p">,</span> <span class="n">np</span><span class="p">)</span>
+<a name="ln-491"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="kd">::</span> <span class="n">pt_loc</span><span class="p">(:,</span> <span class="p">:)</span>
+<a name="ln-492"></a>   <span class="kt">integer</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">n1</span><span class="p">,</span> <span class="n">np</span>
+<a name="ln-493"></a>   <span class="kt">integer</span> <span class="kd">::</span> <span class="n">n</span>
+<a name="ln-494"></a>   <span class="c">!=========================</span>
+<a name="ln-495"></a>   <span class="k">do </span><span class="n">n</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">np</span>
+<a name="ln-496"></a>    <span class="n">pt_loc</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">dx_inv</span><span class="o">*</span><span class="p">(</span><span class="n">pt_loc</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">xmn</span><span class="p">)</span>
+<a name="ln-497"></a>   <span class="k">end do</span>
+<a name="ln-498"></a><span class="k">   if</span> <span class="p">(</span><span class="n">n_str</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-499"></a><span class="k">    do </span><span class="n">n</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">np</span>
+<a name="ln-500"></a>     <span class="n">pt_loc</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="n">dy_inv</span><span class="o">*</span><span class="p">(</span><span class="n">pt_loc</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">ymn</span><span class="p">)</span>
+<a name="ln-501"></a>     <span class="n">pt_loc</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">=</span> <span class="n">dz_inv</span><span class="o">*</span><span class="p">(</span><span class="n">pt_loc</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">-</span> <span class="n">zmn</span><span class="p">)</span>
+<a name="ln-502"></a>    <span class="k">end do</span>
+<a name="ln-503"></a><span class="k">   else</span>
+<a name="ln-504"></a><span class="k">    call </span><span class="n">map3d_part_sind</span><span class="p">(</span><span class="n">pt_loc</span><span class="p">,</span> <span class="n">np</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<a name="ln-505"></a>   <span class="k">end if</span>
+<a name="ln-506"></a><span class="k">   if</span> <span class="p">(</span><span class="n">n1</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="k">return</span>
+<a name="ln-507"></a><span class="k">   do </span><span class="n">n</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">np</span>
+<a name="ln-508"></a>    <span class="n">pt_loc</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="o">=</span> <span class="n">dx_inv</span><span class="o">*</span><span class="p">(</span><span class="n">pt_loc</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="o">-</span> <span class="n">xmn</span><span class="p">)</span>
+<a name="ln-509"></a>   <span class="k">end do</span>
+<a name="ln-510"></a><span class="k">   if</span> <span class="p">(</span><span class="n">n_str</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">then</span>
+<a name="ln-511"></a><span class="k">    do </span><span class="n">n</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">np</span>
+<a name="ln-512"></a>     <span class="n">pt_loc</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span> <span class="o">=</span> <span class="n">dy_inv</span><span class="o">*</span><span class="p">(</span><span class="n">pt_loc</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span> <span class="o">-</span> <span class="n">ymn</span><span class="p">)</span>
+<a name="ln-513"></a>     <span class="n">pt_loc</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span> <span class="o">=</span> <span class="n">dz_inv</span><span class="o">*</span><span class="p">(</span><span class="n">pt_loc</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span> <span class="o">-</span> <span class="n">zmn</span><span class="p">)</span>
+<a name="ln-514"></a>    <span class="k">end do</span>
+<a name="ln-515"></a><span class="k">   else</span>
+<a name="ln-516"></a><span class="k">    call </span><span class="n">map3d_part_sind</span><span class="p">(</span><span class="n">pt_loc</span><span class="p">,</span> <span class="n">np</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+<a name="ln-517"></a>   <span class="k">end if</span>
+<a name="ln-518"></a>
+<a name="ln-519"></a><span class="k">  end subroutine</span>
+<a name="ln-520"></a>
+<a name="ln-521"></a><span class="k"> end module</span>
+</pre></div>
+
+    </section>
+    </div>
+  </div>
+
+  
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2020 <a rel="license" href="http://www.gnu.org/licenses/old-licenses/fdl-1.2.en.html">GNU Free Documentation License</a>
+                                          </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+             on 2020-07-30 
+          </p>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> ALaDyn was developed by The ALaDyn Collaboration</p></div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+      });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+    
+  </body>
+</html>

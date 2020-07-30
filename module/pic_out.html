@@ -1,0 +1,2037 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+   <meta name="description" content="A High-Accuracy PIC Code for the Maxwell-Vlasov Equations">
+    
+    <meta name="author" content="The ALaDyn Collaboration" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>pic_out &ndash; ALaDyn</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">ALaDyn <small>3.0.1</small></a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+        
+            <li><a href='../page/index.html'>Guide</a></li>
+      
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+     aria-expanded="false">Contents <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          
+              
+            <li><a href="../lists/files.html">Source Files</a></li>
+        
+        
+        
+            <li><a href="../lists/modules.html">Modules</a></li>
+        
+            
+                                
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+        
+               
+            <li><a href="../lists/types.html">Derived Types</a></li>
+        
+        
+            <li><a href="../program/aladyn.html">Program</a></li>
+      
+            </ul>
+            </li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+
+                             
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../program/aladyn.html">Program</a></li>
+
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>pic_out 
+    <small>Module</small>
+    
+    </h1>
+    
+<div class="row">
+  <div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+     <li><i class="fa fa-list-ol"></i>
+       <a data-toggle="tooltip"
+    data-placement="bottom" data-html="true"
+    title=" 6.1% of total for modules and submodules.">1499 statements</a>
+     </li> 
+     
+     
+     
+    <li><i class="fa fa-code"></i><a href="../src/pic_out.f90"> Source File</a></li>
+     
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+    
+     <li><a href='../sourcefile/pic_out.f90.html'>pic_out.f90</a></li>
+    
+  
+     <li class="active">pic_out</li>
+  </ol>
+</div>
+</div>
+</div>
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+    
+<div id="sidebar">
+  
+<h3>Contents</h3>
+ 
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#vars-0">Variables</a></h3></div>
+  <div id="vars-0" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/pic_out.html#variable-par_dim">par_dim</a>
+      
+      <a class="list-group-item" href="../module/pic_out.html#variable-int_par">int_par</a>
+      
+      <a class="list-group-item" href="../module/pic_out.html#variable-part_int_par">part_int_par</a>
+      
+      <a class="list-group-item" href="../module/pic_out.html#variable-real_par">real_par</a>
+      
+      <a class="list-group-item" href="../module/pic_out.html#variable-part_real_par">part_real_par</a>
+      
+      <a class="list-group-item" href="../module/pic_out.html#variable-rpar">rpar</a>
+      
+      <a class="list-group-item" href="../module/pic_out.html#variable-ipar">ipar</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#subs-0">Subroutines</a></h3></div>
+  <div class="list-group">
+    <div id="subs-0" class="panel-collapse collapse">
+      
+      <a class="list-group-item" href="../module/pic_out.html#proc-endian">endian</a>
+      
+      <a class="list-group-item" href="../module/pic_out.html#proc-fluid_den_mom_out">fluid_den_mom_out</a>
+      
+      <a class="list-group-item" href="../module/pic_out.html#proc-den_energy_out">den_energy_out</a>
+      
+      <a class="list-group-item" href="../module/pic_out.html#proc-bden_energy_out">bden_energy_out</a>
+      
+      <a class="list-group-item" href="../module/pic_out.html#proc-ext_bfield_out">ext_bfield_out</a>
+      
+      <a class="list-group-item" href="../module/pic_out.html#proc-fields_out">fields_out</a>
+      
+      <a class="list-group-item" href="../module/pic_out.html#proc-fields_out_new">fields_out_new</a>
+      
+      <a class="list-group-item" href="../module/pic_out.html#proc-bfields_out">bfields_out</a>
+      
+      <a class="list-group-item" href="../module/pic_out.html#proc-env_two_fields_out">env_two_fields_out</a>
+      
+      <a class="list-group-item" href="../module/pic_out.html#proc-env_fields_out">env_fields_out</a>
+      
+      <a class="list-group-item" href="../module/pic_out.html#proc-part_pdata_out">part_pdata_out</a>
+      
+      <a class="list-group-item" href="../module/pic_out.html#proc-part_high_gamma_out">part_high_gamma_out</a>
+      
+      <a class="list-group-item" href="../module/pic_out.html#proc-part_bdata_out">part_bdata_out</a>
+      
+      <a class="list-group-item" href="../module/pic_out.html#proc-part_ionz_out">part_ionz_out</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+</div>
+
+    </div>
+    
+    <div class="col-md-9" id='text'>
+    
+      <br>
+    
+  
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Uses</h3>
+      </div>
+      <ul class="list-group">
+      
+      <li class="list-group-item">
+  <ul class="list-inline">
+    
+    <li><a href='../module/pstruct_data.html'>pstruct_data</a></li>
+    
+    <li><a href='../module/fstruct_data.html'>fstruct_data</a></li>
+    
+    <li><a href='../module/code_util.html'>code_util</a></li>
+    
+    <li><a href='../module/common_param.html'>common_param</a></li>
+    
+    <li><a href='../module/grid_param.html'>grid_param</a></li>
+    
+    <li><a href='../module/parallel.html'>parallel</a></li>
+    
+  </ul>
+      </li>
+      
+      
+      
+      <li class="list-group-item">
+  <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: module~~pic_out~~UsesGraph Pages: 1 -->
+<svg id="modulepic_outUsesGraph" width="531pt" height="323pt"
+ viewBox="0.00 0.00 531.00 322.96" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="module~~pic_out~~UsesGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 318.9642)">
+<title>module~~pic_out~~UsesGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-318.9642 527,-318.9642 527,4 -4,4"/>
+<!-- module~pic_out -->
+<g id="module~~pic_out~~UsesGraph_node1" class="node">
+<title>module~pic_out</title>
+<polygon fill="none" stroke="#000000" points="523,-248 469,-248 469,-224 523,-224 523,-248"/>
+<text text-anchor="middle" x="496" y="-233.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">pic_out</text>
+</g>
+<!-- module~parallel -->
+<g id="module~~pic_out~~UsesGraph_node2" class="node">
+<title>module~parallel</title>
+<g id="a_module~~pic_out~~UsesGraph_node2"><a xlink:href=".././module/parallel.html" xlink:title="parallel">
+<polygon fill="#337ab7" stroke="#337ab7" points="422,-228 368,-228 368,-204 422,-204 422,-228"/>
+<text text-anchor="middle" x="395" y="-213.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">parallel</text>
+</a>
+</g>
+</g>
+<!-- module~pic_out&#45;&gt;module~parallel -->
+<g id="module~~pic_out~~UsesGraph_edge1" class="edge">
+<title>module~pic_out&#45;&gt;module~parallel</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M468.9339,-230.6404C457.6126,-228.3985 444.2723,-225.7569 432.0623,-223.3391"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="432.6303,-219.8837 422.1409,-221.3744 431.2705,-226.7503 432.6303,-219.8837"/>
+</g>
+<!-- module~common_param -->
+<g id="module~~pic_out~~UsesGraph_node3" class="node">
+<title>module~common_param</title>
+<g id="a_module~~pic_out~~UsesGraph_node3"><a xlink:href=".././module/common_param.html" xlink:title="common_param">
+<polygon fill="#337ab7" stroke="#337ab7" points="321,-268 221,-268 221,-244 321,-244 321,-268"/>
+<text text-anchor="middle" x="271" y="-253.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">common_param</text>
+</a>
+</g>
+</g>
+<!-- module~pic_out&#45;&gt;module~common_param -->
+<g id="module~~pic_out~~UsesGraph_edge2" class="edge">
+<title>module~pic_out&#45;&gt;module~common_param</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M468.8597,-238.4125C435.0281,-241.4197 376.2117,-246.6478 331.4731,-250.6246"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="330.9439,-247.1578 321.2931,-251.5295 331.5637,-254.1303 330.9439,-247.1578"/>
+</g>
+<!-- module~fstruct_data -->
+<g id="module~~pic_out~~UsesGraph_node4" class="node">
+<title>module~fstruct_data</title>
+<g id="a_module~~pic_out~~UsesGraph_node4"><a xlink:href=".././module/fstruct_data.html" xlink:title="fstruct_data">
+<polygon fill="#337ab7" stroke="#337ab7" points="433,-308 357,-308 357,-284 433,-284 433,-308"/>
+<text text-anchor="middle" x="395" y="-293.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">fstruct_data</text>
+</a>
+</g>
+</g>
+<!-- module~pic_out&#45;&gt;module~fstruct_data -->
+<g id="module~~pic_out~~UsesGraph_edge3" class="edge">
+<title>module~pic_out&#45;&gt;module~fstruct_data</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M475.5611,-248.1419C460.7761,-256.9251 440.5859,-268.9193 424.117,-278.7028"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="422.2183,-275.7597 415.4085,-283.8762 425.7934,-281.7778 422.2183,-275.7597"/>
+</g>
+<!-- module~code_util -->
+<g id="module~~pic_out~~UsesGraph_node5" class="node">
+<title>module~code_util</title>
+<g id="a_module~~pic_out~~UsesGraph_node5"><a xlink:href=".././module/code_util.html" xlink:title="code_util">
+<polygon fill="#337ab7" stroke="#337ab7" points="183,-144 122,-144 122,-120 183,-120 183,-144"/>
+<text text-anchor="middle" x="152.5" y="-129.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">code_util</text>
+</a>
+</g>
+</g>
+<!-- module~pic_out&#45;&gt;module~code_util -->
+<g id="module~~pic_out~~UsesGraph_edge4" class="edge">
+<title>module~pic_out&#45;&gt;module~code_util</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M395,-94C363.6326,-70.9017 253.3899,-100.1751 192.9271,-118.798"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="191.8173,-115.4778 183.3142,-121.7984 193.9029,-122.1599 191.8173,-115.4778"/>
+</g>
+<!-- module~pstruct_data -->
+<g id="module~~pic_out~~UsesGraph_node6" class="node">
+<title>module~pstruct_data</title>
+<g id="a_module~~pic_out~~UsesGraph_node6"><a xlink:href=".././module/pstruct_data.html" xlink:title="pstruct_data">
+<polygon fill="#337ab7" stroke="#337ab7" points="310.5,-66 231.5,-66 231.5,-42 310.5,-42 310.5,-66"/>
+<text text-anchor="middle" x="271" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">pstruct_data</text>
+</a>
+</g>
+</g>
+<!-- module~pic_out&#45;&gt;module~pstruct_data -->
+<g id="module~~pic_out~~UsesGraph_edge5" class="edge">
+<title>module~pic_out&#45;&gt;module~pstruct_data</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M395,-94C373.2451,-77.9801 344.7985,-68.2016 320.6398,-62.3277"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="321.1074,-58.8448 310.5805,-60.0426 319.5567,-65.6709 321.1074,-58.8448"/>
+</g>
+<!-- module~grid_param -->
+<g id="module~~pic_out~~UsesGraph_node7" class="node">
+<title>module~grid_param</title>
+<g id="a_module~~pic_out~~UsesGraph_node7"><a xlink:href=".././module/grid_param.html" xlink:title="grid_param">
+<polygon fill="#337ab7" stroke="#337ab7" points="308,-24 234,-24 234,0 308,0 308,-24"/>
+<text text-anchor="middle" x="271" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">grid_param</text>
+</a>
+</g>
+</g>
+<!-- module~pic_out&#45;&gt;module~grid_param -->
+<g id="module~~pic_out~~UsesGraph_edge6" class="edge">
+<title>module~pic_out&#45;&gt;module~grid_param</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M490.6095,-223.7383C477.961,-196.3662 443.721,-129.8771 395,-94"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M395,-94C360.6788,-68.7266 357.4806,-55.0421 321,-33 318.3848,-31.4199 315.6291,-29.9029 312.8106,-28.4584"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="314.2219,-25.2538 303.6897,-24.1033 311.2057,-31.5706 314.2219,-25.2538"/>
+</g>
+<!-- module~parallel&#45;&gt;module~common_param -->
+<g id="module~~pic_out~~UsesGraph_edge9" class="edge">
+<title>module~parallel&#45;&gt;module~common_param</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M367.7877,-224.7782C353.2464,-229.4689 334.9303,-235.3773 318.1548,-240.7888"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="316.9384,-237.5035 308.4959,-243.9046 319.0875,-244.1654 316.9384,-237.5035"/>
+</g>
+<!-- module~mpi_var -->
+<g id="module~~pic_out~~UsesGraph_node9" class="node">
+<title>module~mpi_var</title>
+<g id="a_module~~pic_out~~UsesGraph_node9"><a xlink:href=".././module/mpi_var.html" xlink:title="mpi_var">
+<polygon fill="#337ab7" stroke="#337ab7" points="180,-226 125,-226 125,-202 180,-202 180,-226"/>
+<text text-anchor="middle" x="152.5" y="-211.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">mpi_var</text>
+</a>
+</g>
+</g>
+<!-- module~parallel&#45;&gt;module~mpi_var -->
+<g id="module~~pic_out~~UsesGraph_edge10" class="edge">
+<title>module~parallel&#45;&gt;module~mpi_var</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M367.6536,-215.7745C324.2633,-215.4166 239.534,-214.7178 190.3425,-214.3121"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="190.1471,-210.8105 180.1186,-214.2278 190.0893,-217.8102 190.1471,-210.8105"/>
+</g>
+<!-- module~util -->
+<g id="module~~pic_out~~UsesGraph_node10" class="node">
+<title>module~util</title>
+<g id="a_module~~pic_out~~UsesGraph_node10"><a xlink:href=".././module/util.html" xlink:title="util">
+<polygon fill="#337ab7" stroke="#337ab7" points="298,-146 244,-146 244,-122 298,-122 298,-146"/>
+<text text-anchor="middle" x="271" y="-131.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">util</text>
+</a>
+</g>
+</g>
+<!-- module~parallel&#45;&gt;module~util -->
+<g id="module~~pic_out~~UsesGraph_edge7" class="edge">
+<title>module~parallel&#45;&gt;module~util</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M382.7637,-203.9827C368.7476,-190.6985 344.6554,-169.2929 321,-155 316.7895,-152.456 312.2149,-150.0756 307.6002,-147.8981"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="308.7362,-144.5734 298.1753,-143.7259 305.9026,-150.9743 308.7362,-144.5734"/>
+</g>
+<!-- mpi -->
+<g id="module~~pic_out~~UsesGraph_node12" class="node">
+<title>mpi</title>
+<g id="a_module~~pic_out~~UsesGraph_node12"><a xlink:href="http://www.mpi-forum.org/docs/mpi-3.1/mpi31-report/node410.htm" xlink:title="mpi">
+<polygon fill="#337ab7" stroke="#337ab7" points="298,-188 244,-188 244,-164 298,-164 298,-188"/>
+<text text-anchor="middle" x="271" y="-173.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">mpi</text>
+</a>
+</g>
+</g>
+<!-- module~parallel&#45;&gt;mpi -->
+<g id="module~~pic_out~~UsesGraph_edge8" class="edge">
+<title>module~parallel&#45;&gt;mpi</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M367.7877,-207.2218C350.1819,-201.5426 327.0428,-194.0783 307.804,-187.8723"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="308.7405,-184.4968 298.1488,-184.7577 306.5914,-191.1588 308.7405,-184.4968"/>
+</g>
+<!-- module~precision_def -->
+<g id="module~~pic_out~~UsesGraph_node8" class="node">
+<title>module~precision_def</title>
+<g id="a_module~~pic_out~~UsesGraph_node8"><a xlink:href=".././module/precision_def.html" xlink:title="precision_def">
+<polygon fill="#337ab7" stroke="#337ab7" points="84,-144 0,-144 0,-120 84,-120 84,-144"/>
+<text text-anchor="middle" x="42" y="-129.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">precision_def</text>
+</a>
+</g>
+</g>
+<!-- module~common_param&#45;&gt;module~precision_def -->
+<g id="module~~pic_out~~UsesGraph_edge11" class="edge">
+<title>module~common_param&#45;&gt;module~precision_def</title>
+<path fill="none" stroke="#ffff00" stroke-dasharray="5,2" d="M247.4048,-268.0993C218.0867,-282.4145 169.81,-303.4278 152.5,-296"/>
+<path fill="none" stroke="#ffff00" stroke-dasharray="5,2" d="M152.5,-296C92.5154,-270.2603 60.6808,-192.2961 48.2691,-153.8763"/>
+<polygon fill="#ffff00" stroke="#ffff00" points="51.5662,-152.6904 45.2762,-144.1648 44.8767,-154.7521 51.5662,-152.6904"/>
+</g>
+<!-- module~fstruct_data&#45;&gt;module~precision_def -->
+<g id="module~~pic_out~~UsesGraph_edge12" class="edge">
+<title>module~fstruct_data&#45;&gt;module~precision_def</title>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M356.5919,-304.9743C307.1507,-314.565 219.6257,-324.804 152.5,-296"/>
+</g>
+<!-- module~code_util&#45;&gt;module~precision_def -->
+<g id="module~~pic_out~~UsesGraph_edge13" class="edge">
+<title>module~code_util&#45;&gt;module~precision_def</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M121.7196,-132C113.1844,-132 103.6728,-132 94.2763,-132"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="94.1768,-128.5001 84.1768,-132 94.1768,-135.5001 94.1768,-128.5001"/>
+</g>
+<!-- module~pstruct_data&#45;&gt;module~precision_def -->
+<g id="module~~pic_out~~UsesGraph_edge14" class="edge">
+<title>module~pstruct_data&#45;&gt;module~precision_def</title>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M235.7206,-66.0166C195.7131,-79.6436 130.3957,-101.8914 86.8143,-116.7357"/>
+<polygon fill="#0000ff" stroke="#0000ff" points="85.6569,-113.4324 77.3195,-119.9698 87.9139,-120.0586 85.6569,-113.4324"/>
+</g>
+<!-- module~struct_def -->
+<g id="module~~pic_out~~UsesGraph_node11" class="node">
+<title>module~struct_def</title>
+<g id="a_module~~pic_out~~UsesGraph_node11"><a xlink:href=".././module/struct_def.html" xlink:title="struct_def">
+<polygon fill="#337ab7" stroke="#337ab7" points="185,-64 120,-64 120,-40 185,-40 185,-64"/>
+<text text-anchor="middle" x="152.5" y="-49.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">struct_def</text>
+</a>
+</g>
+</g>
+<!-- module~pstruct_data&#45;&gt;module~struct_def -->
+<g id="module~~pic_out~~UsesGraph_edge15" class="edge">
+<title>module~pstruct_data&#45;&gt;module~struct_def</title>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M231.2116,-53.3285C219.6667,-53.1336 207.0129,-52.92 195.2923,-52.7222"/>
+<polygon fill="#0000ff" stroke="#0000ff" points="195.3416,-49.2227 185.2839,-52.5533 195.2234,-56.2217 195.3416,-49.2227"/>
+</g>
+<!-- module~grid_param&#45;&gt;module~precision_def -->
+<g id="module~~pic_out~~UsesGraph_edge16" class="edge">
+<title>module~grid_param&#45;&gt;module~precision_def</title>
+<path fill="none" stroke="#ff00ff" stroke-dasharray="5,2" d="M233.7499,-8.9933C201.5646,-8.1112 154.8692,-11.0732 120,-31 87.8526,-49.3714 64.4361,-86.8011 52.0518,-110.5756"/>
+<polygon fill="#ff00ff" stroke="#ff00ff" points="48.7649,-109.3234 47.4264,-119.8333 55.0269,-112.452 48.7649,-109.3234"/>
+</g>
+<!-- module~grid_param&#45;&gt;module~struct_def -->
+<g id="module~~pic_out~~UsesGraph_edge17" class="edge">
+<title>module~grid_param&#45;&gt;module~struct_def</title>
+<path fill="none" stroke="#ff00ff" stroke-dasharray="5,2" d="M235.4461,-24.0013C222.7338,-28.2924 208.2792,-33.1716 195.0375,-37.6414"/>
+<polygon fill="#ff00ff" stroke="#ff00ff" points="193.5522,-34.4486 185.1968,-40.9631 195.791,-41.081 193.5522,-34.4486"/>
+</g>
+<!-- module~mpi_var&#45;&gt;module~precision_def -->
+<g id="module~~pic_out~~UsesGraph_edge18" class="edge">
+<title>module~mpi_var&#45;&gt;module~precision_def</title>
+<path fill="none" stroke="#cbff00" stroke-dasharray="5,2" d="M136.1953,-201.9006C117.8334,-188.2745 87.7946,-165.9833 66.5828,-150.2424"/>
+<polygon fill="#cbff00" stroke="#cbff00" points="68.4877,-147.2976 58.3715,-144.149 64.3162,-152.9189 68.4877,-147.2976"/>
+</g>
+<!-- module~util&#45;&gt;module~code_util -->
+<g id="module~~pic_out~~UsesGraph_edge20" class="edge">
+<title>module~util&#45;&gt;module~code_util</title>
+<path fill="none" stroke="#00ff66" stroke-dasharray="5,2" d="M243.8137,-133.5412C228.8749,-133.289 210.0446,-132.9712 193.37,-132.6898"/>
+<polygon fill="#00ff66" stroke="#00ff66" points="193.378,-129.1895 183.3203,-132.5202 193.2598,-136.1885 193.378,-129.1895"/>
+</g>
+<!-- module~util&#45;&gt;module~precision_def -->
+<g id="module~~pic_out~~UsesGraph_edge19" class="edge">
+<title>module~util&#45;&gt;module~precision_def</title>
+<path fill="none" stroke="#00ff66" stroke-dasharray="5,2" d="M243.7539,-141.6115C226.9653,-145.9023 204.9124,-150.8266 185,-153 156.2817,-156.1346 148.6395,-156.7879 120,-153 109.7814,-151.6485 99.0009,-149.342 88.8234,-146.7402"/>
+<polygon fill="#00ff66" stroke="#00ff66" points="89.4563,-143.286 78.8901,-144.0645 87.6355,-150.0451 89.4563,-143.286"/>
+</g>
+<!-- module~struct_def&#45;&gt;module~precision_def -->
+<g id="module~~pic_out~~UsesGraph_edge21" class="edge">
+<title>module~struct_def&#45;&gt;module~precision_def</title>
+<path fill="none" stroke="#0066ff" stroke-dasharray="5,2" d="M135.7174,-64.1503C117.3573,-77.4427 87.746,-98.8808 66.7257,-114.099"/>
+<polygon fill="#0066ff" stroke="#0066ff" points="64.626,-111.2982 58.5785,-119.9975 68.731,-116.9682 64.626,-111.2982"/>
+</g>
+</g>
+</svg>
+</div><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="517pt" height="32pt"
+ viewBox="0.00 0.00 517.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 513,-28 513,4 -4,4"/>
+<!-- Module -->
+<g id="node1" class="node">
+<title>Module</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="54,-24 0,-24 0,0 54,0 54,-24"/>
+<text text-anchor="middle" x="27" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Module</text>
+</g>
+<!-- Submodule -->
+<g id="node2" class="node">
+<title>Submodule</title>
+<polygon fill="#5bc0de" stroke="#5bc0de" points="145.5,-24 72.5,-24 72.5,0 145.5,0 145.5,-24"/>
+<text text-anchor="middle" x="109" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Submodule</text>
+</g>
+<!-- Subroutine -->
+<g id="node3" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="234.5,-24 163.5,-24 163.5,0 234.5,0 234.5,-24"/>
+<text text-anchor="middle" x="199" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node4" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="311,-24 253,-24 253,0 311,0 311,-24"/>
+<text text-anchor="middle" x="282" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Function</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="387,-24 329,-24 329,0 387,0 387,-24"/>
+<text text-anchor="middle" x="358" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="509,-24 405,-24 405,0 509,0 509,-24"/>
+<text text-anchor="middle" x="457" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a submodule to the (sub)module which it is
+    descended from. Dashed arrows point from a module or program unit to 
+    modules which it uses. Where possible, edges connecting nodes are given different colours to make them easier to distinguish in large graphs.
+    </p>
+    </div></div></div></div>
+      </li>
+      
+      </ul>
+    </div>
+    
+
+    
+    
+    <div class="panel panel-default">
+      <div class="panel-heading">
+  <h3 class="panel-title">Used by</h3>
+      </div>
+      <ul class="list-group">
+  
+  
+  <li class="list-group-item">
+    <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: module~~pic_out~~UsedByGraph Pages: 1 -->
+<svg id="modulepic_outUsedByGraph" width="152pt" height="32pt"
+ viewBox="0.00 0.00 152.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="module~~pic_out~~UsedByGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>module~~pic_out~~UsedByGraph</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 148,-28 148,4 -4,4"/>
+<!-- module~pic_out -->
+<g id="module~~pic_out~~UsedByGraph_node1" class="node">
+<title>module~pic_out</title>
+<polygon fill="none" stroke="#000000" points="54,-24 0,-24 0,0 54,0 54,-24"/>
+<text text-anchor="middle" x="27" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">pic_out</text>
+</g>
+<!-- program~aladyn -->
+<g id="module~~pic_out~~UsedByGraph_node2" class="node">
+<title>program~aladyn</title>
+<g id="a_module~~pic_out~~UsedByGraph_node2"><a xlink:href=".././program/aladyn.html" xlink:title="aladyn">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="144,-24 90,-24 90,0 144,0 144,-24"/>
+<text text-anchor="middle" x="117" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">aladyn</text>
+</a>
+</g>
+</g>
+<!-- program~aladyn&#45;&gt;module~pic_out -->
+<g id="module~~pic_out~~UsedByGraph_edge1" class="edge">
+<title>program~aladyn&#45;&gt;module~pic_out</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M89.997,-12C81.9723,-12 73.0335,-12 64.4691,-12"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="64.295,-8.5001 54.295,-12 64.2949,-15.5001 64.295,-8.5001"/>
+</g>
+</g>
+</svg>
+</div><div><a type="button" class="graph-help" data-toggle="modal" href="#graph-help-text">Help</a></div><div class="modal fade" id="graph-help-text" tabindex="-1" role="dialog"><div class="modal-dialog modal-lg" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="-graph-help-label">Graph Key</h4></div><div class="modal-body">
+    <p>Nodes of different colours represent the following: </p>
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="517pt" height="32pt"
+ viewBox="0.00 0.00 517.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 513,-28 513,4 -4,4"/>
+<!-- Module -->
+<g id="node1" class="node">
+<title>Module</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="54,-24 0,-24 0,0 54,0 54,-24"/>
+<text text-anchor="middle" x="27" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Module</text>
+</g>
+<!-- Submodule -->
+<g id="node2" class="node">
+<title>Submodule</title>
+<polygon fill="#5bc0de" stroke="#5bc0de" points="145.5,-24 72.5,-24 72.5,0 145.5,0 145.5,-24"/>
+<text text-anchor="middle" x="109" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Submodule</text>
+</g>
+<!-- Subroutine -->
+<g id="node3" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="234.5,-24 163.5,-24 163.5,0 234.5,0 234.5,-24"/>
+<text text-anchor="middle" x="199" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node4" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="311,-24 253,-24 253,0 311,0 311,-24"/>
+<text text-anchor="middle" x="282" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Function</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="387,-24 329,-24 329,0 387,0 387,-24"/>
+<text text-anchor="middle" x="358" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="#000000" points="509,-24 405,-24 405,0 509,0 509,-24"/>
+<text text-anchor="middle" x="457" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+    
+    <p>Solid arrows point from a submodule to the (sub)module which it is
+    descended from. Dashed arrows point from a module or program unit to 
+    modules which it uses. Where possible, edges connecting nodes are given different colours to make them easier to distinguish in large graphs.
+    </p>
+    </div></div></div></div>
+  </li>
+  
+      </ul>
+    </div>
+    
+
+    <br>
+
+    <section class="visible-xs visible-sm hidden-md">
+      
+<h3>Contents</h3>
+ 
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#vars-1">Variables</a></h3></div>
+  <div id="vars-1" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../module/pic_out.html#variable-par_dim">par_dim</a>
+      
+      <a class="list-group-item" href="../module/pic_out.html#variable-int_par">int_par</a>
+      
+      <a class="list-group-item" href="../module/pic_out.html#variable-part_int_par">part_int_par</a>
+      
+      <a class="list-group-item" href="../module/pic_out.html#variable-real_par">real_par</a>
+      
+      <a class="list-group-item" href="../module/pic_out.html#variable-part_real_par">part_real_par</a>
+      
+      <a class="list-group-item" href="../module/pic_out.html#variable-rpar">rpar</a>
+      
+      <a class="list-group-item" href="../module/pic_out.html#variable-ipar">ipar</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#subs-1">Subroutines</a></h3></div>
+  <div class="list-group">
+    <div id="subs-1" class="panel-collapse collapse">
+      
+      <a class="list-group-item" href="../module/pic_out.html#proc-endian">endian</a>
+      
+      <a class="list-group-item" href="../module/pic_out.html#proc-fluid_den_mom_out">fluid_den_mom_out</a>
+      
+      <a class="list-group-item" href="../module/pic_out.html#proc-den_energy_out">den_energy_out</a>
+      
+      <a class="list-group-item" href="../module/pic_out.html#proc-bden_energy_out">bden_energy_out</a>
+      
+      <a class="list-group-item" href="../module/pic_out.html#proc-ext_bfield_out">ext_bfield_out</a>
+      
+      <a class="list-group-item" href="../module/pic_out.html#proc-fields_out">fields_out</a>
+      
+      <a class="list-group-item" href="../module/pic_out.html#proc-fields_out_new">fields_out_new</a>
+      
+      <a class="list-group-item" href="../module/pic_out.html#proc-bfields_out">bfields_out</a>
+      
+      <a class="list-group-item" href="../module/pic_out.html#proc-env_two_fields_out">env_two_fields_out</a>
+      
+      <a class="list-group-item" href="../module/pic_out.html#proc-env_fields_out">env_fields_out</a>
+      
+      <a class="list-group-item" href="../module/pic_out.html#proc-part_pdata_out">part_pdata_out</a>
+      
+      <a class="list-group-item" href="../module/pic_out.html#proc-part_high_gamma_out">part_high_gamma_out</a>
+      
+      <a class="list-group-item" href="../module/pic_out.html#proc-part_bdata_out">part_bdata_out</a>
+      
+      <a class="list-group-item" href="../module/pic_out.html#proc-part_ionz_out">part_ionz_out</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+    </section>
+    <br class="visible-xs visible-sm hidden-md">
+
+    
+
+    
+    <section>
+    <h2>Variables</h2>
+    
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th><th>Visibility</th>
+
+<th>Attributes</th><th></th><th>Name</th><th></th><th>Initial</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-par_dim"></span>integer,</td>
+  
+  <td>private,</td>
+  <td>parameter</td><td>::</td>
+  <td><strong>par_dim</strong></td><td> =</td><td>20</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-int_par"></span>integer,</td>
+  
+  <td>private</td>
+  <td></td><td>::</td>
+  <td><strong>int_par</strong>(par_dim)</td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-part_int_par"></span>integer,</td>
+  
+  <td>private</td>
+  <td></td><td>::</td>
+  <td><strong>part_int_par</strong>(par_dim)</td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-real_par"></span>real(kind=sp),</td>
+  
+  <td>private</td>
+  <td></td><td>::</td>
+  <td><strong>real_par</strong>(par_dim)</td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-part_real_par"></span>real(kind=sp),</td>
+  
+  <td>private</td>
+  <td></td><td>::</td>
+  <td><strong>part_real_par</strong>(par_dim)</td><td></td><td></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-rpar"></span>character(len=13),</td>
+  
+  <td>private,</td>
+  <td>parameter, dimension(20)</td><td>::</td>
+  <td><strong>rpar</strong></td><td> =</td><td>[' time =&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;', ' xmin =&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;', ' xmax =&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;', ' ymin =&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;', ' ymax =&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;', ' zmin =&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;', ' zmax =&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;', ' w0_x =&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;', ' w0_y =&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;', ' a0 =&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;', ' lam0 =&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;', ' mc2(MeV) =&nbsp;&nbsp;', ' n0(e18) =&nbsp;&nbsp;&nbsp;', ' np/cell =&nbsp;&nbsp;&nbsp;', ' weight =&nbsp;&nbsp;&nbsp;&nbsp;', ' mass =&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;', ' xmin_out =&nbsp;&nbsp;', ' xmax_out =&nbsp;&nbsp;', ' ymax_out =&nbsp;&nbsp;', ' gam_min =&nbsp;&nbsp;&nbsp;']</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" id="variable-ipar"></span>character(len=12),</td>
+  
+  <td>private,</td>
+  <td>parameter, dimension(20)</td><td>::</td>
+  <td><strong>ipar</strong></td><td> =</td><td>[' npe =&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;', ' nx =&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;', ' ny =&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;', ' nz =&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;', ' model =&nbsp;&nbsp;&nbsp;&nbsp;', ' dmodel =&nbsp;&nbsp;&nbsp;', ' nsp =&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;', ' curr_ndim =', ' mp/cell =&nbsp;&nbsp;', ' ion_ch =&nbsp;&nbsp;&nbsp;', ' tsch_ord = ', ' der_ord =&nbsp;&nbsp;', ' iform =&nbsp;&nbsp;&nbsp;&nbsp;', ' ph_sp_nc = ', ' f_version =', ' i_end =&nbsp;&nbsp;&nbsp;&nbsp;', ' nx_loc =&nbsp;&nbsp;&nbsp;', ' ny_loc =&nbsp;&nbsp;&nbsp;', ' nz_loc =&nbsp;&nbsp;&nbsp;', ' pjump&nbsp;&nbsp;=&nbsp;&nbsp;&nbsp;']</td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+    </section>
+    <br>
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+
+    
+    <section>
+    <h2>Subroutines</h2>
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-endian"></span><h3>
+public subroutine <a href='../proc/endian.html'>endian</a>(iend)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer,</td>
+  <td>intent(out)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>iend</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-fluid_den_mom_out"></span><h3>
+public subroutine <a href='../proc/fluid_den_mom_out.html'>fluid_den_mom_out</a>(fvar, cmp, flcomp)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=dp),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>fvar</strong>(:,:,:,:)</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer,</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>cmp</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer,</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>flcomp</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-den_energy_out"></span><h3>
+public subroutine <a href='../proc/den_energy_out.html'>den_energy_out</a>(ns_ind, cmp, cmp_loc)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer,</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>ns_ind</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer,</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>cmp</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer,</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>cmp_loc</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-bden_energy_out"></span><h3>
+public subroutine <a href='../proc/bden_energy_out.html'>bden_energy_out</a>(cmp_loc)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer,</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>cmp_loc</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-ext_bfield_out"></span><h3>
+public subroutine <a href='../proc/ext_bfield_out.html'>ext_bfield_out</a>(ef, f_ind)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=dp),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>ef</strong>(:,:,:,:)</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer,</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>f_ind</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-fields_out"></span><h3>
+public subroutine <a href='../proc/fields_out.html'>fields_out</a>(ef, f_ind, f_var)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=dp),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>ef</strong>(:,:,:,:)</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer,</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>f_ind</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer,</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>f_var</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-fields_out_new"></span><h3>
+public subroutine <a href='../proc/fields_out_new.html'>fields_out_new</a>(ef, f_ind, var_ind)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=dp),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>ef</strong>(:,:,:,:)</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer,</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>f_ind</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer,</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>var_ind</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-bfields_out"></span><h3>
+public subroutine <a href='../proc/bfields_out.html'>bfields_out</a>(ef, ef1, f_ind)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=dp),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>ef</strong>(:,:,:,:)</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=dp),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>ef1</strong>(:,:,:,:)</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer,</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>f_ind</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-env_two_fields_out"></span><h3>
+public subroutine <a href='../proc/env_two_fields_out.html'>env_two_fields_out</a>(ef, ef1, f_ind)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=dp),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>ef</strong>(:,:,:,:)</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=dp),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>ef1</strong>(:,:,:,:)</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer,</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>f_ind</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-env_fields_out"></span><h3>
+public subroutine <a href='../proc/env_fields_out.html'>env_fields_out</a>(ef, f_ind)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=dp),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>ef</strong>(:,:,:,:)</td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer,</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>f_ind</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-part_pdata_out"></span><h3>
+public subroutine <a href='../proc/part_pdata_out.html'>part_pdata_out</a>(timenow, xmin_out, xmax_out, ymax_out, pid, jmp)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=dp),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>timenow</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=dp),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>xmin_out</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=dp),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>xmax_out</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=dp),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>ymax_out</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer,</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>pid</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer,</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>jmp</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-part_high_gamma_out"></span><h3>
+public subroutine <a href='../proc/part_high_gamma_out.html'>part_high_gamma_out</a>(gam_in, timenow)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=dp),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>gam_in</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=dp),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>timenow</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-part_bdata_out"></span><h3>
+public subroutine <a href='../proc/part_bdata_out.html'>part_bdata_out</a>(timenow, pid, jmp)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=dp),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>timenow</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer,</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>pid</strong></td><td></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>integer,</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>jmp</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    
+  <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="proc-part_ionz_out"></span><h3>
+public subroutine <a href='../proc/part_ionz_out.html'>part_ionz_out</a>(timenow)
+    
+    
+   
+</h3></div>
+  <div class="panel-body">
+       
+    
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>real(kind=dp),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>timenow</strong></td><td></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  </div>
+  </div>
+
+    
+    </section>    
+    <br>
+    
+    
+    
+    </div>
+  </div>
+
+  
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2020 <a rel="license" href="http://www.gnu.org/licenses/old-licenses/fdl-1.2.en.html">GNU Free Documentation License</a>
+                                          </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+             on 2020-07-30 
+          </p>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> ALaDyn was developed by The ALaDyn Collaboration</p></div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+      });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+    
+  </body>
+</html>

@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+   <meta name="description" content="A High-Accuracy PIC Code for the Maxwell-Vlasov Equations">
+    
+    <meta name="author" content="The ALaDyn Collaboration" >
+    <link rel="icon" href="../../favicon.png">
+
+    <title>Old input guide &ndash; ALaDyn</title>
+
+    <link href="../../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../css/pygments.css" rel="stylesheet">
+    <link href="../../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../../css/local.css" rel="stylesheet">
+    
+    <link  href="../../tipuesearch/tipuesearch.css" rel="stylesheet">
+    
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../../js/jquery-2.1.3.min.js"></script>
+    <script src="../../js/svg-pan-zoom.min.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../../index.html">ALaDyn <small>3.0.1</small></a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+        
+            <li><a href='../../page/index.html'>Guide</a></li>
+      
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+     aria-expanded="false">Contents <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          
+              
+            <li><a href="../../lists/files.html">Source Files</a></li>
+        
+        
+        
+            <li><a href="../../lists/modules.html">Modules</a></li>
+        
+            
+                                
+            <li><a href="../../lists/procedures.html">Procedures</a></li>
+        
+               
+            <li><a href="../../lists/types.html">Derived Types</a></li>
+        
+        
+            <li><a href="../../program/aladyn.html">Program</a></li>
+      
+            </ul>
+            </li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../../lists/files.html">Source Files</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../../lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../../lists/procedures.html">Procedures</a></li>
+
+                             
+<li class="visible-xs hidden-sm visible-lg"><a href="../../lists/types.html">Derived Types</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../../program/aladyn.html">Program</a></li>
+
+          </ul>
+        
+        <form action="../../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  <div class="row">
+    <h1>Old input guide</h1>
+    <div class="row">
+    <div class="col-lg-12">
+    <div class="well well-sm" style="min-height: 40px;">
+      <ul class="list-inline" style="margin-bottom:0px; display:inline">
+         
+         
+<!--
+        
+-->
+      </ul>
+        <ol class="breadcrumb in-well">
+      
+         <li><a href='../../page/index.html'>Guide</a></li>
+      
+         <li><a href='../../page/deprecated/index.html'>Deprecated Guide</a></li>
+      
+         <li class="active">Old input guide</li>
+      </ol>
+    </div>
+    </div>
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="col-md-9 col-md-push-3" id='text'>
+      <h1>ALaDyn <code>input.data</code> guide</h1>
+<p>Following here is a brief description of the <code>input.data</code> file required for the simulation parameters definition, through an example. This method is currently deprecated, in favour of the new input namelist.</p>
+<h2>Lines 1-2-3-4 / Grid parameters</h2>
+<div class="codehilite"><pre><span></span><code><span class="mi">7168</span><span class="p">,</span>   <span class="mi">3584</span><span class="p">,</span>    <span class="mi">1</span><span class="p">,</span>     <span class="mi">3500</span>
+  <span class="n">nx</span><span class="p">,</span>     <span class="n">ny</span><span class="p">,</span>   <span class="n">nz</span><span class="p">,</span>  <span class="n">ny_part</span>
+<span class="mi">10</span><span class="mf">0.0</span><span class="p">,</span>    <span class="mf">2.0</span>
+  <span class="n">k0</span><span class="p">,</span> <span class="n">yx_rat</span>
+</code></pre></div>
+
+
+<ul>
+<li><code>nx</code> is the number of grid points in the <em>x</em> direction</li>
+<li>for PWFA simulations, it is required that this number contains the number of cpus of the <em>y</em> and <em>z</em> domains defined by <code>pey</code> in order to be sure that FFTs are working as expected</li>
+<li><code>ny</code> is the number of points in the <em>y</em> direction</li>
+<li>in order to be sure that the simulation is working as expected, it is better to <em>always</em> use a number that contains <code>pey</code></li>
+<li><code>nz</code> is the number of points in the <em>z</em> direction; for a 2D simulaton, use <code>nz = 1</code></li>
+<li>in order to be sure that the 3D simulation is working as expected, it is better to <em>always</em> use here a number that contains the number of cpu assigned to split the <em>z</em> domain (<code>mpi_ntot/pey</code>)</li>
+<li><code>nypart</code> is the transverse size of the target, expressed in number of grid cell filled with particles (if the simulation is a 3D one, the target is a square in the <em>xy</em> plane)</li>
+<li><code>k0</code> defines the resolution, being the numbero of points per μm along <em>x</em>, so that Δx = 1/k0 [μm]; please remember to set a value small enough to solve the skin depth</li>
+<li><code>yxrat</code> is the ratio between the resolution along <em>x</em> and <em>y</em>: Δy = yxrat/k0 [μm]; the resolution along <em>z</em> is the same as for <em>y</em>.</li>
+</ul>
+<p>With those parameters, the full box size (in μm) is: <code>Lx = nx / k0</code>, <code>Ly = yxrat * ny / k0</code>, <code>Lz = yxrat * nz / k0</code></p>
+<h2>Lines 5-6 / Numerical schemes</h2>
+<div class="codehilite"><pre><span></span><code>  <span class="mi">2</span><span class="p">,</span>   <span class="mi">2</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>     <span class="mi">0</span>
+<span class="n">LPf</span><span class="p">,</span> <span class="n">Der</span><span class="p">,</span> <span class="n">str</span><span class="p">,</span> <span class="n">iform</span>
+</code></pre></div>
+
+
+<ul>
+<li><code>Lpf</code> is the leapfrog order used in the integration scheme</li>
+<li><code>Der</code> is the order of the finite difference scheme</li>
+<li><code>str</code> has three possible different values:</li>
+<li><code>0</code> for uniform grid</li>
+<li><code>1</code> to enable stretching along transverse axes</li>
+<li><code>2</code> to enable stretching along all axes, but for <em>x</em> it is only on the right side of the box (need testing)</li>
+<li><code>iform</code> has two possible different values:</li>
+<li><code>0</code>: (D<sub>x</sub>J<sub>x</sub>,D<sub>y</sub>J<sub>y</sub>,D<sub>z</sub>J<sub>z</sub>) to be inverted on a grid (to be preferred) (energy conservation not guaranteed)</li>
+<li><code>1</code>: only (D<sub>x</sub>J<sub>x</sub>) to be inverted on a grid</li>
+<li><code>2</code>: no charge preserving (use energy conservation algorithm)</li>
+</ul>
+<h2>Lines 7-8 / Driver and target models</h2>
+<div class="codehilite"><pre><span></span><code>  <span class="mi">1</span><span class="p">,</span>    <span class="mi">3</span><span class="p">,</span>     <span class="mi">1</span>
+<span class="n">mdl</span><span class="p">,</span> <span class="n">dmdl</span><span class="p">,</span> <span class="n">ibeam</span>
+</code></pre></div>
+
+
+<ul>
+<li><code>mdl</code> has five possible different values</li>
+<li><code>1</code> laser is p-polarized</li>
+<li><code>2</code> laser is s-polarized</li>
+<li><code>3</code> laser is circularly polarized</li>
+<li><code>4</code> laser is described by its envelope approximation model</li>
+<li><code>5</code> the driver is an electron beam. Its description must be given in a separate namelist file</li>
+<li><code>6</code> the driver is a proton bunch. Its description must be given in a separate namelist file</li>
+<li><code>dmdl</code> has five possible different values</li>
+<li><code>1</code> the simulation is done using just two species, electrons and protons</li>
+<li><code>2</code> four species, e, p, C, Al, used in this way: [e+p]foam + [e+Al]bulk + [e+C+p]contaminants (Al is in reality a generic atom, defined by <code>Z_i</code> and <code>A_i</code>, while C is hard coded: we use Al in this readme since it is the common experimental choice, while for C it is an experimental mandatory choice - but it will be lifted in the future)</li>
+<li><code>3</code> three species, e, p, C, in one layer: [e+C+p<em>n]bulk (mind the </em>n*, managed with <code>nsb</code>) (C is in reality a generic atom, defined by <code>Z_i</code> and <code>A_i</code>: we use C in this readme since it is the common experimental choice)</li>
+<li><code>4</code> three species, e, p, Al, used in this way: [e+p]foam + [e+Al]bulk + [e+p]contaminants</li>
+<li><code>5</code> three species, e, p, Al, identic to case <code>4</code>, but with the contaminant layer <em>mass limited</em></li>
+<li><code>ibeam</code>:
+    for PWFA (model_id #5/#6):</li>
+<li><code>0</code></li>
+<li><code>1</code></li>
+<li><code>2</code></li>
+</ul>
+<h2>Lines 9-10 / Number and type of particle species</h2>
+<div class="codehilite"><pre><span></span><code>  <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>   <span class="mi">0</span><span class="p">,</span>   <span class="mi">3</span><span class="p">,</span>   <span class="mi">1</span>
+<span class="n">ibx</span><span class="p">,</span> <span class="n">iby</span><span class="p">,</span> <span class="n">ibz</span><span class="p">,</span> <span class="n">nsp</span><span class="p">,</span> <span class="n">nsb</span>
+</code></pre></div>
+
+
+<ul>
+<li><code>nsp</code> is the number of species (be careful and coherent with <code>dmdl</code>)</li>
+<li><code>nsb</code>, used with <code>dmdl=3</code>, defines the ratio <em>n</em> between the number of C ions and protons, to form <em>CH<sub>n</sub></em></li>
+</ul>
+<h2>Lines 11-12 / Ionization status and schemes</h2>
+<div class="codehilite"><pre><span></span><code>    <span class="mi">4</span><span class="p">,</span>         <span class="mi">11</span><span class="p">,</span>        <span class="mi">13</span><span class="p">,</span>               <span class="mi">2</span><span class="mf">6.98</span>
+<span class="n">ion_min</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="n">ion_max</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="n">atomic_number</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="n">mass_number</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="mi">1</span><span class="p">,</span>         <span class="mi">1</span><span class="p">,</span>          <span class="mi">1</span><span class="p">,</span>         <span class="mf">1.0</span>
+<span class="n">ion_min</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span><span class="n">ion_max</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span><span class="n">atomic_number</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span><span class="n">mass_number</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="mi">0</span><span class="p">,</span>       <span class="mi">0</span>
+<span class="n">ionz_lev</span><span class="p">,</span><span class="n">ionz_model</span><span class="p">,</span>
+</code></pre></div>
+
+
+<ul>
+<li><code>ion_min</code></li>
+<li><code>ion_max</code></li>
+<li><code>atomic_number</code></li>
+<li><code>mass_number</code></li>
+<li><code>ionz_lev</code></li>
+<li><code>ionz_model</code></li>
+</ul>
+<h2>Lines 13-14 / Initial temperatures of the species</h2>
+<div class="codehilite"><pre><span></span><code> <span class="mf">0.0003</span> <span class="p">,</span>    <span class="mf">0.0</span> <span class="p">,</span>    <span class="mf">0.0</span> <span class="p">,</span>    <span class="mf">0.0</span>
+<span class="n">t0_pl</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="n">t0_pl</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span><span class="n">t0_pl</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span><span class="n">t0_pl</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+</code></pre></div>
+
+
+<h2>Lines 15-16-17-18 / Number of particles per cell</h2>
+<div class="codehilite"><pre><span></span><code>   <span class="mi">12</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span>
+<span class="n">np_xc</span>
+    <span class="mi">9</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span>
+<span class="n">np_yc</span>
+</code></pre></div>
+
+
+<p><em>First two are the number of electrons and ions per cell along x/y in the bulk, second two numbers refer to the front layer and third two to the contaminants. A special case is <code>dmdl=3</code>, in which the first indicates the number of electrons, the second the number of protons (to be multiplies by <code>nsb</code>) and the third is the number of ions; in this case the other numbers are not important.</em></p>
+<p>Describing the previous example, it means that, along x:</p>
+<ul>
+<li>n<sub>e</sub><sup>x</sup> = 9, n<sub>i</sub><sup>x</sup> = 4, in the central layer (bulk)</li>
+<li>n<sub>e</sub><sup>x</sup> = 3, n<sub>i</sub><sup>x</sup> = 3, in the frontal layer (foam)</li>
+<li>n<sub>e</sub><sup>x</sup> = 6, n<sub>i</sub><sup>x</sup> = 6, in the contaminant layer</li>
+</ul>
+<p><strong>n<sub>e</sub><sup>x</sup> = 0 in the first <code>np_xc</code> position just means to ignore the plasma and do just a laser propagation simulation.</strong></p>
+<ul>
+<li><code>np_yc</code>: the same as <code>np_xc</code>, this describes the number of particles per cell along transverse directions (valid also for <em>z</em> for 3D simulations)</li>
+</ul>
+<h2>Lines 19-20 / Laser parameters</h2>
+<div class="codehilite"><pre><span></span><code><span class="mi">1</span><span class="mf">6.5</span><span class="p">,</span> <span class="mi">1</span><span class="mf">6.5</span><span class="p">,</span> <span class="mi">3</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">6.2</span><span class="p">,</span>  <span class="mf">3.0</span><span class="p">,</span>  <span class="mf">0.8</span>
+  <span class="n">tf</span><span class="p">,</span>   <span class="n">xc</span><span class="p">,</span>   <span class="n">wx</span><span class="p">,</span>  <span class="n">wy</span><span class="p">,</span>   <span class="n">a0</span><span class="p">,</span> <span class="n">lam0</span>
+</code></pre></div>
+
+
+<p><strong>these lines are valid only for <code>ibeam=1</code></strong></p>
+<ul>
+<li><code>xc</code> is the position (in μm) along <em>x</em> of the central point of the laser envelope</li>
+<li><code>tf</code> is the distance (in μm) after which the laser is focused; so the focus is at <code>xf = xc + tf</code></li>
+<li><code>wx</code> is twice the longitudinal waist, corresponding to the total laser length, which is twice the FWHM. For example, if we have a 40 fs FWHM Ti:Sa laser, we should write for <code>wx=33 μm</code> because:</li>
+</ul>
+<div class="codehilite"><pre><span></span><code>    <span class="p">(</span><span class="mi">40</span> <span class="n">fs</span><span class="o">/</span><span class="mf">3.333</span><span class="p">)</span><span class="o">*</span><span class="mi">2</span><span class="o">*</span><span class="mf">1.37</span> <span class="o">=</span> <span class="mi">33</span> <span class="err">μ</span><span class="n">m</span>
+    <span class="mi">40</span><span class="o">/</span><span class="mf">3.3333</span> <span class="k">is </span><span class="n">done</span> <span class="n">to</span> <span class="n">convert</span> <span class="n">fs</span> <span class="n">to</span> <span class="err">μ</span><span class="n">m</span>
+    <span class="o">*</span><span class="mi">2</span> <span class="k">is </span><span class="n">to</span> <span class="n">convert</span> <span class="n">from</span> <span class="n">FWHM</span> <span class="n">to</span> <span class="n">full</span> <span class="n">length</span>
+    <span class="o">*</span><span class="mf">1.37</span> <span class="k">is </span><span class="n">to</span> <span class="n">convert</span> <span class="n">from</span> <span class="n">laser</span> <span class="n">intensity</span> <span class="n">to</span> <span class="n">fields</span><span class="p">:</span> <span class="n">usually</span> <span class="n">we</span> <span class="n">receive</span> <span class="n">from</span> <span class="n">experiments</span> <span class="n">the</span> <span class="n">FWHM</span> <span class="n">of</span> <span class="n">the</span> <span class="n">laser</span> <span class="n">intensity</span><span class="p">,</span> <span class="n">but</span> <span class="n">we</span> <span class="n">set</span> <span class="n">the</span> <span class="n">length</span> <span class="n">of</span> <span class="n">fields</span> <span class="nb">and </span><span class="n">the</span> <span class="n">FWHM</span> <span class="n">of</span> <span class="n">a</span> <span class="n">cos4</span> <span class="n">has</span> <span class="n">to</span> <span class="n">be</span> <span class="n">converted</span> <span class="n">to</span> <span class="n">the</span> <span class="n">FWHM</span> <span class="n">of</span> <span class="n">a</span> <span class="n">cos2</span><span class="p">:</span> <span class="n">FWHM</span><span class="p">(</span><span class="n">cos4</span><span class="p">)</span><span class="o">=</span><span class="n">FWHM</span><span class="p">(</span><span class="n">cos2</span><span class="p">)</span><span class="o">/</span><span class="mf">1.37</span>
+</code></pre></div>
+
+
+<ul>
+<li><code>wy</code> is the transverse waist FWHM (in μm)</li>
+<li><code>a</code> is the laser adimensional parameter: a<sub>0</sub>=eA/(m<sub>e</sub> c<sup>2</sup>)</li>
+<li><code>lam0</code> is the laser wavelength (in μm)</li>
+</ul>
+<h2>Lines 21-22 / Target shape parameters</h2>
+<div class="codehilite"><pre><span></span><code><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.08</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.01</span>
+ <span class="n">lx</span>
+</code></pre></div>
+
+
+<ul>
+<li><code>lx(1)</code> is the length of the upstream layer (foam or preplasma), having density <code>n1/nc</code></li>
+<li><code>lx(2)</code> is the length of the ramp (linear or exponential depending on the <code>mdl</code>) connecting the upstream layer with the central one (made with bulk particles)</li>
+<li><code>lx(3)</code> is the length of the central layer (bulk), having density <code>n2/nc</code></li>
+<li><code>lx(4)</code> is the length of the ramp (linear), connecting the bulk with the contaminants (made with bulk particles)</li>
+<li><code>lx(5)</code> is the length of the downstream layer (contaminants), having density <code>n3/nc</code></li>
+<li><code>lx(6)</code> is the angle <em>α</em> of incidence, between the laser axis and the target plane</li>
+<li><code>lx(7)</code> is the offset between the end of the laser and the beginning of the target (if zero, the target starts right at the end of the laser pulse). The offset is calculated <em>before</em> laser rotation, so mind the transverse size if <code>lx(6) ≠ 0</code>, in order to avoid laser initialization <em>inside the target</em>.</li>
+</ul>
+<h2>Lines 23-24 / Target shape parameters</h2>
+<div class="codehilite"><pre><span></span><code><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span>
+ <span class="n">ly</span>
+</code></pre></div>
+
+
+<ul>
+<li><code>ly(1)</code> defines the wire size</li>
+<li><code>ly(2)</code> defines the interwire size</li>
+</ul>
+<h2>Lines 25-26 / Target density parameters</h2>
+<div class="codehilite"><pre><span></span><code> <span class="mi">10</span><span class="mf">0.0</span><span class="p">,</span>   <span class="mf">1.0</span><span class="p">,</span>  <span class="mi">1</span><span class="mf">0.0</span>
+ <span class="n">n2</span><span class="o">/</span><span class="n">nc</span><span class="p">,</span> <span class="n">n1</span><span class="o">/</span><span class="n">nc</span><span class="p">,</span> <span class="n">n3</span><span class="o">/</span><span class="n">nc</span>
+</code></pre></div>
+
+
+<ul>
+<li><code>n2/nc</code> is the density in the central layer (bulk)</li>
+<li><code>n1/nc</code> is the density in the upstream layer (foam/preplasma)</li>
+<li><code>n3/nc</code> is the density in the downstream layer (contaminants)</li>
+</ul>
+<h2>Lines 27-28 / Moving window</h2>
+<div class="codehilite"><pre><span></span><code>    <span class="mi">20</span><span class="p">,</span> <span class="mi">10</span><span class="mf">0.0</span><span class="p">,</span> <span class="mi">15</span><span class="mf">0.0</span><span class="p">,</span>     <span class="mf">1.0</span>
+<span class="n">wnd_sh</span><span class="p">,</span>  <span class="n">w_in</span><span class="p">,</span> <span class="n">w_end</span><span class="p">,</span> <span class="n">w_speed</span>
+</code></pre></div>
+
+
+<ul>
+<li><code>wsh</code> is the number of time steps after which the moving-window is called, repeatedly</li>
+<li><code>win</code> is the absolute time at which the window starts moving</li>
+<li><code>wend</code> is the absolute time at which the window stops moving</li>
+<li><code>wspeed</code> is the β speed of the moving window</li>
+</ul>
+<h2>Lines 29-30 / Output manager</h2>
+<div class="codehilite"><pre><span></span><code>  <span class="mi">10</span><span class="p">,</span>  <span class="mi">200</span><span class="p">,</span>     <span class="mi">3</span><span class="p">,</span>    <span class="mi">1</span><span class="p">,</span>     <span class="mi">0</span><span class="p">,</span>     <span class="mi">0</span>
+<span class="n">nout</span><span class="p">,</span> <span class="n">iene</span><span class="p">,</span> <span class="n">nvout</span><span class="p">,</span> <span class="n">nden</span><span class="p">,</span> <span class="n">npout</span><span class="p">,</span> <span class="n">nbout</span>
+</code></pre></div>
+
+
+<ul>
+<li><code>nout</code> is the number of binary outputs during the relative time of the simulation</li>
+<li><code>iene</code> is the number of text outputs during the relative time of the simulation</li>
+<li><code>nvout</code> is the number of <em>fields</em> written. For a 2D P-polarized case, we have just 3 fields, <em>E<sub>x</sub></em>, <em>E<sub>y</sub></em> and <em>B<sub>z</sub></em>; in all the other cases there are 6 fields with these IDs: 1=<em>E<sub>x</sub></em>, 2=<em>E<sub>y</sub></em>, 3=<em>E<sub>z</sub></em>, 4=<em>B<sub>x</sub></em>, 5=<em>B<sub>y</sub></em>, 6=<em>B<sub>z</sub></em>. At each <code>nout</code> step, every field with <code>ID ≤ nf</code> will be dumped.</li>
+<li><code>nden</code> can have three different values; every output is divided by species on different files:</li>
+<li><code>1</code>: writes <em>only</em> the particle density <em>n</em> on the grid</li>
+<li><code>2</code>: writes <em>also</em> the energy density <em>n ･ gamma</em> on the grid</li>
+<li><code>3</code>: writes <em>also</em> the currents <em>J</em> on the grid</li>
+<li><code>npout</code></li>
+<li><code>1</code>: writes <em>only</em> the electron phase space</li>
+<li><code>2</code>: writes <em>only</em> the proton phase space</li>
+<li>in general it writes <em>only</em> the phase space of the <em>n-th</em> species, with <code>n=npv</code>; if <code>n=npv&gt;nps</code>, it writes the phase spaces of all the particle species</li>
+<li><code>nbout</code></li>
+</ul>
+<h2>Lines 31-32 / Output subsampling</h2>
+<div class="codehilite"><pre><span></span><code>  <span class="mi">1</span><span class="p">,</span>    <span class="mi">1</span>
+<span class="n">jmp</span><span class="p">,</span> <span class="n">pjmp</span>
+</code></pre></div>
+
+
+<ul>
+<li><code>jmp</code>: jump on grid points; if <code>jmp=2</code>, it means that each processor is going to write only one point every two. Mind that it's extremely important that <code>jmp</code> is a divisor of the number of grid points <em>per processor</em>, otherwise the grid output will be corrupted</li>
+<li><code>pjmp</code>: jump on particles; if <code>pjmp=2</code>, it means that each processor is going to write the phase space of just one particle every two.</li>
+</ul>
+<h2>Lines 33-34 / Particle box to be dumped</h2>
+<div class="codehilite"><pre><span></span><code> <span class="mf">0.0</span><span class="p">,</span> <span class="mi">10</span><span class="mf">0.0</span><span class="p">,</span>  <span class="mi">2</span><span class="mf">0.0</span>
+ <span class="n">xp0</span><span class="p">,</span>   <span class="n">xp1</span><span class="p">,</span> <span class="n">ypmax</span>
+</code></pre></div>
+
+
+<ul>
+<li>In the dump we will find only particles contained inside the box defined by <code>xp0 &lt; x &lt; xp1</code></li>
+<li>In the dump we will find only particles contained in the box <code>|{y,z}| &lt; ypmax</code></li>
+</ul>
+<h2>Lines 35-36 / Simulation time settings</h2>
+<div class="codehilite"><pre><span></span><code><span class="mi">10</span><span class="mf">0.0</span><span class="p">,</span>  <span class="mf">0.8</span>
+ <span class="n">tmax</span><span class="p">,</span>  <span class="n">cfl</span>
+</code></pre></div>
+
+
+<ul>
+<li><code>tmax</code> is the relative time (in μm, because it is multiplied by <em>c</em>) that the simulation is going to be evolved. Being relative, it's going to be added to the time eventually already reached before the restart. To obtain the time in fs, you have to divide it by 0.299792458 [speed of light in μm/fs]</li>
+<li><code>cfl</code> is the Courant–Friedrichs–Lewy parameter ( <a href="http://en.wikipedia.org/wiki/Courant%E2%80%93Friedrichs%E2%80%93Lewy_condition">Wikipedia CFL-parameter page</a> )</li>
+</ul>
+<h2>Lines 37-38 / Restart manager and processor settings</h2>
+<div class="codehilite"><pre><span></span><code>  <span class="mi">0</span><span class="p">,</span>     <span class="mi">0</span><span class="p">,</span>    <span class="mi">0</span><span class="p">,</span>  <span class="mi">64</span>
+<span class="n">new</span><span class="p">,</span> <span class="n">id_ew</span><span class="p">,</span> <span class="n">dump</span><span class="p">,</span> <span class="n">pey</span>
+</code></pre></div>
+
+
+<ul>
+<li><code>new</code>: identifies if a simulation is new <code>new=0</code> (data is recreated from initial conditions) or if it is a restart <code>new=1</code> (dump are going to be read)</li>
+<li><code>id_ew</code> identifies the starting number of the output files (if <code>new=0</code>) or the last one written in the previous step (if <code>new=1</code>)</li>
+<li><code>dump</code></li>
+<li><code>1</code>: each processor will dump a binary file for every <code>nout</code> in order to enable restart</li>
+<li><code>0</code>: dumps are suppressed</li>
+<li><code>pey</code> identifies the number of processors used for 2D simulations, or how many processors are going to be used for the <em>y</em> domains (<code>mpi_ntot/pey</code> is the number of processors used for the <em>z</em> domains) for 3D simulations.</li>
+</ul>
+    </div>
+    
+    <div class="col-md-3 col-md-pull-9">
+      <hr class="visible-xs visible-sm">
+        <div class="well toc">
+          <ul class="nav nav-stacked nav-pills">
+            <li role="presentation" class="title"><a href='../../page/index.html'>Guide</a></li>
+          </ul>
+          <hr>
+          <ul class="nav nav-stacked nav-pills">
+            
+            <li role="presentation">
+            <a href='../../page/./BUILD.html'>How to build</a>
+            
+            </li>
+            
+            <li role="presentation">
+            <a href='../../page/./CONTRIBUTING.html'>Contributing guidelines</a>
+            
+            </li>
+            
+            <li role="presentation">
+            <a href='../../page/./DESCRIPTION.html'>Code description</a>
+            
+            </li>
+            
+            <li role="presentation">
+            <a href='../../page/./NAMELIST_GUIDE.html'>Write a Namelist</a>
+            
+            </li>
+            
+            <li role="presentation">
+            <a href='../../page/deprecated/index.html'>Deprecated Guide</a>
+            
+            <ul class="nav nav-stacked nav-pills">
+              
+            <li role="presentation" class="disabled">
+            <a href='../../page/deprecated/input_data_guide.html'>Old input guide</a>
+            
+            </li>
+            
+            </ul>
+            
+            </li>
+            
+          </ul>
+        </div>
+    </div>
+    
+  </div>
+
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2020 <a rel="license" href="http://www.gnu.org/licenses/old-licenses/fdl-1.2.en.html">GNU Free Documentation License</a>
+                                          </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+             on 2020-07-30 
+          </p>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> ALaDyn was developed by The ALaDyn Collaboration</p></div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+      });
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+    <script src="../../tipuesearch/tipuesearch_content.js"></script>
+    <script src="../../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../../tipuesearch/tipuesearch.js"></script>
+    
+    
+  </body>
+</html>
