@@ -75,7 +75,7 @@
     do ip = npe_zloc/2 + 3, npe_zloc - 1
      loc_zft_ord(ip) = loc_zft_ord(npe_zloc/2 + 2)
     end do
-   endif
+   end if
   end subroutine
 
   subroutine mpi_ftw_dalloc
@@ -137,7 +137,7 @@
      j2 = j1 + nft2 - 1
      w_r(1:nft1, j1:j2, k1:k2) = fp1(1:nft1, 1:nft2, 1:nft3)
     end do
-   endif
+   end if
    !sends imody=nh to (nh+1,nh+2,nh+3) up to
    !imody=npe_yloc-3 to npe_yloc-2,npe_yloc-1) ybd=2
    !imody=npe_yloc-2 to npe_yloc-1)            ybd=1
@@ -160,7 +160,7 @@
      j2 = j1 + nft2 - 1
      w_r(1:nft1, j1:j2, k1:k2) = fp1(1:nft1, 1:nft2, 1:nft3)
     end do
-   endif
+   end if
 !================== end prly====================
 !=============
    if (prlz) then

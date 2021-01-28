@@ -41,6 +41,7 @@
   use fstruct_data
   use parallel
   use grid_param
+  use util
 
   implicit none
   integer, parameter, private :: x_parity(6) = [-1, 1, 1, -1, 1, 1]
@@ -254,7 +255,7 @@
       end do
      end do
     end do
-   endif
+   end if
    if (pex1) then
     do ic = ic1, ic2 - 1
      do iz = k1, k2
@@ -265,7 +266,7 @@
       end do
      end do
     end do
-   endif
+   end if
    ! now replaces (i2+1:i2+xsh=n1p)
    if (prlx) then
     if (pex1) aux2(1:lenws) = 0.0
@@ -292,7 +293,7 @@
       end do
      end do
     end do
-   endif
+   end if
 
   end subroutine
   !==================================
@@ -656,6 +657,277 @@
    ! end data transfer
    !===========================
   end subroutine
+  !=================================
+  subroutine fill_3d_ebfield_yzxbdsdata(fld, str, stl)
+
+   real (dp) :: fld(:, :, :)
+   integer, intent (in) :: str, stl
+   integer :: ix, j, iy, iz, kk, iy1, iy2, iz1, iz2, lenws, lenwr
+   integer :: i1, i2, j1, j2, k1, k2
+
+   i1 = ix1
+   i2 = ix2
+   j1 = jy1
+   j2 = jy2
+   k1 = kz1
+   k2 = kz2
+
+   iy1 = j1
+   iy2 = j2
+   iz1 = k1
+   iz2 = k2
+
+   ! WARNING str <3 , stl>2 allowed
+   !=======================
+   ! Extends data to the y-left
+   ! sends to the right iy=[j2:j2-str+1]
+   !recvs from the left iy=[j1-1:j1-str] sign=-1
+   !============================================
+   if (prly) then
+    if (str>0) then
+     kk = 0
+     do iz = k1, k2
+      do j = 0, str - 1
+       iy = j2 - j
+       do ix = i1, i2
+        kk = kk + 1
+        aux1(kk) = fld(ix, iy, iz)
+       end do
+      end do
+     end do
+     lenws = kk
+     lenwr = lenws
+     call exchange_bdx_data(aux1, aux2, lenws, lenwr, 1, lft)
+     if (yl_bd) then
+      if (iby<2) then
+       aux2(1:lenwr) = 0.0
+      end if
+     end if
+     kk = 0
+     do iz = k1, k2
+      do j = 1, str
+       iy = j1 - j
+       do ix = i1, i2
+        kk = kk + 1
+        fld(ix, iy, iz) = aux2(kk)
+       end do
+      end do
+     end do
+     iy1 = j1 - str
+    end if
+    !=========================
+    if (stl>0) then
+     !=======================
+     ! Extends data to the y-right, stl>2 allowed
+     !Sends to the left stl data[j1:j1+stl-1]
+     !Recvs from right [j2+1:j2+stl] f_data sign=+1
+
+     kk = 0
+     do iz = k1, k2
+      do j = 0, stl - 1
+       iy = j1 + j
+       do ix = i1, i2
+        kk = kk + 1
+        aux1(kk) = fld(ix, iy, iz)
+       end do
+      end do
+     end do
+     lenws = kk
+     lenwr = lenws
+
+     !======================= next indx=1 cart dim=1 sign=+1
+     call exchange_bdx_data(aux1, aux2, lenws, lenwr, 1, rgt)
+     if (yr_bd) then
+      if (iby<2) then
+       aux2(1:lenwr) = 0.0
+      end if
+     end if
+     kk = 0
+     do iz = k1, k2
+      do j = 1, stl
+       iy = j + j2
+       do ix = i1, i2
+        kk = kk + 1
+        fld(ix, iy, iz) = aux2(kk)
+       end do
+      end do
+     end do
+     iy2 = j2 + stl
+    end if
+   end if
+   !========================
+   if (prlz) then
+    !=======================
+    ! Extends data to the z-left
+    ! sends to the right iz=[k2:k2-str+1]
+    !recvs from the left iz=[k1-1:k1-str] sign=-1
+    !============================================
+
+    if (str>0) then
+     kk = 0
+     do j = 0, str - 1
+      iz = k2 - j
+      do iy = iy1, iy2
+       do ix = i1, i2
+        kk = kk + 1
+        aux1(kk) = fld(ix, iy, iz)
+       end do
+      end do
+     end do
+     lenws = kk
+     lenwr = lenws
+     call exchange_bdx_data(aux1, aux2, lenws, lenwr, 2, lft)
+     if (zl_bd) then
+      if (ibz<2) then
+       aux2(1:lenwr) = 0.0
+      end if
+     end if
+     kk = 0
+     do j = 1, str
+      iz = k1 - j
+      do iy = iy1, iy2
+       do ix = i1, i2
+        kk = kk + 1
+        fld(ix, iy, iz) = aux2(kk)
+       end do
+      end do
+     end do
+     iz1 = k1 - str
+    end if
+    if (stl>0) then
+     ! Extends data to the z-right
+     !Sends to the left stl data[k1:k1+stl-1]
+     !Recvs from right [k2+1:k2+stl] f_data sign=+1
+     kk = 0
+     do j = 0, stl - 1
+      iz = k1 + j
+      do iy = iy1, iy2
+       do ix = i1, i2
+        kk = kk + 1
+        aux1(kk) = fld(ix, iy, iz)
+       end do
+      end do
+     end do
+     lenws = kk
+     lenwr = lenws
+     call exchange_bdx_data(aux1, aux2, lenws, lenwr, 2, rgt)
+     if (zr_bd) then
+      if (ibz<2) then
+       aux2(1:lenwr) = 0.0
+      end if
+     end if
+     kk = 0
+     do j = 1, stl
+      iz = k2 + j
+      do iy = iy1, iy2
+       do ix = i1, i2
+        kk = kk + 1
+        fld(ix, iy, iz) = aux2(kk)
+       end do
+      end do
+     end do
+     iz2 = k2 + stl
+    end if
+   end if
+   !===============================
+   if (.not. prlx) then
+    if (ibx==2) then
+     if (str>0) then
+      do iz = iz1, iz2
+       do iy = iy1, iy2
+        do j = 1, str
+         fld(i1-j, iy, iz) = fld(i2+1-j, iy, iz)
+        end do
+       end do
+      end do
+     end if
+     if (stl>0) then
+      do iz = iz1, iz2
+       do iy = iy1, iy2
+        do j = 1, stl
+         fld(i2+j, iy, iz) = fld(i1-1+j, iy, iz)
+        end do
+       end do
+      end do
+     end if
+    end if
+    return
+   end if
+   !====================================
+   ! Extends data to the x-left
+   ! sends to the right ix=[i2:i2-str+1]
+   !recvs from the left ix=[i1-1:i1-str] sign=-1
+   !============================================
+   if (str>0) then
+    kk = 0
+    do iz = iz1, iz2
+     do iy = iy1, iy2
+      do j = 0, str - 1
+       ix = i2 - j
+       kk = kk + 1
+       aux1(kk) = fld(ix, iy, iz)
+      end do
+     end do
+    end do
+    lenws = kk
+    lenwr = lenws
+    call exchange_bdx_data(aux1, aux2, lenws, lenwr, 3, lft)
+    if (xl_bd) then
+     if (ibx<2) then
+      aux2(1:lenwr) = 0.0
+     end if
+    end if
+    kk = 0
+    do iz = iz1, iz2
+     do iy = iy1, iy2
+      do j = 1, str
+       ix = i1 - j
+       kk = kk + 1
+       fld(ix, iy, iz) = aux2(kk)
+      end do
+     end do
+    end do
+   end if
+   !=======================
+   if (stl>0) then
+    !=======================
+    ! Extends data to the x-right
+    !Sends to the left stl data[i1:i1+stl-1]
+    !Recvs from right [i2+1:i2+stl] f_data sign=+1
+
+    kk = 0
+    do iz = iz1, iz2
+     do iy = iy1, iy2
+      do j = 0, stl - 1
+       ix = i1 + j
+       kk = kk + 1
+       aux1(kk) = fld(ix, iy, iz)
+      end do
+     end do
+    end do
+    lenws = kk
+    lenwr = lenws
+
+    call exchange_bdx_data(aux1, aux2, lenws, lenwr, 3, rgt)
+    if (pex1) then
+     if (ibx<2) then
+      aux2(1:lenwr) = 0.0
+     end if
+    end if
+    kk = 0
+    do iz = iz1, iz2
+     do iy = iy1, iy2
+      do j = 1, stl
+       ix = j + i2
+       kk = kk + 1
+       fld(ix, iy, iz) = aux2(kk)
+      end do
+     end do
+    end do
+   end if
+   ! end data transfer
+   !===========================
+  end subroutine
   !===============================
   subroutine fill_ebfield_xbdsdata(fld, ic1, ic2, str, stl)
    real(dp) :: fld(:, :, :, :)
@@ -770,4 +1042,82 @@
    !===========================
   end subroutine
   !=====================
+
+  subroutine longitudinal_integration(dx_in, field_in, result_in, lb_in, ub_in, integration_order)
+   !! Subroutine that coordinates the longitudinal numerical integration between tasks
+   real(dp), intent(in) :: dx_in
+   real(dp), allocatable, dimension(:, :, :), intent(inout) :: field_in
+   real(dp), allocatable, dimension(:, :, :), intent(inout) :: result_in
+   integer, intent(in) :: lb_in, ub_in, integration_order
+   integer :: npx, i, ix, iy, iz, jlb, jub, klb, kub, stl, str
+   integer :: kk, lenws(1), lenwr(1)
+   logical :: send
+
+   stl = integration_order
+   str = integration_order
+   jlb = LBOUND( field_in, DIM=2)
+   jub = UBOUND( field_in, DIM=2)
+   klb = LBOUND( field_in, DIM=3)
+   kub = UBOUND( field_in, DIM=3)
+
+   call fill_3d_ebfield_yzxbdsdata(field_in, stl, str)
+
+   if (prlx) then
+    do npx = npe_xloc - 1, 1, -1
+     ! Cycle over longitudinal tasks
+     if ( imodx == npx ) then
+      send = .true.
+      select case(integration_order)
+      case(1)
+       call trapezoidal_integration(dx_in, field_in, result_in, lb_in, ub_in, jlb, jub, klb, kub)
+      case(2)
+       call simpson_integration(dx_in, field_in, result_in, lb_in, ub_in, jlb, jub, klb, kub)
+      end select
+      ! Performing the integral
+      kk = 0
+      ! Now task pass boundary values to next one
+      do iz = klb, kub
+       do iy = jlb, jub
+        do i = 0, stl - 1
+         ix = lb_in + i
+         kk = kk + 1
+         aux1(kk) = result_in(ix, iy, iz)
+        end do
+       end do
+      end do
+      lenws(1) = kk
+      call exchange_rdata_int(lenws, send, 1, npx - 1, 3, imodx + 9999)
+      lenwr = lenws
+      call exchange_rdata(aux1, send, lenws(1), npx - 1, 3, imodx + 100)
+     else if (imodx == npx - 1) then
+      send = .false.
+      kk = 0
+      call exchange_rdata_int(lenwr, send, 1, npx, 3, imodx + 1 + 9999)
+      call exchange_rdata(aux2, send, lenwr(1), npx, 3, imodx + 1 + 100)
+      do iz = klb, kub
+       do iy = jlb, jub
+        do i = 1, stl
+         ix = ub_in + i
+         kk = kk + 1
+         result_in(ix, iy, iz) = aux2(kk)
+        end do
+       end do
+      end do
+     end if
+     ! Barrier is necessary to ensure causality in the chain integration
+     call call_barrier()
+    end do
+   end if
+
+   if (pex0) then
+    select case(integration_order)
+    case(1)
+     call trapezoidal_integration(dx_in, field_in, result_in, lb_in, ub_in, jlb, jub, klb, kub)
+    case(2)
+     call simpson_integration(dx_in, field_in, result_in, lb_in, ub_in, jlb, jub, klb, kub)
+    end select
+   end if
+
+   call fill_3d_ebfield_yzxbdsdata(result_in, 2, 2)
+  end subroutine
  end module

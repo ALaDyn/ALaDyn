@@ -21,18 +21,21 @@
 
  module pic_out
 
-  use pstruct_data
-  use fstruct_data
+  use array_alloc, only: v_realloc
   use code_util
   use common_param
+  use fstruct_data
   use grid_param
+  use memory_pool
   use parallel
-
+  use pstruct_data  
+  use util, only: endian
   implicit none
 
   integer, parameter, private :: par_dim = 20
   integer, private :: int_par(par_dim), part_int_par(par_dim)
   real(sp), private :: real_par(par_dim), part_real_par(par_dim)
+  real(dp), allocatable, dimension(:, :), private :: pic_out_aux
 
   character(13), dimension(20), parameter, private :: rpar = [' time =      ', &
                                                               ' xmin =      ', ' xmax =      ', ' ymin =      ', ' ymax =      ', &
@@ -48,21 +51,11 @@
                                                               ' ph_sp_nc = ', ' f_version =', ' i_end =    ', ' nx_loc =   ', &
                                                               ' ny_loc =   ', ' nz_loc =   ', ' pjump  =   ']
 
+  interface part_pdata_out
+   module procedure part_pdata_out_new
+   module procedure part_pdata_out_old
+  end interface
  contains
-
-  subroutine endian(iend)
-   implicit none
-   integer, intent(out) :: iend
-   integer, parameter :: ik1 = selected_int_kind(2)
-   integer, parameter :: ik4 = selected_int_kind(9)
-
-   iend = 0
-   if (btest(transfer(int([1, 0, 0, 0], ik1), 1_ik4), 0)) then
-    iend = 1
-   else
-    iend = 2
-   end if
-  end subroutine
 
   subroutine fluid_den_mom_out(fvar, cmp, flcomp)
    real(dp), intent(in) :: fvar(:, :, :, :)
@@ -1037,8 +1030,8 @@
    disp = 4*mype*(num_header_int + lenw) ! da usare con mpi_write !assuming that all procs have the same grid size
    disp_col = 4*imody*(num_header_int + lenw) ! con mpi_write_col !assuming that all procs have the same grid size
 
-   call mpi_write_field(wdata, lenw, header, num_header_int, disp, 17, &
-                        fname_out)
+   call mpi_write_field(wdata, lenw, header, num_header_int, disp, &
+     fname_out)
 
    if (pe0) then
     write (6, *) 'Fields written on file: '//foldername//'/'// &
@@ -1208,7 +1201,7 @@
   !==========================
   subroutine env_two_fields_out(ef, ef1, f_ind)
    real(dp), intent(in) :: ef(:, :, :, :), ef1(:, :, :, :)
-   character(9) :: fname = '         '
+   character(10) :: fname = '          '
    integer, intent(in) :: f_ind
    integer :: ix, iy, iz, iq, ipe
    integer :: lenw, kk, nx1, ny1, nz1
@@ -1238,6 +1231,16 @@
        a2 = ef(ix, iy, iz, 1)*ef(ix, iy, iz, 1) + &
             ef(ix, iy, iz, 2)*ef(ix, iy, iz, 2)
        avec = sqrt(a2)
+       wdata(kk) = real(avec, sp)
+      end do
+     end do
+    end do
+   end if
+   if (f_ind == -1) then
+    do iz = k1, nzp, jump
+     do iy = j1, nyp, jump
+      do ix = i1, nxp, jump
+       kk = kk + 1
        a2 = ef1(ix, iy, iz, 1)*ef1(ix, iy, iz, 1) + &
             ef1(ix, iy, iz, 2)*ef1(ix, iy, iz, 2)
        avec = avec + sqrt(a2)
@@ -1245,13 +1248,23 @@
       end do
      end do
     end do
-   else
+   end if
+   if (f_ind == 1 .or. f_ind == 2) then
     do iz = k1, nzp, jump
      do iy = j1, nyp, jump
       do ix = i1, nxp, jump
        kk = kk + 1
        wdata(kk) = real(ef(ix, iy, iz, f_ind), sp)
-       wdata(kk) = wdata(kk) + real(ef1(ix, iy, iz, f_ind), sp)
+      end do
+     end do
+    end do
+   end if
+   if (f_ind == 3 .or. f_ind == 4) then
+    do iz = k1, nzp, jump
+     do iy = j1, nyp, jump
+      do ix = i1, nxp, jump
+       kk = kk + 1
+       wdata(kk) = real(ef1(ix, iy, iz, f_ind), sp)
       end do
      end do
     end do
@@ -1275,12 +1288,18 @@
                      file_version, ibeam]
 
     select case (f_ind)
+    case (-1)
+     write (fname, '(a8,i2.2)') 'A2envout', iout
     case (0)
-     write (fname, '(a7,i2.2)') 'Aenvout', iout
+     write (fname, '(a8,i2.2)') 'A1envout', iout
     case (1)
-     write (fname, '(a7,i2.2)') 'Renvout', iout
+     write (fname, '(a8,i2.2)') 'R1envout', iout
     case (2)
-     write (fname, '(a7,i2.2)') 'Ienvout', iout
+     write (fname, '(a8,i2.2)') 'I1envout', iout
+    case (3)
+     write (fname, '(a8,i2.2)') 'R2envout', iout
+    case (4)
+     write (fname, '(a8,i2.2)') 'I2envout', iout
     end select
 
     gr_dim(1) = nxh(1)
@@ -1347,7 +1366,7 @@
 
   subroutine env_fields_out(ef, f_ind)
    real(dp), intent(in) :: ef(:, :, :, :)
-   character(9) :: fname = '         '
+   character(10) :: fname = '          '
    integer, intent(in) :: f_ind
    integer :: ix, iy, iz, iq, ipe
    integer :: lenw, kk, nx1, ny1, nz1
@@ -1411,13 +1430,13 @@
 
     select case (f_ind)
     case (-1)
-     write (fname, '(a7,i2.2)') 'aenvout', iout
+     write (fname, '(a8,i2.2)') 'A2envout', iout
     case (0)
-     write (fname, '(a7,i2.2)') 'Aenvout', iout
+     write (fname, '(a8,i2.2)') 'A1envout', iout
     case (1)
-     write (fname, '(a7,i2.2)') 'Renvout', iout
+     write (fname, '(a8,i2.2)') 'R1envout', iout
     case (2)
-     write (fname, '(a7,i2.2)') 'Ienvout', iout
+     write (fname, '(a8,i2.2)') 'I1envout', iout
     end select
 
     gr_dim(1) = nxh(1)
@@ -1482,19 +1501,172 @@
    end if
   end subroutine
   !================================
-  subroutine part_pdata_out(timenow, xmin_out, xmax_out, ymax_out, pid, &
-                            jmp)
+  subroutine part_pdata_out_new(spec_in, timenow, xmin_out, xmax_out, ymax_out, pid, &
+    jmp, mempool)
 
-   character(6), dimension(4), parameter :: part_files = ['Elpout', &
-                                                          'H1pout', 'Prpout', 'H2pout']
-   character(8) :: fname
-   character(17) :: fname_out
-   character(12) :: fnamel
-   character(21) :: fname_outl
-   real(dp), intent(in) :: timenow, xmin_out, xmax_out, ymax_out
-   integer, intent(in) :: pid, jmp
-   real(sp), allocatable :: pdata(:)
-   integer(dp) :: nptot_global_reduced
+   type(species_new), dimension(:), intent(in) :: spec_in
+   character (6), dimension (4), parameter :: part_files = [ 'Elpout', &
+     'H1pout', 'Prpout', 'H2pout' ]
+   character (8) :: fname
+   character (17) :: fname_out
+   character (12) :: fnamel
+   character (21) :: fname_outl
+   real (dp), intent (in) :: timenow, xmin_out, xmax_out, ymax_out
+   integer, intent (in) :: pid, jmp
+   type(memory_pool_t), pointer, intent(in) :: mempool
+   real(sp) :: ch
+   real (sp), allocatable :: pdata(:)
+   integer (dp) :: nptot_global_reduced
+   integer :: ik, p, q, np, ip, ip_max, nptot, npt, n_comp_out
+   integer :: lenp, ip_loc(npe), ndv, i_end
+   integer (offset_kind) :: disp, disp_col
+   type(index_array) :: out_parts
+   logical, pointer, contiguous, dimension(:) :: mask => null()
+   character (4) :: foldername
+   integer, parameter :: file_version = 4
+
+   write (foldername, '(i4.4)') iout
+
+   ndv = spec_in(pid)%total_size()
+   if (spec_in(pid)%istracked()) then
+    n_comp_out = ndv - 1
+   else
+    n_comp_out = ndv
+   end if
+   ! We exclude for now gamma_inv
+   ! but we add the charge
+   ! (part_index is automatically removed by total_size)
+   np = loc_npart(imody, imodz, imodx, pid)
+   npt = 0
+   ch = real(spec_in(pid)%pick_charge(), sp)
+   call array_realloc_1d(mempool%mp_log_1d, np)
+   mask => mempool%mp_log_1d
+   out_parts = index_array(np)
+   call v_realloc( pic_out_aux, np, ndv )
+   if (np>0) then
+    if (ndim>2) then
+     associate( xx => spec_in(pid)%call_component(X_COMP, lb=1, ub=np), &
+                yy => spec_in(pid)%call_component(Y_COMP, lb=1, ub=np), &
+                zz => spec_in(pid)%call_component(Z_COMP, lb=1, ub=np))
+        mask(1:np) = ( xx>=xmin_out .and. xx<=xmax_out .and. &
+         abs(yy)<=ymax_out .and. abs(zz)<=ymax_out )
+     end associate
+     npt = COUNT(mask(1:np))
+     call out_parts%find_index(mask(1:np))
+
+    else
+     associate( xx => spec_in(pid)%call_component(X_COMP, lb=1, ub=np), &
+                yy => spec_in(pid)%call_component(Y_COMP, lb=1, ub=np))
+        mask(1:np) = ( xx>=xmin_out .and. xx<=xmax_out .and. abs(yy)<=ymax_out)
+     end associate
+     npt = COUNT(mask(1:np))
+     call out_parts%find_index(mask(1:np))
+
+    end if
+    
+    call spec_in(pid)%call_particle(pic_out_aux, out_parts%indices(1:npt:jmp))
+   end if
+   ip_loc(mype+1) = npt
+
+   ip = ip_loc(mype+1)
+   call intvec_distribute(ip, ip_loc, npe)
+
+   ! this differs from nptot_global since it represents just the reduced number of particles
+   ! that will be present in the output (should be equal to nptot_global for p_jump=1)!
+   nptot_global_reduced = 0
+   do ik = 1, npe
+    nptot_global_reduced = nptot_global_reduced + ip_loc(ik)
+   end do
+   if (nptot_global < 1e9) then
+    nptot = int(nptot_global_reduced)
+   else
+    nptot = -1
+   end if
+
+   ip_max = ip
+   if (pe0) ip_max = maxval(ip_loc(1:npe))
+   lenp = (n_comp_out)*ip_loc(mype+1)
+   allocate (pdata(lenp))
+   ik = 0
+   do p = 1, ip_loc(mype+1)
+    do q = 1, n_comp_out - 1
+     ik = ik + 1
+     pdata(ik) = real(pic_out_aux(p,q), sp)
+    end do
+    ik = ik + 1
+    pdata(ik) = ch
+   end do
+   if (ik /= lenp) write (6, '(a16,3i8)') 'wrong pdata size', mype, lenp, &
+     ik
+
+   call endian(i_end)
+   part_real_par(1:20) = [ real(timenow,sp), real(xmin,sp), real(xmax,sp), &
+     real(ymin,sp), real(ymax,sp), real(zmin,sp), real(zmax,sp), &
+     real(w0_x,sp), real(w0_y,sp), real(a0,sp), real(lam0,sp), &
+     real(e0,sp), real(n0_ref,sp), real(np_per_cell,sp), &
+     real(j0_norm,sp), real(mass(pid),sp), real(xmin_out,sp), &
+     real(xmax_out,sp), real(ymax_out,sp), real(gam_min,sp) ]
+
+   part_int_par(1:20) = [ npe, nx, ny, nz, model_id, dmodel_id, nsp, &
+     curr_ndim, mp_per_cell(pid), ion_min(1), lpf_ord, der_ord, iform, n_comp_out, &
+     file_version, i_end, nx_loc, ny_loc, nz_loc, pjump ]
+
+   write (fname, '(a6,i2.2)') part_files(pid), iout !serve sempre
+   write (fnamel, '(a6,i2.2,a1,i3.3)') part_files(pid), iout, '_', imodz !usare con mpi_write_part_col
+   fname_out = foldername // '/' // fname // '.bin'
+   fname_outl = foldername // '/' // fnamel // '.bin'
+   disp = 0
+   disp_col = 0
+   if (pe0) then
+    open (10, file=foldername//'/'//fname//'.dat', form='formatted')
+    write (10, *) ' Real parameters'
+    do q = 1, 20
+     write (10, '(a13,e11.4)') rpar(q), part_real_par(q)
+    end do
+    write (10, *) ' Integer parameters'
+    do p = 1, 20
+     write (10, '(a12,i8)') ipar(p), part_int_par(p)
+    end do
+    write (10, *) ' Number of particles in the output box'
+    write (10, '(4i20)') nptot_global_reduced
+    close (10)
+    write (6, *) 'Particles param written on file: ' // foldername // &
+      '/' // fname // '.dat'
+   else
+    disp = mype + n_comp_out*sum(ip_loc(1:mype)) ! da usare con mpi_write_part
+   end if
+
+   if (mod(mype,npe_yloc)>0) disp_col = n_comp_out*sum(ip_loc(imodz*npe_yloc+1: &
+     mype)) ! da usare con mpi_write_part_col
+
+   disp = disp*4 ! sia gli int che i float sono di 4 bytes
+   disp_col = disp_col*4
+
+   call mpi_write_part(pdata, lenp, ip, disp, fname_out)
+
+   if (allocated(pdata)) deallocate (pdata)
+   if (pe0) then
+    write (6, *) 'Particles data written on file: ' // foldername // &
+      '/' // fname // '.bin'
+    write (6, *) ' Output logical flag ', l_force_singlefile_output
+   end if
+  end subroutine
+  !================================
+  subroutine part_pdata_out_old(spec_in, timenow, xmin_out, xmax_out, ymax_out, pid, &
+    jmp, mempool)
+
+   type(species), dimension(:), intent(in) :: spec_in
+   type(memory_pool_t), pointer, intent(in) :: mempool
+   character (6), dimension (4), parameter :: part_files = [ 'Elpout', &
+     'H1pout', 'Prpout', 'H2pout' ]
+   character (8) :: fname
+   character (17) :: fname_out
+   character (12) :: fnamel
+   character (21) :: fname_outl
+   real (dp), intent (in) :: timenow, xmin_out, xmax_out, ymax_out
+   integer, intent (in) :: pid, jmp
+   real (sp), allocatable :: pdata(:)
+   integer (dp) :: nptot_global_reduced
    integer :: ik, p, q, np, ip, ip_max, nptot
    integer :: lenp, ip_loc(npe), ndv, i_end
    integer(offset_kind) :: disp, disp_col
@@ -1506,18 +1678,19 @@
 
    ndv = nd2 + 2
    np = loc_npart(imody, imodz, imodx, pid)
+   call v_realloc( pic_out_aux, np, nd2+1 )
    ip = 0
    if (np > 0) then
     if (ndim > 2) then
      do p = 1, np, jmp
-      yy = spec(pid)%part(p, 2)
-      zz = spec(pid)%part(p, 3)
-      if (abs(yy) <= ymax_out .and. abs(zz) <= ymax_out) then
-       xx = spec(pid)%part(p, 1)
-       if (xx >= xmin_out .and. xx <= xmax_out) then
+      yy = spec_in(pid)%part(p, 2)
+      zz = spec_in(pid)%part(p, 3)
+      if (abs(yy)<=ymax_out .and. abs(zz)<=ymax_out) then
+       xx = spec_in(pid)%part(p, 1)
+       if (xx>=xmin_out .and. xx<=xmax_out) then
         ip = ip + 1
         do q = 1, nd2 + 1
-         ebfp(ip, q) = spec(pid)%part(p, q)
+         pic_out_aux(ip, q) = spec_in(pid)%part(p, q)
         end do
        end if
       end if
@@ -1525,13 +1698,13 @@
     else
      zz = 1.
      do p = 1, np, jmp
-      yy = spec(pid)%part(p, 2)
-      if (abs(yy) <= ymax_out) then
-       xx = spec(pid)%part(p, 1)
-       if (xx >= xmin_out .and. xx <= xmax_out) then
+      yy = spec_in(pid)%part(p, 2)
+      if (abs(yy)<=ymax_out) then
+       xx = spec_in(pid)%part(p, 1)
+       if (xx>=xmin_out .and. xx<=xmax_out) then
         ip = ip + 1
         do q = 1, nd2 + 1
-         ebfp(ip, q) = spec(pid)%part(p, q)
+         pic_out_aux(ip, q) = spec_in(pid)%part(p, q)
         end do
        end if
       end if
@@ -1563,9 +1736,9 @@
    do p = 1, ip_loc(mype + 1)
     do q = 1, nd2
      ik = ik + 1
-     pdata(ik) = real(ebfp(p, q), sp)
+     pdata(ik) = real(pic_out_aux(p,q), sp)
     end do
-    wgh_cmp = ebfp(p, nd2 + 1)
+    wgh_cmp = pic_out_aux(p, nd2+1)
     ik = ik + 1
     pdata(ik) = wgh
     ik = ik + 1
@@ -1617,7 +1790,7 @@
    disp = disp*4 ! sia gli int che i float sono di 4 bytes
    disp_col = disp_col*4
 
-   call mpi_write_part(pdata, lenp, ip, disp, 17, fname_out)
+   call mpi_write_part(pdata, lenp, ip, disp, fname_out)
 
    if (allocated(pdata)) deallocate (pdata)
    if (pe0) then
@@ -1628,14 +1801,15 @@
   end subroutine
 
 !==========================
-  subroutine part_high_gamma_out(gam_in, timenow)
+  subroutine part_high_gamma_out(spec_in, gam_in, timenow)
 
-   character(8), dimension(1), parameter :: part_files = ['E_hg_out']
-   character(10) :: fname
-   character(19) :: fname_out
-   real(dp), intent(in) :: gam_in, timenow
-   real(sp), allocatable :: pdata(:)
-   integer(dp) :: nptot_global_reduced
+   type(species), dimension(:), intent(in) :: spec_in
+   character (8), dimension (1), parameter :: part_files = [ 'E_hg_out' ]
+   character (10) :: fname
+   character (19) :: fname_out
+   real (dp), intent (in) :: gam_in, timenow
+   real (sp), allocatable :: pdata(:)
+   integer (dp) :: nptot_global_reduced
    integer :: id_ch, ik, p, q, ip, ip_max, nptot
    integer :: jmp, ne, lenp, ip_loc(npe), ndv, i_end
    integer(offset_kind) :: disp
@@ -1648,17 +1822,18 @@
    id_ch = nd2 + 1
    ndv = nd2 + 2
    ne = loc_npart(imody, imodz, imodx, 1)
+   call v_realloc( pic_out_aux, ne, nd2+1 )
    select case (nd2)
    case (4)
     ip = 0
     if (ne > 0) then
      do p = 1, ne
-      pp(1:2) = spec(1)%part(p, 3:4)
-      gam = sqrt(1.+pp(1)*pp(1) + pp(2)*pp(2))
-      if (gam > gam_in) then
+      pp(1:2) = spec_in(1)%part(p, 3:4)
+      gam = sqrt(1.+pp(1)*pp(1)+pp(2)*pp(2))
+      if (gam>gam_in) then
        ip = ip + 1
        do q = 1, nd2 + 1
-        ebfp(ip, q) = spec(1)%part(p, q)
+        pic_out_aux(ip, q) = spec_in(1)%part(p, q)
        end do
       end if
      end do
@@ -1667,12 +1842,12 @@
     ip = 0
     if (ne > 0) then
      do p = 1, ne
-      pp(1:3) = spec(1)%part(p, 4:6)
-      gam = sqrt(1.+pp(1)*pp(1) + pp(2)*pp(2) + pp(3)*pp(3))
-      if (gam > gam_in) then
+      pp(1:3) = spec_in(1)%part(p, 4:6)
+      gam = sqrt(1.+pp(1)*pp(1)+pp(2)*pp(2)+pp(3)*pp(3))
+      if (gam>gam_in) then
        ip = ip + 1
        do q = 1, nd2 + 1
-        ebfp(ip, q) = spec(1)%part(p, q)
+        pic_out_aux(ip, q) = spec_in(1)%part(p, q)
        end do
       end if
      end do
@@ -1701,9 +1876,9 @@
    do p = 1, ip
     do q = 1, nd2
      ik = ik + 1
-     pdata(ik) = real(ebfp(p, q), sp)
+     pdata(ik) = real(pic_out_aux(p,q), sp)
     end do
-    wgh_cmp = ebfp(p, nd2 + 1)
+    wgh_cmp = pic_out_aux(p, nd2+1)
     ik = ik + 1
     pdata(ik) = wgh
     ik = ik + 1
@@ -1749,7 +1924,7 @@
    end if
 
    disp = disp*4 ! sia gli int che i float sono di 4 bytes
-   call mpi_write_part(pdata, lenp, ip, disp, 19, fname_out)
+   call mpi_write_part(pdata, lenp, ip, disp, fname_out)
    if (allocated(pdata)) deallocate (pdata)
    if (pe0) then
     write (6, *) 'Particles data written on file: '//foldername// &
@@ -1757,15 +1932,16 @@
    end if
   end subroutine
 
-  subroutine part_bdata_out(timenow, pid, jmp)
+  subroutine part_bdata_out(spec_in, timenow,pid,jmp)
 
-   character(11), dimension(1), parameter :: part_files = ['E_bunch_out']
-   character(13) :: fname
-   character(22) :: fname_out
-   real(dp), intent(in) :: timenow
-   integer, intent(in) :: pid, jmp
-   real(sp), allocatable :: pdata(:)
-   integer(dp) :: nptot_global_reduced
+   type(species), dimension(:), intent(in) :: spec_in
+   character (11), dimension (1), parameter :: part_files = [ 'E_bunch_out' ]
+   character (13) :: fname
+   character (22) :: fname_out
+   real (dp), intent (in) :: timenow
+   integer,intent(in) :: pid,jmp
+   real (sp), allocatable :: pdata(:)
+   integer (dp) :: nptot_global_reduced
    integer :: id_ch, ik, p, q, ip, ip_max, nptot
    integer :: ne, lenp, ip_loc(npe), ndv, i_end
    integer(offset_kind) :: disp
@@ -1776,14 +1952,15 @@
    id_ch = nd2 + 1
    ndv = nd2 + 2
    ne = loc_npart(imody, imodz, imodx, 1)
+   call v_realloc( pic_out_aux, ne, nd2+1 )
    ip = 0
-   if (ne > 0) then
-    do p = 1, ne, jmp
-     wgh_cmp = spec(1)%part(p, id_ch)
-     if (part_ind == pid) then
+   if (ne>0) then
+    do p = 1, ne,jmp
+     wgh_cmp = spec_in(1)%part(p, id_ch)
+     if (part_ind ==pid) then
       ip = ip + 1
       do q = 1, nd2 + 1
-       ebfp(ip, q) = spec(1)%part(p, q)
+       pic_out_aux(ip, q) = spec_in(1)%part(p, q)
       end do
      end if
     end do
@@ -1811,9 +1988,9 @@
    do p = 1, ip
     do q = 1, nd2
      ik = ik + 1
-     pdata(ik) = real(ebfp(p, q), sp)
+     pdata(ik) = real(pic_out_aux(p,q), sp)
     end do
-    wgh_cmp = ebfp(p, nd2 + 1)
+    wgh_cmp = pic_out_aux(p, nd2+1)
     ik = ik + 1
     pdata(ik) = wgh
     ik = ik + 1
@@ -1859,7 +2036,7 @@
    end if
 
    disp = disp*4 ! sia gli int che i float sono di 4 bytes
-   call mpi_write_part(pdata, lenp, ip, disp, 22, fname_out)
+   call mpi_write_part(pdata, lenp, ip, disp, fname_out)
    if (allocated(pdata)) deallocate (pdata)
    if (pe0) then
     write (6, *) 'Particles data written on file: '//foldername// &
@@ -1867,14 +2044,15 @@
    end if
   end subroutine
   !==============================================
-  subroutine part_ionz_out(timenow)
+  subroutine part_ionz_out(spec_in, timenow)
 
-   character(8), dimension(1), parameter :: part_files = ['Eionzout']
-   character(10) :: fname
-   character(19) :: fname_out
-   real(dp), intent(in) :: timenow
-   real(sp), allocatable :: pdata(:)
-   integer(dp) :: nptot_global_reduced
+   type(species), dimension(:), intent(in) :: spec_in
+   character (8), dimension (1), parameter :: part_files = [ 'Eionzout' ]
+   character (10) :: fname
+   character (19) :: fname_out
+   real (dp), intent (in) :: timenow
+   real (sp), allocatable :: pdata(:)
+   integer (dp) :: nptot_global_reduced
    integer :: id_ch, ik, p, q, ip, ip_max, nptot
    integer :: jmp, ne, lenp, ip_loc(npe), ndv, i_end
    integer(offset_kind) :: disp
@@ -1888,14 +2066,15 @@
    ndv = nd2 + 2
    ch_ion = real(wgh_ion, sp)
    ne = loc_npart(imody, imodz, imodx, 1)
+   call v_realloc( pic_out_aux, ne, nd2 + 1)
    ip = 0
    if (ne > 0) then
     do p = 1, ne
-     wgh_cmp = spec(1)%part(p, id_ch)
+     wgh_cmp = spec_in(1)%part(p, id_ch)
      if (part_ind < 0) then
       ip = ip + 1
       do q = 1, nd2 + 1
-       ebfp(ip, q) = spec(1)%part(p, q)
+       pic_out_aux(ip, q) = spec_in(1)%part(p, q)
       end do
      end if
     end do
@@ -1923,9 +2102,9 @@
    do p = 1, ip
     do q = 1, nd2
      ik = ik + 1
-     pdata(ik) = real(ebfp(p, q), sp)
+     pdata(ik) = real(pic_out_aux(p,q), sp)
     end do
-    wgh_cmp = ebfp(p, nd2 + 1)
+    wgh_cmp = pic_out_aux(p, nd2+1)
     ik = ik + 1
     pdata(ik) = wgh
     ik = ik + 1
@@ -1971,7 +2150,7 @@
    end if
 
    disp = disp*4 ! sia gli int che i float sono di 4 bytes
-   call mpi_write_part(pdata, lenp, ip, disp, 19, fname_out)
+   call mpi_write_part(pdata, lenp, ip, disp, fname_out)
    if (allocated(pdata)) deallocate (pdata)
    if (pe0) then
     write (6, *) 'Particles data written on file: '//foldername// &

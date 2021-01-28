@@ -21,49 +21,63 @@
 
  module run_data_info
 
-  use pstruct_data
-  use fstruct_data
+  use boris_push, only: BORIS, HIGUERA
   use code_util
+  use control_bunch_input, only: reduced_charge, bunch_charge, epsy,&
+  epsz, sxb, syb, gam, rhob, jb_norm
   use common_param
+  use fstruct_data
   use grid_param
   use ionz_data
+  use memory_pool
   use parallel
-  use control_bunch_input, only: reduced_charge, bunch_charge, epsy, &
-                                 epsz, sxb, syb, gam, rhob, jb_norm
   use phys_param, only: electron_charge_norm
+  use pstruct_data
   implicit none
+
+  interface Max_pmemory_check
+   module procedure Max_pmemory_check_new
+   module procedure Max_pmemory_check_old
+  end interface
 
  contains
 
-  subroutine timing
+  subroutine timing(mempool)
+   type(memory_pool_t), intent(inout) :: mempool
+   real(dp) :: used_memory
 
    if (mod(iter, write_every) == 0) then
     mem_psize_max = 0.0
     call Part_numbers
     if (prl) then
-     call Max_pmemory_check()
+     call Max_pmemory_check(spec, ebfp)
+#if !defined(OLD_SPECIES)
+     call Max_memory_pool_usage(mempool, used_memory)
+#endif
     end if
     if (pe0) then
      call tot_num_part
      write (6, '(a10,i6,a10,e11.4,a10,e11.4)') 'iter = ', iter, ' t = ', &
       tnow, ' dt = ', dt_loc
-     call CPU_TIME(unix_time_now)
-     write (6, '(a16,f12.3,a10,i15)') ' Time elapsed = ', &
-      unix_time_now - unix_time_begin, ', nptot = ', nptot_global
-     if (prl) then
-      if (part) then
-       write (6, '(a21,i10,a1,i10)') ' part min/max distr. ', np_min, &
-        ' ', np_max
-       write (6, '(a18,2i8)') ' where pmin/pmax  ', pe_npmin, pe_npmax
-      endif
-      write (6, '(a24,e12.5)') ' max part memory in MB= ', &
-       mem_psize_max
-      write (6, '(a20,e12.5)') ' Max part  address= ', mem_max_addr
-     end if
-     write (6, '(a13,2E11.4)') ' xmin/xmax   ', xmin, xmax
-     write (6, *) '========================'
-    end if !end Pe0 write
-   end if  !end mod(write_every)
+      call CPU_TIME( unix_time_now )
+      write (6, '(a16,f12.3,a10,i15)') ' Time elapsed = ', &
+       unix_time_now - unix_time_begin, ', nptot = ', nptot_global
+      if (prl) then
+       if (part) then
+        write (6, '(a21,i10,a1,i10)') ' part min/max distr. ', np_min, &
+         ' ', np_max
+        write (6, '(a18,2i8)') ' where pmin/pmax  ', pe_npmin, pe_npmax
+       end if
+       write (6, '(a24,e12.5)') ' Max part memory in MB= ', &
+          mem_psize_max
+       write (6, '(a20,e12.5)') ' Max part  address= ', mem_max_addr
+       write (6, '(a31,e12.5)') ' Max memory pool memory in MB= ', &
+          used_memory
+      end if
+      write (6, '(a13,2E11.4)') ' xmin/xmax   ', xmin, xmax
+      write (6, *) '========================'
+     end if !end Pe0 write
+    end if  !end mod(write_every)
 
    if (tnow < tmax) then
     tnow = tnow + dt_loc
@@ -101,9 +115,9 @@
    end do
    np_max = maxval(nploc(1:npe))
    np_min = minval(nploc(1:npe))
-   if (.not. part) then
-    if (np_max > 0) part = .true.
-   endif
+   if(.not.part)then
+    if(np_max > 0) part=.true.
+   end if
    do ip = 0, npe - 1
     if (nploc(ip + 1) == np_min) pe_npmin = ip
     if (nploc(ip + 1) == np_max) pe_npmax = ip
@@ -181,7 +195,7 @@
 
    write (60, *) '*************IMPLEMENTATION TOOLS********************'
    write (60, *) '  Field collocation on the Yee-module staggered grid'
-   write (60, *) '  B-spline shapes of alternating first-second order '
+   write (60, *) '  Second order B-spline shapes '
    if (lpf_ord > 0) then
     if (lpf_ord == 2) write (60, *) &
      '  One-step leap-frog time integration '
@@ -194,6 +208,17 @@
     if (lpf_ord > 2) then
      write (60, *) '  RK multi-step fourth order time scheme '
      write (60, *) '  Explicit fourth order Space Derivative'
+    end if
+    write(60, *) '      === Particle push ===      '
+    if (pusher == HIGUERA .or. model_id == 4) then
+     write(60, *) '  Particles are pushed according to the Higuera push'
+    end if
+    if (pusher == BORIS .and. model_id /= 4) then
+     write(60, *) '  Particles are pushed according to the Boris push'
+    end if
+    if ( n_substeps > 1 ) then
+     write(60, *) '  Particle motion is divided in ', n_substeps, &
+     &' substeps every time cycle'
     end if
    end if
    if (charge_cons) then
@@ -270,6 +295,10 @@
     case (4)
      write (60, *) '  LP(P-pol) laser field injected using &
        &ENVELOPE integration model'
+     if (improved_envelope) then
+      write (60, *) '  An additional term in the Hamiltonian corrects the &
+       &pulse divergence'
+     end if
     case (5)
      write (60, *) '  Electron bunch injected'
     end select
@@ -428,6 +457,11 @@
      write (60, *) ' zmin_t       zmax_t     '
      write (60, '(a2,2e11.4)') '  ', zmin_t, zmax_t
     end if
+    if (decreasing_transverse) then
+     write(60, *) ' Initial macroparticle number per cell is decreased&
+     & along the transverse axis'
+    end if
+
     write (60, *) '********** TARGET CONFIGURATION***********'
     if (wake) then
      select case (dmodel_id)
@@ -540,9 +574,9 @@
    write (6, '(e11.4)') j0_norm
    write (6, *) '********** ALLOCATED MEMORY (MB) *********************'
    write (6, '(a28,e12.5)') ' Pe0 allocated grid memory= ', &
-    1.e-06*real(mem_size, dp)*kind(electron_charge_norm)
+     1.e-06*real(mem_size, dp)*sizeof(electron_charge_norm)
    write (6, '(a28,e12.5)') ' Pe0 allocated part memory= ', &
-    1.e-06*real(mem_psize, dp)*kind(electron_charge_norm)
+     1.e-06*real(mem_psize, dp)*sizeof(electron_charge_norm)
    if (prl) then
     write (6, '(a24,e12.5)') ' Max part memory (MB) = ', mem_psize_max
     !write(6,'(a20,e12.5)')' Max part  address= ',mem_max_addr
@@ -635,8 +669,10 @@
   end subroutine
   !---------------------------
 
-  subroutine Max_pmemory_check()
+  subroutine Max_pmemory_check_old(spec_in, spec_aux_1_in)
 
+   type(species), dimension(:), intent(in) :: spec_in
+   real(dp), dimension(:, :), allocatable, intent(in) :: spec_aux_1_in
    integer :: ndv1, ndv2
    integer :: ic
    real(dp) :: mem_loc(1), max_mem(1)
@@ -645,43 +681,19 @@
    mem_loc = 0.
    max_mem = 0.
    do ic = 1, nsp
-    if (allocated(spec(ic)%part)) then
-     ndv1 = size(spec(ic)%part, 1)
-     ndv2 = size(spec(ic)%part, 2)
+    if (allocated(spec_in(ic)%part)) then
+     ndv1 = size(spec_in(ic)%part, 1)
+     ndv2 = size(spec_in(ic)%part, 2)
      mem_loc(1) = mem_loc(1) + real(ndv1*ndv2, dp)
     end if
    end do
-   if (allocated(ebfp)) then
-    ndv1 = size(ebfp, 1)
-    ndv2 = size(ebfp, 2)
-    mem_loc(1) = mem_loc(1) + real(ndv1*ndv2, dp)
-   end if
-   if (beam) then
-    do ic = 1, nsb
-     if (allocated(bunch(ic)%part)) then
-      ndv1 = size(spec(ic)%part, 1)
-      ndv2 = size(spec(ic)%part, 2)
-      mem_loc(1) = mem_loc(1) + real(ndv1*ndv2, dp)
-     end if
-    end do
-    if (allocated(ebfb)) then
-     ndv1 = size(ebfb, 1)
-     ndv2 = size(ebfb, 2)
-     mem_loc(1) = mem_loc(1) + real(ndv1*ndv2, dp)
-    end if
-   end if
-   if (allocated(ebfp0)) then
-    ndv1 = size(ebfp0, 1)
-    ndv2 = size(ebfp0, 2)
-    mem_loc(1) = mem_loc(1) + real(ndv1*ndv2, dp)
-   end if
-   if (allocated(ebfp1)) then
-    ndv1 = size(ebfp1, 1)
-    ndv2 = size(ebfp1, 2)
+   if (allocated(spec_aux_1_in)) then
+    ndv1 = size(spec_aux_1_in, 1)
+    ndv2 = size(spec_aux_1_in, 2)
     mem_loc(1) = mem_loc(1) + real(ndv1*ndv2, dp)
    end if
    call allreduce_dpreal(maxv, mem_loc, max_mem, 1)
-   mem_psize_max = kind(electron_charge_norm)*1.e-06*max_mem(1)
+   mem_psize_max = sizeof(electron_charge_norm)*1.e-06*max_mem(1)
 
    !call submem(adr)
    !mem_loc(1)=adr
@@ -690,4 +702,52 @@
 
   end subroutine
   !---------------------------
+
+  subroutine Max_pmemory_check_new(spec_in, spec_aux_1_in)
+
+   type(species_new), dimension(:), allocatable, intent(in) :: spec_in
+   type(species_aux), dimension(:), allocatable, intent(in) :: spec_aux_1_in
+   integer :: ndv1, ndv2
+   integer :: ic
+   real (dp) :: mem_loc(1), max_mem(1)
+   !real(dp) :: adr
+
+   mem_loc = 0.
+   max_mem = 0.
+   if (allocated(spec_in) ) then
+    do ic = 1, SIZE(spec_in)
+     ndv1 = spec_in(ic)%array_size()
+     ndv2 = spec_in(ic)%total_size()
+     mem_loc(1) = mem_loc(1) + real(ndv1*ndv2, dp)
+     ndv1 = spec_aux_1_in(ic)%array_size()
+     ndv2 = spec_aux_1_in(ic)%total_size()
+     mem_loc(1) = mem_loc(1) + real(ndv1*ndv2, dp)
+    end do
+   end if
+
+   call allreduce_dpreal(maxv, mem_loc, max_mem, 1)
+   mem_psize_max = sizeof(electron_charge_norm)*1.e-06*max_mem(1)
+
+   !call submem(adr)
+   !mem_loc(1)=adr
+   !call allreduce_dpreal(MAXV,mem_loc,max_mem,1)
+   !mem_max_addr=1.e-06*max_mem(1)
+
+  end subroutine
+  !---------------------------
+  subroutine Max_memory_pool_usage( mempool, mp_usage )
+   type(memory_pool_t), intent(inout) :: mempool
+   real (dp) :: mp_usage
+   real (dp) :: mem_loc(1), max_mem(1)
+
+   mem_loc = 0.
+   max_mem = 0.
+   call mempool%memory_usage()
+   mem_loc(1) = real(mempool%used_memory, dp)
+
+   call allreduce_dpreal(maxv, mem_loc, max_mem, 1)
+
+   mp_usage = 1.e-06*max_mem(1)
+
+  end subroutine
  end module

@@ -24,9 +24,26 @@
   use pstruct_data
   use fstruct_data
   use grid_part_lib
+  use memory_pool
 
   implicit none
 
+  type(interp_coeff), allocatable, private :: interp
+  !! Useful variable to store interpolation results
+  interface set_grid_charge
+   module procedure set_grid_charge_new
+   module procedure set_grid_charge_old
+  end interface
+
+  interface set_grid_env_den_energy
+   module procedure set_grid_env_den_energy_new
+   module procedure set_grid_env_den_energy_old
+  end interface
+
+  interface set_grid_den_energy
+   module procedure set_grid_den_energy_new
+   module procedure set_grid_den_energy_old
+  end interface
  contains
 
   !DIR$ ATTRIBUTES INLINE :: set_local_positions
@@ -95,6 +112,9 @@
    ay0(0:3) = zero_dp
    az0(0:3) = zero_dp
    spl = 3
+   !================================
+   call interp_realloc(interp, 1, 3)
+   !================================
    select case (ndim)
    case (2)
     ch = 5
@@ -109,10 +129,15 @@
      wght = real(pt(n, 4), sp)
      xp(1:2) = pt(n, 1:2)
 
-     call cden_2d_wgh(xp, ax0, ay0, i, j)
+     call cden_2d_wgh( xp, interp )
+
+     ax0(0:3) = interp%coeff_x(0:3)
+     ay0(0:3) = interp%coeff_y(0:3)
+
+     i = interp%ix
+     j = interp%iy
+
      ax0(0:3) = wght*ax0(0:3)
-     i = i - 1
-     j = j - 1
      do j1 = 0, 3
       j2 = j + j1
       do i1 = 0, 3
@@ -134,12 +159,19 @@
     end do
     do n = 1, np
      xp(1:3) = pt(n, 1:3)
-     wght = real(pt(n, 4), sp)
-     call cden_3d_wgh(xp, ax0, ay0, az0, i, j, k)
+     wght = real(pt(n,4), sp)
+
+     call cden_3d_wgh( xp, interp )
+
+     ax0(0:3) = interp%coeff_x(0:3)
+     ay0(0:3) = interp%coeff_y(0:3)
+     az0(0:3) = interp%coeff_z(0:3)
+
+     i = interp%ix
+     j = interp%iy
+     k = interp%iz
+
      ax0(0:3) = wght*ax0(0:3)
-     i = i - 1
-     j = j - 1
-     k = k - 1
      do k1 = 0, spl
       k2 = k + k1
       do j1 = 0, spl
@@ -173,9 +205,12 @@
    ay0(0:2) = zero_dp
    az0(0:2) = zero_dp
    spl = 2
-   x1_loc = xmn
-   y1_loc = yft_min
-   z1_loc = zft_min
+   x1_loc=xmn
+   y1_loc=yft_min
+   z1_loc=zft_min
+   !================================
+   call interp_realloc(interp, 1, 3)
+   !================================
    select case (ndim)
    case (2)
     ch = 5
@@ -190,10 +225,15 @@
      wght = real(pt(n, 4), sp)
      xp(1:2) = pt(n, 1:2)
 
-     call qden_2d_wgh(xp, ax0, ay0, i, j)
+     call qden_2d_wgh( xp, interp )
+
+     ax0(0:2) = interp%coeff_x(0:2)
+     ay0(0:2) = interp%coeff_y(0:2)
+
+     i = interp%ix
+     j = interp%iy
+
      ax0(0:2) = wght*ax0(0:2)
-     i = i - 1
-     j = j - 1
      do j1 = 0, 2
       j2 = j + j1
       do i1 = 0, 2
@@ -215,12 +255,19 @@
     end do
     do n = 1, np
      xp(1:3) = pt(n, 1:3)
-     wght = real(pt(n, 4), sp)
-     call qden_3d_wgh(xp, ax0, ay0, az0, i, j, k)
+     wght = real(pt(n,4), sp)
+
+     call qden_3d_wgh( xp, interp )
+
+     ax0(0:2) = interp%coeff_x(0:2)
+     ay0(0:2) = interp%coeff_y(0:2)
+     az0(0:2) = interp%coeff_z(0:2)
+
+     i = interp%ix
+     j = interp%iy
+     k = interp%iz
+
      ax0(0:2) = wght*ax0(0:2)
-     i = i - 1
-     j = j - 1
-     k = k - 1
      do k1 = 0, spl
       k2 = k + k1
       do j1 = 0, spl
@@ -237,7 +284,120 @@
    end select
   end subroutine
 !=================================
-  subroutine set_grid_charge(sp_loc, pt, den, np, ic)
+  subroutine set_grid_charge_new(sp_loc, den, np, ic, mempool)
+
+   type(species_new), intent (in) :: sp_loc
+   real (dp), intent (inout) :: den(:, :, :, :)
+   integer, intent (in) :: np, ic
+   type(memory_pool_t), pointer, intent(in) :: mempool
+   real (dp), pointer, contiguous, dimension(:, :) :: xx => null()
+   real(dp), pointer, contiguous, dimension(:) :: weight => null()
+   real (dp) :: dvol
+   integer :: i1, j1, k1, i2, j2, k2, n, spline
+   !======================
+   ! Computes charge density of species ic on a grid
+   !=================================
+   !=================================
+   ! Do not execute without particles
+   !=================================
+   if ( sp_loc%empty ) return
+   call interp_realloc(interp, np, sp_loc%pick_dimensions())
+   !================================
+   allocate( weight(np) )
+
+   spline = 2
+   select case (ndim)
+   case (2)
+    call mp_xx_realloc(mempool%mp_xx_2d_A, np, 2, mempool)
+    xx => mempool%mp_xx_2d_A
+
+    weight(1:np) = sp_loc%pick_charge()*sp_loc%call_component( W_COMP, lb=1, ub=np)
+
+    xx(1:np, 1) = set_local_positions( sp_loc, X_COMP )
+    xx(1:np, 2) = set_local_positions( sp_loc, Y_COMP )
+    !==========================
+
+    call qden_2d_wgh( xx(1:np, 1:2), interp, mempool )
+
+    associate( ax0 => interp%coeff_x_rank2, &
+               ay0 => interp%coeff_y_rank2, &
+               i => interp%ix_rank2, &
+               j => interp%iy_rank2 )
+
+    !==========================
+    ! Warning: this call must be after qden_2d_spline since
+    ! in that routine the 1d arrays are used
+    call array_realloc_1d(mempool%mp_xx_1d_A, np)
+    weight => mempool%mp_xx_1d_A
+    weight(1:np) = sp_loc%pick_charge()*sp_loc%call_component( W_COMP, lb=1, ub=np)
+
+    do n = 0, 2
+     ax0(n, 1:np) = weight(1:np)*ax0(n, 1:np)
+    end do
+
+    do n = 1, np
+     do j1 = 0, spline
+      j2 = j(n) + j1
+      do i1 = 0, spline
+       i2 = i(n) + i1
+       dvol = ax0(i1, n)*ay0(j1, n)
+       den(i2, j2, 1, ic) = den(i2, j2, 1, ic) + dvol
+      end do
+     end do
+    end do
+
+    end associate
+
+   case (3)
+    call mp_xx_realloc(mempool%mp_xx_2d_A, np, 3, mempool)
+    xx => mempool%mp_xx_2d_A
+    weight(1:np) = sp_loc%pick_charge()*sp_loc%call_component( W_COMP, lb=1, ub=np)
+
+    xx(1:np, 1) = set_local_positions( sp_loc, X_COMP )
+    xx(1:np, 2) = set_local_positions( sp_loc, Y_COMP )
+    xx(1:np, 3) = set_local_positions( sp_loc, Z_COMP )
+    !==========================
+
+    call qden_3d_wgh( xx(1:np, 1:3), interp, mempool )
+
+    associate( ax0 => interp%coeff_x_rank2, &
+               ay0 => interp%coeff_y_rank2, &
+               az0 => interp%coeff_z_rank2, &
+               i => interp%ix_rank2, &
+               j => interp%iy_rank2, &
+               k => interp%iz_rank2 )
+
+    !==========================
+    ! Warning: this call must be after qden_2d_spline since
+    ! in that routine the 1d arrays are used
+    call array_realloc_1d(mempool%mp_xx_1d_A, np)
+    weight => mempool%mp_xx_1d_A
+    weight(1:np) = sp_loc%pick_charge()*sp_loc%call_component( W_COMP, lb=1, ub=np)
+
+    do n = 0, 2
+     ax0(n, 1:np) = weight(1:np)*ax0(n, 1:np)
+    end do
+
+    do n = 1, np
+     do k1 = 0, spline
+      k2 = k(n) + k1
+      do j1 = 0, spline
+       j2 = j(n) + j1
+       dvol = az0(k1, n)*ay0(j1, n)
+       do i1 = 0, spline
+        i2 = i(n) + i1
+        den(i2, j2, k2, ic) = den(i2, j2, k2, ic) + ax0(i1, n)*dvol
+       end do
+      end do
+     end do
+    end do
+    ! charge density on den(ic)
+    end associate
+   end select
+  end subroutine
+  !==========================
+!=================================
+  subroutine set_grid_charge_old(sp_loc, pt, den, np, ic)
 
    type(species), intent(in) :: sp_loc
    real(dp), intent(inout) :: pt(:, :)
@@ -249,6 +409,9 @@
    !======================
    ! Computes charge density of species ic on a grid
    !=================================
+   !================================
+   call interp_realloc(interp, 1, 3)
+   !================================
    ax0(0:2) = zero_dp
    ay0(0:2) = zero_dp
    az0(0:2) = zero_dp
@@ -265,9 +428,11 @@
      wgh_cmp = sp_loc%part(n, 5)
      wght = charge*wgh
 
-     call qden_1d_wgh(xp, ax0, i)
-     ax0(0:2) = wght*ax0(0:2)
-     i = i - 1
+     call qden_1d_wgh( xp, interp )
+
+     ax0(0:2) = wght*interp%coeff_x(0:2)
+     i = interp%ix
+
      do i1 = 0, 2
       i2 = i + i1
       den(i2, j2, 1, ic) = den(i2, j2, 1, ic) + ax0(i1)
@@ -286,10 +451,15 @@
      wght = real(pt(n, 4), sp)
      xp(1:2) = pt(n, 1:2)
 
-     call qden_2d_wgh(xp, ax0, ay0, i, j)
+     call qden_2d_wgh( xp, interp )
+
+     ax0(0:2) = interp%coeff_x(0:2)
+     ay0(0:2) = interp%coeff_y(0:2)
+
+     i = interp%ix
+     j = interp%iy
+
      ax0(0:2) = wght*ax0(0:2)
-     i = i - 1
-     j = j - 1
      do j1 = 0, 2
       j2 = j + j1
       do i1 = 0, 2
@@ -311,12 +481,19 @@
     call set_local_3d_positions(pt, 1, np)
     do n = 1, np
      xp(1:3) = pt(n, 1:3)
-     wght = real(pt(n, 4), sp)
-     call qden_3d_wgh(xp, ax0, ay0, az0, i, j, k)
+     wght = real(pt(n,4), sp)
+
+     call qden_3d_wgh( xp, interp )
+
+     ax0(0:2) = interp%coeff_x(0:2)
+     ay0(0:2) = interp%coeff_y(0:2)
+     az0(0:2) = interp%coeff_z(0:2)
+
+     i = interp%ix
+     j = interp%iy
+     k = interp%iz
+
      ax0(0:2) = wght*ax0(0:2)
-     i = i - 1
-     j = j - 1
-     k = k - 1
      do k1 = 0, spl
       k2 = k + k1
       do j1 = 0, spl
@@ -334,7 +511,230 @@
   end subroutine
   !==========================
   !==========================
-  subroutine set_grid_env_den_energy(sp_loc, pt, eden, np, icp)
+  subroutine set_grid_env_den_energy_new(sp_loc, eden, np, icp, mempool)
+
+   type (species_new), intent (in) :: sp_loc
+   real (dp), intent (inout) :: eden(:, :, :, :)
+   integer, intent (in) :: np, icp
+   type(memory_pool_t), pointer, intent(in) :: mempool
+   real (dp), pointer, contiguous, dimension(:, :) :: xx => null()
+   real (dp), pointer, contiguous, dimension(:) :: gam => null()
+   real (dp) :: dvol
+   integer :: i1, j1, k1, i2, j2, k2, n, spline
+   !======================
+   !   Computes eden(grid,1)= n/n_0 and eden(grid,2)=<gam-1}n>/n_0
+   !================================================
+   !=================================
+   ! Do not execute without particles
+   !=================================
+   if ( sp_loc%empty ) return
+   !================================
+   call interp_realloc(interp, np, sp_loc%pick_dimensions())
+   !================================
+
+   spline = 2
+   select case (ndim)
+   case (1)
+    call mp_xx_realloc(mempool%mp_xx_2d_A, np, 1, mempool)
+    xx => mempool%mp_xx_2d_A
+
+    call qden_1d_wgh( xx(1:np, 1:1), interp, mempool )
+
+    !==========================
+    ! Warning: this call must be after qden_1d_spline since
+    ! in that routine the 1d arrays are used
+    call array_realloc_1d(mempool%mp_xx_1d_A, np)
+    gam => mempool%mp_xx_1d_A
+    gam(1:np) = sp_loc%call_component( PX_COMP, lb=1, ub=np)*sp_loc%call_component( PX_COMP, lb=1, ub=np)
+
+    xx(1:np, 1) = set_local_positions( sp_loc, X_COMP )
+    
+    j2 = 1
+
+    associate( ax0 => interp%coeff_x_rank2, &
+               i => interp%ix_rank2, &
+               weight => sp_loc%call_component( W_COMP, lb=1, ub=np) )
+
+    do n = 1, np
+     do i1 = 0, spline
+      i2 = i(n) + i1
+      dvol = ax0(i1, n)
+      gam(n) = gam(n) + dvol*eden(i2, j2, 1, icp)
+     end do
+    end do
+    gam(1:np) = sqrt( one_dp + gam(1:np))
+    do i1 = 0, spline
+     ax0(i1, 1:np) = weight(1:np)*ax0(i1, 1:np)
+    end do
+    do n = 1, np
+     do i1 = 0, spline
+      i2 = i(n) + i1
+      dvol = ax0(i1, n)
+      eden(i2, j2, 1, 1) = eden(i2, j2, 1, 1) + dvol*sp_loc%pick_charge()
+      eden(i2, j2, 1, 2) = eden(i2, j2, 1, 2) + (gam(n)-1)*dvol
+     end do
+    end do
+
+   end associate
+
+   case (2)
+
+    call mp_xx_realloc(mempool%mp_xx_2d_A, np, 2, mempool)
+    xx => mempool%mp_xx_2d_A
+
+
+    xx(1:np, 1) = set_local_positions( sp_loc, X_COMP )
+    xx(1:np, 2) = set_local_positions( sp_loc, Y_COMP )
+    
+    call qden_2d_wgh( xx(1:np, 1:2), interp, mempool )
+
+    associate( ax0 => interp%coeff_x_rank2, &
+               ay0 => interp%coeff_y_rank2, &
+               i => interp%ix_rank2, &
+               j => interp%iy_rank2, &
+               weight => sp_loc%call_component( W_COMP, lb=1, ub=np) )
+
+    !==========================
+    ! Warning: this call must be after qden_1d_spline since
+    ! in that routine the 1d arrays are used
+    call array_realloc_1d(mempool%mp_xx_1d_A, np)
+    gam => mempool%mp_xx_1d_A
+
+    if (curr_ndim==2) then
+
+     gam(1:np) = sp_loc%call_component( PX_COMP, lb=1, ub=np)*sp_loc%call_component( PX_COMP, lb=1, ub=np) + &
+     sp_loc%call_component( PY_COMP, lb=1, ub=np)*sp_loc%call_component( PY_COMP, lb=1, ub=np)
+
+     do n = 1, np
+      do j1 = 0, spline
+       j2 = j(n) + j1
+       do i1 = 0, spline
+        i2 = i(n) + i1
+        dvol = ax0(i1, n)*ay0(j1, n)
+        gam(n) = gam(n) + dvol*eden(i2, j2, 1, icp)
+       end do
+      end do
+     end do
+     gam(1:np) = sqrt(one_dp + gam(1:np))
+     do i1 = 0, spline
+      ax0(i1, 1:np) = weight(1:np)*ax0(i1, 1:np)
+     end do
+     do n = 1, np
+      do j1 = 0, spline
+       j2 = j(n) + j1
+       do i1 = 0, spline
+        i2 = i(n) + i1
+        dvol = ax0(i1, n)*ay0(j1, n)
+        eden(i2, j2, 1, 1) = eden(i2, j2, 1, 1) + dvol*sp_loc%pick_charge()
+        eden(i2, j2, 1, 2) = eden(i2, j2, 1, 2) + (gam(n)-1.)*dvol
+       end do
+      end do
+     end do
+    end if
+    if (curr_ndim==3) then
+
+     gam(1:np) = sp_loc%call_component( PX_COMP, lb=1, ub=np)*sp_loc%call_component( PX_COMP, lb=1, ub=np) + &
+     sp_loc%call_component( PY_COMP, lb=1, ub=np)*sp_loc%call_component( PY_COMP, lb=1, ub=np) + &
+     sp_loc%call_component( PZ_COMP, lb=1, ub=np)*sp_loc%call_component( PZ_COMP, lb=1, ub=np)
+
+     do n = 1, np
+      !============ adds iparticle assigned [A^2/2]_p contribution
+      do j1 = 0, spline
+       j2 = j(n) + j1
+       do i1 = 0, spline
+        i2 = i(n) + i1
+        dvol = ax0(i1, n)*ay0(j1, n)
+        gam(n) = gam(n) + dvol*eden(i2, j2, 1, icp)
+       end do
+      end do
+     end do
+     gam(1:np) = sqrt(one_dp + gam(1:np))
+     do i1 = 0, spline
+      ax0(i1, 1:np) = weight(1:np)*ax0(i1, 1:np)
+     end do
+     do n = 1, np
+      do j1 = 0, spline
+       j2 = j(n) + j1
+       do i1 = 0, spline
+        i2 = i(n) + i1
+        dvol = ax0(i1, n)*ay0(j1, n)
+        eden(i2, j2, 1, 1) = eden(i2, j2, 1, 1) + dvol*sp_loc%pick_charge()
+        eden(i2, j2, 1, 2) = eden(i2, j2, 1, 2) + (gam(n) - 1.)*dvol
+       end do
+      end do
+     end do
+    end if
+
+    end associate
+
+   case (3)
+
+    call mp_xx_realloc(mempool%mp_xx_2d_A, np, 3, mempool)
+    xx => mempool%mp_xx_2d_A
+
+    xx(1:np, 1) = set_local_positions( sp_loc, X_COMP )
+    xx(1:np, 2) = set_local_positions( sp_loc, Y_COMP )
+    xx(1:np, 3) = set_local_positions( sp_loc, Z_COMP )
+    
+    call qden_3d_wgh( xx(1:np, 1:3), interp, mempool )
+
+    associate( ax0 => interp%coeff_x_rank2, &
+               ay0 => interp%coeff_y_rank2, &
+               az0 => interp%coeff_z_rank2, &
+               i => interp%ix_rank2, &
+               j => interp%iy_rank2, &
+               k => interp%iz_rank2, &
+               weight => sp_loc%call_component( W_COMP, lb=1, ub=np) )
+
+    !==========================
+    ! Warning: this call must be after qden_1d_spline since
+    ! in that routine the 1d arrays are used
+    call array_realloc_1d(mempool%mp_xx_1d_A, np)
+    gam => mempool%mp_xx_1d_A
+           
+    gam(1:np) = sp_loc%call_component( PX_COMP, lb=1, ub=np)*sp_loc%call_component( PX_COMP, lb=1, ub=np) + &
+     sp_loc%call_component( PY_COMP, lb=1, ub=np)*sp_loc%call_component( PY_COMP, lb=1, ub=np) + &
+     sp_loc%call_component( PZ_COMP, lb=1, ub=np)*sp_loc%call_component( PZ_COMP, lb=1, ub=np)
+
+    do n = 1, np
+     do k1 = 0, spline
+      k2 = k(n) + k1
+      do j1 = 0, spline
+       j2 = j(n) + j1
+       dvol = az0(k1, n)*ay0(j1, n)
+       do i1 = 0, spline
+        i2 = i(n) + i1
+        gam(n) = gam(n) + ax0(i1, n)*dvol*eden(i2, j2, k2, icp)
+       end do
+      end do
+     end do
+    end do
+    gam(1:np) = sqrt(one_dp + gam(1:np))
+    do i1 = 0, spline
+     ax0(i1, 1:np) = weight(1:np)*ax0(i1, 1:np)
+    end do
+    do n = 1, np
+     do k1 = 0, spline
+      k2 = k(n) + k1
+      do j1 = 0, spline
+       j2 = j(n) + j1
+       dvol = az0(k1, n)*ay0(j1, n)
+       do i1 = 0, spline
+        i2 = i(n) + i1
+        eden(i2, j2, k2, 1) = eden(i2, j2, k2, 1) + ax0(n, i1)*dvol*sp_loc%pick_charge()
+        eden(i2, j2, k2, 2) = eden(i2, j2, k2, 2) + &
+          (gam(n) - 1.)*ax0(i1, n)*dvol
+       end do
+      end do
+     end do
+    end do
+
+    end associate
+   end select
+   !===========================
+  end subroutine
+  !==========================
+  subroutine set_grid_env_den_energy_old(sp_loc, pt, eden, np, icp)
 
    type(species), intent(in) :: sp_loc
    real(dp), intent(inout) :: pt(:, :)
@@ -346,6 +746,9 @@
    !======================
    !   Computes eden(grid,1)= n/n_0 and eden(grid,2)=<gam-1}n>/n_0
    !================================================
+   !================================
+   call interp_realloc(interp, 1, 3)
+   !================================
    ax0(0:2) = 0.0
    ay0(0:2) = 0.0
    az0(0:2) = 0.0
@@ -364,8 +767,12 @@
      pp(1:2) = sp_loc%part(n, 3:4)
      gam2 = pp(1)*pp(1) + pp(2)*pp(2)
      wgh_cmp = sp_loc%part(n, ch)
-     call qden_1d_wgh(xp, ax0, i)
-     i = i - 1
+
+     call qden_1d_wgh( xp, interp )
+
+     ax0(0:2) = interp%coeff_x(0:2)
+     i = interp%ix
+
      do i1 = 0, 2
       i2 = i + i1
       dvol = ax0(i1)
@@ -393,9 +800,14 @@
       xp(1:2) = pt(n, 1:2)
       wgh_cmp = pt(n, ch)
 
-      call qden_2d_wgh(xp, ax0, ay0, i, j)
-      i = i - 1
-      j = j - 1
+      call qden_2d_wgh( xp, interp )
+
+      ax0(0:2) = interp%coeff_x(0:2)
+      ay0(0:2) = interp%coeff_y(0:2)
+ 
+      i = interp%ix
+      j = interp%iy
+
       do j1 = 0, 2
        j2 = j + j1
        do i1 = 0, 2
@@ -424,9 +836,14 @@
       xp(1:2) = pt(n, 1:2)
       wgh_cmp = pt(n, ch)
 
-      call qden_2d_wgh(xp, ax0, ay0, i, j)
-      i = i - 1
-      j = j - 1
+      call qden_2d_wgh( xp, interp )
+
+      ax0(0:2) = interp%coeff_x(0:2)
+      ay0(0:2) = interp%coeff_y(0:2)
+ 
+      i = interp%ix
+      j = interp%iy
+
       !============ adds iparticle assigned [A^2/2]_p contribution
       do j1 = 0, 2
        j2 = j + j1
@@ -461,11 +878,15 @@
      xp(1:3) = pt(n, 1:3)
      wgh_cmp = pt(n, ch)
 
-     call qden_3d_wgh(xp, ax0, ay0, az0, i, j, k)
+     call qden_3d_wgh( xp, interp )
 
-     i = i - 1
-     j = j - 1
-     k = k - 1
+     ax0(0:2) = interp%coeff_x(0:2)
+     ay0(0:2) = interp%coeff_y(0:2)
+     az0(0:2) = interp%coeff_z(0:2)
+
+     i = interp%ix
+     j = interp%iy
+     k = interp%iz
 
      do k1 = 0, spl
       k2 = k + k1
@@ -498,7 +919,188 @@
    !===========================
   end subroutine
   !=================================================
-  subroutine set_grid_den_energy(sp_loc, pt, eden, np)
+  subroutine set_grid_den_energy_new(sp_loc, eden, np, mempool)
+
+   type (species_new), intent (in) :: sp_loc
+   real (dp), intent (inout) :: eden(:, :, :, :)
+   integer, intent (in) :: np
+   type(memory_pool_t), pointer, intent(in) :: mempool
+   real (dp), pointer, contiguous, dimension(:, :) :: xx => null()
+   real (dp), pointer, contiguous, dimension(:) :: gam => null()
+   real (dp) :: dvol
+   integer :: i1, j1, k1, i2, j2, k2, n, spline
+   !================================================
+   !   Computes eden(grid,1)= n/n_0 and eden(grid,2)=<gam-1}n>/n_0
+   !================================================
+   !=================================
+   ! Do not execute without particles
+   !=================================
+   if ( sp_loc%empty ) return
+   !================================
+   call interp_realloc(interp, np, sp_loc%pick_dimensions())
+   !================================
+   allocate( gam(np) )
+
+   spline = 2
+   select case (ndim)
+   case (1)
+    j2 = 1
+
+    call mp_xx_realloc(mempool%mp_xx_2d_A, np, 1, mempool)
+    xx => mempool%mp_xx_2d_A
+
+    xx(1:np, 1) = set_local_positions( sp_loc, X_COMP )
+
+    call qden_1d_wgh( xx(1:np, 1:1), interp, mempool )
+
+    associate( ax0 => interp%coeff_x_rank2, &
+               i => interp%ix_rank2, &
+               weight => sp_loc%call_component( W_COMP, lb=1, ub=np) )
+
+     !==========================
+     ! Warning: this call must be after qden_1d_spline since
+     ! in that routine the 1d arrays are used
+     call array_realloc_1d(mempool%mp_xx_1d_A, np)
+     gam => mempool%mp_xx_1d_A
+
+     gam(1:np) = sp_loc%call_component( PX_COMP, lb=1, ub=np)*sp_loc%call_component( PX_COMP, lb=1, ub=np)
+     gam(1:np) = sqrt( one_dp + gam(1:np))
+     do i1 = 0, spline
+      ax0(i1, 1:np) = weight(1:np)*ax0(i1, 1:np)
+     end do
+     do n = 1, np
+      do i1 = 0, spline
+       i2 = i(n) + i1
+       dvol = ax0(i1, n)
+       eden(i2, j2, 1, 1) = eden(i2, j2, 1, 1) + dvol*sp_loc%pick_charge()
+       eden(i2, j2, 1, 2) = eden(i2, j2, 1, 2) + (gam(n)-1)*dvol
+      end do
+     end do
+           
+    end associate
+   case (2)
+
+    call mp_xx_realloc(mempool%mp_xx_2d_A, np, 2, mempool)
+    xx => mempool%mp_xx_2d_A
+
+    xx(1:np, 1) = set_local_positions( sp_loc, X_COMP )
+    xx(1:np, 2) = set_local_positions( sp_loc, Y_COMP )
+    
+    call qden_2d_wgh( xx(1:np, 1:2), interp, mempool )
+
+    associate( ax0 => interp%coeff_x_rank2, &
+               ay0 => interp%coeff_y_rank2, &
+               i => interp%ix_rank2, &
+               j => interp%iy_rank2, &
+               weight => sp_loc%call_component( W_COMP, lb=1, ub=np) )
+
+     !==========================
+     ! Warning: this call must be after qden_1d_spline since
+     ! in that routine the 1d arrays are used
+     call array_realloc_1d(mempool%mp_xx_1d_A, np)
+     gam => mempool%mp_xx_1d_A
+
+    if (curr_ndim==2) then
+
+     gam(1:np) = sp_loc%call_component( PX_COMP, lb=1, ub=np)*sp_loc%call_component( PX_COMP, lb=1, ub=np) + &
+     sp_loc%call_component( PY_COMP, lb=1, ub=np)*sp_loc%call_component( PY_COMP, lb=1, ub=np)
+
+     gam(1:np) = sqrt(one_dp + gam(1:np))
+     do i1 = 0, spline
+      ax0(i1, 1:np) = weight(1:np)*ax0(i1, 1:np)
+     end do
+     do n = 1, np
+      do j1 = 0, spline
+       j2 = j(n) + j1
+       do i1 = 0, spline
+        i2 = i(n) + i1
+        dvol = ax0(i1, n)*ay0(j1, n)
+        eden(i2, j2, 1, 1) = eden(i2, j2, 1, 1) + dvol*sp_loc%pick_charge()
+        eden(i2, j2, 1, 2) = eden(i2, j2, 1, 2) + (gam(n)-1.)*dvol
+       end do
+      end do
+     end do
+    end if
+    if (curr_ndim==3) then
+
+     gam(1:np) = sp_loc%call_component( PX_COMP, lb=1, ub=np)*sp_loc%call_component( PX_COMP, lb=1, ub=np) + &
+     sp_loc%call_component( PY_COMP, lb=1, ub=np)*sp_loc%call_component( PY_COMP, lb=1, ub=np) + &
+     sp_loc%call_component( PZ_COMP, lb=1, ub=np)*sp_loc%call_component( PZ_COMP, lb=1, ub=np)
+
+     gam(1:np) = sqrt(one_dp + gam(1:np))
+     do i1 = 0, spline
+      ax0(i1, 1:np) = weight(1:np)*ax0(i1, 1:np)
+     end do
+     do n = 1, np
+      do j1 = 0, spline
+       j2 = j(n) + j1
+       do i1 = 0, spline
+        i2 = i(n) + i1
+        dvol = ax0(i1, n)*ay0(j1, n)
+        eden(i2, j2, 1, 1) = eden(i2, j2, 1, 1) + dvol*sp_loc%pick_charge()
+        eden(i2, j2, 1, 2) = eden(i2, j2, 1, 2) + (gam(n) - 1.)*dvol
+       end do
+      end do
+     end do
+    end if
+
+    end associate
+
+   case (3)
+
+    call mp_xx_realloc(mempool%mp_xx_2d_A, np, 3, mempool)
+    xx => mempool%mp_xx_2d_A
+
+    xx(1:np, 1) = set_local_positions( sp_loc, X_COMP )
+    xx(1:np, 2) = set_local_positions( sp_loc, Y_COMP )
+    xx(1:np, 3) = set_local_positions( sp_loc, Z_COMP )
+    
+    call qden_3d_wgh( xx(1:np, 1:3), interp, mempool )
+
+    associate( ax0 => interp%coeff_x_rank2, &
+               ay0 => interp%coeff_y_rank2, &
+               az0 => interp%coeff_z_rank2, &
+               i => interp%ix_rank2, &
+               j => interp%iy_rank2, &
+               k => interp%iz_rank2, &
+               weight => sp_loc%call_component( W_COMP, lb=1, ub=np) )
+
+    !==========================
+    ! Warning: this call must be after qden_1d_spline since
+    ! in that routine the 1d arrays are used
+    call array_realloc_1d(mempool%mp_xx_1d_A, np)
+    gam => mempool%mp_xx_1d_A
+
+    gam(1:np) = sp_loc%call_component( PX_COMP, lb=1, ub=np)*sp_loc%call_component( PX_COMP, lb=1, ub=np) + &
+     sp_loc%call_component( PY_COMP, lb=1, ub=np)*sp_loc%call_component( PY_COMP, lb=1, ub=np) + &
+     sp_loc%call_component( PZ_COMP, lb=1, ub=np)*sp_loc%call_component( PZ_COMP, lb=1, ub=np)
+
+    gam(1:np) = sqrt(one_dp + gam(1:np))
+    do i1 = 0, spline
+     ax0(i1, 1:np) = weight(1:np)*ax0(i1, 1:np)
+    end do
+    do n = 1, np
+     do k1 = 0, spline
+      k2 = k(n) + k1
+      do j1 = 0, spline
+       j2 = j(n) + j1
+       dvol = az0(k1, n)*ay0(j1, n)
+       do i1 = 0, spline
+        i2 = i(n) + i1
+        eden(i2, j2, k2, 1) = eden(i2, j2, k2, 1) + ax0(i1, n)*dvol*sp_loc%pick_charge()
+        eden(i2, j2, k2, 2) = eden(i2, j2, k2, 2) + &
+          (gam(n) - 1.)*ax0(i1, n)*dvol
+       end do
+      end do
+     end do
+    end do
+
+    end associate
+   end select
+   !============================
+  end subroutine
+  !=================================================
+  subroutine set_grid_den_energy_old(sp_loc, pt, eden, np)
 
    type(species), intent(in) :: sp_loc
    real(dp), intent(inout) :: pt(:, :)
@@ -510,6 +1112,9 @@
    !======================
    !   Computes eden(grid,1)= n/n_0 and eden(grid,2)=<gam-1}n>/n_0
    !================================================
+   !================================
+   call interp_realloc(interp, 1, 3)
+   !================================
    ax0(0:2) = zero_dp
    ay0(0:2) = zero_dp
    az0(0:2) = zero_dp
@@ -525,9 +1130,10 @@
      gam = sqrt(pp(1)*pp(1) + pp(2)*pp(2) + 1.)
      wgh_cmp = sp_loc%part(n, ch)
 
-     call qden_1d_wgh(xp, ax0, i)
-     ax0(0:2) = wgh*ax0(0:2)
-     i = i - 1
+     call qden_1d_wgh( xp, interp )
+
+     ax0(0:2) = wgh*interp%coeff_x(0:2)
+     i = interp%ix
 
      do i1 = 0, 2
       i2 = i + i1
@@ -549,10 +1155,15 @@
      gam = pt(n, 4)
      wgh_cmp = pt(n, ch)
 
-     call qden_2d_wgh(xp, ax0, ay0, i, j)
+     call qden_2d_wgh( xp, interp )
+
+     ax0(0:2) = interp%coeff_x(0:2)
+     ay0(0:2) = interp%coeff_y(0:2)
+
+     i = interp%ix
+     j = interp%iy
+
      ax0(0:2) = wgh*ax0(0:2)
-     i = i - 1
-     j = j - 1
      do j1 = 0, 2
       j2 = j + j1
       do i1 = 0, 2
@@ -576,11 +1187,17 @@
      wgh_cmp = pt(n, ch)
      gam = pt(n, 4)
 
-     call qden_3d_wgh(xp, ax0, ay0, az0, i, j, k)
+     call qden_3d_wgh( xp, interp )
+
+     ax0(0:2) = interp%coeff_x(0:2)
+     ay0(0:2) = interp%coeff_y(0:2)
+     az0(0:2) = interp%coeff_z(0:2)
+
+     i = interp%ix
+     j = interp%iy
+     k = interp%iz
+
      ax0(0:2) = wgh*ax0(0:2)
-     i = i - 1
-     j = j - 1
-     k = k - 1
      do k1 = 0, spl
       k2 = k + k1
       do j1 = 0, spl
@@ -612,6 +1229,9 @@
    !======================
    !   Computes charge density and Jx current density at t^n current time
    !================================================
+   !================================
+   call interp_realloc(interp, 1, 3)
+   !================================
    ax0(0:2) = zero_dp
    ay0(0:2) = zero_dp
    az0(0:2) = zero_dp
@@ -631,10 +1251,15 @@
      vx = pt(n, 3)/gam
      wght = charge*wgh
 
-     call qden_2d_wgh(xp, ax0, ay0, i, j)
+     call qden_2d_wgh( xp, interp )
+
+     ax0(0:2) = interp%coeff_x(0:2)
+     ay0(0:2) = interp%coeff_y(0:2)
+
+     i = interp%ix
+     j = interp%iy
+
      ax0(0:2) = wght*ax0(0:2)
-     i = i - 1
-     j = j - 1
      do j1 = 0, 2
       j2 = j + j1
       do i1 = 0, 2
@@ -659,11 +1284,17 @@
      vx = pt(n, 4)/gam
      wght = charge*wgh
 
-     call qden_3d_wgh(xp, ax0, ay0, az0, i, j, k)
+     call qden_3d_wgh( xp, interp )
+
+     ax0(0:2) = interp%coeff_x(0:2)
+     ay0(0:2) = interp%coeff_y(0:2)
+     az0(0:2) = interp%coeff_z(0:2)
+
+     i = interp%ix
+     j = interp%iy
+     k = interp%iz
+
      ax0(0:2) = wght*ax0(0:2)
-     i = i - 1
-     j = j - 1
-     k = k - 1
      do k1 = 0, spl
       k2 = k + k1
       do j1 = 0, spl

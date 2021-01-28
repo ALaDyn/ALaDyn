@@ -38,6 +38,11 @@
   use fstruct_data
   implicit none
 
+  interface p_alloc
+   module procedure old_p_alloc
+   module procedure new_p_alloc
+  end interface
+
  contains
 
   subroutine mpi_buffer_alloc(n1_loc, n2_loc, n3_loc, nvd)
@@ -53,12 +58,12 @@
 
   end subroutine
 
-  subroutine v_alloc(n1, n2, n3, ncomp, njc, ndm, ifluid, lp, oder, &
-                     envlp, color, comv, fsize)
+  subroutine v_alloc(n1, n2, n3, ncomp, njc, ndm, ifluid, lp, &
+    envlp, color, comv, fsize)
 
-   integer, intent(in) :: n1, n2, n3, ncomp, njc, ndm, ifluid, lp, oder
-   logical, intent(in) :: envlp, color, comv
-   integer, intent(inout) :: fsize
+   integer, intent (in) :: n1, n2, n3, ncomp, njc, ndm, ifluid, lp
+   logical, intent (in) :: envlp, color, comv
+   integer, intent (inout) :: fsize
    integer :: njdim, ng, ng0, n1p, n2p, n3p, allocstatus, fsize_loc
 
    n1p = n1 + ihx
@@ -194,26 +199,68 @@
    fsize = fsize + bcomp*ng
   end subroutine
   !===========================
-  subroutine p_alloc(npt_max, ncmp, np_s, ns, lp, mid, r_type, msize)
+  subroutine new_p_alloc(spec_in, spec_aux_in, npt_max, ndims, np_s, ns, lp, mid, msize,&
+    mobilearray)
 
-   integer, intent(in) :: npt_max, ncmp, np_s(:), ns, lp, mid, r_type
-   integer, intent(inout) :: msize
+   type(species_new), allocatable, dimension(:), intent(inout) :: spec_in
+   type(species_aux), allocatable, dimension(:), intent(inout) :: spec_aux_in
+   integer, intent (in) :: npt_max, ndims, np_s(:), ns, lp, mid
+   integer, intent (inout) :: msize
+   logical, allocatable, dimension(:), intent(in) :: mobilearray
+   integer :: nsize, ic, allocstatus, ndim_tmp
+   logical :: tracked
+
+   tracked = .false.
+   ndim_tmp = ndims/2
+   if (ndim_tmp /= 2 .and. ndim_tmp /= 3) then
+    write(6, *) 'Warnint, wrong dimensions in palloc'
+   end if
+   allocate( spec_in(ns), stat=allocstatus )
+   allocate( spec_aux_in(ns), stat=allocstatus )
+   nsize = 0
+   do ic = 1, ns
+    call spec_in(ic)%new_species( np_s(ic), ndim_tmp, tracked=tracked, mobile=mobilearray(ic))
+    nsize = nsize + spec_in(ic)%total_size()*spec_in(ic)%how_many()
+    if (mid>0) then
+     call spec_aux_in(ic)%new_species( np_s(ic), ndim_tmp, tracked=tracked, mobile=mobilearray(ic))
+     nsize = nsize + spec_aux_in(ic)%total_size()*spec_aux_in(ic)%how_many()
+    end if
+   end do
+   if (lp>2) then
+    call spec_aux_0%new_species( npt_max, ndim_tmp, tracked=tracked, mobile=mobilearray(ic))
+    nsize = nsize + spec_aux_0%total_size()*spec_aux_0%how_many()
+    if (lp==4) then
+     call spec_aux_1%new_species( npt_max, ndim_tmp, tracked=tracked, mobile=mobilearray(ic))
+     nsize = nsize + spec_aux_1%total_size()*spec_aux_1%how_many()
+    end if
+   end if
+   msize = msize + nsize
+
+  end subroutine
+
+  subroutine old_p_alloc(spec_in, spec_aux_in, npt_max, ncmp, np_s, ns, lp, mid, r_type, msize)
+
+   type(species), allocatable, dimension(:), intent(inout) :: spec_in
+   real(dp), allocatable, dimension(:, :), intent(inout) :: spec_aux_in
+   integer, intent (in) :: npt_max, ncmp, np_s(:), ns, lp, mid, r_type
+   integer, intent (inout) :: msize
    integer :: nsize, ic, npt, allocstatus
 
    npt = 1
+   allocate (spec_in(4))
    select case (r_type)
    case (1) !Plasma particles
     nsize = 0
     do ic = 1, ns
      npt = max(np_s(ic), 1)
-     allocate (spec(ic)%part(npt, ncmp), stat=allocstatus)
+     allocate (spec_in(ic)%part(npt,ncmp), stat=allocstatus)
      nsize = nsize + ncmp*npt
-     spec(ic)%part(1:npt, 1:ncmp) = 0.0
+     spec_in(ic)%part(1:npt, 1:ncmp) = 0.0
     end do
-    if (mid > 0) then
-     allocate (ebfp(npt_max, ncmp), stat=allocstatus)
+    if (mid>0) then
+     allocate (spec_aux_in(npt_max,ncmp), stat=allocstatus)
      nsize = nsize + ncmp*npt_max
-     ebfp(1:npt_max, 1:ncmp) = 0.0
+     spec_aux_in(1:npt_max, 1:ncmp) = 0.0
     end if
     if (lp > 2) then
      allocate (ebfp0(npt_max, ncmp), stat=allocstatus)
@@ -234,23 +281,24 @@
   end subroutine
   !============================
   !DIR$ ATTRIBUTES INLINE :: p_realloc
-  subroutine p_realloc(pdata, npt_new, ndv)
-   type(species), intent(inout) :: pdata
-   integer, intent(in) :: npt_new, ndv
+  subroutine p_realloc(spec_in, npt_new, ndv)
+   type(species), intent(inout) :: spec_in
+   integer, intent (in) :: npt_new, ndv
    integer :: allocstatus, deallocstatus
 
-   if (allocated(pdata%part)) then
-    if (size(pdata%part, 1) < npt_new) then
-     deallocate (pdata%part, stat=deallocstatus)
-     if (deallocstatus == 0) allocate (pdata%part(1:npt_new, 1:ndv), &
-                                       stat=allocstatus)
+   if (allocated(spec_in%part)) then
+    if (size(spec_in%part,1)<npt_new) then
+     deallocate (spec_in%part, stat=deallocstatus)
+     if (deallocstatus==0) allocate (spec_in%part(1:npt_new,1:ndv), &
+       stat=allocstatus)
     end if
    else
-    allocate (pdata%part(1:npt_new, 1:ndv), stat=allocstatus)
+    allocate (spec_in%part(1:npt_new,1:ndv), stat=allocstatus)
    end if
-   pdata%part(:, :) = 0.0
+   spec_in%part(:, :) = 0.0
   end subroutine
   !========================
+  !DIR$ ATTRIBUTES INLINE :: v_realloc
   subroutine v_realloc(vdata, npt_new, ndv)
    real(dp), allocatable, intent(inout) :: vdata(:, :)
    integer, intent(in) :: npt_new, ndv
@@ -266,6 +314,6 @@
    end if
    vdata(:, :) = 0.0
   end subroutine
-  !===========================
+
  end module
 

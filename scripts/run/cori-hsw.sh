@@ -8,8 +8,8 @@
 #SBATCH --error job.err
 #SBATCH --output job.out
 
-export CRAY_CPU_TARGET=haswell
 module load PrgEnv-intel
+module swap craype-${CRAY_CPU_TARGET} craype-haswell
 module load boost
 
 srun -n 320 ./ALaDyn >> opic.txt 2>> epic.txt

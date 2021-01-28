@@ -8,8 +8,8 @@
 #SBATCH --error job.err
 #SBATCH --output job.out
 
-export CRAY_CPU_TARGET=mic-knl
 module load PrgEnv-intel
+module swap craype-${CRAY_CPU_TARGET} craype-mic-knl
 module load boost
 
 srun -n 64 /global/homes/t/terzani/Pic/forked_ALaDyn/bin/ALaDyn >> opic.txt 2>> epic.txt

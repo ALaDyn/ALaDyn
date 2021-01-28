@@ -21,19 +21,23 @@
  module fstruct_data
 
   use precision_def
+  use memory_pool
 
   implicit none
 
-  real(dp), allocatable :: ebf(:, :, :, :), ebf_bunch(:, :, :, :), &
-                           jc(:, :, :, :)
-  real(dp), allocatable :: ebf0(:, :, :, :), ebf1(:, :, :, :)
-  real(dp), allocatable :: ebf0_bunch(:, :, :, :), &
-                           ebf1_bunch(:, :, :, :), jb(:, :, :, :)
-  real(dp), allocatable :: env(:, :, :, :), env0(:, :, :, :), &
-                           env1(:, :, :, :)
-  real(dp), allocatable :: up(:, :, :, :), up0(:, :, :, :), &
-                           up1(:, :, :, :), flux(:, :, :, :)
-  real(dp), allocatable :: pot(:, :, :, :), fluid_x_profile(:), &
-                           fluid_yz_profile(:, :)
-  real(dp), allocatable :: aux1(:), aux2(:)
+  real (dp), allocatable :: ebf(:, :, :, :), ebf_bunch(:, :, :, :), &
+    jc(:, :, :, :)
+  real (dp), allocatable :: ebf0(:, :, :, :), ebf1(:, :, :, :)
+  real (dp), allocatable :: ebf0_bunch(:, :, :, :), &
+    ebf1_bunch(:, :, :, :), jb(:, :, :, :)
+  real (dp), allocatable :: env(:, :, :, :), env0(:, :, :, :), &
+    env1(:, :, :, :)
+  real (dp), allocatable :: up(:, :, :, :), up0(:, :, :, :), &
+    up1(:, :, :, :), flux(:, :, :, :)
+  real (dp), allocatable :: pot(:, :, :, :), fluid_x_profile(:), &
+    fluid_yz_profile(:, :)
+  real (dp), allocatable :: aux1(:), aux2(:)
+  !=========================================
+  type(memory_pool_t), pointer :: mp => null()
+  !! Pointer to the array memory pool
  end module

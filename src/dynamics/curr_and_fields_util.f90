@@ -29,14 +29,49 @@
   use grid_part_connect
   use grid_fields
   use init_grid_field
-
+  use util, only: write_warning
+  
   implicit none
+  interface set_lpf_acc
+   module procedure set_lpf_acc_new
+   module procedure set_lpf_acc_old
+  end interface
+
+  interface field_charge_multiply
+   module procedure field_charge_multiply_new
+   module procedure field_charge_multiply_old
+  end interface
+
+  interface curr_accumulate
+   module procedure curr_accumulate_new
+   module procedure curr_accumulate_old
+  end interface
   !===============================
   ! MOVING WINDOW SECTION
   !=============================
  contains
   !============================
-  subroutine set_lpf_acc(ef, sp_loc, apt, np, nf)
+  subroutine set_lpf_acc_new(ef, sp_loc, apt, np, nf, mempool)
+
+   real (dp), intent (in) :: ef(:, :, :, :)
+   type (species_new), intent (in) :: sp_loc
+   type (species_aux), intent (inout) :: apt
+   integer, intent (in) :: np, nf
+   type(memory_pool_t), pointer, intent(in) :: mempool
+
+   ! Uses alternating order quadratic or linear shapes
+
+   select case (ndim)
+   case (1)
+    call set_part1d_acc(ef, sp_loc, apt, np, nf, mempool)
+   case (2)
+    call set_part2d_hcell_acc(ef, sp_loc, apt, np, nf, mempool)
+   case (3)
+    call set_part3d_hcell_acc(ef, sp_loc, apt, np, mempool)
+   end select
+  end subroutine
+
+  subroutine set_lpf_acc_old(ef, sp_loc, apt, np, nf)
 
    real(dp), intent(in) :: ef(:, :, :, :)
    type(species), intent(in) :: sp_loc
@@ -55,7 +90,7 @@
    end select
   end subroutine
 
-  subroutine field_charge_multiply(sp_loc, apt, np, ncmp)
+  subroutine field_charge_multiply_old(sp_loc, apt, np, ncmp)
 
    type(species), intent(in) :: sp_loc
    real(dp), intent(inout) :: apt(:, :)
@@ -71,10 +106,22 @@
    ! EXIT p-assigned (E,B) fields multiplied by charge
   end subroutine
 
-  subroutine curr_accumulate(sp_loc, pdata, curr, npt)
-   type(species), intent(in) :: sp_loc
-   real(dp), intent(inout) :: pdata(:, :), curr(:, :, :, :)
-   integer, intent(in) :: npt
+  subroutine field_charge_multiply_new(sp_loc, apt)
+
+   type (species_new), intent (in) :: sp_loc
+   type (species_aux), intent (inout) :: apt
+   real(dp) :: ch
+
+   ch = sp_loc%pick_charge()
+   !==========================
+   call multiply_field_charge(apt, ch)
+   ! EXIT p-assigned (E,B) fields multiplied by charge
+  end subroutine
+
+  subroutine curr_accumulate_old(sp_loc, pdata, curr, npt)
+   type (species), intent (in) :: sp_loc
+   real (dp), intent (inout) :: pdata(:, :), curr(:, :, :, :)
+   integer, intent (in) :: npt
    ! real(dp),intent(in) :: dtloc
    !=========================
    ! charge preserving for iform=0, 1
@@ -95,6 +142,39 @@
     call esirkepov_3d_curr(sp_loc, pdata, curr, npt)
    else
     call ncdef_3d_curr(sp_loc, pdata, curr, npt)
+   end if
+   !========================
+   ! accumulates for each species currents on curr(i1:n1p,j1:n2p,k1:n3p,1:compnent)
+   !============================
+  end subroutine
+
+  !==============================
+  subroutine curr_accumulate_new(sp_loc, pdata, curr, npt, mempool)
+   type (species_new), intent (in) :: sp_loc
+   type (species_aux), intent(inout) :: pdata
+   real (dp), intent (inout) :: curr(:, :, :, :)
+   integer, intent (in) :: npt
+   type(memory_pool_t), pointer, intent(in) :: mempool
+   ! real(dp),intent(in) :: dtloc
+   !=========================
+   ! charge preserving for iform=0, 1
+   !iform=0 => (D_xJx,D_yJy,D_zJz) inverted on each particle=> (Jx,Jy,Jz)
+   !iform=1    as iform=0
+   !iform=2    no charge preserving
+   !=========================
+   if (npt==0) return
+   if (ndim<3) then
+    if (iform<2) then
+     call esirkepov_2d_curr(sp_loc, pdata, curr, npt, mempool)
+    else
+     call ncdef_2d_curr(sp_loc, pdata, curr, npt, mempool)
+    end if
+    return
+   end if
+   if (iform<2) then
+    call esirkepov_3d_curr(sp_loc, pdata, curr, npt, mempool)
+   else
+    call ncdef_3d_curr(sp_loc, pdata, curr, npt, mempool)
    end if
    !========================
    ! accumulates for each species currents on curr(i1:n1p,j1:n2p,k1:n3p,1:compnent)
@@ -122,7 +202,7 @@
     case (2)
      do k = kz1, kz2
       do j = jy1, jy2
-       jj = j - 2
+       jj = j - gcy + 1
        dery = loc_yg(jj, 3, imody)
        derhy = loc_yg(jj, 4, imody)
        do i = ix1, ix2
@@ -133,11 +213,11 @@
      end do
     case (3)
      do k = kz1, kz2
-      kk = k - 2
+      kk = k - gcz + 1
       derz = loc_zg(kk, 3, imodz)
       derhz = loc_zg(kk, 4, imodz)
       do j = jy1, jy2
-       jj = j - 2
+       jj = j - gcy + 1
        dery = loc_yg(jj, 3, imody)
        derhy = loc_yg(jj, 4, imody)
        do i = ix1, ix2
@@ -274,11 +354,8 @@
    ib = 2 !ib=1 implicit ib=2 optimazid explicit
    !optimized advection scheme
    if (comoving) ib = 0
-   if (prl) then
-    call fill_ebfield_yzxbdsdata(evf, 1, 2, str, stl)
-   end if
-   call env_bds(evf, str, stl)
-
+   call env_bds( evf, str, stl )
+   ! In env_bds, envelope boundary points are set to zero
    do k = kz1, kz2
     do j = jy1, jy2
      do i = ix1, ix2
@@ -296,13 +373,16 @@
     call env_maxw_solve(jc, evf, omg, dt_loc)
    end if
    ! =================================
+   if (prl) then
+    call fill_ebfield_yzxbdsdata(evf, 1, 2, str, stl)
+   end if
   end subroutine
   !========================================================
 
-  subroutine wave_field_left_inject(ef, x_left)
-   real(dp), intent(inout) :: ef(:, :, :, :)
-   real(dp), intent(in) :: x_left
-   real(dp) :: tnew, xm
+  subroutine wave_field_left_inject(ef_in, x_left)
+   real (dp), intent (inout) :: ef_in(:, :, :, :)
+   real (dp), intent (in) :: x_left
+   real (dp) :: tnew, xm
    integer :: wmodel_id, ic
 
    wmodel_id = model_id
@@ -314,10 +394,10 @@
     if (lp_in(ic) < x_left) then
      if (lp_end(ic) >= xm) then
       lp_inject = .true.
-      if (model_id < 3) call inflow_lp_fields(ebf, lp_amp, tnew, t0_lp, &
-                                              w0_x, w0_y, xf_loc(ic), oml, wmodel_id, ix1, jy1, jy2, kz1, kz2)
-      if (model_id == 3) call inflow_cp_fields(ebf, lp_amp, tnew, t0_lp, &
-                                               w0_x, w0_y, xf_loc(ic), wmodel_id, ix1, jy1, jy2, kz1, kz2)
+      if (model_id<3) call inflow_lp_fields(ef_in, lp_amp, tnew, t0_lp, &
+        w0_x, w0_y, xf_loc(ic), oml, wmodel_id, ix1, jy1, jy2, kz1, kz2)
+      if (model_id==3) call inflow_cp_fields(ef_in, lp_amp, tnew, t0_lp, &
+        w0_x, w0_y, xf_loc(ic), wmodel_id, ix1, jy1, jy2, kz1, kz2)
      end if
     end if
     lp_in(ic) = lp_in(ic) + dt_loc
@@ -327,8 +407,8 @@
     if (lp_ionz_in < x_left) then
      if (lp_ionz_end >= xm) then
       lp_inject = .true.
-      call inflow_lp_fields(ebf, lp1_amp, tnew, t1_lp, w1_x, w1_y, xf1, &
-                            om1, model_id, ix1, jy1, jy2, kz1, kz2)
+      call inflow_lp_fields(ef_in, lp1_amp, tnew, t1_lp, w1_x, w1_y, xf1, &
+        om1, model_id, ix1, jy1, jy2, kz1, kz2)
      end if
     end if
     lp_ionz_in = lp_ionz_in + dt_loc

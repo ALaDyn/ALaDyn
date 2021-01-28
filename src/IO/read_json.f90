@@ -50,7 +50,7 @@ module read_json
 
   ! Initializing the json file
   ! Enabling the comments on lines that start with !
-  call namelist_in%initialize(comment_char=json_CK_'!')
+  call namelist_in%initialize(comment_char=json_CK_'!', strict_integer_type_checking=.false.)
 
   ! Loading the file
   call namelist_in%load_file(trim(input_name))
@@ -243,6 +243,10 @@ module read_json
    default=sim_params_init%ibeam)
   call json%get(sim_json, 'density_limiter', sim_params%density_limiter, found, &
    default=sim_params_init%density_limiter)
+  call json%get(sim_json, 'pusher', sim_params%pusher, found, &
+   default=sim_params_init%pusher)
+  call json%get(sim_json, 'n_substeps', sim_params%n_substeps, found, &
+   default=sim_params_init%n_substeps)
 
   call json%destroy()
  end subroutine
@@ -280,6 +284,8 @@ module read_json
    default=targ_params_init%np_per_zc)
   call json%get(targ_json, 'concentration', targ_params%concentration, found, &
    default=targ_params_init%concentration)
+  call json%get(targ_json, 'transverse_dist', targ_params%transverse_dist, found, &
+   default=targ_params_init%transverse_dist)
   call json%get(targ_json, 'lpx', targ_params%lpx, found, &
    default=targ_params_init%lpx)
   call json%get(targ_json, 'lpy', targ_params%lpy, found, &
@@ -353,6 +359,8 @@ module read_json
    default=laser_params_init%z1_cent)
   call json%get(laser_json, 'incid_angle', laser_params%incid_angle, found, &
    default=laser_params_init%incid_angle)
+  call json%get(laser_json, 'improved_envelope', laser_params%improved_envelope, found, &
+   default=laser_params_init%improved_envelope)
 
   call json%destroy()
  end subroutine
@@ -481,8 +489,8 @@ module read_json
 
   call json%initialize(comment_char=json_CK_'!')
 
-  call json%get(tracking_json, 'tkjump', tracking_params%tkjump, found, &
-   default=tracking_params_init%tkjump)
+  call json%get(tracking_json, 'every_track', tracking_params%every_track, found, &
+   default=tracking_params_init%every_track)
   call json%get(tracking_json, 'nkjump', tracking_params%nkjump, found, &
    default=tracking_params_init%nkjump)
   call json%get(tracking_json, 'txmin', tracking_params%txmin, found, &
@@ -503,6 +511,8 @@ module read_json
    default=tracking_params_init%t_out)
   call json%get(tracking_json, 'p_tracking', tracking_params%p_tracking, found, &
    default=tracking_params_init%p_tracking)
+  call json%get(tracking_json, 'a_on_particles', tracking_params%a_on_particles, found, &
+   default=tracking_params_init%a_on_particles)
 
   call json%destroy()
  end subroutine

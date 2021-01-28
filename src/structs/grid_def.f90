@@ -19,24 +19,38 @@
 !  along with ALaDyn.  If not, see <http://www.gnu.org/licenses/>.                                    !
 !*****************************************************************************************************!
 
-!--------------------------
- module pstruct_data
+ module grid_def
 
   use precision_def
-
-  use struct_def
-
   implicit none
+  public
 
-  real(dp), allocatable :: ebfp(:, :), ebfb(:, :)
-  real(dp), allocatable :: ebfp0(:, :), ebfp1(:, :)
-  real(dp), allocatable :: pdata_tracking(:, :, :)
-  real(dp), allocatable :: track_aux(:)
-  real(dp), allocatable :: xpt(:, :), ypt(:, :), zpt(:, :), wghpt(:, :)
-  real(dp), allocatable :: loc_ypt(:, :), loc_zpt(:, :), &
-                           loc_wghyz(:, :, :)
-  real(dp), allocatable :: loc_xpt(:, :), loc_wghx(:, :)
-  type(species) :: spec(4), bunch(5)
-  integer(hp_int), parameter :: ihx = 3
+  type grid
+   integer :: ng
+   !!Number of cells in a given direction of the grid
+   integer :: p_ind(2)
+   !!Minimum and maximum cell number of the grid
+   real (dp) :: gmin
+   !!Value of the corresponding axis at the minimum cell
+   real (dp) :: gmax
+   !!Value of the corresponding axis at the maximum cell
+   integer :: min_cell
+   !!Initial cell of the grid in absolute units (i.e. respect to the total grid)
+   integer :: max_cell
+   !!Final cell of the grid in absolute units (i.e. respect to the total grid)
+   integer :: shift
+   !!Number of guard cells for a given grid
+  end type
 
+  type sgrid
+   integer :: sind(2)
+   !!Initial and final stretched cell (sind(1) also coincides with the number of
+   !!stretched cells)
+   real (dp) :: smin
+   !!Axis value on the boundary between stretched and unstretched grid (left side of the box)
+   real (dp) :: smax
+   !!Axis value on the boundary between stretched and unstretched grid (right side of the box)
+   real (dp) :: stretched_length
+   !!Length in microns (axis units) of the stretched section of the grid
+  end type
  end module

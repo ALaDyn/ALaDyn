@@ -39,7 +39,8 @@
   !> Start subroutine. It reads the input file, initializes
   !> the variables and allocates the needed arrays before to start the
   !> simulation.
-  subroutine Start
+  subroutine Start(mempool)
+   type(memory_pool_t), pointer, intent(inout) :: mempool
 
    integer :: iic, ncmp, n, i
 
@@ -67,28 +68,10 @@
     call End_parallel
     stop
    end if
-   if (mod(nx, nprocx) /= 0) then
-    if (pe0) write (6, *) ' ==================================================='
-    if (pe0) write (6, *) ' WARNING: Number of cells in the X direction is not '
-    if (pe0) write (6, *) ' an integer multiple of the number of cores requested.'
-    if (pe0) write (6, *) ' ==================================================='
-   end if
-   if (ndim > 1) then
-    if (mod(ny, nprocy) /= 0) then
-     if (pe0) write (6, *) ' ==================================================='
-     if (pe0) write (6, *) ' WARNING: Number of cells in the Y direction is not '
-     if (pe0) write (6, *) ' an integer multiple of the number of cores requested.'
-     if (pe0) write (6, *) ' ==================================================='
-    end if
-   end if
-   if (ndim > 2) then
-    if (mod(nz, nprocz) /= 0) then
-     if (pe0) write (6, *) ' ==================================================='
-     if (pe0) write (6, *) ' WARNING: Number of cells in the Z direction is not '
-     if (pe0) write (6, *) ' an integer multiple of the number of cores requested.'
-     if (pe0) write (6, *) ' ==================================================='
-    end if
-   end if
+
+   ! Check the namelist for inconsistency
+   call check_namelist
+
    !sets parameters related to initial condition
    !=== Ascii art generated on http://patorjk.com/software/taag using the Star Wars font ===
    if (pe0) then
@@ -111,7 +94,7 @@
    !call set_grid() to define global grid and grid
    !parameters
    call mpi_loc_grid(nx_loc, ny_loc, nz_loc, nprocx, nprocy, nprocz)
-   call set_fyzxgrid(npe_yloc, npe_zloc, npe_xloc, sh_ix)
+   call set_fyzxgrid(npe_yloc, npe_zloc, npe_xloc)
    if (stretch) call set_str_ind(npe_yloc, npe_zloc, ndim)
    call set_loc_grid_param
    call set_output_grid(jump, nprocx, nprocy, nprocz)
@@ -162,11 +145,11 @@
        write (10, *) loc_yft(1, iic), loc_yft(4*n, iic)
        write (10, *) '===================='
       end do
-      close (10)
-     endif
-    endif
-   endif
-
+      close(10)
+     end if
+    end if
+   end if
+     
    !Exit
    !loc_xgrid(nprocx),loc_ygrid(nprocy),loc_ygrid(nprocz) local grid data
    !local grid parameters and
@@ -182,15 +165,20 @@
    ncmp = nfield
    ! Allocates basic arrays, defines grid parameters, boundary index etc
    call v_alloc(nxp, nyp, nzp, nfield, nj_dim, ndim, ibeam, lpf_ord, &
-                der_ord, envelope, Two_color, comoving, mem_size)
+     envelope, Two_color, comoving, mem_size)
    if (hybrid) then
     call fluid_alloc(nxp, nyp, nzp, nfcomp, ndim, lpf_ord, mem_size)
     ncmp = max(ncmp, nfcomp)
    end if
    call mpi_buffer_alloc(nx_loc, ny_loc, nz_loc, ncmp)
    !local arrays and coefficients for space derivatives
-   diag = .true.
-   if (iene == 0) then
+   !===================================================
+   ! Constructs the memory pool instance
+   !===================================================
+   call create_memory_pool(mempool)
+   !===================================================
+
+   if (iene==0) then
     diag = .false.
     iene = 1
    end if
@@ -213,22 +201,24 @@
    case (0)
     iout = id_new
     ienout = 0
-    call init
     tstart = 0.0
     last_iter = 0
     tdia = tstart
     tout = tstart
-
     dt_loc = dt
     iter_max = 1
-    dtout = (tmax - tstart)/nouts
-    dtdia = (tmax - tstart)/iene
-    if (tmax > 0.0) then
+    dtout = (tmax-tstart)/nouts
+    dtdia = (tmax-tstart)/iene
+    tnow = tstart
+    if (tnow < dt_loc) initial_time = .true.
+
+    call init(mempool)
+
+    if (tmax>0.0) then
      iter_max = int(tmax/dt)
      dt_loc = tmax/float(iter_max)
     end if
-    if (iter_max < 1000) write_every = nint(0.1*iter_max)
-    if (pe0) write (*, *) 'write_every param =', write_every
+    if(iter_max <1000)write_every=nint(0.1*iter_max)
 
    case (1)
     if (.not. l_first_output_on_restart) then
@@ -238,8 +228,8 @@
      iout = id_new + 1
      ienout = 0
     end if
-    call restart(last_iter, tstart)
-    call MPI_BARRIER(comm, error)
+    call restart(last_iter, tstart, spec, ebfp)
+    call call_barrier()
     call set_fxgrid(npe_xloc, sh_ix)
     if (tmax > 0.0) then
      iter_max = int(tmax/dt)
@@ -258,28 +248,80 @@
     end if
     ! to count outputs in energy-data (iene+1 times)
    end select
-  contains
-   ! in general data (nouts+1 times)
-   subroutine check_grid_size
+  ! in general data (nouts+1 times)
+ end subroutine
 
-    if (mod(nx, 2) /= 0) then
-     write (6, *) ' Wrong x dimension'
-     stop
-    end if
-    if (ny == 0) then
+  subroutine check_grid_size
+
+   if (mod(nx,2)/=0) then
+    write (6, *) ' Wrong x dimension'
+    stop
+   end if
+   if (ny==0) then
+    write (6, *) ' Wrong y dimension'
+    stop
+   end if
+   if (ny>1) then
+    if (mod(ny,2)/=0) then
      write (6, *) ' Wrong y dimension'
      stop
     end if
-    if (ny > 1) then
-     if (mod(ny, 2) /= 0) then
-      write (6, *) ' Wrong y dimension'
-      stop
-     end if
+   end if
+  end subroutine
+
+
+  subroutine check_namelist
+   logical :: error = .false.
+   ! Check if grid and mpi decomposition are compatible
+   if ( mod(nx, nprocx) /= 0 ) then
+    if (pe0) write (6, *) ' **************************************************** '
+    if (pe0) write (6, *) ' WARNING: Number of cells in the X direction is not   '
+    if (pe0) write (6, *) ' an integer multiple of the number of cores requested.' 
+    if (pe0) write (6, *) ' **************************************************** '
+    error = .true.
+   end if
+   if ( ndim > 1 ) then
+    if ( mod(ny, nprocy) /= 0 ) then
+     if (pe0) write (6, *) ' **************************************************** '
+     if (pe0) write (6, *) ' WARNING: Number of cells in the Y direction is not   '
+     if (pe0) write (6, *) ' an integer multiple of the number of cores requested.' 
+     if (pe0) write (6, *) ' **************************************************** '
+     error = .true.
     end if
-   end subroutine
+   end if
+   if ( ndim > 2 ) then
+    if ( mod(nz, nprocz) /= 0 ) then
+     if (pe0) write (6, *) ' **************************************************** '
+     if (pe0) write (6, *) ' WARNING: Number of cells in the Z direction is not   '
+     if (pe0) write (6, *) ' an integer multiple of the number of cores requested.' 
+     if (pe0) write (6, *) ' **************************************************** '
+     error = .true.
+    end if
+   end if
+   call stop_if_error(error)
+
+   !========= Check plasma target
+   if ( ny_targ > ny ) then
+    if (pe0) then
+     write(6, *) '******************************************'
+     write(6, *) ' WARNING: ny_targ > ny. By default it is  '
+     write(6, *) '       resetted to the value ny - 20      '
+     write(6, *) '******************************************'
+    end if
+    ny_targ = ny - 20
+   end if
+
+   !========== Stop if any error has been found
 
   end subroutine
-  ! reads from dump evolved data
-  !=============================
+
+  subroutine stop_if_error( error_flag )
+   logical, intent(in) :: error_flag
+
+   if ( error_flag ) then
+    stop
+   end if
+  end subroutine
+
  end module
 

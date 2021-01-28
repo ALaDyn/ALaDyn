@@ -44,9 +44,13 @@
   !! (1/6 of the cells are stretched per side)
   real(dp), parameter :: e_charge = 1.6021766*1.e-7 !e charge in pC
   !! Electron charge in pC
-  real(dp), parameter :: electron_mass = 0.510998928 !e mass in MeV
-  !! Electron charge in MeV
-  real(dp), parameter :: rc0 = 2.81794033 !rc0=e^2/mc^2 classical electron radius, in units 10^-13[cm]
+  real (dp), parameter :: e_charge_C = 1.6021766*1.e-19 !e charge in C
+  !! Electron charge in C
+  real (dp), parameter :: electron_mass = 0.510998928 !e mass in MeV
+  !! Electron mass in MeV
+  real (dp), parameter :: electron_mass_Kg = 9.10938356e-31 !e mass in Kg
+  !! Electron mass in MeV
+  real (dp), parameter :: rc0 = 2.81794033 !rc0=e^2/mc^2 classical electron radius, in units 10^-13[cm]
   !! classical electron radius \(\frac{e^2}{mc^2}\) in units 10^{-13} cm
   real(dp), parameter :: speed_of_light = 0.299792458 !mu/fs
   !! Speed of light in units \mu m/fs
@@ -59,4 +63,29 @@
   !10 eV =>  beta = 0.00625603 => gamma = 1.0000196 => beta*gamma = 0.00625615
   !20 eV =>  beta = 0.00884723 => gamma = 1.0000391 => beta*gamma = 0.00884758
   !30 eV =>  beta = 0.01083544 => gamma = 1.0000587 => beta*gamma = 0.01083608
+
+  !======= Some units of measures for openPMD diagnostics ===============
+  !                       Reference vector is                           !
+  !                       [length L,                                    !
+  !                        mass M,                                      !
+  !                        time T,                                      !
+  !                        electric current I,                          !
+  !                        thermodynamic temperature theta,             !
+  !                        amount of substance N,                       !
+  !                        luminous intensity J]                        !
+  !=====================================================================!
+  real(dp), dimension(7), parameter :: &
+  unit_dimensions_positions = [one_dp, zero_dp, zero_dp, zero_dp, zero_dp, zero_dp, zero_dp]
+  real(dp), dimension(7), parameter :: &
+  unit_dimensions_momentum = [zero_dp, zero_dp, zero_dp, zero_dp, zero_dp, zero_dp, zero_dp]
+  real(dp), dimension(7), parameter :: &
+  unit_dimensions_mass = [zero_dp, zero_dp, zero_dp, zero_dp, zero_dp, zero_dp, zero_dp]
+  real(dp), dimension(7), parameter :: &
+  unit_dimensions_gamma = [zero_dp, zero_dp, zero_dp, zero_dp, zero_dp, zero_dp, zero_dp]
+  real(dp), dimension(7), parameter :: &
+  unit_dimensions_weight = [zero_dp, zero_dp, zero_dp, zero_dp, zero_dp, zero_dp, zero_dp]
+  real(dp), dimension(7), parameter :: &
+  unit_dimensions_index = [zero_dp, zero_dp, zero_dp, zero_dp, zero_dp, zero_dp, zero_dp]
+  real(dp), parameter :: microns_to_seconds = (one_dp/3.)*1.e-15
+  real(dp), parameter :: unit_SI_position = 1.e-6
  end module
