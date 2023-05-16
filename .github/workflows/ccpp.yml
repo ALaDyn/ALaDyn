@@ -32,7 +32,7 @@ jobs:
     - name: Update apt
       run: sudo apt update
     - name: Install dependencies
-      run: sudo apt-get install -y yasm nasm
+      run: sudo apt-get install -y yasm nasm openmpi-bin libopenmpi-dev
 
     - name: 'Setup vcpkg and NuGet artifacts backend'
       shell: bash
@@ -70,7 +70,7 @@ jobs:
       if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.debug_enabled }}
 
     - name: Install dependencies
-      run: brew install libomp yasm nasm
+      run: brew install libomp yasm nasm open-mpi gcc
 
     - uses: lukka/get-cmake@latest
 
