@@ -70,7 +70,9 @@ jobs:
       if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.debug_enabled }}
 
     - name: Install dependencies
-      run: brew install libomp yasm nasm open-mpi gcc
+      run: >
+        brew install libomp yasm nasm open-mpi gcc ;
+        brew link --overwrite gcc
 
     - uses: lukka/get-cmake@latest
 
@@ -90,43 +92,6 @@ jobs:
       if: env.BAGET_API_KEY != null
       run: >
         mono $(./vcpkg/vcpkg fetch nuget | tail -n 1)
-        setapikey ${{ secrets.BAGET_API_KEY }}
-        -Source http://93.49.111.10:5555/v3/index.json
-
-    - name: 'Build'
-      shell: pwsh
-      run: ${{ github.workspace }}/cmake/build.ps1 -UseVCPKG -DoNotUpdateVCPKG -DisableInteractive -DoNotUpdateTOOL
-
-
-  win-vcpkg:
-    runs-on: windows-latest
-    steps:
-    - uses: actions/checkout@v3
-      with:
-        submodules: recursive
-
-    - name: Setup tmate session
-      uses: mxschmitt/action-tmate@v3
-      if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.debug_enabled }}
-
-    - uses: lukka/get-cmake@latest
-
-    - name: 'Setup vcpkg and NuGet artifacts backend'
-      shell: bash
-      run: >
-        git clone https://github.com/microsoft/vcpkg ;
-        ./vcpkg/bootstrap-vcpkg.sh ;
-        $(./vcpkg/vcpkg fetch nuget | tail -n 1) sources add
-        -Name "vcpkgbinarycache"
-        -Source http://93.49.111.10:5555/v3/index.json
-
-    - name: Setup NuGet API key if found
-      shell: bash
-      env:
-        BAGET_API_KEY: ${{ secrets.BAGET_API_KEY }}
-      if: env.BAGET_API_KEY != null
-      run: >
-        $(./vcpkg/vcpkg fetch nuget | tail -n 1)
         setapikey ${{ secrets.BAGET_API_KEY }}
         -Source http://93.49.111.10:5555/v3/index.json
 
