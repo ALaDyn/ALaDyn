@@ -69,11 +69,19 @@ jobs:
       uses: mxschmitt/action-tmate@v3
       if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.debug_enabled }}
 
+    - name: Upgrade bash version
+      run: |
+        brew install bash
+        brew install gnu-sed
+        echo "/usr/local/bin" >> $GITHUB_PATH
+        echo "$(brew --prefix)/opt/gnu-sed/libexec/gnubin" >> $GITHUB_PATH
+
     - name: Install dependencies
+      shell: bash
       run: >
         brew install libomp yasm nasm open-mpi gcc ;
         all_versions=$(ls -1 /usr/local/bin/gfortran-* | tail -1) ;
-        IFS="-" read -A tokens <<< "$all_versions" ;
+        IFS="-" read -ra tokens <<< "$all_versions" ;
         latest_version="${tokens[-1]}" ;
         ln -s /usr/local/bin/gfortran-${latest_version} /usr/local/bin/gfortran ;
         which gfortran-${latest_version} ;
