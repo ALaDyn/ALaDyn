@@ -70,11 +70,10 @@ jobs:
       if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.debug_enabled }}
 
     - name: Install dependencies
-      shell: bash
       run: >
         brew install libomp yasm nasm open-mpi gcc ;
         all_versions=$(ls -1 /usr/local/bin/gfortran-* | tail -1) ;
-        IFS="-" read -ra tokens <<< "$all_versions" ;
+        IFS="-" read -A tokens <<< "$all_versions" ;
         latest_version="${tokens[-1]}" ;
         ln -s /usr/local/bin/gfortran-${latest_version} /usr/local/bin/gfortran ;
         which gfortran-${latest_version} ;
