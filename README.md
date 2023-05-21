@@ -1,5 +1,6 @@
-[![Build Status Master](https://travis-ci.org/ALaDyn/ALaDyn.png?branch=master)](https://travis-ci.org/ALaDyn/ALaDyn "master")
-[![Build status](https://ci.appveyor.com/api/projects/status/evol3yvpqqfyxi7p?svg=true)](https://ci.appveyor.com/project/cenit/aladyn-kul79)
+# ALaDyn
+
+[![ALaDyn Continuous Integration](https://github.com/ALaDyn/ALaDyn/actions/workflows/ccpp.yml/badge.svg)](https://github.com/ALaDyn/ALaDyn/actions/workflows/ccpp.yml)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.592388.svg)](http://dx.doi.org/10.5281/zenodo.592388)
 ![GitHub tag (latest SemVer)](https://img.shields.io/github/tag/aladyn/aladyn.svg?label=Latest%20Release)
@@ -53,4 +54,3 @@ v1.0.0 (v2017.1): [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1065413.sv
 v1.0.0-beta: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.49553.svg)](https://doi.org/10.5281/zenodo.49553)  
 v1.0.0-alpha2: [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.48933.svg)](http://dx.doi.org/10.5281/zenodo.48933)  
 v1.0.0-alpha: [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.47467.svg)](http://dx.doi.org/10.5281/zenodo.47467)
-

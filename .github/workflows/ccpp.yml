@@ -1,4 +1,4 @@
-name: Physycom Continuous Integration
+name: ALaDyn Continuous Integration
 
 on:
   pull_request:
