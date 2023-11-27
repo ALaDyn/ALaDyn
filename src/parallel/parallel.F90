@@ -32,7 +32,7 @@
   implicit none
   include 'mpif.h'
 #else
-  use mpi
+  use mpi_f08
   implicit none
 #endif
 
