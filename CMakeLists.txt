@@ -106,22 +106,6 @@ else()
     endif()
 endif()
 
-if(WIN32 AND CMAKE_CXX_COMPILER_ID STREQUAL "PGI")
-    find_package(MPI REQUIRED COMPONENTS C)
-    set(FORCE_OLD_MPI
-        ON
-        CACHE BOOL "Forcing old mpif.h linking" FORCE)
-    message(STATUS "ALaDyn: MPI libraries are linked against mpif.h")
-    target_compile_definitions(ALaDyn PRIVATE FORCE_OLD_MPI)
-    target_include_directories(ALaDyn PRIVATE ${MPI_INCLUDE_PATH})
-    target_link_libraries(ALaDyn PRIVATE ${MPI_LIBRARIES})
-else()
-    find_package(MPI REQUIRED COMPONENTS Fortran)
-    target_include_directories(ALaDyn PRIVATE ${MPI_INCLUDE_PATH}
-                                              ${MPI_Fortran_INCLUDE_PATH})
-    target_link_libraries(ALaDyn PRIVATE ${MPI_LIBRARIES})
-endif()
-
 # Add the source files
 add_subdirectory(src)
 
