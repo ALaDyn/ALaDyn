@@ -22,7 +22,17 @@
  module mpi_var
 
   use precision_def
+  
+#if defined (ALaDyn_USE_MPI) && ! defined (FORCE_OLD_MPI)
+  use mpi_f08, only: MPI_Comm, MPI_Datatype
   implicit none
+  type(MPI_Comm) :: comm, comm_col(3)
+  type(MPI_Datatype) :: partype
+#else
+  implicit none
+  integer :: comm, partype, comm_col(3)
+#endif
+
 
   integer, allocatable :: loc_npart(:, :, :, :), loc_nbpart(:, :, :, :)
   integer, allocatable :: loc_ne_ionz(:, :, :), loc_tpart(:)
@@ -34,7 +44,6 @@
   integer :: mype, imodx, imody, imodz, npe, npe_yloc, npe_zloc, &
              npe_xloc
   integer :: npe_yz, mpi_size, mpi_rank
-  integer :: partype
   integer :: imodzx, imodyz, imodyx
   integer :: pe_min, pe_max
   integer :: pe_min_y, pe_max_y, pe_min_z, pe_max_z, pe_min_x, pe_max_x
@@ -42,5 +51,5 @@
   logical :: pe0y, pe0z, pe1y, pe1z, pe0, pe1, prl, prlx, prly, prlz
   logical :: xl_bd, yl_bd, zl_bd, xr_bd, yr_bd, zr_bd
   logical :: pe0x, pe1x, pex0, pex1
-  integer :: comm, coor(3), comm_col(3), col_or(3)
+  integer :: coor(3), col_or(3)
  end module
