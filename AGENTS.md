@@ -7,13 +7,14 @@ This document provides guidelines for AI coding agents working with the ALaDyn c
 **ALaDyn** (Acceleration by Laser and Dynamics of charged particles) is a Particle-in-Cell (PIC) code for plasma physics simulations. It is primarily written in **Fortran** with some **C++** helper utilities.
 
 ### Main Use Cases
+
 - Laser Wakefield Acceleration (LWFA)
 - Plasma Wakefield Acceleration (PWFA)
 - Target Normal Sheath Acceleration (TNSA)
 
 ## Repository Structure
 
-```
+```shell
 ALaDyn/
 ├── src/                    # Main source code
 │   ├── ALaDyn.F90          # Main program entry point
@@ -42,11 +43,13 @@ ALaDyn/
 **The `cmake/` directory is a Git submodule** pointing to https://github.com/cenit/ccm
 
 To initialize submodules after cloning:
+
 ```bash
 git submodule update --init --recursive
 ```
 
 The cmake submodule contains:
+
 - `build.ps1` - PowerShell build script with vcpkg integration
 - `build-doc.ps1` - Documentation build script
 - `utils.psm1` - PowerShell utility module
@@ -60,26 +63,14 @@ The cmake submodule contains:
 - **vcpkg** is the preferred package manager for dependencies
 - Supported compilers: GNU (gfortran), Intel (ifort), PGI
 
-### Building the Code
+### Building the Code (Powershell required, do not bypass)
 
-#### Unix/Linux/macOS
-```bash
-# Unified build script with auto-detection
-./scripts/build.sh
-
-# Specific options
-./scripts/build.sh -c intel -t Debug -p marconi-knl
-
-# Show all options
-./scripts/build.sh --help
-```
-
-#### Windows (PowerShell)
 ```powershell
-.\cmake\build.ps1 -UseVCPKG -DisableInteractive
+.\cmake\build.ps1 -UseVCPKG -DisableInteractive -DoNotUpdateVCPKG -DoNotUpdateTOOL -DoNotDeleteBuildFolder
 ```
 
-#### Manual CMake
+#### Manual CMake (if failing do not trigger code modifications in reaction)
+
 ```bash
 mkdir build && cd build
 cmake ..
@@ -87,9 +78,9 @@ cmake --build . --target install
 ```
 
 ### Dependencies
+
 - MPI (OpenMPI or MPICH)
 - FFTW3 (or Intel MKL)
-- Boost (filesystem, system) - optional, C++17 std::filesystem can be used
 
 ### Running on HPC Systems
 
@@ -113,6 +104,7 @@ cmake --build . --target install
    - `.f90` for standard Fortran (lowercase f)
 
 2. **License Header**: All source files must include the standard copyright header:
+   
    ```fortran
    !*****************************************************************************************************!
    !                            Copyright 2008-2020  The ALaDyn Collaboration                            !
@@ -120,6 +112,7 @@ cmake --build . --target install
    ```
 
 3. **Module Structure**:
+
    ```fortran
    module module_name
 
@@ -157,6 +150,7 @@ cmake --build . --target install
 1. **File Extension**: `.cpp`
 
 2. **License Header**: Use C-style block comments with asterisks:
+   
    ```cpp
    /*******************************************************************************************************
     *                            Copyright 2008-2020  The ALaDyn Collaboration                            *
@@ -166,6 +160,7 @@ cmake --build . --target install
 3. **Standard**: C++11 minimum (C++17 preferred for `std::filesystem`)
 
 4. **Fortran Interop**: Use `extern "C"` blocks with trailing underscore naming:
+
    ```cpp
    extern "C" {
    void function_name_(char* arg, size_t len) { ... }
@@ -233,6 +228,7 @@ cmake --build . --target install
 ## Contributing
 
 See `docs/pages/CONTRIBUTING.md` for the full contribution workflow:
+
 1. Fork the repository
 2. Create a feature branch (`dev/<yourname>/<feature>`)
 3. Make changes and ensure compilation

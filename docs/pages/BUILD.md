@@ -2,161 +2,227 @@ title: How to build
 
 # How to build the code
 
-1) Follow your system prerequisites (below)
-2) Clone ALaDyn from this repository, or download a stable release 
+ALaDyn is built using **CMake** (minimum version 3.15) and can optionally use **vcpkg** for dependency management.
+
+## Quick Start
+
+1) Clone ALaDyn with submodules:
 
 ```bash
 git clone https://github.com/ALaDyn/ALaDyn.git
 cd ALaDyn
+git submodule update --init --recursive
 ```
 
-3) Use the best script depending to your configuration. There are many examples inside `scripts/build`. For example:
+2) Follow your system prerequisites (below)
+
+3) Build using one of the supported methods
+
+## Supported Platforms
+
+We support running ALaDyn only on **x86-64 CPUs** with **64-bit operating systems**.
+Supported compilers: **GNU (gfortran)**, **Intel (ifort)**
+
+## Dependencies
+
+- **MPI** (OpenMPI or MPICH)
+- **FFTW3** (or Intel MKL)
+- **CMake** (>= 3.15)
+- **PowerShell** (for the recommended build script)
+
+## Building with vcpkg (Recommended)
+
+The recommended way to build ALaDyn is using the PowerShell build script with vcpkg integration:
+
+```powershell
+./cmake/build.ps1 -UseVCPKG -DisableInteractive -DoNotUpdateVCPKG -DoNotUpdateTOOL -DoNotDeleteBuildFolder
+```
+
+This script handles:
+- vcpkg setup and dependency installation
+- CMake configuration
+- Building and installing the executable
+
+## Building with Plain CMake
+
+If you have system-installed dependencies, you can build directly with CMake:
 
 ```bash
-./scripts/build/cmake.generic
+mkdir -p build && cd build
+cmake .. -DCMAKE_BUILD_TYPE=Release
+cmake --build . --parallel
+cmake --install .
 ```
-
-Note that some scripts only work in a specific environment or shell.  
-We support running `ALaDyn` only on x86-64 CPUs, with 64 bit operating systems.
 
 ## Prerequisites
 
 ### Ubuntu
 
-1) Open a Bash terminal and type the following commands
+Open a Bash terminal and install the required dependencies:
 
 ```bash
 sudo apt-get update
-sudo apt-get dist-upgrade
-sudo apt-get install -y g++ gfortran cmake make git ninja-build libboost-all-dev libopenmpi-dev pkgconf libfftw3-dev pkg-config
+sudo apt-get install -y gfortran cmake make git ninja-build openmpi-bin libopenmpi-dev libfftw3-dev libfftw3-mpi-dev pkg-config
 ```
+
+**For vcpkg build (optional additional packages):**
+
+```bash
+sudo apt-get install -y yasm nasm mono-devel
+```
+
+**PowerShell installation (required for the recommended build script):**
+
+Follow the [official Microsoft guide](https://learn.microsoft.com/en-us/powershell/scripting/install/install-ubuntu) or use these commands:
+
+```bash
+# Install pre-requisite packages
+sudo apt-get install -y wget apt-transport-https software-properties-common
+
+# Get the version of Ubuntu
+source /etc/os-release
+
+# Download the Microsoft repository keys
+wget -q https://packages.microsoft.com/config/ubuntu/$VERSION_ID/packages-microsoft-prod.deb
+
+# Register the Microsoft repository keys
+sudo dpkg -i packages-microsoft-prod.deb
+
+# Delete the Microsoft repository keys file
+rm packages-microsoft-prod.deb
+
+# Update the list of packages after we added packages.microsoft.com
+sudo apt-get update
+
+# Install PowerShell
+sudo apt-get install -y powershell
+```
+
+After installation, you can start PowerShell with `pwsh`.
 
 ### macOS
 
-1) If not already installed, install the XCode Command Line Tools, typing this command in a terminal:
+1) Install the XCode Command Line Tools (if not already installed):
 
 ```bash
 xcode-select --install
 ```
 
-2) If not already installed, install Homebrew following the [official guide](https://brew.sh/index_it.html).
-3) Open the terminal and type these commands
+2) Install Homebrew following the [official guide](https://brew.sh/).
+
+3) Install dependencies:
 
 ```bash
 brew update
 brew upgrade
-brew install gcc cmake make git ninja boost open-mpi fftw pkg-config
+brew install gcc cmake make git ninja open-mpi fftw pkg-config
 ```
 
-### Windows (7+) - PGI Compiler
+**For vcpkg build (optional additional packages):**
 
-1) Install Visual Studio 2017 from the [official website](https://www.visualstudio.com/)
-2) Open your Powershell with Administrator privileges, type the following command and confirm it:
-
-```PowerShell
-PS \>                 Set-ExecutionPolicy unrestricted
+```bash
+brew install libomp yasm nasm automake autoconf-archive mono
 ```
 
-3) If not already installed, please install chocolatey using the [official guide](http://chocolatey.org)
-4) If you are not sure about having them updated, or even installed, please install `git`, `javaruntime`, `cmake` and an updated `Powershell`. To do so, open your Powershell with Administrator privileges and type
+**Note:** You may need to set up the gfortran symlink for CMake:
 
-```PowerShell
-PS \>                 cinst -y git cmake powershell javaruntime
+```bash
+# Find gfortran version
+GFORTRAN_PATH=$(brew --prefix gcc)/bin/gfortran-$(brew list --versions gcc | awk '{print $2}' | cut -d. -f1)
+sudo ln -sf "$GFORTRAN_PATH" /usr/local/bin/gfortran
 ```
 
-5) Restart the PC if required by chocolatey after the latest step
-6) Install PGI 18.10 from the [official website](https://www.pgroup.com/products/community.htm) (the community edition is enough and is free; NOTE: install included MS-MPI, but avoid JRE and Cygwin). Note that for some time it was necessary to activate license for PGI 18.10 Community Edition (renaming the file `%PROGRAMFILES%\PGI\license.dat-COMMUNITY-18.10` to `%PROGRAMFILES%\PGI\license.dat`)
-7) Define a work folder, which we will call `WORKSPACE` in this tutorial: this could be a "Code" folder in our home, a "cpp" folder on our desktop, whatever you want. Create it if you don't already have, using your favourite method (mkdir in Powershell, or from the graphical interface in explorer). We will now define an environment variable to tell the system where our folder is. Please note down its full path. Open a Powershell (as a standard user) and type
+**PowerShell installation (required for the recommended build script):**
 
-```PowerShell
-PS \>                 rundll32 sysdm.cpl,EditEnvironmentVariables
+Follow the [official Microsoft guide](https://learn.microsoft.com/en-us/powershell/scripting/install/install-powershell-on-macos) or install via Homebrew:
+
+```bash
+brew install --cask powershell
 ```
 
-8) In the upper part of the window that pops-up, we have to create a new environment variable, with name `WORKSPACE` and value the full path noted down before.
-If it not already in the `PATH` (this is possible only if you did it before), we also need to modify the "Path" variable adding the following string (on Windows 10 you need to add a new line to insert it, on Windows 7/8 it is necessary to append it using a `;` as a separator between other records):
+After installation, you can start PowerShell with `pwsh`.
 
-```cmd
-                      %PROGRAMFILES%\CMake\bin
+### Windows (via WSL)
+
+Native Windows builds are **not supported** due to the complexity of Fortran compiler installation on Windows. Instead, we recommend using **Windows Subsystem for Linux (WSL)**, which provides a full Linux environment.
+
+1) Install WSL following the [official Microsoft guide](https://learn.microsoft.com/en-us/windows/wsl/install):
+
+```powershell
+wsl --install
 ```
 
-9) If `vcpkg` is not installed, please follow the next procedure, otherwise please jump to #11
+2) After WSL is installed and you have an Ubuntu distribution running, follow the **Ubuntu** instructions above to install dependencies and build ALaDyn.
 
-```PowerShell
-PS \>                 cd $env:WORKSPACE
-PS Code>              git clone https://github.com/Microsoft/vcpkg.git
-PS Code>              cd vcpkg
-PS Code\vcpkg>        .\bootstrap-vcpkg.bat
+3) Your Windows files are accessible from WSL at `/mnt/c/` (for the C: drive), and you can run the built executable directly within the WSL environment.
+
+## Running ALaDyn
+
+### On HPC Systems
+
+Use the unified run script to generate and submit job scripts:
+
+```bash
+# Generate and submit job script
+./scripts/run.sh -n 2 -t 136 -a MyProject
+
+# Dry run (see generated script without submitting)
+./scripts/run.sh -p marconi-knl --dry-run
+
+# Specify queue and walltime
+./scripts/run.sh -n 4 -t 272 -w 02:00:00 -q <queue_name> -a <account>
 ```
 
-10) Open a Powershell with Administrator privileges and type
+### Local Execution
 
-```PowerShell
-PS \>                 cd $env:WORKSPACE
-PS Code>              cd vcpkg
-PS Code\vcpkg>        .\vcpkg integrate install
+```bash
+# Run directly with mpirun
+./scripts/run.sh --local -t 4
 ```
 
-11) Open a Powershell (as a standard user) and type (the last command requires a confirmation and is used to clean up unnecessary files). Note: do NOT install msmpi from vcpkg because it will be preferred from the one included in PGI and it is incompatible with PGI compiler
+### Manual Execution
 
-```PowerShell
-PS \>                 cd $env:WORKSPACE
-PS Code>              cd vcpkg
-PS Code\vcpkg>        .\vcpkg install fftw3:x64-windows
-PS Code\vcpkg>        rmdir .\buildtrees\
-PS Code\vcpkg>        cd $env:WORKSPACE
-PS Code>              git clone https://github.com/ALaDyn/ALaDyn
+```bash
+mpirun -np <num_tasks> ./ALaDyn
 ```
 
-12) Open a Powershell and build `ALaDyn` using the `scripts\build\cmake.win.ps1` script
+## Build Script Options
 
-```PowerShell
-PS \>                 cd $env:WORKSPACE
-PS Code>              cd ALaDyn
-PS Code\ALaDyn>       .\scripts\build\cmake.win.ps1
+The `cmake/build.ps1` script supports many options:
+
+| Option | Description |
+|--------|-------------|
+| `-UseVCPKG` | Use vcpkg for dependencies |
+| `-DisableInteractive` | Disable interactive prompts (for CI) |
+| `-DoNotUpdateVCPKG` | Skip vcpkg update |
+| `-DoNotUpdateTOOL` | Skip tool repository update |
+| `-DoNotDeleteBuildFolder` | Keep build folder after completion |
+| `-BuildDebug` | Build with debug configuration |
+
+Run `Get-Help ./cmake/build.ps1` for the full list of options.
+
+## Troubleshooting
+
+### Git Submodules
+
+If the `cmake/` directory is empty, initialize the submodules:
+
+```bash
+git submodule update --init --recursive
 ```
 
-13) You may have to manually copy the `fftw3.dll` from the vcpkg folder to the install folder
+### MPI Issues
 
-```PowerShell
-PS \>                 cd $env:WORKSPACE
-PS Code>              cd ALaDyn
-PS Code\ALaDyn>       cp $env:WORKSPACE\vcpkg\installed\x64-windows\bin\fftw3.dll .\bin\
+Some MPI implementations require special handling. Check the `FORCE_OLD_MPI` CMake option if using legacy `mpif.h`.
+
+### Compiler Not Found
+
+Ensure your Fortran compiler is in the PATH. On macOS, you may need to explicitly set `FC`:
+
+```bash
+export FC=/usr/local/bin/gfortran
 ```
 
-Note: in case you need to re-download a compatible MS-MPI runtime, please use this link [MS-MPI Redistributable 2012 R2 v4.2.4400.0](https://download.microsoft.com/download/B/C/8/BC826318-B57E-490D-82C1-06C99F52C608/MSMPISetup.exe); in case you need to re-download a compatible MS-MPI Client Utilities, please use this link [MS-MPI CU 2012 R2 v4.2.4400.0](https://download.microsoft.com/download/7/A/3/7A3BA65C-669D-4F2F-A295-6A16AA730B59/HpcClient_x64.Msi); in case you need to re-download a compatible MS-MPI SDK, please use this link [MS-MPI SDK 2012 R2 v4.2.4400.0](https://download.microsoft.com/download/3/F/3/3F3BE6EA-EB22-4445-9A72-D1A642256217/sdk_x64.msi)
+## Deprecated Build Scripts
 
-#### Upgrade software
-
-1) To update software installed with Chocolatey, open a Powershell with Administrator privileges and type
-
-```PowerShell
-PS \>                 cup all -y
-```
-
-2) To update libraries installed with vcpkg, open a Powershell (as a standard user), type these commands and follow on-screen instructions
-
-```PowerShell
-PS \>                 cd $env:WORKSPACE
-PS Code>              cd vcpkg
-PS Code>              git pull
-PS Code>              .\bootstrap-vcpkg.bat
-PS Code>              .\vcpkg update
-PS Code>              .\vcpkg upgrade --no-dry-run
-```
-
-### Cygwin
-
-1) If not already installed, please install chocolatey using the [official guide](http://chocolatey.org)
-2) Open a Powershell with Administrator privileges and type
-
-```PowerShell
-PS \>                 cinst -y cygwin
-```
-
-3) Open a Powershell (as a standard user) and type
-
-```PowerShell
-PS \>                 Invoke-WebRequest https://cygwin.com/setup-x86_64.exe -OutFile $env:WORKSPACE\cygwin-setup.exe
-PS \>                 cd $env:WORKSPACE
-PS Code>              .\cygwin-setup --quiet-mode --no-shortcuts --no-startmenu --no-desktop --upgrade-also --packages gcc-g++,libopenmpi-devel,gcc-fortran,cmake,fftw3,libfftw3-devel,libboost-devel,zlib-devel,pkg-config
-```
+Legacy build scripts for specific HPC systems are available in `scripts/build/deprecated/` for reference but are no longer actively maintained

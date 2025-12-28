@@ -48,6 +48,7 @@ opt_report.txt
 .vscode/
 *.Rapp.history
 log.*
+*.log
 
 .project
 *.nml
