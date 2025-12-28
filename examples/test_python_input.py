@@ -75,7 +75,7 @@ def test_validation():
     
     # Test invalid model_id
     try:
-        sim = SimulationConfig(model_id=99)
+        SimulationConfig(model_id=99)
         print("✗ Validation should have caught invalid model_id")
         return False
     except ValueError:
