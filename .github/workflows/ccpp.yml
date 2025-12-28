@@ -34,7 +34,7 @@ jobs:
     - name: Update apt & install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y yasm nasm openmpi-bin libopenmpi-dev mono-devel
+        sudo apt-get install -y yasm nasm openmpi-bin libopenmpi-dev mono-devel gfortran
 
     - name: Clean downloads
       run: sudo apt-get clean
@@ -60,8 +60,16 @@ jobs:
         -Source http://93.49.111.10:5555/v3/index.json
 
     - name: 'Build'
-      shell: pwsh
-      run: ${{ github.workspace }}/cmake/build.ps1 -UseVCPKG -DoNotUpdateVCPKG -DisableInteractive -DoNotUpdateTOOL
+      shell: bash
+      env:
+        VCPKG_ROOT: ${{ github.workspace }}/vcpkg
+        ENABLE_VCPKG_INTEGRATION: "ON"
+      run: |
+        mkdir -p build
+        cd build
+        cmake .. -DCMAKE_BUILD_TYPE=Release -DENABLE_VCPKG_INTEGRATION=ON
+        cmake --build . --parallel
+        cmake --install .
 
 
   osx-vcpkg:
@@ -76,7 +84,20 @@ jobs:
       if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.debug_enabled }}
 
     - name: Install dependencies
-      run: brew install libomp yasm nasm pkg-config automake autoconf-archive mono open-mpi gcc
+      shell: bash
+      run: |
+        brew install libomp yasm nasm pkg-config automake autoconf-archive mono open-mpi gcc
+        # Set up gfortran symlink for CMake to find
+        GFORTRAN_PATH=$(brew --prefix gcc)/bin/gfortran-$(brew list --versions gcc | awk '{print $2}' | cut -d. -f1)
+        if [ -f "$GFORTRAN_PATH" ]; then
+          sudo ln -sf "$GFORTRAN_PATH" /usr/local/bin/gfortran
+          echo "FC=/usr/local/bin/gfortran" >> $GITHUB_ENV
+          which gfortran
+          gfortran --version
+        else
+          echo "Warning: gfortran not found at expected location"
+          ls -la $(brew --prefix gcc)/bin/gfortran*
+        fi
 
     - uses: lukka/get-cmake@latest
 
@@ -101,5 +122,13 @@ jobs:
         -Source http://93.49.111.10:5555/v3/index.json
 
     - name: 'Build'
-      shell: pwsh
-      run: ${{ github.workspace }}/cmake/build.ps1 -UseVCPKG -DoNotUpdateVCPKG -DisableInteractive -DoNotUpdateTOOL
+      shell: bash
+      env:
+        VCPKG_ROOT: ${{ github.workspace }}/vcpkg
+        ENABLE_VCPKG_INTEGRATION: "ON"
+      run: |
+        mkdir -p build
+        cd build
+        cmake .. -DCMAKE_BUILD_TYPE=Release -DENABLE_VCPKG_INTEGRATION=ON
+        cmake --build . --parallel
+        cmake --install .
