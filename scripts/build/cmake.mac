@@ -1,8 +1,0 @@
-#!/bin/bash
-
-export FC=/usr/local/bin/gfortran-9
-
-mkdir -p build ; cd build
-cmake .. -DCMAKE_BUILD_TYPE="Release" -DCMAKE_Fortran_COMPILER=$FC
-cmake --build . --target install
-cd ..

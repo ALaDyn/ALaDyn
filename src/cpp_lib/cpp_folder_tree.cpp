@@ -19,18 +19,6 @@
  *  along with ALaDyn.  If not, see <http://www.gnu.org/licenses/>.                                    *
  ******************************************************************************************************/
 
-#if defined(USE_BOOST)
-#include <boost/filesystem.hpp>
-#include <cstring>
-
-extern "C" {
-void create_folder_(char* folderName, size_t len)
-{
-  std::string fname(folderName, 0, len);
-  boost::filesystem::create_directories(fname);
-}
-}
-#elif defined(USE_FILESYSTEM)
 #include <filesystem>
 
 extern "C" {
@@ -39,21 +27,3 @@ void create_folder_(char* folderName, size_t len) {
   std::filesystem::create_directories(fname);
 }
 }
-#elif defined(_WIN32)
-#include <direct.h>
-#include <stdio.h>
-
-extern "C"
-{
-void create_folder_(char* folderName, size_t len) {
-  if (_mkdir(folderName) != 0) {
-    printf("Problem creating directory %s!\n", folderName);
-  }
-}
-}
-#else
-
-extern "C" {
-void create_folder_(char* folderName, size_t len) {}
-}
-#endif

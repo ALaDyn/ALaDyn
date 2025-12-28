@@ -21,7 +21,8 @@ This newer version, in part rewritten from scratch, is released as is, without a
 
 [Papers published by the ALaDyn Collaboration](https://aladyn.github.io/Papers/)  
 [Code description](./docs/pages/DESCRIPTION.md)  
-[Input guide](./docs/pages/NAMELIST_GUIDE.md)
+[Input guide](./docs/pages/NAMELIST_GUIDE.md)  
+[**Python input guide (NEW!)**](./docs/pages/PYTHON_INPUT_GUIDE.md)
 
 Copyright on the code is by the ALaDyn Collaboration.
 
@@ -39,7 +40,7 @@ appveyor and travis recipes can also help to understand how to build the code.
 ## Support channels
 
 We have a Telegram channel to promote latest news: [join here](https://t.me/ALaDyn_Collaboration)  
-We also have a group on Telegram ([join here](https://t.me/ALaDyn_Chat)) (for quick questions and unofficial discussions), an [official slack channel](http://aladyn.slack.com) (for more technical discussions) and another slack channel for the [italian plasma community](http://plasmaitaly.slack.com).
+We also have a group on Telegram ([join here](https://t.me/ALaDyn_Chat)) (for quick questions and unofficial discussions).
 
 ## Releases
 
