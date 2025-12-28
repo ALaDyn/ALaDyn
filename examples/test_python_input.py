@@ -13,7 +13,16 @@ import os
 script_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'scripts')
 sys.path.insert(0, script_dir)
 
-from aladyn_config import *
+from aladyn_config import (
+    ALaDynConfig,
+    GridConfig,
+    SimulationConfig,
+    TargetConfig,
+    LaserConfig,
+    MovingWindowConfig,
+    OutputConfig,
+    MPIConfig,
+)
 from config_to_namelist import config_to_namelist
 
 
