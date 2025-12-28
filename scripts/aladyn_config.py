@@ -434,7 +434,7 @@ Grid:
 
 Simulation:
   Model: {'LWFA' if self.simulation.dmodel_id == 1 else 'Other'}
-  Laser polarization: {['', 'p-polarized', 's-polarized', 'circular', 'envelope'][self.simulation.model_id]}
+  Laser polarization: {{1: 'p-polarized', 2: 's-polarized', 3: 'circular', 4: 'envelope'}.get(self.simulation.model_id, '')}
   Integration: {'Leap-frog' if self.simulation.LPf_ord == 2 else 'RK4'}
 
 Laser:
