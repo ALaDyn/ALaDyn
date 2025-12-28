@@ -6,7 +6,6 @@ RUN apt-get update &&\
     graphviz \
     gcc \
     gfortran \
-    libboost-all-dev \
     libopenmpi-dev \
     libfftw3-dev
 RUN pip install --no-cache-dir ford

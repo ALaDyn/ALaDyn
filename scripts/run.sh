@@ -189,7 +189,6 @@ generate_module_commands() {
                 modules+="module load profile/knl\n"
                 modules+="module load intel/pe-xe-2018--binary\n"
                 modules+="module load intelmpi/2018--binary\n"
-                modules+="module load boost/1.66.0--intelmpi--2018--binary\n"
                 if [[ "$USE_FFTW" == true ]]; then
                     modules+="module load fftw/3.3.7_knl--intelmpi--2018--binary\n"
                 else
@@ -200,7 +199,6 @@ generate_module_commands() {
                 modules+="module load gnu/6.1.0\n"
                 modules+="module load openmpi/1-10.3--gnu--6.1.0\n"
                 modules+="module load fftw/3.3.4--openmpi--1-10.3--gnu--6.1.0\n"
-                modules+="module load boost/1.61.0--gnu--6.1.0\n"
             fi
             ;;
         marconi)
@@ -208,7 +206,6 @@ generate_module_commands() {
             if [[ "$COMPILER_TYPE" == "intel" ]]; then
                 modules+="module load intel/pe-xe-2018--binary\n"
                 modules+="module load intelmpi/2018--binary\n"
-                modules+="module load boost/1.66.0--intelmpi--2018--binary\n"
                 modules+="module load mkl/2018--binary\n"
             fi
             ;;
@@ -217,11 +214,9 @@ generate_module_commands() {
             if [[ "$COMPILER_TYPE" == "intel" ]]; then
                 modules+="module load compilers/gcc-4.9.2\n"
                 modules+="module load compilers/intel-parallel-studio-2017\n"
-                modules+="module load boost_1_56_0_gcc4_9_0\n"
             elif [[ "$COMPILER_TYPE" == "gnu" ]]; then
                 modules+="module load compilers/gcc-4.9.2\n"
                 modules+="module load compilers/openmpi-1.8.1_gcc-4.9.0_with_cuda6.5\n"
-                modules+="module load boost_1_56_0_gcc4_9_0\n"
             fi
             ;;
     esac

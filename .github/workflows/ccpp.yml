@@ -61,7 +61,13 @@ jobs:
 
     - name: 'Build'
       shell: pwsh
-      run: ${{ github.workspace }}/cmake/build.ps1 -UseVCPKG -DoNotUpdateVCPKG -DisableInteractive -DoNotUpdateTOOL
+      run: ${{ github.workspace }}/cmake/build.ps1 -UseVCPKG -DoNotUpdateVCPKG -DisableInteractive -DoNotUpdateTOOL -EnableTEST
+
+    - name: 'Run Tests'
+      shell: bash
+      run: |
+        cd build_release
+        ctest --output-on-failure --timeout 300
 
 
   ubuntu-plain:
@@ -87,10 +93,15 @@ jobs:
       run: |
         mkdir -p build
         cd build
-        cmake .. -DCMAKE_BUILD_TYPE=Release
+        cmake .. -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON
         cmake --build . --parallel
         cmake --install .
 
+    - name: 'Run Tests'
+      shell: bash
+      run: |
+        cd build
+        ctest --output-on-failure --timeout 300
 
   osx-vcpkg:
     runs-on: macos-latest
@@ -143,4 +154,10 @@ jobs:
 
     - name: 'Build'
       shell: pwsh
-      run: ${{ github.workspace }}/cmake/build.ps1 -UseVCPKG -DoNotUpdateVCPKG -DisableInteractive -DoNotUpdateTOOL
+      run: ${{ github.workspace }}/cmake/build.ps1 -UseVCPKG -DoNotUpdateVCPKG -DisableInteractive -DoNotUpdateTOOL -EnableTEST
+
+    - name: 'Run Tests'
+      shell: bash
+      run: |
+        cd build_release
+        ctest --output-on-failure --timeout 300

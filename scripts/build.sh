@@ -215,7 +215,6 @@ load_modules() {
                 intel)
                     module load intel/pe-xe-2018--binary 2>/dev/null || module load intel 2>/dev/null || true
                     module load intelmpi/2018--binary 2>/dev/null || module load intelmpi 2>/dev/null || true
-                    module load boost/1.66.0--intelmpi--2018--binary 2>/dev/null || module load boost 2>/dev/null || true
                     module load mkl/2018--binary 2>/dev/null || module load mkl 2>/dev/null || true
                     module load cmake 2>/dev/null || true
                     ;;
@@ -224,7 +223,6 @@ load_modules() {
                     module load gnu/6.1.0 2>/dev/null || module load gnu 2>/dev/null || true
                     module load openmpi/1-10.3--gnu--6.1.0 2>/dev/null || module load openmpi 2>/dev/null || true
                     module load fftw/3.3.4--openmpi--1-10.3--gnu--6.1.0 2>/dev/null || module load fftw 2>/dev/null || true
-                    module load boost/1.61.0--gnu--6.1.0 2>/dev/null || module load boost 2>/dev/null || true
                     module load cmake 2>/dev/null || true
                     ;;
             esac
@@ -237,7 +235,6 @@ load_modules() {
                     module load profile/knl 2>/dev/null || true
                     module load intel/pe-xe-2018--binary 2>/dev/null || module load intel 2>/dev/null || true
                     module load intelmpi/2018--binary 2>/dev/null || module load intelmpi 2>/dev/null || true
-                    module load boost/1.66.0--intelmpi--2018--binary 2>/dev/null || module load boost 2>/dev/null || true
                     if [[ "$FORCE_FFTW" == true ]]; then
                         module load fftw/3.3.7_knl--intelmpi--2018--binary 2>/dev/null || module load fftw 2>/dev/null || true
                     else
@@ -250,7 +247,6 @@ load_modules() {
                     module load gnu/6.1.0 2>/dev/null || module load gnu 2>/dev/null || true
                     module load openmpi/1-10.3--gnu--6.1.0 2>/dev/null || module load openmpi 2>/dev/null || true
                     module load fftw/3.3.4--openmpi--1-10.3--gnu--6.1.0 2>/dev/null || module load fftw 2>/dev/null || true
-                    module load boost/1.61.0--gnu--6.1.0 2>/dev/null || module load boost 2>/dev/null || true
                     module load cmake 2>/dev/null || true
                     ;;
             esac
@@ -260,12 +256,10 @@ load_modules() {
                 intel)
                     module load compilers/gcc-4.9.2 2>/dev/null || true
                     module load compilers/intel-parallel-studio-2017 2>/dev/null || true
-                    module load boost_1_56_0_gcc4_9_0 2>/dev/null || true
                     ;;
                 gnu)
                     module load compilers/gcc-7.1.0 2>/dev/null || module load compilers/gcc 2>/dev/null || true
                     module load compilers/openmpi-2.1.1_gcc-7.1.0 2>/dev/null || module load openmpi 2>/dev/null || true
-                    module load boost_1_64_0_gcc7_1_0 2>/dev/null || module load boost 2>/dev/null || true
                     ;;
             esac
             ;;
@@ -277,7 +271,6 @@ load_modules() {
                 module load intel-mkl 2>/dev/null || true
             fi
             module load cmake 2>/dev/null || true
-            module load boost 2>/dev/null || true
             ;;
         mac)
             # macOS uses Homebrew, no modules needed
@@ -417,9 +410,6 @@ configure_cmake_options() {
     if [[ "$FORCE_OLD_MPI" == true ]]; then
         CMAKE_OPTS+=("-DFORCE_OLD_MPI:BOOL=ON")
     fi
-
-    # Boost options (avoid CMake's built-in FindBoost issues)
-    CMAKE_OPTS+=("-DBoost_NO_BOOST_CMAKE=ON")
 
     # vcpkg integration
     if [[ "$USE_VCPKG" == true ]]; then

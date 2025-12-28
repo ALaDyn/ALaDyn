@@ -66,8 +66,39 @@ The cmake submodule contains:
 ### Building the Code (Powershell required, do not bypass)
 
 ```powershell
-.\cmake\build.ps1 -UseVCPKG -DisableInteractive -DoNotUpdateVCPKG -DoNotUpdateTOOL -DoNotDeleteBuildFolder
+.\cmake\build.ps1 -UseVCPKG -DisableInteractive -DoNotUpdateVCPKG -DoNotUpdateTOOL -DoNotDeleteBuildFolder -EnableTEST
 ```
+
+#### Important build.ps1 Flags
+
+| Flag | Description |
+|------|-------------|
+| `-UseVCPKG` | Use vcpkg for dependency management |
+| `-DisableInteractive` | Disable interactive prompts (required for CI) |
+| `-DoNotUpdateVCPKG` | Skip vcpkg updates |
+| `-DoNotUpdateTOOL` | Skip tool self-updates |
+| `-DoNotDeleteBuildFolder` | Keep build folder after completion |
+| `-EnableTEST` | **Enable building and running tests** |
+| `-BuildDebug` | Build debug version (in addition to release) |
+| `-DoNotUseNinja` | Use Makefile generator instead of Ninja (see note below) |
+
+**Note**: Without `-BuildDebug`, only the release build is produced. The build output goes to `build_release/` for release builds.
+
+#### Ninja vs Makefile Generator
+
+By default, `build.ps1` uses the **Ninja** generator for faster builds. However, **Ninja can cause issues with Fortran code**, particularly:
+
+1. **Preprocessing corruption**: Ninja's handling of Fortran preprocessing (`.F90` files with preprocessor directives) can corrupt source files, causing cryptic errors like `Invalid character in name` pointing to valid Fortran kind specifiers (e.g., `1.0_dp`).
+
+2. **Module dependency ordering**: Fortran modules must be compiled in dependency order. While CMake handles this, Ninja's parallel execution can sometimes cause race conditions.
+
+**Recommendation**: If you encounter unexplained compilation errors in Fortran files (especially test files or files using `use` statements with kind parameters), try adding `-DoNotUseNinja` to switch to the Makefile generator:
+
+```powershell
+.\cmake\build.ps1 -UseVCPKG -DisableInteractive -DoNotUpdateVCPKG -DoNotUpdateTOOL -DoNotDeleteBuildFolder -EnableTEST -DoNotUseNinja
+```
+
+The Makefile generator is slower but more reliable for Fortran projects.
 
 #### Manual CMake (if failing do not trigger code modifications in reaction)
 
@@ -171,8 +202,132 @@ cmake --build . --target install
 
 - GitHub Actions workflow in `.github/workflows/ccpp.yml`
 - CI runs on Ubuntu and macOS
-- Ensure code compiles before submitting PRs
-- No formal test suite exists; validate compilation is the minimum requirement
+- Tests are run automatically via `ctest` after each build
+- **All code modifications must include corresponding tests**
+
+### Test Suite Structure
+
+```shell
+tests/
+├── CMakeLists.txt          # Test build configuration
+├── test_framework/         # Test utilities and assertions
+│   ├── test_assertions.f90 # Assertion macros for testing
+│   └── test_runner.f90     # Test suite runner utilities
+├── unit/                   # Unit tests for individual modules
+│   ├── test_precision_def.f90
+│   ├── test_phys_param.f90
+│   ├── test_util.f90
+│   ├── test_stretched_grid.f90
+│   ├── test_grid_param.f90
+│   ├── test_boris_push.f90
+│   └── test_array_alloc.f90
+└── integration/            # Integration tests
+    ├── test_smoke.f90      # Basic functionality smoke test
+    └── test_lwfa_scenario.f90  # LWFA physics validation
+```
+
+### Running Tests
+
+```bash
+# After building with CMake
+cd build
+ctest --output-on-failure
+
+# Run specific test
+ctest -R precision_def
+
+# Verbose output
+ctest -V
+
+# Run tests in parallel
+ctest -j4
+```
+
+### Building with Tests
+
+```bash
+# Enable tests (enabled by default)
+cmake .. -DBUILD_TESTING=ON
+cmake --build .
+ctest
+```
+
+### Writing Tests
+
+When adding new functionality, follow these guidelines:
+
+1. **Create a test file** in `tests/unit/` for unit tests or `tests/integration/` for integration tests
+
+2. **Use the test framework**:
+   ```fortran
+   program test_my_module
+    use test_assertions
+    use test_runner
+    
+    implicit none
+    
+    call start_test_suite('my_module')
+    
+    call test_feature_1()
+    call test_feature_2()
+    
+    call end_test_suite('my_module')
+    
+    if (.not. test_suite_passed()) then
+     error stop 1
+    end if
+   
+   contains
+   
+    subroutine test_feature_1()
+     call run_test('feature_1')
+     call assert_near_dp(expected, actual, tolerance, 'description')
+     call assert_true(condition, 'description')
+    end subroutine
+   
+   end program
+   ```
+
+3. **Available assertions**:
+   - `assert_true(condition, name)` - Assert condition is true
+   - `assert_false(condition, name)` - Assert condition is false
+   - `assert_equal_int(expected, actual, name)` - Compare integers
+   - `assert_equal_dp(expected, actual, name)` - Compare double precision
+   - `assert_near_dp(expected, actual, tol, name)` - Compare with tolerance
+   - `assert_array_near_dp(expected, actual, n, tol, name)` - Compare arrays
+
+4. **Add the test to CMakeLists.txt**:
+   ```cmake
+   add_executable(test_my_module unit/test_my_module.f90)
+   target_compile_options(test_my_module PRIVATE ${TEST_Fortran_FLAGS})
+   target_link_libraries(test_my_module PRIVATE aladyn_test_utils)
+   target_include_directories(test_my_module PRIVATE ${CMAKE_BINARY_DIR})
+   add_test(NAME my_module_tests COMMAND test_my_module)
+   ```
+
+### Test Categories
+
+| Category | Description | Location |
+|----------|-------------|----------|
+| **Unit Tests** | Test individual functions/modules in isolation | `tests/unit/` |
+| **Integration Tests** | Test interactions between modules | `tests/integration/` |
+| **Physics Tests** | Validate physics correctness (LWFA, PWFA, etc.) | `tests/integration/` |
+
+### Test Coverage Requirements
+
+When making changes, ensure:
+
+1. **New features**: Add unit tests for all new public functions/subroutines
+2. **Bug fixes**: Add a test that would have caught the bug
+3. **Physics changes**: Add validation tests for physics accuracy
+4. **Performance changes**: Document expected behavior, add regression tests
+
+### Test Naming Conventions
+
+- Test files: `test_<module_name>.f90`
+- Test programs: `test_<module_name>`
+- Test subroutines: `test_<feature_name>`
+- Test names (in assertions): descriptive, lowercase with spaces
 
 ## Making Changes
 

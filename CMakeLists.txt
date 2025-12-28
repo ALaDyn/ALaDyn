@@ -171,3 +171,17 @@ endif()
 set_target_properties(ALaDyn PROPERTIES LINKER_LANGUAGE Fortran)
 
 install(TARGETS ALaDyn DESTINATION bin)
+
+# Testing support
+# Support both BUILD_TESTING (CMake standard) and ENABLE_TEST (build.ps1 flag)
+option(BUILD_TESTING "Build test suite" ON)
+option(ENABLE_TEST "Build test suite (alias for BUILD_TESTING)" OFF)
+if(ENABLE_TEST)
+    set(BUILD_TESTING ON CACHE BOOL "Build test suite" FORCE)
+endif()
+if(BUILD_TESTING)
+    message(STATUS "ALaDyn: Building test suite")
+    # Enable CTest in root directory so tests are discoverable
+    enable_testing()
+    add_subdirectory(tests)
+endif()
