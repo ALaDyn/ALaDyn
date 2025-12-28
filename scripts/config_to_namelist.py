@@ -64,7 +64,8 @@ def write_namelist_section(file, section_name: str, params: dict, indent: int = 
     }
     
     # Find maximum parameter name length for alignment
-    max_len = max((len(name) for name in params.keys()), default=0)
+    # Use list comprehension for better performance with large parameter sets
+    max_len = max([len(name) for name in params.keys()]) if params else 0
     
     for name, value in params.items():
         if value is None:

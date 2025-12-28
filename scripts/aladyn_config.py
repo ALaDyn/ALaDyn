@@ -24,15 +24,18 @@ try:
 except ImportError:
     HAS_NUMPY = False
     np = None
-    print("Warning: NumPy not available. Custom density functions will not work.")
+    # Note: NumPy is only required for custom density functions
+    # The basic configuration and namelist generation work without it
 
 
 def _check_numpy_available():
     """Check if NumPy is available for custom density functions."""
     if not HAS_NUMPY:
         raise ImportError(
-            "NumPy is required for custom density functions. "
-            "Install it with: pip install numpy"
+            "NumPy is required for custom density functions.\n"
+            "The basic configuration system works without NumPy, but custom\n"
+            "density functions need it for array operations.\n"
+            "Install NumPy with: pip install numpy"
         )
     return True
 

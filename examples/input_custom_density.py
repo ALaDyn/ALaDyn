@@ -213,13 +213,17 @@ def visualize_density_profile():
     This function creates plots of the density profile to help
     understand and verify the plasma configuration.
     
+    Note: Visualization is optional. The configuration and namelist
+    generation work without matplotlib.
+    
     Requires matplotlib to be installed.
     """
     try:
         import matplotlib.pyplot as plt
     except ImportError:
-        print("Error: matplotlib is required for visualization")
-        print("Install it with: pip install matplotlib")
+        print("Note: matplotlib is required for density profile visualization")
+        print("The configuration is valid and will work without visualization.")
+        print("Install matplotlib with: pip install matplotlib")
         return
     
     # Create coordinate arrays
