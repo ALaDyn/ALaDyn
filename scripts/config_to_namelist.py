@@ -6,7 +6,7 @@ This module converts Python-based ALaDyn configurations to Fortran namelist form
 maintaining full compatibility with the existing ALaDyn Fortran code.
 """
 
-from typing import Any, List, Union
+from typing import Any
 from aladyn_config import ALaDynConfig
 
 
