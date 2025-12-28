@@ -168,6 +168,30 @@
   end subroutine
   !=======================================
   subroutine update_adam_bash_fluid_variables(u, u0, flx, ef)
+   !! Adams-Bashforth integration for fluid variables
+   !! This wrapper calls the higher-order implementation with optional history arrays
+   use fstruct_data, only: up1, up2
+   use common_param, only: ab_order
+
+   real(dp), intent(inout) :: u(:, :, :, :), u0(:, :, :, :)
+   real(dp), intent(inout) :: ef(:, :, :, :), flx(:, :, :, :)
+
+   select case (ab_order)
+   case (2)
+    call update_ab2_fluid_variables(u, u0, flx, ef)
+   case (3)
+    call update_ab3_fluid_variables(u, u0, up1, flx, ef)
+   case (4)
+    call update_ab4_fluid_variables(u, u0, up1, up2, flx, ef)
+   case default
+    ! Default to AB2 for backward compatibility
+    call update_ab2_fluid_variables(u, u0, flx, ef)
+   end select
+  end subroutine
+  !=======================================
+  subroutine update_ab2_fluid_variables(u, u0, flx, ef)
+   !! Adams-Bashforth 2nd order (AB2) integration
+   !! u^{n+1} = u^n + dt * (3/2*F^n - 1/2*F^{n-1})
    real(dp), intent(inout) :: u(:, :, :, :), u0(:, :, :, :)
    real(dp), intent(inout) :: ef(:, :, :, :), flx(:, :, :, :)
    integer :: i, j, k, ic, str, stl, fdim, fldim
@@ -176,7 +200,7 @@
    real(dp), parameter :: WK1 = 0.5, EPS = 1.e-06
    real(dp) :: abf_0, abf_1
    !===================================
-   ! INTEGRATES by a one-step adam-bashfort (dissipative leap-frog)
+   ! INTEGRATES by a one-step Adam-Bashforth 2nd order
    !===============================
    !   NON-CONSERVATIVE FORM of RELATIVISTC COLD FLUID
    !==========================================
@@ -188,9 +212,7 @@
    !================================
    lzf = lorentz_fact(1)*unit_charge(1)*dt_loc
    fdim = size(u, 4)
-   !fdim=curr_ndim+1
    fldim = size(flx, 4)
-   !fldim = 2*curr_ndim + 1 !(five or seven components)
    abf_0 = -0.5
    abf_1 = 1.5
    !================== Enter
@@ -209,7 +231,7 @@
     u0(:, :, :, :) = zero_dp
     call nc_fluid_density_momenta(flx, u0, dt_loc, fdim)
     ! - F_adv(u) = - grad(Flux)
-    call add_lorentz_force !in u_0 is stored Dt*(-F_adv(u)+ F_{Lorentz}) at t^n
+    call add_lorentz_force_ab2 !in u_0 is stored Dt*(-F_adv(u)+ F_{Lorentz}) at t^n
     do ic = 1, fdim
      do k = kz1, kz2
       do j = jy1, jy2
@@ -232,7 +254,7 @@
     end do
     u0(:, :, :, :) = 0.0
     call nc_fluid_density_momenta(flx, u0, dt_loc, fdim)
-    call add_lorentz_force !in u_0 is ftored Dt*(F_adv(u)+ F_{Lorentz}) for next timestep
+    call add_lorentz_force_ab2 !in u_0 is stored Dt*(F_adv(u)+ F_{Lorentz}) for next timestep
     do ic = 1, fdim
      do k = kz1, kz2
       do j = jy1, jy2
@@ -248,7 +270,7 @@
    end if
    !==========================
   contains
-   subroutine add_lorentz_force
+   subroutine add_lorentz_force_ab2
     !in u0() -flux derivatives
     do k = kz1, kz2
      do j = jy1, jy2
@@ -287,6 +309,332 @@
         u0(i, j, k, 2) = u0(i, j, k, 2) + den*lzf*vz*bx
         u0(i, j, k, 3) = u0(i, j, k, 3) + den*lzf*(ez + vx*by - vy*bx)
         !=> u^{n+1}
+       end do
+      end do
+     end do
+    end if
+   end subroutine
+  end subroutine
+  !=======================================
+  subroutine update_ab3_fluid_variables(u, u0, u1, flx, ef)
+   !! Adams-Bashforth 3rd order (AB3) integration
+   !! u^{n+1} = u^n + dt * (23/12*F^n - 16/12*F^{n-1} + 5/12*F^{n-2})
+   !! This provides higher accuracy and lower dissipation than AB2
+   real(dp), intent(inout) :: u(:, :, :, :), u0(:, :, :, :), u1(:, :, :, :)
+   real(dp), intent(inout) :: ef(:, :, :, :), flx(:, :, :, :)
+   integer :: i, j, k, ic, str, stl, fdim, fldim
+   real(dp) :: den, lzf
+   real(dp) :: ex, ey, ez, bx, by, bz, vx, vy, vz, b1p, b1m
+   real(dp), parameter :: WK1 = 0.5, EPS = 1.e-06
+   ! AB3 coefficients: (23/12, -16/12, 5/12)
+   real(dp), parameter :: ABF3_0 = 23.0_dp/12.0_dp
+   real(dp), parameter :: ABF3_1 = -16.0_dp/12.0_dp
+   real(dp), parameter :: ABF3_2 = 5.0_dp/12.0_dp
+   real(dp) :: f_new
+   integer, save :: startup_count = 0
+   !===================================
+   ! INTEGRATES by Adams-Bashforth 3rd order
+   !===============================
+   lzf = lorentz_fact(1)*unit_charge(1)*dt_loc
+   fdim = size(u, 4)
+   fldim = size(flx, 4)
+   str = 1
+   stl = 1
+   if (prl) then
+    call fill_ebfield_yzxbdsdata(flx, 1, fldim, 2, 2)
+    call fill_ebfield_yzxbdsdata(ef, 1, nfield, str, stl)
+    call field_xyzbd(ef, nfield)
+   end if
+
+   if (initial_time) then
+    ! First step: use simple Euler
+    startup_count = 0
+    u0(:, :, :, :) = zero_dp
+    u1(:, :, :, :) = zero_dp
+    call nc_fluid_density_momenta(flx, u0, dt_loc, fdim)
+    call add_lorentz_force_ab3
+    do ic = 1, fdim
+     do k = kz1, kz2
+      do j = jy1, jy2
+       do i = ix1, ix2
+        u(i, j, k, ic) = u(i, j, k, ic) + u0(i, j, k, ic)
+        flx(i, j, k, ic) = 0.5*(flx(i, j, k, ic) + u(i, j, k, ic))
+       end do
+      end do
+     end do
+    end do
+   else
+    startup_count = startup_count + 1
+    if (startup_count == 1) then
+     ! Second step: use AB2
+     do ic = 1, fdim
+      do k = kz1, kz2
+       do j = jy1, jy2
+        do i = ix1, ix2
+         u(i, j, k, ic) = u(i, j, k, ic) - 0.5*u0(i, j, k, ic)
+        end do
+       end do
+      end do
+     end do
+     u1(:, :, :, :) = u0(:, :, :, :)  ! Store F^{n-1} into u1 (will become F^{n-2})
+     u0(:, :, :, :) = 0.0
+     call nc_fluid_density_momenta(flx, u0, dt_loc, fdim)
+     call add_lorentz_force_ab3
+     do ic = 1, fdim
+      do k = kz1, kz2
+       do j = jy1, jy2
+        do i = ix1, ix2
+         u(i, j, k, ic) = u(i, j, k, ic) + 1.5*u0(i, j, k, ic)
+         flx(i, j, k, ic) = 0.5*(flx(i, j, k, ic) + u(i, j, k, ic))
+        end do
+       end do
+      end do
+     end do
+    else
+     ! Full AB3: u^{n+1} = u^n + 23/12*F^n - 16/12*F^{n-1} + 5/12*F^{n-2}
+     ! u0 contains F^{n-1}, u1 contains F^{n-2}
+     do ic = 1, fdim
+      do k = kz1, kz2
+       do j = jy1, jy2
+        do i = ix1, ix2
+         u(i, j, k, ic) = u(i, j, k, ic) + ABF3_1*u0(i, j, k, ic) + ABF3_2*u1(i, j, k, ic)
+        end do
+       end do
+      end do
+     end do
+     ! Shift history: F^{n-1} -> F^{n-2}
+     u1(:, :, :, :) = u0(:, :, :, :)
+     u0(:, :, :, :) = 0.0
+     call nc_fluid_density_momenta(flx, u0, dt_loc, fdim)
+     call add_lorentz_force_ab3  ! u0 now contains F^n
+     do ic = 1, fdim
+      do k = kz1, kz2
+       do j = jy1, jy2
+        do i = ix1, ix2
+         u(i, j, k, ic) = u(i, j, k, ic) + ABF3_0*u0(i, j, k, ic)
+         flx(i, j, k, ic) = 0.5*(flx(i, j, k, ic) + u(i, j, k, ic))
+        end do
+       end do
+      end do
+     end do
+    end if
+   end if
+  contains
+   subroutine add_lorentz_force_ab3
+    do k = kz1, kz2
+     do j = jy1, jy2
+      do i = ix1, ix2
+       den = 1.
+       if (flx(i, j, k, fdim) <= EPS) den = 0.0
+       ex = WK1*(ef(i, j, k, 1) + ef(i - 1, j, k, 1))
+       ey = WK1*(ef(i, j, k, 2) + ef(i, j - 1, k, 2))
+       b1p = WK1*(ef(i, j, k, nfield) + ef(i - 1, j, k, nfield))
+       b1m = WK1*(ef(i, j - 1, k, nfield) + ef(i - 1, j - 1, k, nfield))
+       bz = WK1*(b1p + b1m)
+       vx = flx(i, j, k, fdim + 1)
+       vy = flx(i, j, k, fdim + 2)
+       u0(i, j, k, 1) = u0(i, j, k, 1) + den*lzf*(ex + vy*bz)
+       u0(i, j, k, 2) = u0(i, j, k, 2) + den*lzf*(ey - vx*bz)
+      end do
+     end do
+    end do
+    if (curr_ndim == 3) then
+     do k = kz1, kz2
+      do j = jy1, jy2
+       do i = ix1, ix2
+        den = 1.
+        if (flx(i, j, k, fdim) <= EPS) den = 0.0
+        ez = WK1*(ef(i, j, k, 3) + ef(i, j, k - 1, 3))
+        b1p = WK1*(ef(i, j, k, 5) + ef(i - 1, j, k, 5))
+        b1m = WK1*(ef(i, j, k - 1, 5) + ef(i - 1, j, k - 1, 5))
+        by = WK1*(b1p + b1m)
+        b1p = WK1*(ef(i, j, k, 4) + ef(i, j - 1, k, 4))
+        b1m = WK1*(ef(i, j, k - 1, 4) + ef(i, j - 1, k - 1, 4))
+        bx = WK1*(b1p + b1m)
+        vx = flx(i, j, k, fdim + 1)
+        vy = flx(i, j, k, fdim + 2)
+        vz = flx(i, j, k, fdim + 3)
+        u0(i, j, k, 1) = u0(i, j, k, 1) - den*lzf*vz*by
+        u0(i, j, k, 2) = u0(i, j, k, 2) + den*lzf*vz*bx
+        u0(i, j, k, 3) = u0(i, j, k, 3) + den*lzf*(ez + vx*by - vy*bx)
+       end do
+      end do
+     end do
+    end if
+   end subroutine
+  end subroutine
+  !=======================================
+  subroutine update_ab4_fluid_variables(u, u0, u1, u2, flx, ef)
+   !! Adams-Bashforth 4th order (AB4) integration
+   !! u^{n+1} = u^n + dt * (55/24*F^n - 59/24*F^{n-1} + 37/24*F^{n-2} - 9/24*F^{n-3})
+   !! This provides highest accuracy and lowest dissipation
+   real(dp), intent(inout) :: u(:, :, :, :), u0(:, :, :, :)
+   real(dp), intent(inout) :: u1(:, :, :, :), u2(:, :, :, :)
+   real(dp), intent(inout) :: ef(:, :, :, :), flx(:, :, :, :)
+   integer :: i, j, k, ic, str, stl, fdim, fldim
+   real(dp) :: den, lzf
+   real(dp) :: ex, ey, ez, bx, by, bz, vx, vy, vz, b1p, b1m
+   real(dp), parameter :: WK1 = 0.5, EPS = 1.e-06
+   ! AB4 coefficients: (55/24, -59/24, 37/24, -9/24)
+   real(dp), parameter :: ABF4_0 = 55.0_dp/24.0_dp
+   real(dp), parameter :: ABF4_1 = -59.0_dp/24.0_dp
+   real(dp), parameter :: ABF4_2 = 37.0_dp/24.0_dp
+   real(dp), parameter :: ABF4_3 = -9.0_dp/24.0_dp
+   integer, save :: startup_count = 0
+   !===================================
+   ! INTEGRATES by Adams-Bashforth 4th order
+   !===============================
+   lzf = lorentz_fact(1)*unit_charge(1)*dt_loc
+   fdim = size(u, 4)
+   fldim = size(flx, 4)
+   str = 1
+   stl = 1
+   if (prl) then
+    call fill_ebfield_yzxbdsdata(flx, 1, fldim, 2, 2)
+    call fill_ebfield_yzxbdsdata(ef, 1, nfield, str, stl)
+    call field_xyzbd(ef, nfield)
+   end if
+
+   if (initial_time) then
+    ! First step: use simple Euler
+    startup_count = 0
+    u0(:, :, :, :) = zero_dp
+    u1(:, :, :, :) = zero_dp
+    u2(:, :, :, :) = zero_dp
+    call nc_fluid_density_momenta(flx, u0, dt_loc, fdim)
+    call add_lorentz_force_ab4
+    do ic = 1, fdim
+     do k = kz1, kz2
+      do j = jy1, jy2
+       do i = ix1, ix2
+        u(i, j, k, ic) = u(i, j, k, ic) + u0(i, j, k, ic)
+        flx(i, j, k, ic) = 0.5*(flx(i, j, k, ic) + u(i, j, k, ic))
+       end do
+      end do
+     end do
+    end do
+   else
+    startup_count = startup_count + 1
+    if (startup_count == 1) then
+     ! Second step: use AB2
+     do ic = 1, fdim
+      do k = kz1, kz2
+       do j = jy1, jy2
+        do i = ix1, ix2
+         u(i, j, k, ic) = u(i, j, k, ic) - 0.5*u0(i, j, k, ic)
+        end do
+       end do
+      end do
+     end do
+     u1(:, :, :, :) = u0(:, :, :, :)
+     u0(:, :, :, :) = 0.0
+     call nc_fluid_density_momenta(flx, u0, dt_loc, fdim)
+     call add_lorentz_force_ab4
+     do ic = 1, fdim
+      do k = kz1, kz2
+       do j = jy1, jy2
+        do i = ix1, ix2
+         u(i, j, k, ic) = u(i, j, k, ic) + 1.5*u0(i, j, k, ic)
+         flx(i, j, k, ic) = 0.5*(flx(i, j, k, ic) + u(i, j, k, ic))
+        end do
+       end do
+      end do
+     end do
+    else if (startup_count == 2) then
+     ! Third step: use AB3
+     do ic = 1, fdim
+      do k = kz1, kz2
+       do j = jy1, jy2
+        do i = ix1, ix2
+         u(i, j, k, ic) = u(i, j, k, ic) - (16.0_dp/12.0_dp)*u0(i, j, k, ic) &
+                          + (5.0_dp/12.0_dp)*u1(i, j, k, ic)
+        end do
+       end do
+      end do
+     end do
+     u2(:, :, :, :) = u1(:, :, :, :)
+     u1(:, :, :, :) = u0(:, :, :, :)
+     u0(:, :, :, :) = 0.0
+     call nc_fluid_density_momenta(flx, u0, dt_loc, fdim)
+     call add_lorentz_force_ab4
+     do ic = 1, fdim
+      do k = kz1, kz2
+       do j = jy1, jy2
+        do i = ix1, ix2
+         u(i, j, k, ic) = u(i, j, k, ic) + (23.0_dp/12.0_dp)*u0(i, j, k, ic)
+         flx(i, j, k, ic) = 0.5*(flx(i, j, k, ic) + u(i, j, k, ic))
+        end do
+       end do
+      end do
+     end do
+    else
+     ! Full AB4: u^{n+1} = u^n + 55/24*F^n - 59/24*F^{n-1} + 37/24*F^{n-2} - 9/24*F^{n-3}
+     do ic = 1, fdim
+      do k = kz1, kz2
+       do j = jy1, jy2
+        do i = ix1, ix2
+         u(i, j, k, ic) = u(i, j, k, ic) + ABF4_1*u0(i, j, k, ic) &
+                          + ABF4_2*u1(i, j, k, ic) + ABF4_3*u2(i, j, k, ic)
+        end do
+       end do
+      end do
+     end do
+     ! Shift history: F^{n-2} -> F^{n-3}, F^{n-1} -> F^{n-2}
+     u2(:, :, :, :) = u1(:, :, :, :)
+     u1(:, :, :, :) = u0(:, :, :, :)
+     u0(:, :, :, :) = 0.0
+     call nc_fluid_density_momenta(flx, u0, dt_loc, fdim)
+     call add_lorentz_force_ab4  ! u0 now contains F^n
+     do ic = 1, fdim
+      do k = kz1, kz2
+       do j = jy1, jy2
+        do i = ix1, ix2
+         u(i, j, k, ic) = u(i, j, k, ic) + ABF4_0*u0(i, j, k, ic)
+         flx(i, j, k, ic) = 0.5*(flx(i, j, k, ic) + u(i, j, k, ic))
+        end do
+       end do
+      end do
+     end do
+    end if
+   end if
+  contains
+   subroutine add_lorentz_force_ab4
+    do k = kz1, kz2
+     do j = jy1, jy2
+      do i = ix1, ix2
+       den = 1.
+       if (flx(i, j, k, fdim) <= EPS) den = 0.0
+       ex = WK1*(ef(i, j, k, 1) + ef(i - 1, j, k, 1))
+       ey = WK1*(ef(i, j, k, 2) + ef(i, j - 1, k, 2))
+       b1p = WK1*(ef(i, j, k, nfield) + ef(i - 1, j, k, nfield))
+       b1m = WK1*(ef(i, j - 1, k, nfield) + ef(i - 1, j - 1, k, nfield))
+       bz = WK1*(b1p + b1m)
+       vx = flx(i, j, k, fdim + 1)
+       vy = flx(i, j, k, fdim + 2)
+       u0(i, j, k, 1) = u0(i, j, k, 1) + den*lzf*(ex + vy*bz)
+       u0(i, j, k, 2) = u0(i, j, k, 2) + den*lzf*(ey - vx*bz)
+      end do
+     end do
+    end do
+    if (curr_ndim == 3) then
+     do k = kz1, kz2
+      do j = jy1, jy2
+       do i = ix1, ix2
+        den = 1.
+        if (flx(i, j, k, fdim) <= EPS) den = 0.0
+        ez = WK1*(ef(i, j, k, 3) + ef(i, j, k - 1, 3))
+        b1p = WK1*(ef(i, j, k, 5) + ef(i - 1, j, k, 5))
+        b1m = WK1*(ef(i, j, k - 1, 5) + ef(i - 1, j, k - 1, 5))
+        by = WK1*(b1p + b1m)
+        b1p = WK1*(ef(i, j, k, 4) + ef(i, j - 1, k, 4))
+        b1m = WK1*(ef(i, j, k - 1, 4) + ef(i, j - 1, k - 1, 4))
+        bx = WK1*(b1p + b1m)
+        vx = flx(i, j, k, fdim + 1)
+        vy = flx(i, j, k, fdim + 2)
+        vz = flx(i, j, k, fdim + 3)
+        u0(i, j, k, 1) = u0(i, j, k, 1) - den*lzf*vz*by
+        u0(i, j, k, 2) = u0(i, j, k, 2) + den*lzf*vz*bx
+        u0(i, j, k, 3) = u0(i, j, k, 3) + den*lzf*(ez + vx*by - vy*bx)
        end do
       end do
      end do

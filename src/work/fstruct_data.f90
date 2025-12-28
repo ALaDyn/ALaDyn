@@ -32,7 +32,7 @@
   real(dp), allocatable :: env(:, :, :, :), env0(:, :, :, :), &
                            env1(:, :, :, :)
   real(dp), allocatable :: up(:, :, :, :), up0(:, :, :, :), &
-                           up1(:, :, :, :), flux(:, :, :, :)
+                           up1(:, :, :, :), up2(:, :, :, :), flux(:, :, :, :)
   real(dp), allocatable :: pot(:, :, :, :), fluid_x_profile(:), &
                            fluid_yz_profile(:, :)
   real(dp), allocatable :: aux1(:), aux2(:)

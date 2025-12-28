@@ -104,6 +104,16 @@ target_include_directories(test_array_alloc PRIVATE ${CMAKE_BINARY_DIR} ${CMAKE_
 add_test(NAME array_alloc_tests COMMAND test_array_alloc)
 
 ################################################################################
+# Unit Tests for fluid_integration module (Adams-Bashforth schemes)
+################################################################################
+add_executable(test_fluid_integration
+    unit/test_fluid_integration.f90
+)
+target_link_libraries(test_fluid_integration PRIVATE aladyn_test_utils)
+target_include_directories(test_fluid_integration PRIVATE ${CMAKE_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR})
+add_test(NAME fluid_integration_tests COMMAND test_fluid_integration)
+
+################################################################################
 # Integration Test - Smoke test for basic functionality
 ################################################################################
 add_executable(test_integration_smoke
@@ -127,6 +137,6 @@ add_test(NAME integration_lwfa_test COMMAND test_integration_lwfa)
 # Test Suite Summary
 ################################################################################
 message(STATUS "ALaDyn Test Suite configured:")
-message(STATUS "  - Unit tests: precision_def, phys_param, util, stretched_grid, grid_param, boris_push, array_alloc")
+message(STATUS "  - Unit tests: precision_def, phys_param, util, stretched_grid, grid_param, boris_push, array_alloc, fluid_integration")
 message(STATUS "  - Integration tests: smoke, lwfa_scenario")
 message(STATUS "  - Run tests with: ctest --output-on-failure")

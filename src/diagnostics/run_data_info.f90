@@ -196,6 +196,19 @@
      write (60, *) '  Explicit fourth order Space Derivative'
     end if
    end if
+   ! Document Adams-Bashforth order for fluid integration
+   if (hybrid) then
+    select case (ab_order)
+    case (2)
+     write (60, *) '  Adams-Bashforth 2nd order fluid integration'
+    case (3)
+     write (60, *) '  Adams-Bashforth 3rd order fluid integration (reduced dissipation)'
+    case (4)
+     write (60, *) '  Adams-Bashforth 4th order fluid integration (lowest dissipation)'
+    case default
+     write (60, *) '  Adams-Bashforth 2nd order fluid integration (default)'
+    end select
+   end if
    if (charge_cons) then
     if (iform < 2) then
      write (60, *) '  Continuity equation enforced by Esirkepov scheme'

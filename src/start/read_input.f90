@@ -59,7 +59,7 @@
 
    namelist /grid/ nx, ny, nz, ny_targ, k0, yx_rat, zx_rat
    namelist /simulation/ lpf_ord, der_ord, str_flag, iform, model_id, &
-    dmodel_id, ibx, iby, ibz, ibeam
+    dmodel_id, ibx, iby, ibz, ibeam, ab_order
    namelist /target_description/ nsp, nsb, ionz_lev, ionz_model, ion_min, &
     ion_max, atomic_number, mass_number, t0_pl, ppc, np_per_xc, &
     np_per_yc, np_per_zc, concentration, lpx, lpy, n0_ref, np1, np2, &
@@ -91,6 +91,7 @@
    call consistency_check_grid
 
    !--- reading sim parameters ---!
+   ab_order = 2  ! Default to AB2 for backward compatibility
    open (nml_iounit, file=input_namelist_filename, status='old')
    read (nml_iounit, simulation, iostat=nml_ierr)
    nml_error_message = 'SIMULATION'
@@ -197,7 +198,7 @@
    !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
    namelist /grid/ nx, ny, nz, ny_targ, k0, yx_rat, zx_rat
    namelist /simulation/ lpf_ord, der_ord, str_flag, iform, model_id, &
-    dmodel_id, ibx, iby, ibz, ibeam
+    dmodel_id, ibx, iby, ibz, ibeam, ab_order
    namelist /target_description/ nsp, nsb, ionz_lev, ionz_model, ion_min, &
     ion_max, atomic_number, mass_number, t0_pl, ppc, np_per_xc, &
     np_per_yc, np_per_zc, concentration, lpx, lpy, n0_ref, np1, np2, &
