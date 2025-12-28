@@ -21,7 +21,8 @@ This newer version, in part rewritten from scratch, is released as is, without a
 
 [Papers published by the ALaDyn Collaboration](https://aladyn.github.io/Papers/)  
 [Code description](./docs/pages/DESCRIPTION.md)  
-[Input guide](./docs/pages/NAMELIST_GUIDE.md)
+[Input guide](./docs/pages/NAMELIST_GUIDE.md)  
+[**Python input guide (NEW!)**](./docs/pages/PYTHON_INPUT_GUIDE.md)
 
 Copyright on the code is by the ALaDyn Collaboration.
 
