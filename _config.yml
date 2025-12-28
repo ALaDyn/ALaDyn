@@ -1,8 +1,0 @@
-title: ALaDyn
-description: A High-Accuracy PIC Code for the Maxwell-Vlasov Equations
-google_analytics: 
-show_downloads: true
-theme: jekyll-theme-architect
-
-gems:
-  - jekyll-mentions
