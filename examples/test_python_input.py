@@ -67,7 +67,7 @@ def test_validation():
     
     # Test invalid grid
     try:
-        grid = GridConfig(nx=-100, ny=500, nz=1, k0=50.0)
+        GridConfig(nx=-100, ny=500, nz=1, k0=50.0)
         print("✗ Validation should have caught negative nx")
         return False
     except ValueError:
