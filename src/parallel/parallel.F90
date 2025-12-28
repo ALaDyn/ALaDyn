@@ -32,10 +32,6 @@
 #if defined (FORCE_OLD_MPI)
   implicit none
   include 'mpif.h'
-#else
-  use mpi_f08
-  implicit none
-#endif
 
   type :: communicator_T
    integer, private :: world_comm
@@ -44,9 +40,24 @@
     procedure, public :: setworld
     procedure, public :: getworld
   end type
+#else
+  use mpi_f08
+  implicit none
+
+  type :: communicator_T
+   type(MPI_Comm), private :: world_comm
+   !! Stores the MPI_COMM_WORLD
+   contains
+    procedure, public :: setworld
+    procedure, public :: getworld
+  end type
+#endif
 
   integer, parameter :: offset_kind = mpi_offset_kind, &
                         whence = mpi_seek_set
+
+  ! Alias for standard MPI double precision data type
+  type(MPI_Datatype), parameter :: mpi_sd = MPI_DOUBLE_PRECISION
 
   integer :: mpi_err
 
@@ -61,6 +72,7 @@
 
  !=== Subroutine for communicator type ===
 
+#if defined (FORCE_OLD_MPI)
  subroutine setworld( this, comm_in )
   class(communicator_T), intent(inout) :: this
   integer, intent(in) :: comm_in
@@ -76,6 +88,23 @@
   comm_out = this%world_comm
 
  end function
+#else
+ subroutine setworld( this, comm_in )
+  class(communicator_T), intent(inout) :: this
+  type(MPI_Comm), intent(in) :: comm_in
+
+  this%world_comm = comm_in
+
+ end subroutine
+
+ pure function getworld( this ) result( comm_out )
+  class(communicator_T), intent(in) :: this
+  type(MPI_Comm) :: comm_out
+
+  comm_out = this%world_comm
+
+ end function
+#endif
 
  !==================
  subroutine check_decomposition
@@ -268,6 +297,7 @@
 
   end subroutine
 
+#if defined (FORCE_OLD_MPI)
   subroutine call_barrier( comm_in )
    integer, intent(in), optional :: comm_in
    integer :: comm_barr
@@ -281,6 +311,21 @@
    call MPI_BARRIER( comm_barr, error )
 
   end subroutine
+#else
+  subroutine call_barrier( comm_in )
+   type(MPI_Comm), intent(in), optional :: comm_in
+   type(MPI_Comm) :: comm_barr
+
+   if ( present(comm_in) ) then
+    comm_barr = comm_in
+   else
+    comm_barr = comm
+   end if
+
+   call MPI_BARRIER( comm_barr, error )
+
+  end subroutine
+#endif
 
   subroutine mpi_write_dp(buf, bufsize, disp, fout)
 
@@ -344,7 +389,8 @@
    integer (offset_kind), intent (in) :: disp
    character (LEN=*), intent (in) :: fout
 
-   integer :: ierr, thefile
+   type(MPI_File) :: thefile
+   integer :: ierr
    !===================
    call mpi_file_open(comm_col(1), fout, mpi_mode_wronly+mpi_mode_create &
      , mpi_info_null, thefile, ierr)

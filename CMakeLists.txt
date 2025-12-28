@@ -242,8 +242,8 @@ else()
   find_package(FFTW REQUIRED OPTIONAL_COMPONENTS MPI)
 endif()
 
-set(jsonfortran-GNU_DIR ${JFORTRAN_BINARY_PATH})
-set(jsonfortran-Intel_DIR ${JFORTRAN_BINARY_PATH})
+set(jsonfortran-GNU_DIR ${JFORTRAN_LOCALS_PATH}/jsonfortran-gnu-8.1.0/cmake)
+set(jsonfortran-Intel_DIR ${JFORTRAN_LOCALS_PATH}/jsonfortran-intel-8.1.0/cmake)
 if(JSON_FORTRAN_SUPPORT)
   find_package ( jsonfortran-${CMAKE_Fortran_COMPILER_ID} 8.1.0 REQUIRED)
 endif()
@@ -271,8 +271,6 @@ endif()
 
 if(MKL_FOUND)
   add_definitions(-DUSE_MKL)
-  list(APPEND ALaDyn_Fortran_sources src/util/mkl_random_generator.f90)
-  list(APPEND ALaDyn_Fortran_sources ${MKL_INCLUDE_DIR}/mkl_vsl.f90)
 endif()
 
 if(jsonfortran-${CMAKE_Fortran_COMPILER_ID}_FOUND)
@@ -283,64 +281,58 @@ if(jsonfortran-${CMAKE_Fortran_COMPILER_ID}_FOUND)
   add_definitions(-DJSON_FORTRAN)
 endif()
 
-add_executable(ALaDyn
-  ${ALaDyn_Fortran_sources}
-)
+# Add the source files from subdirectories
+add_subdirectory(src)
 
-add_library(cpp_folder_tree STATIC src/cpp_lib/cpp_folder_tree.cpp)
-add_library(find_last_addr STATIC src/cpp_lib/find_last_addr.cpp)
-add_library(enable_gdb_attach STATIC src/cpp_lib/enable_gdb_attach.cpp)
-
-target_link_libraries(ALaDyn
-  cpp_folder_tree
-  find_last_addr
-  enable_gdb_attach
-)
+# Add MKL sources if found
+if(MKL_FOUND)
+  target_sources(ALaDyn PRIVATE src/util/mkl_random_generator.f90 ${MKL_INCLUDE_DIR}/mkl_vsl.f90)
+endif()
 
 if(FFTW_MPI_LIBRARY)
-  target_link_libraries(ALaDyn
+  target_link_libraries(ALaDyn PRIVATE
     ${FFTW_MPI_LIBRARY}
   )
 endif()
 
 if(FFTW_LIBRARY)
-  target_link_libraries(ALaDyn
+  target_link_libraries(ALaDyn PRIVATE
     ${FFTW_LIBRARY}
   )
 endif()
 
 if(MKL_LIBRARIES)
-  target_link_libraries(ALaDyn
+  target_link_libraries(ALaDyn PRIVATE
     ${MKL_LIBRARIES}
   )
 endif()
 
 if(MPI_Fortran_LIBRARIES)
-  target_link_libraries(ALaDyn
+  target_link_libraries(ALaDyn PRIVATE
     ${MPI_Fortran_LIBRARIES}
   )
 endif()
 
 if(MPI_LIBRARIES)
-  target_link_libraries(ALaDyn
+  target_link_libraries(ALaDyn PRIVATE
     ${MPI_LIBRARIES}
   )
 endif()
 
 if(Boost_LIBRARIES)
-  target_link_libraries(ALaDyn
+  target_link_libraries(ALaDyn PRIVATE
     ${Boost_LIBRARIES}
   )
 endif()
 
 if(NUMA_LIBRARY)
-  target_link_libraries(ALaDyn
+  target_link_libraries(ALaDyn PRIVATE
     ${NUMA_LIBRARY}
   )
 endif()
 
 if(jsonfortran-${CMAKE_Fortran_COMPILER_ID}_FOUND)
-  target_link_libraries(ALaDyn
+  target_link_libraries(ALaDyn PRIVATE
     jsonfortran-static
   )
 endif()

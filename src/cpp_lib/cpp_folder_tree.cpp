@@ -26,4 +26,18 @@ void create_folder_(char* folderName, size_t len) {
   std::string fname(folderName, 0, len);
   std::filesystem::create_directories(fname);
 }
+
+void check_folder_empty_(int* isempty, char* folderName, size_t len) {
+  std::string fname(folderName, 0, len);
+  // Trim trailing whitespace (Fortran strings may be padded)
+  fname.erase(fname.find_last_not_of(" \t\n\r") + 1);
+
+  if (!std::filesystem::exists(fname) || !std::filesystem::is_directory(fname)) {
+    *isempty = 1; // Treat non-existent or non-directory as empty
+    return;
+  }
+
+  // Check if directory is empty
+  *isempty = std::filesystem::is_empty(fname) ? 1 : 0;
+}
 }
