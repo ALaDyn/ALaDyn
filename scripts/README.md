@@ -1,6 +1,6 @@
 # ALaDyn Scripts
 
-This directory contains unified build and run scripts for ALaDyn, plus python scripts for better input handling
+This directory contains unified build and run scripts for ALaDyn, plus python scripts for better input handling.
 
 ## Python Input Scripts
 
