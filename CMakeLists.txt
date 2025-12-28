@@ -1,43 +1,65 @@
 cmake_minimum_required(VERSION 3.15)
 
-project(
-    ALaDyn
-    VERSION 3.0.2
-    LANGUAGES Fortran CXX)
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-add_executable(ALaDyn src/ALaDyn.F90)
-
 if(DEFINED ENV{VCPKG_DEFAULT_TRIPLET})
-    message(
-        STATUS
-            "Setting default vcpkg target triplet to $ENV{VCPKG_DEFAULT_TRIPLET}"
-    )
-    set(VCPKG_TARGET_TRIPLET $ENV{VCPKG_DEFAULT_TRIPLET})
+  message(STATUS "Setting default vcpkg target triplet to $ENV{VCPKG_DEFAULT_TRIPLET}")
+  set(VCPKG_TARGET_TRIPLET $ENV{VCPKG_DEFAULT_TRIPLET})
 endif()
 
-if(DEFINED ENV{VCPKG_ROOT} AND NOT DEFINED CMAKE_TOOLCHAIN_FILE)
-    set(CMAKE_TOOLCHAIN_FILE
-        "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
-        CACHE STRING "")
-    message(STATUS "VCPKG found: $ENV{VCPKG_ROOT}")
-    message(STATUS "Using VCPKG integration")
-    message(STATUS "VCPKG_MANIFEST_FEATURES: ${VCPKG_MANIFEST_FEATURES}")
-elseif(DEFINED CMAKE_TOOLCHAIN_FILE)
-    message(STATUS "Using toolchain: ${CMAKE_TOOLCHAIN_FILE}")
-    if(CMAKE_TOOLCHAIN_FILE MATCHES "vcpkg.cmake")
-        message(STATUS "Toolchain uses VCPKG integration")
-        message(STATUS "VCPKG_MANIFEST_FEATURES: ${VCPKG_MANIFEST_FEATURES}")
-    endif()
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "^x86" OR CMAKE_SYSTEM_PROCESSOR MATCHES "^AMD64")
+  set(IS_X86 TRUE)
 else()
-    message(WARNING "vcpkg not found, toolchain not defined, build might fail")
+  set(IS_X86 FALSE)
 endif()
+
+if(ENABLE_VCPKG_INTEGRATION AND DEFINED ENV{VCPKG_ROOT} AND NOT DEFINED CMAKE_TOOLCHAIN_FILE)
+  set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
+  set(X_VCPKG_APPLOCAL_DEPS_INSTALL ON)
+  set(CMAKE_TOOLCHAIN_FILE "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake" CACHE STRING "")
+  #set(_VCPKG_INSTALLED_DIR ${CMAKE_CURRENT_LIST_DIR}/vcpkg CACHE STRING "")  #folder for manifest-installed dependencies
+  message(STATUS "VCPKG found: $ENV{VCPKG_ROOT}")
+  message(STATUS "Using VCPKG integration")
+  if(VCPKG_MANIFEST_FEATURES)
+    message(STATUS "VCPKG_MANIFEST_FEATURES: ${VCPKG_MANIFEST_FEATURES}")
+  endif()
+elseif(DEFINED CMAKE_TOOLCHAIN_FILE)
+  message(STATUS "Using toolchain: ${CMAKE_TOOLCHAIN_FILE}")
+  if(CMAKE_TOOLCHAIN_FILE MATCHES "vcpkg.cmake")
+    message(STATUS "Toolchain uses VCPKG integration")
+    if(VCPKG_MANIFEST_FEATURES)
+      message(STATUS "VCPKG_MANIFEST_FEATURES: ${VCPKG_MANIFEST_FEATURES}")
+    endif()
+  endif()
+else()
+  message(WARNING "vcpkg not found, toolchain not defined, build might fail")
+endif()
+
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg.json)
+  file(READ ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg.json VCPKG_JSON_STRING)
+  string(JSON VERSION_STRING GET ${VCPKG_JSON_STRING} version)
+else()
+  set(VERSION_STRING "0.0.0.1")
+endif()
+
+string(REPLACE "." ";" VERSION_LIST ${VERSION_STRING})
+list(LENGTH VERSION_LIST VERSION_LIST_LENGTH)
+if(VERSION_LIST_LENGTH LESS 3)
+  message(FATAL_ERROR "ALaDyn needs at least major.minor.patch version numbers to properly configure")
+endif()
+list(GET VERSION_LIST 0 ALaDyn_MAJOR_VERSION)
+list(GET VERSION_LIST 1 ALaDyn_MINOR_VERSION)
+list(GET VERSION_LIST 2 ALaDyn_PATCH_VERSION)
+if(VERSION_LIST_LENGTH GREATER 3)
+  list(GET VERSION_LIST 3 ALaDyn_TWEAK_VERSION)
+else()
+  set(ALaDyn_TWEAK_VERSION 0)
+endif()
+
+set(ALaDyn_VERSION ${ALaDyn_MAJOR_VERSION}.${ALaDyn_MINOR_VERSION}.${ALaDyn_PATCH_VERSION}.${ALaDyn_TWEAK_VERSION})
+message("ALaDyn_VERSION: ${ALaDyn_VERSION}")
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 if(MSYS)
-    set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/Modules/msys2/"
-                          ${CMAKE_MODULE_PATH})
+    set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/Modules/msys2/" ${CMAKE_MODULE_PATH})
 endif()
 
 if(APPLE)
@@ -47,39 +69,18 @@ endif(APPLE)
 # you can force FFTW if necessary, avoiding MKL (which is preferred on Intel systems)
 option(FORCE_FFTW "Forcing FFTW libraries" OFF)
 
-# set this variable to true to force static linking (if supported by the compiler)
-option(FORCE_STATIC_LINK "Forcing static linking to libraries" OFF)
-
 # forcing old mpif.h if the correct version of the mpi module is not available
-set(FORCE_OLD_MPI
-    OFF
-    CACHE BOOL "Forcing old mpif.h linking")
+set(FORCE_OLD_MPI OFF CACHE BOOL "Forcing old mpif.h linking")
 
-# make sure that the default is a RELEASE
-set(DEFAULT_BUILD_TYPE "Release")
-if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
-    message(
-        STATUS
-            "ALaDyn: Setting build type to '${DEFAULT_BUILD_TYPE}' as none was specified."
-    )
-    set(CMAKE_BUILD_TYPE
-        "${DEFAULT_BUILD_TYPE}"
-        CACHE STRING "Choose the type of build." FORCE)
-    set_property(
-        CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel"
-                                        "RelWithDebInfo" "Profiling")
-endif()
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+project(ALaDyn
+    VERSION ${ALaDyn_VERSION}
+    LANGUAGES Fortran CXX
+)
 
-if(NOT Boost_FOUND)
-    set(CMAKE_CXX_STANDARD 17)
-    set(CMAKE_CXX_STANDARD_REQUIRED ON)
-endif()
-
-if(FORCE_STATIC_LINK)
-    string(APPEND CMAKE_Fortran_LINK_FLAGS " -static")
-endif()
+add_executable(ALaDyn src/ALaDyn.F90)
 
 if(UNIX
    AND CMAKE_CXX_COMPILER_ID STREQUAL "PGI"

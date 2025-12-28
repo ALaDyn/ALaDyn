@@ -14,9 +14,15 @@ if(WIN32 AND CMAKE_CXX_COMPILER_ID STREQUAL "PGI")
 else()
     find_package(MPI REQUIRED COMPONENTS Fortran)
     if(MPI_FOUND)
-        target_include_directories(ALaDyn PRIVATE ${MPI_INCLUDE_PATH}
-                                                  ${MPI_Fortran_INCLUDE_PATH})
-        target_link_libraries(ALaDyn PRIVATE ${MPI_LIBRARIES})
+        # Use modern imported target for proper MPI F08 module support
+        if(TARGET MPI::MPI_Fortran)
+            target_link_libraries(ALaDyn PRIVATE MPI::MPI_Fortran)
+        else()
+            # Fallback to legacy variables
+            target_include_directories(ALaDyn PRIVATE ${MPI_INCLUDE_PATH}
+                                                      ${MPI_Fortran_INCLUDE_PATH})
+            target_link_libraries(ALaDyn PRIVATE ${MPI_Fortran_LIBRARIES})
+        endif()
     endif()
 endif()
 

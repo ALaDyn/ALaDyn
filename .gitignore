@@ -9,6 +9,11 @@
 *.user
 *.swp
 
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
 # Precompiled Headers
 *.gch
 *.pch
@@ -44,14 +49,9 @@ opt_report.txt
 *.Rapp.history
 log.*
 
-cmake.*
-make.*
-!/scripts/build/cmake.*
-!/scripts/build/make.*
-build.*
-
 .project
 *.nml
+!examples/*.nml
 fftw*/
 
 #Visual studio code
@@ -59,10 +59,6 @@ fftw*/
 
 #Backup files
 *.bak
-
-#Snippets
-
-snippet_*
 
 #FORD documentations
 html/*

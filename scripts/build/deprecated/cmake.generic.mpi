@@ -1,0 +1,6 @@
+#!/bin/bash
+
+mkdir -p build ; cd build
+cmake .. -DFORCE_OLD_MPI:BOOL=ON
+cmake --build . --target install -- -j$(nproc)
+cd ..

@@ -6,6 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       debug_enabled:
+        type: boolean
         description: 'Run the build with tmate debugging enabled (https://github.com/marketplace/actions/debugging-with-tmate)'
         required: false
         default: false
@@ -14,12 +15,13 @@ on:
 
 env:
   VCPKG_BINARY_SOURCES: 'clear;nuget,vcpkgbinarycache,readwrite'
+  VCPKG_FORCE_DOWNLOADED_BINARIES: "TRUE"
 
 jobs:
   ubuntu-vcpkg:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         submodules: recursive
 
@@ -29,19 +31,23 @@ jobs:
 
     - uses: lukka/get-cmake@latest
 
-    - name: Update apt
-      run: sudo apt update
-    - name: Install dependencies
-      run: sudo apt-get install -y yasm nasm openmpi-bin libopenmpi-dev
+    - name: Update apt & install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y yasm nasm openmpi-bin libopenmpi-dev mono-devel gfortran
+
+    - name: Clean downloads
+      run: sudo apt-get clean
 
     - name: 'Setup vcpkg and NuGet artifacts backend'
       shell: bash
       run: >
-        git clone https://github.com/microsoft/vcpkg ;
+        git clone --depth 1 https://github.com/microsoft/vcpkg ;
         ./vcpkg/bootstrap-vcpkg.sh ;
         mono $(./vcpkg/vcpkg fetch nuget | tail -n 1) sources add
         -Name "vcpkgbinarycache"
         -Source http://93.49.111.10:5555/v3/index.json
+        -AllowInsecureConnections
 
     - name: Setup NuGet API key if found
       shell: bash
@@ -58,10 +64,10 @@ jobs:
       run: ${{ github.workspace }}/cmake/build.ps1 -UseVCPKG -DoNotUpdateVCPKG -DisableInteractive -DoNotUpdateTOOL
 
 
-  osx-vcpkg:
-    runs-on: macos-latest
+  ubuntu-plain:
+    runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         submodules: recursive
 
@@ -69,34 +75,61 @@ jobs:
       uses: mxschmitt/action-tmate@v3
       if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.debug_enabled }}
 
-    - name: Upgrade bash version
+    - uses: lukka/get-cmake@latest
+
+    - name: Install dependencies
       run: |
-        brew install bash
-        brew install gnu-sed
-        echo "/usr/local/bin" >> $GITHUB_PATH
-        echo "$(brew --prefix)/opt/gnu-sed/libexec/gnubin" >> $GITHUB_PATH
+        sudo apt-get update
+        sudo apt-get install -y gfortran openmpi-bin libopenmpi-dev libfftw3-dev libfftw3-mpi-dev
+
+    - name: 'Build with plain CMake'
+      shell: bash
+      run: |
+        mkdir -p build
+        cd build
+        cmake .. -DCMAKE_BUILD_TYPE=Release
+        cmake --build . --parallel
+        cmake --install .
+
+
+  osx-vcpkg:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Setup tmate session
+      uses: mxschmitt/action-tmate@v3
+      if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.debug_enabled }}
 
     - name: Install dependencies
       shell: bash
-      run: >
-        brew install libomp yasm nasm open-mpi gcc ;
-        all_versions=$(ls -1 /usr/local/bin/gfortran-* | tail -1) ;
-        IFS="-" read -ra tokens <<< "$all_versions" ;
-        latest_version="${tokens[-1]}" ;
-        ln -s /usr/local/bin/gfortran-${latest_version} /usr/local/bin/gfortran ;
-        which gfortran-${latest_version} ;
-        which gfortran
+      run: |
+        brew install libomp yasm nasm pkg-config automake autoconf-archive mono open-mpi gcc
+        # Set up gfortran symlink for CMake to find
+        GFORTRAN_PATH=$(brew --prefix gcc)/bin/gfortran-$(brew list --versions gcc | awk '{print $2}' | cut -d. -f1)
+        if [ -f "$GFORTRAN_PATH" ]; then
+          sudo ln -sf "$GFORTRAN_PATH" /usr/local/bin/gfortran
+          echo "FC=/usr/local/bin/gfortran" >> $GITHUB_ENV
+          which gfortran
+          gfortran --version
+        else
+          echo "Warning: gfortran not found at expected location"
+          ls -la $(brew --prefix gcc)/bin/gfortran*
+        fi
 
     - uses: lukka/get-cmake@latest
 
     - name: 'Setup vcpkg and NuGet artifacts backend'
       shell: bash
       run: >
-        git clone https://github.com/microsoft/vcpkg ;
+        git clone --depth 1 https://github.com/microsoft/vcpkg ;
         ./vcpkg/bootstrap-vcpkg.sh ;
         mono $(./vcpkg/vcpkg fetch nuget | tail -n 1) sources add
         -Name "vcpkgbinarycache"
         -Source http://93.49.111.10:5555/v3/index.json
+        -AllowInsecureConnections
 
     - name: Setup NuGet API key if found
       shell: bash

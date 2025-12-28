@@ -30,12 +30,29 @@ ALaDyn/
 │   ├── particles/          # Particle data structures and utilities
 │   ├── start/              # Initialization and startup routines
 │   └── work/               # Common parameters, precision, utilities
-├── cmake/                  # CMake modules and build scripts
+├── cmake/                  # CMake modules and build scripts (GIT SUBMODULE)
 ├── docs/                   # Documentation
 ├── examples/               # Example input files
 ├── scripts/                # Build and utility scripts
 └── deprecated/             # Deprecated code
 ```
+
+### Important: Git Submodules
+
+**The `cmake/` directory is a Git submodule** pointing to https://github.com/cenit/ccm
+
+To initialize submodules after cloning:
+```bash
+git submodule update --init --recursive
+```
+
+The cmake submodule contains:
+- `build.ps1` - PowerShell build script with vcpkg integration
+- `build-doc.ps1` - Documentation build script
+- `utils.psm1` - PowerShell utility module
+- Various helper scripts for deployment and configuration
+
+**Always ensure submodules are initialized before running CI builds or using cmake/build.ps1**
 
 ## Build System
 
