@@ -9,6 +9,11 @@
 *.user
 *.swp
 
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
 # Precompiled Headers
 *.gch
 *.pch
@@ -52,6 +57,9 @@ build.*
 
 .project
 *.nml
+!examples/input_lwfa.nml
+!examples/input_pwfa.nml
+!examples/input_tnsa.nml
 fftw*/
 
 #Visual studio code
