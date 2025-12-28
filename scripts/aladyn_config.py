@@ -14,7 +14,7 @@ Features:
 - Compatible with existing Fortran namelist format
 """
 
-from dataclasses import dataclass, field, asdict
+from dataclasses import dataclass, field
 from typing import List, Callable, Optional
 
 # NumPy is optional - only needed for custom density functions and visualization
