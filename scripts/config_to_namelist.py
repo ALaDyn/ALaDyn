@@ -301,8 +301,28 @@ if __name__ == "__main__":
         # Import the configuration
         import importlib.util
         spec = importlib.util.spec_from_file_location("user_config", config_file)
+        if spec is None or spec.loader is None:
+            print(f"Error: Could not load configuration module from '{config_file}'.")
+            sys.exit(1)
+
         user_config = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(user_config)
+        try:
+            spec.loader.exec_module(user_config)
+        except FileNotFoundError:
+            print(f"Error: Configuration file '{config_file}' not found or not readable.")
+            sys.exit(1)
+        except SyntaxError as e:
+            location = f"{e.filename}:{e.lineno}" if getattr(e, 'filename', None) and getattr(e, 'lineno', None) else config_file
+            print(f"Error: Syntax error in configuration file ({location}).")
+            if getattr(e, 'text', None):
+                print(f"       {e.text.strip()}")
+            sys.exit(1)
+        except ImportError as e:
+            print(f"Error: Failed to import a dependency while loading '{config_file}': {e}")
+            sys.exit(1)
+        except Exception as e:
+            print(f"Error: Unexpected error while loading configuration file '{config_file}': {e}")
+            sys.exit(1)
         
         # Convert to namelist
         if hasattr(user_config, 'config'):
