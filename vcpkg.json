@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
   "name": "aladyn",
-  "version": "1.0.0",
+  "version": "2.4.0",
   "homepage": "https://github.com/ALaDyn/ALaDyn",
   "description": "A High-Accuracy PIC Code for the Maxwell-Vlasov Equations",
   "dependencies":
