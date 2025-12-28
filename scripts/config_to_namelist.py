@@ -44,8 +44,27 @@ def write_namelist_section(file, section_name: str, params: dict, indent: int = 
     """
     file.write(f"&{section_name.upper()}\n")
     
+    # Configuration for array parameter slicing
+    ARRAY_SLICE_CONFIG = {
+        'ion_min': (3, lambda v: all(x == 1 for x in v[:3])),
+        'ion_max': (3, lambda v: all(x == 1 for x in v[:3])),
+        'atomic_number': (3, lambda v: all(x == 1 for x in v[:3])),
+        'mass_number': (3, lambda v: all(x == 1.0 for x in v[:3])),
+        't0_pl': (4, None),
+        'np_per_xc': (6, None),
+        'np_per_yc': (6, None),
+        'np_per_zc': (6, None),
+        'ppc': (6, lambda v: all(x == -1 for x in v)),
+        'lpx': (7, None),
+        'lpy': (2, None),
+        'lp_delay': (1, None),
+        'y0_cent': (1, None),
+        'z0_cent': (1, None),
+        'Enable_ionization': (2, None),
+    }
+    
     # Find maximum parameter name length for alignment
-    max_len = max(len(name) for name in params.keys()) if params else 0
+    max_len = max((len(name) for name in params.keys()), default=0)
     
     for name, value in params.items():
         if value is None:
@@ -53,34 +72,13 @@ def write_namelist_section(file, section_name: str, params: dict, indent: int = 
         
         # Special handling for arrays
         if isinstance(value, list):
-            # Check if all elements are the same as default, skip if so
-            if name == 'ion_min' and all(v == 1 for v in value[:3]):
-                formatted_value = format_fortran_value(value[:3])
-            elif name == 'ion_max' and all(v == 1 for v in value[:3]):
-                formatted_value = format_fortran_value(value[:3])
-            elif name == 'atomic_number' and all(v == 1 for v in value[:3]):
-                formatted_value = format_fortran_value(value[:3])
-            elif name == 'mass_number' and all(v == 1.0 for v in value[:3]):
-                formatted_value = format_fortran_value(value[:3])
-            elif name.startswith('t0_pl'):
-                formatted_value = format_fortran_value(value[:4])
-            elif name.startswith('np_per_'):
-                formatted_value = format_fortran_value(value[:6])
-            elif name == 'ppc':
-                # Skip if all values are -1 (not used)
-                if all(v == -1 for v in value):
+            # Check if this is a known array parameter
+            if name in ARRAY_SLICE_CONFIG:
+                slice_len, skip_check = ARRAY_SLICE_CONFIG[name]
+                # Skip if all elements match the skip condition
+                if skip_check and skip_check(value):
                     continue
-                formatted_value = format_fortran_value(value[:6])
-            elif name == 'lpx':
-                formatted_value = format_fortran_value(value[:7])
-            elif name == 'lpy':
-                formatted_value = format_fortran_value(value[:2])
-            elif name == 'lp_delay':
-                formatted_value = format_fortran_value(value[:1])
-            elif name in ['y0_cent', 'z0_cent']:
-                formatted_value = format_fortran_value(value[:1])
-            elif name == 'Enable_ionization':
-                formatted_value = format_fortran_value(value[:2])
+                formatted_value = format_fortran_value(value[:slice_len])
             else:
                 formatted_value = format_fortran_value(value)
         else:

@@ -17,13 +17,24 @@ Features:
 from dataclasses import dataclass, field, asdict
 from typing import List, Callable, Optional
 
-# NumPy is optional - only needed for custom density functions
+# NumPy is optional - only needed for custom density functions and visualization
 try:
     import numpy as np
     HAS_NUMPY = True
 except ImportError:
     HAS_NUMPY = False
     np = None
+    print("Warning: NumPy not available. Custom density functions will not work.")
+
+
+def _check_numpy_available():
+    """Check if NumPy is available for custom density functions."""
+    if not HAS_NUMPY:
+        raise ImportError(
+            "NumPy is required for custom density functions. "
+            "Install it with: pip install numpy"
+        )
+    return True
 
 
 @dataclass
