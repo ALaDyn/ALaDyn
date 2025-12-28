@@ -92,6 +92,7 @@
 
    !--- reading sim parameters ---!
    ab_order = 2  ! Default to AB2 for backward compatibility
+   ab_startup = 0  ! Initialize startup counter
    open (nml_iounit, file=input_namelist_filename, status='old')
    read (nml_iounit, simulation, iostat=nml_ierr)
    nml_error_message = 'SIMULATION'

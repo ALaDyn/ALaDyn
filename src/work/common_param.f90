@@ -39,6 +39,7 @@
   integer :: ibx, iby, ibz, ibeam
   integer :: lpf_ord, der_ord, str_flag, iform, model_id, dmodel_id
   integer :: ab_order  ! Adams-Bashforth order for fluid integration (2, 3, or 4)
+  integer :: ab_startup  ! Startup step counter for higher-order AB schemes
   integer :: nsp, nsb, ionz_lev, ionz_model, ion_min(ref_nlayer), &
              ion_max(ref_nlayer)
   integer :: atomic_number(ref_nlayer), n_mol_atoms(ref_nlayer)

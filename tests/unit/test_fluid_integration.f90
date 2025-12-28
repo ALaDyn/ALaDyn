@@ -29,7 +29,14 @@ program test_fluid_integration
 
  implicit none
 
- real(dp), parameter :: pi = 3.141592653589793_dp
+ ! Adams-Bashforth coefficients at module level to avoid duplication
+ real(dp), parameter :: ABF3_0 = 23.0_dp/12.0_dp
+ real(dp), parameter :: ABF3_1 = -16.0_dp/12.0_dp
+ real(dp), parameter :: ABF3_2 = 5.0_dp/12.0_dp
+ real(dp), parameter :: ABF4_0 = 55.0_dp/24.0_dp
+ real(dp), parameter :: ABF4_1 = -59.0_dp/24.0_dp
+ real(dp), parameter :: ABF4_2 = 37.0_dp/24.0_dp
+ real(dp), parameter :: ABF4_3 = -9.0_dp/24.0_dp
 
  call start_test_suite('fluid_integration')
 
@@ -109,9 +116,6 @@ contains
   !! Test AB3 basic integration
   real(dp) :: u, f_n, f_nm1, f_nm2, dt, t_final
   real(dp) :: exact, error
-  real(dp), parameter :: ABF3_0 = 23.0_dp/12.0_dp
-  real(dp), parameter :: ABF3_1 = -16.0_dp/12.0_dp
-  real(dp), parameter :: ABF3_2 = 5.0_dp/12.0_dp
   real(dp), parameter :: tol = 0.001_dp
   integer :: n, nsteps
 
@@ -156,13 +160,6 @@ contains
   !! Test AB4 basic integration
   real(dp) :: u, f_n, f_nm1, f_nm2, f_nm3, dt, t_final
   real(dp) :: exact, error
-  real(dp), parameter :: ABF4_0 = 55.0_dp/24.0_dp
-  real(dp), parameter :: ABF4_1 = -59.0_dp/24.0_dp
-  real(dp), parameter :: ABF4_2 = 37.0_dp/24.0_dp
-  real(dp), parameter :: ABF4_3 = -9.0_dp/24.0_dp
-  real(dp), parameter :: ABF3_0 = 23.0_dp/12.0_dp
-  real(dp), parameter :: ABF3_1 = -16.0_dp/12.0_dp
-  real(dp), parameter :: ABF3_2 = 5.0_dp/12.0_dp
   real(dp), parameter :: tol = 0.0001_dp
   integer :: n, nsteps
 
@@ -219,13 +216,6 @@ contains
   !! Verifies that solutions don't blow up
   real(dp) :: u_ab2, u_ab3, u_ab4, dt, t_final
   real(dp) :: f_n, f_nm1, f_nm2, f_nm3
-  real(dp), parameter :: ABF3_0 = 23.0_dp/12.0_dp
-  real(dp), parameter :: ABF3_1 = -16.0_dp/12.0_dp
-  real(dp), parameter :: ABF3_2 = 5.0_dp/12.0_dp
-  real(dp), parameter :: ABF4_0 = 55.0_dp/24.0_dp
-  real(dp), parameter :: ABF4_1 = -59.0_dp/24.0_dp
-  real(dp), parameter :: ABF4_2 = 37.0_dp/24.0_dp
-  real(dp), parameter :: ABF4_3 = -9.0_dp/24.0_dp
   integer :: n, nsteps
 
   call run_test('ab_stability')

@@ -320,6 +320,8 @@
    !! Adams-Bashforth 3rd order (AB3) integration
    !! u^{n+1} = u^n + dt * (23/12*F^n - 16/12*F^{n-1} + 5/12*F^{n-2})
    !! This provides higher accuracy and lower dissipation than AB2
+   use common_param, only: ab_startup
+
    real(dp), intent(inout) :: u(:, :, :, :), u0(:, :, :, :), u1(:, :, :, :)
    real(dp), intent(inout) :: ef(:, :, :, :), flx(:, :, :, :)
    integer :: i, j, k, ic, str, stl, fdim, fldim
@@ -330,8 +332,6 @@
    real(dp), parameter :: ABF3_0 = 23.0_dp/12.0_dp
    real(dp), parameter :: ABF3_1 = -16.0_dp/12.0_dp
    real(dp), parameter :: ABF3_2 = 5.0_dp/12.0_dp
-   real(dp) :: f_new
-   integer, save :: startup_count = 0
    !===================================
    ! INTEGRATES by Adams-Bashforth 3rd order
    !===============================
@@ -348,7 +348,7 @@
 
    if (initial_time) then
     ! First step: use simple Euler
-    startup_count = 0
+    ab_startup = 0
     u0(:, :, :, :) = zero_dp
     u1(:, :, :, :) = zero_dp
     call nc_fluid_density_momenta(flx, u0, dt_loc, fdim)
@@ -364,8 +364,8 @@
      end do
     end do
    else
-    startup_count = startup_count + 1
-    if (startup_count == 1) then
+    ab_startup = ab_startup + 1
+    if (ab_startup == 1) then
      ! Second step: use AB2
      do ic = 1, fdim
       do k = kz1, kz2
@@ -468,6 +468,8 @@
    !! Adams-Bashforth 4th order (AB4) integration
    !! u^{n+1} = u^n + dt * (55/24*F^n - 59/24*F^{n-1} + 37/24*F^{n-2} - 9/24*F^{n-3})
    !! This provides highest accuracy and lowest dissipation
+   use common_param, only: ab_startup
+
    real(dp), intent(inout) :: u(:, :, :, :), u0(:, :, :, :)
    real(dp), intent(inout) :: u1(:, :, :, :), u2(:, :, :, :)
    real(dp), intent(inout) :: ef(:, :, :, :), flx(:, :, :, :)
@@ -480,7 +482,6 @@
    real(dp), parameter :: ABF4_1 = -59.0_dp/24.0_dp
    real(dp), parameter :: ABF4_2 = 37.0_dp/24.0_dp
    real(dp), parameter :: ABF4_3 = -9.0_dp/24.0_dp
-   integer, save :: startup_count = 0
    !===================================
    ! INTEGRATES by Adams-Bashforth 4th order
    !===============================
@@ -497,7 +498,7 @@
 
    if (initial_time) then
     ! First step: use simple Euler
-    startup_count = 0
+    ab_startup = 0
     u0(:, :, :, :) = zero_dp
     u1(:, :, :, :) = zero_dp
     u2(:, :, :, :) = zero_dp
@@ -514,8 +515,8 @@
      end do
     end do
    else
-    startup_count = startup_count + 1
-    if (startup_count == 1) then
+    ab_startup = ab_startup + 1
+    if (ab_startup == 1) then
      ! Second step: use AB2
      do ic = 1, fdim
       do k = kz1, kz2
@@ -540,7 +541,7 @@
        end do
       end do
      end do
-    else if (startup_count == 2) then
+    else if (ab_startup == 2) then
      ! Third step: use AB3
      do ic = 1, fdim
       do k = kz1, kz2
