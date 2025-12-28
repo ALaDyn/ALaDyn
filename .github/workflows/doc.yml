@@ -16,7 +16,7 @@ jobs:
 
       - name: Build FORD documentation
         id: build
-        uses: ResearchSoftwareActions/ford-build@v1
+        uses: ResearchSoftwareActions/ford-build@v1.0
         with:
           project_file: aladyn_doc.md
 
