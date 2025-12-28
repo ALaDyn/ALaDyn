@@ -210,6 +210,7 @@ else()
   else()
     message(STATUS "ALaDyn: Compiler ${CMAKE_Fortran_COMPILER} found, unsupported")
     message(STATUS "ALaDyn: Let's try using it...")
+  endif()
 endif()
 
 if(WIN32 AND USING_PGI_COMPILER)
