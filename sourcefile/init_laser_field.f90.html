@@ -4,9 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-   
    <meta name="description" content="A High-Accuracy PIC Code for the Maxwell-Vlasov Equations">
-    
     <meta name="author" content="The ALaDyn Collaboration" >
     <link rel="icon" href="../favicon.png">
 
@@ -16,10 +14,7 @@
     <link href="../css/pygments.css" rel="stylesheet">
     <link href="../css/font-awesome.min.css" rel="stylesheet">
     <link href="../css/local.css" rel="stylesheet">
-    
     <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
-    
-    
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -48,55 +43,28 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-        
             <li><a href='../page/index.html'>Guide</a></li>
-      
             <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
               <a href="#" class="dropdown-toggle"
               data-toggle="dropdown" role="button"
               aria-haspopup="true"
      aria-expanded="false">Contents <span class="caret"></span></a>
         <ul class="dropdown-menu">
-          
-              
             <li><a href="../lists/files.html">Source Files</a></li>
-        
-        
-        
             <li><a href="../lists/modules.html">Modules</a></li>
-        
-            
-                                
             <li><a href="../lists/procedures.html">Procedures</a></li>
-        
-               
-            <li><a href="../lists/types.html">Derived Types</a></li>
-        
-        
+                   <li><a href="../lists/types.html">Derived Types</a></li>
             <li><a href="../program/aladyn.html">Program</a></li>
-      
+       
             </ul>
-            </li>
-
-
-<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
-
-
-
-<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
-
-
-
-<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
-
-                             
-<li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
-
-
-<li class="visible-xs hidden-sm visible-lg"><a href="../program/aladyn.html">Program</a></li>
-
-          </ul>
         
+            </li>
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+                             <li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+<li class="visible-xs hidden-sm visible-lg"><a href="../program/aladyn.html">Program</a></li>
+          </ul>
         <form action="../search.html" class="navbar-form navbar-right" role="search">
         <div class="form-group">
           <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
@@ -105,114 +73,95 @@
         <button type="submit" class="btn btn-default">Submit</button>
 -->
         </form>
-        
         </div><!--/.nav-collapse -->
       </div>
     </nav>
 
     <div class="container">
-    
-  
   <div class="row">
     <h1>init_laser_field.f90
-    <small>Source File</small>
-    
+      <small>Source File</small>
+      
     </h1>
-    
-<div class="row">
-  <div class="col-lg-12">
-<div class="well well-sm">
-  <ul class="list-inline" style="margin-bottom:0px;display:inline">
-     
-     
-     
-     
-    
-    
-     <li><i class="fa fa-list-ol"></i>
-       <a data-toggle="tooltip"
-    data-placement="bottom" data-html="true"
-    title=" 0.7% of total for source files.">180 statements</a>
-     </li> 
-     
-     
-     
-    <li><i class="fa fa-code"></i><a href="../src/init_laser_field.f90"> Source File</a></li>
-     
-     
-  </ul>
-  <ol class="breadcrumb in-well text-right">
-  
-    
-  
-     <li class="active">init_laser_field.f90</li>
-  </ol>
-</div>
-</div>
-</div>
-<script>
-  $(function () {
-  $('[data-toggle="tooltip"]').tooltip()
-  })
-</script>
+      <div class="row" id="info-bar">
+    <div class="col-lg-12">
+      <div class="well well-sm">
+        <ul class="list-inline" style="margin-bottom:0px;display:inline">
+            <li id="meta-license"><i class="fa fa-legal"></i> <a rel="license" href="http://www.gnu.org/licenses/old-licenses/fdl-1.2.en.html">GNU Free Documentation License</a></li>
+
+          <li id="statements"><i class="fa fa-list-ol"></i>
+            <a data-toggle="tooltip"
+               data-placement="bottom" data-html="true"
+               title=" 0.9% of total for source files.">180 statements</a>
+          </li>
+
+            <li id="source-file">
+              <i class="fa fa-code"></i>
+              <a href="../src/init_laser_field.f90"> Source File</a>
+            </li>
+        </ul>
+        <ol class="breadcrumb in-well text-right">
+          <li class="active">init_laser_field.f90</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+  <script>
+    $(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+    })
+  </script>
 
   </div>
   <div class="row">
     <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
-    
-<div id="sidebar">
+      <div id="sidebar">
+      <h3>Contents</h3>
   
-<h3>Contents</h3>
- 
-
-
-
-
-
-
-
-<div class="panel panel-primary">
-  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#mods-0">Modules</a></h3></div>
-  <div id="mods-0" class="panel-collapse collapse">
-    <div class="list-group">
-      
-      <a class="list-group-item" href="../module/init_laser_field.html">init_laser_field</a>
-      
+  
+  
+  
+  
+      <div class="panel panel-primary">
+      <div class="panel-heading text-left">
+        <h3 class="panel-title">
+          <a data-toggle="collapse" href="#mods-0">Modules</a>
+        </h3>
+      </div>
+      <div id="mods-0" class="panel-collapse collapse">
+        <div class="list-group">
+            <a class="list-group-item" href="../module/init_laser_field.html">init_laser_field</a>
+        </div>
+      </div>
     </div>
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    <div class="panel panel-primary">
+      <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+      <div class="list-group">
+        <a class="list-group-item" href="../sourcefile/init_laser_field.f90.html#src">init_laser_field.f90</a>
+      </div>
+    </div>
+
+
   </div>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="panel panel-primary">
-  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
-  <div class="list-group">
-    <a class="list-group-item" href="../sourcefile/init_laser_field.f90.html#src">init_laser_field.f90</a>
-  </div>
-</div>
-
-
-
-</div>
 
     </div>
     <div class="col-md-9" id='text'>
       
       <br>
-    
     <div class="panel panel-default">
       <div class="panel-heading">
   <h3 class="panel-title">This file depends on</h3>
@@ -221,313 +170,313 @@
   <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+<!-- Generated by graphviz version 2.43.0 (0)
  -->
 <!-- Title: sourcefile~~init_laser_field.f90~~EfferentGraph Pages: 1 -->
 <svg id="sourcefileinit_laser_fieldf90EfferentGraph" width="641pt" height="215pt"
- viewBox="0.00 0.00 641.00 214.54" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<g id="sourcefile~~init_laser_field.f90~~EfferentGraph" class="graph" transform="scale(.7506 .7506) rotate(0) translate(4 281.827)">
+ viewBox="0.00 0.00 641.00 214.52" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="sourcefile~~init_laser_field.f90~~EfferentGraph" class="graph" transform="scale(0.75 0.75) rotate(0) translate(4 281.47)">
 <title>sourcefile~~init_laser_field.f90~~EfferentGraph</title>
-<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-281.827 850,-281.827 850,4 -4,4"/>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-281.47 849,-281.47 849,4 -4,4"/>
 <!-- sourcefile~init_laser_field.f90 -->
 <g id="sourcefile~~init_laser_field.f90~~EfferentGraph_node1" class="node">
 <title>sourcefile~init_laser_field.f90</title>
-<polygon fill="none" stroke="#000000" points="846,-212 737,-212 737,-188 846,-188 846,-212"/>
-<text text-anchor="middle" x="791.5" y="-197.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">init_laser_field.f90</text>
+<polygon fill="none" stroke="black" points="845,-212 736,-212 736,-188 845,-188 845,-212"/>
+<text text-anchor="middle" x="790.5" y="-197.6" font-family="Helvetica,sans-Serif" font-size="10.50">init_laser_field.f90</text>
+</g>
+<!-- sourcefile~pstruct_data.f90 -->
+<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_node2" class="node">
+<title>sourcefile~pstruct_data.f90</title>
+<g id="a_sourcefile~~init_laser_field.f90~~EfferentGraph_node2"><a xlink:href=".././sourcefile/pstruct_data.f90.html" xlink:title="pstruct_data.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="385,-192 286,-192 286,-168 385,-168 385,-192"/>
+<text text-anchor="middle" x="335.5" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">pstruct_data.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~init_laser_field.f90&#45;&gt;sourcefile~pstruct_data.f90 -->
+<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_edge1" class="edge">
+<title>sourcefile~init_laser_field.f90&#45;&gt;sourcefile~pstruct_data.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M735.76,-197.63C650.2,-193.85 483.69,-186.5 395.15,-182.59"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="395.15,-179.09 385.01,-182.14 394.84,-186.08 395.15,-179.09"/>
+</g>
+<!-- sourcefile~fstruct_data.f90 -->
+<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_node3" class="node">
+<title>sourcefile~fstruct_data.f90</title>
+<g id="a_sourcefile~~init_laser_field.f90~~EfferentGraph_node3"><a xlink:href=".././sourcefile/fstruct_data.f90.html" xlink:title="fstruct_data.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="541.5,-272 445.5,-272 445.5,-248 541.5,-248 541.5,-272"/>
+<text text-anchor="middle" x="493.5" y="-257.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">fstruct_data.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~init_laser_field.f90&#45;&gt;sourcefile~fstruct_data.f90 -->
+<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_edge2" class="edge">
+<title>sourcefile~init_laser_field.f90&#45;&gt;sourcefile~fstruct_data.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M768.56,-212.06C750.89,-221.62 724.6,-234.43 700,-241 651.17,-254.03 593.77,-258.47 552.06,-259.83"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="551.71,-256.34 541.81,-260.11 551.9,-263.34 551.71,-256.34"/>
 </g>
 <!-- sourcefile~init_grid_fields.f90 -->
-<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_node2" class="node">
+<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_node4" class="node">
 <title>sourcefile~init_grid_fields.f90</title>
-<g id="a_sourcefile~~init_laser_field.f90~~EfferentGraph_node2"><a xlink:href=".././sourcefile/init_grid_fields.f90.html" xlink:title="init_grid_fields.f90">
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="701,-232 592,-232 592,-208 701,-208 701,-232"/>
-<text text-anchor="middle" x="646.5" y="-217.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">init_grid_fields.f90</text>
+<g id="a_sourcefile~~init_laser_field.f90~~EfferentGraph_node4"><a xlink:href=".././sourcefile/init_grid_fields.f90.html" xlink:title="init_grid_fields.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="700,-232 591,-232 591,-208 700,-208 700,-232"/>
+<text text-anchor="middle" x="645.5" y="-217.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">init_grid_fields.f90</text>
 </a>
 </g>
 </g>
 <!-- sourcefile~init_laser_field.f90&#45;&gt;sourcefile~init_grid_fields.f90 -->
 <g id="sourcefile~~init_laser_field.f90~~EfferentGraph_edge3" class="edge">
 <title>sourcefile~init_laser_field.f90&#45;&gt;sourcefile~init_grid_fields.f90</title>
-<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M736.6817,-207.5611C728.4714,-208.6936 719.9389,-209.8705 711.5414,-211.0288"/>
-<polygon fill="#ff0000" stroke="#ff0000" points="710.8238,-207.5945 701.3958,-212.4282 711.7803,-214.5289 710.8238,-207.5945"/>
-</g>
-<!-- sourcefile~pstruct_data.f90 -->
-<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_node3" class="node">
-<title>sourcefile~pstruct_data.f90</title>
-<g id="a_sourcefile~~init_laser_field.f90~~EfferentGraph_node3"><a xlink:href=".././sourcefile/pstruct_data.f90.html" xlink:title="pstruct_data.f90">
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="386,-192 287,-192 287,-168 386,-168 386,-192"/>
-<text text-anchor="middle" x="336.5" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">pstruct_data.f90</text>
-</a>
-</g>
-</g>
-<!-- sourcefile~init_laser_field.f90&#45;&gt;sourcefile~pstruct_data.f90 -->
-<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_edge2" class="edge">
-<title>sourcefile~init_laser_field.f90&#45;&gt;sourcefile~pstruct_data.f90</title>
-<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M736.6164,-197.5875C650.6752,-193.8099 485.0072,-186.5278 396.1933,-182.6239"/>
-<polygon fill="#ff0000" stroke="#ff0000" points="396.1591,-179.1191 386.015,-182.1765 395.8516,-186.1123 396.1591,-179.1191"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M735.85,-207.5C727.62,-208.65 719.06,-209.85 710.63,-211.03"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="709.87,-207.6 700.46,-212.45 710.84,-214.53 709.87,-207.6"/>
 </g>
 <!-- sourcefile~grid_fields.f90 -->
-<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_node4" class="node">
+<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_node5" class="node">
 <title>sourcefile~grid_fields.f90</title>
-<g id="a_sourcefile~~init_laser_field.f90~~EfferentGraph_node4"><a xlink:href=".././sourcefile/grid_fields.f90.html" xlink:title="grid_fields.f90">
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="690.5,-150 602.5,-150 602.5,-126 690.5,-126 690.5,-150"/>
-<text text-anchor="middle" x="646.5" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">grid_fields.f90</text>
+<g id="a_sourcefile~~init_laser_field.f90~~EfferentGraph_node5"><a xlink:href=".././sourcefile/grid_fields.f90.html" xlink:title="grid_fields.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="689.5,-140 601.5,-140 601.5,-116 689.5,-116 689.5,-140"/>
+<text text-anchor="middle" x="645.5" y="-125.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">grid_fields.f90</text>
 </a>
 </g>
 </g>
 <!-- sourcefile~init_laser_field.f90&#45;&gt;sourcefile~grid_fields.f90 -->
-<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_edge1" class="edge">
-<title>sourcefile~init_laser_field.f90&#45;&gt;sourcefile~grid_fields.f90</title>
-<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M763.1983,-187.8986C740.643,-178.2543 708.8585,-164.6637 684.1554,-154.1009"/>
-<polygon fill="#ff0000" stroke="#ff0000" points="685.3011,-150.7843 674.7303,-150.0709 682.549,-157.2206 685.3011,-150.7843"/>
-</g>
-<!-- sourcefile~fstruct_data.f90 -->
-<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_node5" class="node">
-<title>sourcefile~fstruct_data.f90</title>
-<g id="a_sourcefile~~init_laser_field.f90~~EfferentGraph_node5"><a xlink:href=".././sourcefile/fstruct_data.f90.html" xlink:title="fstruct_data.f90">
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="542.5,-272 446.5,-272 446.5,-248 542.5,-248 542.5,-272"/>
-<text text-anchor="middle" x="494.5" y="-257.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">fstruct_data.f90</text>
-</a>
-</g>
-</g>
-<!-- sourcefile~init_laser_field.f90&#45;&gt;sourcefile~fstruct_data.f90 -->
 <g id="sourcefile~~init_laser_field.f90~~EfferentGraph_edge4" class="edge">
-<title>sourcefile~init_laser_field.f90&#45;&gt;sourcefile~fstruct_data.f90</title>
-<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M770.3078,-212.0562C752.4281,-221.6174 725.8466,-234.4284 701,-241 652.1257,-253.9265 594.7375,-258.3887 552.8808,-259.7831"/>
-<polygon fill="#ff0000" stroke="#ff0000" points="552.7538,-256.2852 542.8575,-260.0684 552.9531,-263.2823 552.7538,-256.2852"/>
-</g>
-<!-- sourcefile~init_grid_fields.f90&#45;&gt;sourcefile~pstruct_data.f90 -->
-<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_edge6" class="edge">
-<title>sourcefile~init_grid_fields.f90&#45;&gt;sourcefile~pstruct_data.f90</title>
-<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M591.9254,-221.6593C562.9532,-222.1212 526.7623,-222.0338 494.5,-220"/>
-<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M494.5,-220C454.4931,-217.478 410.379,-205.4976 378.9552,-195.2996"/>
-<polygon fill="#ff0000" stroke="#ff0000" points="379.8134,-191.8967 369.2199,-192.0654 377.6065,-198.5397 379.8134,-191.8967"/>
-</g>
-<!-- sourcefile~init_grid_fields.f90&#45;&gt;sourcefile~fstruct_data.f90 -->
-<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_edge8" class="edge">
-<title>sourcefile~init_grid_fields.f90&#45;&gt;sourcefile~fstruct_data.f90</title>
-<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M600.895,-232.0013C585.0358,-236.1748 567.0624,-240.9046 550.4625,-245.273"/>
-<polygon fill="#ff0000" stroke="#ff0000" points="549.1153,-242.0083 540.3353,-247.9381 550.8968,-248.7778 549.1153,-242.0083"/>
-</g>
-<!-- sourcefile~grid_field_param.f90 -->
-<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_node7" class="node">
-<title>sourcefile~grid_field_param.f90</title>
-<g id="a_sourcefile~~init_laser_field.f90~~EfferentGraph_node7"><a xlink:href=".././sourcefile/grid_field_param.f90.html" xlink:title="grid_field_param.f90">
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="556,-150 433,-150 433,-126 556,-126 556,-150"/>
-<text text-anchor="middle" x="494.5" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">grid_field_param.f90</text>
-</a>
-</g>
-</g>
-<!-- sourcefile~init_grid_fields.f90&#45;&gt;sourcefile~grid_field_param.f90 -->
-<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_edge5" class="edge">
-<title>sourcefile~init_grid_fields.f90&#45;&gt;sourcefile~grid_field_param.f90</title>
-<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M624.0719,-207.9006C598.1402,-193.9112 555.2783,-170.7883 526.0074,-154.9974"/>
-<polygon fill="#ff0000" stroke="#ff0000" points="527.4829,-151.8166 517.0201,-150.149 524.1594,-157.9773 527.4829,-151.8166"/>
-</g>
-<!-- sourcefile~phys_param.f90 -->
-<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_node10" class="node">
-<title>sourcefile~phys_param.f90</title>
-<g id="a_sourcefile~~init_laser_field.f90~~EfferentGraph_node10"><a xlink:href=".././sourcefile/phys_param.f90.html" xlink:title="phys_param.f90">
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="240,-232 142,-232 142,-208 240,-208 240,-232"/>
-<text text-anchor="middle" x="191" y="-217.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">phys_param.f90</text>
-</a>
-</g>
-</g>
-<!-- sourcefile~init_grid_fields.f90&#45;&gt;sourcefile~phys_param.f90 -->
-<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_edge7" class="edge">
-<title>sourcefile~init_grid_fields.f90&#45;&gt;sourcefile~phys_param.f90</title>
-<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M494.5,-220C409.8674,-214.6648 311.6958,-216.0378 250.4572,-217.793"/>
-<polygon fill="#ff0000" stroke="#ff0000" points="250.1002,-214.3021 240.2096,-218.1003 250.31,-221.2989 250.1002,-214.3021"/>
-</g>
-<!-- sourcefile~struct_def.f90 -->
-<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_node6" class="node">
-<title>sourcefile~struct_def.f90</title>
-<g id="a_sourcefile~~init_laser_field.f90~~EfferentGraph_node6"><a xlink:href=".././sourcefile/struct_def.f90.html" xlink:title="struct_def.f90">
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="233.5,-152 148.5,-152 148.5,-128 233.5,-128 233.5,-152"/>
-<text text-anchor="middle" x="191" y="-137.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">struct_def.f90</text>
-</a>
-</g>
-</g>
-<!-- sourcefile~pstruct_data.f90&#45;&gt;sourcefile~struct_def.f90 -->
-<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_edge10" class="edge">
-<title>sourcefile~pstruct_data.f90&#45;&gt;sourcefile~struct_def.f90</title>
-<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M292.8452,-167.9987C277.3176,-163.7299 259.6727,-158.8791 243.4831,-154.4283"/>
-<polygon fill="#7fff00" stroke="#7fff00" points="244.1928,-150.9936 233.6227,-151.7176 242.3371,-157.7432 244.1928,-150.9936"/>
+<title>sourcefile~init_laser_field.f90&#45;&gt;sourcefile~grid_fields.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M765.57,-187.95C742.06,-176.11 705.99,-157.95 679.71,-144.72"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="681.02,-141.46 670.51,-140.09 677.87,-147.71 681.02,-141.46"/>
 </g>
 <!-- sourcefile~precision_def.f90 -->
-<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_node9" class="node">
+<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_node6" class="node">
 <title>sourcefile~precision_def.f90</title>
-<g id="a_sourcefile~~init_laser_field.f90~~EfferentGraph_node9"><a xlink:href=".././sourcefile/precision_def.f90.html" xlink:title="precision_def.F90">
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="106,-152 0,-152 0,-128 106,-128 106,-152"/>
-<text text-anchor="middle" x="53" y="-137.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">precision_def.F90</text>
+<g id="a_sourcefile~~init_laser_field.f90~~EfferentGraph_node6"><a xlink:href=".././sourcefile/precision_def.f90.html" xlink:title="precision_def.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="105,-151 0,-151 0,-127 105,-127 105,-151"/>
+<text text-anchor="middle" x="52.5" y="-136.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">precision_def.F90</text>
 </a>
 </g>
 </g>
 <!-- sourcefile~pstruct_data.f90&#45;&gt;sourcefile~precision_def.f90 -->
-<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_edge9" class="edge">
+<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_edge5" class="edge">
 <title>sourcefile~pstruct_data.f90&#45;&gt;sourcefile~precision_def.f90</title>
-<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M286.695,-176.9851C247.2565,-174.1529 190.8659,-169.1141 142,-161 131.2084,-159.2081 119.7782,-156.8594 108.8351,-154.3834"/>
-<polygon fill="#7fff00" stroke="#7fff00" points="109.4873,-150.9417 98.9545,-152.0861 107.902,-157.7599 109.4873,-150.9417"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M285.75,-176.76C246.47,-173.72 189.94,-168.36 141,-160 130.5,-158.21 119.38,-155.88 108.72,-153.42"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="109.21,-149.94 98.68,-151.05 107.6,-156.76 109.21,-149.94"/>
 </g>
-<!-- sourcefile~grid_fields.f90&#45;&gt;sourcefile~grid_field_param.f90 -->
+<!-- sourcefile~struct_def.f90 -->
+<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_node7" class="node">
+<title>sourcefile~struct_def.f90</title>
+<g id="a_sourcefile~~init_laser_field.f90~~EfferentGraph_node7"><a xlink:href=".././sourcefile/struct_def.f90.html" xlink:title="struct_def.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="232.5,-151 147.5,-151 147.5,-127 232.5,-127 232.5,-151"/>
+<text text-anchor="middle" x="190" y="-136.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">struct_def.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~pstruct_data.f90&#45;&gt;sourcefile~struct_def.f90 -->
+<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_edge6" class="edge">
+<title>sourcefile~pstruct_data.f90&#45;&gt;sourcefile~struct_def.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M292.22,-167.92C276.75,-163.5 259.06,-158.45 242.85,-153.81"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="243.55,-150.38 232.98,-150.99 241.63,-157.11 243.55,-150.38"/>
+</g>
+<!-- sourcefile~fstruct_data.f90&#45;&gt;sourcefile~precision_def.f90 -->
+<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_edge7" class="edge">
+<title>sourcefile~fstruct_data.f90&#45;&gt;sourcefile~precision_def.f90</title>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M445.23,-268.42C374.89,-278.59 240.29,-288.8 141,-240 105.71,-222.65 78.79,-184 64.63,-159.86"/>
+<polygon fill="#7fff00" stroke="#7fff00" points="67.65,-158.08 59.68,-151.1 61.55,-161.52 67.65,-158.08"/>
+</g>
+<!-- sourcefile~init_grid_fields.f90&#45;&gt;sourcefile~pstruct_data.f90 -->
 <g id="sourcefile~~init_laser_field.f90~~EfferentGraph_edge11" class="edge">
-<title>sourcefile~grid_fields.f90&#45;&gt;sourcefile~grid_field_param.f90</title>
-<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M602.1267,-138C590.8995,-138 578.5516,-138 566.3469,-138"/>
-<polygon fill="#00ffff" stroke="#00ffff" points="566.1565,-134.5001 556.1564,-138 566.1564,-141.5001 566.1565,-134.5001"/>
+<title>sourcefile~init_grid_fields.f90&#45;&gt;sourcefile~pstruct_data.f90</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M590.99,-221.63C562.34,-222.09 526.47,-222.02 494.5,-220"/>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M492.5,-220C452.97,-217.51 409.42,-205.52 378.4,-195.32"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="379.38,-191.96 368.79,-192.08 377.15,-198.59 379.38,-191.96"/>
+</g>
+<!-- sourcefile~init_grid_fields.f90&#45;&gt;sourcefile~fstruct_data.f90 -->
+<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_edge9" class="edge">
+<title>sourcefile~init_grid_fields.f90&#45;&gt;sourcefile~fstruct_data.f90</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M599.5,-232C583.84,-236.17 566.11,-240.9 549.73,-245.27"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="548.49,-241.98 539.73,-247.94 550.3,-248.74 548.49,-241.98"/>
+</g>
+<!-- sourcefile~phys_param.f90 -->
+<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_node8" class="node">
+<title>sourcefile~phys_param.f90</title>
+<g id="a_sourcefile~~init_laser_field.f90~~EfferentGraph_node8"><a xlink:href=".././sourcefile/phys_param.f90.html" xlink:title="phys_param.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="239,-231 141,-231 141,-207 239,-207 239,-231"/>
+<text text-anchor="middle" x="190" y="-216.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">phys_param.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~init_grid_fields.f90&#45;&gt;sourcefile~phys_param.f90 -->
+<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_edge10" class="edge">
+<title>sourcefile~init_grid_fields.f90&#45;&gt;sourcefile~phys_param.f90</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M492.5,-220C408.05,-214.68 310.04,-215.68 249.26,-217.14"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="249.01,-213.64 239.1,-217.4 249.18,-220.64 249.01,-213.64"/>
+</g>
+<!-- sourcefile~grid_field_param.f90 -->
+<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_node10" class="node">
+<title>sourcefile~grid_field_param.f90</title>
+<g id="a_sourcefile~~init_laser_field.f90~~EfferentGraph_node10"><a xlink:href=".././sourcefile/grid_field_param.f90.html" xlink:title="grid_field_param.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="555,-140 432,-140 432,-116 555,-116 555,-140"/>
+<text text-anchor="middle" x="493.5" y="-125.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">grid_field_param.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~init_grid_fields.f90&#45;&gt;sourcefile~grid_field_param.f90 -->
+<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_edge8" class="edge">
+<title>sourcefile~init_grid_fields.f90&#45;&gt;sourcefile~grid_field_param.f90</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M624.89,-207.97C598.84,-191.99 552.64,-163.66 522.81,-145.36"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="524.47,-142.28 514.11,-140.03 520.81,-148.24 524.47,-142.28"/>
 </g>
 <!-- sourcefile~parallel.f90 -->
-<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_node8" class="node">
+<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_node9" class="node">
 <title>sourcefile~parallel.f90</title>
-<g id="a_sourcefile~~init_laser_field.f90~~EfferentGraph_node8"><a xlink:href=".././sourcefile/parallel.f90.html" xlink:title="parallel.F90">
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="532.5,-87 456.5,-87 456.5,-63 532.5,-63 532.5,-87"/>
-<text text-anchor="middle" x="494.5" y="-72.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">parallel.F90</text>
+<g id="a_sourcefile~~init_laser_field.f90~~EfferentGraph_node9"><a xlink:href=".././sourcefile/parallel.f90.html" xlink:title="parallel.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="531.5,-87 455.5,-87 455.5,-63 531.5,-63 531.5,-87"/>
+<text text-anchor="middle" x="493.5" y="-72.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">parallel.F90</text>
 </a>
 </g>
 </g>
 <!-- sourcefile~grid_fields.f90&#45;&gt;sourcefile~parallel.f90 -->
-<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_edge12" class="edge">
-<title>sourcefile~grid_fields.f90&#45;&gt;sourcefile~parallel.f90</title>
-<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M617.1929,-125.853C593.1442,-115.8854 558.9116,-101.6969 532.7136,-90.8385"/>
-<polygon fill="#00ffff" stroke="#00ffff" points="534.0371,-87.5984 523.459,-87.0028 531.3568,-94.065 534.0371,-87.5984"/>
-</g>
-<!-- sourcefile~fstruct_data.f90&#45;&gt;sourcefile~precision_def.f90 -->
 <g id="sourcefile~~init_laser_field.f90~~EfferentGraph_edge13" class="edge">
-<title>sourcefile~fstruct_data.f90&#45;&gt;sourcefile~precision_def.f90</title>
-<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M446.2879,-268.6454C375.5891,-278.9238 241.416,-289.1658 142,-241 106.3496,-223.7278 78.8915,-185.0505 64.4061,-160.8851"/>
-<polygon fill="#7f00ff" stroke="#7f00ff" points="67.3697,-159.0183 59.3345,-152.1128 61.3096,-162.5219 67.3697,-159.0183"/>
+<title>sourcefile~grid_fields.f90&#45;&gt;sourcefile~parallel.f90</title>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M610.46,-115.97C589.06,-108.41 561.23,-98.58 538.2,-90.44"/>
+<polygon fill="#7f00ff" stroke="#7f00ff" points="539.26,-87.1 528.66,-87.07 536.92,-93.7 539.26,-87.1"/>
+</g>
+<!-- sourcefile~grid_fields.f90&#45;&gt;sourcefile~grid_field_param.f90 -->
+<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_edge12" class="edge">
+<title>sourcefile~grid_fields.f90&#45;&gt;sourcefile~grid_field_param.f90</title>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M601.11,-128C589.89,-128 577.52,-128 565.29,-128"/>
+<polygon fill="#7f00ff" stroke="#7f00ff" points="565.08,-124.5 555.08,-128 565.08,-131.5 565.08,-124.5"/>
 </g>
 <!-- sourcefile~struct_def.f90&#45;&gt;sourcefile~precision_def.f90 -->
 <g id="sourcefile~~init_laser_field.f90~~EfferentGraph_edge14" class="edge">
 <title>sourcefile~struct_def.f90&#45;&gt;sourcefile~precision_def.f90</title>
-<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M148.4694,-140C138.3869,-140 127.4157,-140 116.6211,-140"/>
-<polygon fill="#ff0000" stroke="#ff0000" points="116.3606,-136.5001 106.3606,-140 116.3605,-143.5001 116.3606,-136.5001"/>
+<path fill="none" stroke="#cbff00" stroke-dasharray="5,2" d="M147.24,-139C137.22,-139 126.31,-139 115.59,-139"/>
+<polygon fill="#cbff00" stroke="#cbff00" points="115.41,-135.5 105.41,-139 115.4,-142.5 115.41,-135.5"/>
 </g>
-<!-- sourcefile~common_param.f90 -->
-<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_node11" class="node">
-<title>sourcefile~common_param.f90</title>
-<g id="a_sourcefile~~init_laser_field.f90~~EfferentGraph_node11"><a xlink:href=".././sourcefile/common_param.f90.html" xlink:title="common_param.f90">
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="397,-66 276,-66 276,-42 397,-42 397,-66"/>
-<text text-anchor="middle" x="336.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">common_param.f90</text>
-</a>
-</g>
-</g>
-<!-- sourcefile~grid_field_param.f90&#45;&gt;sourcefile~common_param.f90 -->
-<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_edge17" class="edge">
-<title>sourcefile~grid_field_param.f90&#45;&gt;sourcefile~common_param.f90</title>
-<path fill="none" stroke="#cbff00" stroke-dasharray="5,2" d="M476.9553,-125.9385C453.5026,-109.9432 413.0298,-82.8202 397,-75 393.2341,-73.1628 389.2657,-71.4114 385.2362,-69.7603"/>
-<polygon fill="#cbff00" stroke="#cbff00" points="386.3785,-66.4494 375.7895,-66.0969 383.8475,-72.9758 386.3785,-66.4494"/>
+<!-- sourcefile~phys_param.f90&#45;&gt;sourcefile~precision_def.f90 -->
+<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_edge15" class="edge">
+<title>sourcefile~phys_param.f90&#45;&gt;sourcefile~precision_def.f90</title>
+<path fill="none" stroke="#00ff66" stroke-dasharray="5,2" d="M165.9,-206.83C157.96,-202.55 149.04,-197.65 141,-193 120.79,-181.31 98.4,-167.47 81.32,-156.73"/>
+<polygon fill="#00ff66" stroke="#00ff66" points="82.75,-153.49 72.43,-151.11 79.02,-159.41 82.75,-153.49"/>
 </g>
 <!-- sourcefile~mpi_var.f90 -->
-<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_node12" class="node">
+<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_node11" class="node">
 <title>sourcefile~mpi_var.f90</title>
-<g id="a_sourcefile~~init_laser_field.f90~~EfferentGraph_node12"><a xlink:href=".././sourcefile/mpi_var.f90.html" xlink:title="mpi_var.f90">
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="374,-108 299,-108 299,-84 374,-84 374,-108"/>
-<text text-anchor="middle" x="336.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">mpi_var.f90</text>
+<g id="a_sourcefile~~init_laser_field.f90~~EfferentGraph_node11"><a xlink:href=".././sourcefile/mpi_var.f90.html" xlink:title="mpi_var.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="373.5,-66 297.5,-66 297.5,-42 373.5,-42 373.5,-66"/>
+<text text-anchor="middle" x="335.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">mpi_var.F90</text>
 </a>
 </g>
-</g>
-<!-- sourcefile~grid_field_param.f90&#45;&gt;sourcefile~mpi_var.f90 -->
-<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_edge16" class="edge">
-<title>sourcefile~grid_field_param.f90&#45;&gt;sourcefile~mpi_var.f90</title>
-<path fill="none" stroke="#cbff00" stroke-dasharray="5,2" d="M449.2235,-125.9645C428.7702,-120.5275 404.604,-114.1036 383.9033,-108.6009"/>
-<polygon fill="#cbff00" stroke="#cbff00" points="384.6146,-105.1685 374.051,-105.9819 382.8162,-111.9335 384.6146,-105.1685"/>
-</g>
-<!-- sourcefile~grid_param.f90 -->
-<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_node14" class="node">
-<title>sourcefile~grid_param.f90</title>
-<g id="a_sourcefile~~init_laser_field.f90~~EfferentGraph_node14"><a xlink:href=".././sourcefile/grid_param.f90.html" xlink:title="grid_param.f90">
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="383.5,-150 289.5,-150 289.5,-126 383.5,-126 383.5,-150"/>
-<text text-anchor="middle" x="336.5" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">grid_param.f90</text>
-</a>
-</g>
-</g>
-<!-- sourcefile~grid_field_param.f90&#45;&gt;sourcefile~grid_param.f90 -->
-<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_edge15" class="edge">
-<title>sourcefile~grid_field_param.f90&#45;&gt;sourcefile~grid_param.f90</title>
-<path fill="none" stroke="#cbff00" stroke-dasharray="5,2" d="M432.9607,-138C420.2342,-138 406.8714,-138 394.2847,-138"/>
-<polygon fill="#cbff00" stroke="#cbff00" points="393.9253,-134.5001 383.9253,-138 393.9253,-141.5001 393.9253,-134.5001"/>
-</g>
-<!-- sourcefile~parallel.f90&#45;&gt;sourcefile~common_param.f90 -->
-<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_edge18" class="edge">
-<title>sourcefile~parallel.f90&#45;&gt;sourcefile~common_param.f90</title>
-<path fill="none" stroke="#00ff66" stroke-dasharray="5,2" d="M456.2526,-69.9165C441.58,-67.9663 424.3247,-65.6729 407.5521,-63.4436"/>
-<polygon fill="#00ff66" stroke="#00ff66" points="407.5726,-59.9157 397.1986,-62.0675 406.6502,-66.8546 407.5726,-59.9157"/>
 </g>
 <!-- sourcefile~parallel.f90&#45;&gt;sourcefile~mpi_var.f90 -->
-<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_edge20" class="edge">
+<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_edge16" class="edge">
 <title>sourcefile~parallel.f90&#45;&gt;sourcefile~mpi_var.f90</title>
-<path fill="none" stroke="#00ff66" stroke-dasharray="5,2" d="M456.2526,-80.0835C434.5337,-82.9702 407.1559,-86.609 384.0614,-89.6786"/>
-<polygon fill="#00ff66" stroke="#00ff66" points="383.5739,-86.2125 374.1223,-90.9996 384.4963,-93.1514 383.5739,-86.2125"/>
+<path fill="none" stroke="#0066ff" stroke-dasharray="5,2" d="M455.13,-69.97C433.72,-67.09 406.63,-63.44 383.74,-60.36"/>
+<polygon fill="#0066ff" stroke="#0066ff" points="383.94,-56.85 373.56,-58.99 383,-63.79 383.94,-56.85"/>
 </g>
 <!-- sourcefile~util.f90 -->
 <g id="sourcefile~~init_laser_field.f90~~EfferentGraph_node13" class="node">
 <title>sourcefile~util.f90</title>
 <g id="a_sourcefile~~init_laser_field.f90~~EfferentGraph_node13"><a xlink:href=".././sourcefile/util.f90.html" xlink:title="util.f90">
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="363.5,-24 309.5,-24 309.5,0 363.5,0 363.5,-24"/>
-<text text-anchor="middle" x="336.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">util.f90</text>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="362.5,-24 308.5,-24 308.5,0 362.5,0 362.5,-24"/>
+<text text-anchor="middle" x="335.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">util.f90</text>
 </a>
 </g>
 </g>
 <!-- sourcefile~parallel.f90&#45;&gt;sourcefile~util.f90 -->
-<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_edge19" class="edge">
+<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_edge17" class="edge">
 <title>sourcefile~parallel.f90&#45;&gt;sourcefile~util.f90</title>
-<path fill="none" stroke="#00ff66" stroke-dasharray="5,2" d="M467.8168,-62.8835C448.3421,-54.1933 421.2248,-42.4077 397,-33 389.4212,-30.0568 381.2358,-27.0816 373.4086,-24.3327"/>
-<polygon fill="#00ff66" stroke="#00ff66" points="374.3532,-20.956 363.7584,-20.9915 372.0628,-27.5707 374.3532,-20.956"/>
+<path fill="none" stroke="#0066ff" stroke-dasharray="5,2" d="M466.09,-62.9C446.81,-54.22 419.97,-42.43 396,-33 388.4,-30.01 380.19,-26.98 372.35,-24.19"/>
+<polygon fill="#0066ff" stroke="#0066ff" points="373.31,-20.82 362.72,-20.8 370.99,-27.42 373.31,-20.82"/>
 </g>
-<!-- sourcefile~phys_param.f90&#45;&gt;sourcefile~precision_def.f90 -->
+<!-- sourcefile~common_param.f90 -->
+<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_node14" class="node">
+<title>sourcefile~common_param.f90</title>
+<g id="a_sourcefile~~init_laser_field.f90~~EfferentGraph_node14"><a xlink:href=".././sourcefile/common_param.f90.html" xlink:title="common_param.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="396,-108 275,-108 275,-84 396,-84 396,-108"/>
+<text text-anchor="middle" x="335.5" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">common_param.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~parallel.f90&#45;&gt;sourcefile~common_param.f90 -->
+<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_edge18" class="edge">
+<title>sourcefile~parallel.f90&#45;&gt;sourcefile~common_param.f90</title>
+<path fill="none" stroke="#0066ff" stroke-dasharray="5,2" d="M455.13,-80.03C440.5,-82 423.23,-84.33 406.45,-86.58"/>
+<polygon fill="#0066ff" stroke="#0066ff" points="405.54,-83.17 396.1,-87.98 406.48,-90.11 405.54,-83.17"/>
+</g>
+<!-- sourcefile~grid_field_param.f90&#45;&gt;sourcefile~mpi_var.f90 -->
+<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_edge20" class="edge">
+<title>sourcefile~grid_field_param.f90&#45;&gt;sourcefile~mpi_var.f90</title>
+<path fill="none" stroke="#cc00ff" stroke-dasharray="5,2" d="M469.11,-115.92C457.83,-110.02 444.15,-102.75 432,-96 415.81,-87 412.81,-82.78 396,-75 391.92,-73.11 387.62,-71.29 383.27,-69.56"/>
+<polygon fill="#cc00ff" stroke="#cc00ff" points="384.34,-66.22 373.75,-65.93 381.85,-72.76 384.34,-66.22"/>
+</g>
+<!-- sourcefile~grid_param.f90 -->
+<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_node12" class="node">
+<title>sourcefile~grid_param.f90</title>
+<g id="a_sourcefile~~init_laser_field.f90~~EfferentGraph_node12"><a xlink:href=".././sourcefile/grid_param.f90.html" xlink:title="grid_param.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="382.5,-150 288.5,-150 288.5,-126 382.5,-126 382.5,-150"/>
+<text text-anchor="middle" x="335.5" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">grid_param.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~grid_field_param.f90&#45;&gt;sourcefile~grid_param.f90 -->
 <g id="sourcefile~~init_laser_field.f90~~EfferentGraph_edge21" class="edge">
-<title>sourcefile~phys_param.f90&#45;&gt;sourcefile~precision_def.f90</title>
-<path fill="none" stroke="#cc00ff" stroke-dasharray="5,2" d="M167.4221,-207.8404C159.3102,-203.5643 150.2061,-198.6615 142,-194 121.2579,-182.2174 98.2453,-168.2296 80.8175,-157.4429"/>
-<polygon fill="#cc00ff" stroke="#cc00ff" points="82.5957,-154.4272 72.2546,-152.1226 78.9015,-160.373 82.5957,-154.4272"/>
+<title>sourcefile~grid_field_param.f90&#45;&gt;sourcefile~grid_param.f90</title>
+<path fill="none" stroke="#cc00ff" stroke-dasharray="5,2" d="M431.74,-131.89C419.04,-132.71 405.7,-133.56 393.16,-134.37"/>
+<polygon fill="#cc00ff" stroke="#cc00ff" points="392.6,-130.9 382.84,-135.03 393.04,-137.88 392.6,-130.9"/>
 </g>
-<!-- sourcefile~common_param.f90&#45;&gt;sourcefile~precision_def.f90 -->
-<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_edge22" class="edge">
-<title>sourcefile~common_param.f90&#45;&gt;sourcefile~precision_def.f90</title>
-<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M301.6043,-66.0751C265.7837,-78.2375 212.3573,-95.6693 191,-99"/>
-<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M191,-99C157.6793,-104.1964 121.1466,-115.305 94.0443,-124.6499"/>
-<polygon fill="#ff0000" stroke="#ff0000" points="92.7845,-121.3827 84.5093,-127.9987 95.1042,-127.9872 92.7845,-121.3827"/>
+<!-- sourcefile~grid_field_param.f90&#45;&gt;sourcefile~common_param.f90 -->
+<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_edge19" class="edge">
+<title>sourcefile~grid_field_param.f90&#45;&gt;sourcefile~common_param.f90</title>
+<path fill="none" stroke="#cc00ff" stroke-dasharray="5,2" d="M433.97,-115.99C424.54,-114.06 414.7,-112.04 405.05,-110.06"/>
+<polygon fill="#cc00ff" stroke="#cc00ff" points="405.6,-106.6 395.1,-108.02 404.19,-113.46 405.6,-106.6"/>
 </g>
 <!-- sourcefile~mpi_var.f90&#45;&gt;sourcefile~precision_def.f90 -->
-<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_edge23" class="edge">
+<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_edge22" class="edge">
 <title>sourcefile~mpi_var.f90&#45;&gt;sourcefile~precision_def.f90</title>
-<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M298.8787,-94.0281C269.3579,-93.1408 227.3227,-93.3354 191,-99"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M299.43,-66.04C264.11,-77.93 211.93,-94.8 191,-98"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M189,-98C156.25,-103.01 120.43,-114.11 93.85,-123.5"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="92.36,-120.31 84.13,-126.99 94.73,-126.9 92.36,-120.31"/>
+</g>
+<!-- sourcefile~grid_param.f90&#45;&gt;sourcefile~precision_def.f90 -->
+<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_edge23" class="edge">
+<title>sourcefile~grid_param.f90&#45;&gt;sourcefile~precision_def.f90</title>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M297.34,-125.93C258.45,-113.57 201.58,-96.38 191,-98"/>
+</g>
+<!-- sourcefile~grid_param.f90&#45;&gt;sourcefile~struct_def.f90 -->
+<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_edge24" class="edge">
+<title>sourcefile~grid_param.f90&#45;&gt;sourcefile~struct_def.f90</title>
+<path fill="none" stroke="#7fff00" stroke-dasharray="5,2" d="M288.31,-138.32C273.79,-138.42 257.68,-138.54 242.8,-138.64"/>
+<polygon fill="#7fff00" stroke="#7fff00" points="242.71,-135.14 232.74,-138.71 242.76,-142.14 242.71,-135.14"/>
 </g>
 <!-- sourcefile~util.f90&#45;&gt;sourcefile~precision_def.f90 -->
-<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_edge24" class="edge">
+<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_edge25" class="edge">
 <title>sourcefile~util.f90&#45;&gt;sourcefile~precision_def.f90</title>
-<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M309.1885,-9.4074C269.7802,-6.9304 195.8033,-7.1035 142,-36 106.5135,-55.059 79.0023,-94.4721 64.4622,-118.9309"/>
-<polygon fill="#00ffff" stroke="#00ffff" points="61.3149,-117.3833 59.3693,-127.7979 67.3849,-120.8697 61.3149,-117.3833"/>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M308.28,-9.28C269.3,-6.46 194.89,-5.92 141,-35 105.8,-53.99 78.86,-93.43 64.66,-117.91"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="61.53,-116.35 59.7,-126.78 67.63,-119.77 61.53,-116.35"/>
 </g>
 <!-- sourcefile~code_util.f90 -->
 <g id="sourcefile~~init_laser_field.f90~~EfferentGraph_node15" class="node">
 <title>sourcefile~code_util.f90</title>
 <g id="a_sourcefile~~init_laser_field.f90~~EfferentGraph_node15"><a xlink:href=".././sourcefile/code_util.f90.html" xlink:title="code_util.f90">
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="231.5,-69 150.5,-69 150.5,-45 231.5,-45 231.5,-69"/>
-<text text-anchor="middle" x="191" y="-54.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">code_util.f90</text>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="230.5,-68 149.5,-68 149.5,-44 230.5,-44 230.5,-68"/>
+<text text-anchor="middle" x="190" y="-53.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">code_util.f90</text>
 </a>
 </g>
 </g>
 <!-- sourcefile~util.f90&#45;&gt;sourcefile~code_util.f90 -->
-<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_edge25" class="edge">
-<title>sourcefile~util.f90&#45;&gt;sourcefile~code_util.f90</title>
-<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M309.4736,-20.3587C289.9141,-26.408 262.9391,-34.7508 239.6691,-41.9477"/>
-<polygon fill="#00ffff" stroke="#00ffff" points="238.4748,-38.6534 229.9555,-44.9519 240.5432,-45.3409 238.4748,-38.6534"/>
-</g>
-<!-- sourcefile~grid_param.f90&#45;&gt;sourcefile~struct_def.f90 -->
-<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_edge27" class="edge">
-<title>sourcefile~grid_param.f90&#45;&gt;sourcefile~struct_def.f90</title>
-<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M289.2603,-138.6493C274.6976,-138.8495 258.5733,-139.0712 243.669,-139.276"/>
-<polygon fill="#7f00ff" stroke="#7f00ff" points="243.5307,-135.7775 233.5798,-139.4147 243.627,-142.7768 243.5307,-135.7775"/>
-</g>
-<!-- sourcefile~grid_param.f90&#45;&gt;sourcefile~precision_def.f90 -->
 <g id="sourcefile~~init_laser_field.f90~~EfferentGraph_edge26" class="edge">
-<title>sourcefile~grid_param.f90&#45;&gt;sourcefile~precision_def.f90</title>
-<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M298.0969,-125.9796C258.6743,-113.9187 201.6266,-97.3428 191,-99"/>
+<title>sourcefile~util.f90&#45;&gt;sourcefile~code_util.f90</title>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M308.18,-20.07C289.06,-25.93 262.64,-34.03 239.72,-41.06"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="238.68,-37.72 230.15,-44 240.73,-44.41 238.68,-37.72"/>
+</g>
+<!-- sourcefile~common_param.f90&#45;&gt;sourcefile~precision_def.f90 -->
+<g id="sourcefile~~init_laser_field.f90~~EfferentGraph_edge27" class="edge">
+<title>sourcefile~common_param.f90&#45;&gt;sourcefile~precision_def.f90</title>
+<path fill="none" stroke="#7f00ff" stroke-dasharray="5,2" d="M274.85,-93.17C248.95,-92.89 218.34,-93.82 191,-98"/>
 </g>
 <!-- sourcefile~code_util.f90&#45;&gt;sourcefile~precision_def.f90 -->
 <g id="sourcefile~~init_laser_field.f90~~EfferentGraph_edge28" class="edge">
 <title>sourcefile~code_util.f90&#45;&gt;sourcefile~precision_def.f90</title>
-<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M169.4408,-69.1077C160.8628,-73.9803 150.9274,-79.6929 142,-85 121.3917,-97.2509 98.3749,-111.4899 80.9117,-122.4101"/>
-<polygon fill="#ff0000" stroke="#ff0000" points="78.9425,-119.5137 72.3279,-127.7901 82.66,-125.445 78.9425,-119.5137"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M167.88,-68.12C159.48,-72.99 149.75,-78.7 141,-84 120.74,-96.27 98.11,-110.51 80.94,-121.42"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="79.06,-118.48 72.5,-126.8 82.82,-124.38 79.06,-118.48"/>
 </g>
 </g>
 </svg>
@@ -536,25 +485,25 @@
     <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+<!-- Generated by graphviz version 2.43.0 (0)
  -->
 <!-- Title: Graph Key Pages: 1 -->
 <svg width="202pt" height="32pt"
  viewBox="0.00 0.00 201.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
 <title>Graph Key</title>
-<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 197.5,-28 197.5,4 -4,4"/>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 197.5,-28 197.5,4 -4,4"/>
 <!-- Source File -->
 <g id="node1" class="node">
 <title>Source File</title>
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="71,-24 0,-24 0,0 71,0 71,-24"/>
-<text text-anchor="middle" x="35.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Source File</text>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="70,-24 0,-24 0,0 70,0 70,-24"/>
+<text text-anchor="middle" x="35" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Source File</text>
 </g>
 <!-- This Page&#39;s Entity -->
 <g id="node2" class="node">
 <title>This Page&#39;s Entity</title>
-<polygon fill="none" stroke="#000000" points="193.5,-24 89.5,-24 89.5,0 193.5,0 193.5,-24"/>
-<text text-anchor="middle" x="141.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+<polygon fill="none" stroke="black" points="193.5,-24 88.5,-24 88.5,0 193.5,0 193.5,-24"/>
+<text text-anchor="middle" x="141" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
 </g>
 </g>
 </svg>
@@ -567,8 +516,6 @@
     </div></div></div></div>
       </div>
     </div>
-    
-      
     <div class="panel panel-default">
       <div class="panel-heading">
   <h3 class="panel-title">Files dependent on this one</h3>
@@ -577,64 +524,64 @@
   <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+<!-- Generated by graphviz version 2.43.0 (0)
  -->
 <!-- Title: sourcefile~~init_laser_field.f90~~AfferentGraph Pages: 1 -->
 <svg id="sourcefileinit_laser_fieldf90AfferentGraph" width="442pt" height="32pt"
  viewBox="0.00 0.00 442.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <g id="sourcefile~~init_laser_field.f90~~AfferentGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
 <title>sourcefile~~init_laser_field.f90~~AfferentGraph</title>
-<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 438,-28 438,4 -4,4"/>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 438,-28 438,4 -4,4"/>
 <!-- sourcefile~init_laser_field.f90 -->
 <g id="sourcefile~~init_laser_field.f90~~AfferentGraph_node1" class="node">
 <title>sourcefile~init_laser_field.f90</title>
-<polygon fill="none" stroke="#000000" points="109,-24 0,-24 0,0 109,0 109,-24"/>
-<text text-anchor="middle" x="54.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">init_laser_field.f90</text>
+<polygon fill="none" stroke="black" points="109,-24 0,-24 0,0 109,0 109,-24"/>
+<text text-anchor="middle" x="54.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">init_laser_field.f90</text>
 </g>
 <!-- sourcefile~pic_in.f90 -->
 <g id="sourcefile~~init_laser_field.f90~~AfferentGraph_node2" class="node">
 <title>sourcefile~pic_in.f90</title>
 <g id="a_sourcefile~~init_laser_field.f90~~AfferentGraph_node2"><a xlink:href=".././sourcefile/pic_in.f90.html" xlink:title="pic_in.f90">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="209,-24 145,-24 145,0 209,0 209,-24"/>
-<text text-anchor="middle" x="177" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">pic_in.f90</text>
+<text text-anchor="middle" x="177" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">pic_in.f90</text>
 </a>
 </g>
 </g>
 <!-- sourcefile~pic_in.f90&#45;&gt;sourcefile~init_laser_field.f90 -->
 <g id="sourcefile~~init_laser_field.f90~~AfferentGraph_edge1" class="edge">
 <title>sourcefile~pic_in.f90&#45;&gt;sourcefile~init_laser_field.f90</title>
-<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M144.8146,-12C136.8829,-12 128.1046,-12 119.2287,-12"/>
-<polygon fill="#ff0000" stroke="#ff0000" points="119.2059,-8.5001 109.2058,-12 119.2058,-15.5001 119.2059,-8.5001"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M144.97,-12C137.06,-12 128.28,-12 119.38,-12"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="119.33,-8.5 109.33,-12 119.33,-15.5 119.33,-8.5"/>
 </g>
 <!-- sourcefile~start_all.f90 -->
 <g id="sourcefile~~init_laser_field.f90~~AfferentGraph_node3" class="node">
 <title>sourcefile~start_all.f90</title>
 <g id="a_sourcefile~~init_laser_field.f90~~AfferentGraph_node3"><a xlink:href=".././sourcefile/start_all.f90.html" xlink:title="start_all.F90">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="322,-24 245,-24 245,0 322,0 322,-24"/>
-<text text-anchor="middle" x="283.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">start_all.F90</text>
+<text text-anchor="middle" x="283.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">start_all.F90</text>
 </a>
 </g>
 </g>
 <!-- sourcefile~start_all.f90&#45;&gt;sourcefile~pic_in.f90 -->
 <g id="sourcefile~~init_laser_field.f90~~AfferentGraph_edge2" class="edge">
 <title>sourcefile~start_all.f90&#45;&gt;sourcefile~pic_in.f90</title>
-<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M244.7498,-12C236.4624,-12 227.6678,-12 219.2558,-12"/>
-<polygon fill="#ff0000" stroke="#ff0000" points="219.2448,-8.5001 209.2448,-12 219.2448,-15.5001 219.2448,-8.5001"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M244.77,-12C236.46,-12 227.62,-12 219.17,-12"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="219.14,-8.5 209.14,-12 219.14,-15.5 219.14,-8.5"/>
 </g>
 <!-- sourcefile~aladyn.f90 -->
 <g id="sourcefile~~init_laser_field.f90~~AfferentGraph_node4" class="node">
 <title>sourcefile~aladyn.f90</title>
 <g id="a_sourcefile~~init_laser_field.f90~~AfferentGraph_node4"><a xlink:href=".././sourcefile/aladyn.f90.html" xlink:title="ALaDyn.F90">
 <polygon fill="#f0ad4e" stroke="#f0ad4e" points="434,-24 358,-24 358,0 434,0 434,-24"/>
-<text text-anchor="middle" x="396" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">ALaDyn.F90</text>
+<text text-anchor="middle" x="396" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ALaDyn.F90</text>
 </a>
 </g>
 </g>
 <!-- sourcefile~aladyn.f90&#45;&gt;sourcefile~start_all.f90 -->
 <g id="sourcefile~~init_laser_field.f90~~AfferentGraph_edge3" class="edge">
 <title>sourcefile~aladyn.f90&#45;&gt;sourcefile~start_all.f90</title>
-<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M357.9126,-12C349.7553,-12 341.0272,-12 332.5231,-12"/>
-<polygon fill="#ff0000" stroke="#ff0000" points="332.3146,-8.5001 322.3146,-12 332.3145,-15.5001 332.3146,-8.5001"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M357.9,-12C349.7,-12 340.89,-12 332.33,-12"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="332.07,-8.5 322.07,-12 332.07,-15.5 332.07,-8.5"/>
 </g>
 </g>
 </svg>
@@ -643,25 +590,25 @@
     <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+<!-- Generated by graphviz version 2.43.0 (0)
  -->
 <!-- Title: Graph Key Pages: 1 -->
 <svg width="202pt" height="32pt"
  viewBox="0.00 0.00 201.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
 <title>Graph Key</title>
-<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 197.5,-28 197.5,4 -4,4"/>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 197.5,-28 197.5,4 -4,4"/>
 <!-- Source File -->
 <g id="node1" class="node">
 <title>Source File</title>
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="71,-24 0,-24 0,0 71,0 71,-24"/>
-<text text-anchor="middle" x="35.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Source File</text>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="70,-24 0,-24 0,0 70,0 70,-24"/>
+<text text-anchor="middle" x="35" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Source File</text>
 </g>
 <!-- This Page&#39;s Entity -->
 <g id="node2" class="node">
 <title>This Page&#39;s Entity</title>
-<polygon fill="none" stroke="#000000" points="193.5,-24 89.5,-24 89.5,0 193.5,0 193.5,-24"/>
-<text text-anchor="middle" x="141.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+<polygon fill="none" stroke="black" points="193.5,-24 88.5,-24 88.5,0 193.5,0 193.5,-24"/>
+<text text-anchor="middle" x="141" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
 </g>
 </g>
 </svg>
@@ -674,53 +621,46 @@
     </div></div></div></div>
       </div>
     </div>
-      
-      <br>
-
+<br>
     <section class="visible-xs visible-sm hidden-md">
-      
-<h3>Contents</h3>
- 
-
-
-
-
-
-
-
-<div class="panel panel-primary">
-  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#mods-1">Modules</a></h3></div>
-  <div id="mods-1" class="panel-collapse collapse">
-    <div class="list-group">
-      
-      <a class="list-group-item" href="../module/init_laser_field.html">init_laser_field</a>
-      
+        <h3>Contents</h3>
+  
+  
+  
+  
+  
+      <div class="panel panel-primary">
+      <div class="panel-heading text-left">
+        <h3 class="panel-title">
+          <a data-toggle="collapse" href="#mods-1">Modules</a>
+        </h3>
+      </div>
+      <div id="mods-1" class="panel-collapse collapse">
+        <div class="list-group">
+            <a class="list-group-item" href="../module/init_laser_field.html">init_laser_field</a>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="panel panel-primary">
-  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
-  <div class="list-group">
-    <a class="list-group-item" href="../sourcefile/init_laser_field.f90.html#src">init_laser_field.f90</a>
-  </div>
-</div>
-
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    <div class="panel panel-primary">
+      <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+      <div class="list-group">
+        <a class="list-group-item" href="../sourcefile/init_laser_field.f90.html#src">init_laser_field.f90</a>
+      </div>
+    </div>
 
 
     </section>
@@ -728,283 +668,281 @@
 
     <section>
       <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="hl"><pre><span></span><a name="ln-1"></a><span class="c">!*****************************************************************************************************!</span>
-<a name="ln-2"></a><span class="c">!                            Copyright 2008-2020  The ALaDyn Collaboration                            !</span>
-<a name="ln-3"></a><span class="c">!*****************************************************************************************************!</span>
-<a name="ln-4"></a>
-<a name="ln-5"></a><span class="c">!*****************************************************************************************************!</span>
-<a name="ln-6"></a><span class="c">!  This file is part of ALaDyn.                                                                       !</span>
-<a name="ln-7"></a><span class="c">!                                                                                                     !</span>
-<a name="ln-8"></a><span class="c">!  ALaDyn is free software: you can redistribute it and/or modify                                     !</span>
-<a name="ln-9"></a><span class="c">!  it under the terms of the GNU General Public License as published by                               !</span>
-<a name="ln-10"></a><span class="c">!  the Free Software Foundation, either version 3 of the License, or                                  !</span>
-<a name="ln-11"></a><span class="c">!  (at your option) any later version.                                                                !</span>
-<a name="ln-12"></a><span class="c">!                                                                                                     !</span>
-<a name="ln-13"></a><span class="c">!  ALaDyn is distributed in the hope that it will be useful,                                          !</span>
-<a name="ln-14"></a><span class="c">!  but WITHOUT ANY WARRANTY; without even the implied warranty of                                     !</span>
-<a name="ln-15"></a><span class="c">!  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                                      !</span>
-<a name="ln-16"></a><span class="c">!  GNU General Public License for more details.                                                       !</span>
-<a name="ln-17"></a><span class="c">!                                                                                                     !</span>
-<a name="ln-18"></a><span class="c">!  You should have received a copy of the GNU General Public License                                  !</span>
-<a name="ln-19"></a><span class="c">!  along with ALaDyn.  If not, see &lt;http://www.gnu.org/licenses/&gt;.                                    !</span>
-<a name="ln-20"></a><span class="c">!*****************************************************************************************************!</span>
-<a name="ln-21"></a>
-<a name="ln-22"></a> <span class="k">module </span><span class="n">init_laser_field</span>
-<a name="ln-23"></a>
-<a name="ln-24"></a>  <span class="k">use </span><span class="n">pstruct_data</span>
-<a name="ln-25"></a>  <span class="k">use </span><span class="n">fstruct_data</span>
-<a name="ln-26"></a>  <span class="k">use </span><span class="n">init_grid_field</span>
-<a name="ln-27"></a>  <span class="k">use </span><span class="n">grid_fields</span><span class="p">,</span> <span class="n">only</span><span class="p">:</span> <span class="n">env_bds</span>
-<a name="ln-28"></a>
-<a name="ln-29"></a>  <span class="k">implicit none</span>
-<a name="ln-30"></a>
-<a name="ln-31"></a><span class="k"> contains</span>
-<a name="ln-32"></a>  <span class="c">!=========================================</span>
-<a name="ln-33"></a>
-<a name="ln-34"></a>  <span class="k">subroutine </span><span class="n">lp_pulse</span><span class="p">(</span><span class="n">lp_mod</span><span class="p">,</span> <span class="n">part_in</span><span class="p">)</span>
-<a name="ln-35"></a>
-<a name="ln-36"></a>   <span class="kt">integer</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">lp_mod</span>
-<a name="ln-37"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span> <span class="kd">::</span> <span class="n">part_in</span>
-<a name="ln-38"></a>   <span class="kt">integer</span> <span class="kd">::</span> <span class="n">ic</span><span class="p">,</span> <span class="n">lp_ind</span><span class="p">,</span> <span class="n">i1</span><span class="p">,</span> <span class="n">i2</span>
-<a name="ln-39"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">angle</span><span class="p">,</span> <span class="n">shx_lp</span><span class="p">,</span> <span class="n">sigm</span><span class="p">,</span> <span class="n">eps</span><span class="p">,</span> <span class="n">xm</span><span class="p">,</span> <span class="n">tt</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">tau1</span>
-<a name="ln-40"></a>   <span class="c">!===========================</span>
-<a name="ln-41"></a>   <span class="c">! field grid index defined on set_pgrid</span>
-<a name="ln-42"></a>
-<a name="ln-43"></a>   <span class="n">i1</span> <span class="o">=</span> <span class="n">loc_xgrid</span><span class="p">(</span><span class="n">imodx</span><span class="p">)%</span><span class="n">p_ind</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-<a name="ln-44"></a>   <span class="n">i2</span> <span class="o">=</span> <span class="n">loc_xgrid</span><span class="p">(</span><span class="n">imodx</span><span class="p">)%</span><span class="n">p_ind</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-<a name="ln-45"></a>   <span class="n">xm</span> <span class="o">=</span> <span class="n">loc_xgrid</span><span class="p">(</span><span class="n">imodx</span><span class="p">)%</span><span class="n">gmin</span> <span class="c">! =&gt; field index i1</span>
-<a name="ln-46"></a>   <span class="n">tt</span> <span class="o">=</span> <span class="mf">0.0</span>
-<a name="ln-47"></a>   <span class="k">if</span> <span class="p">(</span><span class="n">g_prof</span><span class="p">)</span> <span class="k">then</span>
-<a name="ln-48"></a><span class="k">    </span><span class="n">tau</span> <span class="o">=</span> <span class="n">w0_x</span><span class="o">*</span><span class="nb">sqrt</span><span class="p">(</span><span class="mf">2.</span><span class="p">)</span>
-<a name="ln-49"></a>    <span class="n">tau1</span> <span class="o">=</span> <span class="n">w1_x</span><span class="o">*</span><span class="nb">sqrt</span><span class="p">(</span><span class="mf">2.</span><span class="p">)</span>
-<a name="ln-50"></a>   <span class="k">else</span>
-<a name="ln-51"></a><span class="k">    </span><span class="n">tau</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">w0_x</span> <span class="c">!cos^2() profile_</span>
-<a name="ln-52"></a>    <span class="n">tau1</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">w1_x</span> <span class="c">!cos^2() profile_</span>
-<a name="ln-53"></a>   <span class="k">end if</span>
-<a name="ln-54"></a><span class="k">   </span><span class="n">lp_amp</span> <span class="o">=</span> <span class="n">oml</span><span class="o">*</span><span class="n">a0</span>
-<a name="ln-55"></a>   <span class="n">lp1_amp</span> <span class="o">=</span> <span class="n">om1</span><span class="o">*</span><span class="n">a1</span>
-<a name="ln-56"></a>   <span class="c">!=====================</span>
-<a name="ln-57"></a>   <span class="n">lp_in</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">xc_lp</span> <span class="o">-</span> <span class="n">tau</span>
-<a name="ln-58"></a>   <span class="n">lp_end</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">xc_lp</span> <span class="o">+</span> <span class="n">tau</span>
-<a name="ln-59"></a>   <span class="n">eps</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="p">(</span><span class="n">oml</span><span class="o">*</span><span class="n">w0_y</span><span class="p">)</span>
-<a name="ln-60"></a>   <span class="n">sigm</span> <span class="o">=</span> <span class="n">lam0</span><span class="o">/</span><span class="n">w0_x</span>
-<a name="ln-61"></a>   <span class="n">angle</span> <span class="o">=</span> <span class="n">incid_angle</span>
-<a name="ln-62"></a>   <span class="n">xf</span> <span class="o">=</span> <span class="n">xc_lp</span> <span class="o">+</span> <span class="n">t0_lp</span>
-<a name="ln-63"></a>   <span class="c">!=======================</span>
-<a name="ln-64"></a>   <span class="n">lp_ind</span> <span class="o">=</span> <span class="n">lp_mod</span>
-<a name="ln-65"></a>   <span class="n">shx_lp</span> <span class="o">=</span> <span class="mf">0.0</span>
-<a name="ln-66"></a>   <span class="n">xc_loc</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">xc_lp</span>
-<a name="ln-67"></a>   <span class="n">xf_loc</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">xf</span>
-<a name="ln-68"></a>   <span class="k">if</span> <span class="p">(</span><span class="n">plane_wave</span><span class="p">)</span> <span class="n">lp_ind</span> <span class="o">=</span> <span class="mi">0</span>
-<a name="ln-69"></a>   <span class="k">if</span> <span class="p">(</span><span class="n">angle</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">)</span> <span class="k">then</span>
-<a name="ln-70"></a><span class="k">    </span><span class="n">shx_lp</span> <span class="o">=</span> <span class="n">lpx</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
-<a name="ln-71"></a>    <span class="k">call </span><span class="n">init_lp_fields</span><span class="p">(</span><span class="n">ebf</span><span class="p">,</span> <span class="n">lp_amp</span><span class="p">,</span> <span class="n">tt</span><span class="p">,</span> <span class="n">t0_lp</span><span class="p">,</span> <span class="n">w0_x</span><span class="p">,</span> <span class="n">w0_y</span><span class="p">,</span> <span class="n">xf</span><span class="p">,</span> <span class="n">oml</span><span class="p">,</span> <span class="p">&amp;</span>
-<a name="ln-72"></a>                        <span class="n">angle</span><span class="p">,</span> <span class="n">shx_lp</span><span class="p">,</span> <span class="n">lp_ind</span><span class="p">,</span> <span class="n">i1</span><span class="p">,</span> <span class="n">i2</span><span class="p">,</span> <span class="n">y0_cent</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">z0_cent</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
-<a name="ln-73"></a>   <span class="k">else</span> <span class="c">!normal incidence</span>
-<a name="ln-74"></a>    <span class="k">call </span><span class="n">init_lp_inc0_fields</span><span class="p">(</span><span class="n">ebf</span><span class="p">,</span> <span class="n">lp_amp</span><span class="p">,</span> <span class="n">tt</span><span class="p">,</span> <span class="n">t0_lp</span><span class="p">,</span> <span class="n">w0_x</span><span class="p">,</span> <span class="n">w0_y</span><span class="p">,</span> <span class="n">xf</span><span class="p">,</span> <span class="p">&amp;</span>
-<a name="ln-75"></a>                             <span class="n">oml</span><span class="p">,</span> <span class="n">lp_ind</span><span class="p">,</span> <span class="n">i1</span><span class="p">,</span> <span class="n">i2</span><span class="p">,</span> <span class="n">y0_cent</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">z0_cent</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
-<a name="ln-76"></a>   <span class="k">end if</span>
-<a name="ln-77"></a><span class="k">   if</span> <span class="p">(</span><span class="n">nb_laser</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="k">then</span>
-<a name="ln-78"></a><span class="k">    do </span><span class="n">ic</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">nb_laser</span>
-<a name="ln-79"></a>     <span class="n">lp_in</span><span class="p">(</span><span class="n">ic</span><span class="p">)</span> <span class="o">=</span> <span class="n">lp_in</span><span class="p">(</span><span class="n">ic</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">lp_delay</span><span class="p">(</span><span class="n">ic</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
-<a name="ln-80"></a>     <span class="n">lp_end</span><span class="p">(</span><span class="n">ic</span><span class="p">)</span> <span class="o">=</span> <span class="n">lp_end</span><span class="p">(</span><span class="n">ic</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">lp_delay</span><span class="p">(</span><span class="n">ic</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
-<a name="ln-81"></a>     <span class="n">xc_loc</span><span class="p">(</span><span class="n">ic</span><span class="p">)</span> <span class="o">=</span> <span class="n">xc_loc</span><span class="p">(</span><span class="n">ic</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">lp_delay</span><span class="p">(</span><span class="n">ic</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
-<a name="ln-82"></a>     <span class="n">xf_loc</span><span class="p">(</span><span class="n">ic</span><span class="p">)</span> <span class="o">=</span> <span class="n">xc_loc</span><span class="p">(</span><span class="n">ic</span><span class="p">)</span> <span class="o">+</span> <span class="n">t0_lp</span>
-<a name="ln-83"></a>     <span class="k">call </span><span class="n">init_lp_inc0_fields</span><span class="p">(</span><span class="n">ebf</span><span class="p">,</span> <span class="n">lp_amp</span><span class="p">,</span> <span class="n">tt</span><span class="p">,</span> <span class="n">t0_lp</span><span class="p">,</span> <span class="p">&amp;</span>
-<a name="ln-84"></a>                              <span class="n">w0_x</span><span class="p">,</span> <span class="n">w0_y</span><span class="p">,</span> <span class="n">xf_loc</span><span class="p">(</span><span class="n">ic</span><span class="p">),</span> <span class="n">oml</span><span class="p">,</span> <span class="n">lp_ind</span><span class="p">,</span> <span class="n">i1</span><span class="p">,</span> <span class="n">i2</span><span class="p">,</span> <span class="n">y0_cent</span><span class="p">(</span><span class="n">ic</span><span class="p">),</span> <span class="p">&amp;</span>
-<a name="ln-85"></a>                              <span class="n">z0_cent</span><span class="p">(</span><span class="n">ic</span><span class="p">))</span>
-<a name="ln-86"></a>    <span class="k">end do</span>
-<a name="ln-87"></a><span class="k">   end if</span>
-<a name="ln-88"></a>   <span class="c">!=================TWO-COLOR</span>
-<a name="ln-89"></a>   <span class="k">if</span> <span class="p">(</span><span class="n">Two_color</span><span class="p">)</span> <span class="k">then</span>
-<a name="ln-90"></a><span class="k">    </span><span class="n">xc1_lp</span> <span class="o">=</span> <span class="n">xc_loc</span><span class="p">(</span><span class="n">nb_laser</span><span class="p">)</span> <span class="o">-</span> <span class="n">lp_offset</span>
-<a name="ln-91"></a>    <span class="n">xf1</span> <span class="o">=</span> <span class="n">xc1_lp</span> <span class="o">+</span> <span class="n">t1_lp</span>
-<a name="ln-92"></a>
-<a name="ln-93"></a>    <span class="n">lp_ionz_in</span> <span class="o">=</span> <span class="n">xc1_lp</span> <span class="o">-</span> <span class="n">tau1</span>
-<a name="ln-94"></a>    <span class="n">lp_ionz_end</span> <span class="o">=</span> <span class="n">xc1_lp</span> <span class="o">+</span> <span class="n">tau1</span>
-<a name="ln-95"></a>    <span class="k">call </span><span class="n">init_lp_inc0_fields</span><span class="p">(</span><span class="n">ebf</span><span class="p">,</span> <span class="n">lp1_amp</span><span class="p">,</span> <span class="n">tt</span><span class="p">,</span> <span class="n">t1_lp</span><span class="p">,</span> <span class="n">w1_x</span><span class="p">,</span> <span class="n">w1_y</span><span class="p">,</span> <span class="n">xf1</span><span class="p">,</span> <span class="p">&amp;</span>
-<a name="ln-96"></a>                             <span class="n">om1</span><span class="p">,</span> <span class="n">lp_ind</span><span class="p">,</span> <span class="n">i1</span><span class="p">,</span> <span class="n">i2</span><span class="p">,</span> <span class="n">y1_cent</span><span class="p">,</span> <span class="n">z1_cent</span><span class="p">)</span>
-<a name="ln-97"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">pe0</span><span class="p">)</span> <span class="k">write</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;(a30,e11.4)&#39;</span><span class="p">)</span> <span class="s1">&#39;two-color activated at xc1_lp=&#39;</span><span class="p">,</span> <span class="p">&amp;</span>
-<a name="ln-98"></a>     <span class="n">xc1_lp</span>
-<a name="ln-99"></a>   <span class="k">end if</span>
-<a name="ln-100"></a>
-<a name="ln-101"></a>   <span class="c">!==================================</span>
-<a name="ln-102"></a>   <span class="n">part_in</span> <span class="o">=</span> <span class="n">lp_end</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">lpx</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
-<a name="ln-103"></a>  <span class="k">end subroutine</span>
-<a name="ln-104"></a>  <span class="c">!===========================</span>
-<a name="ln-105"></a>  <span class="k">subroutine </span><span class="n">cp_pulse</span><span class="p">(</span><span class="n">cp_mod</span><span class="p">,</span> <span class="n">part_in</span><span class="p">)</span>
-<a name="ln-106"></a>
-<a name="ln-107"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span> <span class="kd">::</span> <span class="n">part_in</span>
-<a name="ln-108"></a>   <span class="kt">integer</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">cp_mod</span>
-<a name="ln-109"></a>   <span class="kt">integer</span> <span class="kd">::</span> <span class="n">i1</span><span class="p">,</span> <span class="n">i2</span><span class="p">,</span> <span class="n">cp_ind</span>
-<a name="ln-110"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">angle</span><span class="p">,</span> <span class="n">shx_cp</span><span class="p">,</span> <span class="n">eps</span><span class="p">,</span> <span class="n">sigm</span><span class="p">,</span> <span class="n">xm</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">tt</span>
-<a name="ln-111"></a>
-<a name="ln-112"></a>   <span class="n">lp_amp</span> <span class="o">=</span> <span class="n">oml</span><span class="o">*</span><span class="n">a0</span><span class="o">/</span><span class="nb">sqrt</span><span class="p">(</span><span class="mf">2.</span><span class="p">)</span>
-<a name="ln-113"></a>   <span class="c">!===========================</span>
-<a name="ln-114"></a>   <span class="n">i1</span> <span class="o">=</span> <span class="n">loc_xgrid</span><span class="p">(</span><span class="n">imodx</span><span class="p">)%</span><span class="n">p_ind</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-<a name="ln-115"></a>   <span class="n">i2</span> <span class="o">=</span> <span class="n">loc_xgrid</span><span class="p">(</span><span class="n">imodx</span><span class="p">)%</span><span class="n">p_ind</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-<a name="ln-116"></a>   <span class="n">xm</span> <span class="o">=</span> <span class="n">loc_xgrid</span><span class="p">(</span><span class="n">imodx</span><span class="p">)%</span><span class="n">gmin</span> <span class="c">! =&gt; field index i1</span>
-<a name="ln-117"></a>   <span class="n">tt</span> <span class="o">=</span> <span class="mf">0.0</span>
-<a name="ln-118"></a>   <span class="n">tau</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">w0_x</span>
-<a name="ln-119"></a>   <span class="n">lp_in</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">xc_lp</span> <span class="o">-</span> <span class="n">tau</span> <span class="c">!Pulse centroid xc_lp=xf-ts at time t=0 lp_in=xc-tau</span>
-<a name="ln-120"></a>   <span class="n">lp_end</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">lp_in</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">w0_x</span>
-<a name="ln-121"></a>   <span class="n">eps</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="p">(</span><span class="n">oml</span><span class="o">*</span><span class="n">w0_y</span><span class="p">)</span>
-<a name="ln-122"></a>   <span class="n">sigm</span> <span class="o">=</span> <span class="n">lam0</span><span class="o">/</span><span class="n">w0_x</span>
-<a name="ln-123"></a>   <span class="n">angle</span> <span class="o">=</span> <span class="n">incid_angle</span>
-<a name="ln-124"></a>   <span class="n">xf</span> <span class="o">=</span> <span class="n">xc_lp</span> <span class="o">+</span> <span class="n">t0_lp</span>
-<a name="ln-125"></a>   <span class="n">shx_cp</span> <span class="o">=</span> <span class="mf">0.0</span>
-<a name="ln-126"></a>   <span class="k">if</span> <span class="p">(</span><span class="n">angle</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">)</span> <span class="n">shx_cp</span> <span class="o">=</span> <span class="n">lpx</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
-<a name="ln-127"></a>   <span class="k">if</span> <span class="p">(</span><span class="n">lp_amp</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">)</span> <span class="k">then</span>
-<a name="ln-128"></a><span class="k">    </span><span class="n">cp_ind</span> <span class="o">=</span> <span class="n">cp_mod</span>
-<a name="ln-129"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">plane_wave</span><span class="p">)</span> <span class="n">cp_ind</span> <span class="o">=</span> <span class="mi">0</span>
-<a name="ln-130"></a>    <span class="c">!=======================</span>
-<a name="ln-131"></a>    <span class="k">call </span><span class="n">init_cp_fields</span><span class="p">(</span><span class="n">ebf</span><span class="p">,</span> <span class="n">lp_amp</span><span class="p">,</span> <span class="n">tt</span><span class="p">,</span> <span class="n">t0_lp</span><span class="p">,</span> <span class="n">w0_x</span><span class="p">,</span> <span class="n">w0_y</span><span class="p">,</span> <span class="n">xf</span><span class="p">,</span> <span class="n">angle</span><span class="p">,</span> <span class="p">&amp;</span>
-<a name="ln-132"></a>                        <span class="n">shx_cp</span><span class="p">,</span> <span class="n">cp_ind</span><span class="p">,</span> <span class="n">i1</span><span class="p">,</span> <span class="n">i2</span><span class="p">)</span>
-<a name="ln-133"></a>    <span class="c">!=================def part distr points</span>
-<a name="ln-134"></a>    <span class="n">lp_end</span> <span class="o">=</span> <span class="n">xm</span>
-<a name="ln-135"></a>   <span class="k">end if</span>
-<a name="ln-136"></a>   <span class="c">!======================</span>
-<a name="ln-137"></a>   <span class="n">part_in</span> <span class="o">=</span> <span class="n">lp_end</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">lpx</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
-<a name="ln-138"></a>  <span class="k">end subroutine</span>
-<a name="ln-139"></a>  <span class="c">!======================</span>
-<a name="ln-140"></a>  <span class="k">subroutine </span><span class="n">set_envelope</span><span class="p">(</span><span class="n">part_in</span><span class="p">)</span>
-<a name="ln-141"></a>
-<a name="ln-142"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span> <span class="kd">::</span> <span class="n">part_in</span>
-<a name="ln-143"></a>   <span class="kt">integer</span> <span class="kd">::</span> <span class="n">ic</span><span class="p">,</span> <span class="n">pw_ind</span><span class="p">,</span> <span class="n">i1</span><span class="p">,</span> <span class="n">i2</span><span class="p">,</span> <span class="n">j1</span><span class="p">,</span> <span class="n">k1</span>
-<a name="ln-144"></a>   <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">eps</span><span class="p">,</span> <span class="n">sigm</span><span class="p">,</span> <span class="n">xm</span><span class="p">,</span> <span class="n">tt</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">tau1</span><span class="p">,</span> <span class="n">loc_delay</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-<a name="ln-145"></a>   <span class="kt">integer</span> <span class="kd">::</span> <span class="n">str</span><span class="p">,</span> <span class="n">stl</span>
-<a name="ln-146"></a>
-<a name="ln-147"></a>   <span class="n">lp_amp</span> <span class="o">=</span> <span class="n">a0</span>
-<a name="ln-148"></a>   <span class="n">lp1_amp</span> <span class="o">=</span> <span class="n">a1</span>
-<a name="ln-149"></a>   <span class="c">!===========================</span>
-<a name="ln-150"></a>   <span class="c">! field grid index defined on set_pgrid</span>
-<a name="ln-151"></a>
-<a name="ln-152"></a>   <span class="n">j1</span> <span class="o">=</span> <span class="n">jy1</span>
-<a name="ln-153"></a>   <span class="n">k1</span> <span class="o">=</span> <span class="n">kz1</span>
-<a name="ln-154"></a>   <span class="n">i1</span> <span class="o">=</span> <span class="n">ix1</span>
-<a name="ln-155"></a>   <span class="n">i2</span> <span class="o">=</span> <span class="n">nxp</span>
-<a name="ln-156"></a>   <span class="n">xm</span> <span class="o">=</span> <span class="n">loc_xgrid</span><span class="p">(</span><span class="n">imodx</span><span class="p">)%</span><span class="n">gmin</span>
-<a name="ln-157"></a>   <span class="c">!=========================</span>
-<a name="ln-158"></a>   <span class="n">tt</span> <span class="o">=</span> <span class="mf">0.0</span>
-<a name="ln-159"></a>   <span class="n">pw_ind</span> <span class="o">=</span> <span class="mi">1</span>
-<a name="ln-160"></a>   <span class="k">if</span> <span class="p">(</span><span class="n">plane_wave</span><span class="p">)</span> <span class="n">pw_ind</span> <span class="o">=</span> <span class="mi">0</span>
-<a name="ln-161"></a>   <span class="k">if</span> <span class="p">(</span><span class="n">g_prof</span><span class="p">)</span> <span class="k">then</span>
-<a name="ln-162"></a><span class="k">    </span><span class="n">tau</span> <span class="o">=</span> <span class="n">w0_x</span><span class="o">*</span><span class="nb">sqrt</span><span class="p">(</span><span class="mf">2.</span><span class="p">)</span>
-<a name="ln-163"></a>    <span class="n">tau1</span> <span class="o">=</span> <span class="n">w1_x</span><span class="o">*</span><span class="nb">sqrt</span><span class="p">(</span><span class="mf">2.</span><span class="p">)</span>
-<a name="ln-164"></a>   <span class="k">else</span>
-<a name="ln-165"></a><span class="k">    </span><span class="n">tau</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">w0_x</span> <span class="c">!cos^2() profile_</span>
-<a name="ln-166"></a>    <span class="n">tau1</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">w1_x</span> <span class="c">!cos^2() profile_</span>
-<a name="ln-167"></a>   <span class="k">end if</span>
-<a name="ln-168"></a><span class="k">   </span><span class="n">lp_in</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">xc_lp</span> <span class="o">-</span> <span class="n">tau</span>
-<a name="ln-169"></a>   <span class="n">lp_end</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">xc_lp</span> <span class="o">+</span> <span class="n">tau</span>
-<a name="ln-170"></a>   <span class="n">eps</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="p">(</span><span class="n">oml</span><span class="o">*</span><span class="n">w0_y</span><span class="p">)</span>
-<a name="ln-171"></a>   <span class="n">sigm</span> <span class="o">=</span> <span class="n">lam0</span><span class="o">/</span><span class="n">w0_x</span>
-<a name="ln-172"></a>   <span class="n">xf</span> <span class="o">=</span> <span class="n">xc_lp</span> <span class="o">+</span> <span class="n">t0_lp</span>
-<a name="ln-173"></a>   <span class="c">!=======================</span>
-<a name="ln-174"></a>   <span class="n">xc_loc</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">xc_lp</span>
-<a name="ln-175"></a>   <span class="n">xf_loc</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">xf</span>
-<a name="ln-176"></a>   <span class="n">env</span><span class="p">(:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="p">:)</span> <span class="o">=</span> <span class="mf">0.0</span>
-<a name="ln-177"></a>   <span class="k">if</span> <span class="p">(</span><span class="n">g_prof</span><span class="p">)</span> <span class="k">then</span>
-<a name="ln-178"></a><span class="k">    call </span><span class="n">init_gprof_envelope_field</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">a0</span><span class="p">,</span> <span class="n">tt</span><span class="p">,</span> <span class="n">t0_lp</span><span class="p">,</span> <span class="n">w0_x</span><span class="p">,</span> <span class="n">w0_y</span><span class="p">,</span> <span class="p">&amp;</span>
-<a name="ln-179"></a>                                   <span class="n">xf</span><span class="p">,</span> <span class="n">oml</span><span class="p">,</span> <span class="n">pw_ind</span><span class="p">,</span> <span class="n">i1</span><span class="p">,</span> <span class="n">i2</span><span class="p">,</span> <span class="n">y0_cent</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">z0_cent</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
-<a name="ln-180"></a>   <span class="k">else</span>
-<a name="ln-181"></a><span class="k">    call </span><span class="n">init_envelope_field</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">a0</span><span class="p">,</span> <span class="n">tt</span><span class="p">,</span> <span class="n">t0_lp</span><span class="p">,</span> <span class="n">w0_x</span><span class="p">,</span> <span class="n">w0_y</span><span class="p">,</span> <span class="n">xf</span><span class="p">,</span> <span class="p">&amp;</span>
-<a name="ln-182"></a>                             <span class="n">oml</span><span class="p">,</span> <span class="n">pw_ind</span><span class="p">,</span> <span class="n">i1</span><span class="p">,</span> <span class="n">i2</span><span class="p">,</span> <span class="n">y0_cent</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">z0_cent</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
-<a name="ln-183"></a>    <span class="c">!call init_env_filtering(env,i1,i2,j1,nyp,k1,nzp)</span>
-<a name="ln-184"></a>   <span class="k">end if</span>
-<a name="ln-185"></a><span class="k">   if</span> <span class="p">(</span><span class="n">nb_laser</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="k">then</span>
-<a name="ln-186"></a><span class="k">    do </span><span class="n">ic</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">nb_laser</span>
-<a name="ln-187"></a>     <span class="n">lp_in</span><span class="p">(</span><span class="n">ic</span><span class="p">)</span> <span class="o">=</span> <span class="n">lp_in</span><span class="p">(</span><span class="n">ic</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">lp_delay</span><span class="p">(</span><span class="n">ic</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
-<a name="ln-188"></a>     <span class="n">lp_end</span><span class="p">(</span><span class="n">ic</span><span class="p">)</span> <span class="o">=</span> <span class="n">lp_end</span><span class="p">(</span><span class="n">ic</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">lp_delay</span><span class="p">(</span><span class="n">ic</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
-<a name="ln-189"></a>     <span class="n">xc_loc</span><span class="p">(</span><span class="n">ic</span><span class="p">)</span> <span class="o">=</span> <span class="n">xc_loc</span><span class="p">(</span><span class="n">ic</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">lp_delay</span><span class="p">(</span><span class="n">ic</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
-<a name="ln-190"></a>     <span class="n">xf_loc</span><span class="p">(</span><span class="n">ic</span><span class="p">)</span> <span class="o">=</span> <span class="n">xc_loc</span><span class="p">(</span><span class="n">ic</span><span class="p">)</span> <span class="o">+</span> <span class="n">t0_lp</span>
-<a name="ln-191"></a>     <span class="k">if</span> <span class="p">(</span><span class="n">lp_end</span><span class="p">(</span><span class="n">ic</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">xm</span><span class="p">)</span> <span class="k">then</span>
-<a name="ln-192"></a><span class="k">      if</span> <span class="p">(</span><span class="n">g_prof</span><span class="p">)</span> <span class="k">then</span>
-<a name="ln-193"></a><span class="k">       call </span><span class="n">init_gprof_envelope_field</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">a0</span><span class="p">,</span> <span class="n">tt</span><span class="p">,</span> <span class="n">t0_lp</span><span class="p">,</span> <span class="n">w0_x</span><span class="p">,</span> <span class="p">&amp;</span>
-<a name="ln-194"></a>                                      <span class="n">w0_y</span><span class="p">,</span> <span class="n">xf_loc</span><span class="p">(</span><span class="n">ic</span><span class="p">),</span> <span class="n">oml</span><span class="p">,</span> <span class="n">pw_ind</span><span class="p">,</span> <span class="n">i1</span><span class="p">,</span> <span class="n">i2</span><span class="p">,</span> <span class="n">y0_cent</span><span class="p">(</span><span class="n">ic</span><span class="p">),</span> <span class="p">&amp;</span>
-<a name="ln-195"></a>                                      <span class="n">z0_cent</span><span class="p">(</span><span class="n">ic</span><span class="p">))</span>
-<a name="ln-196"></a>      <span class="k">else</span>
-<a name="ln-197"></a><span class="k">       call </span><span class="n">init_envelope_field</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">a0</span><span class="p">,</span> <span class="n">tt</span><span class="p">,</span> <span class="n">t0_lp</span><span class="p">,</span> <span class="n">w0_x</span><span class="p">,</span> <span class="n">w0_y</span><span class="p">,</span> <span class="p">&amp;</span>
-<a name="ln-198"></a>                                <span class="n">xf_loc</span><span class="p">(</span><span class="n">ic</span><span class="p">),</span> <span class="n">oml</span><span class="p">,</span> <span class="n">pw_ind</span><span class="p">,</span> <span class="n">i1</span><span class="p">,</span> <span class="n">i2</span><span class="p">,</span> <span class="n">y0_cent</span><span class="p">(</span><span class="n">ic</span><span class="p">),</span> <span class="n">z0_cent</span><span class="p">(</span><span class="n">ic</span><span class="p">))</span>
-<a name="ln-199"></a>      <span class="k">end if</span>
-<a name="ln-200"></a><span class="k">     end if</span>
-<a name="ln-201"></a><span class="k">    end do</span>
-<a name="ln-202"></a><span class="k">   end if</span>
-<a name="ln-203"></a><span class="k">   if</span> <span class="p">(</span><span class="n">lpf_ord</span> <span class="o">==</span> <span class="mi">4</span><span class="p">)</span> <span class="k">then</span> <span class="c">!set initial first derivative</span>
-<a name="ln-204"></a>    <span class="n">env</span><span class="p">(</span><span class="n">i1</span><span class="p">:</span><span class="n">i2</span><span class="p">,</span> <span class="n">j1</span><span class="p">:</span><span class="n">nyp</span><span class="p">,</span> <span class="n">k1</span><span class="p">:</span><span class="n">nzp</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span><span class="mi">4</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="n">env</span><span class="p">(</span><span class="n">i1</span><span class="p">:</span><span class="n">i2</span><span class="p">,</span> <span class="n">j1</span><span class="p">:</span><span class="n">nyp</span><span class="p">,</span> <span class="n">k1</span><span class="p">:</span><span class="n">nzp</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">env</span><span class="p">(</span> <span class="p">&amp;</span>
-<a name="ln-205"></a>                                       <span class="n">i1</span><span class="p">:</span><span class="n">i2</span><span class="p">,</span> <span class="n">j1</span><span class="p">:</span><span class="n">nyp</span><span class="p">,</span> <span class="n">k1</span><span class="p">:</span><span class="n">nzp</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span><span class="mi">4</span><span class="p">))</span><span class="o">/</span><span class="n">dt</span>
-<a name="ln-206"></a>   <span class="k">end if</span>
-<a name="ln-207"></a>   <span class="c">!=================TWO-COLOR</span>
-<a name="ln-208"></a>   <span class="k">if</span> <span class="p">(</span><span class="n">Two_color</span><span class="p">)</span> <span class="k">then</span>
-<a name="ln-209"></a><span class="k">    </span><span class="n">env1</span><span class="p">(:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="p">:)</span> <span class="o">=</span> <span class="mf">0.0</span>
-<a name="ln-210"></a>    <span class="n">xc1_lp</span> <span class="o">=</span> <span class="n">xc_loc</span><span class="p">(</span><span class="n">nb_laser</span><span class="p">)</span> <span class="o">-</span> <span class="n">lp_offset</span>
-<a name="ln-211"></a>    <span class="n">xf1</span> <span class="o">=</span> <span class="n">xc1_lp</span> <span class="o">+</span> <span class="n">t1_lp</span>
-<a name="ln-212"></a>
-<a name="ln-213"></a>    <span class="n">lp_ionz_in</span> <span class="o">=</span> <span class="n">xc1_lp</span> <span class="o">-</span> <span class="n">tau1</span>
-<a name="ln-214"></a>    <span class="n">lp_ionz_end</span> <span class="o">=</span> <span class="n">xc1_lp</span> <span class="o">+</span> <span class="n">tau1</span>
-<a name="ln-215"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">lp_ionz_end</span> <span class="o">&gt;</span> <span class="n">xm</span><span class="p">)</span> <span class="k">then</span>
-<a name="ln-216"></a><span class="k">     if</span> <span class="p">(</span><span class="n">g_prof</span><span class="p">)</span> <span class="k">then</span>
-<a name="ln-217"></a><span class="k">      call </span><span class="n">init_gprof_envelope_field</span><span class="p">(</span><span class="n">env1</span><span class="p">,</span> <span class="n">a1</span><span class="p">,</span> <span class="n">tt</span><span class="p">,</span> <span class="n">t1_lp</span><span class="p">,</span> <span class="n">w1_x</span><span class="p">,</span> <span class="p">&amp;</span>
-<a name="ln-218"></a>                                     <span class="n">w1_y</span><span class="p">,</span> <span class="n">xf1</span><span class="p">,</span> <span class="n">om1</span><span class="p">,</span> <span class="n">pw_ind</span><span class="p">,</span> <span class="n">i1</span><span class="p">,</span> <span class="n">i2</span><span class="p">,</span> <span class="n">y1_cent</span><span class="p">,</span> <span class="n">z1_cent</span><span class="p">)</span>
-<a name="ln-219"></a>     <span class="k">else</span>
-<a name="ln-220"></a><span class="k">      call </span><span class="n">init_envelope_field</span><span class="p">(</span><span class="n">env1</span><span class="p">,</span> <span class="n">a1</span><span class="p">,</span> <span class="n">tt</span><span class="p">,</span> <span class="n">t1_lp</span><span class="p">,</span> <span class="n">w1_x</span><span class="p">,</span> <span class="n">w1_y</span><span class="p">,</span> <span class="n">xf1</span><span class="p">,</span> <span class="p">&amp;</span>
-<a name="ln-221"></a>                               <span class="n">om1</span><span class="p">,</span> <span class="n">pw_ind</span><span class="p">,</span> <span class="n">i1</span><span class="p">,</span> <span class="n">i2</span><span class="p">,</span> <span class="n">y1_cent</span><span class="p">,</span> <span class="n">z1_cent</span><span class="p">)</span>
-<a name="ln-222"></a>     <span class="k">end if</span>
-<a name="ln-223"></a><span class="k">    end if</span>
-<a name="ln-224"></a><span class="k">   end if</span>
-<a name="ln-225"></a>
-<a name="ln-226"></a>   <span class="c">!=======================</span>
-<a name="ln-227"></a>   <span class="n">ebf</span> <span class="o">=</span> <span class="mf">0.0</span>
-<a name="ln-228"></a>   <span class="c">!=====================</span>
-<a name="ln-229"></a>   <span class="k">if</span> <span class="p">(</span><span class="n">pe0</span><span class="p">)</span> <span class="k">then</span>
-<a name="ln-230"></a><span class="k">    open</span> <span class="p">(</span><span class="mi">26</span><span class="p">,</span> <span class="k">file</span><span class="o">=</span><span class="s1">&#39;Initial_env_info.dat&#39;</span><span class="p">)</span>
-<a name="ln-231"></a>    <span class="k">write</span> <span class="p">(</span><span class="mi">26</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39;number &#39;</span><span class="p">,</span> <span class="n">nb_laser</span><span class="p">,</span> <span class="s1">&#39;LP envelope injected &#39;</span>
-<a name="ln-232"></a>    <span class="k">write</span> <span class="p">(</span><span class="mi">26</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; First pulse parameters&#39;</span>
-<a name="ln-233"></a>    <span class="k">write</span> <span class="p">(</span><span class="mi">26</span><span class="p">,</span> <span class="s1">&#39;(a21,e11.4)&#39;</span><span class="p">)</span> <span class="s1">&#39; Focal x-position xf=&#39;</span><span class="p">,</span> <span class="n">xf</span>
-<a name="ln-234"></a>    <span class="k">write</span> <span class="p">(</span><span class="mi">26</span><span class="p">,</span> <span class="s1">&#39;(a21,e11.4)&#39;</span><span class="p">)</span> <span class="s1">&#39; Centr x-position xc=&#39;</span><span class="p">,</span> <span class="n">xc_lp</span>
-<a name="ln-235"></a>    <span class="k">write</span> <span class="p">(</span><span class="mi">26</span><span class="p">,</span> <span class="s1">&#39;(a20,e11.4)&#39;</span><span class="p">)</span> <span class="s1">&#39; Size (microns) lx=&#39;</span><span class="p">,</span> <span class="n">w0_x</span>
-<a name="ln-236"></a>    <span class="k">write</span> <span class="p">(</span><span class="mi">26</span><span class="p">,</span> <span class="s1">&#39;(a14,e11.4)&#39;</span><span class="p">)</span> <span class="s1">&#39; FWHM (fs) lx=&#39;</span><span class="p">,</span> <span class="n">tau_fwhm</span>
-<a name="ln-237"></a>    <span class="k">write</span> <span class="p">(</span><span class="mi">26</span><span class="p">,</span> <span class="s1">&#39;(a19,e11.4)&#39;</span><span class="p">)</span> <span class="s1">&#39; Waist(microns) ly=&#39;</span><span class="p">,</span> <span class="n">w0_y</span>
-<a name="ln-238"></a>    <span class="k">write</span> <span class="p">(</span><span class="mi">26</span><span class="p">,</span> <span class="s1">&#39;(a17,e11.4)&#39;</span><span class="p">)</span> <span class="s1">&#39; FWHM(microns) = &#39;</span><span class="p">,</span> <span class="n">lp_rad</span>
-<a name="ln-239"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">nb_laser</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="k">write</span> <span class="p">(</span><span class="mi">26</span><span class="p">,</span> <span class="s1">&#39;(a21,3e11.4)&#39;</span><span class="p">)</span> <span class="s1">&#39; Delay among pulses= &#39;</span><span class="p">,</span> <span class="p">&amp;</span>
-<a name="ln-240"></a>     <span class="n">loc_delay</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">)</span>
-<a name="ln-241"></a>    <span class="k">if</span> <span class="p">(</span><span class="n">Two_color</span><span class="p">)</span> <span class="k">then</span>
-<a name="ln-242"></a><span class="k">     write</span> <span class="p">(</span><span class="mi">26</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span> <span class="s1">&#39; Injection pulse parameters&#39;</span>
-<a name="ln-243"></a>     <span class="k">write</span> <span class="p">(</span><span class="mi">26</span><span class="p">,</span> <span class="s1">&#39;(a16,e11.4)&#39;</span><span class="p">)</span> <span class="s1">&#39; amplitude  a1 =&#39;</span><span class="p">,</span> <span class="n">a1</span>
-<a name="ln-244"></a>     <span class="k">write</span> <span class="p">(</span><span class="mi">26</span><span class="p">,</span> <span class="s1">&#39;(a21,e11.4)&#39;</span><span class="p">)</span> <span class="s1">&#39; Focal x-position xf=&#39;</span><span class="p">,</span> <span class="n">xf1</span>
-<a name="ln-245"></a>     <span class="k">write</span> <span class="p">(</span><span class="mi">26</span><span class="p">,</span> <span class="s1">&#39;(a21,e11.4)&#39;</span><span class="p">)</span> <span class="s1">&#39; Centr x-position xc=&#39;</span><span class="p">,</span> <span class="n">xc1_lp</span>
-<a name="ln-246"></a>     <span class="k">write</span> <span class="p">(</span><span class="mi">26</span><span class="p">,</span> <span class="s1">&#39;(a20,e11.4)&#39;</span><span class="p">)</span> <span class="s1">&#39; Size (microns) lx=&#39;</span><span class="p">,</span> <span class="n">w1_x</span>
-<a name="ln-247"></a>     <span class="k">write</span> <span class="p">(</span><span class="mi">26</span><span class="p">,</span> <span class="s1">&#39;(a19,e11.4)&#39;</span><span class="p">)</span> <span class="s1">&#39; Waist(microns) ly=&#39;</span><span class="p">,</span> <span class="n">w1_y</span>
-<a name="ln-248"></a>    <span class="k">end if</span>
-<a name="ln-249"></a><span class="k">    close</span> <span class="p">(</span><span class="mi">26</span><span class="p">)</span>
-<a name="ln-250"></a>   <span class="k">end if</span>
-<a name="ln-251"></a><span class="k">   </span><span class="n">part_in</span> <span class="o">=</span> <span class="n">lp_end</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">lpx</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
-<a name="ln-252"></a>   <span class="c">!=================def part distr points</span>
-<a name="ln-253"></a>  <span class="k">end subroutine</span>
-<a name="ln-254"></a>
-<a name="ln-255"></a><span class="k"> end module</span>
+    <div class="hl"><pre><span></span><a id="ln-1" name="ln-1" href="#ln-1"></a><span class="c">!*****************************************************************************************************!</span>
+<a id="ln-2" name="ln-2" href="#ln-2"></a><span class="c">!                            Copyright 2008-2020  The ALaDyn Collaboration                            !</span>
+<a id="ln-3" name="ln-3" href="#ln-3"></a><span class="c">!*****************************************************************************************************!</span>
+<a id="ln-4" name="ln-4" href="#ln-4"></a>
+<a id="ln-5" name="ln-5" href="#ln-5"></a><span class="c">!*****************************************************************************************************!</span>
+<a id="ln-6" name="ln-6" href="#ln-6"></a><span class="c">!  This file is part of ALaDyn.                                                                       !</span>
+<a id="ln-7" name="ln-7" href="#ln-7"></a><span class="c">!                                                                                                     !</span>
+<a id="ln-8" name="ln-8" href="#ln-8"></a><span class="c">!  ALaDyn is free software: you can redistribute it and/or modify                                     !</span>
+<a id="ln-9" name="ln-9" href="#ln-9"></a><span class="c">!  it under the terms of the GNU General Public License as published by                               !</span>
+<a id="ln-10" name="ln-10" href="#ln-10"></a><span class="c">!  the Free Software Foundation, either version 3 of the License, or                                  !</span>
+<a id="ln-11" name="ln-11" href="#ln-11"></a><span class="c">!  (at your option) any later version.                                                                !</span>
+<a id="ln-12" name="ln-12" href="#ln-12"></a><span class="c">!                                                                                                     !</span>
+<a id="ln-13" name="ln-13" href="#ln-13"></a><span class="c">!  ALaDyn is distributed in the hope that it will be useful,                                          !</span>
+<a id="ln-14" name="ln-14" href="#ln-14"></a><span class="c">!  but WITHOUT ANY WARRANTY; without even the implied warranty of                                     !</span>
+<a id="ln-15" name="ln-15" href="#ln-15"></a><span class="c">!  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                                      !</span>
+<a id="ln-16" name="ln-16" href="#ln-16"></a><span class="c">!  GNU General Public License for more details.                                                       !</span>
+<a id="ln-17" name="ln-17" href="#ln-17"></a><span class="c">!                                                                                                     !</span>
+<a id="ln-18" name="ln-18" href="#ln-18"></a><span class="c">!  You should have received a copy of the GNU General Public License                                  !</span>
+<a id="ln-19" name="ln-19" href="#ln-19"></a><span class="c">!  along with ALaDyn.  If not, see &lt;http://www.gnu.org/licenses/&gt;.                                    !</span>
+<a id="ln-20" name="ln-20" href="#ln-20"></a><span class="c">!*****************************************************************************************************!</span>
+<a id="ln-21" name="ln-21" href="#ln-21"></a>
+<a id="ln-22" name="ln-22" href="#ln-22"></a><span class="w"> </span><span class="k">module </span><span class="n">init_laser_field</span><span class="w"></span>
+<a id="ln-23" name="ln-23" href="#ln-23"></a>
+<a id="ln-24" name="ln-24" href="#ln-24"></a><span class="w">  </span><span class="k">use </span><span class="n">pstruct_data</span><span class="w"></span>
+<a id="ln-25" name="ln-25" href="#ln-25"></a><span class="w">  </span><span class="k">use </span><span class="n">fstruct_data</span><span class="w"></span>
+<a id="ln-26" name="ln-26" href="#ln-26"></a><span class="w">  </span><span class="k">use </span><span class="n">init_grid_field</span><span class="w"></span>
+<a id="ln-27" name="ln-27" href="#ln-27"></a><span class="w">  </span><span class="k">use </span><span class="n">grid_fields</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="p">:</span><span class="w"> </span><span class="n">env_bds</span><span class="w"></span>
+<a id="ln-28" name="ln-28" href="#ln-28"></a>
+<a id="ln-29" name="ln-29" href="#ln-29"></a><span class="w">  </span><span class="k">implicit none</span>
+<a id="ln-30" name="ln-30" href="#ln-30"></a>
+<a id="ln-31" name="ln-31" href="#ln-31"></a><span class="k"> contains</span><span class="w"></span>
+<a id="ln-32" name="ln-32" href="#ln-32"></a><span class="w">  </span><span class="c">!=========================================</span>
+<a id="ln-33" name="ln-33" href="#ln-33"></a>
+<a id="ln-34" name="ln-34" href="#ln-34"></a><span class="w">  </span><span class="k">subroutine </span><span class="n">lp_pulse</span><span class="p">(</span><span class="n">lp_mod</span><span class="p">,</span><span class="w"> </span><span class="n">part_in</span><span class="p">)</span><span class="w"></span>
+<a id="ln-35" name="ln-35" href="#ln-35"></a>
+<a id="ln-36" name="ln-36" href="#ln-36"></a><span class="w">   </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">lp_mod</span><span class="w"></span>
+<a id="ln-37" name="ln-37" href="#ln-37"></a><span class="w">   </span><span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">part_in</span><span class="w"></span>
+<a id="ln-38" name="ln-38" href="#ln-38"></a><span class="w">   </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">ic</span><span class="p">,</span><span class="w"> </span><span class="n">lp_ind</span><span class="p">,</span><span class="w"> </span><span class="n">i1</span><span class="p">,</span><span class="w"> </span><span class="n">i2</span><span class="w"></span>
+<a id="ln-39" name="ln-39" href="#ln-39"></a><span class="w">   </span><span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">angle</span><span class="p">,</span><span class="w"> </span><span class="n">shx_lp</span><span class="p">,</span><span class="w"> </span><span class="n">sigm</span><span class="p">,</span><span class="w"> </span><span class="n">eps</span><span class="p">,</span><span class="w"> </span><span class="n">xm</span><span class="p">,</span><span class="w"> </span><span class="n">tt</span><span class="p">,</span><span class="w"> </span><span class="n">tau</span><span class="p">,</span><span class="w"> </span><span class="n">tau1</span><span class="w"></span>
+<a id="ln-40" name="ln-40" href="#ln-40"></a><span class="w">   </span><span class="c">!===========================</span>
+<a id="ln-41" name="ln-41" href="#ln-41"></a><span class="w">   </span><span class="c">! field grid index defined on set_pgrid</span>
+<a id="ln-42" name="ln-42" href="#ln-42"></a>
+<a id="ln-43" name="ln-43" href="#ln-43"></a><span class="w">   </span><span class="n">i1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">loc_xgrid</span><span class="p">(</span><span class="n">imodx</span><span class="p">)%</span><span class="n">p_ind</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<a id="ln-44" name="ln-44" href="#ln-44"></a><span class="w">   </span><span class="n">i2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">loc_xgrid</span><span class="p">(</span><span class="n">imodx</span><span class="p">)%</span><span class="n">p_ind</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="w"></span>
+<a id="ln-45" name="ln-45" href="#ln-45"></a><span class="w">   </span><span class="n">xm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">loc_xgrid</span><span class="p">(</span><span class="n">imodx</span><span class="p">)%</span><span class="n">gmin</span><span class="w"> </span><span class="c">! =&gt; field index i1</span>
+<a id="ln-46" name="ln-46" href="#ln-46"></a><span class="w">   </span><span class="n">tt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0</span><span class="w"></span>
+<a id="ln-47" name="ln-47" href="#ln-47"></a><span class="w">   </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">g_prof</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<a id="ln-48" name="ln-48" href="#ln-48"></a><span class="k">    </span><span class="n">tau</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">w0_x</span><span class="o">*</span><span class="nb">sqrt</span><span class="p">(</span><span class="mf">2.</span><span class="p">)</span><span class="w"></span>
+<a id="ln-49" name="ln-49" href="#ln-49"></a><span class="w">    </span><span class="n">tau1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">w1_x</span><span class="o">*</span><span class="nb">sqrt</span><span class="p">(</span><span class="mf">2.</span><span class="p">)</span><span class="w"></span>
+<a id="ln-50" name="ln-50" href="#ln-50"></a><span class="w">   </span><span class="k">else</span>
+<a id="ln-51" name="ln-51" href="#ln-51"></a><span class="k">    </span><span class="n">tau</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.5</span><span class="o">*</span><span class="n">w0_x</span><span class="w"> </span><span class="c">!cos^2() profile_</span>
+<a id="ln-52" name="ln-52" href="#ln-52"></a><span class="w">    </span><span class="n">tau1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.5</span><span class="o">*</span><span class="n">w1_x</span><span class="w"> </span><span class="c">!cos^2() profile_</span>
+<a id="ln-53" name="ln-53" href="#ln-53"></a><span class="w">   </span><span class="k">end if</span>
+<a id="ln-54" name="ln-54" href="#ln-54"></a><span class="k">   </span><span class="n">lp_amp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">oml</span><span class="o">*</span><span class="n">a0</span><span class="w"></span>
+<a id="ln-55" name="ln-55" href="#ln-55"></a><span class="w">   </span><span class="n">lp1_amp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">om1</span><span class="o">*</span><span class="n">a1</span><span class="w"></span>
+<a id="ln-56" name="ln-56" href="#ln-56"></a><span class="w">   </span><span class="c">!=====================</span>
+<a id="ln-57" name="ln-57" href="#ln-57"></a><span class="w">   </span><span class="n">lp_in</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">xc_lp</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">tau</span><span class="w"></span>
+<a id="ln-58" name="ln-58" href="#ln-58"></a><span class="w">   </span><span class="n">lp_end</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">xc_lp</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">tau</span><span class="w"></span>
+<a id="ln-59" name="ln-59" href="#ln-59"></a><span class="w">   </span><span class="n">eps</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.</span><span class="o">/</span><span class="p">(</span><span class="n">oml</span><span class="o">*</span><span class="n">w0_y</span><span class="p">)</span><span class="w"></span>
+<a id="ln-60" name="ln-60" href="#ln-60"></a><span class="w">   </span><span class="n">sigm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">lam0</span><span class="o">/</span><span class="n">w0_x</span><span class="w"></span>
+<a id="ln-61" name="ln-61" href="#ln-61"></a><span class="w">   </span><span class="n">angle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">incid_angle</span><span class="w"></span>
+<a id="ln-62" name="ln-62" href="#ln-62"></a><span class="w">   </span><span class="n">xf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">xc_lp</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">t0_lp</span><span class="w"></span>
+<a id="ln-63" name="ln-63" href="#ln-63"></a><span class="w">   </span><span class="c">!=======================</span>
+<a id="ln-64" name="ln-64" href="#ln-64"></a><span class="w">   </span><span class="n">lp_ind</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">lp_mod</span><span class="w"></span>
+<a id="ln-65" name="ln-65" href="#ln-65"></a><span class="w">   </span><span class="n">shx_lp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0</span><span class="w"></span>
+<a id="ln-66" name="ln-66" href="#ln-66"></a><span class="w">   </span><span class="n">xc_loc</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">xc_lp</span><span class="w"></span>
+<a id="ln-67" name="ln-67" href="#ln-67"></a><span class="w">   </span><span class="n">xf_loc</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">xf</span><span class="w"></span>
+<a id="ln-68" name="ln-68" href="#ln-68"></a><span class="w">   </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">plane_wave</span><span class="p">)</span><span class="w"> </span><span class="n">lp_ind</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<a id="ln-69" name="ln-69" href="#ln-69"></a><span class="w">   </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">angle</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">0.0</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<a id="ln-70" name="ln-70" href="#ln-70"></a><span class="k">    </span><span class="n">shx_lp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">lpx</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span><span class="w"></span>
+<a id="ln-71" name="ln-71" href="#ln-71"></a><span class="w">    </span><span class="k">call </span><span class="n">init_lp_fields</span><span class="p">(</span><span class="n">ebf</span><span class="p">,</span><span class="w"> </span><span class="n">lp_amp</span><span class="p">,</span><span class="w"> </span><span class="n">tt</span><span class="p">,</span><span class="w"> </span><span class="n">t0_lp</span><span class="p">,</span><span class="w"> </span><span class="n">w0_x</span><span class="p">,</span><span class="w"> </span><span class="n">w0_y</span><span class="p">,</span><span class="w"> </span><span class="n">xf</span><span class="p">,</span><span class="w"> </span><span class="n">oml</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
+<a id="ln-72" name="ln-72" href="#ln-72"></a><span class="w">                        </span><span class="n">angle</span><span class="p">,</span><span class="w"> </span><span class="n">shx_lp</span><span class="p">,</span><span class="w"> </span><span class="n">lp_ind</span><span class="p">,</span><span class="w"> </span><span class="n">i1</span><span class="p">,</span><span class="w"> </span><span class="n">i2</span><span class="p">,</span><span class="w"> </span><span class="n">y0_cent</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="n">z0_cent</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="w"></span>
+<a id="ln-73" name="ln-73" href="#ln-73"></a><span class="w">   </span><span class="k">else</span><span class="w"> </span><span class="c">!normal incidence</span>
+<a id="ln-74" name="ln-74" href="#ln-74"></a><span class="w">    </span><span class="k">call </span><span class="n">init_lp_inc0_fields</span><span class="p">(</span><span class="n">ebf</span><span class="p">,</span><span class="w"> </span><span class="n">lp_amp</span><span class="p">,</span><span class="w"> </span><span class="n">tt</span><span class="p">,</span><span class="w"> </span><span class="n">t0_lp</span><span class="p">,</span><span class="w"> </span><span class="n">w0_x</span><span class="p">,</span><span class="w"> </span><span class="n">w0_y</span><span class="p">,</span><span class="w"> </span><span class="n">xf</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
+<a id="ln-75" name="ln-75" href="#ln-75"></a><span class="w">                             </span><span class="n">oml</span><span class="p">,</span><span class="w"> </span><span class="n">lp_ind</span><span class="p">,</span><span class="w"> </span><span class="n">i1</span><span class="p">,</span><span class="w"> </span><span class="n">i2</span><span class="p">,</span><span class="w"> </span><span class="n">y0_cent</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="n">z0_cent</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="w"></span>
+<a id="ln-76" name="ln-76" href="#ln-76"></a><span class="w">   </span><span class="k">end if</span>
+<a id="ln-77" name="ln-77" href="#ln-77"></a><span class="k">   if</span><span class="w"> </span><span class="p">(</span><span class="n">nb_laser</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<a id="ln-78" name="ln-78" href="#ln-78"></a><span class="k">    do </span><span class="n">ic</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">nb_laser</span><span class="w"></span>
+<a id="ln-79" name="ln-79" href="#ln-79"></a><span class="w">     </span><span class="n">lp_in</span><span class="p">(</span><span class="n">ic</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">lp_in</span><span class="p">(</span><span class="n">ic</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">lp_delay</span><span class="p">(</span><span class="n">ic</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<a id="ln-80" name="ln-80" href="#ln-80"></a><span class="w">     </span><span class="n">lp_end</span><span class="p">(</span><span class="n">ic</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">lp_end</span><span class="p">(</span><span class="n">ic</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">lp_delay</span><span class="p">(</span><span class="n">ic</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<a id="ln-81" name="ln-81" href="#ln-81"></a><span class="w">     </span><span class="n">xc_loc</span><span class="p">(</span><span class="n">ic</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">xc_loc</span><span class="p">(</span><span class="n">ic</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">lp_delay</span><span class="p">(</span><span class="n">ic</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<a id="ln-82" name="ln-82" href="#ln-82"></a><span class="w">     </span><span class="n">xf_loc</span><span class="p">(</span><span class="n">ic</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">xc_loc</span><span class="p">(</span><span class="n">ic</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">t0_lp</span><span class="w"></span>
+<a id="ln-83" name="ln-83" href="#ln-83"></a><span class="w">     </span><span class="k">call </span><span class="n">init_lp_inc0_fields</span><span class="p">(</span><span class="n">ebf</span><span class="p">,</span><span class="w"> </span><span class="n">lp_amp</span><span class="p">,</span><span class="w"> </span><span class="n">tt</span><span class="p">,</span><span class="w"> </span><span class="n">t0_lp</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
+<a id="ln-84" name="ln-84" href="#ln-84"></a><span class="w">                              </span><span class="n">w0_x</span><span class="p">,</span><span class="w"> </span><span class="n">w0_y</span><span class="p">,</span><span class="w"> </span><span class="n">xf_loc</span><span class="p">(</span><span class="n">ic</span><span class="p">),</span><span class="w"> </span><span class="n">oml</span><span class="p">,</span><span class="w"> </span><span class="n">lp_ind</span><span class="p">,</span><span class="w"> </span><span class="n">i1</span><span class="p">,</span><span class="w"> </span><span class="n">i2</span><span class="p">,</span><span class="w"> </span><span class="n">y0_cent</span><span class="p">(</span><span class="n">ic</span><span class="p">),</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
+<a id="ln-85" name="ln-85" href="#ln-85"></a><span class="w">                              </span><span class="n">z0_cent</span><span class="p">(</span><span class="n">ic</span><span class="p">))</span><span class="w"></span>
+<a id="ln-86" name="ln-86" href="#ln-86"></a><span class="w">    </span><span class="k">end do</span>
+<a id="ln-87" name="ln-87" href="#ln-87"></a><span class="k">   end if</span><span class="w"></span>
+<a id="ln-88" name="ln-88" href="#ln-88"></a><span class="w">   </span><span class="c">!=================TWO-COLOR</span>
+<a id="ln-89" name="ln-89" href="#ln-89"></a><span class="w">   </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">Two_color</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<a id="ln-90" name="ln-90" href="#ln-90"></a><span class="k">    </span><span class="n">xc1_lp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">xc_loc</span><span class="p">(</span><span class="n">nb_laser</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">lp_offset</span><span class="w"></span>
+<a id="ln-91" name="ln-91" href="#ln-91"></a><span class="w">    </span><span class="n">xf1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">xc1_lp</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">t1_lp</span><span class="w"></span>
+<a id="ln-92" name="ln-92" href="#ln-92"></a>
+<a id="ln-93" name="ln-93" href="#ln-93"></a><span class="w">    </span><span class="n">lp_ionz_in</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">xc1_lp</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">tau1</span><span class="w"></span>
+<a id="ln-94" name="ln-94" href="#ln-94"></a><span class="w">    </span><span class="n">lp_ionz_end</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">xc1_lp</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">tau1</span><span class="w"></span>
+<a id="ln-95" name="ln-95" href="#ln-95"></a><span class="w">    </span><span class="k">call </span><span class="n">init_lp_inc0_fields</span><span class="p">(</span><span class="n">ebf</span><span class="p">,</span><span class="w"> </span><span class="n">lp1_amp</span><span class="p">,</span><span class="w"> </span><span class="n">tt</span><span class="p">,</span><span class="w"> </span><span class="n">t1_lp</span><span class="p">,</span><span class="w"> </span><span class="n">w1_x</span><span class="p">,</span><span class="w"> </span><span class="n">w1_y</span><span class="p">,</span><span class="w"> </span><span class="n">xf1</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
+<a id="ln-96" name="ln-96" href="#ln-96"></a><span class="w">                             </span><span class="n">om1</span><span class="p">,</span><span class="w"> </span><span class="n">lp_ind</span><span class="p">,</span><span class="w"> </span><span class="n">i1</span><span class="p">,</span><span class="w"> </span><span class="n">i2</span><span class="p">,</span><span class="w"> </span><span class="n">y1_cent</span><span class="p">,</span><span class="w"> </span><span class="n">z1_cent</span><span class="p">)</span><span class="w"></span>
+<a id="ln-97" name="ln-97" href="#ln-97"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">pe0</span><span class="p">)</span><span class="w"> </span><span class="k">write</span><span class="w"> </span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;(a30,e11.4)&#39;</span><span class="p">)</span><span class="w"> </span><span class="s1">&#39;two-color activated at xc1_lp=&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
+<a id="ln-98" name="ln-98" href="#ln-98"></a><span class="w">     </span><span class="n">xc1_lp</span><span class="w"></span>
+<a id="ln-99" name="ln-99" href="#ln-99"></a><span class="w">   </span><span class="k">end if</span><span class="w"></span>
+<a id="ln-100" name="ln-100" href="#ln-100"></a>
+<a id="ln-101" name="ln-101" href="#ln-101"></a><span class="w">   </span><span class="c">!==================================</span>
+<a id="ln-102" name="ln-102" href="#ln-102"></a><span class="w">   </span><span class="n">part_in</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">lp_end</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">lpx</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span><span class="w"></span>
+<a id="ln-103" name="ln-103" href="#ln-103"></a><span class="w">  </span><span class="k">end subroutine</span><span class="w"></span>
+<a id="ln-104" name="ln-104" href="#ln-104"></a><span class="w">  </span><span class="c">!===========================</span>
+<a id="ln-105" name="ln-105" href="#ln-105"></a><span class="w">  </span><span class="k">subroutine </span><span class="n">cp_pulse</span><span class="p">(</span><span class="n">cp_mod</span><span class="p">,</span><span class="w"> </span><span class="n">part_in</span><span class="p">)</span><span class="w"></span>
+<a id="ln-106" name="ln-106" href="#ln-106"></a>
+<a id="ln-107" name="ln-107" href="#ln-107"></a><span class="w">   </span><span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">part_in</span><span class="w"></span>
+<a id="ln-108" name="ln-108" href="#ln-108"></a><span class="w">   </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">cp_mod</span><span class="w"></span>
+<a id="ln-109" name="ln-109" href="#ln-109"></a><span class="w">   </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i1</span><span class="p">,</span><span class="w"> </span><span class="n">i2</span><span class="p">,</span><span class="w"> </span><span class="n">cp_ind</span><span class="w"></span>
+<a id="ln-110" name="ln-110" href="#ln-110"></a><span class="w">   </span><span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">angle</span><span class="p">,</span><span class="w"> </span><span class="n">shx_cp</span><span class="p">,</span><span class="w"> </span><span class="n">eps</span><span class="p">,</span><span class="w"> </span><span class="n">sigm</span><span class="p">,</span><span class="w"> </span><span class="n">xm</span><span class="p">,</span><span class="w"> </span><span class="n">tau</span><span class="p">,</span><span class="w"> </span><span class="n">tt</span><span class="w"></span>
+<a id="ln-111" name="ln-111" href="#ln-111"></a>
+<a id="ln-112" name="ln-112" href="#ln-112"></a><span class="w">   </span><span class="n">lp_amp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">oml</span><span class="o">*</span><span class="n">a0</span><span class="o">/</span><span class="nb">sqrt</span><span class="p">(</span><span class="mf">2.</span><span class="p">)</span><span class="w"></span>
+<a id="ln-113" name="ln-113" href="#ln-113"></a><span class="w">   </span><span class="c">!===========================</span>
+<a id="ln-114" name="ln-114" href="#ln-114"></a><span class="w">   </span><span class="n">i1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">loc_xgrid</span><span class="p">(</span><span class="n">imodx</span><span class="p">)%</span><span class="n">p_ind</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<a id="ln-115" name="ln-115" href="#ln-115"></a><span class="w">   </span><span class="n">i2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">loc_xgrid</span><span class="p">(</span><span class="n">imodx</span><span class="p">)%</span><span class="n">p_ind</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="w"></span>
+<a id="ln-116" name="ln-116" href="#ln-116"></a><span class="w">   </span><span class="n">xm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">loc_xgrid</span><span class="p">(</span><span class="n">imodx</span><span class="p">)%</span><span class="n">gmin</span><span class="w"> </span><span class="c">! =&gt; field index i1</span>
+<a id="ln-117" name="ln-117" href="#ln-117"></a><span class="w">   </span><span class="n">tt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0</span><span class="w"></span>
+<a id="ln-118" name="ln-118" href="#ln-118"></a><span class="w">   </span><span class="n">tau</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.5</span><span class="o">*</span><span class="n">w0_x</span><span class="w"></span>
+<a id="ln-119" name="ln-119" href="#ln-119"></a><span class="w">   </span><span class="n">lp_in</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">xc_lp</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">tau</span><span class="w"> </span><span class="c">!Pulse centroid xc_lp=xf-ts at time t=0 lp_in=xc-tau</span>
+<a id="ln-120" name="ln-120" href="#ln-120"></a><span class="w">   </span><span class="n">lp_end</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">lp_in</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">w0_x</span><span class="w"></span>
+<a id="ln-121" name="ln-121" href="#ln-121"></a><span class="w">   </span><span class="n">eps</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.</span><span class="o">/</span><span class="p">(</span><span class="n">oml</span><span class="o">*</span><span class="n">w0_y</span><span class="p">)</span><span class="w"></span>
+<a id="ln-122" name="ln-122" href="#ln-122"></a><span class="w">   </span><span class="n">sigm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">lam0</span><span class="o">/</span><span class="n">w0_x</span><span class="w"></span>
+<a id="ln-123" name="ln-123" href="#ln-123"></a><span class="w">   </span><span class="n">angle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">incid_angle</span><span class="w"></span>
+<a id="ln-124" name="ln-124" href="#ln-124"></a><span class="w">   </span><span class="n">xf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">xc_lp</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">t0_lp</span><span class="w"></span>
+<a id="ln-125" name="ln-125" href="#ln-125"></a><span class="w">   </span><span class="n">shx_cp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0</span><span class="w"></span>
+<a id="ln-126" name="ln-126" href="#ln-126"></a><span class="w">   </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">angle</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">0.0</span><span class="p">)</span><span class="w"> </span><span class="n">shx_cp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">lpx</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span><span class="w"></span>
+<a id="ln-127" name="ln-127" href="#ln-127"></a><span class="w">   </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">lp_amp</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">0.0</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<a id="ln-128" name="ln-128" href="#ln-128"></a><span class="k">    </span><span class="n">cp_ind</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cp_mod</span><span class="w"></span>
+<a id="ln-129" name="ln-129" href="#ln-129"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">plane_wave</span><span class="p">)</span><span class="w"> </span><span class="n">cp_ind</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<a id="ln-130" name="ln-130" href="#ln-130"></a><span class="w">    </span><span class="c">!=======================</span>
+<a id="ln-131" name="ln-131" href="#ln-131"></a><span class="w">    </span><span class="k">call </span><span class="n">init_cp_fields</span><span class="p">(</span><span class="n">ebf</span><span class="p">,</span><span class="w"> </span><span class="n">lp_amp</span><span class="p">,</span><span class="w"> </span><span class="n">tt</span><span class="p">,</span><span class="w"> </span><span class="n">t0_lp</span><span class="p">,</span><span class="w"> </span><span class="n">w0_x</span><span class="p">,</span><span class="w"> </span><span class="n">w0_y</span><span class="p">,</span><span class="w"> </span><span class="n">xf</span><span class="p">,</span><span class="w"> </span><span class="n">angle</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
+<a id="ln-132" name="ln-132" href="#ln-132"></a><span class="w">                        </span><span class="n">shx_cp</span><span class="p">,</span><span class="w"> </span><span class="n">cp_ind</span><span class="p">,</span><span class="w"> </span><span class="n">i1</span><span class="p">,</span><span class="w"> </span><span class="n">i2</span><span class="p">)</span><span class="w"></span>
+<a id="ln-133" name="ln-133" href="#ln-133"></a><span class="w">    </span><span class="c">!=================def part distr points</span>
+<a id="ln-134" name="ln-134" href="#ln-134"></a><span class="w">    </span><span class="n">lp_end</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">xm</span><span class="w"></span>
+<a id="ln-135" name="ln-135" href="#ln-135"></a><span class="w">   </span><span class="k">end if</span><span class="w"></span>
+<a id="ln-136" name="ln-136" href="#ln-136"></a><span class="w">   </span><span class="c">!======================</span>
+<a id="ln-137" name="ln-137" href="#ln-137"></a><span class="w">   </span><span class="n">part_in</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">lp_end</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">lpx</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span><span class="w"></span>
+<a id="ln-138" name="ln-138" href="#ln-138"></a><span class="w">  </span><span class="k">end subroutine</span><span class="w"></span>
+<a id="ln-139" name="ln-139" href="#ln-139"></a><span class="w">  </span><span class="c">!======================</span>
+<a id="ln-140" name="ln-140" href="#ln-140"></a><span class="w">  </span><span class="k">subroutine </span><span class="n">set_envelope</span><span class="p">(</span><span class="n">part_in</span><span class="p">)</span><span class="w"></span>
+<a id="ln-141" name="ln-141" href="#ln-141"></a>
+<a id="ln-142" name="ln-142" href="#ln-142"></a><span class="w">   </span><span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">part_in</span><span class="w"></span>
+<a id="ln-143" name="ln-143" href="#ln-143"></a><span class="w">   </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">ic</span><span class="p">,</span><span class="w"> </span><span class="n">pw_ind</span><span class="p">,</span><span class="w"> </span><span class="n">i1</span><span class="p">,</span><span class="w"> </span><span class="n">i2</span><span class="p">,</span><span class="w"> </span><span class="n">j1</span><span class="p">,</span><span class="w"> </span><span class="n">k1</span><span class="w"></span>
+<a id="ln-144" name="ln-144" href="#ln-144"></a><span class="w">   </span><span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">eps</span><span class="p">,</span><span class="w"> </span><span class="n">sigm</span><span class="p">,</span><span class="w"> </span><span class="n">xm</span><span class="p">,</span><span class="w"> </span><span class="n">tt</span><span class="p">,</span><span class="w"> </span><span class="n">tau</span><span class="p">,</span><span class="w"> </span><span class="n">tau1</span><span class="p">,</span><span class="w"> </span><span class="n">loc_delay</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="w"></span>
+<a id="ln-145" name="ln-145" href="#ln-145"></a><span class="w">   </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">str</span><span class="p">,</span><span class="w"> </span><span class="n">stl</span><span class="w"></span>
+<a id="ln-146" name="ln-146" href="#ln-146"></a>
+<a id="ln-147" name="ln-147" href="#ln-147"></a><span class="w">   </span><span class="n">lp_amp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a0</span><span class="w"></span>
+<a id="ln-148" name="ln-148" href="#ln-148"></a><span class="w">   </span><span class="n">lp1_amp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a1</span><span class="w"></span>
+<a id="ln-149" name="ln-149" href="#ln-149"></a><span class="w">   </span><span class="c">!===========================</span>
+<a id="ln-150" name="ln-150" href="#ln-150"></a><span class="w">   </span><span class="c">! field grid index defined on set_pgrid</span>
+<a id="ln-151" name="ln-151" href="#ln-151"></a>
+<a id="ln-152" name="ln-152" href="#ln-152"></a><span class="w">   </span><span class="n">j1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">jy1</span><span class="w"></span>
+<a id="ln-153" name="ln-153" href="#ln-153"></a><span class="w">   </span><span class="n">k1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">kz1</span><span class="w"></span>
+<a id="ln-154" name="ln-154" href="#ln-154"></a><span class="w">   </span><span class="n">i1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ix1</span><span class="w"></span>
+<a id="ln-155" name="ln-155" href="#ln-155"></a><span class="w">   </span><span class="n">i2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">nxp</span><span class="w"></span>
+<a id="ln-156" name="ln-156" href="#ln-156"></a><span class="w">   </span><span class="n">xm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">loc_xgrid</span><span class="p">(</span><span class="n">imodx</span><span class="p">)%</span><span class="n">gmin</span><span class="w"></span>
+<a id="ln-157" name="ln-157" href="#ln-157"></a><span class="w">   </span><span class="c">!=========================</span>
+<a id="ln-158" name="ln-158" href="#ln-158"></a><span class="w">   </span><span class="n">tt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0</span><span class="w"></span>
+<a id="ln-159" name="ln-159" href="#ln-159"></a><span class="w">   </span><span class="n">pw_ind</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<a id="ln-160" name="ln-160" href="#ln-160"></a><span class="w">   </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">plane_wave</span><span class="p">)</span><span class="w"> </span><span class="n">pw_ind</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<a id="ln-161" name="ln-161" href="#ln-161"></a><span class="w">   </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">g_prof</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<a id="ln-162" name="ln-162" href="#ln-162"></a><span class="k">    </span><span class="n">tau</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">w0_x</span><span class="o">*</span><span class="nb">sqrt</span><span class="p">(</span><span class="mf">2.</span><span class="p">)</span><span class="w"></span>
+<a id="ln-163" name="ln-163" href="#ln-163"></a><span class="w">    </span><span class="n">tau1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">w1_x</span><span class="o">*</span><span class="nb">sqrt</span><span class="p">(</span><span class="mf">2.</span><span class="p">)</span><span class="w"></span>
+<a id="ln-164" name="ln-164" href="#ln-164"></a><span class="w">   </span><span class="k">else</span>
+<a id="ln-165" name="ln-165" href="#ln-165"></a><span class="k">    </span><span class="n">tau</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.5</span><span class="o">*</span><span class="n">w0_x</span><span class="w"> </span><span class="c">!cos^2() profile_</span>
+<a id="ln-166" name="ln-166" href="#ln-166"></a><span class="w">    </span><span class="n">tau1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.5</span><span class="o">*</span><span class="n">w1_x</span><span class="w"> </span><span class="c">!cos^2() profile_</span>
+<a id="ln-167" name="ln-167" href="#ln-167"></a><span class="w">   </span><span class="k">end if</span>
+<a id="ln-168" name="ln-168" href="#ln-168"></a><span class="k">   </span><span class="n">lp_in</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">xc_lp</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">tau</span><span class="w"></span>
+<a id="ln-169" name="ln-169" href="#ln-169"></a><span class="w">   </span><span class="n">lp_end</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">xc_lp</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">tau</span><span class="w"></span>
+<a id="ln-170" name="ln-170" href="#ln-170"></a><span class="w">   </span><span class="n">eps</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.</span><span class="o">/</span><span class="p">(</span><span class="n">oml</span><span class="o">*</span><span class="n">w0_y</span><span class="p">)</span><span class="w"></span>
+<a id="ln-171" name="ln-171" href="#ln-171"></a><span class="w">   </span><span class="n">sigm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">lam0</span><span class="o">/</span><span class="n">w0_x</span><span class="w"></span>
+<a id="ln-172" name="ln-172" href="#ln-172"></a><span class="w">   </span><span class="n">xf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">xc_lp</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">t0_lp</span><span class="w"></span>
+<a id="ln-173" name="ln-173" href="#ln-173"></a><span class="w">   </span><span class="c">!=======================</span>
+<a id="ln-174" name="ln-174" href="#ln-174"></a><span class="w">   </span><span class="n">xc_loc</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">xc_lp</span><span class="w"></span>
+<a id="ln-175" name="ln-175" href="#ln-175"></a><span class="w">   </span><span class="n">xf_loc</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">xf</span><span class="w"></span>
+<a id="ln-176" name="ln-176" href="#ln-176"></a><span class="w">   </span><span class="n">env</span><span class="p">(:,</span><span class="w"> </span><span class="p">:,</span><span class="w"> </span><span class="p">:,</span><span class="w"> </span><span class="p">:)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0</span><span class="w"></span>
+<a id="ln-177" name="ln-177" href="#ln-177"></a><span class="w">   </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">g_prof</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<a id="ln-178" name="ln-178" href="#ln-178"></a><span class="k">    call </span><span class="n">init_gprof_envelope_field</span><span class="p">(</span><span class="n">env</span><span class="p">,</span><span class="w"> </span><span class="n">a0</span><span class="p">,</span><span class="w"> </span><span class="n">tt</span><span class="p">,</span><span class="w"> </span><span class="n">t0_lp</span><span class="p">,</span><span class="w"> </span><span class="n">w0_x</span><span class="p">,</span><span class="w"> </span><span class="n">w0_y</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
+<a id="ln-179" name="ln-179" href="#ln-179"></a><span class="w">                                   </span><span class="n">xf</span><span class="p">,</span><span class="w"> </span><span class="n">oml</span><span class="p">,</span><span class="w"> </span><span class="n">pw_ind</span><span class="p">,</span><span class="w"> </span><span class="n">i1</span><span class="p">,</span><span class="w"> </span><span class="n">i2</span><span class="p">,</span><span class="w"> </span><span class="n">y0_cent</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="n">z0_cent</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="w"></span>
+<a id="ln-180" name="ln-180" href="#ln-180"></a><span class="w">   </span><span class="k">else</span>
+<a id="ln-181" name="ln-181" href="#ln-181"></a><span class="k">    call </span><span class="n">init_envelope_field</span><span class="p">(</span><span class="n">env</span><span class="p">,</span><span class="w"> </span><span class="n">a0</span><span class="p">,</span><span class="w"> </span><span class="n">tt</span><span class="p">,</span><span class="w"> </span><span class="n">t0_lp</span><span class="p">,</span><span class="w"> </span><span class="n">w0_x</span><span class="p">,</span><span class="w"> </span><span class="n">w0_y</span><span class="p">,</span><span class="w"> </span><span class="n">xf</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
+<a id="ln-182" name="ln-182" href="#ln-182"></a><span class="w">                             </span><span class="n">oml</span><span class="p">,</span><span class="w"> </span><span class="n">pw_ind</span><span class="p">,</span><span class="w"> </span><span class="n">i1</span><span class="p">,</span><span class="w"> </span><span class="n">i2</span><span class="p">,</span><span class="w"> </span><span class="n">y0_cent</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="n">z0_cent</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="w"></span>
+<a id="ln-183" name="ln-183" href="#ln-183"></a><span class="w">    </span><span class="c">!call init_env_filtering(env,i1,i2,j1,nyp,k1,nzp)</span>
+<a id="ln-184" name="ln-184" href="#ln-184"></a><span class="w">   </span><span class="k">end if</span>
+<a id="ln-185" name="ln-185" href="#ln-185"></a><span class="k">   if</span><span class="w"> </span><span class="p">(</span><span class="n">nb_laser</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<a id="ln-186" name="ln-186" href="#ln-186"></a><span class="k">    do </span><span class="n">ic</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">nb_laser</span><span class="w"></span>
+<a id="ln-187" name="ln-187" href="#ln-187"></a><span class="w">     </span><span class="n">lp_in</span><span class="p">(</span><span class="n">ic</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">lp_in</span><span class="p">(</span><span class="n">ic</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">lp_delay</span><span class="p">(</span><span class="n">ic</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<a id="ln-188" name="ln-188" href="#ln-188"></a><span class="w">     </span><span class="n">lp_end</span><span class="p">(</span><span class="n">ic</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">lp_end</span><span class="p">(</span><span class="n">ic</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">lp_delay</span><span class="p">(</span><span class="n">ic</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<a id="ln-189" name="ln-189" href="#ln-189"></a><span class="w">     </span><span class="n">xc_loc</span><span class="p">(</span><span class="n">ic</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">xc_loc</span><span class="p">(</span><span class="n">ic</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">lp_delay</span><span class="p">(</span><span class="n">ic</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<a id="ln-190" name="ln-190" href="#ln-190"></a><span class="w">     </span><span class="n">xf_loc</span><span class="p">(</span><span class="n">ic</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">xc_loc</span><span class="p">(</span><span class="n">ic</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">t0_lp</span><span class="w"></span>
+<a id="ln-191" name="ln-191" href="#ln-191"></a><span class="w">     </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">lp_end</span><span class="p">(</span><span class="n">ic</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">xm</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<a id="ln-192" name="ln-192" href="#ln-192"></a><span class="k">      if</span><span class="w"> </span><span class="p">(</span><span class="n">g_prof</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<a id="ln-193" name="ln-193" href="#ln-193"></a><span class="k">       call </span><span class="n">init_gprof_envelope_field</span><span class="p">(</span><span class="n">env</span><span class="p">,</span><span class="w"> </span><span class="n">a0</span><span class="p">,</span><span class="w"> </span><span class="n">tt</span><span class="p">,</span><span class="w"> </span><span class="n">t0_lp</span><span class="p">,</span><span class="w"> </span><span class="n">w0_x</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
+<a id="ln-194" name="ln-194" href="#ln-194"></a><span class="w">                                      </span><span class="n">w0_y</span><span class="p">,</span><span class="w"> </span><span class="n">xf_loc</span><span class="p">(</span><span class="n">ic</span><span class="p">),</span><span class="w"> </span><span class="n">oml</span><span class="p">,</span><span class="w"> </span><span class="n">pw_ind</span><span class="p">,</span><span class="w"> </span><span class="n">i1</span><span class="p">,</span><span class="w"> </span><span class="n">i2</span><span class="p">,</span><span class="w"> </span><span class="n">y0_cent</span><span class="p">(</span><span class="n">ic</span><span class="p">),</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
+<a id="ln-195" name="ln-195" href="#ln-195"></a><span class="w">                                      </span><span class="n">z0_cent</span><span class="p">(</span><span class="n">ic</span><span class="p">))</span><span class="w"></span>
+<a id="ln-196" name="ln-196" href="#ln-196"></a><span class="w">      </span><span class="k">else</span>
+<a id="ln-197" name="ln-197" href="#ln-197"></a><span class="k">       call </span><span class="n">init_envelope_field</span><span class="p">(</span><span class="n">env</span><span class="p">,</span><span class="w"> </span><span class="n">a0</span><span class="p">,</span><span class="w"> </span><span class="n">tt</span><span class="p">,</span><span class="w"> </span><span class="n">t0_lp</span><span class="p">,</span><span class="w"> </span><span class="n">w0_x</span><span class="p">,</span><span class="w"> </span><span class="n">w0_y</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
+<a id="ln-198" name="ln-198" href="#ln-198"></a><span class="w">                                </span><span class="n">xf_loc</span><span class="p">(</span><span class="n">ic</span><span class="p">),</span><span class="w"> </span><span class="n">oml</span><span class="p">,</span><span class="w"> </span><span class="n">pw_ind</span><span class="p">,</span><span class="w"> </span><span class="n">i1</span><span class="p">,</span><span class="w"> </span><span class="n">i2</span><span class="p">,</span><span class="w"> </span><span class="n">y0_cent</span><span class="p">(</span><span class="n">ic</span><span class="p">),</span><span class="w"> </span><span class="n">z0_cent</span><span class="p">(</span><span class="n">ic</span><span class="p">))</span><span class="w"></span>
+<a id="ln-199" name="ln-199" href="#ln-199"></a><span class="w">      </span><span class="k">end if</span>
+<a id="ln-200" name="ln-200" href="#ln-200"></a><span class="k">     end if</span>
+<a id="ln-201" name="ln-201" href="#ln-201"></a><span class="k">    end do</span>
+<a id="ln-202" name="ln-202" href="#ln-202"></a><span class="k">   end if</span>
+<a id="ln-203" name="ln-203" href="#ln-203"></a><span class="k">   if</span><span class="w"> </span><span class="p">(</span><span class="n">lpf_ord</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="k">then</span><span class="w"> </span><span class="c">!set initial first derivative</span>
+<a id="ln-204" name="ln-204" href="#ln-204"></a><span class="w">    </span><span class="n">env</span><span class="p">(</span><span class="n">i1</span><span class="p">:</span><span class="n">i2</span><span class="p">,</span><span class="w"> </span><span class="n">j1</span><span class="p">:</span><span class="n">nyp</span><span class="p">,</span><span class="w"> </span><span class="n">k1</span><span class="p">:</span><span class="n">nzp</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">:</span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">env</span><span class="p">(</span><span class="n">i1</span><span class="p">:</span><span class="n">i2</span><span class="p">,</span><span class="w"> </span><span class="n">j1</span><span class="p">:</span><span class="n">nyp</span><span class="p">,</span><span class="w"> </span><span class="n">k1</span><span class="p">:</span><span class="n">nzp</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">env</span><span class="p">(</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
+<a id="ln-205" name="ln-205" href="#ln-205"></a><span class="w">                                       </span><span class="n">i1</span><span class="p">:</span><span class="n">i2</span><span class="p">,</span><span class="w"> </span><span class="n">j1</span><span class="p">:</span><span class="n">nyp</span><span class="p">,</span><span class="w"> </span><span class="n">k1</span><span class="p">:</span><span class="n">nzp</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">:</span><span class="mi">4</span><span class="p">))</span><span class="o">/</span><span class="n">dt</span><span class="w"></span>
+<a id="ln-206" name="ln-206" href="#ln-206"></a><span class="w">   </span><span class="k">end if</span><span class="w"></span>
+<a id="ln-207" name="ln-207" href="#ln-207"></a><span class="w">   </span><span class="c">!=================TWO-COLOR</span>
+<a id="ln-208" name="ln-208" href="#ln-208"></a><span class="w">   </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">Two_color</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<a id="ln-209" name="ln-209" href="#ln-209"></a><span class="k">    </span><span class="n">env1</span><span class="p">(:,</span><span class="w"> </span><span class="p">:,</span><span class="w"> </span><span class="p">:,</span><span class="w"> </span><span class="p">:)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0</span><span class="w"></span>
+<a id="ln-210" name="ln-210" href="#ln-210"></a><span class="w">    </span><span class="n">xc1_lp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">xc_loc</span><span class="p">(</span><span class="n">nb_laser</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">lp_offset</span><span class="w"></span>
+<a id="ln-211" name="ln-211" href="#ln-211"></a><span class="w">    </span><span class="n">xf1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">xc1_lp</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">t1_lp</span><span class="w"></span>
+<a id="ln-212" name="ln-212" href="#ln-212"></a>
+<a id="ln-213" name="ln-213" href="#ln-213"></a><span class="w">    </span><span class="n">lp_ionz_in</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">xc1_lp</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">tau1</span><span class="w"></span>
+<a id="ln-214" name="ln-214" href="#ln-214"></a><span class="w">    </span><span class="n">lp_ionz_end</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">xc1_lp</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">tau1</span><span class="w"></span>
+<a id="ln-215" name="ln-215" href="#ln-215"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">lp_ionz_end</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">xm</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<a id="ln-216" name="ln-216" href="#ln-216"></a><span class="k">     if</span><span class="w"> </span><span class="p">(</span><span class="n">g_prof</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<a id="ln-217" name="ln-217" href="#ln-217"></a><span class="k">      call </span><span class="n">init_gprof_envelope_field</span><span class="p">(</span><span class="n">env1</span><span class="p">,</span><span class="w"> </span><span class="n">a1</span><span class="p">,</span><span class="w"> </span><span class="n">tt</span><span class="p">,</span><span class="w"> </span><span class="n">t1_lp</span><span class="p">,</span><span class="w"> </span><span class="n">w1_x</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
+<a id="ln-218" name="ln-218" href="#ln-218"></a><span class="w">                                     </span><span class="n">w1_y</span><span class="p">,</span><span class="w"> </span><span class="n">xf1</span><span class="p">,</span><span class="w"> </span><span class="n">om1</span><span class="p">,</span><span class="w"> </span><span class="n">pw_ind</span><span class="p">,</span><span class="w"> </span><span class="n">i1</span><span class="p">,</span><span class="w"> </span><span class="n">i2</span><span class="p">,</span><span class="w"> </span><span class="n">y1_cent</span><span class="p">,</span><span class="w"> </span><span class="n">z1_cent</span><span class="p">)</span><span class="w"></span>
+<a id="ln-219" name="ln-219" href="#ln-219"></a><span class="w">     </span><span class="k">else</span>
+<a id="ln-220" name="ln-220" href="#ln-220"></a><span class="k">      call </span><span class="n">init_envelope_field</span><span class="p">(</span><span class="n">env1</span><span class="p">,</span><span class="w"> </span><span class="n">a1</span><span class="p">,</span><span class="w"> </span><span class="n">tt</span><span class="p">,</span><span class="w"> </span><span class="n">t1_lp</span><span class="p">,</span><span class="w"> </span><span class="n">w1_x</span><span class="p">,</span><span class="w"> </span><span class="n">w1_y</span><span class="p">,</span><span class="w"> </span><span class="n">xf1</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
+<a id="ln-221" name="ln-221" href="#ln-221"></a><span class="w">                               </span><span class="n">om1</span><span class="p">,</span><span class="w"> </span><span class="n">pw_ind</span><span class="p">,</span><span class="w"> </span><span class="n">i1</span><span class="p">,</span><span class="w"> </span><span class="n">i2</span><span class="p">,</span><span class="w"> </span><span class="n">y1_cent</span><span class="p">,</span><span class="w"> </span><span class="n">z1_cent</span><span class="p">)</span><span class="w"></span>
+<a id="ln-222" name="ln-222" href="#ln-222"></a><span class="w">     </span><span class="k">end if</span>
+<a id="ln-223" name="ln-223" href="#ln-223"></a><span class="k">    end if</span>
+<a id="ln-224" name="ln-224" href="#ln-224"></a><span class="k">   end if</span><span class="w"></span>
+<a id="ln-225" name="ln-225" href="#ln-225"></a>
+<a id="ln-226" name="ln-226" href="#ln-226"></a><span class="w">   </span><span class="c">!=======================</span>
+<a id="ln-227" name="ln-227" href="#ln-227"></a><span class="w">   </span><span class="n">ebf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0</span><span class="w"></span>
+<a id="ln-228" name="ln-228" href="#ln-228"></a><span class="w">   </span><span class="c">!=====================</span>
+<a id="ln-229" name="ln-229" href="#ln-229"></a><span class="w">   </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">pe0</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<a id="ln-230" name="ln-230" href="#ln-230"></a><span class="k">    open</span><span class="w"> </span><span class="p">(</span><span class="mi">26</span><span class="p">,</span><span class="w"> </span><span class="k">file</span><span class="o">=</span><span class="s1">&#39;Initial_env_info.dat&#39;</span><span class="p">)</span><span class="w"></span>
+<a id="ln-231" name="ln-231" href="#ln-231"></a><span class="w">    </span><span class="k">write</span><span class="w"> </span><span class="p">(</span><span class="mi">26</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="s1">&#39;number &#39;</span><span class="p">,</span><span class="w"> </span><span class="n">nb_laser</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;LP envelope injected &#39;</span><span class="w"></span>
+<a id="ln-232" name="ln-232" href="#ln-232"></a><span class="w">    </span><span class="k">write</span><span class="w"> </span><span class="p">(</span><span class="mi">26</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="s1">&#39; First pulse parameters&#39;</span><span class="w"></span>
+<a id="ln-233" name="ln-233" href="#ln-233"></a><span class="w">    </span><span class="k">write</span><span class="w"> </span><span class="p">(</span><span class="mi">26</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;(a21,e11.4)&#39;</span><span class="p">)</span><span class="w"> </span><span class="s1">&#39; Focal x-position xf=&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">xf</span><span class="w"></span>
+<a id="ln-234" name="ln-234" href="#ln-234"></a><span class="w">    </span><span class="k">write</span><span class="w"> </span><span class="p">(</span><span class="mi">26</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;(a21,e11.4)&#39;</span><span class="p">)</span><span class="w"> </span><span class="s1">&#39; Centr x-position xc=&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">xc_lp</span><span class="w"></span>
+<a id="ln-235" name="ln-235" href="#ln-235"></a><span class="w">    </span><span class="k">write</span><span class="w"> </span><span class="p">(</span><span class="mi">26</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;(a20,e11.4)&#39;</span><span class="p">)</span><span class="w"> </span><span class="s1">&#39; Size (microns) lx=&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">w0_x</span><span class="w"></span>
+<a id="ln-236" name="ln-236" href="#ln-236"></a><span class="w">    </span><span class="k">write</span><span class="w"> </span><span class="p">(</span><span class="mi">26</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;(a14,e11.4)&#39;</span><span class="p">)</span><span class="w"> </span><span class="s1">&#39; FWHM (fs) lx=&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">tau_fwhm</span><span class="w"></span>
+<a id="ln-237" name="ln-237" href="#ln-237"></a><span class="w">    </span><span class="k">write</span><span class="w"> </span><span class="p">(</span><span class="mi">26</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;(a19,e11.4)&#39;</span><span class="p">)</span><span class="w"> </span><span class="s1">&#39; Waist(microns) ly=&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">w0_y</span><span class="w"></span>
+<a id="ln-238" name="ln-238" href="#ln-238"></a><span class="w">    </span><span class="k">write</span><span class="w"> </span><span class="p">(</span><span class="mi">26</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;(a17,e11.4)&#39;</span><span class="p">)</span><span class="w"> </span><span class="s1">&#39; FWHM(microns) = &#39;</span><span class="p">,</span><span class="w"> </span><span class="n">lp_rad</span><span class="w"></span>
+<a id="ln-239" name="ln-239" href="#ln-239"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">nb_laser</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">write</span><span class="w"> </span><span class="p">(</span><span class="mi">26</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;(a21,3e11.4)&#39;</span><span class="p">)</span><span class="w"> </span><span class="s1">&#39; Delay among pulses= &#39;</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
+<a id="ln-240" name="ln-240" href="#ln-240"></a><span class="w">     </span><span class="n">loc_delay</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">)</span><span class="w"></span>
+<a id="ln-241" name="ln-241" href="#ln-241"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">Two_color</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<a id="ln-242" name="ln-242" href="#ln-242"></a><span class="k">     write</span><span class="w"> </span><span class="p">(</span><span class="mi">26</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="s1">&#39; Injection pulse parameters&#39;</span><span class="w"></span>
+<a id="ln-243" name="ln-243" href="#ln-243"></a><span class="w">     </span><span class="k">write</span><span class="w"> </span><span class="p">(</span><span class="mi">26</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;(a16,e11.4)&#39;</span><span class="p">)</span><span class="w"> </span><span class="s1">&#39; amplitude  a1 =&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">a1</span><span class="w"></span>
+<a id="ln-244" name="ln-244" href="#ln-244"></a><span class="w">     </span><span class="k">write</span><span class="w"> </span><span class="p">(</span><span class="mi">26</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;(a21,e11.4)&#39;</span><span class="p">)</span><span class="w"> </span><span class="s1">&#39; Focal x-position xf=&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">xf1</span><span class="w"></span>
+<a id="ln-245" name="ln-245" href="#ln-245"></a><span class="w">     </span><span class="k">write</span><span class="w"> </span><span class="p">(</span><span class="mi">26</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;(a21,e11.4)&#39;</span><span class="p">)</span><span class="w"> </span><span class="s1">&#39; Centr x-position xc=&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">xc1_lp</span><span class="w"></span>
+<a id="ln-246" name="ln-246" href="#ln-246"></a><span class="w">     </span><span class="k">write</span><span class="w"> </span><span class="p">(</span><span class="mi">26</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;(a20,e11.4)&#39;</span><span class="p">)</span><span class="w"> </span><span class="s1">&#39; Size (microns) lx=&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">w1_x</span><span class="w"></span>
+<a id="ln-247" name="ln-247" href="#ln-247"></a><span class="w">     </span><span class="k">write</span><span class="w"> </span><span class="p">(</span><span class="mi">26</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;(a19,e11.4)&#39;</span><span class="p">)</span><span class="w"> </span><span class="s1">&#39; Waist(microns) ly=&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">w1_y</span><span class="w"></span>
+<a id="ln-248" name="ln-248" href="#ln-248"></a><span class="w">    </span><span class="k">end if</span>
+<a id="ln-249" name="ln-249" href="#ln-249"></a><span class="k">    close</span><span class="w"> </span><span class="p">(</span><span class="mi">26</span><span class="p">)</span><span class="w"></span>
+<a id="ln-250" name="ln-250" href="#ln-250"></a><span class="w">   </span><span class="k">end if</span>
+<a id="ln-251" name="ln-251" href="#ln-251"></a><span class="k">   </span><span class="n">part_in</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">lp_end</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">lpx</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span><span class="w"></span>
+<a id="ln-252" name="ln-252" href="#ln-252"></a><span class="w">   </span><span class="c">!=================def part distr points</span>
+<a id="ln-253" name="ln-253" href="#ln-253"></a><span class="w">  </span><span class="k">end subroutine</span>
+<a id="ln-254" name="ln-254" href="#ln-254"></a>
+<a id="ln-255" name="ln-255" href="#ln-255"></a><span class="k"> end module</span><span class="w"></span>
 </pre></div>
 
     </section>
     </div>
   </div>
 
-  
     <hr>    
     </div> <!-- /container -->
     <footer>
       <div class="container">
       <div class="row">
-        <div class="col-xs-6 col-md-4"><p>&copy; 2020 <a rel="license" href="http://www.gnu.org/licenses/old-licenses/fdl-1.2.en.html">GNU Free Documentation License</a>
-                                          </p></div>
-        <div class="col-xs-6 col-md-4 col-md-push-4">
+        <div class="col-xs-6 col-md-6"><p>ALaDyn was developed by The ALaDyn Collaboration<br>&copy; 2025 <a rel="license" href="http://www.gnu.org/licenses/old-licenses/fdl-1.2.en.html">GNU Free Documentation License</a>
+</p>
+        </div>
+        <div class="col-xs-6 col-md-6">
           <p class="text-right">
             Documentation generated by 
-            <a href="https://github.com/cmacmackin/ford">FORD</a>
-             on 2020-07-30 
-          </p>
+            <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+ on 2025-12-28           </p>
         </div>
-        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> ALaDyn was developed by The ALaDyn Collaboration</p></div>
       </div>
       <br>
       </div> <!-- /container -->    
@@ -1030,14 +968,11 @@
         extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
       });
     </script>
-    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
     
     <script src="../tipuesearch/tipuesearch_content.js"></script>
     <script src="../tipuesearch/tipuesearch_set.js"></script>
     <script src="../tipuesearch/tipuesearch.js"></script>
-    
     
   </body>
 </html>

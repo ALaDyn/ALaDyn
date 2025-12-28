@@ -4,9 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-   
    <meta name="description" content="A High-Accuracy PIC Code for the Maxwell-Vlasov Equations">
-    
     <meta name="author" content="The ALaDyn Collaboration" >
     <link rel="icon" href="../favicon.png">
 
@@ -16,10 +14,7 @@
     <link href="../css/pygments.css" rel="stylesheet">
     <link href="../css/font-awesome.min.css" rel="stylesheet">
     <link href="../css/local.css" rel="stylesheet">
-    
     <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
-    
-    
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -48,55 +43,28 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-        
             <li><a href='../page/index.html'>Guide</a></li>
-      
             <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
               <a href="#" class="dropdown-toggle"
               data-toggle="dropdown" role="button"
               aria-haspopup="true"
      aria-expanded="false">Contents <span class="caret"></span></a>
         <ul class="dropdown-menu">
-          
-              
             <li><a href="../lists/files.html">Source Files</a></li>
-        
-        
-        
             <li><a href="../lists/modules.html">Modules</a></li>
-        
-            
-                                
             <li><a href="../lists/procedures.html">Procedures</a></li>
-        
-               
-            <li><a href="../lists/types.html">Derived Types</a></li>
-        
-        
+                   <li><a href="../lists/types.html">Derived Types</a></li>
             <li><a href="../program/aladyn.html">Program</a></li>
-      
+       
             </ul>
-            </li>
-
-
-<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
-
-
-
-<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
-
-
-
-<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
-
-                             
-<li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
-
-
-<li class="visible-xs hidden-sm visible-lg"><a href="../program/aladyn.html">Program</a></li>
-
-          </ul>
         
+            </li>
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+                             <li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+<li class="visible-xs hidden-sm visible-lg"><a href="../program/aladyn.html">Program</a></li>
+          </ul>
         <form action="../search.html" class="navbar-form navbar-right" role="search">
         <div class="form-group">
           <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
@@ -105,29 +73,22 @@
         <button type="submit" class="btn btn-default">Submit</button>
 -->
         </form>
-        
         </div><!--/.nav-collapse -->
       </div>
     </nav>
 
     <div class="container">
-    
   <div class="row">
     <h1>Write a Namelist</h1>
     <div class="row">
     <div class="col-lg-12">
     <div class="well well-sm" style="min-height: 40px;">
       <ul class="list-inline" style="margin-bottom:0px; display:inline">
-         
-         
 <!--
-        
 -->
       </ul>
         <ol class="breadcrumb in-well">
-      
          <li><a href='../page/index.html'>Guide</a></li>
-      
          <li class="active">Write a Namelist</li>
       </ol>
     </div>
@@ -140,17 +101,16 @@
       <h1>ALaDyn <code>namelist</code> guide</h1>
 <p>Following here is a brief description of the new <code>input.nml</code> file required for the simulation parameters definition, through an example.</p>
 <h2>GRID namelist block</h2>
-<div class="codehilite"><pre><span></span><code><span class="p">&amp;</span><span class="n">GRID</span>
- <span class="n">nx</span>               <span class="o">=</span> <span class="mi">7168</span><span class="p">,</span>
- <span class="n">ny</span>               <span class="o">=</span> <span class="mi">3584</span><span class="p">,</span>
- <span class="n">nz</span>               <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
- <span class="n">ny_targ</span>          <span class="o">=</span> <span class="mi">3500</span><span class="p">,</span>
- <span class="n">k0</span>               <span class="o">=</span> <span class="mi">10</span><span class="mf">0.0</span><span class="p">,</span>
- <span class="n">yx_rat</span>           <span class="o">=</span> <span class="mf">2.0</span><span class="p">,</span>
- <span class="n">zx_rat</span>           <span class="o">=</span> <span class="mf">2.0</span><span class="p">,</span>
-<span class="o">/</span>
+<div class="codehilite"><pre><span></span><code><span class="p">&amp;</span><span class="n">GRID</span><span class="w"></span>
+<span class="w"> </span><span class="n">nx</span><span class="w">               </span><span class="o">=</span><span class="w"> </span><span class="mi">7168</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">ny</span><span class="w">               </span><span class="o">=</span><span class="w"> </span><span class="mi">3584</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">nz</span><span class="w">               </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">ny_targ</span><span class="w">          </span><span class="o">=</span><span class="w"> </span><span class="mi">3500</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">k0</span><span class="w">               </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="mf">0.0</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">yx_rat</span><span class="w">           </span><span class="o">=</span><span class="w"> </span><span class="mf">2.0</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">zx_rat</span><span class="w">           </span><span class="o">=</span><span class="w"> </span><span class="mf">2.0</span><span class="p">,</span><span class="w"></span>
+<span class="o">/</span><span class="w"></span>
 </code></pre></div>
-
 
 <ul>
 <li><code>nx</code> is the number of grid points in the <em>x</em> direction</li>
@@ -166,20 +126,19 @@
 </ul>
 <p>With those parameters, the full box size (in μm) is: <code>Lx = nx / k0</code>, <code>Ly = yx_rat * ny / k0</code>, <code>Lz = zx_rat * nz / k0</code></p>
 <h2>SIMULATION namelist block</h2>
-<div class="codehilite"><pre><span></span><code><span class="p">&amp;</span><span class="n">SIMULATION</span>
- <span class="n">LPf_ord</span>          <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
- <span class="n">der_ord</span>          <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
- <span class="n">str_flag</span>         <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
- <span class="n">iform</span>            <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
- <span class="n">model_id</span>         <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
- <span class="n">dmodel_id</span>        <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
- <span class="n">ibx</span>              <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
- <span class="n">iby</span>              <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
- <span class="n">ibz</span>              <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
- <span class="n">ibeam</span>            <span class="o">=</span> <span class="mi">1</span>
-<span class="o">/</span>
+<div class="codehilite"><pre><span></span><code><span class="p">&amp;</span><span class="n">SIMULATION</span><span class="w"></span>
+<span class="w"> </span><span class="n">LPf_ord</span><span class="w">          </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">der_ord</span><span class="w">          </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">str_flag</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">iform</span><span class="w">            </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">model_id</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">dmodel_id</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">ibx</span><span class="w">              </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">iby</span><span class="w">              </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">ibz</span><span class="w">              </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">ibeam</span><span class="w">            </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="o">/</span><span class="w"></span>
 </code></pre></div>
-
 
 <ul>
 <li><code>Lpf_ord</code> is  the integration scheme order. Lpf_ord=2 for standard leap-frog, Lpf_ord_ord=4 for RK4 (now disabled)</li>
@@ -216,62 +175,61 @@
 <li><code>2</code> For Envelope-fluid LWFA model (model_id = 4). Code solves Euler equations for plasma density with the laser described as an envelope.</li>
 </ul>
 <h2>TARGET_DESCRIPTION namelist block</h2>
-<div class="codehilite"><pre><span></span><code><span class="p">&amp;</span><span class="n">TARGET_DESCRIPTION</span>
- <span class="n">nsp</span>              <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
- <span class="n">nsb</span>              <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
- <span class="n">ion_min</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>       <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
- <span class="n">ion_max</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>       <span class="o">=</span> <span class="mi">11</span><span class="p">,</span>
- <span class="n">atomic_number</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mi">13</span><span class="p">,</span>
- <span class="n">mass_number</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>   <span class="o">=</span> <span class="mi">2</span><span class="mf">6.98</span><span class="p">,</span>
- <span class="n">ion_min</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>       <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
- <span class="n">ion_max</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>       <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
- <span class="n">atomic_number</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
- <span class="n">mass_number</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>   <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
- <span class="n">ion_min</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>       <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
- <span class="n">ion_max</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>       <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
- <span class="n">atomic_number</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
- <span class="n">mass_number</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>   <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
- <span class="n">ionz_model</span>       <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
- <span class="n">ionz_lev</span>         <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
- <span class="n">t0_pl</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>         <span class="o">=</span> <span class="mf">0.0003</span><span class="p">,</span>
- <span class="n">t0_pl</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>         <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
- <span class="n">t0_pl</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>         <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
- <span class="n">t0_pl</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>         <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
- <span class="n">np_per_xc</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>     <span class="o">=</span> <span class="mi">12</span><span class="p">,</span>
- <span class="n">np_per_xc</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>     <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
- <span class="n">np_per_xc</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>     <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
- <span class="n">np_per_xc</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>     <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
- <span class="n">np_per_xc</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>     <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
- <span class="n">np_per_xc</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>     <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
- <span class="n">np_per_yc</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>     <span class="o">=</span> <span class="mi">9</span><span class="p">,</span>
- <span class="n">np_per_yc</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>     <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
- <span class="n">np_per_yc</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>     <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
- <span class="n">np_per_yc</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>     <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
- <span class="n">np_per_yc</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>     <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
- <span class="n">np_per_yc</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>     <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
- <span class="n">np_per_zc</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>     <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
- <span class="n">concentration</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
- <span class="n">concentration</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
- <span class="n">concentration</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
- <span class="n">concentration</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
- <span class="n">concentration</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
- <span class="n">concentration</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
- <span class="n">lpx</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>           <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
- <span class="n">lpx</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>           <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
- <span class="n">lpx</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>           <span class="o">=</span> <span class="mf">2.0</span><span class="p">,</span>
- <span class="n">lpx</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>           <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
- <span class="n">lpx</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>           <span class="o">=</span> <span class="mf">0.08</span><span class="p">,</span>
- <span class="n">lpx</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>           <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
- <span class="n">lpx</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>           <span class="o">=</span> <span class="mf">0.01</span><span class="p">,</span>
- <span class="n">lpy</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>           <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
- <span class="n">lpy</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>           <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
- <span class="n">n0_ref</span>           <span class="o">=</span> <span class="mi">10</span><span class="mf">0.0</span><span class="p">,</span>
- <span class="n">np1</span>              <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
- <span class="n">np2</span>              <span class="o">=</span> <span class="mi">1</span><span class="mf">0.0</span><span class="p">,</span>
- <span class="n">r_c</span>              <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
-<span class="o">/</span>
+<div class="codehilite"><pre><span></span><code><span class="p">&amp;</span><span class="n">TARGET_DESCRIPTION</span><span class="w"></span>
+<span class="w"> </span><span class="n">nsp</span><span class="w">              </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">nsb</span><span class="w">              </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">ion_min</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">ion_max</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="mi">11</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">atomic_number</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">13</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">mass_number</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="mf">6.98</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">ion_min</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">ion_max</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">atomic_number</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">mass_number</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">ion_min</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">ion_max</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">atomic_number</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">mass_number</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">ionz_model</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">ionz_lev</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">t0_pl</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0003</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">t0_pl</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">t0_pl</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">t0_pl</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">np_per_xc</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">np_per_xc</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">np_per_xc</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">np_per_xc</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">np_per_xc</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">np_per_xc</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">np_per_yc</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="mi">9</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">np_per_yc</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">np_per_yc</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">np_per_yc</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">np_per_yc</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">np_per_yc</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">np_per_zc</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">concentration</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.5</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">concentration</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.5</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">concentration</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">concentration</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">concentration</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">concentration</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">lpx</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w">           </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">lpx</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="w">           </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">lpx</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="w">           </span><span class="o">=</span><span class="w"> </span><span class="mf">2.0</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">lpx</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="w">           </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">lpx</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span><span class="w">           </span><span class="o">=</span><span class="w"> </span><span class="mf">0.08</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">lpx</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span><span class="w">           </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">lpx</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span><span class="w">           </span><span class="o">=</span><span class="w"> </span><span class="mf">0.01</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">lpy</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w">           </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">lpy</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="w">           </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">n0_ref</span><span class="w">           </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="mf">0.0</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">np1</span><span class="w">              </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">np2</span><span class="w">              </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="mf">0.0</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">r_c</span><span class="w">              </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"></span>
+<span class="o">/</span><span class="w"></span>
 </code></pre></div>
-
 
 <ul>
 <li><code>nsp</code> is the number of species (be careful and coherent with <code>dmodel_id</code>)</li>
@@ -287,21 +245,20 @@
 <li>4 (Minimum between ADK and BSI ionization values. Here the ADK value is computed averaging on <code>m</code>, the magnetic quantum number of the ionized electrons as in <a href="http://wrap.warwick.ac.uk/57465/">Lawrence-Douglas, 2013</a>)</li>
 <li><code>mass_number(i)</code> are the mass number (A) that define the exact isotope of a given <code>atomic_number(i)</code>. Here following you can find the only elements known by ALaDyn</li>
 </ul>
-<div class="codehilite"><pre><span></span><code><span class="n">Hydrogen</span>  <span class="p">(</span><span class="n">atomic_number</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>  <span class="o">-</span> <span class="n">mass_number</span> <span class="o">=</span> <span class="mf">1.0</span>
-<span class="n">Helium</span>    <span class="p">(</span><span class="n">atomic_number</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span>  <span class="o">-</span> <span class="n">mass_number</span> <span class="o">=</span> <span class="mf">4.0</span>
-<span class="n">Lithium</span>   <span class="p">(</span><span class="n">atomic_number</span> <span class="o">=</span> <span class="mi">3</span><span class="p">)</span>  <span class="o">-</span> <span class="n">mass_number</span> <span class="o">=</span> <span class="mf">6.0</span>
-<span class="n">Carbon</span>    <span class="p">(</span><span class="n">atomic_number</span> <span class="o">=</span> <span class="mi">6</span><span class="p">)</span>  <span class="o">-</span> <span class="n">mass_number</span> <span class="o">=</span> <span class="mi">1</span><span class="mf">2.0</span>
-<span class="n">Nitrogen</span>  <span class="p">(</span><span class="n">atomic_number</span> <span class="o">=</span> <span class="mi">7</span><span class="p">)</span>  <span class="o">-</span> <span class="n">mass_number</span> <span class="o">=</span> <span class="mi">1</span><span class="mf">4.0</span>
-<span class="n">Oxygen</span>    <span class="p">(</span><span class="n">atomic_number</span> <span class="o">=</span> <span class="mi">8</span><span class="p">)</span>  <span class="o">-</span> <span class="n">mass_number</span> <span class="o">=</span> <span class="mi">1</span><span class="mf">6.0</span>
-<span class="n">Neon</span>      <span class="p">(</span><span class="n">atomic_number</span> <span class="o">=</span> <span class="mi">10</span><span class="p">)</span> <span class="o">-</span> <span class="n">mass_number</span> <span class="o">=</span> <span class="mi">2</span><span class="mf">0.0</span>
-<span class="n">Aluminium</span> <span class="p">(</span><span class="n">atomic_number</span> <span class="o">=</span> <span class="mi">13</span><span class="p">)</span> <span class="o">-</span> <span class="n">mass_number</span> <span class="o">=</span> <span class="mi">2</span><span class="mf">6.98</span>
-<span class="n">Silicon</span>   <span class="p">(</span><span class="n">atomic_number</span> <span class="o">=</span> <span class="mi">14</span><span class="p">)</span> <span class="o">-</span> <span class="n">mass_number</span> <span class="o">=</span> <span class="mi">2</span><span class="mf">8.09</span>
-<span class="n">Argon</span>     <span class="p">(</span><span class="n">atomic_number</span> <span class="o">=</span> <span class="mi">18</span><span class="p">)</span> <span class="o">-</span> <span class="n">mass_number</span> <span class="o">=</span> <span class="mi">3</span><span class="mf">9.948</span>
-<span class="n">Titanium</span>  <span class="p">(</span><span class="n">atomic_number</span> <span class="o">=</span> <span class="mi">22</span><span class="p">)</span> <span class="o">-</span> <span class="n">mass_number</span> <span class="o">=</span> <span class="mi">4</span><span class="mf">7.8</span>
-<span class="n">Nickel</span>    <span class="p">(</span><span class="n">atomic_number</span> <span class="o">=</span> <span class="mi">28</span><span class="p">)</span> <span class="o">-</span> <span class="n">mass_number</span> <span class="o">=</span> <span class="mi">5</span><span class="mf">8.7</span>
-<span class="n">Copper</span>    <span class="p">(</span><span class="n">atomic_number</span> <span class="o">=</span> <span class="mi">29</span><span class="p">)</span> <span class="o">-</span> <span class="n">mass_number</span> <span class="o">=</span> <span class="mi">6</span><span class="mf">3.54</span>
+<div class="codehilite"><pre><span></span><code><span class="n">Hydrogen</span><span class="w">  </span><span class="p">(</span><span class="n">atomic_number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w">  </span><span class="o">-</span><span class="w"> </span><span class="n">mass_number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0</span><span class="w"></span>
+<span class="n">Helium</span><span class="w">    </span><span class="p">(</span><span class="n">atomic_number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w">  </span><span class="o">-</span><span class="w"> </span><span class="n">mass_number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">4.0</span><span class="w"></span>
+<span class="n">Lithium</span><span class="w">   </span><span class="p">(</span><span class="n">atomic_number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="w">  </span><span class="o">-</span><span class="w"> </span><span class="n">mass_number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">6.0</span><span class="w"></span>
+<span class="n">Carbon</span><span class="w">    </span><span class="p">(</span><span class="n">atomic_number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">6</span><span class="p">)</span><span class="w">  </span><span class="o">-</span><span class="w"> </span><span class="n">mass_number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="mf">2.0</span><span class="w"></span>
+<span class="n">Nitrogen</span><span class="w">  </span><span class="p">(</span><span class="n">atomic_number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">7</span><span class="p">)</span><span class="w">  </span><span class="o">-</span><span class="w"> </span><span class="n">mass_number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="mf">4.0</span><span class="w"></span>
+<span class="n">Oxygen</span><span class="w">    </span><span class="p">(</span><span class="n">atomic_number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">8</span><span class="p">)</span><span class="w">  </span><span class="o">-</span><span class="w"> </span><span class="n">mass_number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="mf">6.0</span><span class="w"></span>
+<span class="n">Neon</span><span class="w">      </span><span class="p">(</span><span class="n">atomic_number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">mass_number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="mf">0.0</span><span class="w"></span>
+<span class="n">Aluminium</span><span class="w"> </span><span class="p">(</span><span class="n">atomic_number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">13</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">mass_number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="mf">6.98</span><span class="w"></span>
+<span class="n">Silicon</span><span class="w">   </span><span class="p">(</span><span class="n">atomic_number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">14</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">mass_number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="mf">8.09</span><span class="w"></span>
+<span class="n">Argon</span><span class="w">     </span><span class="p">(</span><span class="n">atomic_number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">18</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">mass_number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="mf">9.948</span><span class="w"></span>
+<span class="n">Titanium</span><span class="w">  </span><span class="p">(</span><span class="n">atomic_number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">22</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">mass_number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="mf">7.8</span><span class="w"></span>
+<span class="n">Nickel</span><span class="w">    </span><span class="p">(</span><span class="n">atomic_number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">28</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">mass_number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="mf">8.7</span><span class="w"></span>
+<span class="n">Copper</span><span class="w">    </span><span class="p">(</span><span class="n">atomic_number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">29</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">mass_number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">6</span><span class="mf">3.54</span><span class="w"></span>
 </code></pre></div>
-
 
 <ul>
 <li><code>t0_pl(i)</code>, with <code>i</code> from 1 to 4, are the initial temperatures in MeV for the different species</li>
@@ -348,34 +305,33 @@ If the background atoms are already ionized, the initial plasma density is compu
 <li><code>r_c</code> is the plasma channel depth ==&gt; <code>n/n_over_nc = 1 + w0_y^2*lambda_0^2/(r_c^2 *\pi ^2 *n_over_nc)(y^2+z^2)/w0_y^2</code>, where <code>w0_y</code> is the laser waist. If <code>r_c</code>=<code>w0_y</code> the channel is matched</li>
 </ul>
 <h2>LASER namelist block</h2>
-<div class="codehilite"><pre><span></span><code><span class="p">&amp;</span><span class="n">LASER</span>
- <span class="n">G_prof</span>         <span class="o">=</span> <span class="p">.</span><span class="n">true</span><span class="p">.,</span>
- <span class="n">nb_laser</span>       <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
- <span class="n">t0_lp</span>          <span class="o">=</span> <span class="mi">1</span><span class="mf">6.5</span><span class="p">,</span>
- <span class="n">xc_lp</span>          <span class="o">=</span> <span class="mi">1</span><span class="mf">6.5</span><span class="p">,</span>
- <span class="n">tau_fwhm</span>       <span class="o">=</span> <span class="mi">3</span><span class="mf">3.0</span><span class="p">,</span>
- <span class="n">w0_y</span>           <span class="o">=</span> <span class="mf">6.2</span><span class="p">,</span>
- <span class="n">a0</span>             <span class="o">=</span> <span class="mf">3.0</span><span class="p">,</span>
- <span class="n">incid_angle</span>    <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> 
- <span class="n">lam0</span>           <span class="o">=</span> <span class="mf">0.8</span><span class="p">,</span>
- <span class="n">y0_cent</span>         <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> 
- <span class="n">z0_cent</span>         <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
- <span class="n">Enable_ionization</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="p">.</span><span class="n">true</span><span class="p">.</span> 
- <span class="n">lp_delay</span>       <span class="o">=</span> <span class="mi">2</span><span class="mf">0.59</span><span class="p">,</span>
- <span class="n">lp_offset</span>      <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
- <span class="n">t1_lp</span>          <span class="o">=</span> <span class="mi">20</span><span class="mf">0.0</span><span class="p">,</span>
- <span class="n">tau1_fwhm</span>      <span class="o">=</span> <span class="mi">2</span><span class="mf">4.74</span><span class="p">,</span>
- <span class="n">w1_y</span>           <span class="o">=</span> <span class="mf">3.5</span><span class="p">,</span>
- <span class="n">a1</span>             <span class="o">=</span> <span class="mf">0.45</span><span class="p">,</span>
- <span class="n">lam1</span>           <span class="o">=</span> <span class="mf">0.4</span><span class="p">,</span>
- <span class="n">y1_cent</span>         <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> 
- <span class="n">z1_cent</span>         <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
- <span class="n">Enable_ionization</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="p">.</span><span class="n">true</span><span class="p">.,</span>
- <span class="n">Symmetrization_pulse</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.,</span>
- <span class="n">a_symm_rat</span>       <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
-<span class="o">/</span>
+<div class="codehilite"><pre><span></span><code><span class="p">&amp;</span><span class="n">LASER</span><span class="w"></span>
+<span class="w"> </span><span class="n">G_prof</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.,</span><span class="w"></span>
+<span class="w"> </span><span class="n">nb_laser</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">t0_lp</span><span class="w">          </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="mf">6.5</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">xc_lp</span><span class="w">          </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="mf">6.5</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">tau_fwhm</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="mf">3.0</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">w0_y</span><span class="w">           </span><span class="o">=</span><span class="w"> </span><span class="mf">6.2</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">a0</span><span class="w">             </span><span class="o">=</span><span class="w"> </span><span class="mf">3.0</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">incid_angle</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span>
+<span class="w"> </span><span class="n">lam0</span><span class="w">           </span><span class="o">=</span><span class="w"> </span><span class="mf">0.8</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">y0_cent</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span>
+<span class="w"> </span><span class="n">z0_cent</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">Enable_ionization</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.</span><span class="w"> </span>
+<span class="w"> </span><span class="n">lp_delay</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="mf">0.59</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">lp_offset</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">t1_lp</span><span class="w">          </span><span class="o">=</span><span class="w"> </span><span class="mi">20</span><span class="mf">0.0</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">tau1_fwhm</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="mf">4.74</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">w1_y</span><span class="w">           </span><span class="o">=</span><span class="w"> </span><span class="mf">3.5</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">a1</span><span class="w">             </span><span class="o">=</span><span class="w"> </span><span class="mf">0.45</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">lam1</span><span class="w">           </span><span class="o">=</span><span class="w"> </span><span class="mf">0.4</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">y1_cent</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span>
+<span class="w"> </span><span class="n">z1_cent</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">Enable_ionization</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.,</span><span class="w"></span>
+<span class="w"> </span><span class="n">Symmetrization_pulse</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.,</span><span class="w"></span>
+<span class="w"> </span><span class="n">a_symm_rat</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span><span class="w"></span>
+<span class="o">/</span><span class="w"></span>
 </code></pre></div>
-
 
 <ul>
 <li><code>G_prof</code> logical flag: if true the pulse is temporally gaussian, if false it has a <code>cos^2</code> shape</li>
@@ -404,20 +360,19 @@ If the background atoms are already ionized, the initial plasma density is compu
 <li><code>a_symm_rat</code> is the pseudo-temperature that electrons acquire on the transverse axis, if <code>Symmetrization_pulse=.true.</code>. Formula is <code>sin(2.*pi*u)*a_symm_rat*Delta_a</code></li>
 </ul>
 <h2>BEAM INJECTION namelist block</h2>
-<div class="codehilite"><pre><span></span><code><span class="p">&amp;</span><span class="n">BEAM_INJECT</span>
-  <span class="n">nb_1</span>        <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
-  <span class="n">xc_1</span>        <span class="o">=</span> <span class="mi">30</span><span class="p">,</span>
-  <span class="n">gam_1</span>       <span class="o">=</span> <span class="mi">300</span><span class="p">,</span>
-  <span class="n">sxb_1</span>       <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
-  <span class="n">syb_1</span>       <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
-  <span class="n">epsy_1</span>      <span class="o">=</span> <span class="mf">0.2</span><span class="p">,</span>
-  <span class="n">epsz_1</span>      <span class="o">=</span> <span class="mf">0.2</span><span class="p">,</span>
-  <span class="n">dg_1</span>        <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
-  <span class="n">charge_1</span>    <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
-  <span class="n">t_inject</span>    <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
-<span class="o">/</span>
+<div class="codehilite"><pre><span></span><code><span class="p">&amp;</span><span class="n">BEAM_INJECT</span><span class="w"></span>
+<span class="w">  </span><span class="n">nb_1</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="n">xc_1</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="mi">30</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="n">gam_1</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="mi">300</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="n">sxb_1</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="n">syb_1</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="n">epsy_1</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="mf">0.2</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="n">epsz_1</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="mf">0.2</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="n">dg_1</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="n">charge_1</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="n">t_inject</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"></span>
+<span class="o">/</span><span class="w"></span>
 </code></pre></div>
-
 
 <ul>
 <li><code>nb_1</code> is the number of particles in the injected bunch in units of <code>10^5</code></li>
@@ -432,14 +387,13 @@ If the background atoms are already ionized, the initial plasma density is compu
 <li><code>t_inject</code> time at which the bunch is injected in the simulation box</li>
 </ul>
 <h2>MOVING_WINDOW namelist block</h2>
-<div class="codehilite"><pre><span></span><code><span class="p">&amp;</span><span class="n">MOVING_WINDOW</span>
- <span class="n">w_sh</span>           <span class="o">=</span> <span class="mi">20</span><span class="p">,</span>
- <span class="n">wi_time</span>        <span class="o">=</span> <span class="mi">10</span><span class="mf">0.0</span><span class="p">,</span>
- <span class="n">wf_time</span>        <span class="o">=</span> <span class="mi">15</span><span class="mf">0.0</span><span class="p">,</span>
- <span class="n">w_speed</span>        <span class="o">=</span> <span class="mf">1.0</span>
-<span class="o">/</span>
+<div class="codehilite"><pre><span></span><code><span class="p">&amp;</span><span class="n">MOVING_WINDOW</span><span class="w"></span>
+<span class="w"> </span><span class="n">w_sh</span><span class="w">           </span><span class="o">=</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">wi_time</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="mf">0.0</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">wf_time</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="mi">15</span><span class="mf">0.0</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">w_speed</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0</span><span class="w"></span>
+<span class="o">/</span><span class="w"></span>
 </code></pre></div>
-
 
 <ul>
 <li><code>w_sh</code> is the number of time steps after which the moving-window is called, repeatedly</li>
@@ -448,27 +402,26 @@ If the background atoms are already ionized, the initial plasma density is compu
 <li><code>w_speed</code> is the speed over c of the moving window</li>
 </ul>
 <h2>OUTPUT namelist block</h2>
-<div class="codehilite"><pre><span></span><code><span class="p">&amp;</span><span class="n">OUTPUT</span>
- <span class="n">nouts</span>          <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
- <span class="n">iene</span>           <span class="o">=</span> <span class="mi">200</span><span class="p">,</span>
- <span class="n">nvout</span>          <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
- <span class="n">nden</span>           <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
- <span class="n">npout</span>          <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
- <span class="n">nbout</span>          <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
- <span class="n">jump</span>           <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
- <span class="n">pjump</span>          <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
- <span class="n">xp0_out</span>        <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
- <span class="n">xp1_out</span>        <span class="o">=</span> <span class="mi">10</span><span class="mf">0.0</span><span class="p">,</span>
- <span class="n">yp_out</span>         <span class="o">=</span> <span class="mi">2</span><span class="mf">0.0</span><span class="p">,</span>
- <span class="n">tmax</span>           <span class="o">=</span> <span class="mi">10</span><span class="mf">0.0</span><span class="p">,</span>
- <span class="n">cfl</span>            <span class="o">=</span> <span class="mf">0.8</span><span class="p">,</span>
- <span class="n">new_sim</span>        <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
- <span class="n">id_new</span>         <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
- <span class="n">dump</span>           <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
- <span class="n">L_env_modulus</span>  <span class="o">=</span> <span class="p">.</span><span class="n">true</span><span class="p">.,</span>
-<span class="o">/</span>
+<div class="codehilite"><pre><span></span><code><span class="p">&amp;</span><span class="n">OUTPUT</span><span class="w"></span>
+<span class="w"> </span><span class="n">nouts</span><span class="w">          </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">iene</span><span class="w">           </span><span class="o">=</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">nvout</span><span class="w">          </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">nden</span><span class="w">           </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">npout</span><span class="w">          </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">nbout</span><span class="w">          </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">jump</span><span class="w">           </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">pjump</span><span class="w">          </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">xp0_out</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">xp1_out</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="mf">0.0</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">yp_out</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="mf">0.0</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">tmax</span><span class="w">           </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="mf">0.0</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">cfl</span><span class="w">            </span><span class="o">=</span><span class="w"> </span><span class="mf">0.8</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">new_sim</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">id_new</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">dump</span><span class="w">           </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">L_env_modulus</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.,</span><span class="w"></span>
+<span class="o">/</span><span class="w"></span>
 </code></pre></div>
-
 
 <ul>
 <li><code>nouts</code> is the number of binary outputs during the relative time of the simulation</li>
@@ -499,21 +452,20 @@ If the background atoms are already ionized, the initial plasma density is compu
 <li><code>L_env_modulus</code> logical flag, only if <code>model_id=4</code>: if true the code generates the absolute value of the laser envelope amplitude, otherwise gives the real and imaginary part in two separate files</li>
 </ul>
 <h2>TRACKING namelist block (now disabled)</h2>
-<div class="codehilite"><pre><span></span><code><span class="p">&amp;</span><span class="n">TRACKING</span>
- <span class="n">P_tracking</span>     <span class="o">=</span> <span class="p">.</span><span class="n">true</span><span class="p">.,</span>
- <span class="n">nkjump</span>           <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
- <span class="n">tkjump</span>           <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
- <span class="n">txmin</span>            <span class="o">=</span> <span class="mi">5</span><span class="mf">5.</span><span class="p">,</span>
- <span class="n">txmax</span>            <span class="o">=</span> <span class="mi">7</span><span class="mf">5.</span><span class="p">,</span>
- <span class="n">tymin</span>            <span class="o">=</span> <span class="o">-</span><span class="mi">8</span><span class="mf">0.</span><span class="p">,</span>
- <span class="n">tymax</span>            <span class="o">=</span> <span class="mi">8</span><span class="mf">0.</span><span class="p">,</span>
- <span class="n">tzmin</span>            <span class="o">=</span> <span class="o">-</span><span class="mi">2</span><span class="mf">0.</span><span class="p">,</span>
- <span class="n">tzmax</span>            <span class="o">=</span> <span class="mi">2</span><span class="mf">0.</span><span class="p">,</span>
- <span class="n">t_in</span>             <span class="o">=</span> <span class="mf">0.</span><span class="p">,</span>
- <span class="n">t_out</span>            <span class="o">=</span> <span class="mi">20</span><span class="mf">0.</span><span class="p">,</span>
-<span class="o">/</span>
+<div class="codehilite"><pre><span></span><code><span class="p">&amp;</span><span class="n">TRACKING</span><span class="w"></span>
+<span class="w"> </span><span class="n">P_tracking</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="p">.</span><span class="n">true</span><span class="p">.,</span><span class="w"></span>
+<span class="w"> </span><span class="n">nkjump</span><span class="w">           </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">tkjump</span><span class="w">           </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">txmin</span><span class="w">            </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="mf">5.</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">txmax</span><span class="w">            </span><span class="o">=</span><span class="w"> </span><span class="mi">7</span><span class="mf">5.</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">tymin</span><span class="w">            </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">8</span><span class="mf">0.</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">tymax</span><span class="w">            </span><span class="o">=</span><span class="w"> </span><span class="mi">8</span><span class="mf">0.</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">tzmin</span><span class="w">            </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">2</span><span class="mf">0.</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">tzmax</span><span class="w">            </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="mf">0.</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">t_in</span><span class="w">             </span><span class="o">=</span><span class="w"> </span><span class="mf">0.</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">t_out</span><span class="w">            </span><span class="o">=</span><span class="w"> </span><span class="mi">20</span><span class="mf">0.</span><span class="p">,</span><span class="w"></span>
+<span class="o">/</span><span class="w"></span>
 </code></pre></div>
-
 
 <ul>
 <li><code>P_tracking</code> logical flag: if true the particle tracking is enabled</li>
@@ -529,13 +481,12 @@ If the background atoms are already ionized, the initial plasma density is compu
 <li><code>t_out</code> final tracking time</li>
 </ul>
 <h2>MPIPARAMS namelist block</h2>
-<div class="codehilite"><pre><span></span><code><span class="p">&amp;</span><span class="n">MPIPARAMS</span>
- <span class="n">nprocx</span>         <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
- <span class="n">nprocy</span>         <span class="o">=</span> <span class="mi">64</span><span class="p">,</span>
- <span class="n">nprocz</span>         <span class="o">=</span> <span class="mi">1</span>
-<span class="o">/</span>
+<div class="codehilite"><pre><span></span><code><span class="p">&amp;</span><span class="n">MPIPARAMS</span><span class="w"></span>
+<span class="w"> </span><span class="n">nprocx</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">nprocy</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="mi">64</span><span class="p">,</span><span class="w"></span>
+<span class="w"> </span><span class="n">nprocz</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="o">/</span><span class="w"></span>
 </code></pre></div>
-
 
 <ul>
 <li><code>nprocx</code> defines the number of processor the simulation will be splitted along the <code>x</code> coordinate</li>
@@ -544,7 +495,6 @@ If the background atoms are already ionized, the initial plasma density is compu
 <li>mind that usually we do not split along <code>x</code> and we use the same number of processor along <code>y</code> and <code>z</code> (for 3D simulations) or we define <code>nprocz=1</code> explicitly for 2D simulations. No guarantees are given if you want to explore other configurations (that <em>should</em> work anyway).</li>
 </ul>
     </div>
-    
     <div class="col-md-3 col-md-pull-9">
       <hr class="visible-xs visible-sm">
         <div class="well toc">
@@ -553,62 +503,45 @@ If the background atoms are already ionized, the initial plasma density is compu
           </ul>
           <hr>
           <ul class="nav nav-stacked nav-pills">
-            
             <li role="presentation">
             <a href='../page/./BUILD.html'>How to build</a>
-            
             </li>
-            
             <li role="presentation">
             <a href='../page/./CONTRIBUTING.html'>Contributing guidelines</a>
-            
             </li>
-            
             <li role="presentation">
             <a href='../page/./DESCRIPTION.html'>Code description</a>
-            
             </li>
-            
             <li role="presentation" class="disabled">
             <a href='../page/./NAMELIST_GUIDE.html'>Write a Namelist</a>
-            
             </li>
-            
             <li role="presentation">
             <a href='../page/deprecated/index.html'>Deprecated Guide</a>
-            
             <ul class="nav nav-stacked nav-pills">
-              
-            <li role="presentation">
+                          <li role="presentation">
             <a href='../page/deprecated/input_data_guide.html'>Old input guide</a>
-            
             </li>
-            
+
             </ul>
-            
             </li>
-            
           </ul>
         </div>
     </div>
-    
   </div>
-
     <hr>    
     </div> <!-- /container -->
     <footer>
       <div class="container">
       <div class="row">
-        <div class="col-xs-6 col-md-4"><p>&copy; 2020 <a rel="license" href="http://www.gnu.org/licenses/old-licenses/fdl-1.2.en.html">GNU Free Documentation License</a>
-                                          </p></div>
-        <div class="col-xs-6 col-md-4 col-md-push-4">
+        <div class="col-xs-6 col-md-6"><p>ALaDyn was developed by The ALaDyn Collaboration<br>&copy; 2025 <a rel="license" href="http://www.gnu.org/licenses/old-licenses/fdl-1.2.en.html">GNU Free Documentation License</a>
+</p>
+        </div>
+        <div class="col-xs-6 col-md-6">
           <p class="text-right">
             Documentation generated by 
-            <a href="https://github.com/cmacmackin/ford">FORD</a>
-             on 2020-07-30 
-          </p>
+            <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+ on 2025-12-28           </p>
         </div>
-        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> ALaDyn was developed by The ALaDyn Collaboration</p></div>
       </div>
       <br>
       </div> <!-- /container -->    
@@ -634,14 +567,11 @@ If the background atoms are already ionized, the initial plasma density is compu
         extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
       });
     </script>
-    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
     
     <script src="../tipuesearch/tipuesearch_content.js"></script>
     <script src="../tipuesearch/tipuesearch_set.js"></script>
     <script src="../tipuesearch/tipuesearch.js"></script>
-    
     
   </body>
 </html>

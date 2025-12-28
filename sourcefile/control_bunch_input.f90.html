@@ -4,9 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-   
    <meta name="description" content="A High-Accuracy PIC Code for the Maxwell-Vlasov Equations">
-    
     <meta name="author" content="The ALaDyn Collaboration" >
     <link rel="icon" href="../favicon.png">
 
@@ -16,10 +14,7 @@
     <link href="../css/pygments.css" rel="stylesheet">
     <link href="../css/font-awesome.min.css" rel="stylesheet">
     <link href="../css/local.css" rel="stylesheet">
-    
     <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
-    
-    
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -48,55 +43,28 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-        
             <li><a href='../page/index.html'>Guide</a></li>
-      
             <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
               <a href="#" class="dropdown-toggle"
               data-toggle="dropdown" role="button"
               aria-haspopup="true"
      aria-expanded="false">Contents <span class="caret"></span></a>
         <ul class="dropdown-menu">
-          
-              
             <li><a href="../lists/files.html">Source Files</a></li>
-        
-        
-        
             <li><a href="../lists/modules.html">Modules</a></li>
-        
-            
-                                
             <li><a href="../lists/procedures.html">Procedures</a></li>
-        
-               
-            <li><a href="../lists/types.html">Derived Types</a></li>
-        
-        
+                   <li><a href="../lists/types.html">Derived Types</a></li>
             <li><a href="../program/aladyn.html">Program</a></li>
-      
+       
             </ul>
-            </li>
-
-
-<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
-
-
-
-<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
-
-
-
-<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
-
-                             
-<li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
-
-
-<li class="visible-xs hidden-sm visible-lg"><a href="../program/aladyn.html">Program</a></li>
-
-          </ul>
         
+            </li>
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+                             <li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+<li class="visible-xs hidden-sm visible-lg"><a href="../program/aladyn.html">Program</a></li>
+          </ul>
         <form action="../search.html" class="navbar-form navbar-right" role="search">
         <div class="form-group">
           <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
@@ -105,114 +73,95 @@
         <button type="submit" class="btn btn-default">Submit</button>
 -->
         </form>
-        
         </div><!--/.nav-collapse -->
       </div>
     </nav>
 
     <div class="container">
-    
-  
   <div class="row">
     <h1>control_bunch_input.f90
-    <small>Source File</small>
-    
+      <small>Source File</small>
+      
     </h1>
-    
-<div class="row">
-  <div class="col-lg-12">
-<div class="well well-sm">
-  <ul class="list-inline" style="margin-bottom:0px;display:inline">
-     
-     
-     
-     
-    
-    
-     <li><i class="fa fa-list-ol"></i>
-       <a data-toggle="tooltip"
-    data-placement="bottom" data-html="true"
-    title=" 0.1% of total for source files.">19 statements</a>
-     </li> 
-     
-     
-     
-    <li><i class="fa fa-code"></i><a href="../src/control_bunch_input.f90"> Source File</a></li>
-     
-     
-  </ul>
-  <ol class="breadcrumb in-well text-right">
-  
-    
-  
-     <li class="active">control_bunch_input.f90</li>
-  </ol>
-</div>
-</div>
-</div>
-<script>
-  $(function () {
-  $('[data-toggle="tooltip"]').tooltip()
-  })
-</script>
+      <div class="row" id="info-bar">
+    <div class="col-lg-12">
+      <div class="well well-sm">
+        <ul class="list-inline" style="margin-bottom:0px;display:inline">
+            <li id="meta-license"><i class="fa fa-legal"></i> <a rel="license" href="http://www.gnu.org/licenses/old-licenses/fdl-1.2.en.html">GNU Free Documentation License</a></li>
+
+          <li id="statements"><i class="fa fa-list-ol"></i>
+            <a data-toggle="tooltip"
+               data-placement="bottom" data-html="true"
+               title=" 0.1% of total for source files.">19 statements</a>
+          </li>
+
+            <li id="source-file">
+              <i class="fa fa-code"></i>
+              <a href="../src/control_bunch_input.f90"> Source File</a>
+            </li>
+        </ul>
+        <ol class="breadcrumb in-well text-right">
+          <li class="active">control_bunch_input.f90</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+  <script>
+    $(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+    })
+  </script>
 
   </div>
   <div class="row">
     <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
-    
-<div id="sidebar">
+      <div id="sidebar">
+      <h3>Contents</h3>
   
-<h3>Contents</h3>
- 
-
-
-
-
-
-
-
-<div class="panel panel-primary">
-  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#mods-0">Modules</a></h3></div>
-  <div id="mods-0" class="panel-collapse collapse">
-    <div class="list-group">
-      
-      <a class="list-group-item" href="../module/control_bunch_input.html">control_bunch_input</a>
-      
+  
+  
+  
+  
+      <div class="panel panel-primary">
+      <div class="panel-heading text-left">
+        <h3 class="panel-title">
+          <a data-toggle="collapse" href="#mods-0">Modules</a>
+        </h3>
+      </div>
+      <div id="mods-0" class="panel-collapse collapse">
+        <div class="list-group">
+            <a class="list-group-item" href="../module/control_bunch_input.html">control_bunch_input</a>
+        </div>
+      </div>
     </div>
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    <div class="panel panel-primary">
+      <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+      <div class="list-group">
+        <a class="list-group-item" href="../sourcefile/control_bunch_input.f90.html#src">control_bunch_input.f90</a>
+      </div>
+    </div>
+
+
   </div>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="panel panel-primary">
-  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
-  <div class="list-group">
-    <a class="list-group-item" href="../sourcefile/control_bunch_input.f90.html#src">control_bunch_input.f90</a>
-  </div>
-</div>
-
-
-
-</div>
 
     </div>
     <div class="col-md-9" id='text'>
       
       <br>
-    
     <div class="panel panel-default">
       <div class="panel-heading">
   <h3 class="panel-title">This file depends on</h3>
@@ -221,34 +170,34 @@
   <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+<!-- Generated by graphviz version 2.43.0 (0)
  -->
 <!-- Title: sourcefile~~control_bunch_input.f90~~EfferentGraph Pages: 1 -->
-<svg id="sourcefilecontrol_bunch_inputf90EfferentGraph" width="291pt" height="32pt"
- viewBox="0.00 0.00 291.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg id="sourcefilecontrol_bunch_inputf90EfferentGraph" width="289pt" height="32pt"
+ viewBox="0.00 0.00 289.00 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <g id="sourcefile~~control_bunch_input.f90~~EfferentGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
 <title>sourcefile~~control_bunch_input.f90~~EfferentGraph</title>
-<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 287,-28 287,4 -4,4"/>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 285,-28 285,4 -4,4"/>
 <!-- sourcefile~control_bunch_input.f90 -->
 <g id="sourcefile~~control_bunch_input.f90~~EfferentGraph_node1" class="node">
 <title>sourcefile~control_bunch_input.f90</title>
-<polygon fill="none" stroke="#000000" points="283,-24 142,-24 142,0 283,0 283,-24"/>
-<text text-anchor="middle" x="212.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">control_bunch_input.f90</text>
+<polygon fill="none" stroke="black" points="281,-24 141,-24 141,0 281,0 281,-24"/>
+<text text-anchor="middle" x="211" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">control_bunch_input.f90</text>
 </g>
 <!-- sourcefile~precision_def.f90 -->
 <g id="sourcefile~~control_bunch_input.f90~~EfferentGraph_node2" class="node">
 <title>sourcefile~precision_def.f90</title>
 <g id="a_sourcefile~~control_bunch_input.f90~~EfferentGraph_node2"><a xlink:href=".././sourcefile/precision_def.f90.html" xlink:title="precision_def.F90">
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="106,-24 0,-24 0,0 106,0 106,-24"/>
-<text text-anchor="middle" x="53" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">precision_def.F90</text>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="105,-24 0,-24 0,0 105,0 105,-24"/>
+<text text-anchor="middle" x="52.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">precision_def.F90</text>
 </a>
 </g>
 </g>
 <!-- sourcefile~control_bunch_input.f90&#45;&gt;sourcefile~precision_def.f90 -->
 <g id="sourcefile~~control_bunch_input.f90~~EfferentGraph_edge1" class="edge">
 <title>sourcefile~control_bunch_input.f90&#45;&gt;sourcefile~precision_def.f90</title>
-<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M141.6121,-12C133.3051,-12 124.8682,-12 116.668,-12"/>
-<polygon fill="#ff0000" stroke="#ff0000" points="116.4353,-8.5001 106.4352,-12 116.4352,-15.5001 116.4353,-8.5001"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M140.9,-12C132.4,-12 123.76,-12 115.37,-12"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="115.31,-8.5 105.31,-12 115.31,-15.5 115.31,-8.5"/>
 </g>
 </g>
 </svg>
@@ -257,25 +206,25 @@
     <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+<!-- Generated by graphviz version 2.43.0 (0)
  -->
 <!-- Title: Graph Key Pages: 1 -->
 <svg width="202pt" height="32pt"
  viewBox="0.00 0.00 201.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
 <title>Graph Key</title>
-<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 197.5,-28 197.5,4 -4,4"/>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 197.5,-28 197.5,4 -4,4"/>
 <!-- Source File -->
 <g id="node1" class="node">
 <title>Source File</title>
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="71,-24 0,-24 0,0 71,0 71,-24"/>
-<text text-anchor="middle" x="35.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Source File</text>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="70,-24 0,-24 0,0 70,0 70,-24"/>
+<text text-anchor="middle" x="35" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Source File</text>
 </g>
 <!-- This Page&#39;s Entity -->
 <g id="node2" class="node">
 <title>This Page&#39;s Entity</title>
-<polygon fill="none" stroke="#000000" points="193.5,-24 89.5,-24 89.5,0 193.5,0 193.5,-24"/>
-<text text-anchor="middle" x="141.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+<polygon fill="none" stroke="black" points="193.5,-24 88.5,-24 88.5,0 193.5,0 193.5,-24"/>
+<text text-anchor="middle" x="141" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
 </g>
 </g>
 </svg>
@@ -288,8 +237,6 @@
     </div></div></div></div>
       </div>
     </div>
-    
-      
     <div class="panel panel-default">
       <div class="panel-heading">
   <h3 class="panel-title">Files dependent on this one</h3>
@@ -298,211 +245,212 @@
   <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+<!-- Generated by graphviz version 2.43.0 (0)
  -->
 <!-- Title: sourcefile~~control_bunch_input.f90~~AfferentGraph Pages: 1 -->
-<svg id="sourcefilecontrol_bunch_inputf90AfferentGraph" width="641pt" height="193pt"
- viewBox="0.00 0.00 641.00 193.08" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<g id="sourcefile~~control_bunch_input.f90~~AfferentGraph" class="graph" transform="scale(.8292 .8292) rotate(0) translate(4 228.8374)">
+<svg id="sourcefilecontrol_bunch_inputf90AfferentGraph" width="641pt" height="186pt"
+ viewBox="0.00 0.00 641.00 185.99" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="sourcefile~~control_bunch_input.f90~~AfferentGraph" class="graph" transform="scale(0.83 0.83) rotate(0) translate(4 220)">
 <title>sourcefile~~control_bunch_input.f90~~AfferentGraph</title>
-<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-228.8374 769,-228.8374 769,4 -4,4"/>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-220 768,-220 768,4 -4,4"/>
 <!-- sourcefile~control_bunch_input.f90 -->
 <g id="sourcefile~~control_bunch_input.f90~~AfferentGraph_node1" class="node">
 <title>sourcefile~control_bunch_input.f90</title>
-<polygon fill="none" stroke="#000000" points="141,-123.8374 0,-123.8374 0,-99.8374 141,-99.8374 141,-123.8374"/>
-<text text-anchor="middle" x="70.5" y="-109.4374" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">control_bunch_input.f90</text>
-</g>
-<!-- sourcefile~set_init_param.f90 -->
-<g id="sourcefile~~control_bunch_input.f90~~AfferentGraph_node2" class="node">
-<title>sourcefile~set_init_param.f90</title>
-<g id="a_sourcefile~~control_bunch_input.f90~~AfferentGraph_node2"><a xlink:href=".././sourcefile/set_init_param.f90.html" xlink:title="set_init_param.f90">
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="288,-144.8374 177,-144.8374 177,-120.8374 288,-120.8374 288,-144.8374"/>
-<text text-anchor="middle" x="232.5" y="-130.4374" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">set_init_param.f90</text>
-</a>
-</g>
-</g>
-<!-- sourcefile~set_init_param.f90&#45;&gt;sourcefile~control_bunch_input.f90 -->
-<g id="sourcefile~~control_bunch_input.f90~~AfferentGraph_edge1" class="edge">
-<title>sourcefile~set_init_param.f90&#45;&gt;sourcefile~control_bunch_input.f90</title>
-<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M176.7488,-125.6104C168.5258,-124.5444 159.9172,-123.4285 151.3113,-122.3129"/>
-<polygon fill="#ff0000" stroke="#ff0000" points="151.6004,-118.8212 141.2334,-121.0065 150.7004,-125.7631 151.6004,-118.8212"/>
-</g>
-<!-- sourcefile~init_beam_part_distrib.f90 -->
-<g id="sourcefile~~control_bunch_input.f90~~AfferentGraph_node3" class="node">
-<title>sourcefile~init_beam_part_distrib.f90</title>
-<g id="a_sourcefile~~control_bunch_input.f90~~AfferentGraph_node3"><a xlink:href=".././sourcefile/init_beam_part_distrib.f90.html" xlink:title="init_beam_part_distrib.f90">
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="475,-224.8374 324,-224.8374 324,-200.8374 475,-200.8374 475,-224.8374"/>
-<text text-anchor="middle" x="399.5" y="-210.4374" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">init_beam_part_distrib.f90</text>
-</a>
-</g>
-</g>
-<!-- sourcefile~init_beam_part_distrib.f90&#45;&gt;sourcefile~control_bunch_input.f90 -->
-<g id="sourcefile~~control_bunch_input.f90~~AfferentGraph_edge2" class="edge">
-<title>sourcefile~init_beam_part_distrib.f90&#45;&gt;sourcefile~control_bunch_input.f90</title>
-<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M348.6776,-200.7916C315.5724,-192.9137 271.4526,-182.3556 232.5,-172.8374"/>
-</g>
-<!-- sourcefile~read_input.f90 -->
-<g id="sourcefile~~control_bunch_input.f90~~AfferentGraph_node4" class="node">
-<title>sourcefile~read_input.f90</title>
-<g id="a_sourcefile~~control_bunch_input.f90~~AfferentGraph_node4"><a xlink:href=".././sourcefile/read_input.f90.html" xlink:title="read_input.f90">
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="277.5,-102.8374 187.5,-102.8374 187.5,-78.8374 277.5,-78.8374 277.5,-102.8374"/>
-<text text-anchor="middle" x="232.5" y="-88.4374" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">read_input.f90</text>
-</a>
-</g>
-</g>
-<!-- sourcefile~read_input.f90&#45;&gt;sourcefile~control_bunch_input.f90 -->
-<g id="sourcefile~~control_bunch_input.f90~~AfferentGraph_edge3" class="edge">
-<title>sourcefile~read_input.f90&#45;&gt;sourcefile~control_bunch_input.f90</title>
-<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M187.374,-96.687C176.0713,-98.1522 163.6008,-99.7687 151.1416,-101.3838"/>
-<polygon fill="#ff0000" stroke="#ff0000" points="150.6415,-97.9193 141.1745,-102.6759 151.5415,-104.8612 150.6415,-97.9193"/>
+<polygon fill="none" stroke="black" points="140,-116 0,-116 0,-92 140,-92 140,-116"/>
+<text text-anchor="middle" x="70" y="-101.6" font-family="Helvetica,sans-Serif" font-size="10.50">control_bunch_input.f90</text>
 </g>
 <!-- sourcefile~run_data_info.f90 -->
-<g id="sourcefile~~control_bunch_input.f90~~AfferentGraph_node5" class="node">
+<g id="sourcefile~~control_bunch_input.f90~~AfferentGraph_node2" class="node">
 <title>sourcefile~run_data_info.f90</title>
-<g id="a_sourcefile~~control_bunch_input.f90~~AfferentGraph_node5"><a xlink:href=".././sourcefile/run_data_info.f90.html" xlink:title="run_data_info.f90">
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="285.5,-60.8374 179.5,-60.8374 179.5,-36.8374 285.5,-36.8374 285.5,-60.8374"/>
-<text text-anchor="middle" x="232.5" y="-46.4374" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">run_data_info.f90</text>
+<g id="a_sourcefile~~control_bunch_input.f90~~AfferentGraph_node2"><a xlink:href=".././sourcefile/run_data_info.f90.html" xlink:title="run_data_info.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="284,-53 179,-53 179,-29 284,-29 284,-53"/>
+<text text-anchor="middle" x="231.5" y="-38.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">run_data_info.f90</text>
 </a>
 </g>
 </g>
 <!-- sourcefile~run_data_info.f90&#45;&gt;sourcefile~control_bunch_input.f90 -->
-<g id="sourcefile~~control_bunch_input.f90~~AfferentGraph_edge4" class="edge">
+<g id="sourcefile~~control_bunch_input.f90~~AfferentGraph_edge1" class="edge">
 <title>sourcefile~run_data_info.f90&#45;&gt;sourcefile~control_bunch_input.f90</title>
-<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M200.4814,-60.8657C192.7833,-63.7816 184.5918,-66.9043 177,-69.8374 154.8536,-78.3937 130.1867,-88.1096 110.1735,-96.04"/>
-<polygon fill="#ff0000" stroke="#ff0000" points="108.7587,-92.8358 100.7541,-99.7767 111.34,-99.3425 108.7587,-92.8358"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M199.06,-53.04C191.5,-55.95 183.46,-59.07 176,-62 154.17,-70.57 129.85,-80.29 110.12,-88.22"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="108.8,-84.97 100.83,-91.95 111.41,-91.47 108.8,-84.97"/>
 </g>
 <!-- sourcefile~diag_part_and_fields.f90 -->
-<g id="sourcefile~~control_bunch_input.f90~~AfferentGraph_node6" class="node">
+<g id="sourcefile~~control_bunch_input.f90~~AfferentGraph_node3" class="node">
 <title>sourcefile~diag_part_and_fields.f90</title>
-<g id="a_sourcefile~~control_bunch_input.f90~~AfferentGraph_node6"><a xlink:href=".././sourcefile/diag_part_and_fields.f90.html" xlink:title="diag_part_and_fields.f90">
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="653,-184.8374 511,-184.8374 511,-160.8374 653,-160.8374 653,-184.8374"/>
-<text text-anchor="middle" x="582" y="-170.4374" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">diag_part_and_fields.f90</text>
+<g id="a_sourcefile~~control_bunch_input.f90~~AfferentGraph_node3"><a xlink:href=".././sourcefile/diag_part_and_fields.f90.html" xlink:title="diag_part_and_fields.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="465,-216 323,-216 323,-192 465,-192 465,-216"/>
+<text text-anchor="middle" x="394" y="-201.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">diag_part_and_fields.f90</text>
 </a>
 </g>
 </g>
 <!-- sourcefile~diag_part_and_fields.f90&#45;&gt;sourcefile~control_bunch_input.f90 -->
 <g id="sourcefile~~control_bunch_input.f90~~AfferentGraph_edge5" class="edge">
 <title>sourcefile~diag_part_and_fields.f90&#45;&gt;sourcefile~control_bunch_input.f90</title>
-<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M510.8672,-182.5948C439.402,-190.1388 326.6613,-195.8461 232.5,-172.8374"/>
-<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M232.5,-172.8374C188.2849,-161.0654 139.3622,-141.72 106.9703,-127.9731"/>
-<polygon fill="#ff0000" stroke="#ff0000" points="108.042,-124.6245 97.4719,-123.9011 105.2838,-131.0582 108.042,-124.6245"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M343.47,-191.98C311.74,-184.27 269.7,-174.05 232.5,-165"/>
 </g>
-<!-- sourcefile~window.f90 -->
-<g id="sourcefile~~control_bunch_input.f90~~AfferentGraph_node7" class="node">
-<title>sourcefile~window.f90</title>
-<g id="a_sourcefile~~control_bunch_input.f90~~AfferentGraph_node7"><a xlink:href=".././sourcefile/window.f90.html" xlink:title="window.f90">
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="435.5,-62.8374 363.5,-62.8374 363.5,-38.8374 435.5,-38.8374 435.5,-62.8374"/>
-<text text-anchor="middle" x="399.5" y="-48.4374" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">window.f90</text>
+<!-- sourcefile~set_init_param.f90 -->
+<g id="sourcefile~~control_bunch_input.f90~~AfferentGraph_node4" class="node">
+<title>sourcefile~set_init_param.f90</title>
+<g id="a_sourcefile~~control_bunch_input.f90~~AfferentGraph_node4"><a xlink:href=".././sourcefile/set_init_param.f90.html" xlink:title="set_init_param.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="287,-137 176,-137 176,-113 287,-113 287,-137"/>
+<text text-anchor="middle" x="231.5" y="-122.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">set_init_param.f90</text>
 </a>
 </g>
 </g>
-<!-- sourcefile~window.f90&#45;&gt;sourcefile~run_data_info.f90 -->
-<g id="sourcefile~~control_bunch_input.f90~~AfferentGraph_edge11" class="edge">
-<title>sourcefile~window.f90&#45;&gt;sourcefile~run_data_info.f90</title>
-<path fill="none" stroke="#0066ff" stroke-dasharray="5,2" d="M363.2635,-50.4034C343.6309,-50.1683 318.8005,-49.8709 296.0645,-49.5986"/>
-<polygon fill="#0066ff" stroke="#0066ff" points="295.833,-46.0957 285.7918,-49.4756 295.7492,-53.0952 295.833,-46.0957"/>
+<!-- sourcefile~set_init_param.f90&#45;&gt;sourcefile~control_bunch_input.f90 -->
+<g id="sourcefile~~control_bunch_input.f90~~AfferentGraph_edge3" class="edge">
+<title>sourcefile~set_init_param.f90&#45;&gt;sourcefile~control_bunch_input.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M175.61,-117.77C167.38,-116.69 158.77,-115.56 150.16,-114.42"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="150.45,-110.93 140.08,-113.1 149.54,-117.87 150.45,-110.93"/>
+</g>
+<!-- sourcefile~read_input.f90 -->
+<g id="sourcefile~~control_bunch_input.f90~~AfferentGraph_node5" class="node">
+<title>sourcefile~read_input.f90</title>
+<g id="a_sourcefile~~control_bunch_input.f90~~AfferentGraph_node5"><a xlink:href=".././sourcefile/read_input.f90.html" xlink:title="read_input.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="276,-95 187,-95 187,-71 276,-71 276,-95"/>
+<text text-anchor="middle" x="231.5" y="-80.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">read_input.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~read_input.f90&#45;&gt;sourcefile~control_bunch_input.f90 -->
+<g id="sourcefile~~control_bunch_input.f90~~AfferentGraph_edge4" class="edge">
+<title>sourcefile~read_input.f90&#45;&gt;sourcefile~control_bunch_input.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M186.92,-88.74C175.49,-90.24 162.81,-91.91 150.14,-93.58"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="149.47,-90.14 140.02,-94.91 150.39,-97.08 149.47,-90.14"/>
+</g>
+<!-- sourcefile~init_beam_part_distrib.f90 -->
+<g id="sourcefile~~control_bunch_input.f90~~AfferentGraph_node6" class="node">
+<title>sourcefile~init_beam_part_distrib.f90</title>
+<g id="a_sourcefile~~control_bunch_input.f90~~AfferentGraph_node6"><a xlink:href=".././sourcefile/init_beam_part_distrib.f90.html" xlink:title="init_beam_part_distrib.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="652,-166 501,-166 501,-142 652,-142 652,-166"/>
+<text text-anchor="middle" x="576.5" y="-151.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">init_beam_part_distrib.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~init_beam_part_distrib.f90&#45;&gt;sourcefile~control_bunch_input.f90 -->
+<g id="sourcefile~~control_bunch_input.f90~~AfferentGraph_edge2" class="edge">
+<title>sourcefile~init_beam_part_distrib.f90&#45;&gt;sourcefile~control_bunch_input.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M512.18,-166.04C442.55,-176.99 327.87,-188.21 232.5,-165"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M230.5,-165C186.7,-153.56 138.4,-134.07 106.55,-120.19"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="107.79,-116.91 97.22,-116.08 104.96,-123.32 107.79,-116.91"/>
 </g>
 <!-- sourcefile~aladyn.f90 -->
-<g id="sourcefile~~control_bunch_input.f90~~AfferentGraph_node8" class="node">
+<g id="sourcefile~~control_bunch_input.f90~~AfferentGraph_node7" class="node">
 <title>sourcefile~aladyn.f90</title>
-<g id="a_sourcefile~~control_bunch_input.f90~~AfferentGraph_node8"><a xlink:href=".././sourcefile/aladyn.f90.html" xlink:title="ALaDyn.F90">
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="765,-124.8374 689,-124.8374 689,-100.8374 765,-100.8374 765,-124.8374"/>
-<text text-anchor="middle" x="727" y="-110.4374" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">ALaDyn.F90</text>
+<g id="a_sourcefile~~control_bunch_input.f90~~AfferentGraph_node7"><a xlink:href=".././sourcefile/aladyn.f90.html" xlink:title="ALaDyn.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="764,-106 688,-106 688,-82 764,-82 764,-106"/>
+<text text-anchor="middle" x="726" y="-91.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ALaDyn.F90</text>
 </a>
 </g>
 </g>
-<!-- sourcefile~aladyn.f90&#45;&gt;sourcefile~init_beam_part_distrib.f90 -->
-<g id="sourcefile~~control_bunch_input.f90~~AfferentGraph_edge7" class="edge">
-<title>sourcefile~aladyn.f90&#45;&gt;sourcefile~init_beam_part_distrib.f90</title>
-<path fill="none" stroke="#cbff00" stroke-dasharray="5,2" d="M720.0266,-125.1214C708.6912,-143.7517 684.3461,-178.5921 653,-193.8374 601.1875,-219.0365 536.2963,-223.476 485.1391,-221.7756"/>
-<polygon fill="#cbff00" stroke="#cbff00" points="485.2356,-218.2767 475.0988,-221.358 484.9446,-225.2706 485.2356,-218.2767"/>
-</g>
 <!-- sourcefile~aladyn.f90&#45;&gt;sourcefile~run_data_info.f90 -->
-<g id="sourcefile~~control_bunch_input.f90~~AfferentGraph_edge9" class="edge">
+<g id="sourcefile~~control_bunch_input.f90~~AfferentGraph_edge6" class="edge">
 <title>sourcefile~aladyn.f90&#45;&gt;sourcefile~run_data_info.f90</title>
-<path fill="none" stroke="#0066ff" stroke-dasharray="5,2" d="M720.6019,-100.5963C709.7231,-81.2846 685.5912,-44.4438 653,-29.8374 527.1749,26.5535 358.4017,-10.5005 278.3388,-33.888"/>
-<polygon fill="#0066ff" stroke="#0066ff" points="277.1445,-30.5919 268.5631,-36.8055 279.1464,-37.2995 277.1445,-30.5919"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M687.71,-93.49C657.89,-93.21 615,-93.08 577.5,-94"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M575.5,-94C472.51,-96.54 354.09,-72.05 286.8,-55.5"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="287.39,-52.04 276.84,-53.01 285.7,-58.83 287.39,-52.04"/>
 </g>
 <!-- sourcefile~aladyn.f90&#45;&gt;sourcefile~diag_part_and_fields.f90 -->
-<g id="sourcefile~~control_bunch_input.f90~~AfferentGraph_edge12" class="edge">
+<g id="sourcefile~~control_bunch_input.f90~~AfferentGraph_edge9" class="edge">
 <title>sourcefile~aladyn.f90&#45;&gt;sourcefile~diag_part_and_fields.f90</title>
-<path fill="none" stroke="#cc00ff" stroke-dasharray="5,2" d="M701.8751,-124.9852C687.6546,-131.7079 669.4708,-140.0504 653,-146.8374 644.3544,-150.3999 635.0228,-153.993 626.0564,-157.3237"/>
-<polygon fill="#cc00ff" stroke="#cc00ff" points="624.7034,-154.0919 616.52,-160.8211 627.1137,-160.6639 624.7034,-154.0919"/>
+<path fill="none" stroke="#cbff00" stroke-dasharray="5,2" d="M718.09,-106.14C706.87,-124.58 682.81,-159.16 652,-175 597.51,-203.01 528.09,-209.4 475.14,-209.26"/>
+<polygon fill="#cbff00" stroke="#cbff00" points="475.15,-205.76 465.11,-209.16 475.08,-212.76 475.15,-205.76"/>
+</g>
+<!-- sourcefile~aladyn.f90&#45;&gt;sourcefile~init_beam_part_distrib.f90 -->
+<g id="sourcefile~~control_bunch_input.f90~~AfferentGraph_edge12" class="edge">
+<title>sourcefile~aladyn.f90&#45;&gt;sourcefile~init_beam_part_distrib.f90</title>
+<path fill="none" stroke="#cc00ff" stroke-dasharray="5,2" d="M695.15,-106.14C672.49,-115.36 641.12,-128.12 616.48,-138.15"/>
+<polygon fill="#cc00ff" stroke="#cc00ff" points="615,-134.97 607.05,-141.98 617.63,-141.45 615,-134.97"/>
 </g>
 <!-- sourcefile~start_all.f90 -->
-<g id="sourcefile~~control_bunch_input.f90~~AfferentGraph_node9" class="node">
+<g id="sourcefile~~control_bunch_input.f90~~AfferentGraph_node8" class="node">
 <title>sourcefile~start_all.f90</title>
-<g id="a_sourcefile~~control_bunch_input.f90~~AfferentGraph_node9"><a xlink:href=".././sourcefile/start_all.f90.html" xlink:title="start_all.F90">
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="438,-124.8374 361,-124.8374 361,-100.8374 438,-100.8374 438,-124.8374"/>
-<text text-anchor="middle" x="399.5" y="-110.4374" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">start_all.F90</text>
+<g id="a_sourcefile~~control_bunch_input.f90~~AfferentGraph_node8"><a xlink:href=".././sourcefile/start_all.f90.html" xlink:title="start_all.F90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="432.5,-135 355.5,-135 355.5,-111 432.5,-111 432.5,-135"/>
+<text text-anchor="middle" x="394" y="-120.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">start_all.F90</text>
 </a>
 </g>
 </g>
 <!-- sourcefile~aladyn.f90&#45;&gt;sourcefile~start_all.f90 -->
-<g id="sourcefile~~control_bunch_input.f90~~AfferentGraph_edge15" class="edge">
+<g id="sourcefile~~control_bunch_input.f90~~AfferentGraph_edge13" class="edge">
 <title>sourcefile~aladyn.f90&#45;&gt;sourcefile~start_all.f90</title>
-<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M688.9749,-113.4497C677.4219,-113.6092 664.6918,-113.7584 653,-113.8374 589.8903,-114.2638 574.1105,-114.1204 511,-113.8374 490.4886,-113.7454 467.8554,-113.5582 448.3706,-113.3705"/>
-<polygon fill="#0000ff" stroke="#0000ff" points="448.2348,-109.869 438.2006,-113.2697 448.1654,-116.8687 448.2348,-109.869"/>
+<path fill="none" stroke="#00ff00" stroke-dasharray="5,2" d="M575.5,-94C529.97,-95.12 478.76,-104.1 442.55,-111.77"/>
+<polygon fill="#00ff00" stroke="#00ff00" points="441.79,-108.36 432.75,-113.89 443.27,-115.2 441.79,-108.36"/>
 </g>
 <!-- sourcefile~pic_evolve_in_time.f90 -->
 <g id="sourcefile~~control_bunch_input.f90~~AfferentGraph_node10" class="node">
 <title>sourcefile~pic_evolve_in_time.f90</title>
 <g id="a_sourcefile~~control_bunch_input.f90~~AfferentGraph_node10"><a xlink:href=".././sourcefile/pic_evolve_in_time.f90.html" xlink:title="pic_evolve_in_time.f90">
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="648.5,-104.8374 515.5,-104.8374 515.5,-80.8374 648.5,-80.8374 648.5,-104.8374"/>
-<text text-anchor="middle" x="582" y="-90.4374" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">pic_evolve_in_time.f90</text>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="643,-66 510,-66 510,-42 643,-42 643,-66"/>
+<text text-anchor="middle" x="576.5" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">pic_evolve_in_time.f90</text>
 </a>
 </g>
 </g>
 <!-- sourcefile~aladyn.f90&#45;&gt;sourcefile~pic_evolve_in_time.f90 -->
 <g id="sourcefile~~control_bunch_input.f90~~AfferentGraph_edge16" class="edge">
 <title>sourcefile~aladyn.f90&#45;&gt;sourcefile~pic_evolve_in_time.f90</title>
-<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M688.903,-107.5826C679.5557,-106.2933 669.2153,-104.8671 658.7563,-103.4244"/>
-<polygon fill="#ff0000" stroke="#ff0000" points="659.1053,-99.9395 648.7208,-102.0402 658.1488,-106.8739 659.1053,-99.9395"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M687.78,-83.91C670.78,-79.3 650.31,-73.75 631.65,-68.69"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="632.37,-65.25 621.8,-66.01 630.53,-72.01 632.37,-65.25"/>
 </g>
 <!-- sourcefile~env_evolve_in_time.f90 -->
 <g id="sourcefile~~control_bunch_input.f90~~AfferentGraph_node11" class="node">
 <title>sourcefile~env_evolve_in_time.f90</title>
 <g id="a_sourcefile~~control_bunch_input.f90~~AfferentGraph_node11"><a xlink:href=".././sourcefile/env_evolve_in_time.f90.html" xlink:title="env_evolve_in_time.f90">
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="650.5,-62.8374 513.5,-62.8374 513.5,-38.8374 650.5,-38.8374 650.5,-62.8374"/>
-<text text-anchor="middle" x="582" y="-48.4374" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">env_evolve_in_time.f90</text>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="645,-24 508,-24 508,0 645,0 645,-24"/>
+<text text-anchor="middle" x="576.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">env_evolve_in_time.f90</text>
 </a>
 </g>
 </g>
 <!-- sourcefile~aladyn.f90&#45;&gt;sourcefile~env_evolve_in_time.f90 -->
 <g id="sourcefile~~control_bunch_input.f90~~AfferentGraph_edge17" class="edge">
 <title>sourcefile~aladyn.f90&#45;&gt;sourcefile~env_evolve_in_time.f90</title>
-<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M707.797,-100.6685C693.1912,-91.7956 672.3713,-79.9536 653,-71.8374 648.2318,-69.8396 643.2094,-67.9512 638.1303,-66.1871"/>
-<polygon fill="#00ffff" stroke="#00ffff" points="638.9384,-62.768 628.3452,-62.9519 636.741,-69.4142 638.9384,-62.768"/>
-</g>
-<!-- sourcefile~start_all.f90&#45;&gt;sourcefile~set_init_param.f90 -->
-<g id="sourcefile~~control_bunch_input.f90~~AfferentGraph_edge6" class="edge">
-<title>sourcefile~start_all.f90&#45;&gt;sourcefile~set_init_param.f90</title>
-<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M360.7671,-117.476C342.1345,-119.7075 319.2796,-122.4446 298.0497,-124.9871"/>
-<polygon fill="#ff0000" stroke="#ff0000" points="297.6214,-121.5133 288.1086,-126.1777 298.4539,-128.4636 297.6214,-121.5133"/>
-</g>
-<!-- sourcefile~start_all.f90&#45;&gt;sourcefile~read_input.f90 -->
-<g id="sourcefile~~control_bunch_input.f90~~AfferentGraph_edge8" class="edge">
-<title>sourcefile~start_all.f90&#45;&gt;sourcefile~read_input.f90</title>
-<path fill="none" stroke="#00ff66" stroke-dasharray="5,2" d="M360.7671,-107.7348C339.0151,-104.8693 311.5085,-101.2457 287.5508,-98.0896"/>
-<polygon fill="#00ff66" stroke="#00ff66" points="287.8991,-94.6053 277.5276,-96.7691 286.9848,-101.5453 287.8991,-94.6053"/>
+<path fill="none" stroke="#00ffff" stroke-dasharray="5,2" d="M713.75,-81.92C700.31,-68.17 676.54,-45.95 652,-33 648.32,-31.06 644.45,-29.28 640.47,-27.66"/>
+<polygon fill="#00ffff" stroke="#00ffff" points="641.66,-24.37 631.07,-24.13 639.21,-30.92 641.66,-24.37"/>
 </g>
 <!-- sourcefile~start_all.f90&#45;&gt;sourcefile~run_data_info.f90 -->
-<g id="sourcefile~~control_bunch_input.f90~~AfferentGraph_edge10" class="edge">
+<g id="sourcefile~~control_bunch_input.f90~~AfferentGraph_edge7" class="edge">
 <title>sourcefile~start_all.f90&#45;&gt;sourcefile~run_data_info.f90</title>
-<path fill="none" stroke="#0066ff" stroke-dasharray="5,2" d="M368.2803,-100.7367C345.9365,-92.0911 315.1337,-80.2027 288,-69.8374 283.4858,-68.1129 278.7626,-66.3154 274.0586,-64.5294"/>
-<polygon fill="#0066ff" stroke="#0066ff" points="275.0941,-61.179 264.5028,-60.9069 272.6128,-67.7245 275.0941,-61.179"/>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M355.31,-112.24C344.44,-108.3 332.86,-103.23 323,-97 304.13,-85.08 305.79,-74.03 287,-62 284.44,-60.36 281.72,-58.81 278.93,-57.36"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="280.37,-54.17 269.84,-53.06 277.38,-60.5 280.37,-54.17"/>
+</g>
+<!-- sourcefile~start_all.f90&#45;&gt;sourcefile~set_init_param.f90 -->
+<g id="sourcefile~~control_bunch_input.f90~~AfferentGraph_edge10" class="edge">
+<title>sourcefile~start_all.f90&#45;&gt;sourcefile~set_init_param.f90</title>
+<path fill="none" stroke="#00ff66" stroke-dasharray="5,2" d="M355.37,-123.47C338.09,-123.68 317.1,-123.95 297.39,-124.19"/>
+<polygon fill="#00ff66" stroke="#00ff66" points="297.18,-120.69 287.23,-124.32 297.27,-127.69 297.18,-120.69"/>
+</g>
+<!-- sourcefile~start_all.f90&#45;&gt;sourcefile~read_input.f90 -->
+<g id="sourcefile~~control_bunch_input.f90~~AfferentGraph_edge11" class="edge">
+<title>sourcefile~start_all.f90&#45;&gt;sourcefile~read_input.f90</title>
+<path fill="none" stroke="#0066ff" stroke-dasharray="5,2" d="M355.37,-113.62C334.71,-108.47 308.74,-102 286,-96.33"/>
+<polygon fill="#0066ff" stroke="#0066ff" points="286.69,-92.9 276.15,-93.88 285,-99.69 286.69,-92.9"/>
+</g>
+<!-- sourcefile~window.f90 -->
+<g id="sourcefile~~control_bunch_input.f90~~AfferentGraph_node9" class="node">
+<title>sourcefile~window.f90</title>
+<g id="a_sourcefile~~control_bunch_input.f90~~AfferentGraph_node9"><a xlink:href=".././sourcefile/window.f90.html" xlink:title="window.f90">
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="430,-53 358,-53 358,-29 430,-29 430,-53"/>
+<text text-anchor="middle" x="394" y="-38.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">window.f90</text>
+</a>
+</g>
+</g>
+<!-- sourcefile~window.f90&#45;&gt;sourcefile~run_data_info.f90 -->
+<g id="sourcefile~~control_bunch_input.f90~~AfferentGraph_edge8" class="edge">
+<title>sourcefile~window.f90&#45;&gt;sourcefile~run_data_info.f90</title>
+<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M357.78,-41C339.14,-41 315.7,-41 294.16,-41"/>
+<polygon fill="#ff0000" stroke="#ff0000" points="294.1,-37.5 284.1,-41 294.1,-44.5 294.1,-37.5"/>
 </g>
 <!-- sourcefile~pic_evolve_in_time.f90&#45;&gt;sourcefile~window.f90 -->
-<g id="sourcefile~~control_bunch_input.f90~~AfferentGraph_edge13" class="edge">
+<g id="sourcefile~~control_bunch_input.f90~~AfferentGraph_edge14" class="edge">
 <title>sourcefile~pic_evolve_in_time.f90&#45;&gt;sourcefile~window.f90</title>
-<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M529.7028,-80.8019C503.1089,-74.6816 471.0809,-67.3108 445.4454,-61.4111"/>
-<polygon fill="#ff0000" stroke="#ff0000" points="446.1324,-57.9778 435.6021,-59.1458 444.5624,-64.7995 446.1324,-57.9778"/>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M509.82,-49.27C486.8,-47.61 461.47,-45.79 440.47,-44.27"/>
+<polygon fill="#0000ff" stroke="#0000ff" points="440.45,-40.76 430.23,-43.54 439.95,-47.75 440.45,-40.76"/>
 </g>
 <!-- sourcefile~env_evolve_in_time.f90&#45;&gt;sourcefile~window.f90 -->
-<g id="sourcefile~~control_bunch_input.f90~~AfferentGraph_edge14" class="edge">
+<g id="sourcefile~~control_bunch_input.f90~~AfferentGraph_edge15" class="edge">
 <title>sourcefile~env_evolve_in_time.f90&#45;&gt;sourcefile~window.f90</title>
-<path fill="none" stroke="#ff0000" stroke-dasharray="5,2" d="M513.2646,-50.8374C490.7044,-50.8374 466.1857,-50.8374 445.707,-50.8374"/>
-<polygon fill="#ff0000" stroke="#ff0000" points="445.7023,-47.3375 435.7023,-50.8374 445.7022,-54.3375 445.7023,-47.3375"/>
+<path fill="none" stroke="#0000ff" stroke-dasharray="5,2" d="M507.77,-22.88C485.18,-26.51 460.58,-30.46 440.13,-33.75"/>
+<polygon fill="#0000ff" stroke="#0000ff" points="439.48,-30.31 430.16,-35.35 440.59,-37.22 439.48,-30.31"/>
 </g>
 </g>
 </svg>
@@ -511,25 +459,25 @@
     <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<!-- Generated by graphviz version 2.40.1 (20161225.0304)
+<!-- Generated by graphviz version 2.43.0 (0)
  -->
 <!-- Title: Graph Key Pages: 1 -->
 <svg width="202pt" height="32pt"
  viewBox="0.00 0.00 201.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
 <title>Graph Key</title>
-<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-28 197.5,-28 197.5,4 -4,4"/>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 197.5,-28 197.5,4 -4,4"/>
 <!-- Source File -->
 <g id="node1" class="node">
 <title>Source File</title>
-<polygon fill="#f0ad4e" stroke="#f0ad4e" points="71,-24 0,-24 0,0 71,0 71,-24"/>
-<text text-anchor="middle" x="35.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#ffffff">Source File</text>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="70,-24 0,-24 0,0 70,0 70,-24"/>
+<text text-anchor="middle" x="35" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Source File</text>
 </g>
 <!-- This Page&#39;s Entity -->
 <g id="node2" class="node">
 <title>This Page&#39;s Entity</title>
-<polygon fill="none" stroke="#000000" points="193.5,-24 89.5,-24 89.5,0 193.5,0 193.5,-24"/>
-<text text-anchor="middle" x="141.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="#000000">This Page&#39;s Entity</text>
+<polygon fill="none" stroke="black" points="193.5,-24 88.5,-24 88.5,0 193.5,0 193.5,-24"/>
+<text text-anchor="middle" x="141" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
 </g>
 </g>
 </svg>
@@ -542,53 +490,46 @@
     </div></div></div></div>
       </div>
     </div>
-      
-      <br>
-
+<br>
     <section class="visible-xs visible-sm hidden-md">
-      
-<h3>Contents</h3>
- 
-
-
-
-
-
-
-
-<div class="panel panel-primary">
-  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#mods-1">Modules</a></h3></div>
-  <div id="mods-1" class="panel-collapse collapse">
-    <div class="list-group">
-      
-      <a class="list-group-item" href="../module/control_bunch_input.html">control_bunch_input</a>
-      
+        <h3>Contents</h3>
+  
+  
+  
+  
+  
+      <div class="panel panel-primary">
+      <div class="panel-heading text-left">
+        <h3 class="panel-title">
+          <a data-toggle="collapse" href="#mods-1">Modules</a>
+        </h3>
+      </div>
+      <div id="mods-1" class="panel-collapse collapse">
+        <div class="list-group">
+            <a class="list-group-item" href="../module/control_bunch_input.html">control_bunch_input</a>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="panel panel-primary">
-  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
-  <div class="list-group">
-    <a class="list-group-item" href="../sourcefile/control_bunch_input.f90.html#src">control_bunch_input.f90</a>
-  </div>
-</div>
-
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    <div class="panel panel-primary">
+      <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+      <div class="list-group">
+        <a class="list-group-item" href="../sourcefile/control_bunch_input.f90.html#src">control_bunch_input.f90</a>
+      </div>
+    </div>
 
 
     </section>
@@ -596,80 +537,78 @@
 
     <section>
       <h2><span class="anchor" id="src"></span>Source Code</h2>
-    <div class="hl"><pre><span></span><a name="ln-1"></a><span class="c">!*****************************************************************************************************!</span>
-<a name="ln-2"></a><span class="c">!                            Copyright 2008-2020  The ALaDyn Collaboration                            !</span>
-<a name="ln-3"></a><span class="c">!*****************************************************************************************************!</span>
-<a name="ln-4"></a>
-<a name="ln-5"></a><span class="c">!*****************************************************************************************************!</span>
-<a name="ln-6"></a><span class="c">!  This file is part of ALaDyn.                                                                       !</span>
-<a name="ln-7"></a><span class="c">!                                                                                                     !</span>
-<a name="ln-8"></a><span class="c">!  ALaDyn is free software: you can redistribute it and/or modify                                     !</span>
-<a name="ln-9"></a><span class="c">!  it under the terms of the GNU General Public License as published by                               !</span>
-<a name="ln-10"></a><span class="c">!  the Free Software Foundation, either version 3 of the License, or                                  !</span>
-<a name="ln-11"></a><span class="c">!  (at your option) any later version.                                                                !</span>
-<a name="ln-12"></a><span class="c">!                                                                                                     !</span>
-<a name="ln-13"></a><span class="c">!  ALaDyn is distributed in the hope that it will be useful,                                          !</span>
-<a name="ln-14"></a><span class="c">!  but WITHOUT ANY WARRANTY; without even the implied warranty of                                     !</span>
-<a name="ln-15"></a><span class="c">!  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                                      !</span>
-<a name="ln-16"></a><span class="c">!  GNU General Public License for more details.                                                       !</span>
-<a name="ln-17"></a><span class="c">!                                                                                                     !</span>
-<a name="ln-18"></a><span class="c">!  You should have received a copy of the GNU General Public License                                  !</span>
-<a name="ln-19"></a><span class="c">!  along with ALaDyn.  If not, see &lt;http://www.gnu.org/licenses/&gt;.                                    !</span>
-<a name="ln-20"></a><span class="c">!*****************************************************************************************************!</span>
-<a name="ln-21"></a>
-<a name="ln-22"></a> <span class="k">module </span><span class="n">control_bunch_input</span>
-<a name="ln-23"></a>
-<a name="ln-24"></a>  <span class="k">use </span><span class="n">precision_def</span>
-<a name="ln-25"></a>
-<a name="ln-26"></a>  <span class="k">implicit none</span>
-<a name="ln-27"></a>
-<a name="ln-28"></a><span class="k">  </span><span class="kt">integer</span> <span class="kd">::</span> <span class="n">n_bunches</span><span class="p">,</span> <span class="n">bunch_type</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">nb_tot</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">number_of_slices</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span> <span class="p">&amp;</span>
-<a name="ln-29"></a>             <span class="n">bunch_shape</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">nb_per_cell</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
-<a name="ln-30"></a>
-<a name="ln-31"></a>  <span class="kt">integer</span> <span class="kd">::</span> <span class="n">np_1</span><span class="p">,</span> <span class="n">np_2</span><span class="p">,</span> <span class="n">np_3</span><span class="p">,</span> <span class="n">np_4</span><span class="p">,</span> <span class="n">np_5</span>
-<a name="ln-32"></a>  <span class="kt">integer</span> <span class="kd">::</span> <span class="n">bunch_type_1</span><span class="p">,</span> <span class="n">bunch_type_2</span><span class="p">,</span> <span class="n">bunch_type_3</span><span class="p">,</span> <span class="n">bunch_type_4</span><span class="p">,</span> <span class="p">&amp;</span>
-<a name="ln-33"></a>             <span class="n">bunch_type_5</span>
-<a name="ln-34"></a>  <span class="kt">integer</span> <span class="kd">::</span> <span class="n">bunch_shape_1</span><span class="p">,</span> <span class="n">bunch_shape_2</span><span class="p">,</span> <span class="n">bunch_shape_3</span><span class="p">,</span> <span class="n">bunch_shape_4</span><span class="p">,</span> <span class="p">&amp;</span>
-<a name="ln-35"></a>             <span class="n">bunch_shape_5</span>
-<a name="ln-36"></a>
-<a name="ln-37"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">bunch_charge</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">bunch_volume</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">jb_norm</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="p">&amp;</span>
-<a name="ln-38"></a>              <span class="n">reduced_charge</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">lorentz_bfact</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
-<a name="ln-39"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">charge_right</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">charge_left</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
-<a name="ln-40"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">gam</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">rhob</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">particle_charge</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
-<a name="ln-41"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">xc_bunch</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">yc_bunch</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">zc_bunch</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
-<a name="ln-42"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">sxb</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">syb</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
-<a name="ln-43"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">epsy</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">epsz</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">dg</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
-<a name="ln-44"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">sigma_cut_bunch</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
-<a name="ln-45"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">alpha_twiss</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">beta_twiss</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
-<a name="ln-46"></a>  <span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span> <span class="kd">::</span> <span class="n">b_ex_poloidal</span><span class="p">,</span> <span class="n">radius_poloidal</span>
-<a name="ln-47"></a>  <span class="kt">integer</span> <span class="kd">::</span> <span class="n">ppc_x_bunch</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">ppc_y_bunch</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">ppc_z_bunch</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="p">&amp;</span>
-<a name="ln-48"></a>             <span class="n">ppc_bunch</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
-<a name="ln-49"></a>
-<a name="ln-50"></a>  <span class="kt">logical</span> <span class="kd">::</span> <span class="n">l_particles</span><span class="p">,</span> <span class="n">l_twiss</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">l_bpoloidal</span><span class="p">,</span> <span class="n">l_embunchevolution</span>
-<a name="ln-51"></a>
-<a name="ln-52"></a> <span class="k">end module</span>
+    <div class="hl"><pre><span></span><a id="ln-1" name="ln-1" href="#ln-1"></a><span class="c">!*****************************************************************************************************!</span>
+<a id="ln-2" name="ln-2" href="#ln-2"></a><span class="c">!                            Copyright 2008-2020  The ALaDyn Collaboration                            !</span>
+<a id="ln-3" name="ln-3" href="#ln-3"></a><span class="c">!*****************************************************************************************************!</span>
+<a id="ln-4" name="ln-4" href="#ln-4"></a>
+<a id="ln-5" name="ln-5" href="#ln-5"></a><span class="c">!*****************************************************************************************************!</span>
+<a id="ln-6" name="ln-6" href="#ln-6"></a><span class="c">!  This file is part of ALaDyn.                                                                       !</span>
+<a id="ln-7" name="ln-7" href="#ln-7"></a><span class="c">!                                                                                                     !</span>
+<a id="ln-8" name="ln-8" href="#ln-8"></a><span class="c">!  ALaDyn is free software: you can redistribute it and/or modify                                     !</span>
+<a id="ln-9" name="ln-9" href="#ln-9"></a><span class="c">!  it under the terms of the GNU General Public License as published by                               !</span>
+<a id="ln-10" name="ln-10" href="#ln-10"></a><span class="c">!  the Free Software Foundation, either version 3 of the License, or                                  !</span>
+<a id="ln-11" name="ln-11" href="#ln-11"></a><span class="c">!  (at your option) any later version.                                                                !</span>
+<a id="ln-12" name="ln-12" href="#ln-12"></a><span class="c">!                                                                                                     !</span>
+<a id="ln-13" name="ln-13" href="#ln-13"></a><span class="c">!  ALaDyn is distributed in the hope that it will be useful,                                          !</span>
+<a id="ln-14" name="ln-14" href="#ln-14"></a><span class="c">!  but WITHOUT ANY WARRANTY; without even the implied warranty of                                     !</span>
+<a id="ln-15" name="ln-15" href="#ln-15"></a><span class="c">!  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                                      !</span>
+<a id="ln-16" name="ln-16" href="#ln-16"></a><span class="c">!  GNU General Public License for more details.                                                       !</span>
+<a id="ln-17" name="ln-17" href="#ln-17"></a><span class="c">!                                                                                                     !</span>
+<a id="ln-18" name="ln-18" href="#ln-18"></a><span class="c">!  You should have received a copy of the GNU General Public License                                  !</span>
+<a id="ln-19" name="ln-19" href="#ln-19"></a><span class="c">!  along with ALaDyn.  If not, see &lt;http://www.gnu.org/licenses/&gt;.                                    !</span>
+<a id="ln-20" name="ln-20" href="#ln-20"></a><span class="c">!*****************************************************************************************************!</span>
+<a id="ln-21" name="ln-21" href="#ln-21"></a>
+<a id="ln-22" name="ln-22" href="#ln-22"></a><span class="w"> </span><span class="k">module </span><span class="n">control_bunch_input</span><span class="w"></span>
+<a id="ln-23" name="ln-23" href="#ln-23"></a>
+<a id="ln-24" name="ln-24" href="#ln-24"></a><span class="w">  </span><span class="k">use </span><span class="n">precision_def</span><span class="w"></span>
+<a id="ln-25" name="ln-25" href="#ln-25"></a>
+<a id="ln-26" name="ln-26" href="#ln-26"></a><span class="w">  </span><span class="k">implicit none</span>
+<a id="ln-27" name="ln-27" href="#ln-27"></a>
+<a id="ln-28" name="ln-28" href="#ln-28"></a><span class="k">  </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">n_bunches</span><span class="p">,</span><span class="w"> </span><span class="n">bunch_type</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span><span class="w"> </span><span class="n">nb_tot</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span><span class="w"> </span><span class="n">number_of_slices</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
+<a id="ln-29" name="ln-29" href="#ln-29"></a><span class="w">             </span><span class="n">bunch_shape</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span><span class="w"> </span><span class="n">nb_per_cell</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span><span class="w"></span>
+<a id="ln-30" name="ln-30" href="#ln-30"></a>
+<a id="ln-31" name="ln-31" href="#ln-31"></a><span class="w">  </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">np_1</span><span class="p">,</span><span class="w"> </span><span class="n">np_2</span><span class="p">,</span><span class="w"> </span><span class="n">np_3</span><span class="p">,</span><span class="w"> </span><span class="n">np_4</span><span class="p">,</span><span class="w"> </span><span class="n">np_5</span><span class="w"></span>
+<a id="ln-32" name="ln-32" href="#ln-32"></a><span class="w">  </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">bunch_type_1</span><span class="p">,</span><span class="w"> </span><span class="n">bunch_type_2</span><span class="p">,</span><span class="w"> </span><span class="n">bunch_type_3</span><span class="p">,</span><span class="w"> </span><span class="n">bunch_type_4</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
+<a id="ln-33" name="ln-33" href="#ln-33"></a><span class="w">             </span><span class="n">bunch_type_5</span><span class="w"></span>
+<a id="ln-34" name="ln-34" href="#ln-34"></a><span class="w">  </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">bunch_shape_1</span><span class="p">,</span><span class="w"> </span><span class="n">bunch_shape_2</span><span class="p">,</span><span class="w"> </span><span class="n">bunch_shape_3</span><span class="p">,</span><span class="w"> </span><span class="n">bunch_shape_4</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
+<a id="ln-35" name="ln-35" href="#ln-35"></a><span class="w">             </span><span class="n">bunch_shape_5</span><span class="w"></span>
+<a id="ln-36" name="ln-36" href="#ln-36"></a>
+<a id="ln-37" name="ln-37" href="#ln-37"></a><span class="w">  </span><span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">bunch_charge</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span><span class="w"> </span><span class="n">bunch_volume</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span><span class="w"> </span><span class="n">jb_norm</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
+<a id="ln-38" name="ln-38" href="#ln-38"></a><span class="w">              </span><span class="n">reduced_charge</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span><span class="w"> </span><span class="n">lorentz_bfact</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span><span class="w"></span>
+<a id="ln-39" name="ln-39" href="#ln-39"></a><span class="w">  </span><span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">charge_right</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span><span class="w"> </span><span class="n">charge_left</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span><span class="w"></span>
+<a id="ln-40" name="ln-40" href="#ln-40"></a><span class="w">  </span><span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">gam</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span><span class="w"> </span><span class="n">rhob</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span><span class="w"> </span><span class="n">particle_charge</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span><span class="w"></span>
+<a id="ln-41" name="ln-41" href="#ln-41"></a><span class="w">  </span><span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">xc_bunch</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span><span class="w"> </span><span class="n">yc_bunch</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span><span class="w"> </span><span class="n">zc_bunch</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span><span class="w"></span>
+<a id="ln-42" name="ln-42" href="#ln-42"></a><span class="w">  </span><span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">sxb</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span><span class="w"> </span><span class="n">syb</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span><span class="w"></span>
+<a id="ln-43" name="ln-43" href="#ln-43"></a><span class="w">  </span><span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">epsy</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span><span class="w"> </span><span class="n">epsz</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span><span class="w"> </span><span class="n">dg</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span><span class="w"></span>
+<a id="ln-44" name="ln-44" href="#ln-44"></a><span class="w">  </span><span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">sigma_cut_bunch</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span><span class="w"></span>
+<a id="ln-45" name="ln-45" href="#ln-45"></a><span class="w">  </span><span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">alpha_twiss</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span><span class="w"> </span><span class="n">beta_twiss</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span><span class="w"></span>
+<a id="ln-46" name="ln-46" href="#ln-46"></a><span class="w">  </span><span class="kt">real</span><span class="p">(</span><span class="n">dp</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">b_ex_poloidal</span><span class="p">,</span><span class="w"> </span><span class="n">radius_poloidal</span><span class="w"></span>
+<a id="ln-47" name="ln-47" href="#ln-47"></a><span class="w">  </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">ppc_x_bunch</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span><span class="w"> </span><span class="n">ppc_y_bunch</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span><span class="w"> </span><span class="n">ppc_z_bunch</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
+<a id="ln-48" name="ln-48" href="#ln-48"></a><span class="w">             </span><span class="n">ppc_bunch</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="w"></span>
+<a id="ln-49" name="ln-49" href="#ln-49"></a>
+<a id="ln-50" name="ln-50" href="#ln-50"></a><span class="w">  </span><span class="kt">logical</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">l_particles</span><span class="p">,</span><span class="w"> </span><span class="n">l_twiss</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span><span class="w"> </span><span class="n">l_bpoloidal</span><span class="p">,</span><span class="w"> </span><span class="n">l_embunchevolution</span><span class="w"></span>
+<a id="ln-51" name="ln-51" href="#ln-51"></a>
+<a id="ln-52" name="ln-52" href="#ln-52"></a><span class="w"> </span><span class="k">end module</span><span class="w"></span>
 </pre></div>
 
     </section>
     </div>
   </div>
 
-  
     <hr>    
     </div> <!-- /container -->
     <footer>
       <div class="container">
       <div class="row">
-        <div class="col-xs-6 col-md-4"><p>&copy; 2020 <a rel="license" href="http://www.gnu.org/licenses/old-licenses/fdl-1.2.en.html">GNU Free Documentation License</a>
-                                          </p></div>
-        <div class="col-xs-6 col-md-4 col-md-push-4">
+        <div class="col-xs-6 col-md-6"><p>ALaDyn was developed by The ALaDyn Collaboration<br>&copy; 2025 <a rel="license" href="http://www.gnu.org/licenses/old-licenses/fdl-1.2.en.html">GNU Free Documentation License</a>
+</p>
+        </div>
+        <div class="col-xs-6 col-md-6">
           <p class="text-right">
             Documentation generated by 
-            <a href="https://github.com/cmacmackin/ford">FORD</a>
-             on 2020-07-30 
-          </p>
+            <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+ on 2025-12-28           </p>
         </div>
-        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> ALaDyn was developed by The ALaDyn Collaboration</p></div>
       </div>
       <br>
       </div> <!-- /container -->    
@@ -695,14 +634,11 @@
         extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
       });
     </script>
-    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
     
     <script src="../tipuesearch/tipuesearch_content.js"></script>
     <script src="../tipuesearch/tipuesearch_set.js"></script>
     <script src="../tipuesearch/tipuesearch.js"></script>
-    
     
   </body>
 </html>
