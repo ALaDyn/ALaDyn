@@ -19,42 +19,62 @@
 !  along with ALaDyn.  If not, see <http://www.gnu.org/licenses/>.                                    !
 !*****************************************************************************************************!
 
- module code_util
+!! @file test_runner.f90
+!! @brief Test runner utilities for ALaDyn test suite
+!! @details Provides utilities for organizing and running test suites
 
-  use precision_def
+module test_runner
 
-  implicit none
+ use test_assertions
 
-  integer, parameter :: major_version = 4
-  integer, parameter :: minor_version = 0
-  integer, parameter :: patch_version = 0
-  character (6), parameter :: sw_name = 'ALaDyn'
-  character(:), allocatable :: input_namelist_filename
-  character(:), allocatable :: input_json_filename
-  character(10) :: input_data_filename = 'input.data'
-  integer, parameter :: maxv = 1, sumv = 0, minv = -1
-  integer, parameter :: left = -1, right = 1
-  integer, parameter :: field = 0, curr = 1
-  integer, parameter :: sh_ix = 3, sh_iy = 3, sh_iz = 3
-  integer :: time2dump(1) = 0
-  integer :: mem_size, mem_psize
-  integer :: last_iter, iter_max, write_every
-  integer :: t_ind, inject_ind, tk_ind
-  integer :: ienout, iout, iter, ier
-  real(dp) :: mem_psize_max, dump_t0, dump_t1
-  real(dp) :: unix_time_begin, unix_time_now
-  real(dp) :: time_interval_dumps, unix_time_last_dump
-  real(dp) :: gamma_cut_min, weights_cut_min, weights_cut_max
-  real(dp) :: tdia, dtdia, tout, dtout, tstart, mem_max_addr
+ implicit none
+ private
 
-  logical :: diag, tpart
-  logical :: l_intdiagnostics_pwfa, l_intdiagnostics_classic
-  logical :: l_force_singlefile_output
-  logical :: l_print_j_on_grid
-  logical :: l_first_output_on_restart
-  logical :: l_use_unique_dumps
-  logical :: l_disable_rng_seed
-  logical :: l_intdiagnostics_background
-  logical :: l_env_modulus
+ public :: start_test_suite, end_test_suite
+ public :: run_test, skip_test
+ public :: test_suite_passed
 
- end module
+contains
+
+ !> Start a test suite with the given name
+ subroutine start_test_suite(suite_name)
+  character(len=*), intent(in) :: suite_name
+
+  write(*,'(A)') ''
+  write(*,'(A)') '============================================'
+  write(*,'(A,A)') 'TEST SUITE: ', trim(suite_name)
+  write(*,'(A)') '============================================'
+  write(*,'(A)') ''
+
+  call reset_test_counts()
+ end subroutine
+
+ !> End a test suite and print summary
+ subroutine end_test_suite(suite_name)
+  character(len=*), intent(in) :: suite_name
+
+  write(*,'(A)') ''
+  write(*,'(A,A)') 'End of test suite: ', trim(suite_name)
+  call print_test_summary()
+ end subroutine
+
+ !> Check if the test suite passed
+ function test_suite_passed() result(passed)
+  logical :: passed
+  passed = (failed_tests == 0)
+ end function
+
+ !> Mark a test as being run
+ subroutine run_test(test_name)
+  character(len=*), intent(in) :: test_name
+  write(*,'(A,A,A)') '--- Running: ', trim(test_name), ' ---'
+ end subroutine
+
+ !> Skip a test with a reason
+ subroutine skip_test(test_name, reason)
+  character(len=*), intent(in) :: test_name
+  character(len=*), intent(in) :: reason
+  write(*,'(A,A,A,A)') '[SKIP] ', trim(test_name), ' - ', trim(reason)
+ end subroutine
+
+end module test_runner

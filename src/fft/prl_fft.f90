@@ -124,7 +124,7 @@
      do ip = 1, jl
       tag = 200 + ip
       pes = yp_prev(ip)
-      call mpi_send(w_s(1, 1, 1), lenw, mpi_sd, pes, tag, comm_col(dd), error)
+      call mpi_send(w_s(1, 1, 1), lenw, mpi_double_precision, pes, tag, comm_col(dd), error)
      end do
     endif
     j1 = loc_yft_ord(imody)
@@ -132,7 +132,7 @@
      per = yp_next(ip)
      tag = 200 + ip
      call mpi_recv(fp1(1, 1, 1), lenw, &
-                   mpi_sd, per, tag, comm_col(dd), status, error)
+                   mpi_double_precision, per, tag, comm_col(dd), status, error)
      j1 = j1 + nft2
      j2 = j1 + nft2 - 1
      w_r(1:nft1, j1:j2, k1:k2) = fp1(1:nft1, 1:nft2, 1:nft3)
@@ -148,14 +148,14 @@
     do ip = 1, ybd
      tag = 200 - ip
      pes = yp_next(ip)
-     call mpi_send(w_s(1, 1, 1), lenw, mpi_sd, pes, tag, comm_col(dd), error)
+     call mpi_send(w_s(1, 1, 1), lenw, mpi_double_precision, pes, tag, comm_col(dd), error)
     end do
     j1 = loc_yft_ord(imody)
     do ip = 1, jjr
      tag = 200 - ip
      per = yp_prev(ip)
      call mpi_recv(fp1(1, 1, 1), lenw, &
-                   mpi_sd, per, tag, comm_col(dd), status, error)
+                   mpi_double_precision, per, tag, comm_col(dd), status, error)
      j1 = j1 - nft2
      j2 = j1 + nft2 - 1
      w_r(1:nft1, j1:j2, k1:k2) = fp1(1:nft1, 1:nft2, 1:nft3)
@@ -176,7 +176,7 @@
       do ip = 1, kl
        tag = 100 + ip
        pes = zp_prev(ip)
-       call mpi_send(w_s(1, 1, 1), lenw, mpi_sd, pes, tag, comm_col(dd), error)
+       call mpi_send(w_s(1, 1, 1), lenw, mpi_double_precision, pes, tag, comm_col(dd), error)
       end do
      endif
      k1 = loc_zft_ord(imodz)
@@ -184,7 +184,7 @@
       tag = 100 + ip
       per = zp_next(ip)
       call mpi_recv(fp1(1, 1, 1), lenw, &
-                    mpi_sd, per, tag, comm_col(dd), status, error)
+                    mpi_double_precision, per, tag, comm_col(dd), status, error)
       k1 = k1 + nft3
       k2 = k1 + nft3 - 1
       w_r(1:nft1, j1:j2, k1:k2) = fp1(1:nft1, 1:nft2, 1:nft3)
@@ -197,14 +197,14 @@
      do ip = 1, zbd
       tag = 100 - ip
       pes = zp_next(ip)
-      call mpi_send(w_s(1, 1, 1), lenw, mpi_sd, pes, tag, comm_col(dd), error)
+      call mpi_send(w_s(1, 1, 1), lenw, mpi_double_precision, pes, tag, comm_col(dd), error)
      end do
      k1 = loc_zft_ord(imodz)
      do ip = 1, kkr
       per = zp_prev(ip)
       tag = 100 - ip
       call mpi_recv(fp1(1, 1, 1), lenw, &
-                    mpi_sd, per, tag, comm_col(dd), status, error)
+                    mpi_double_precision, per, tag, comm_col(dd), status, error)
       k1 = k1 - nft3
       k2 = k1 + nft3 - 1
       w_r(1:nft1, j1:j2, k1:k2) = fp1(1:nft1, 1:nft2, 1:nft3)
@@ -258,8 +258,8 @@
       end do
      end do
     end do
-    call mpi_sendrecv(faux1(1), lenws, mpi_sd, pes, tag, faux2(1), &
-                      lenwr, mpi_sd, per, tag, comm_col(3), status, error)
+    call mpi_sendrecv(faux1(1), lenws, mpi_double_precision, pes, tag, faux2(1), &
+                      lenwr, mpi_double_precision, per, tag, comm_col(3), status, error)
     j1 = n2_xloc*per
     kk = 0
     do iz = 1, n3
@@ -318,8 +318,8 @@
       end do
      end do
     end do
-    call mpi_sendrecv(faux1(1), lenws, mpi_sd, pes, tag, faux2(1), &
-                      lenwr, mpi_sd, per, tag, comm_col(1), status, error)
+    call mpi_sendrecv(faux1(1), lenws, mpi_double_precision, pes, tag, faux2(1), &
+                      lenwr, mpi_double_precision, per, tag, comm_col(1), status, error)
     i1 = n1_loc*per
     kk = 0
     do iz = 1, n3_loc
@@ -376,8 +376,8 @@
       end do
      end do
     end do
-    call mpi_sendrecv(faux1(1), lenw, mpi_sd, pes, tag, faux2(1), lenw, &
-                      mpi_sd, per, tag, comm_col(2), status, error)
+    call mpi_sendrecv(faux1(1), lenw, mpi_double_precision, pes, tag, faux2(1), lenw, &
+                      mpi_double_precision, per, tag, comm_col(2), status, error)
     i1 = n1_loc*per
     kk = 0
     do iz = 1, n3_loc
@@ -443,8 +443,8 @@
     lenws = kk
     lenwr = lenws
 
-    call mpi_sendrecv(faux1(1), lenws, mpi_sd, pes, tag, faux2(1), &
-                      lenwr, mpi_sd, per, tag, comm_col(3), status, error)
+    call mpi_sendrecv(faux1(1), lenws, mpi_double_precision, pes, tag, faux2(1), &
+                      lenwr, mpi_double_precision, per, tag, comm_col(3), status, error)
     i1 = n1_loc*per
     kk = 0
     do iz = 1, n3
@@ -506,8 +506,8 @@
     lenws = kk
     lenwr = lenws
 
-    call mpi_sendrecv(faux1(1), lenws, mpi_sd, pes, tag, faux2(1), &
-                      lenwr, mpi_sd, per, tag, comm_col(1), status, error)
+    call mpi_sendrecv(faux1(1), lenws, mpi_double_precision, pes, tag, faux2(1), &
+                      lenwr, mpi_double_precision, per, tag, comm_col(1), status, error)
     j1 = n2_loc*per
     kk = 0
     do iz = 1, n3_loc
@@ -564,8 +564,8 @@
      end do
     end do
 
-    call mpi_sendrecv(faux1(1), lenw, mpi_sd, pes, tag, faux2(1), lenw, &
-                      mpi_sd, per, tag, comm_col(2), status, error)
+    call mpi_sendrecv(faux1(1), lenw, mpi_double_precision, pes, tag, faux2(1), lenw, &
+                      mpi_double_precision, per, tag, comm_col(2), status, error)
     k1 = n3_loc*per
     kk = 0
     do iz = 1, n3_loc

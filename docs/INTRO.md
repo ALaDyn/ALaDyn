@@ -1,5 +1,4 @@
-[![Build Status Master](https://travis-ci.org/ALaDyn/ALaDyn.png?branch=master)](https://travis-ci.org/ALaDyn/ALaDyn "master")
-[![Build status](https://ci.appveyor.com/api/projects/status/evol3yvpqqfyxi7p?svg=true)](https://ci.appveyor.com/project/cenit/aladyn-kul79)
+[![ALaDyn Continuous Integration](https://github.com/ALaDyn/ALaDyn/actions/workflows/ccpp.yml/badge.svg)](https://github.com/ALaDyn/ALaDyn/actions/workflows/ccpp.yml)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.592388.svg)](http://dx.doi.org/10.5281/zenodo.592388)
 ![GitHub tag (latest SemVer)](https://img.shields.io/github/tag/aladyn/aladyn.svg?label=Latest%20Release)

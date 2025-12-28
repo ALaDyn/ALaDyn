@@ -1,19 +1,70 @@
-cmake_minimum_required(VERSION 3.4)
-project(ALaDyn)
-enable_language(Fortran)
-enable_language(CXX)
-set(CMAKE_CXX_STANDARD 11)
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/Modules")
-cmake_policy(SET CMP0074 NEW)
-if(MSYS)
-  list(INSERT CMAKE_MODULE_PATH 0 "${CMAKE_SOURCE_DIR}/cmake/msys2/")
+cmake_minimum_required(VERSION 3.15)
+
+if(DEFINED ENV{VCPKG_DEFAULT_TRIPLET})
+  message(STATUS "Setting default vcpkg target triplet to $ENV{VCPKG_DEFAULT_TRIPLET}")
+  set(VCPKG_TARGET_TRIPLET $ENV{VCPKG_DEFAULT_TRIPLET})
 endif()
 
-# uncomment the following definition to enable GDB attach to debug while running
-# add_definitions(-DENABLE_GDB_ATTACH)
-if(NOT WIN32)
-  add_definitions(-DUSE_GDB_ATTACH)
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "^x86" OR CMAKE_SYSTEM_PROCESSOR MATCHES "^AMD64")
+  set(IS_X86 TRUE)
+else()
+  set(IS_X86 FALSE)
 endif()
+
+if(ENABLE_VCPKG_INTEGRATION AND DEFINED ENV{VCPKG_ROOT} AND NOT DEFINED CMAKE_TOOLCHAIN_FILE)
+  set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
+  set(X_VCPKG_APPLOCAL_DEPS_INSTALL ON)
+  set(CMAKE_TOOLCHAIN_FILE "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake" CACHE STRING "")
+  #set(_VCPKG_INSTALLED_DIR ${CMAKE_CURRENT_LIST_DIR}/vcpkg CACHE STRING "")  #folder for manifest-installed dependencies
+  message(STATUS "VCPKG found: $ENV{VCPKG_ROOT}")
+  message(STATUS "Using VCPKG integration")
+  if(VCPKG_MANIFEST_FEATURES)
+    message(STATUS "VCPKG_MANIFEST_FEATURES: ${VCPKG_MANIFEST_FEATURES}")
+  endif()
+elseif(DEFINED CMAKE_TOOLCHAIN_FILE)
+  message(STATUS "Using toolchain: ${CMAKE_TOOLCHAIN_FILE}")
+  if(CMAKE_TOOLCHAIN_FILE MATCHES "vcpkg.cmake")
+    message(STATUS "Toolchain uses VCPKG integration")
+    if(VCPKG_MANIFEST_FEATURES)
+      message(STATUS "VCPKG_MANIFEST_FEATURES: ${VCPKG_MANIFEST_FEATURES}")
+    endif()
+  endif()
+else()
+  message(WARNING "vcpkg not found, toolchain not defined, build might fail")
+endif()
+
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg.json)
+  file(READ ${CMAKE_CURRENT_SOURCE_DIR}/vcpkg.json VCPKG_JSON_STRING)
+  string(JSON VERSION_STRING GET ${VCPKG_JSON_STRING} version)
+else()
+  set(VERSION_STRING "0.0.0.1")
+endif()
+
+string(REPLACE "." ";" VERSION_LIST ${VERSION_STRING})
+list(LENGTH VERSION_LIST VERSION_LIST_LENGTH)
+if(VERSION_LIST_LENGTH LESS 3)
+  message(FATAL_ERROR "ALaDyn needs at least major.minor.patch version numbers to properly configure")
+endif()
+list(GET VERSION_LIST 0 ALaDyn_MAJOR_VERSION)
+list(GET VERSION_LIST 1 ALaDyn_MINOR_VERSION)
+list(GET VERSION_LIST 2 ALaDyn_PATCH_VERSION)
+if(VERSION_LIST_LENGTH GREATER 3)
+  list(GET VERSION_LIST 3 ALaDyn_TWEAK_VERSION)
+else()
+  set(ALaDyn_TWEAK_VERSION 0)
+endif()
+
+set(ALaDyn_VERSION ${ALaDyn_MAJOR_VERSION}.${ALaDyn_MINOR_VERSION}.${ALaDyn_PATCH_VERSION}.${ALaDyn_TWEAK_VERSION})
+message("ALaDyn_VERSION: ${ALaDyn_VERSION}")
+
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
+if(MSYS)
+    set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/Modules/msys2/" ${CMAKE_MODULE_PATH})
+endif()
+
+if(APPLE)
+    set(MACOSX_RPATH TRUE)
+endif(APPLE)
 
 # Old species (provisional)
 # add_definitions(-DOLD_SPECIES)
@@ -57,7 +108,7 @@ if( JSON_FORTRAN_SUPPORT )
     -DCMAKE_INSTALL_PREFIX=${JFORTRAN_LOCALS_PATH}
     -DSKIP_DOC_GEN=TRUE
     -G "${CMAKE_GENERATOR}"
-    ${JFORTRAN_PATH} 
+    ${JFORTRAN_PATH}
     WORKING_DIRECTORY ${JFORTRAN_BINARY_PATH})
     # Building and installing
     execute_process(COMMAND ${CMAKE_COMMAND}
@@ -68,96 +119,20 @@ if( JSON_FORTRAN_SUPPORT )
 endif()
 
 # you can force FFTW if necessary, avoiding MKL (which is preferred on Intel systems)
-set(FORCE_FFTW OFF CACHE BOOL "Forcing FFTW libraries")
+option(FORCE_FFTW "Forcing FFTW libraries" OFF)
 
-# set this variable to true to force static linking (if supported by the compiler)
-set(FORCE_STATIC_LINK FALSE CACHE BOOL "Forcing static linking to libraries")
+# forcing old mpif.h if the correct version of the mpi module is not available
+set(FORCE_OLD_MPI OFF CACHE BOOL "Forcing old mpif.h linking")
 
-# make sure that the default is a RELEASE
-set(default_build_type "Release")
-if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
-  message(STATUS "ALaDyn: Setting build type to '${default_build_type}' as none was specified.")
-  set(CMAKE_BUILD_TYPE "${default_build_type}" CACHE
-      STRING "Choose the type of build." FORCE)
-  set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS
-    "Debug" "Release" "MinSizeRel" "RelWithDebInfo" "Profiling" "Reports")
-endif()
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-
-list(APPEND ALaDyn_Fortran_sources
-  src/ALaDyn.F90
-  src/cpp_lib/cpp_folder_tree.cpp
-  src/cpp_lib/find_last_addr.cpp
-  src/diagnostics/diag_part_and_fields.f90
-  src/diagnostics/run_data_info.F90
-  src/dynamics/boris_push.f90
-  src/dynamics/curr_and_fields_util.f90
-  src/dynamics/env_evolve_in_time.f90
-  src/dynamics/fluid_density_momenta.f90
-  src/dynamics/pic_evolve_in_time.f90
-  src/dynamics/window.f90
-  src/fft/legacy_fft_lib.F90
-  src/fft/modern_fft_lib.F90
-  src/fft/prl_fft.f90
-  src/fields/grid_field_param.f90
-  src/fields/grid_fields.f90
-  src/fields/init_grid_fields.f90
-  src/grid/grid_param.f90
-  src/grid/set_grid_param.f90
-  src/grid/stretched_grid.f90
-  src/ionization/ionize.f90
-  src/ionization/ionz_data.f90
-  src/IO/pic_in.F90
-  src/IO/init_laser_field.f90
-  src/IO/init_part_distrib.f90
-  src/IO/init_beam_part_distrib.f90
-  src/IO/read_json.f90
-  src/IO/read_namelist.f90
-  src/IO/pic_out.f90
-  src/IO/pic_out_util.f90
-  src/IO/psolve.f90
-  src/IO/tracking.f90
-  src/particles/grid_part_lib.f90
-  src/particles/grid_part_connect.F90
-  src/particles/grid_part_util.f90
-  src/particles/grid_tracking_part_connect.f90
-  src/particles/interpolation_lib.f90
-  src/parallel/mpi_var.f90
-  src/parallel/mpi_part_interface.f90
-  src/parallel/mpi_field_interface.f90
-  src/parallel/mpi_curr_interface.f90
-  src/parallel/parallel.F90
-  src/start/pic_dump.f90
-  src/start/read_input.F90
-  src/start/set_init_param.f90
-  src/start/start_all.F90
-  src/start/system_utilities.f90
-  src/structs/base_species.f90
-  src/structs/grid_def.f90
-  src/structs/index_array.f90
-  src/structs/particles_aux_def.f90
-  src/structs/particles_def.f90
-  src/structs/struct_def.f90
-  src/util/array_util.f90
-  src/util/code_util.f90
-  src/util/random_generator.f90
-  src/util/util.F90
-  src/util/warning.f90
-  src/work/array_alloc.f90
-  src/work/common_param.f90
-  src/work/control_bunch_input.f90
-  src/work/fstruct_data.f90
-  src/work/memory_pool.f90
-  src/work/phys_param.f90
-  src/work/precision_def.F90
-  src/work/pstruct_data.F90
-  src/work/sim_params_types.f90
+project(ALaDyn
+    VERSION ${ALaDyn_VERSION}
+    LANGUAGES Fortran CXX
 )
 
-set(USING_PGI_COMPILER FALSE)
-set(USING_GNU_COMPILER FALSE)
-set(USING_INTEL_COMPILER FALSE)
+add_executable(ALaDyn src/ALaDyn.F90)
 
 get_filename_component(Fortran_COMPILER_NAME ${CMAKE_Fortran_COMPILER} NAME)
 if(CMAKE_Fortran_COMPILER_ID MATCHES "PGI")
@@ -235,7 +210,6 @@ else()
   else()
     message(STATUS "ALaDyn: Compiler ${CMAKE_Fortran_COMPILER} found, unsupported")
     message(STATUS "ALaDyn: Let's try using it...")
-  endif()
 endif()
 
 if(WIN32 AND USING_PGI_COMPILER)
@@ -257,15 +231,8 @@ if(UNIX AND USING_PGI_COMPILER AND NOT APPLE)
   find_package(Numa REQUIRED)
 endif()
 
-if(NOT WIN32)
-  find_package(Boost COMPONENTS system filesystem)
-  if(Boost_FOUND)
-    add_definitions(-DUSE_BOOST)
-  else()
-    add_definitions(-DUSE_FILESYSTEM)
-    set(CMAKE_CXX_STANDARD 17)
-  endif()
-endif()
+add_definitions(-DUSE_FILESYSTEM)
+set(CMAKE_CXX_STANDARD 17)
 
 if(USING_INTEL_COMPILER AND NOT FORCE_FFTW)
   find_package(MKL REQUIRED)
@@ -314,7 +281,7 @@ if(jsonfortran-${CMAKE_Fortran_COMPILER_ID}_FOUND)
   message(STATUS "ALaDyn: JSON-Fortran has been found")
   add_definitions(-DJSON_FORTRAN)
 endif()
-  
+
 add_executable(ALaDyn
   ${ALaDyn_Fortran_sources}
 )
@@ -381,4 +348,18 @@ set_target_properties(ALaDyn PROPERTIES LINKER_LANGUAGE Fortran)
 string(TOLOWER ${CMAKE_Fortran_COMPILER_ID} EXE_SUFFIX)
 set_target_properties(ALaDyn PROPERTIES OUTPUT_NAME ALaDyn_${EXE_SUFFIX})
 
-install(TARGETS ALaDyn DESTINATION ${CMAKE_SOURCE_DIR}/bin/)
+install(TARGETS ALaDyn DESTINATION bin)
+
+# Testing support
+# Support both BUILD_TESTING (CMake standard) and ENABLE_TEST (build.ps1 flag)
+option(BUILD_TESTING "Build test suite" ON)
+option(ENABLE_TEST "Build test suite (alias for BUILD_TESTING)" OFF)
+if(ENABLE_TEST)
+    set(BUILD_TESTING ON CACHE BOOL "Build test suite" FORCE)
+endif()
+if(BUILD_TESTING)
+    message(STATUS "ALaDyn: Building test suite")
+    # Enable CTest in root directory so tests are discoverable
+    enable_testing()
+    add_subdirectory(tests)
+endif()

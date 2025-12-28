@@ -19,42 +19,37 @@
 !  along with ALaDyn.  If not, see <http://www.gnu.org/licenses/>.                                    !
 !*****************************************************************************************************!
 
- module code_util
+ module mpi_var
 
   use precision_def
-
+  
+#if defined (ALaDyn_USE_MPI) && ! defined (FORCE_OLD_MPI)
+  use mpi_f08, only: MPI_Comm, MPI_Datatype
   implicit none
+  type(MPI_Comm) :: comm, comm_col(3)
+  type(MPI_Datatype) :: partype
+#else
+  implicit none
+  integer :: comm, partype, comm_col(3)
+#endif
 
-  integer, parameter :: major_version = 4
-  integer, parameter :: minor_version = 0
-  integer, parameter :: patch_version = 0
-  character (6), parameter :: sw_name = 'ALaDyn'
-  character(:), allocatable :: input_namelist_filename
-  character(:), allocatable :: input_json_filename
-  character(10) :: input_data_filename = 'input.data'
-  integer, parameter :: maxv = 1, sumv = 0, minv = -1
-  integer, parameter :: left = -1, right = 1
-  integer, parameter :: field = 0, curr = 1
-  integer, parameter :: sh_ix = 3, sh_iy = 3, sh_iz = 3
-  integer :: time2dump(1) = 0
-  integer :: mem_size, mem_psize
-  integer :: last_iter, iter_max, write_every
-  integer :: t_ind, inject_ind, tk_ind
-  integer :: ienout, iout, iter, ier
-  real(dp) :: mem_psize_max, dump_t0, dump_t1
-  real(dp) :: unix_time_begin, unix_time_now
-  real(dp) :: time_interval_dumps, unix_time_last_dump
-  real(dp) :: gamma_cut_min, weights_cut_min, weights_cut_max
-  real(dp) :: tdia, dtdia, tout, dtout, tstart, mem_max_addr
 
-  logical :: diag, tpart
-  logical :: l_intdiagnostics_pwfa, l_intdiagnostics_classic
-  logical :: l_force_singlefile_output
-  logical :: l_print_j_on_grid
-  logical :: l_first_output_on_restart
-  logical :: l_use_unique_dumps
-  logical :: l_disable_rng_seed
-  logical :: l_intdiagnostics_background
-  logical :: l_env_modulus
+  integer, allocatable :: loc_npart(:, :, :, :), loc_nbpart(:, :, :, :)
+  integer, allocatable :: loc_ne_ionz(:, :, :), loc_tpart(:)
+  integer, allocatable :: yp_next(:), yp_prev(:)
+  integer, allocatable :: zp_next(:), zp_prev(:)
+  integer, allocatable :: xp_next(:), xp_prev(:)
 
+  integer :: np_max, pe_npmax, np_min, pe_npmin
+  integer :: mype, imodx, imody, imodz, npe, npe_yloc, npe_zloc, &
+             npe_xloc
+  integer :: npe_yz, mpi_size, mpi_rank
+  integer :: imodzx, imodyz, imodyx
+  integer :: pe_min, pe_max
+  integer :: pe_min_y, pe_max_y, pe_min_z, pe_max_z, pe_min_x, pe_max_x
+  integer :: ndims, dims(3)
+  logical :: pe0y, pe0z, pe1y, pe1z, pe0, pe1, prl, prlx, prly, prlz
+  logical :: xl_bd, yl_bd, zl_bd, xr_bd, yr_bd, zr_bd
+  logical :: pe0x, pe1x, pex0, pex1
+  integer :: coor(3), col_or(3)
  end module

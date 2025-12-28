@@ -86,8 +86,8 @@
    end if
    if (pe0) then
     write (6, *) '======================================================'
-    write (6, '(a33,i1,a1,i2,a17)') ' =               Code version    ', &
-     major_version, '.', minor_version, '                ='
+    write (6, '(a33,i1,a1,i1,a1,i1,a17)') ' =               Code version    ', &
+     major_version, '.', minor_version, '.', patch_version, '               ='
     write (6, *) '======================================================'
     call create_initial_folders
    end if

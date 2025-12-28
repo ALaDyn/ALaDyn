@@ -33,7 +33,7 @@
   implicit none
   include 'mpif.h'
 #else
-  use mpi
+  use mpi_f08
   implicit none
 #endif
 
@@ -52,10 +52,11 @@
 
   real(dp), allocatable :: fp0x(:, :, :, :), fp1x(:, :, :, :)
 
-  integer :: status(mpi_status_size), error, mpi_sd
+  integer :: error
+  type(MPI_Status) :: status
 
   type(communicator_T) :: communicator
-  
+
   contains
 
  !=== Subroutine for communicator type ===
@@ -63,11 +64,11 @@
  subroutine setworld( this, comm_in )
   class(communicator_T), intent(inout) :: this
   integer, intent(in) :: comm_in
-  
+
   this%world_comm = comm_in
-  
+
  end subroutine
- 
+
  pure function getworld( this ) result( comm_out )
   class(communicator_T), intent(in) :: this
   integer :: comm_out
@@ -131,9 +132,7 @@
 
    comm = mpi_comm_world
 
-   mpi_sd = mpi_double_precision
-
-   call mpi_type_contiguous(ncmp + 1, mpi_sd, partype, error)
+   call mpi_type_contiguous(ncmp + 1, mpi_double_precision, partype, error)
    call mpi_type_commit(partype, error)
 
    !================
@@ -290,12 +289,13 @@
    integer (offset_kind), intent (in) :: disp
    character (LEN=*), intent (in) :: fout
    !===========================
-   integer :: ierr, thefile
+   type(MPI_File) :: thefile
+   integer :: ierr
    !========================
    call mpi_file_open(comm, fout, mpi_mode_wronly + mpi_mode_create, &
                       mpi_info_null, thefile, ierr)
 
-   call mpi_file_write_at(thefile, disp, buf, bufsize, mpi_sd, &
+   call mpi_file_write_at(thefile, disp, buf, bufsize, mpi_double_precision, &
                           mpi_status_ignore, ierr)
    call mpi_file_close(thefile, ierr)
 
@@ -308,7 +308,8 @@
    integer (offset_kind), intent (in) :: disp
    character (LEN=*), intent (in) :: fout
 
-   integer :: ierr, thefile
+   type(MPI_File) :: thefile
+   integer :: ierr
    !=======================================
    call mpi_file_open(comm_col(2), fout, mpi_mode_wronly+mpi_mode_create &
      , mpi_info_null, thefile, ierr)
@@ -325,7 +326,8 @@
    integer (offset_kind), intent (in) :: disp
    character (LEN=*), intent (in) :: fout
 
-   integer :: ierr, thefile
+   type(MPI_File) :: thefile
+   integer :: ierr
    !===================
    call mpi_file_open(comm_col(1), fout, mpi_mode_wronly+mpi_mode_create &
      , mpi_info_null, thefile, ierr)
@@ -360,7 +362,8 @@
    integer (offset_kind), intent (in) :: disp
    character (LEN=*), intent (in) :: fout
 
-   integer :: ierr, thefile
+   type(MPI_File) :: thefile
+   integer :: ierr
    !========================
    call mpi_file_open(comm_col(1), fout, mpi_mode_rdonly, mpi_info_null, &
      thefile, ierr)
@@ -378,7 +381,8 @@
    integer (offset_kind), intent (in) :: disp
    character (LEN=*), intent (in) :: fout
 
-   integer :: ierr, thefile
+   type(MPI_File) :: thefile
+   integer :: ierr
    !=======================================
    call mpi_file_open(comm, fout, mpi_mode_rdonly, mpi_info_null, &
      thefile, ierr)
@@ -395,7 +399,8 @@
    integer (offset_kind), intent (in) :: disp
    character (LEN=*), intent (in) :: fout
 
-   integer :: ierr, thefile
+   type(MPI_File) :: thefile
+   integer :: ierr
    !===============================
    call mpi_file_open(comm, fout, mpi_mode_wronly+mpi_mode_create, &
      mpi_info_null, thefile, ierr)
@@ -417,7 +422,8 @@
    integer (offset_kind), intent (in) :: disp
    character (LEN=*), intent (in) :: fout
    !========================
-   integer :: ierr, thefile
+   type(MPI_File) :: thefile
+   integer :: ierr
    !========================
    call mpi_file_open(comm_col(1), fout, mpi_mode_wronly+mpi_mode_create &
      , mpi_info_null, thefile, ierr)
@@ -440,7 +446,8 @@
    integer (offset_kind), intent (in) :: disp
    character (LEN=*), intent (in) :: fout
 
-   integer :: ierr, thefile
+   type(MPI_File) :: thefile
+   integer :: ierr
    !========================
    call mpi_file_open(comm, fout, mpi_mode_wronly+mpi_mode_create, &
      mpi_info_null, thefile, ierr)
@@ -465,7 +472,8 @@
    integer (offset_kind), intent (in) :: disp
    character (LEN=*), intent (in) :: fout
    !different from mpi_write_field because of the different communicator in
-   integer :: ierr, thefile
+   type(MPI_File) :: thefile
+   integer :: ierr
    !mpi_file_open
    call mpi_file_open(comm_col(1), fout, mpi_mode_wronly+mpi_mode_create &
      , mpi_info_null, thefile, ierr)
@@ -550,11 +558,11 @@
 
    if (sr) then
 
-    call mpi_send(dat0(1), lenw, mpi_sd, ipe, tag, comm, error)
+    call mpi_send(dat0(1), lenw, mpi_double_precision, ipe, tag, comm, error)
 
    else
     !====================
-    call mpi_recv(dat0(1), lenw, mpi_sd, ipe, tag, comm, status, error)
+    call mpi_recv(dat0(1), lenw, mpi_double_precision, ipe, tag, comm, status, error)
    end if
 
   end subroutine
@@ -568,11 +576,11 @@
    lenw = n1*n2
    if (sr) then
 
-    call mpi_send(dat0(1, 1), lenw, mpi_sd, ipe, tag, comm, error)
+    call mpi_send(dat0(1, 1), lenw, mpi_double_precision, ipe, tag, comm, error)
 
    else
 
-    call mpi_recv(dat0(1, 1), lenw, mpi_sd, ipe, tag, comm, status, &
+    call mpi_recv(dat0(1, 1), lenw, mpi_double_precision, ipe, tag, comm, status, &
                   error)
    end if
 
@@ -587,12 +595,12 @@
    tag = 10 + ipe
    if (sr) then
 
-    call mpi_send(dat0(1, 1, 1), lenw, mpi_sd, ipe, tag, comm_col(dir), &
+    call mpi_send(dat0(1, 1, 1), lenw, mpi_double_precision, ipe, tag, comm_col(dir), &
                   error)
     !=========================
    else
 
-    call mpi_recv(dat0(1, 1, 1), lenw, mpi_sd, ipe, tag, comm_col(dir), &
+    call mpi_recv(dat0(1, 1, 1), lenw, mpi_double_precision, ipe, tag, comm_col(dir), &
                   status, error)
    end if
   end subroutine
@@ -606,12 +614,12 @@
    tag = 10 + ipe
    if (sr) then
 
-    call mpi_send(dat0(1, 1, 1, 1), lenw, mpi_sd, ipe, tag, comm_col(dir), &
+    call mpi_send(dat0(1, 1, 1, 1), lenw, mpi_double_precision, ipe, tag, comm_col(dir), &
                   error)
     !=========================
    else
 
-    call mpi_recv(dat0(1, 1, 1, 1), lenw, mpi_sd, ipe, tag, comm_col(dir), &
+    call mpi_recv(dat0(1, 1, 1, 1), lenw, mpi_double_precision, ipe, tag, comm_col(dir), &
                   status, error)
    end if
 
@@ -678,7 +686,7 @@
 
      call mpi_recv(dat1(1), 3, mpi_sd, per, tag, &
       comm_col(dir), status, error)
-     
+
      call part_prop_rcv%set_temperature( dat1(1) )
      call part_prop_rcv%set_charge( dat1(2) )
      call part_prop_rcv%set_dimensions( int(dat1(3)) )
@@ -796,12 +804,12 @@
     end if
    end select
    if (ns*nr > 0) then
-    call mpi_sendrecv(sdata(1), ns, mpi_sd, pes, tag, rdata(1), nr, &
-                      mpi_sd, per, tag, comm_col(dir), status, error)
+    call mpi_sendrecv(sdata(1), ns, mpi_double_precision, pes, tag, rdata(1), nr, &
+                      mpi_double_precision, per, tag, comm_col(dir), status, error)
    else
-    if (ns > 0) call mpi_send(sdata(1), ns, mpi_sd, pes, tag, &
+    if (ns > 0) call mpi_send(sdata(1), ns, mpi_double_precision, pes, tag, &
                               comm_col(dir), error)
-    if (nr > 0) call mpi_recv(rdata(1), nr, mpi_sd, per, tag, &
+    if (nr > 0) call mpi_recv(rdata(1), nr, mpi_double_precision, per, tag, &
                               comm_col(dir), status, error)
    end if
   end subroutine
@@ -868,9 +876,9 @@
    integer, intent(in) :: lenw, ipe, dir, tag
 
    if (sr) then
-    call mpi_send(buff(1), lenw, mpi_sd, ipe, tag, comm_col(dir), error)
+    call mpi_send(buff(1), lenw, mpi_double_precision, ipe, tag, comm_col(dir), error)
    else
-    call mpi_recv(buff(1), lenw, mpi_sd, ipe, tag, comm_col(dir), &
+    call mpi_recv(buff(1), lenw, mpi_double_precision, ipe, tag, comm_col(dir), &
                   status, error)
    end if
 
@@ -919,7 +927,7 @@
    real(dp), intent(inout) :: rv_send(:), rv_recv(:)
    integer, intent(in) :: dir, nt
 
-   call mpi_allgather(rv_send, nt, mpi_sd, rv_recv, nt, mpi_sd, &
+   call mpi_allgather(rv_send, nt, mpi_double_precision, rv_recv, nt, mpi_double_precision, &
                       comm_col(dir), error)
   end subroutine
   subroutine allreduce_dpreal(ib, rv_loc, rv, nt)
@@ -973,10 +981,10 @@
     case (-1) !---------------------------------------------
 
      call MPI_ALLREDUCE(dt0, dt_tot, 1, mpi_integer, mpi_min, comm, error)
-    case (0) 
+    case (0)
 
      call MPI_ALLREDUCE(dt0, dt_tot, 1, mpi_integer, mpi_sum, comm, error)
-    case (1) 
+    case (1)
 
      call MPI_ALLREDUCE(dt0, dt_tot, 1, mpi_integer, mpi_max, comm, error)
     end select
@@ -1021,7 +1029,7 @@
 
    lenw = n1*n2*n3*nc
 
-   call MPI_BCAST(dat0(1, 1, 1, 1), lenw, mpi_sd, pe_min, comm, error)
+   call MPI_BCAST(dat0(1, 1, 1, 1), lenw, mpi_double_precision, pe_min, comm, error)
 
   end subroutine
 
@@ -1034,9 +1042,9 @@
 
    if (prl) then
 
-    call MPI_REDUCE(dt_prl, dt_tot, nt, mpi_sd, mpi_sum, pe_min, comm, &
+    call MPI_REDUCE(dt_prl, dt_tot, nt, mpi_double_precision, mpi_sum, pe_min, comm, &
                     error)
-    if (ib) call MPI_BCAST(dt_tot, nt, mpi_sd, pe_min, comm, error)
+    if (ib) call MPI_BCAST(dt_tot, nt, mpi_double_precision, pe_min, comm, error)
    else
     dt_tot = dt_prl
    end if
@@ -1063,7 +1071,7 @@
    integer, intent(in) :: ndt
    real(dp) :: dt_tot(ndt)
 
-   call MPI_BCAST(dt_tot, ndt, mpi_sd, pe_min, comm, error)
+   call MPI_BCAST(dt_tot, ndt, mpi_double_precision, pe_min, comm, error)
 
   end subroutine
 
@@ -1085,8 +1093,8 @@
     per = xp_prev(ip)
     pes = xp_next(ip)
    end select
-   call mpi_sendrecv(buff1(1), lenws, mpi_sd, pes, tag, buff2(1), lenws, &
-                     mpi_sd, per, tag, comm_col(dir), status, error)
+   call mpi_sendrecv(buff1(1), lenws, mpi_double_precision, pes, tag, buff2(1), lenws, &
+                     mpi_double_precision, per, tag, comm_col(dir), status, error)
 
   end subroutine
 
@@ -1127,8 +1135,8 @@
      per = xp_prev(-side)
     end if
    end select
-   call mpi_sendrecv(buff1(1, 1, 1), lenws, mpi_sd, pes, tag, buff2(1, 1, 1), lenwr, &
-                     mpi_sd, per, tag, comm_col(dir), status, error)
+   call mpi_sendrecv(buff1(1, 1, 1), lenws, mpi_double_precision, pes, tag, buff2(1, 1, 1), lenwr, &
+                     mpi_double_precision, per, tag, comm_col(dir), status, error)
 
   end subroutine
 
@@ -1168,8 +1176,8 @@
      per = xp_prev(-side)
     end if
    end select
-   call mpi_sendrecv(buff1(1), lenws, mpi_sd, pes, tag, buff2(1), lenwr, &
-                     mpi_sd, per, tag, comm_col(dir), status, error)
+   call mpi_sendrecv(buff1(1), lenws, mpi_double_precision, pes, tag, buff2(1), lenwr, &
+                     mpi_double_precision, per, tag, comm_col(dir), status, error)
 
   end subroutine
 
