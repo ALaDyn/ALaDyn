@@ -1,0 +1,6 @@
+#!/bin/bash
+
+mkdir -p build ; cd build
+cmake .. -DCMAKE_BUILD_TYPE="Profiling"
+cmake --build . --target install -- -j$(nproc)
+cd ..

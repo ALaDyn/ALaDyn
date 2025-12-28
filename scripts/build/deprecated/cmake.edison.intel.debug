@@ -1,0 +1,11 @@
+#!/bin/bash
+
+module load PrgEnv-intel
+module load intel-mkl
+module load cmake
+module load boost
+
+mkdir -p build ; cd build
+cmake .. "-DBoost_NO_BOOST_CMAKE=ON" "-DCMAKE_BUILD_TYPE=Debug"
+cmake --build . --target install
+cd ..

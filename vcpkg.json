@@ -6,8 +6,6 @@
   "description": "A High-Accuracy PIC Code for the Maxwell-Vlasov Equations",
   "dependencies":
   [
-    "boost-filesystem",
-    "boost-system",
     "fftw3"
   ]
 }

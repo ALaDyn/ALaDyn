@@ -49,17 +49,9 @@ opt_report.txt
 *.Rapp.history
 log.*
 
-cmake.*
-make.*
-!/scripts/build/cmake.*
-!/scripts/build/make.*
-build.*
-
 .project
 *.nml
-!examples/input_lwfa.nml
-!examples/input_pwfa.nml
-!examples/input_tnsa.nml
+!examples/*.nml
 fftw*/
 
 #Visual studio code
@@ -67,10 +59,6 @@ fftw*/
 
 #Backup files
 *.bak
-
-#Snippets
-
-snippet_*
 
 #FORD documentations
 html/*
