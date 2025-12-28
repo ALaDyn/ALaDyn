@@ -1,0 +1,29 @@
+name: FORD Documentation
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build FORD documentation
+        id: build
+        uses: ResearchSoftwareActions/ford-build@v1
+        with:
+          project_file: aladyn_doc.md
+
+      - name: Deploy to GitHub Pages
+        if: success()
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ${{ steps.build.outputs.output_dir }}
+          publish_branch: gh-pages

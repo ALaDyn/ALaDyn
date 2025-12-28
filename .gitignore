@@ -42,8 +42,9 @@ opt_report.txt
 *.optrpt
 
 [Bb]uild*/
-!scripts/build/
 [Bb]in/
+[Dd]ebug*/
+[Rr]elease*/
 .vs/
 .vscode/
 *.Rapp.history
