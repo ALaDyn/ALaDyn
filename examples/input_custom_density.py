@@ -240,7 +240,7 @@ def visualize_density_profile():
     density = config.custom_density_function(X, Y, Z)
     
     # Create figure with two subplots
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
+    _, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
     
     # 2D density map
     im = ax1.pcolormesh(X, Y, density, shading='auto', cmap='viridis')
