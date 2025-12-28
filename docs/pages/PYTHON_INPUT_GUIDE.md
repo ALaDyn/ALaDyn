@@ -166,7 +166,7 @@ laser=LaserConfig(
 ```
 
 **Laser intensity:** The intensity is related to `a0` by:
-- `I [W/cm²] ≈ 1.37 × 10¹⁸ × a0² / λ0²`
+- `I [W/cm²] ≈ 1.37 × 10¹⁸ × a0² / lam0²`
 
 ### OutputConfig
 
