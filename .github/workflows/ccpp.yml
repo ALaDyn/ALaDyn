@@ -60,14 +60,34 @@ jobs:
         -Source http://93.49.111.10:5555/v3/index.json
 
     - name: 'Build'
+      shell: pwsh
+      run: ${{ github.workspace }}/cmake/build.ps1 -UseVCPKG -DoNotUpdateVCPKG -DisableInteractive -DoNotUpdateTOOL
+
+
+  ubuntu-plain:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Setup tmate session
+      uses: mxschmitt/action-tmate@v3
+      if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.debug_enabled }}
+
+    - uses: lukka/get-cmake@latest
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y gfortran openmpi-bin libopenmpi-dev libfftw3-dev libfftw3-mpi-dev
+
+    - name: 'Build with plain CMake'
       shell: bash
-      env:
-        VCPKG_ROOT: ${{ github.workspace }}/vcpkg
-        ENABLE_VCPKG_INTEGRATION: "ON"
       run: |
         mkdir -p build
         cd build
-        cmake .. -DCMAKE_BUILD_TYPE=Release -DENABLE_VCPKG_INTEGRATION=ON
+        cmake .. -DCMAKE_BUILD_TYPE=Release
         cmake --build . --parallel
         cmake --install .
 
@@ -122,13 +142,5 @@ jobs:
         -Source http://93.49.111.10:5555/v3/index.json
 
     - name: 'Build'
-      shell: bash
-      env:
-        VCPKG_ROOT: ${{ github.workspace }}/vcpkg
-        ENABLE_VCPKG_INTEGRATION: "ON"
-      run: |
-        mkdir -p build
-        cd build
-        cmake .. -DCMAKE_BUILD_TYPE=Release -DENABLE_VCPKG_INTEGRATION=ON
-        cmake --build . --parallel
-        cmake --install .
+      shell: pwsh
+      run: ${{ github.workspace }}/cmake/build.ps1 -UseVCPKG -DoNotUpdateVCPKG -DisableInteractive -DoNotUpdateTOOL
