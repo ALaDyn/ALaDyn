@@ -54,17 +54,21 @@ def test_basic_config():
         with tempfile.NamedTemporaryFile(mode='w', suffix='.nml', delete=False) as f:
             test_file = f.name
         
-        config_to_namelist(config, test_file)
-        print(f"✓ Namelist generated successfully: {test_file}")
-        
-        # Check file exists and has content
-        if os.path.exists(test_file) and os.path.getsize(test_file) > 0:
-            print("✓ Namelist file is valid")
-            os.remove(test_file)
-            return True
-        else:
-            print("✗ Namelist file is empty or missing")
-            return False
+        try:
+            config_to_namelist(config, test_file)
+            print(f"✓ Namelist generated successfully: {test_file}")
+            
+            # Check file exists and has content
+            if os.path.exists(test_file) and os.path.getsize(test_file) > 0:
+                print("✓ Namelist file is valid")
+                return True
+            else:
+                print("✗ Namelist file is empty or missing")
+                return False
+        finally:
+            # Ensure cleanup even if exception occurs
+            if os.path.exists(test_file):
+                os.remove(test_file)
     except Exception as e:
         print(f"✗ Namelist generation failed: {e}")
         return False

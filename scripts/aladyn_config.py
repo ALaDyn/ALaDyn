@@ -18,14 +18,11 @@ from dataclasses import dataclass, field
 from typing import List, Callable, Optional
 
 # NumPy is optional - only needed for custom density functions and visualization
-try:
-    import numpy as np
-    HAS_NUMPY = True
-except ImportError:
-    HAS_NUMPY = False
-    np = None
-    # Note: NumPy is only required for custom density functions
-    # The basic configuration and namelist generation work without it
+# We check for availability without importing to avoid polluting namespace
+import importlib.util
+HAS_NUMPY = importlib.util.find_spec("numpy") is not None
+# Note: NumPy is only required for custom density functions
+# The basic configuration and namelist generation work without it
 
 
 def _check_numpy_available():
@@ -423,6 +420,14 @@ class ALaDynConfig:
         Ly = self.grid.ny * dy
         Lz = self.grid.nz * dz
         
+        # Map for laser polarization
+        laser_pol_map = {
+            1: 'p-polarized',
+            2: 's-polarized',
+            3: 'circular',
+            4: 'envelope'
+        }
+        
         summary = f"""
 ALaDyn Configuration Summary
 ============================
@@ -434,7 +439,7 @@ Grid:
 
 Simulation:
   Model: {'LWFA' if self.simulation.dmodel_id == 1 else 'Other'}
-  Laser polarization: {{1: 'p-polarized', 2: 's-polarized', 3: 'circular', 4: 'envelope'}.get(self.simulation.model_id, '')}
+  Laser polarization: {laser_pol_map.get(self.simulation.model_id, 'unknown')}
   Integration: {'Leap-frog' if self.simulation.LPf_ord == 2 else 'RK4'}
 
 Laser:

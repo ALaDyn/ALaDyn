@@ -85,8 +85,9 @@ def write_namelist_section(file, section_name: str, params: dict, indent: int = 
             formatted_value = format_fortran_value(value)
         
         # Write with proper formatting
+        indent_str = ' ' * indent
         spaces = ' ' * (max_len - len(name) + 1)
-        file.write(f"  {name}{spaces}= {formatted_value},\n")
+        file.write(f"{indent_str}{name}{spaces}= {formatted_value},\n")
     
     file.write("/\n\n")
 
@@ -97,193 +98,201 @@ def config_to_namelist(config: ALaDynConfig, output_file: str = "input.nml"):
     Args:
         config: ALaDynConfig object with simulation parameters
         output_file: Output filename for the namelist
+    
+    Raises:
+        IOError: If the file cannot be written
+        ValueError: If the configuration is invalid
     """
     # Validate configuration
     config.validate()
     
-    with open(output_file, 'w') as f:
-        # Write header comment
-        f.write("!\n")
-        f.write("! ALaDyn input file\n")
-        f.write("! Generated from Python configuration\n")
-        f.write("!\n\n")
+    try:
+        with open(output_file, 'w') as f:
+            # Write header comment
+            f.write("!\n")
+            f.write("! ALaDyn input file\n")
+            f.write("! Generated from Python configuration\n")
+            f.write("!\n\n")
+            
+            # GRID section
+            grid_params = {
+                'nx': config.grid.nx,
+                'ny': config.grid.ny,
+                'nz': config.grid.nz,
+                'ny_targ': config.grid.ny_targ,
+                'k0': config.grid.k0,
+                'yx_rat': config.grid.yx_rat,
+                'zx_rat': config.grid.zx_rat,
+            }
+            write_namelist_section(f, 'GRID', grid_params)
         
-        # GRID section
-        grid_params = {
-            'nx': config.grid.nx,
-            'ny': config.grid.ny,
-            'nz': config.grid.nz,
-            'ny_targ': config.grid.ny_targ,
-            'k0': config.grid.k0,
-            'yx_rat': config.grid.yx_rat,
-            'zx_rat': config.grid.zx_rat,
-        }
-        write_namelist_section(f, 'GRID', grid_params)
+            # SIMULATION section
+            sim_params = {
+                'LPf_ord': config.simulation.LPf_ord,
+                'der_ord': config.simulation.der_ord,
+                'str_flag': config.simulation.str_flag,
+                'iform': config.simulation.iform,
+                'model_id': config.simulation.model_id,
+                'dmodel_id': config.simulation.dmodel_id,
+                'ibx': config.simulation.ibx,
+                'iby': config.simulation.iby,
+                'ibz': config.simulation.ibz,
+                'ibeam': config.simulation.ibeam,
+            }
+            write_namelist_section(f, 'SIMULATION', sim_params)
         
-        # SIMULATION section
-        sim_params = {
-            'LPf_ord': config.simulation.LPf_ord,
-            'der_ord': config.simulation.der_ord,
-            'str_flag': config.simulation.str_flag,
-            'iform': config.simulation.iform,
-            'model_id': config.simulation.model_id,
-            'dmodel_id': config.simulation.dmodel_id,
-            'ibx': config.simulation.ibx,
-            'iby': config.simulation.iby,
-            'ibz': config.simulation.ibz,
-            'ibeam': config.simulation.ibeam,
-        }
-        write_namelist_section(f, 'SIMULATION', sim_params)
+            # TARGET_DESCRIPTION section
+            target_params = {
+                'nsp': config.target.nsp,
+                'nsb': config.target.nsb,
+                'ionz_lev': config.target.ionz_lev,
+                'ionz_model': config.target.ionz_model,
+                'ion_min': config.target.ion_min,
+                'ion_max': config.target.ion_max,
+                'atomic_number': config.target.atomic_number,
+                'mass_number': config.target.mass_number,
+                't0_pl': config.target.t0_pl,
+            }
         
-        # TARGET_DESCRIPTION section
-        target_params = {
-            'nsp': config.target.nsp,
-            'nsb': config.target.nsb,
-            'ionz_lev': config.target.ionz_lev,
-            'ionz_model': config.target.ionz_model,
-            'ion_min': config.target.ion_min,
-            'ion_max': config.target.ion_max,
-            'atomic_number': config.target.atomic_number,
-            'mass_number': config.target.mass_number,
-            't0_pl': config.target.t0_pl,
-        }
+            # Add ppc or np_per_xc/yc/zc depending on what's used
+            if any(p >= 1 for p in config.target.ppc):
+                target_params['ppc'] = config.target.ppc
+            else:
+                target_params['np_per_xc'] = config.target.np_per_xc
+                target_params['np_per_yc'] = config.target.np_per_yc
+                if config.grid.nz > 1:
+                    target_params['np_per_zc'] = config.target.np_per_zc
         
-        # Add ppc or np_per_xc/yc/zc depending on what's used
-        if any(p >= 1 for p in config.target.ppc):
-            target_params['ppc'] = config.target.ppc
-        else:
-            target_params['np_per_xc'] = config.target.np_per_xc
-            target_params['np_per_yc'] = config.target.np_per_yc
-            if config.grid.nz > 1:
-                target_params['np_per_zc'] = config.target.np_per_zc
-        
-        target_params.update({
-            'concentration': config.target.concentration,
-            'lpx': config.target.lpx,
-            'lpy': config.target.lpy,
-            'n0_ref': config.target.n0_ref,
-            'np1': config.target.np1,
-            'np2': config.target.np2,
-            'r_c': config.target.r_c,
-        })
-        
-        if config.target.l_disable_rng_seed:
-            target_params['l_disable_rng_seed'] = config.target.l_disable_rng_seed
-        
-        write_namelist_section(f, 'TARGET_DESCRIPTION', target_params)
-        
-        # LASER section
-        laser_params = {
-            'G_prof': config.laser.G_prof,
-            'nb_laser': config.laser.nb_laser,
-            't0_lp': config.laser.t0_lp,
-            'xc_lp': config.laser.xc_lp,
-            'tau_fwhm': config.laser.tau_fwhm,
-            'w0_y': config.laser.w0_y,
-            'a0': config.laser.a0,
-            'lam0': config.laser.lam0,
-            'y0_cent': config.laser.y0_cent,
-            'z0_cent': config.laser.z0_cent,
-            'incid_angle': config.laser.incid_angle,
-            'Enable_ionization': config.laser.Enable_ionization,
-            'lp_delay': config.laser.lp_delay,
-        }
-        
-        # Add second laser parameters if used
-        if config.laser.a1 > 0:
-            laser_params.update({
-                'lp_offset': config.laser.lp_offset,
-                't1_lp': config.laser.t1_lp,
-                'tau1_fwhm': config.laser.tau1_fwhm,
-                'w1_y': config.laser.w1_y,
-                'a1': config.laser.a1,
-                'lam1': config.laser.lam1,
-                'y1_cent': config.laser.y1_cent,
-                'z1_cent': config.laser.z1_cent,
+            target_params.update({
+                'concentration': config.target.concentration,
+                'lpx': config.target.lpx,
+                'lpy': config.target.lpy,
+                'n0_ref': config.target.n0_ref,
+                'np1': config.target.np1,
+                'np2': config.target.np2,
+                'r_c': config.target.r_c,
             })
         
-        if config.laser.Symmetrization_pulse:
-            laser_params.update({
-                'Symmetrization_pulse': config.laser.Symmetrization_pulse,
-                'a_symm_rat': config.laser.a_symm_rat,
-            })
+            if config.target.l_disable_rng_seed:
+                target_params['l_disable_rng_seed'] = config.target.l_disable_rng_seed
         
-        write_namelist_section(f, 'LASER', laser_params)
+            write_namelist_section(f, 'TARGET_DESCRIPTION', target_params)
         
-        # BEAM_INJECT section (if beam is configured)
-        if config.beam is not None and config.target.nsb > 0:
-            beam_params = {
-                'nb_1': config.beam.nb_1,
-                'xc_1': config.beam.xc_1,
-                'gam_1': config.beam.gam_1,
-                'sxb_1': config.beam.sxb_1,
-                'syb_1': config.beam.syb_1,
-                'epsy_1': config.beam.epsy_1,
-                'epsz_1': config.beam.epsz_1,
-                'dg_1': config.beam.dg_1,
-                'charge_1': config.beam.charge_1,
-                'ap1_twiss': config.beam.ap1_twiss,
-                'bt1_twiss': config.beam.bt1_twiss,
-                't_inject': config.beam.t_inject,
+            # LASER section
+            laser_params = {
+                'G_prof': config.laser.G_prof,
+                'nb_laser': config.laser.nb_laser,
+                't0_lp': config.laser.t0_lp,
+                'xc_lp': config.laser.xc_lp,
+                'tau_fwhm': config.laser.tau_fwhm,
+                'w0_y': config.laser.w0_y,
+                'a0': config.laser.a0,
+                'lam0': config.laser.lam0,
+                'y0_cent': config.laser.y0_cent,
+                'z0_cent': config.laser.z0_cent,
+                'incid_angle': config.laser.incid_angle,
+                'Enable_ionization': config.laser.Enable_ionization,
+                'lp_delay': config.laser.lp_delay,
             }
-            write_namelist_section(f, 'BEAM_INJECT', beam_params)
         
-        # MOVING_WINDOW section
-        window_params = {
-            'w_sh': config.moving_window.w_sh,
-            'wi_time': config.moving_window.wi_time,
-            'wf_time': config.moving_window.wf_time,
-            'w_speed': config.moving_window.w_speed,
-        }
-        write_namelist_section(f, 'MOVING_WINDOW', window_params)
+            # Add second laser parameters if used
+            if config.laser.a1 > 0:
+                laser_params.update({
+                    'lp_offset': config.laser.lp_offset,
+                    't1_lp': config.laser.t1_lp,
+                    'tau1_fwhm': config.laser.tau1_fwhm,
+                    'w1_y': config.laser.w1_y,
+                    'a1': config.laser.a1,
+                    'lam1': config.laser.lam1,
+                    'y1_cent': config.laser.y1_cent,
+                    'z1_cent': config.laser.z1_cent,
+                })
         
-        # OUTPUT section
-        output_params = {
-            'nouts': config.output.nouts,
-            'iene': config.output.iene,
-            'nvout': config.output.nvout,
-            'nden': config.output.nden,
-            'npout': config.output.npout,
-            'nbout': config.output.nbout,
-            'jump': config.output.jump,
-            'pjump': config.output.pjump,
-            'gam_min': config.output.gam_min,
-            'xp0_out': config.output.xp0_out,
-            'xp1_out': config.output.xp1_out,
-            'yp_out': config.output.yp_out,
-            'tmax': config.output.tmax,
-            'cfl': config.output.cfl,
-            'new_sim': config.output.new_sim,
-            'id_new': config.output.id_new,
-            'dump': config.output.dump,
-            'L_env_modulus': config.output.L_env_modulus,
-        }
-        write_namelist_section(f, 'OUTPUT', output_params)
+            if config.laser.Symmetrization_pulse:
+                laser_params.update({
+                    'Symmetrization_pulse': config.laser.Symmetrization_pulse,
+                    'a_symm_rat': config.laser.a_symm_rat,
+                })
         
-        # TRACKING section (if tracking is enabled)
-        if config.tracking is not None and config.tracking.p_tracking:
-            tracking_params = {
-                'tkjump': config.tracking.tkjump,
-                'nkjump': config.tracking.nkjump,
-                'txmin': config.tracking.txmin,
-                'txmax': config.tracking.txmax,
-                'tymin': config.tracking.tymin,
-                'tymax': config.tracking.tymax,
-                'tzmin': config.tracking.tzmin,
-                'tzmax': config.tracking.tzmax,
-                't_in': config.tracking.t_in,
-                't_out': config.tracking.t_out,
-                'p_tracking': config.tracking.p_tracking,
+            write_namelist_section(f, 'LASER', laser_params)
+        
+            # BEAM_INJECT section (if beam is configured)
+            if config.beam is not None and config.target.nsb > 0:
+                beam_params = {
+                    'nb_1': config.beam.nb_1,
+                    'xc_1': config.beam.xc_1,
+                    'gam_1': config.beam.gam_1,
+                    'sxb_1': config.beam.sxb_1,
+                    'syb_1': config.beam.syb_1,
+                    'epsy_1': config.beam.epsy_1,
+                    'epsz_1': config.beam.epsz_1,
+                    'dg_1': config.beam.dg_1,
+                    'charge_1': config.beam.charge_1,
+                    'ap1_twiss': config.beam.ap1_twiss,
+                    'bt1_twiss': config.beam.bt1_twiss,
+                    't_inject': config.beam.t_inject,
+                }
+                write_namelist_section(f, 'BEAM_INJECT', beam_params)
+        
+            # MOVING_WINDOW section
+            window_params = {
+                'w_sh': config.moving_window.w_sh,
+                'wi_time': config.moving_window.wi_time,
+                'wf_time': config.moving_window.wf_time,
+                'w_speed': config.moving_window.w_speed,
             }
-            write_namelist_section(f, 'TRACKING', tracking_params)
+            write_namelist_section(f, 'MOVING_WINDOW', window_params)
         
-        # MPIPARAMS section
-        mpi_params = {
-            'nprocx': config.mpi.nprocx,
-            'nprocy': config.mpi.nprocy,
-            'nprocz': config.mpi.nprocz,
-        }
-        write_namelist_section(f, 'MPIPARAMS', mpi_params)
+            # OUTPUT section
+            output_params = {
+                'nouts': config.output.nouts,
+                'iene': config.output.iene,
+                'nvout': config.output.nvout,
+                'nden': config.output.nden,
+                'npout': config.output.npout,
+                'nbout': config.output.nbout,
+                'jump': config.output.jump,
+                'pjump': config.output.pjump,
+                'gam_min': config.output.gam_min,
+                'xp0_out': config.output.xp0_out,
+                'xp1_out': config.output.xp1_out,
+                'yp_out': config.output.yp_out,
+                'tmax': config.output.tmax,
+                'cfl': config.output.cfl,
+                'new_sim': config.output.new_sim,
+                'id_new': config.output.id_new,
+                'dump': config.output.dump,
+                'L_env_modulus': config.output.L_env_modulus,
+            }
+            write_namelist_section(f, 'OUTPUT', output_params)
+        
+            # TRACKING section (if tracking is enabled)
+            if config.tracking is not None and config.tracking.p_tracking:
+                tracking_params = {
+                    'tkjump': config.tracking.tkjump,
+                    'nkjump': config.tracking.nkjump,
+                    'txmin': config.tracking.txmin,
+                    'txmax': config.tracking.txmax,
+                    'tymin': config.tracking.tymin,
+                    'tymax': config.tracking.tymax,
+                    'tzmin': config.tracking.tzmin,
+                    'tzmax': config.tracking.tzmax,
+                    't_in': config.tracking.t_in,
+                    't_out': config.tracking.t_out,
+                    'p_tracking': config.tracking.p_tracking,
+                }
+                write_namelist_section(f, 'TRACKING', tracking_params)
+        
+            # MPIPARAMS section
+            mpi_params = {
+                'nprocx': config.mpi.nprocx,
+                'nprocy': config.mpi.nprocy,
+                'nprocz': config.mpi.nprocz,
+            }
+            write_namelist_section(f, 'MPIPARAMS', mpi_params)
+    
+    except IOError as e:
+        raise IOError(f"Failed to write namelist file '{output_file}': {e}")
     
     print(f"Namelist file written to: {output_file}")
     print(config.summary())
@@ -300,32 +309,38 @@ if __name__ == "__main__":
         # Import the configuration
         import importlib.util
         spec = importlib.util.spec_from_file_location("user_config", config_file)
-        if spec is None or spec.loader is None:
-            print(f"Error: Could not load configuration module from '{config_file}'.")
-            sys.exit(1)
-
-        user_config = importlib.util.module_from_spec(spec)
+        
         try:
+            if spec is None or spec.loader is None:
+                print(f"Error: Could not load configuration module from '{config_file}'")
+                sys.exit(1)
+            
+            user_config = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(user_config)
+            
         except FileNotFoundError:
-            print(f"Error: Configuration file '{config_file}' not found or not readable.")
+            print(f"Error: Configuration file '{config_file}' not found")
             sys.exit(1)
         except SyntaxError as e:
-            location = f"{e.filename}:{e.lineno}" if getattr(e, 'filename', None) and getattr(e, 'lineno', None) else config_file
-            print(f"Error: Syntax error in configuration file ({location}).")
-            if getattr(e, 'text', None):
+            location = f"{e.filename}:{e.lineno}" if e.filename and e.lineno else config_file
+            print(f"Error: Syntax error in configuration file ({location})")
+            if e.text:
                 print(f"       {e.text.strip()}")
             sys.exit(1)
         except ImportError as e:
-            print(f"Error: Failed to import a dependency while loading '{config_file}': {e}")
+            print(f"Error: Failed to import dependency while loading '{config_file}': {e}")
             sys.exit(1)
         except Exception as e:
-            print(f"Error: Unexpected error while loading configuration file '{config_file}': {e}")
+            print(f"Error: Unexpected error while loading '{config_file}': {e}")
             sys.exit(1)
         
         # Convert to namelist
         if hasattr(user_config, 'config'):
-            config_to_namelist(user_config.config, output_file)
+            try:
+                config_to_namelist(user_config.config, output_file)
+            except Exception as e:
+                print(f"Error: Failed to generate namelist: {e}")
+                sys.exit(1)
         else:
             print("Error: Configuration file must define a 'config' variable of type ALaDynConfig")
             sys.exit(1)

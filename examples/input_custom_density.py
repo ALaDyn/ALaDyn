@@ -71,6 +71,10 @@ def parabolic_channel_density(x, y, z, r0=20.0, delta_n=0.01):
     This creates a uniform plasma with a parabolic density channel
     suitable for guiding laser pulses over long distances.
     
+    This function is provided as an alternative example of custom density.
+    To use it, replace custom_plasma_density with this function in the
+    config definition below (line 205).
+    
     Args:
         x, y, z: Position arrays (in μm)
         r0: Channel radius (μm)
