@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.19)
 
 if(DEFINED ENV{VCPKG_DEFAULT_TRIPLET})
   message(STATUS "Setting default vcpkg target triplet to $ENV{VCPKG_DEFAULT_TRIPLET}")
@@ -66,6 +66,58 @@ if(APPLE)
     set(MACOSX_RPATH TRUE)
 endif(APPLE)
 
+# Old species (provisional)
+# add_definitions(-DOLD_SPECIES)
+
+message(STATUS "ALaDyn: Building using the generator ${CMAKE_GENERATOR}")
+# Look for JSON-FORTRAN
+set(JSON_FORTRAN_SUPPORT TRUE CACHE BOOL "ALaDyn: Building ALaDyn with JSON-Fortran support")
+if( JSON_FORTRAN_SUPPORT )
+  message(STATUS "ALaDyn: Building ALaDyn with JSON-Fortran support")
+  set(JFORTRAN_BASE_PATH ${CMAKE_SOURCE_DIR}/third_party/json-fortran)
+  set(JFORTRAN_PATH ${JFORTRAN_BASE_PATH}/json-fortran_source)
+  set(JFORTRAN_LOCALS_PATH ${JFORTRAN_BASE_PATH}/json-fortran_locals)
+  set(JFORTRAN_SOURCE_PATH ${JFORTRAN_PATH}/src)
+  set(JFORTRAN_BINARY_PATH ${JFORTRAN_PATH}/build)
+  find_package(Git QUIET)
+  if(GIT_FOUND AND EXISTS "${PROJECT_SOURCE_DIR}/.git")
+  # Update submodules as needed
+      option(GIT_SUBMODULE "Check submodules during build" ON)
+      if(GIT_SUBMODULE)
+          message(STATUS "ALaDyn: Submodule update")
+          execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init --recursive
+                          WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                          RESULT_VARIABLE GIT_SUBMOD_RESULT)
+          if(NOT GIT_SUBMOD_RESULT EQUAL "0")
+              message(FATAL_ERROR "git submodule update --init failed with ${GIT_SUBMOD_RESULT}, please checkout submodules")
+          endif()
+      endif()
+  endif()
+
+  if(NOT EXISTS "${JFORTRAN_PATH}/CMakeLists.txt")
+      message(FATAL_ERROR "The submodules were not downloaded! GIT_SUBMODULE was turned off or failed. Please update submodules and try again.")
+  endif()
+
+  if( EXISTS ${JFORTRAN_PATH} AND NOT EXISTS ${JFORTRAN_LOCALS_PATH})
+    message(STATUS "JSON-Fortran: Now building the JSON-Fortran library")
+    file(MAKE_DIRECTORY ${JFORTRAN_BINARY_PATH})
+    set(CMAKE_INSTALL_MESSAGE LAZY)
+    # Configure subproject into ${JFORTRAN_BINARY_PATH}
+    execute_process(COMMAND ${CMAKE_COMMAND}
+    -DCMAKE_INSTALL_MESSAGE=LAZY
+    -DCMAKE_INSTALL_PREFIX=${JFORTRAN_LOCALS_PATH}
+    -DSKIP_DOC_GEN=TRUE
+    -G "${CMAKE_GENERATOR}"
+    ${JFORTRAN_PATH}
+    WORKING_DIRECTORY ${JFORTRAN_BINARY_PATH})
+    # Building and installing
+    execute_process(COMMAND ${CMAKE_COMMAND}
+    --build ${JFORTRAN_BINARY_PATH}
+    --target install)
+    message(STATUS "JSON-Fortran: Built")
+  endif()
+endif()
+
 # you can force FFTW if necessary, avoiding MKL (which is preferred on Intel systems)
 option(FORCE_FFTW "Forcing FFTW libraries" OFF)
 
@@ -82,93 +134,208 @@ project(ALaDyn
 
 add_executable(ALaDyn src/ALaDyn.F90)
 
-if(UNIX
-   AND CMAKE_CXX_COMPILER_ID STREQUAL "PGI"
-   AND NOT APPLE)
-    find_package(Numa REQUIRED)
-    target_link_libraries(ALaDyn PRIVATE ${NUMA_LIBRARY})
-endif()
-
-if(CMAKE_CXX_COMPILER_ID STREQUAL "Intel" AND NOT FORCE_FFTW)
-    find_package(MKL REQUIRED)
-    set(MKL_FFTW_INCLUDE_DIR "${MKL_INCLUDE_DIR}/fftw/")
-    target_include_directories(ALaDyn PRIVATE ${MKL_INCLUDE_DIR}
-                                              ${MKL_FFTW_INCLUDE_DIR})
-    target_link_libraries(ALaDyn PRIVATE ${MKL_LIBRARIES})
+get_filename_component(Fortran_COMPILER_NAME ${CMAKE_Fortran_COMPILER} NAME)
+if(CMAKE_Fortran_COMPILER_ID MATCHES "PGI")
+  message(STATUS "ALaDyn: Using PGI Compiler")
+  set(USING_PGI_COMPILER TRUE)
+  add_definitions(-DUSING_PGI_COMPILER)
+  string(REGEX REPLACE "-fPIE" "" CMAKE_Fortran_FLAGS_RELEASE ${CMAKE_Fortran_FLAGS_RELEASE})
+  string(REGEX REPLACE "-fPIE" "" CMAKE_Fortran_FLAGS_DEBUG ${CMAKE_Fortran_FLAGS_DEBUG})
+  string(REGEX REPLACE "-fPIE" "" CMAKE_Fortran_FLAGS ${CMAKE_Fortran_FLAGS})
+  string(APPEND CMAKE_Fortran_FLAGS_RELEASE " -r8 ")
+  string(APPEND CMAKE_Fortran_FLAGS_DEBUG   " -r8 -g ")
+elseif(CMAKE_Fortran_COMPILER_ID MATCHES "GNU")
+  message(STATUS "ALaDyn: Using GCC Compiler")
+  set(USING_GNU_COMPILER TRUE)
+  add_definitions(-DUSING_GNU_COMPILER)
+  string(APPEND CMAKE_CXX_COMPILE_FLAGS " -Wall")
+  string(APPEND CMAKE_Fortran_FLAGS_RELEASE " -fdefault-real-8 -funroll-all-loops -O3")
+  string(APPEND CMAKE_Fortran_FLAGS_DEBUG   " -fdefault-real-8 -Wall -Wextra -fbacktrace -fcheck=bounds -O0 -g")
+  string(APPEND CMAKE_Fortran_FLAGS_PROFILING " -fdefault-real-8 -g -O2 -pg -Wall")
+  if(MARCONI_KNL OR CORI_KNL)
+    string(APPEND CMAKE_CXX_COMPILE_FLAGS " -march=knl -mavx512f -mavx512cd -mavx512er -mavx512pf")
+    string(APPEND CMAKE_Fortran_FLAGS_RELEASE " -march=knl -mavx512f -mavx512cd -mavx512er -mavx512pf")
+    string(APPEND CMAKE_Fortran_FLAGS_DEBUG   " -march=knl -mavx512f -mavx512cd -mavx512er -mavx512pf")
+  elseif(CORI_HASWELL)
+    string(APPEND CMAKE_CXX_COMPILE_FLAGS " -march=core-avx2 -mavx2")
+    string(APPEND CMAKE_Fortran_FLAGS_RELEASE " -march=core-avx2 -mavx2")
+    string(APPEND CMAKE_Fortran_FLAGS_DEBUG   " -march=core-avx2 -mavx2")
+  endif()
+  if(CMAKE_Fortran_COMPILER_VERSION VERSION_GREATER_EQUAL 10.0)
+    message(STATUS "Adding argument mismatch tolerance flag and invalid boz, for MPICH compatibility")
+    string(APPEND CMAKE_Fortran_FLAGS_RELEASE   " -fallow-argument-mismatch -fallow-invalid-boz")
+    string(APPEND CMAKE_Fortran_FLAGS_DEBUG     " -fallow-argument-mismatch -fallow-invalid-boz")
+    string(APPEND CMAKE_Fortran_FLAGS_PROFILING " -fallow-argument-mismatch -fallow-invalid-boz")
+  else()
+    message(STATUS "No need to add argument mismatch tolerance flag and invalid boz")
+  endif()
+elseif(CMAKE_Fortran_COMPILER_ID MATCHES "Intel")
+  message(STATUS "ALaDyn: Using Intel Compiler")
+  set(USING_INTEL_COMPILER TRUE)
+  add_definitions(-DUSING_INTEL_COMPILER)
+  string(APPEND CMAKE_CXX_COMPILE_FLAGS " -diag-enable warn")
+  string(APPEND CMAKE_Fortran_FLAGS_RELEASE " -real-size 64")
+  string(APPEND CMAKE_Fortran_FLAGS_DEBUG   " -real-size 64 -diag-enable warn -g")
+  string(APPEND CMAKE_Fortran_FLAGS_PROFILING "-g -qopt-report=5 -qopt-report-file=comp_report_out -qopt-report-per-object -real-size 64")
+  string(APPEND CMAKE_Fortran_FLAGS_REPORTS " -qopt-report=2 -qopt-report-phase=vec,loop -real-size 64")
+  if(MARCONI_KNL OR CORI_KNL)
+    string(APPEND CMAKE_CXX_COMPILE_FLAGS " -xMIC-AVX512")
+    string(APPEND CMAKE_Fortran_FLAGS_RELEASE " -xMIC-AVX512 -O3")
+    string(APPEND CMAKE_Fortran_FLAGS_DEBUG   " -xMIC-AVX512 -check all -fpe0 -warn -traceback -debug extended -Og")
+    string(APPEND CMAKE_Fortran_FLAGS_PROFILING " -xMIC-AVX512 -O2")
+    string(APPEND CMAKE_Fortran_FLAGS_REPORTS " -xMIC-AVX512 -O2")
+    string(APPEND CMAKE_Fortran_LINK_FLAGS " -lstdc++")
+  elseif(CORI_HASWELL)
+    string(APPEND CMAKE_CXX_COMPILE_FLAGS " -xCORE-AVX2")
+    string(APPEND CMAKE_Fortran_FLAGS_RELEASE " -xCORE-AVX2 -O3")
+    string(APPEND CMAKE_Fortran_FLAGS_DEBUG   " -xCORE-AVX2 -check all -fpe0 -warn -traceback -debug all -O0")
+    string(APPEND CMAKE_Fortran_FLAGS_PROFILING " -xCORE-AVX2 -O2")
+    string(APPEND CMAKE_Fortran_FLAGS_REPORTS " -xCORE-AVX2 -O2")
+    string(APPEND CMAKE_Fortran_LINK_FLAGS " -lstdc++")
+  else()
+    string(APPEND CMAKE_CXX_COMPILE_FLAGS " -axcore-avx-i,SSE4.2")
+    string(APPEND CMAKE_Fortran_FLAGS_RELEASE " -axcore-avx-i,SSE4.2 -O3")
+    string(APPEND CMAKE_Fortran_FLAGS_DEBUG   " -check all -fpe0 -warn -traceback -debug extended -Og")
+    string(APPEND CMAKE_Fortran_LINK_FLAGS " -lstdc++")
+  endif()
+  if(FORCE_FFTW)
+    message(STATUS "ALaDyn: Forcing FFTW, avoid MKL even if found")
+  else()
+    message(STATUS "ALaDyn: MKL is preferred to FFTW, if found")
+    string(APPEND CMAKE_Fortran_LINK_FLAGS " -mkl")
+  endif()
 else()
-    find_package(FFTW REQUIRED OPTIONAL_COMPONENTS MPI)
-    target_include_directories(ALaDyn PRIVATE ${FFTW_INCLUDE_DIR})
-    target_link_libraries(ALaDyn PRIVATE ${FFTW_LIBRARY})
-    if(FFTW_MPI_FOUND)
-        target_include_directories(ALaDyn PRIVATE ${FFTW_MPI_INCLUDE_DIR})
-        target_link_libraries(ALaDyn PRIVATE ${FFTW_MPI_LIBRARY})
-    endif()
+  if(MARCONI_KNL OR CORI_HASWELL OR CORI_KNL)
+    error("ALaDyn: Unsupported compiler for KNL")
+  else()
+    message(STATUS "ALaDyn: Compiler ${CMAKE_Fortran_COMPILER} found, unsupported")
+    message(STATUS "ALaDyn: Let's try using it...")
+  endif()
 endif()
 
-# Add the source files
+if(WIN32 AND USING_PGI_COMPILER)
+  find_package(MPI COMPONENTS C)
+  set(FORCE_OLD_MPI ON CACHE BOOL "Forcing old mpif.h linking" FORCE)
+else()
+  find_package(MPI COMPONENTS Fortran)
+endif()
+
+if(FORCE_OLD_MPI)
+  message(STATUS "ALaDyn: MPI libraries are linked against mpif.h")
+  add_definitions(-DFORCE_OLD_MPI)
+endif()
+if(FORCE_STATIC_LINK)
+  string(APPEND CMAKE_Fortran_LINK_FLAGS " -static")
+endif()
+
+if(UNIX AND USING_PGI_COMPILER AND NOT APPLE)
+  find_package(Numa REQUIRED)
+endif()
+
+add_definitions(-DUSE_FILESYSTEM)
+set(CMAKE_CXX_STANDARD 17)
+
+if(USING_INTEL_COMPILER AND NOT FORCE_FFTW)
+  find_package(MKL REQUIRED)
+  set(MKL_FFTW_INCLUDE_DIR "${MKL_INCLUDE_DIR}/fftw/")
+else()
+  find_package(FFTW REQUIRED OPTIONAL_COMPONENTS MPI)
+endif()
+
+file(READ "${CMAKE_CURRENT_SOURCE_DIR}/third_party/json-fortran/json-fortran_source/.VERSION" JSONFORTRAN_VERSION)
+string(STRIP "${JSONFORTRAN_VERSION}" JSONFORTRAN_VERSION)
+string(TOLOWER ${CMAKE_Fortran_COMPILER_ID} COMPILER_ID_LOWER)
+
+message(STATUS "ALaDyn: JSON-Fortran path: ${JFORTRAN_LOCALS_PATH}/jsonfortran-${COMPILER_ID_LOWER}-${JSONFORTRAN_VERSION}")
+if(JSON_FORTRAN_SUPPORT)
+  find_package ( jsonfortran-${CMAKE_Fortran_COMPILER_ID} ${JSONFORTRAN_VERSION} REQUIRED HINTS ${JFORTRAN_LOCALS_PATH}/jsonfortran-${COMPILER_ID_LOWER}-${JSONFORTRAN_VERSION} )
+endif()
+
+string(APPEND CMAKE_CXX_COMPILE_FLAGS " ${MPI_COMPILE_FLAGS}")
+string(APPEND CMAKE_CXX_LINK_FLAGS " ${MPI_LINK_FLAGS}")
+string(APPEND CMAKE_Fortran_COMPILE_FLAGS " ${MPI_COMPILE_FLAGS} ${MPI_Fortran_COMPILE_FLAGS}")
+string(APPEND CMAKE_Fortran_LINK_FLAGS " ${MPI_LINK_FLAGS} ${MPI_Fortran_LINK_FLAGS}")
+
+include_directories(
+  ${OTHER_INCLUDE_DIR}
+  ${MPI_INCLUDE_PATH}
+  ${MPI_Fortran_INCLUDE_PATH}
+  ${FFTW_INCLUDE_DIR}
+  ${MKL_INCLUDE_DIR}
+  ${MKL_FFTW_INCLUDE_DIR}
+)
+
+if(FFTW_MPI_FOUND)
+  include_directories(
+   ${FFTW_MPI_INCLUDE_DIR}
+  )
+endif()
+
+if(MKL_FOUND)
+  add_definitions(-DUSE_MKL)
+endif()
+
+if(jsonfortran-${CMAKE_Fortran_COMPILER_ID}_FOUND)
+  include_directories (
+    ${jsonfortran_INCLUDE_DIRS}
+  )
+  message(STATUS "ALaDyn: JSON-Fortran has been found")
+  add_definitions(-DJSON_FORTRAN)
+endif()
+
+# Add the source files from subdirectories
 add_subdirectory(src)
 
-message(STATUS "ALaDyn: Using ${CMAKE_Fortran_COMPILER_ID} Compiler")
-if(CMAKE_Fortran_COMPILER_ID STREQUAL "PGI")
-    string(REGEX REPLACE "-fPIE" "" CMAKE_Fortran_FLAGS_RELEASE
-                         ${CMAKE_Fortran_FLAGS_RELEASE})
-    string(REGEX REPLACE "-fPIE" "" CMAKE_Fortran_FLAGS_DEBUG
-                         ${CMAKE_Fortran_FLAGS_DEBUG})
-    string(REGEX REPLACE "-fPIE" "" CMAKE_Fortran_FLAGS ${CMAKE_Fortran_FLAGS})
-    string(APPEND CMAKE_Fortran_FLAGS_RELEASE " -r8 ")
-    string(APPEND CMAKE_Fortran_FLAGS_DEBUG " -r8 -g ")
-elseif(CMAKE_Fortran_COMPILER_ID STREQUAL "GNU")
-    string(APPEND CMAKE_Fortran_FLAGS_RELEASE " -fdefault-real-8")
-    string(APPEND CMAKE_Fortran_FLAGS_DEBUG " -fdefault-real-8 -Wall -Wextra")
-    string(APPEND CMAKE_Fortran_FLAGS_PROFILING
-           " -fdefault-real-8 -g -pg -Wall -fcheck='all' ")
-
-    if(CMAKE_Fortran_COMPILER_VERSION VERSION_GREATER_EQUAL 10.0)
-        message(
-            STATUS
-                "Adding argument mismatch tolerance flag and invalid boz, for MPICH compatibility"
-        )
-        string(APPEND CMAKE_Fortran_FLAGS_RELEASE
-               " -fallow-argument-mismatch -fallow-invalid-boz")
-        string(APPEND CMAKE_Fortran_FLAGS_DEBUG
-               " -fallow-argument-mismatch -fallow-invalid-boz")
-        string(APPEND CMAKE_Fortran_FLAGS_PROFILING
-               " -fallow-argument-mismatch -fallow-invalid-boz")
-    else()
-        message(
-            STATUS
-                "No need to add argument mismatch tolerance flag and invalid boz"
-        )
-    endif()
-
-elseif(CMAKE_Fortran_COMPILER_ID STREQUAL "Intel")
-    string(APPEND CMAKE_Fortran_FLAGS_RELEASE " -real-size 64")
-    string(APPEND CMAKE_Fortran_FLAGS_DEBUG " -real-size 64 -diag-enable warn")
-    string(
-        APPEND
-        CMAKE_Fortran_FLAGS_PROFILING
-        "-g -O2 -qopt-report=5 -qopt-report-file=comp_report_out -qopt-report-per-object -real-size 64"
-    )
-    if(FORCE_FFTW)
-        message(STATUS "ALaDyn: Forcing FFTW, avoid MKL even if found")
-    else()
-        message(STATUS "ALaDyn: MKL is preferred to FFTW, if found")
-        string(APPEND CMAKE_Fortran_LINK_FLAGS " -mkl")
-    endif()
-else()
-    message(
-        STATUS "ALaDyn: Compiler ${CMAKE_Fortran_COMPILER} found, unsupported")
-    message(STATUS "ALaDyn: Let's try using it...")
+# Add MKL sources if found
+if(MKL_FOUND)
+  target_sources(ALaDyn PRIVATE src/util/mkl_random_generator.f90 ${MKL_INCLUDE_DIR}/mkl_vsl.f90)
 endif()
 
-# Check CXX compiler
-if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    string(APPEND CMAKE_CXX_COMPILE_FLAGS " -Wall")
-elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
-    string(APPEND CMAKE_CXX_COMPILE_FLAGS " -diag-enable warn")
+if(FFTW_MPI_LIBRARY)
+  target_link_libraries(ALaDyn PRIVATE
+    ${FFTW_MPI_LIBRARY}
+  )
+endif()
+
+if(FFTW_LIBRARY)
+  target_link_libraries(ALaDyn PRIVATE
+    ${FFTW_LIBRARY}
+  )
+endif()
+
+if(MKL_LIBRARIES)
+  target_link_libraries(ALaDyn PRIVATE
+    ${MKL_LIBRARIES}
+  )
+endif()
+
+if(MPI_Fortran_LIBRARIES)
+  target_link_libraries(ALaDyn PRIVATE
+    ${MPI_Fortran_LIBRARIES}
+  )
+endif()
+
+if(MPI_LIBRARIES)
+  target_link_libraries(ALaDyn PRIVATE
+    ${MPI_LIBRARIES}
+  )
+endif()
+
+if(NUMA_LIBRARY)
+  target_link_libraries(ALaDyn PRIVATE
+    ${NUMA_LIBRARY}
+  )
+endif()
+
+if(jsonfortran-${CMAKE_Fortran_COMPILER_ID}_FOUND)
+  target_link_libraries(ALaDyn PRIVATE
+    jsonfortran-${COMPILER_ID_LOWER}::jsonfortran-static
+  )
 endif()
 
 set_target_properties(ALaDyn PROPERTIES LINKER_LANGUAGE Fortran)
+string(TOLOWER ${CMAKE_Fortran_COMPILER_ID} EXE_SUFFIX)
+set_target_properties(ALaDyn PROPERTIES OUTPUT_NAME ALaDyn_${EXE_SUFFIX})
 
 install(TARGETS ALaDyn DESTINATION bin)
 

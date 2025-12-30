@@ -427,3 +427,114 @@
   end subroutine
 
   !===========================
+    !=============================================
+  subroutine collect_bunch_and_plasma_density(this_bunch, isp)
+
+   !========== bunch density and particles of species isp added on jc(ic)
+   !=========================================
+   integer, intent (in) :: this_bunch, isp
+   real (dp) :: dery, derz
+   integer :: np, nb, ik, i, j, k, jj, kk
+
+   do i = 1, 2
+    jc(:, :, :, i) = 0.0
+   end do
+   np = loc_npart(imody, imodz, imodx, isp)
+
+   if (this_bunch==0) then
+    do ik = 1, nsb
+     nb = loc_nbpart(imody, imodz, imodx, ik)
+     if (nb>0) then
+      call set_grid_charge(bunch(ik), ebfb, jc, nb, 1)
+     end if
+    end do
+   else
+    ik = this_bunch !only the selected bunch density
+    nb = loc_nbpart(imody, imodz, imodx, ik)
+    if (nb>0) then
+     call set_grid_charge(bunch(ik), ebfb, jc, nb, 1)
+    end if
+   end if
+   !=========== bunch data on jc(1)
+   !==================== data of isp species on jc(2)
+   if (np>0) then
+    call set_grid_charge(spec(isp), ebfp, jc, np, 2)
+   end if
+   if (prl) then
+    do i = 1, 2
+     call fill_curr_yzxbdsdata(jc, i)
+    end do
+   end if
+   jc(ix1:ix2, jy1:jy2, kz1:kz2, 1) = jc(ix1:ix2, jy1:jy2, kz1:kz2, 1) + &
+     jc(ix1:ix2, jy1:jy2, kz1:kz2, 2)
+   !============ on jc(1) bunch+ particles
+   if (stretch) then
+    kk = kz1 - gcz + 1
+    do k = kz1, kz2
+     derz = loc_zg(kk, 3, imodz)
+     jj = jy1 - gcy + 1
+     do j = jy1, jy2
+      dery = loc_yg(jj, 3, imody)*derz
+      do i = ix1, ix2
+       jc(i, j, k, 1) = dery*jc(i, j, k, 2)
+       jc(i, j, k, 2) = dery*jc(i, j, k, 2)
+      end do
+      jj = jj + 1
+     end do
+     kk = kk + 1
+    end do
+   end if
+   !=============================
+  end subroutine
+
+  subroutine prl_bden_energy_interp(ic)
+
+   integer, intent (in) :: ic
+   real (dp) :: dery, derz
+   integer :: np, ik, i, j, k, jj, kk
+
+   !curr_clean
+   do i = 1, 2
+    jc(:, :, :, i) = 0.0
+   end do
+   if (ic==0) then !collects all bunch density
+    do ik = 1, nsb
+     np = loc_nbpart(imody, imodz, imodx, ik)
+     if (np>0) then
+      call set_grid_den_energy(bunch(ik), ebfb, jc, np)
+     end if
+    end do
+   else
+    ik = ic !only the ic-bunch density
+    np = loc_nbpart(imody, imodz, imodx, ik)
+    if (np>0) then
+     call set_grid_den_energy(bunch(ik), ebfb, jc, np)
+    end if
+   end if
+   !========= den on [i1-1:i2+2,j1-1:nyp+2,k1-1:nzp+2]
+   if (prl) then
+    call fill_curr_yzxbdsdata(jc, 2)
+   end if
+   !do ik=1,2
+   ! call den_zyxbd(jc,i1,i2,j1,nyf,k1,nzf,ik)
+   !end do
+   jc(:, :, :, 1) = -jc(:, :, :, 1) !positive for electrons
+
+   if (stretch) then
+    kk = kz1 - gcz + 1
+    do k = kz1, kz2
+     derz = loc_zg(kk, 3, imodz)
+     jj = jy1 - gcy + 1
+     do j = jy1, jy2
+      dery = loc_yg(jj, 3, imody)*derz
+      do i = ix1, ix2
+       jc(i, j, k, 1) = dery*jc(i, j, k, 1)
+       jc(i, j, k, 2) = dery*jc(i, j, k, 2)
+      end do
+      jj = jj + 1
+     end do
+     kk = kk + 1
+    end do
+   end if
+   !=============================
+  end subroutine

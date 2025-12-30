@@ -19,7 +19,7 @@
 !  along with ALaDyn.  If not, see <http://www.gnu.org/licenses/>.                                    !
 !*****************************************************************************************************!
 
- module read_input
+ module read_namelist
 
   use common_param
   use control_bunch_input
@@ -27,28 +27,11 @@
   use mpi_var
 
   implicit none
-  private
-  public :: read_main_input, write_read_nml
 
   integer :: nml_iounit = 1, nml_ierr = 0
   character(100) :: nml_error_message = ''
 
  contains
-
-  subroutine read_main_input
-   logical exist_nml
-   logical exist_data
-
-   inquire (file=input_namelist_filename, exist=exist_nml)
-   inquire (file=input_data_filename, exist=exist_data)
-
-   if (exist_nml) then
-    call read_input_nml
-   else
-    write (6, *) 'No usable input file (.nml or .data) has been found'
-    stop 5
-   end if
-  end subroutine
 
   subroutine read_input_nml
    !===========================================================
@@ -57,27 +40,27 @@
    !=
    !===========================================================
 
-   namelist /grid/ nx, ny, nz, ny_targ, k0, yx_rat, zx_rat
-   namelist /simulation/ lpf_ord, der_ord, str_flag, iform, model_id, &
-    dmodel_id, ibx, iby, ibz, ibeam, ab_order
-   namelist /target_description/ nsp, nsb, ionz_lev, ionz_model, ion_min, &
-    ion_max, atomic_number, mass_number, t0_pl, ppc, np_per_xc, &
-    np_per_yc, np_per_zc, concentration, lpx, lpy, n0_ref, np1, np2, &
-    r_c, l_disable_rng_seed
-   namelist /laser/ g_prof, nb_laser, t0_lp, xc_lp, tau_fwhm, w0_y, a0, &
-    lam0, lp_delay, lp_offset, t1_lp, tau1_fwhm, w1_y, a1, lam1, &
-    symmetrization_pulse, a_symm_rat, enable_ionization, y0_cent, &
-    z0_cent, y1_cent, z1_cent, incid_angle
-   namelist /beam_inject/ nb_1, xc_1, gam_1, sxb_1, syb_1, epsy_1, &
-    epsz_1, dg_1, charge_1, ap1_twiss, bt1_twiss, t_inject
-   namelist /moving_window/ w_sh, wi_time, wf_time, w_speed
-   namelist /output/ nouts, iene, nvout, nden, npout, nbout, jump, pjump, &
-    gam_min, xp0_out, xp1_out, yp_out, tmax, cfl, new_sim, id_new, &
-    dump, l_force_singlefile_output, time_interval_dumps, &
-    l_print_j_on_grid, l_first_output_on_restart, l_env_modulus
-   namelist /tracking/ tkjump, nkjump, txmin, txmax, tymin, tymax, tzmin, &
-    tzmax, t_in, t_out, p_tracking
-   namelist /mpiparams/ nprocx, nprocy, nprocz
+   namelist /grid/nx, ny, nz, ny_targ, k0, yx_rat, zx_rat
+   namelist /simulation/lpf_ord, der_ord, str_flag, iform, model_id, &
+     dmodel_id, ibx, iby, ibz, ibeam, ab_order, density_limiter, pusher, n_substeps
+   namelist /target_description/nsp, nsb, ionz_lev, ionz_model, ion_min, &
+     ion_max, atomic_number, mass_number, t0_pl, ppc, np_per_xc, &
+     np_per_yc, np_per_zc, concentration, transverse_dist, lpx, lpy, n0_ref, np1, np2, &
+     r_c, l_disable_rng_seed
+   namelist /laser/g_prof, nb_laser, t0_lp, xc_lp, tau_fwhm, w0_y, a0, &
+     lam0, lp_delay, lp_offset, t1_lp, tau1_fwhm, w1_y, a1, lam1, &
+     symmetrization_pulse, a_symm_rat, enable_ionization, y0_cent, &
+     z0_cent, y1_cent, z1_cent, incid_angle, improved_envelope
+   namelist /beam_inject/nb_1, xc_1, gam_1, sxb_1, syb_1, epsy_1, &
+     epsz_1, dg_1, charge_1, ap1_twiss,bt1_twiss,t_inject
+   namelist /moving_window/w_sh, wi_time, wf_time, w_speed
+   namelist /output/nouts, iene, nvout, nden, ncurr, npout, nbout, jump, pjump, &
+     gam_min, xp0_out, xp1_out, yp_out, tmax, cfl, new_sim, id_new, &
+     dump, l_force_singlefile_output, time_interval_dumps, &
+     l_print_j_on_grid, l_first_output_on_restart, l_env_modulus
+   namelist /tracking/every_track, tkjump, nkjump, txmin, txmax, tymin, tymax, tzmin, &
+     tzmax, t_in, t_out, p_tracking, a_on_particles
+   namelist /mpiparams/nprocx, nprocy, nprocz
 
    !--- reading grid parameters ---!
    yx_rat = -1.
@@ -93,6 +76,9 @@
    !--- reading sim parameters ---!
    ab_order = 2  ! Default to AB2 for backward compatibility
    ab_startup = 0  ! Initialize startup counter
+   density_limiter = .false.
+   pusher = 1
+   n_substeps = 1
    open (nml_iounit, file=input_namelist_filename, status='old')
    read (nml_iounit, simulation, iostat=nml_ierr)
    nml_error_message = 'SIMULATION'
@@ -109,6 +95,7 @@
    concentration(:) = zero_dp
    concentration(1) = one_dp
    n0_ref = 1.
+   transverse_dist = 0
    open (nml_iounit, file=input_namelist_filename, status='old')
    read (nml_iounit, target_description, iostat=nml_ierr)
    nml_error_message = 'TARGET_DESCRIPTION'
@@ -121,6 +108,7 @@
    symmetrization_pulse = .false.
    a_symm_rat = 0.
    enable_ionization(:) = .true.
+   improved_envelope = .false.
    y0_cent(:) = zero_dp
    z0_cent(:) = zero_dp
    y1_cent = zero_dp
@@ -172,6 +160,11 @@
    close (nml_iounit)
    if (nml_ierr > 0) call print_at_screen_nml_error
 
+
+   !--- reading tracking parameters ---!
+   p_tracking = .false.
+   a_on_particles = .false.
+   every_track = 1
    open (nml_iounit, file=input_namelist_filename, status='old')
    read (nml_iounit, tracking, iostat=nml_ierr)
    nml_error_message = 'TRACKING'
@@ -197,33 +190,33 @@
    !C write namelist on a file 'input_  .nml'
    !C
    !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-   namelist /grid/ nx, ny, nz, ny_targ, k0, yx_rat, zx_rat
-   namelist /simulation/ lpf_ord, der_ord, str_flag, iform, model_id, &
-    dmodel_id, ibx, iby, ibz, ibeam, ab_order
-   namelist /target_description/ nsp, nsb, ionz_lev, ionz_model, ion_min, &
-    ion_max, atomic_number, mass_number, t0_pl, ppc, np_per_xc, &
-    np_per_yc, np_per_zc, concentration, lpx, lpy, n0_ref, np1, np2, &
-    r_c
-   namelist /laser/ g_prof, nb_laser, t0_lp, xc_lp, tau_fwhm, w0_y, a0, &
-    lam0, lp_delay, lp_offset, t1_lp, tau1_fwhm, w1_y, a1, lam1, &
-    symmetrization_pulse, a_symm_rat, enable_ionization, y0_cent, &
-    z0_cent, y1_cent, z1_cent, incid_angle
-   namelist /moving_window/ w_sh, wi_time, wf_time, w_speed
-   namelist /output/ nouts, iene, nvout, nden, npout, nbout, jump, pjump, &
-    gam_min, xp0_out, xp1_out, yp_out, tmax, cfl, new_sim, id_new, &
-    dump, l_force_singlefile_output, time_interval_dumps, &
-    l_print_j_on_grid, l_first_output_on_restart, l_env_modulus
-   namelist /tracking/ tkjump, nkjump, txmin, txmax, tymin, tymax, tzmin, &
-    tzmax, t_in, t_out, p_tracking
-   namelist /mpiparams/ nprocx, nprocy, nprocz
-   namelist /number_bunches/ n_bunches, l_particles, &
-    l_intdiagnostics_pwfa, l_intdiagnostics_classic, &
-    l_embunchevolution, number_of_slices
-   namelist /bunches/ nb_tot, bunch_type, bunch_shape, rhob, xc_bunch, &
-    yc_bunch, zc_bunch, gam, sxb, syb, epsy, epsz, dg, charge_right, &
-    charge_left, sigma_cut_bunch, ppc_x_bunch, ppc_y_bunch, ppc_z_bunch
-   namelist /twiss/ l_twiss, alpha_twiss, beta_twiss
-   namelist /bpoloidal/ l_bpoloidal, b_ex_poloidal, radius_poloidal
+   namelist /grid/nx, ny, nz, ny_targ, k0, yx_rat, zx_rat
+   namelist /simulation/lpf_ord, der_ord, str_flag, iform, model_id, &
+     dmodel_id, ibx, iby, ibz, ibeam, ab_order, density_limiter, pusher, n_substeps
+   namelist /target_description/nsp, nsb, ionz_lev, ionz_model, ion_min, &
+     ion_max, atomic_number, mass_number, t0_pl, ppc, np_per_xc, &
+     np_per_yc, np_per_zc, concentration, transverse_dist, lpx, lpy, n0_ref, np1, np2, &
+     r_c
+   namelist /laser/g_prof, nb_laser, t0_lp, xc_lp, tau_fwhm, w0_y, a0, &
+     lam0, lp_delay, lp_offset, t1_lp, tau1_fwhm, w1_y, a1, lam1, &
+     symmetrization_pulse, a_symm_rat, enable_ionization, y0_cent, &
+     z0_cent, y1_cent, z1_cent, incid_angle, improved_envelope
+   namelist /moving_window/w_sh, wi_time, wf_time, w_speed
+   namelist /output/nouts, iene, nvout, nden, ncurr, npout, nbout, jump, pjump, &
+     gam_min, xp0_out, xp1_out, yp_out, tmax, cfl, new_sim, id_new, &
+     dump, l_force_singlefile_output, time_interval_dumps, &
+     l_print_j_on_grid, l_first_output_on_restart, l_env_modulus
+   namelist /tracking/every_track, tkjump, nkjump, txmin, txmax, tymin, tymax, tzmin, &
+     tzmax, t_in, t_out, p_tracking, a_on_particles
+   namelist /mpiparams/nprocx, nprocy, nprocz
+   namelist /number_bunches/n_bunches, l_particles, &
+     l_intdiagnostics_pwfa, l_intdiagnostics_classic, &
+     l_embunchevolution, number_of_slices
+   namelist /bunches/nb_tot, bunch_type, bunch_shape, rhob, xc_bunch, &
+     yc_bunch, zc_bunch, gam, sxb, syb, epsy, epsz, dg, charge_right, &
+     charge_left, sigma_cut_bunch, ppc_x_bunch, ppc_y_bunch, ppc_z_bunch
+   namelist /twiss/l_twiss, alpha_twiss, beta_twiss
+   namelist /bpoloidal/l_bpoloidal, b_ex_poloidal, radius_poloidal
 
    write (output_filename, 100) 'input_', id_new, '.nml'
 100 format(a6, i2.2, a4)
@@ -234,7 +227,7 @@
    write (nml_iounit, nml=laser, err=110)
    write (nml_iounit, nml=moving_window, err=110)
    write (nml_iounit, nml=output, err=110)
-   if (p_tracking) write (nml_iounit, nml=tracking, err=110)
+   if (ANY(p_tracking)) write (nml_iounit, nml=tracking, err=110)
    write (nml_iounit, nml=mpiparams, err=110)
    write (nml_iounit, nml=number_bunches, err=110)
    write (nml_iounit, nml=bunches, err=110)

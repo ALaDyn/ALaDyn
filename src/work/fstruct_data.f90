@@ -21,6 +21,7 @@
  module fstruct_data
 
   use precision_def
+  use memory_pool
 
   implicit none
 

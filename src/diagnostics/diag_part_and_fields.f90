@@ -27,140 +27,75 @@
   use phys_param
   use parallel
   use grid_param
-  use control_bunch_input, only: reduced_charge, bunch_charge, epsy, &
-                                 epsz, sxb, syb, gam, dg
+  use control_bunch_input, only: reduced_charge, bunch_charge, epsy,&
+   epsz, sxb, syb, gam, dg
+  use array_alloc, only: v_realloc
 
   implicit none
 
-  real(dp) :: tloc(10000), tsp(1:1001), eavg(10, 1001), &
-              eavg1(10, 1001), pavg(15, 1001, 4), favg(30, 1001)
+  real (dp) :: tloc(10000) = zero_dp, tsp(1:1001) = zero_dp, eavg(10, 1001) = zero_dp, &
+    eavg1(10, 1001) = zero_dp, pavg(15, 1001, 4) = zero_dp, favg(30, 1001) = zero_dp
   integer, parameter :: ne = 100
-  real(dp) :: nde0(ne), nde1(ne), nde2(ne)
-  real(dp) :: nde(ne, 500, 4), eksp_max(500, 4), nde_sm(ne, 500, 4), &
-              nde_sp(ne, 500, 4)
-  integer :: ionz_number(500), hgam_number(500), bunch_number(500, 5)
-  real(dp) :: ionz_bavg(500, 18), bunch_bavg(500, 18, 5), tbunch(1000), &
-              tionz(500), hgam_charge(500), ionz_charge(500), bcharge(500, 5)
-  real(dp) :: hgam_bavg(500, 18), tgam(500)
+  real (dp) :: nde0(ne) = zero_dp, nde1(ne) = zero_dp, nde2(ne) = zero_dp
+  real (dp) :: nde(ne, 500, 4) = zero_dp, eksp_max(500, 4) = zero_dp, nde_sm(ne, 500, 4) = zero_dp, &
+    nde_sp(ne, 500, 4) = zero_dp
+  integer :: ionz_number(500) = 0, hgam_number(500) = 0, bunch_number(500,5) = 0
+  real (dp) :: ionz_bavg(500, 18) = zero_dp, bunch_bavg(500, 18,5) = zero_dp, tbunch(1000) = zero_dp, &
+    tionz(500) = zero_dp, hgam_charge(500) = zero_dp, ionz_charge(500) = zero_dp,bcharge(500,5) = zero_dp
+  real (dp) :: hgam_bavg(500, 18) = zero_dp, tgam(500) = zero_dp
 
+  real (dp), allocatable, dimension(:, :), private :: diag_part_aux
+
+  interface energy_momenta
+   module procedure energy_momenta_new
+   module procedure energy_momenta_old
+  end interface
+
+  interface Envar
+   module procedure Envar_new
+   module procedure Envar_old
+  end interface
  contains
 
-  subroutine track_part_pdata_out(tk)
-
-   character(12), parameter :: tpart_name = 'El_track_out'
-   character(14) :: fname
-   character(23) :: fname_out
-   integer, intent(in) :: tk
-   real(dp), allocatable :: pdata(:)
-   integer :: ik, p, q, ip, ip_max, it, tot_tpart
-   integer :: lenp, ndv
-   integer(offset_kind) :: disp
-   character(4) :: foldername
-   !integer,parameter :: file_version = 4
-
-   write (foldername, '(i4.4)') iout
-
-   ndv = nd2 + 1
-   if (mype > 0) then
-    ip = 0
-   else
-    ip = loc_tpart(1)
-   end if
-   !call intvec_distribute(ip,loc_tpart,npe)
-   !tot_tpart=0
-   !nptot_global_reduced=sum(ip_loc(1:npe))
-   !do ik=1,npe
-   tot_tpart = loc_tpart(1)
-   !end do
-
-   ip_max = ip
-   !if(pe0)ip_max=maxval(loc_tpart(1:npe))
-   lenp = ndv*ip*tk
-   write (fname, '(a12,i2.2)') tpart_name, iout !serve sempre
-   fname_out = foldername//'/'//fname//'.bin'
-   disp = 0
-   if (pe0) then
-    allocate (pdata(lenp))
-    ik = 0
-    do it = 1, tk
-     do p = 1, ip
-      do q = 1, ndv
-       ik = ik + 1
-       pdata(ik) = pdata_tracking(q, p, it)
-      end do
-     end do
-    end do
-    write (6, *) 'tpart size', ik, lenp
-    open (10, file=foldername//'/'//fname//'.dat', form='formatted')
-    write (10, *) ' Real parameters'
-    write (10, *) 'time '
-    write (10, '(e11.4)') tnow
-    write (10, *) 'time step size '
-    write (10, '(e11.4)') dt
-    write (10, *) ' Integer parameters'
-    write (10, *) 'tot_nproc '
-    write (10, '(i6)') npe
-    write (10, *) 'phase dim '
-    write (10, '(i6)') ndv
-    write (10, *) 'space dim '
-    write (10, '(i6)') ndim
-    write (10, *) 'time nstep '
-    write (10, '(i6)') tk
-    write (10, *) 'nstep inc  '
-    write (10, '(i6)') tkjump
-    write (10, *) 'tot tkpart '
-    write (10, '(3i8)') ip, tot_tpart, track_tot_part
-    close (10)
-    write (6, *) 'Particles param written on file: '//foldername// &
-     '/'//fname//'.dat'
-    !======================
-    open (20, file=foldername//'/'//fname//'.bin', form='unformatted')
-    write (20) pdata(1:lenp) !(coordinates,pindex,time)=>(coordinates,time,pind)
-    close (20)
-
-    write (6, *) 'Particles data written on file: '//foldername// &
-     '/'//fname//'.bin'
-   end if
-  end subroutine
   !==============================================
-  subroutine energy_spect(np, ekem, gfield)
-   integer, intent(in) :: np
-   real(dp), intent(in) :: ekem
-   real(dp), intent(in) :: gfield(:, :)
+  subroutine energy_spect(np, ekem)
+   integer, intent (in) :: np
+   real (dp), intent (in) :: ekem
    integer :: p, ix
    real(dp) :: xx, de, wght
    ! activated only for np>0
 
+   call v_realloc(diag_part_aux, np, nd2 + 1)
    de = ekem/real(ne, dp)
    if (ekem < 1.e-06) return
    do p = 1, np
-    xx = gfield(p, 1)/de !0.5*mc^2*(gamma-1) energy in MeV
-    wght = gfield(p, 2) !weight >0 to be multiplied by np_per_cell
+    xx = diag_part_aux(p, 1)/de !0.5*mc^2*(gamma-1) energy in MeV
+    wght = diag_part_aux(p, 2) !weight >0 to be multiplied by np_per_cell
     ix = nint(xx)
     ix = min(ix + 1, ne)
     nde0(ix) = nde0(ix) + wght
    end do
   end subroutine
 
-  subroutine select_energy_spect(np, ekem, xl, xr, gfield)
-   integer, intent(in) :: np
-   real(dp), intent(in) :: ekem, xl, xr
-   real(dp), intent(in) :: gfield(:, :)
+  subroutine select_energy_spect(np, ekem, xl, xr)
+   integer, intent (in) :: np
+   real (dp), intent (in) :: ekem, xl, xr
    integer :: p, ix
    real(dp) :: xx, de, wght
    ! activated only for np>0
 
+   call v_realloc( diag_part_aux, np, nd2 + 1)
    de = ekem/real(ne, dp)
    if (ekem < 1.e-06) return
    do p = 1, np
-    xx = gfield(p, 1)/de !0.5*mc^2*(gamma-1) energy in MeV
-    wght = gfield(p, 2) !weight >0
+    xx = diag_part_aux(p, 1)/de !0.5*mc^2*(gamma-1) energy in MeV
+    wght = diag_part_aux(p, 2) !weight >0
     ix = nint(xx)
-    ix = min(ix + 1, ne)
-    if (gfield(p, 4) < xl) then
+    ix = min(ix+1, ne)
+    if (diag_part_aux(p,4)<xl) then
      nde0(ix) = nde0(ix) + wght
     end if
-    if (gfield(p, 4) > xr) then
+    if (diag_part_aux(p,4)>xr) then
      nde1(ix) = nde1(ix) + wght
     end if
    end do
@@ -169,25 +104,74 @@
 
   !--------------------------
 
-  subroutine energy_momenta(sp_loc, gfield, np, ek, ekmax)
-   type(species), intent(in) :: sp_loc
-   real(dp), intent(inout) :: gfield(:, :)
-   integer, intent(in) :: np
-   real(dp), intent(out) :: ek(:), ekmax
+  subroutine energy_momenta_new(spec_in, np, ek, ekmax)
+   type (species_new), intent (in) :: spec_in
+   integer, intent (in) :: np
+   real (dp), intent (out) :: ek(:), ekmax
+   integer :: ip, ik
+   real (dp) :: xp(3), vp(3), gamm, gam1
+
+   ek = 0.0
+   ekmax = 0.0
+   ! if (curr_ndim<3) then
+   !  do ip = 1, np
+   !   vp(1:2) = sp_loc%part(ip, 3:4)
+   !   gamm = sqrt(1.+vp(1)*vp(1)+vp(2)*vp(2))
+   !   gfield(ip, 1) = pmass*(gamm-1.)
+   !   wgh_cmp = sp_loc%part(ip, 5)
+   !   gfield(ip, 2) = wgh
+   !   gfield(ip, 3) = vp(1)
+   !   gfield(ip, 4) = sp_loc%part(ip, 1)
+   !   gam1 = gamm - 1.
+   !   do ik = 1, curr_ndim
+   !    ek(ik) = ek(ik) + wgh*vp(ik)
+   !   end do
+   !   ek(6) = ek(6) + real(charge*wgh, dp)
+   !   ek(7) = ek(7) + real(wgh*gam1, dp)
+   !   ekmax = max(ekmax, gam1)
+   !  end do
+   ! else
+   !  do ip = 1, np
+   !   xp(1:3) = sp_loc%part(ip, 1:3)
+   !   vp(1:3) = sp_loc%part(ip, 4:6)
+   !   gamm = sqrt(1.+vp(1)*vp(1)+vp(2)*vp(2)+vp(3)*vp(3))
+   !   gfield(ip, 1) = pmass*(gamm-1.)
+   !   wgh_cmp = sp_loc%part(ip, 7)
+   !   gfield(ip, 2) = wgh
+   !   gfield(ip, 3) = vp(1)
+   !   gfield(ip, 4) = sp_loc%part(ip, 1)
+   !   gam1 = gamm - 1.
+   !   do ik = 1, curr_ndim
+   !    ek(ik) = ek(ik) + vp(ik) !momenta
+   !   end do
+   !   ek(4) = ek(4) + wgh*(xp(2)*vp(3)-xp(3)*vp(2))
+   !   ek(6) = ek(6) + real(charge*wgh, dp)
+   !   ek(7) = ek(7) + real(wgh*gam1, dp)
+   !   ekmax = max(ekmax, gam1)
+   !  end do
+   ! end if
+  end subroutine
+  !--------------------------
+
+  subroutine energy_momenta_old(sp_loc, np, ek, ekmax)
+   type (species), intent (in) :: sp_loc
+   integer, intent (in) :: np
+   real (dp), intent (out) :: ek(:), ekmax
    integer :: ip, ik
    real(dp) :: xp(3), vp(3), gamm, gam1
 
+   call v_realloc( diag_part_aux, np, nd2 + 1 )
    ek = 0.0
    ekmax = 0.0
    if (curr_ndim < 3) then
     do ip = 1, np
      vp(1:2) = sp_loc%part(ip, 3:4)
-     gamm = sqrt(1.+vp(1)*vp(1) + vp(2)*vp(2))
-     gfield(ip, 1) = pmass*(gamm - 1.)
+     gamm = sqrt(1.+vp(1)*vp(1)+vp(2)*vp(2))
+     diag_part_aux(ip, 1) = pmass*(gamm-1.)
      wgh_cmp = sp_loc%part(ip, 5)
-     gfield(ip, 2) = wgh
-     gfield(ip, 3) = vp(1)
-     gfield(ip, 4) = sp_loc%part(ip, 1)
+     diag_part_aux(ip, 2) = wgh
+     diag_part_aux(ip, 3) = vp(1)
+     diag_part_aux(ip, 4) = sp_loc%part(ip, 1)
      gam1 = gamm - 1.
      do ik = 1, curr_ndim
       ek(ik) = ek(ik) + wgh*vp(ik)
@@ -200,12 +184,12 @@
     do ip = 1, np
      xp(1:3) = sp_loc%part(ip, 1:3)
      vp(1:3) = sp_loc%part(ip, 4:6)
-     gamm = sqrt(1.+vp(1)*vp(1) + vp(2)*vp(2) + vp(3)*vp(3))
-     gfield(ip, 1) = pmass*(gamm - 1.)
+     gamm = sqrt(1.+vp(1)*vp(1)+vp(2)*vp(2)+vp(3)*vp(3))
+     diag_part_aux(ip, 1) = pmass*(gamm-1.)
      wgh_cmp = sp_loc%part(ip, 7)
-     gfield(ip, 2) = wgh
-     gfield(ip, 3) = vp(1)
-     gfield(ip, 4) = sp_loc%part(ip, 1)
+     diag_part_aux(ip, 2) = wgh
+     diag_part_aux(ip, 3) = vp(1)
+     diag_part_aux(ip, 4) = sp_loc%part(ip, 1)
      gam1 = gamm - 1.
      do ik = 1, curr_ndim
       ek(ik) = ek(ik) + vp(ik) !momenta
@@ -350,12 +334,12 @@
    ekt(1:2) = 0.0
    do iz = k1, nzp
     zz = 0.0
-    if (k1 > 2) then
-     k = iz - 2
+    if (k1>2) then
+     k = iz - gcz + 1
      zz = loc_zg(k, 2, imodz)
     end if
     do iy = j1, nyp
-     j = iy - 2
+     j = iy - gcy + 1
      yy = loc_yg(j, 2, imody)
      rr = sqrt(zz*zz + yy*yy)
      do ix = i01, i02
@@ -416,12 +400,12 @@
     ekt(1:2) = 0.0
     do iz = k1, nzp
      zz = 0.0
-     if (k1 > 2) then
-      k = iz - 2
+     if (k1>2) then
+      k = iz - gcz + 1
       zz = loc_zg(k, 2, imodz)
      end if
      do iy = j1, nyp
-      j = iy - 2
+      j = iy - gcy + 1
       yy = loc_yg(j, 2, imody)
       rr = sqrt(zz*zz + yy*yy)
       do ix = i01, i02
@@ -481,21 +465,259 @@
    eavg(1:nfield, nst) = field_energy*ekm(1:nfield)
    !=======================
   end subroutine
+  
+  !=======================
+  subroutine Envar_new(nst, spec_in)
 
-  subroutine Envar(nst)
-
-   integer, intent(in) :: nst
-
+   integer, intent (in) :: nst
+   type (species_new), dimension(:), intent (in) :: spec_in
    integer :: np, ik, ix, iy, iz, ic, i1, i2, ndv
    integer :: j1, k1, ii, jj, kk, j, k, l
-   real(dp) :: ek_max(1), ekt(7), ekm(7), ekmax(1)
-   real(dp) :: dvol, dgvol, sgz, sg, ef2
-   real(dp) :: np_norm, p_energy_norm
-   real(dp), parameter :: mev_to_joule = 1.602e-13
-   real(dp), parameter :: field_energy = 1.156e-06
-   integer, parameter :: zg_ind(6) = [3, 3, 4, 4, 4, 3]
-   integer, parameter :: yg_ind(6) = [3, 4, 3, 4, 3, 4]
-   integer, parameter :: xg_ind(6) = [4, 3, 3, 3, 4, 4]
+   real (dp) :: ek_max(1), ekt(7), ekm(7), ekmax(1)
+   real (dp) :: dvol, dgvol, sgz, sg, ef2
+   real (dp) :: np_norm, p_energy_norm
+   real (dp), parameter :: mev_to_joule = 1.602e-13
+   real (dp), parameter :: field_energy = 1.156e-06
+   integer, parameter :: zg_ind(6) = [ 3, 3, 4, 4, 4, 3 ]
+   integer, parameter :: yg_ind(6) = [ 3, 4, 3, 4, 3, 4 ]
+   integer, parameter :: xg_ind(6) = [ 4, 3, 3, 3, 4, 4 ]
+   !================================================
+   ! field_energy transforms the energy density u=E^2/2 in adimensional
+   ! form to energy density in Joule/mu^3
+   ! field_energy =epsilon_0*(E_0^2)/2 in SI or
+   !              =(E_0^2)/8pi         in cgs (Gaussian) units
+   !==================================================
+
+   ! dgvol = dx*dy*dz
+   ! if (ndim==2) dgvol = dx*dy*dy
+   ! ndv = nd2 + 1
+   ! j1 = jy1
+   ! k1 = kz1
+   ! i1 = ix1
+   ! i2 = nxp
+
+   ! tloc(nst) = tnow
+   ! tsp(nst) = tnow
+   ! if (nst==1) then
+   !  pavg = 0.0
+   !  favg = 0.0
+   !  eavg = 0.0
+   !  nde_sp = 0.0
+   !  nde_sm = 0.0
+   !  nde = 0.0
+   ! end if
+   ! ekt(1) = real(nx*ny*nz, dp)
+   ! dvol = 1./ekt(1)
+
+   ! if (part) then
+   !  p_energy_norm = np_per_cell*mev_to_joule
+   !  do ic = 1, nsp
+   !   ekm = 0.0
+   !   ekt = 0.0
+   !   ekmax = 0.0
+   !   ek_max = 0.0
+   !   np = loc_npart(imody, imodz, imodx, ic)
+   !   ekt(1) = real(np, dp)
+   !   call allreduce_dpreal(sumv, ekt, ekm, 1)
+   !   np_norm = 1.
+   !   if (ekm(1)>0.0) np_norm = 1.0/ekm(1)
+   !   pmass = electron_mass*mass(ic) !In MeV
+   !   ekt(1) = 0.0
+   !   ekm(1) = 0.0
+   !   if (np>0) then
+   !    call energy_momenta(spec(ic), ebfp, np, ekt, ekmax(1))
+   !    !  WARNING: total variables multipied by a weight = 1/nmacro_per cell
+   !    !  Momenta ekt(1:3) are averaged by the macroparticle total number
+   !    !==================================
+   !    ekt(4) = pmass*ekt(4) !Total angular momentum (Mev/c^2)
+   !    ekt(7) = pmass*ekt(7) !the ic-species TOTAL energy (MeV)
+   !    ekmax(1) = pmass*ekmax(1)
+
+   !   end if
+   !   call allreduce_dpreal(maxv, ekmax, ek_max, 1)
+   !   !============= spectra section
+   !   nde0(1:ne) = 0.0
+   !   if (np>0) call energy_spect(np, ek_max(1), ebfp)
+   !   nde1(1:ne) = nde0(1:ne)
+   !   call allreduce_dpreal(sumv, nde0, nde1, ne)
+   !   nde(1:ne, nst, ic) = nde1(1:ne)
+   !   if (solid_target) then
+   !    nde0(1:ne) = 0.0
+   !    nde1(1:ne) = 0.0
+   !    if (np>0) call select_energy_spect(np, ek_max(1), targ_in, &
+   !      targ_end, ebfp)
+   !    nde2(1:ne) = nde0(1:ne)
+   !    call allreduce_dpreal(sumv, nde0, nde2, ne)
+   !    nde_sm(1:ne, nst, ic) = nde2(1:ne)
+   !    nde2(1:ne) = nde1(1:ne)
+   !    call allreduce_dpreal(sumv, nde1, nde2, ne)
+   !    nde_sp(1:ne, nst, ic) = nde2(1:ne)
+   !   end if
+   !   !======================= end spectra section
+   !   call allreduce_dpreal(sumv, ekt, ekm, 7)
+   !   do ik = 1, curr_ndim
+   !    ekm(ik) = ekm(ik)*np_norm !Average Momenta
+   !   end do
+   !   !======================= phase space integrated data for each species
+   !   eksp_max(nst, ic) = ek_max(1)
+   !   pavg(1, nst, ic) = p_energy_norm*ekm(7) !Total energy of ic species (Joule)
+   !   pavg(2, nst, ic) = ek_max(1) ! Max energy (MeV)
+   !   pavg(3, nst, ic) = mev_to_joule*ekm(4) !total angular Momenta
+   !   pavg(4:6, nst, ic) = pmass*ekm(1:3) !averaged linear Momenta (MeV/c)
+   !   pavg(10, nst, ic) = np_norm*ekm(6) !Mean charge
+   !   pavg(11, nst, ic) = dvol*ekm(6) !Charge per cell
+   !   ekt(1:3) = 0.0
+   !   if (np>0) then
+   !    do ik = 1, curr_ndim
+   !     kk = ik + curr_ndim
+   !     do ix = 1, np
+   !      sg = spec(ic)%part(ix, kk) - ekm(ik)
+   !      ekt(ik) = ekt(ik) + sg*sg ! <[p -<p>]^2>, p=gamma*v/c
+   !     end do
+   !    end do
+   !   end if
+   !   call allreduce_dpreal(sumv, ekt, ekm, 3)
+   !   ekm(1:3) = np_norm*ekm(1:3)
+   !   do ik = 1, curr_ndim
+   !    pavg(6+ik, nst, ic) = 1.e+03*pmass*ekm(ik) !
+   !    !sigma^2 of particle momenta (in KeV)
+   !   end do
+   !  end do
+   ! end if
+
+   ! if (ionization) call enb_ionz(nst, tnow, gam_min) !select ioniz.electrons with gamma > gam_min
+
+   ! if (high_gamma) call enb_hgam(nst, tnow, gam_min)
+
+   ! if (inject_beam) then
+   !  bunch_bavg(nst,:,:) = 0.0
+   !  tbunch(nst) = tnow
+   !  do ik=1,nsb
+   !   call enb_bunch(nst,ik)
+   !  end do
+   ! end if
+
+   ! !   END PARTICLE SECTION
+   ! !======================== Field  section
+   ! ekt = 0.0
+   ! ekm = 0.0
+   ! if (stretch) then
+   !  if (ndim==3) then
+   !   do ik = 1, nfield
+   !    k = zg_ind(ik) !staggering of stretched grid cell
+   !    j = yg_ind(ik)
+   !    l = xg_ind(ik)
+   !    do iz = k1, nzp
+   !     kk = iz - gcz + 1
+   !     sgz = 1./loc_zg(kk, k, imodz)
+   !     do iy = j1, nyp
+   !      jj = iy - gcy + 1
+   !      sg = sgz/loc_yg(jj, j, imody)
+   !      do ix = i1, i2
+   !       ii = ix - gcx + 1
+   !       dvol = sg/loc_xg(ii, l, imodx)
+   !       ekt(ik) = ekt(ik) + dvol*ebf(ix, iy, iz, ik)*ebf(ix, iy, iz, ik &
+   !         )
+   !      end do
+   !     end do
+   !    end do
+   !   end do
+   !  else
+   !   do ik = 1, nfield
+   !    j = yg_ind(ik)
+   !    l = xg_ind(ik)
+   !    do iz = k1, nzp
+   !     sgz = 1.
+   !     do iy = j1, nyp
+   !      jj = iy - gcy + 1
+   !      sg = sgz/loc_yg(jj, j, imody)
+   !      do ix = i1, i2
+   !       ii = ix - gcx + 1
+   !       dvol = sg/loc_xg(ii, l, imodx)
+   !       ekt(ik) = ekt(ik) + dvol*ebf(ix, iy, iz, ik)*ebf(ix, iy, iz, ik &
+   !         )
+   !      end do
+   !     end do
+   !    end do
+   !   end do
+   !  end if
+   ! else
+   !  do ik = 1, nfield
+   !   do iz = k1, nzp
+   !    do iy = j1, nyp
+   !     do ix = i1, i2
+   !      ekt(ik) = ekt(ik) + ebf(ix, iy, iz, ik)*ebf(ix, iy, iz, ik)
+   !     end do
+   !    end do
+   !   end do
+   !  end do
+   ! end if
+   ! ekt(1:nfield) = dgvol*ekt(1:nfield)
+   ! call allreduce_dpreal(sumv, ekt, ekm, nfield)
+   ! favg(1:3, nst) = field_energy*ekm(1:3) !field itotal energy (in Joule)
+   ! favg(7:9, nst) = field_energy*ekm(4:6)
+
+   ! ekt = 0.0
+   ! do iz = k1, nzp
+   !  do iy = j1, nyp
+   !   do ix = i1, i2
+   !    ef2 = dot_product(ebf(ix,iy,iz,1:curr_ndim), &
+   !      ebf(ix,iy,iz,1:curr_ndim))
+   !    ekt(7) = max(ekt(7), ef2)
+   !   end do
+   !  end do
+   ! end do
+   ! do ik = 1, nfield
+   !  if (ekm(ik)>0.0) ekt(ik) = maxval(abs(ebf(i1:i2,j1:nyp,k1:nzp,ik)))
+   !  if (ekt(ik)>giant_field) then
+   !   write (6, *) ' WARNING: Ebf field too big at component=', ik
+   !   write (6, *) 'max fields', mype, ekt(ik)
+   !   do iz = k1, nzp
+   !    do iy = j1, nyp
+   !     do ix = i1, i2
+   !      if (abs(ebf(ix,iy,iz,ik)-ekt(ik))<epsilon) then
+   !       ii = ix
+   !       jj = iy
+   !       kk = iz
+   !      end if
+   !     end do
+   !    end do
+   !   end do
+   !   write (6, '(a23,3i4)') ' At the mpi_task=', imodx, imody, imodz
+   !   write (6, '(a19,3i6)') ' At the local grid=', ii, jj, kk
+   !  end if
+   ! end do
+   ! ekm = 0.0 ! Max values
+   ! call allreduce_dpreal(maxv, ekt, ekm, 7)
+   ! favg(4:6, nst) = e0*ekm(1:3) !Max fields in TV/m
+   ! favg(10:12, nst) = e0*ekm(4:6)
+   ! !=====================================
+   ! if (wake) then
+   !  if (envelope) then
+   !   call envelope_struct_data(nst)
+   !   !else
+   !   ! call laser_struct_data(nst)
+   !  end if
+   ! end if
+   ! if (solid_target) call fields_on_target(nst)
+
+  end subroutine
+  !=======================
+  subroutine Envar_old(nst, spec_in)
+
+   integer, intent (in) :: nst
+   type (species), dimension(:), intent (in) :: spec_in
+   integer :: np, ik, ix, iy, iz, ic, i1, i2, ndv
+   integer :: j1, k1, ii, jj, kk, j, k, l
+   integer, allocatable, dimension(:) :: np_all
+   real (dp) :: ek_max(1), ekt(7), ekm(7), ekmax(1)
+   real (dp) :: dvol, dgvol, sgz, sg, ef2
+   real (dp) :: np_norm, p_energy_norm
+   real (dp), parameter :: mev_to_joule = 1.602e-13
+   real (dp), parameter :: field_energy = 1.156e-06
+   integer, parameter :: zg_ind(6) = [ 3, 3, 4, 4, 4, 3 ]
+   integer, parameter :: yg_ind(6) = [ 3, 4, 3, 4, 3, 4 ]
+   integer, parameter :: xg_ind(6) = [ 4, 3, 3, 3, 4, 4 ]
    !================================================
    ! field_energy transforms the energy density u=E^2/2 in adimensional
    ! form to energy density in Joule/mu^3
@@ -510,7 +732,7 @@
    k1 = kz1
    i1 = ix1
    i2 = nxp
-
+   
    tloc(nst) = tnow
    tsp(nst) = tnow
    if (nst == 1) then
@@ -523,8 +745,11 @@
    end if
    ekt(1) = real(nx*ny*nz, dp)
    dvol = 1./ekt(1)
-
+   
    if (part) then
+    allocate( np_all(nsp) )
+    np_all = loc_npart(imody, imodz, imodx, 1:nsp)
+    call v_realloc( diag_part_aux, maxval(np_all), nd2 + 1)
     p_energy_norm = np_per_cell*mev_to_joule
     do ic = 1, nsp
      ekm = 0.0
@@ -539,8 +764,8 @@
      pmass = electron_mass*mass(ic) !In MeV
      ekt(1) = 0.0
      ekm(1) = 0.0
-     if (np > 0) then
-      call energy_momenta(spec(ic), ebfp, np, ekt, ekmax(1))
+     if (np>0) then
+      call energy_momenta(spec_in(ic), np, ekt, ekmax(1))
       !  WARNING: total variables multipied by a weight = 1/nmacro_per cell
       !  Momenta ekt(1:3) are averaged by the macroparticle total number
       !==================================
@@ -552,15 +777,15 @@
      call allreduce_dpreal(maxv, ekmax, ek_max, 1)
      !============= spectra section
      nde0(1:ne) = 0.0
-     if (np > 0) call energy_spect(np, ek_max(1), ebfp)
+     if (np>0) call energy_spect(np, ek_max(1))
      nde1(1:ne) = nde0(1:ne)
      call allreduce_dpreal(sumv, nde0, nde1, ne)
      nde(1:ne, nst, ic) = nde1(1:ne)
      if (solid_target) then
       nde0(1:ne) = 0.0
       nde1(1:ne) = 0.0
-      if (np > 0) call select_energy_spect(np, ek_max(1), targ_in, &
-                                           targ_end, ebfp)
+      if (np>0) call select_energy_spect(np, ek_max(1), targ_in, &
+        targ_end)
       nde2(1:ne) = nde0(1:ne)
       call allreduce_dpreal(sumv, nde0, nde2, ne)
       nde_sm(1:ne, nst, ic) = nde2(1:ne)
@@ -586,7 +811,7 @@
       do ik = 1, curr_ndim
        kk = ik + curr_ndim
        do ix = 1, np
-        sg = spec(ic)%part(ix, kk) - ekm(ik)
+        sg = spec_in(ic)%part(ix, kk) - ekm(ik)
         ekt(ik) = ekt(ik) + sg*sg ! <[p -<p>]^2>, p=gamma*v/c
        end do
       end do
@@ -600,17 +825,17 @@
     end do
    end if
 
-   if (ionization) call enb_ionz(nst, tnow, gam_min) !select ioniz.electrons with gamma > gam_min
+   if (ionization) call enb_ionz(spec_in, nst, tnow, gam_min) !select ioniz.electrons with gamma > gam_min
 
-   if (high_gamma) call enb_hgam(nst, tnow, gam_min)
+   if (high_gamma) call enb_hgam(spec_in, nst, tnow, gam_min)
 
    if (inject_beam) then
     bunch_bavg(nst, :, :) = 0.0
     tbunch(nst) = tnow
-    do ik = 1, nsb
-     call enb_bunch(nst, ik)
+    do ik=1,nsb
+     call enb_bunch(spec_in, nst,ik)
     end do
-   endif
+   end if
 
    !   END PARTICLE SECTION
    !======================== Field  section
@@ -623,13 +848,13 @@
       j = yg_ind(ik)
       l = xg_ind(ik)
       do iz = k1, nzp
-       kk = iz - 2
+       kk = iz - gcz + 1
        sgz = 1./loc_zg(kk, k, imodz)
        do iy = j1, nyp
-        jj = iy - 2
+        jj = iy - gcy + 1
         sg = sgz/loc_yg(jj, j, imody)
         do ix = i1, i2
-         ii = ix - 2
+         ii = ix - gcx + 1
          dvol = sg/loc_xg(ii, l, imodx)
          ekt(ik) = ekt(ik) + dvol*ebf(ix, iy, iz, ik)*ebf(ix, iy, iz, ik &
                                                           )
@@ -644,10 +869,10 @@
       do iz = k1, nzp
        sgz = 1.
        do iy = j1, nyp
-        jj = iy - 2
+        jj = iy - gcy + 1
         sg = sgz/loc_yg(jj, j, imody)
         do ix = i1, i2
-         ii = ix - 2
+         ii = ix - gcx + 1
          dvol = sg/loc_xg(ii, l, imodx)
          ekt(ik) = ekt(ik) + dvol*ebf(ix, iy, iz, ik)*ebf(ix, iy, iz, ik &
                                                           )
@@ -827,36 +1052,38 @@
    !==========================
   end subroutine
 !===========================
-  subroutine enb_bunch(nst, ib)
-   integer, intent(in) :: nst, ib
+  subroutine enb_bunch(spec_in, nst, ib)
+   type(species), dimension(:), intent(in) :: spec_in
+   integer, intent (in) :: nst,ib
 
    integer :: ik, np, p, q
    real(dp) :: np_norm, bcorr(16), ekt(2), ekm(2)
 
    ik = 0
    np = loc_npart(imody, imodz, imodx, 1)
+   call v_realloc( diag_part_aux, np, nd2 + 1)
    ekt = 0.0
    if (np > 0) then
     select case (curr_ndim)
     case (2)
      do p = 1, np
-      wgh_cmp = spec(1)%part(p, 5)
-      if (part_ind == ib) then
+      wgh_cmp = spec_in(1)%part(p, 5)
+      if (part_ind ==ib) then
        ekt(2) = ekt(2) + wgh
        ik = ik + 1
        do q = 1, nd2 + 1
-        ebfp(ik, q) = spec(1)%part(p, q)
+        diag_part_aux(ik, q) = spec_in(1)%part(p, q)
        end do
       end if
      end do
     case (3)
      do p = 1, np
-      wgh_cmp = spec(1)%part(p, 7)
-      if (part_ind == ib) then
+      wgh_cmp = spec_in(1)%part(p, 7)
+      if (part_ind ==ib) then
        ekt(2) = ekt(2) + wgh
        ik = ik + 1
        do q = 1, nd2 + 1
-        ebfp(ik, q) = spec(1)%part(p, q)
+        diag_part_aux(ik, q) = spec_in(1)%part(p, q)
        end do
       end if
      end do
@@ -867,15 +1094,16 @@
    call allreduce_dpreal(sumv, ekt, ekm, 2)
    bunch_number(nst, ib) = nint(ekm(1))
    np_norm = 1.
-   if (ekm(1) > 0.0) np_norm = 1./ekm(1)
-   call bunch_corr(ebfp, ik, np_norm, bcorr)
-   bunch_bavg(nst, 1:16, ib) = bcorr(1:16)
-   bcharge(nst, ib) = e_charge*np_per_cell*ekm(2)
+   if (ekm(1)>0.0) np_norm = 1./ekm(1)
+   call bunch_corr(diag_part_aux, ik, np_norm, bcorr)
+   bunch_bavg(nst, 1:16,ib) = bcorr(1:16)
+   bcharge(nst,ib) = e_charge*np_per_cell*ekm(2)
   end subroutine
 !============================================
-  subroutine enb_ionz(nst, t_loc, gmm)
-   integer, intent(in) :: nst
-   real(dp), intent(in) :: t_loc, gmm
+  subroutine enb_ionz(spec_in, nst, t_loc, gmm)
+   type(species), dimension(:), intent(in) :: spec_in
+   integer, intent (in) :: nst
+   real (dp), intent (in) :: t_loc, gmm
 
    integer :: ik, np, p, q
    real(dp) :: np_norm, bcorr(16), ekt(2), ekm(2)
@@ -885,35 +1113,36 @@
    ik = 0
    ch_ion = real(wgh_ion, sp)
    np = loc_npart(imody, imodz, imodx, 1)
+   call v_realloc( diag_part_aux, np, nd2 + 1 )
    ekt = 0.0
    if (np > 0) then
     select case (curr_ndim)
     case (2)
      do p = 1, np
-      wgh_cmp = spec(1)%part(p, 5)
-      pp(1:2) = spec(1)%part(p, 3:4)
-      gamma = sqrt(1.+pp(1)*pp(1) + pp(2)*pp(2))
+      wgh_cmp = spec_in(1)%part(p, 5)
+      pp(1:2) = spec_in(1)%part(p, 3:4)
+      gamma = sqrt(1.+pp(1)*pp(1)+pp(2)*pp(2))
       if (part_ind < 0) then
        if (gamma > gmm) then
         ekt(2) = ekt(2) + wgh
         ik = ik + 1
         do q = 1, nd2 + 1
-         ebfp(ik, q) = spec(1)%part(p, q)
+         diag_part_aux(ik, q) = spec_in(1)%part(p, q)
         end do
        end if
       end if
      end do
     case (3)
      do p = 1, np
-      wgh_cmp = spec(1)%part(p, 7)
-      pp(1:3) = spec(1)%part(p, 4:6)
-      gamma = sqrt(1.+pp(1)*pp(1) + pp(2)*pp(2) + pp(3)*pp(3))
+      wgh_cmp = spec_in(1)%part(p, 7)
+      pp(1:3) = spec_in(1)%part(p, 4:6)
+      gamma = sqrt(1.+pp(1)*pp(1)+pp(2)*pp(2)+pp(3)*pp(3))
       if (part_ind < 0) then
        if (gamma > gmm) then
         ekt(2) = ekt(2) + wgh
         ik = ik + 1
         do q = 1, nd2 + 1
-         ebfp(ik, q) = spec(1)%part(p, q)
+         diag_part_aux(ik, q) = spec_in(1)%part(p, q)
         end do
        end if
       end if
@@ -927,15 +1156,16 @@
    call allreduce_dpreal(sumv, ekt, ekm, 2)
    ionz_number(nst) = nint(ekm(1))
    np_norm = 1.
-   if (ekm(1) > 0.0) np_norm = 1./ekm(1)
-   call bunch_corr(ebfp, ik, np_norm, bcorr)
+   if (ekm(1)>0.0) np_norm = 1./ekm(1)
+   call bunch_corr(diag_part_aux, ik, np_norm, bcorr)
    ionz_bavg(nst, 1:16) = bcorr(1:16)
    ionz_charge(nst) = e_charge*np_per_cell*ekm(2)
   end subroutine
   !============================
-  subroutine enb_hgam(nst, t_loc, gmm)
-   integer, intent(in) :: nst
-   real(dp), intent(in) :: t_loc, gmm
+  subroutine enb_hgam(spec_in, nst, t_loc, gmm)
+   type(species), dimension(:), intent(in) :: spec_in
+   integer, intent (in) :: nst
+   real (dp), intent (in) :: t_loc, gmm
 
    integer :: ik, np, p, q
    real(dp) :: np_norm, bcorr(16), ekt(2), ekm(2)
@@ -943,32 +1173,33 @@
 
    ik = 0
    np = loc_npart(imody, imodz, imodx, 1)
+   call v_realloc( diag_part_aux, np, nd2 + 1 )
    ekt = 0.0
    if (np > 0) then
     select case (curr_ndim)
     case (2)
      do p = 1, np
-      wgh_cmp = spec(1)%part(p, 5)
-      pp(1:2) = spec(1)%part(p, 3:4)
-      gamma = sqrt(1.+pp(1)*pp(1) + pp(2)*pp(2))
+      wgh_cmp = spec_in(1)%part(p, 5)
+      pp(1:2) = spec_in(1)%part(p, 3:4)
+      gamma = sqrt(1.+pp(1)*pp(1)+pp(2)*pp(2))
       if (gamma > gmm) then
        ekt(2) = ekt(2) + wgh
        ik = ik + 1
        do q = 1, nd2 + 1
-        ebfp(ik, q) = spec(1)%part(p, q)
+        diag_part_aux(ik, q) = spec_in(1)%part(p, q)
        end do
       end if
      end do
     case (3)
      do p = 1, np
-      wgh_cmp = spec(1)%part(p, 7)
-      pp(1:3) = spec(1)%part(p, 4:6)
-      gamma = sqrt(1.+pp(1)*pp(1) + pp(2)*pp(2) + pp(3)*pp(3))
+      wgh_cmp = spec_in(1)%part(p, 7)
+      pp(1:3) = spec_in(1)%part(p, 4:6)
+      gamma = sqrt(1.+pp(1)*pp(1)+pp(2)*pp(2)+pp(3)*pp(3))
       if (gamma > gmm) then
        ekt(2) = ekt(2) + wgh
        ik = ik + 1
        do q = 1, nd2 + 1
-        ebfp(ik, q) = spec(1)%part(p, q)
+        diag_part_aux(ik, q) = spec_in(1)%part(p, q)
        end do
       end if
      end do
@@ -981,8 +1212,8 @@
    call allreduce_dpreal(sumv, ekt, ekm, 2)
    hgam_number(nst) = nint(ekm(1))
    np_norm = 1.
-   if (ekm(1) > 0.0) np_norm = 1./ekm(1)
-   call bunch_corr(ebfp, ik, np_norm, bcorr)
+   if (ekm(1)>0.0) np_norm = 1./ekm(1)
+   call bunch_corr(diag_part_aux, ik, np_norm, bcorr)
    hgam_bavg(nst, 1:16) = bcorr(1:16)
    hgam_charge(nst) = e_charge*np_per_cell*ekm(2)
    !==========================

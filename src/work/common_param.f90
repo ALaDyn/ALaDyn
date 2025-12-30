@@ -26,11 +26,14 @@
 
  module common_param
   use precision_def
+  use sim_params_types
 
   implicit none
 
   integer, parameter :: ref_nlayer = 6, ref_nlas = 8, &
                         ref_nspec = 8
+  ! Parameters type
+  type(parameters_t) :: parameters
   !namelist input parameters
   integer :: nx, ny, nz, ny_targ
   integer :: n1ft, n2ft, n3ft
@@ -40,19 +43,20 @@
   integer :: lpf_ord, der_ord, str_flag, iform, model_id, dmodel_id
   integer :: ab_order  ! Adams-Bashforth order for fluid integration (2, 3, or 4)
   integer :: ab_startup  ! Startup step counter for higher-order AB schemes
+  integer :: pusher, n_substeps
   integer :: nsp, nsb, ionz_lev, ionz_model, ion_min(ref_nlayer), &
-             ion_max(ref_nlayer)
+             ion_max(ref_nlayer), transverse_dist
   integer :: atomic_number(ref_nlayer), n_mol_atoms(ref_nlayer)
   integer :: nb_laser, nb_1, np_per_xc(ref_nlayer), &
              np_per_yc(ref_nlayer)
-  real(dp) :: mass_number(3), t0_pl(4)
-  real(dp) :: lpx(7), lpy(2), n_over_nc, np1, np2, r_c
-  real(dp) :: t0_lp, xc_lp, tau_fwhm, w0_y, a0, lam0, &
-              lp_delay(ref_nlas)
-  real(dp) :: lp_offset, t1_lp, tau1_fwhm, w1_y, a1, lam1, a_symm_rat
-  real(dp) :: xc_1, gam_1, sxb_1, syb_1, epsy_1, epsz_1, dg_1, &
-              charge_1, ap1_twiss, bt1_twiss, t_inject
-  integer :: nouts, iene, nvout, nden, npout, nbout, jump, pjump
+  real (dp) :: mass_number(ref_nlayer), t0_pl(ref_nlayer)
+  real (dp) :: lpx(7), lpy(2), n_over_nc, np1, np2, r_c
+  real (dp) :: t0_lp, xc_lp, tau_fwhm, w0_y, a0, lam0, &
+    lp_delay(ref_nlas)
+  real (dp) :: lp_offset, t1_lp, tau1_fwhm, w1_y, a1, lam1, a_symm_rat
+  real (dp) :: xc_1, gam_1, sxb_1, syb_1, epsy_1, epsz_1, dg_1, &
+               charge_1, ap1_twiss,bt1_twiss, t_inject
+  integer :: nouts, iene, nvout, nden, npout, nbout, jump, pjump, ncurr
   integer :: new_sim, id_new, dump
   real(dp) :: gam_min, xp0_out, xp1_out, yp_out
   !====================
@@ -60,17 +64,27 @@
   real(dp) :: tnow, tmax, tscale, dt_loc, dt, cfl
   logical :: initial_time
   !====================
-  integer :: tkjump, nkjump, track_tot_nstep
-  real(dp) :: txmin, txmax, tymin, tymax, tzmin, tzmax, t_in, t_out
+  ! TRACKING
+  !====================
+  integer :: every_track(ref_nspec), nkjump(ref_nspec), track_tot_nstep
+  real (dp) :: txmin(ref_nspec), txmax(ref_nspec)
+  real (dp) :: tymin(ref_nspec), tymax(ref_nspec)
+  real (dp) :: tzmin(ref_nspec), tzmax(ref_nspec)
+  real (dp) :: t_in(ref_nspec), t_out(ref_nspec)
+  logical ::  p_tracking(ref_nspec), a_on_particles(ref_nspec)
+  !====================
+  ! END TRACKING
+  !====================
   integer :: nprocx, nprocy, nprocz
-  logical :: g_prof, p_tracking, comoving
+  logical :: g_prof, comoving
   logical :: beam, hybrid, wake, envelope, solid_target
   logical :: ionization, ions
   logical :: part, stretch, channel, inject_beam
-  logical :: lp_active, lp_inject, plane_wave, lin_lp, circ_lp, &
-             relativistic, Two_color
+  logical :: lp_active, lp_inject, plane_wave, p_polar, s_polar, &
+    lin_lp, circ_lp, relativistic, Two_color, improved_envelope
   logical :: enable_ionization(2), symmetrization_pulse
   logical :: charge_cons, high_gamma, test
+  logical :: density_limiter, decreasing_transverse
 
   integer :: nx_loc, ny_loc, nz_loc, npty, nptz, nptx_max, ncmp_max, &
              nx_alloc
@@ -113,6 +127,10 @@
 
   real(dp) :: energy_in_targ
   integer(kind=8) :: nptot_global
+  !==================
+  ! PARTICLE PUSHER
+  !==================
+  integer, parameter :: HIGUERA = 1
+  integer, parameter :: BORIS = 2
 
  end module
-

@@ -18,34 +18,31 @@
 !  You should have received a copy of the GNU General Public License                                  !
 !  along with ALaDyn.  If not, see <http://www.gnu.org/licenses/>.                                    !
 !*****************************************************************************************************!
+!--------------------------
+ module pstruct_data
 
- module pic_in
+  use precision_def
 
-  use init_laser_field
-  use init_part_distrib
+  use struct_def
 
   implicit none
 
-  real(dp) :: xf0
-
- contains
-  subroutine init
-   !======================================
-   if (model_id < 3) then
-    call lp_pulse(model_id, xf0) !Linear polarization along y (1)   z(2)
-   else
-    select case (model_id)
-    case (3)
-     call cp_pulse(model_id, xf0) !Circular polarization
-    case (4)
-     call set_envelope(xf0) !Envelope  approximation for laser
-     ! vector potential Ay
-    end select
-   end if
-   call part_distribute(dmodel_id, xf0)
-
-   if (hybrid) call init_fluid_density_momenta(dmodel_id, xf0)
-
-  end subroutine
+  real (dp), allocatable :: ebfb(:, :)
+  real (dp), allocatable :: ebfp0(:, :), ebfp1(:, :)
+  real (dp), allocatable :: pdata_tracking(:, :, :)
+  real (dp), allocatable :: xpt(:, :), ypt(:, :), zpt(:, :), wghpt(:, :)
+  real (dp), allocatable :: loc_ypt(:, :), loc_zpt(:, :), &
+  loc_wghyz(:, :, :)
+  real (dp), allocatable :: loc_xpt(:, :), loc_wghx(:, :)
+  type (species), allocatable, dimension(:) :: bunch
+#if defined(OLD_SPECIES)
+  type (species), allocatable, dimension(:) :: spec
+  real (dp), allocatable :: ebfp(:, :)
+#else
+  type (species_new), allocatable, dimension(:) :: spec
+  type (species_aux), allocatable, dimension(:) :: ebfp
+#endif
+  type (species_aux) :: spec_aux_0, spec_aux_1
+  integer (hp_int), parameter :: ihx = 3
 
  end module

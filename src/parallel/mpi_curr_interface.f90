@@ -549,9 +549,9 @@
   end subroutine
 !=====================================
   subroutine jc_xyzbd(curr, nc)
-   real(dp), intent(inout) :: curr(:, :, :, :)
-   integer, intent(in) :: nc
-   integer :: ix, iy, iz, i0, j2, k2, ik
+   real (dp), intent (inout) :: curr(:, :, :, :)
+   integer, intent (in) :: nc
+   integer :: ix, iy, iz, j2, k2, ik
    integer :: i1, n1, j1, n2, k1, n3
    ! Enter current data on extended ranges:
    !========== Only for Periodic BDs period=n1-1
@@ -563,21 +563,27 @@
    n3 = kz2
    j2 = n2
    k2 = n3
-   if (ibx == 0) then
-    do ik = 1, nc
-     curr(i1, j1:j2, k1:k2, ik) = curr(i1, j1:j2, k1:k2, ik) + &
-                                  curr(i1 - 1, j1:j2, k1:k2, ik)
-     curr(i1 - 1, j1:j2, k1:k2, ik) = 0.0
-
-     curr(n1, j1:j2, k1:k2, ik) = curr(n1, j1:j2, k1:k2, ik) + &
-                                  curr(n1 + 1, j1:j2, k1:k2, ik) + curr(n1 + 2, j1:j2, k1:k2, ik)
-     curr(n1 + 1:n1 + 2, j1:j2, k1:k2, ik) = 0.0
-    end do
-    i0 = 1
+   if (xl_bd) then
+    if (ibx==0) then
+     do ik = 1, nc
+      curr(i1, j1:j2, k1:k2, ik) = curr(i1, j1:j2, k1:k2, ik) + &
+        curr(i1-1, j1:j2, k1:k2, ik) + curr(i1-2, j1:j2, k1:k2, ik)
+      curr(i1-2:i1-1, j1:j2, k1:k2, ik) = 0.0
+     end do
+    end if
    end if
-   if (ndim < 2) return
-   if (pe0y) then
-    if (iby == 0) then
+   if (xr_bd) then
+    if (ibx==0) then
+     do ik = 1, nc
+      curr(n1, j1:j2, k1:k2, ik) = curr(n1, j1:j2, k1:k2, ik) + &
+        curr(n1+1, j1:j2, k1:k2, ik) + curr(n1+2, j1:j2, k1:k2, ik)
+      curr(n1+1:n1+2, j1:j2, k1:k2, ik) = 0.0
+     end do
+    end if
+   end if
+   if (ndim<2) return
+   if (yl_bd) then
+    if (iby==0) then
      do ik = 1, nc
       do iz = k1, k2
        do ix = i1, n1
@@ -600,8 +606,8 @@
      end do
     end if
    end if
-   if (pe1y) then
-    if (iby == 0) then
+   if (yr_bd) then
+    if (iby==0) then
      do ik = 1, nc
       do iz = k1, k2
        do ix = i1, n1
@@ -613,9 +619,9 @@
      end do
     end if
    end if
-   if (ndim < 3) return
-   if (ibz == 0) then
-    if (pe0z) then
+   if (ndim<3) return
+   if (ibz==0) then
+    if (zl_bd) then
      do ik = 1, nc
       do iy = j1, j2
        do ix = i1, n1
@@ -626,8 +632,8 @@
       end do
      end do
     end if
-    if (pe1z) then
-     if (ibz == 0) then
+    if (zr_bd) then
+     if (ibz==0) then
       do ik = 1, nc
        do iy = j1, j2
         do ix = i1, n1

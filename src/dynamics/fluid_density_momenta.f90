@@ -79,7 +79,7 @@
       flx(i + 1, j, k, 1) = flx(i, j, k, 1)
      end do
     end do
-   endif
+   end if
    do k = kz1, kz2
     do j = jy1, jy2
      do i = ix1, ix2
@@ -195,10 +195,11 @@
    real(dp), intent(inout) :: u(:, :, :, :), u0(:, :, :, :)
    real(dp), intent(inout) :: ef(:, :, :, :), flx(:, :, :, :)
    integer :: i, j, k, ic, str, stl, fdim, fldim
-   real(dp) :: den, lzf
-   real(dp) :: ex, ey, ez, bx, by, bz, vx, vy, vz, b1p, b1m
-   real(dp), parameter :: WK1 = 0.5, EPS = 1.e-06
-   real(dp) :: abf_0, abf_1
+   real (dp) :: den, lzf
+   real (dp) :: ex, ey, ez, bx, by, bz, vx, vy, vz, b1p, b1m
+   real (dp), parameter :: WK1 = 0.5, EPS = 1.e-06
+   real (dp), parameter :: abf_0 = -0.5
+   real (dp), parameter :: abf_1 = 1.5
    !===================================
    ! INTEGRATES by a one-step Adam-Bashforth 2nd order
    !===============================
@@ -215,6 +216,7 @@
    fldim = size(flx, 4)
    abf_0 = -0.5
    abf_1 = 1.5
+   !fldim = 2*curr_ndim + 1 !(five or seven components)
    !================== Enter
    ! flx[Px,Py,Pz,den,vx,vy,vz]^n fldim components
    ! ef[1:nfield] = total (E,B) fields and ponderomotive force

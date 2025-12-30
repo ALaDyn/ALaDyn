@@ -255,14 +255,15 @@
   end subroutine
 
   !========================================
-  subroutine ionization_electrons_inject(ion_ch_inc, ic, np, np_el, &
-                                         new_np_el)
+  subroutine ionization_electrons_inject(spec_in, ion_ch_inc, ic, np, np_el, &
+    new_np_el)
 
-   integer, intent(in) :: ion_ch_inc(:)
-   integer, intent(in) :: ic, np, new_np_el
-   integer, intent(inout) :: np_el
-   integer(sp) :: inc, id_ch
-   real(dp) :: u, temp(3)
+   type(species), dimension(:), intent(inout) :: spec_in
+   integer, intent (in) :: ion_ch_inc(:)
+   integer, intent (in) :: ic, np, new_np_el
+   integer, intent (inout) :: np_el
+   integer (sp) :: inc, id_ch
+   real (dp) :: u, temp(3)
 
    integer :: n, i, ii
    !========== Enter sp_field(n,1)= the rms momenta Delta*a (n) for env model
@@ -277,19 +278,19 @@
    case (2)
     do n = 1, np
      inc = ion_ch_inc(n)
-     if (inc > 0) then
-      wgh_cmp = spec(ic)%part(n, id_ch)
+     if (inc>0) then
+      wgh_cmp = spec_in(ic)%part(n, id_ch)
       charge = -one_int_hp
       part_ind = -one_int_hp
       wgh = wgh*n_mol_atoms(ic - 1)
       do i = 1, inc
        ii = ii + 1
-       spec(1)%part(ii, 1:2) = spec(ic)%part(n, 1:2)
+       spec_in(1)%part(ii, 1:2) = spec_in(ic)%part(n, 1:2)
        call gasdev(u)
-       spec(1)%part(ii, 3) = temp(1)*u
+       spec_in(1)%part(ii, 3) = temp(1)*u
        call gasdev(u)
-       spec(1)%part(ii, 4) = temp(2)*u
-       spec(1)%part(ii, id_ch) = wgh_cmp
+       spec_in(1)%part(ii, 4) = temp(2)*u
+       spec_in(1)%part(ii, id_ch) = wgh_cmp
       end do
       np_el = np_el + inc
      end if
@@ -297,21 +298,21 @@
    case (3)
     do n = 1, np
      inc = ion_ch_inc(n)
-     if (inc > 0) then
-      wgh_cmp = spec(ic)%part(n, id_ch)
+     if (inc>0) then
+      wgh_cmp = spec_in(ic)%part(n, id_ch)
       charge = -one_int_hp
       part_ind = -one_int_hp
       wgh = wgh*n_mol_atoms(ic - 1)
       do i = 1, inc
        ii = ii + 1
-       spec(1)%part(ii, 1:3) = spec(ic)%part(n, 1:3)
+       spec_in(1)%part(ii, 1:3) = spec_in(ic)%part(n, 1:3)
        call gasdev(u)
-       spec(1)%part(ii, 4) = temp(1)*u
+       spec_in(1)%part(ii, 4) = temp(1)*u
        call gasdev(u)
-       spec(1)%part(ii, 5) = temp(2)*u
+       spec_in(1)%part(ii, 5) = temp(2)*u
        call gasdev(u)
-       spec(1)%part(ii, 6) = temp(3)*u
-       spec(1)%part(ii, id_ch) = wgh_cmp
+       spec_in(1)%part(ii, 6) = temp(3)*u
+       spec_in(1)%part(ii, id_ch) = wgh_cmp
       end do
       np_el = np_el + inc
      end if
@@ -321,15 +322,16 @@
    !============ Now create new_np_el electrons
   end subroutine
   !=======================================
-  subroutine env_ionization_electrons_inject(sp_field, ion_ch_inc, ic, &
-                                             np, np_el, new_np_el)
+  subroutine env_ionization_electrons_inject(spec_in, sp_field, ion_ch_inc, ic, &
+    np, np_el, new_np_el)
 
-   real(dp), intent(in) :: sp_field(:, :)
-   integer, intent(in) :: ion_ch_inc(:)
-   integer, intent(in) :: ic, np, new_np_el
-   integer, intent(inout) :: np_el
-   integer(sp) :: inc, id_ch
-   real(dp) :: u, temp(3), a_symm
+   type(species), dimension(:), intent(inout) :: spec_in
+   real (dp), intent (in) :: sp_field(:, :)
+   integer, intent (in) :: ion_ch_inc(:)
+   integer, intent (in) :: ic, np, new_np_el
+   integer, intent (inout) :: np_el
+   integer (sp) :: inc, id_ch
+   real (dp) :: u, temp(3), a_symm
    integer :: n, i, ii
    !========== Enter sp_field(n,1)= the rms momenta Delta*a (n) for env model
    !                 inc=ion_ch_inc(n) the number of ionization electrons
@@ -343,19 +345,19 @@
    case (2)
     do n = 1, np
      inc = ion_ch_inc(n)
-     if (inc > 0) then
-      wgh_cmp = spec(ic)%part(n, id_ch)
+     if (inc>0) then
+      wgh_cmp = spec_in(ic)%part(n, id_ch)
       charge = -one_int_hp
       part_ind = -one_int_hp
       wgh = wgh*n_mol_atoms(ic - 1)
       do i = 1, inc
        ii = ii + 1
-       spec(1)%part(ii, 1:2) = spec(ic)%part(n, 1:2)
+       spec_in(1)%part(ii, 1:2) = spec_in(ic)%part(n, 1:2)
        call gasdev(u)
-       spec(1)%part(ii, 3) = temp(1)*u
+       spec_in(1)%part(ii, 3) = temp(1)*u
        call gasdev(u)
-       spec(1)%part(ii, 4) = sp_field(n, 1)*u
-       spec(1)%part(ii, id_ch) = wgh_cmp
+       spec_in(1)%part(ii, 4) = sp_field(n, 1)*u
+       spec_in(1)%part(ii, id_ch) = wgh_cmp
       end do
       np_el = np_el + inc
      end if
@@ -363,21 +365,21 @@
    case (3)
     do n = 1, np
      inc = ion_ch_inc(n)
-     if (inc > 0) then
-      wgh_cmp = spec(ic)%part(n, id_ch)
+     if (inc>0) then
+      wgh_cmp = spec_in(ic)%part(n, id_ch)
       charge = -one_int_hp
       part_ind = -one_int_hp
       wgh = wgh*n_mol_atoms(ic - 1)
       do i = 1, inc
        ii = ii + 1
-       spec(1)%part(ii, 1:3) = spec(ic)%part(n, 1:3)
+       spec_in(1)%part(ii, 1:3) = spec_in(ic)%part(n, 1:3)
        call gasdev(u)
-       spec(1)%part(ii, 4) = temp(1)*u
+       spec_in(1)%part(ii, 4) = temp(1)*u
        call gasdev(u)
-       spec(1)%part(ii, 5) = sp_field(n, 1)*u
+       spec_in(1)%part(ii, 5) = sp_field(n, 1)*u
        a_symm = sp_field(n, 1)*sqrt(2.0)
-       spec(1)%part(ii, 6) = sin(2.0*pig*u)*a_symm
-       spec(1)%part(ii, id_ch) = wgh_cmp
+       spec_in(1)%part(ii, 6) = sin(2.0*pig*u)*a_symm
+       spec_in(1)%part(ii, id_ch) = wgh_cmp
       end do
       np_el = np_el + inc
      end if
@@ -449,12 +451,12 @@
    !================= Exit
   end subroutine
   !====================
-  subroutine ionization_cycle(sp_loc, sp_aux, np, ic, itloc, mom_id, &
-                              def_inv)
-   type(species), intent(inout) :: sp_loc
-   real(dp), intent(inout) :: sp_aux(:, :)
-   integer, intent(in) :: np, ic, itloc, mom_id
-   real(dp), intent(in) :: def_inv
+  subroutine ionization_cycle(spec_in, sp_aux, np, ic, itloc, mom_id, &
+    def_inv)
+   type (species), intent (inout), dimension(:) :: spec_in
+   real (dp), allocatable, intent (inout) :: sp_aux(:, :)
+   integer, intent (in) :: np, ic, itloc, mom_id
+   real (dp), intent (in) :: def_inv
    integer :: id_ch, old_np_el, new_np_el, new_np_alloc, n, nk
    real(dp) :: ef2_ion, ef_ion
 
@@ -464,7 +466,7 @@
    ! In sp_aux(id_ch) enters the |E|^2 env field assigned  to each ion
    ! np is the number of ions
    !==================
-   ! sp_loc(np,1:id_ch) is the array structure of ions coordinates, charge and weight
+   ! spec_in(np,1:id_ch) is the array structure of ions coordinates, charge and weight
    !==========================
    !mom_id=1  select ionization procedure for envelope
    !mom_id=0 for other models
@@ -510,7 +512,7 @@
    !            Ef(n)=nk*DE=nk*dge=nk/def_inv
    ! Grid index nk stored in el_ionz_count(n)
    !====================
-   call part_ionize(sp_loc, efp_aux, np, ic, new_np_el, el_ionz_count)
+   call part_ionize(spec_in(ic), efp_aux, np, ic, new_np_el, el_ionz_count)
    !======= In part_ionize:
    ! The transition probality from ion charge z_0 => z_0 +1 is evaluated using
    ! the probability table W_one_lev(nk,z0,sp_ion)
@@ -526,31 +528,31 @@
     loc_ne_ionz(imody, imodz, imodx) = loc_ne_ionz(imody, imodz, imodx) &
                                        + new_np_el
     !==========
-    if (allocated(spec(1)%part)) then
-     if (size(spec(1)%part, 1) < new_np_alloc) then
+    if (allocated(spec_in(1)%part)) then
+     if (size(spec_in(1)%part, 1)<new_np_alloc) then
       do n = 1, old_np_el
-       ebfp(n, 1:id_ch) = spec(1)%part(n, 1:id_ch)
+       sp_aux(n, 1:id_ch) = spec_in(1)%part(n, 1:id_ch)
       end do
-      deallocate (spec(1)%part)
-      allocate (spec(1)%part(new_np_alloc, id_ch))
+      deallocate (spec_in(1)%part)
+      allocate (spec_in(1)%part(new_np_alloc,id_ch))
       do n = 1, old_np_el
-       spec(1)%part(n, 1:id_ch) = ebfp(n, 1:id_ch)
+       spec_in(1)%part(n, 1:id_ch) = sp_aux(n, 1:id_ch)
       end do
      end if
     else
-     allocate (spec(1)%part(new_np_alloc, id_ch))
+     allocate (spec_in(1)%part(new_np_alloc,id_ch))
      write (6, '(a37,2I6)') &
       'warning, electron array not previously allocated', imody, imodz
     end if
-    call v_realloc(ebfp, new_np_alloc, id_ch)
+    call v_realloc(sp_aux, new_np_alloc, id_ch)
     !=========== and then Inject new electrons================
     select case (mom_id)
     case (0)
-     call ionization_electrons_inject(el_ionz_count, ic, np, old_np_el, &
-                                      new_np_el)
+     call ionization_electrons_inject(spec_in, el_ionz_count, ic, np, old_np_el, &
+       new_np_el)
     case (1)
-     call env_ionization_electrons_inject(efp_aux, el_ionz_count, ic, &
-                                          np, old_np_el, new_np_el)
+     call env_ionization_electrons_inject(spec_in, efp_aux, el_ionz_count, ic, &
+       np, old_np_el, new_np_el)
     end select
    end if
    !Ionization energy to be added to the plasma particles current

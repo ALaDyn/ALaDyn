@@ -22,6 +22,7 @@
  module grid_fields
 
   use grid_field_param
+  use mpi_field_interface
   use parallel
 
   implicit none
@@ -31,6 +32,12 @@
   integer, dimension(2, 3), protected, private :: COEFF_2
   integer, dimension(2, 2), protected, private :: COEFF_1
   integer, dimension(2, 1), protected, private :: COEFF_0
+  real(dp), parameter :: EPS = 1.e-06
+  !! Small parameter for WENO interpolation
+  real(dp), save :: EPS_P
+  !! Small parameter for density flux limiter
+  real(dp), dimension(3), parameter :: LDER = [ 0.5, -2., 1.5 ]
+  real(dp), dimension(3), parameter :: RDER = [ -1.5, 2., -0.5 ]
 
  contains
 
@@ -76,54 +83,57 @@
    end do
   end subroutine
 !=================================
-  subroutine unif_to_str_field_interp(unif_field, str_field, ic)
+  subroutine unif_to_str_field_interp(unif_field,str_field,ic)
 
-   real(dp), intent(in) :: unif_field(:, :, :)
-   real(dp), intent(inout) :: str_field(:, :, :, :)
-   integer, intent(in) :: ic
-   real(dp) :: shy, shz, shy2, shz2
-   integer :: i, ii, j, jj, k, kk
-   integer :: jsize, ksize
+   real (dp), intent (in) :: unif_field(:, :, :)
+   real (dp), intent (inout) :: str_field(:, :, :,:)
+   integer,intent(in) :: ic
+   real (dp) :: shy, shz,shy2,shz2
+   integer :: i, ii, j, jj,k, kk, jindex, kindex
+   integer :: jsize,ksize
    !=======================================
-   jsize = size(unif_field, 2)
-   ksize = size(unif_field, 3)
+   jsize = size(unif_field,2)
+   ksize = size(unif_field,3)
 !=====================
-   select case (ndim)
-   case (2)
+   select case(ndim)
+   case(2)
     k = kz1
     kk = 1
     do j = jy1, jy2
-     jj = yft_ind(j - 2, imody)
-     shy = dy_inv*(loc_yg(j - 2, 1, imody) - loc_yft(jj, imody))
+     jindex = j - gcy + 1
+     jj = yft_ind(jindex, imody)
+     shy = dy_inv*(loc_yg(jindex, 1, imody) - loc_yft(jj, imody))
      shy2 = 0.5*shy*shy
      shy = 0.5*shy
-     do i = ix1, ix2
-      ii = i - 2
+     do i= ix1, ix2
+      ii = i - gcx + 1
       str_field(i, j, k, ic) = unif_field(ii, jj, kk) + &
-                               shy*(unif_field(ii, jj + 1, kk) - unif_field(ii, jj - 1, kk)) + &
-                               shy2*(unif_field(ii, jj + 1, kk) + unif_field(ii, jj - 1, kk) - 2*unif_field(ii, jj, kk))
+      shy*(unif_field(ii, jj + 1, kk) - unif_field(ii, jj - 1, kk)) + &
+      shy2*(unif_field(ii, jj + 1, kk) + unif_field(ii, jj - 1, kk) - 2*unif_field(ii, jj, kk))
+      end do
      end do
-    end do
-   case (3)
+    case(3)
     do k = kz1, kz2
-     kk = zft_ind(k - 2, imodz)
-     shz = dz_inv*(loc_zg(k - 2, 1, imodz) - loc_zft(kk, imodz))
-     shz2 = 0.5*shz*shz
-     shz = 0.5*shz
+     kindex = k - gcz + 1
+     kk = zft_ind(kindex, imodz)
+     shz = dz_inv*(loc_zg(kindex, 1, imodz) - loc_zft(kk, imodz))
+     shz2=0.5*shz*shz
+     shz=0.5*shz
      do j = jy1, jy2
-      jj = yft_ind(j - 2, imody)
-      shy = dy_inv*(loc_yg(j - 2, 1, imody) - loc_yft(jj, imody))
-      shy2 = 0.5*shy*shy
-      shy = 0.5*shy
+      jindex = j - gcy + 1
+      jj = yft_ind(jindex, imody)
+      shy = dy_inv*(loc_yg(jindex, 1, imody) - loc_yft(jj, imody))
+      shy2=0.5*shy*shy
+      shy=0.5*shy
       do i = ix1, ix2
-       ii = i - 2
+       ii = i - gcx + 1
        str_field(i, j, k, ic) = unif_field(ii, jj, kk) + &
-                                shy*(unif_field(ii, jj + 1, kk) - unif_field(ii, jj - 1, kk)) + &
-                                shz*(unif_field(ii, jj, kk + 1) - unif_field(ii, jj, kk - 1))
+        shy*(unif_field(ii, jj + 1, kk) - unif_field(ii, jj - 1, kk)) + &
+        shz*(unif_field(ii, jj, kk + 1) - unif_field(ii, jj, kk - 1))
        str_field(i, j, k, ic) = str_field(i, j, k, ic) + &
-                                shy2*(unif_field(ii, jj + 1, kk) + unif_field(ii, jj - 1, kk) - 2*unif_field(ii, jj, kk))
+        shy2*(unif_field(ii, jj + 1, kk) + unif_field(ii, jj - 1, kk) - 2*unif_field(ii, jj, kk))
        str_field(i, j, k, ic) = str_field(i, j, k, ic) + &
-                                shz2*(unif_field(ii, jj, kk + 1) + unif_field(ii, jj, kk - 1) - 2*unif_field(ii, jj, kk))
+        shz2*(unif_field(ii, jj, kk + 1) + unif_field(ii, jj, kk - 1) - 2*unif_field(ii, jj, kk))
       end do
      end do
     end do
@@ -148,18 +158,21 @@
    if (ndim == 1) return
    if (pe0y) then
     j = jy1
+    !========
+    ! Check index of loc_yg
+    !========
     shy = loc_yg(j - 1, 3, imody)*aphy
     do k = kz1, kz2
      do i = ix1, ix2
-      curr(i, j, k, 1) = curr(i, j, k, 1) + shy*(curr(i, j + 1, k, 2) - curr(i, &
-                                                                             j, k, 2))
+      curr(i, j, k, 1) = curr(i, j, k, 1) + shy*(curr(i, j + 1, k, 2)-curr(i, &
+        j, k, 2))
      end do
     end do
     j01 = jy1 + 1
    end if
    do k = kz1, kz2
     do j = j01, jy2
-     jj = j - 2
+     jj = j - gcy + 1
      shy = loc_yg(jj, 3, imody)*aphy
      do i = ix1, ix2
       curr(i, j, k, 1) = curr(i, j, k, 1) + shy*(curr(i, j, k, 2) - curr(i, j - &
@@ -171,21 +184,22 @@
    if (ndim == 3) then
     if (pe0z) then
      k = kz1
-     shz = loc_zg(k - 1, 3, imodz)*aphz
+     shz = loc_zg(k - gcz + 1, 3, imodz)*aphz
      do j = jy1, jy2
       do i = ix1, ix2
-       curr(i, j, k, 1) = curr(i, j, k, 1) + shz*(curr(i, j, k + 1, 3) - curr(i &
-                                                                              , j, k, 3))
+       curr(i, j, k, 1) = curr(i, j, k, 1) + shz*(curr(i, j, k + 1, 3)-curr(i &
+         , j, k, 3))
       end do
      end do
      k01 = kz1 + 1
     end if
     do k = k01, kz2
-     shz = loc_zg(k - 2, 3, imodz)*aphz
+     jj = k - gcz + 1
+     shz = loc_zg(jj, 3, imodz)*aphz
      do j = jy1, jy2
       do i = ix1, ix2
        curr(i, j, k, 1) = curr(i, j, k, 1) + shz*(curr(i, j, k, 3) - curr(i, j &
-                                                                          , k - 1, 3))
+         , k - 1, 3))
       end do
      end do
     end do
@@ -195,11 +209,11 @@
    do k = kz1, kz2
     do j = jy1, jy2
      do i = ix2, ix1, -1
-      ii = i - 2
-      ww0(ii, 1) = ww0(ii + 1, 1) + dx*curr(i + 1, j, k, 1)
+      ii = i - gcx + 1
+      ww0(ii, 1) = ww0(ii+1, 1) + dx*curr(i+1, j, k, 1)
      end do
      do i = ix1, ix2
-      ii = i - 2
+      ii = i - gcx + 1
       curr(i, j, k, 1) = ww0(ii, 1)
      end do
     end do
@@ -212,8 +226,8 @@
    real(dp), intent(in) :: dth, v_adv
    integer, intent(in) :: ic1, ic2, isch
    integer :: i1, n1p, i, j, k, ii, ic, ind
-   real(dp) :: aphx, aphx_exp, aphx_impl, a, b, c, b1, c1, an, bn
-   real(dp), dimension(3), parameter :: RDER = [-3., 4., -1.]
+   real (dp) :: aphx, aphx_exp, aphx_impl, a, b, c, b1, c1, an, bn
+   !real (dp), dimension (3), parameter :: RDER = [ -3., 4., -1. ]
    !=====================
    ! APPLIES also for prlx=.true. (MPI x decomposition)
    !=============================================
@@ -360,13 +374,13 @@
    do ic = ic1, ic2
     do k = k01, k02
      do j = j01, j02
-      jj = j - 2
+      jj = j - gcy + 1
       shy = dy4_inv(1)*loc_yg(jj, 3, imody)
       sphy = loc_yg(jj, 4, imody)
       smhy = loc_yg(jj - 1, 4, imody)
       do i = i01, i02
-       source(i, j, k, ic) = source(i, j, k, ic) + shy*(sphy*(av(i, j + 1, k, ic) - av(i, j, k, ic)) - &
-                                                        smhy*(av(i, j, k, ic) - av(i, j - 1, k, ic)))
+       source(i, j, k, ic) = source(i, j, k, ic) + shy*(sphy*(av(i, j + 1, &
+         k, ic) - av(i, j, k, ic)) - smhy*(av(i, j, k, ic) - av(i, j - 1, k, ic)))
       end do
      end do
     end do
@@ -375,13 +389,13 @@
     do ic = ic1, ic2
      do k = k01, k02
       do j = j01, j02
-       jj = j - 2
+       jj = j - gcy + 1
        shy = dy4_inv(2)*loc_yg(jj, 3, imody)
        sphy = loc_yg(jj + 1, 3, imody)
        smhy = loc_yg(jj - 1, 3, imody)
        do i = i01, i02
-        source(i, j, k, ic) = source(i, j, k, ic) + shy*(sphy*(av(i, j + 2, k, ic) - av(i, j, k, ic)) - &
-                                                         smhy*(av(i, j, k, ic) - av(i, j - 2, k, ic)))
+        source(i, j, k, ic) = source(i, j, k, ic) + shy*(sphy*(av(i, j + 2, &
+          k, ic) - av(i, j, k, ic)) - smhy*(av(i, j, k, ic) - av(i, j - 2, k, ic)))
        end do
       end do
      end do
@@ -392,14 +406,14 @@
 
    do ic = ic1, ic2
     do k = k01, k02
-     jj = k - 2
+     jj = k - gcz + 1
      shz = dz4_inv(1)*loc_zg(jj, 3, imodz)
      sphz = loc_zg(jj, 4, imodz)
      smhz = loc_zg(jj - 1, 4, imodz)
      do j = j01, j02
       do i = i01, i02
-       source(i, j, k, ic) = source(i, j, k, ic) + shz*(sphz*(av(i, j, k + 1, ic) - av(i, j, k, ic)) - &
-                                                        smhz*(av(i, j, k, ic) - av(i, j, k - 1, ic)))
+       source(i, j, k, ic) = source(i, j, k, ic) + shz*(sphz*(av(i, j, &
+         k + 1, ic) - av(i, j, k, ic)) - smhz*(av(i, j, k, ic) - av(i, j, k - 1, ic)))
       end do
      end do
     end do
@@ -407,14 +421,14 @@
    if (der_ord == 4) then
     do ic = ic1, ic2
      do k = k01, k02
-      jj = k - 2
+      jj = k - gcz + 1
       shz = dz4_inv(2)*loc_zg(jj, 3, imodz)
       sphz = loc_zg(jj + 1, 3, imodz)
       smhz = loc_zg(jj - 1, 3, imodz)
       do j = j01, j02
        do i = i01, i02
-        source(i, j, k, ic) = source(i, j, k, ic) + shz*(sphz*(av(i, j, k + 2, ic) - av(i, j, k, ic)) - &
-                                                         smhz*(av(i, j, k, ic) - av(i, j, k - 2, ic)))
+        source(i, j, k, ic) = source(i, j, k, ic) + shz*(sphz*(av(i, j, &
+          k + 2, ic) - av(i, j, k, ic)) - smhz*(av(i, j, k, ic) - av(i, j, k - 2, ic)))
        end do
       end do
      end do
@@ -422,17 +436,321 @@
    end if
    !======================================
   end subroutine
-  !========================
-  subroutine env_grad(envg)
 
-   real(dp), intent(inout) :: envg(:, :, :, :)
+  !===========================
+  subroutine env_amp_prepare(envf, av, spl_in, spr_in)
+   real (dp), intent (in) :: envf(:, :, :, :)
+   real (dp), intent (out) :: av(:, :, :, :)
+   integer, intent (in) :: spl_in, spr_in
+   integer :: spl, spr
+   !real(dp) :: ar,ai
+   !===================
+   !|A|^2/2 at current t^n time level
+   av(ix1:ix2, jy1:jy2, kz1:kz2, 1) = av(ix1:ix2, jy1:jy2, kz1:kz2, 1) + &
+   0.5 * (envf(ix1:ix2, jy1:jy2, kz1:kz2, 1)*envf(ix1:ix2, jy1:jy2, kz1:kz2, 1)+&
+    envf(ix1:ix2, jy1:jy2, kz1:kz2, 2)*envf(ix1:ix2, jy1:jy2, kz1:kz2, 2))
+   spl = spl_in
+   spr = spr_in
+   if (spl>2) spl = 2
+   if (spr>2) spr = 2
+   !=====================
+  end subroutine
+
+  !===========================
+  subroutine env_fields_average(evf, av, omega_0, spl_in, spr_in)
+   !! Subroutines that computes the vector potential A at half integer
+   !! time step.
+   real (dp), intent (in) :: evf(:, :, :, :)
+   real (dp), intent (out) :: av(:, :, :, :)
+   real (dp), intent(in) :: omega_0
+   integer, intent (in) :: spl_in, spr_in
+   real (dp), parameter :: frac = 0.5
+
+   !========================
+   ! In av(:, :, :, 2:3) the real and imaginary part of A^{n+1/2}
+   av(ix1:ix2, jy1:jy2, kz1:kz2, 2) = &
+    frac*(evf(ix1:ix2, jy1:jy2, kz1:kz2, 1) + evf(ix1:ix2, jy1:jy2, kz1:kz2, 3))
+   av(ix1:ix2, jy1:jy2, kz1:kz2, 3) = &
+    frac*(evf(ix1:ix2, jy1:jy2, kz1:kz2, 2) + evf(ix1:ix2, jy1:jy2, kz1:kz2, 4))
+
+   ! |A|^2/2 at t^{n+1/2}=> gamp^{n+1/2}
+   av(ix1:ix2, jy1:jy2, kz1:kz2, 1) = av(ix1:ix2, jy1:jy2, kz1:kz2, 1) + &
+    frac*( av(ix1:ix2, jy1:jy2, kz1:kz2, 2)*av(ix1:ix2, jy1:jy2, kz1:kz2, 2) + & 
+    av(ix1:ix2, jy1:jy2, kz1:kz2, 3)*av(ix1:ix2, jy1:jy2, kz1:kz2, 3))
+
+   !=====================
+    av(ix1:ix2, jy1:jy2, kz1:kz2, 2:3) = av(ix1:ix2, jy1:jy2, kz1:kz2, 2:3)/omega_0
+   ! Real and imaginary parts are already divided by k0 
+
+   if (prl) call fill_ebfield_yzxbdsdata(av, 2, 3, spr_in, spl_in)
+  end subroutine
+
+  !========================
+  subroutine compute_ponderomotive_term(env_in, av, omega_0, spl_in, spr_in, env1_in, omega_1)
+   !! Subroutine that computes the additional term in the ponderomotive gamma using
+   !! vector potential at time t
+   real (dp), intent (in) :: env_in(:, :, :, :)
+   real (dp), intent (inout) :: av(:, :, :, :)
+   real (dp), intent(in) :: omega_0
+   real (dp), intent (in), optional :: env1_in(:, :, :, :)
+   real (dp), intent(in), optional :: omega_1
+   integer, intent(in) :: spl_in, spr_in
+   integer :: shift, n_envs
+
+   n_envs = 1
+   if ( PRESENT(env1_in) ) then
+    n_envs = 2
+    if ( .not. PRESENT(omega_1) ) then
+     call write_warning(text='Warning, omega_1 not given in compute_ponderomotive')
+    end if
+   end if
+   !===================
+   ! Need to put zero current on boundary cells as a boundary condition
+   if(xl_bd) then
+    shift = gcx - 1
+    av(ix1 - shift:ix1, jy1:jy2, kz1:kz2, 2:3) = zero_dp
+   end if
+   if(xr_bd) then
+    shift = gcx - 1
+    av(ix2:ix2 + shift, jy1:jy2, kz1:kz2, 2:3) = zero_dp
+   end if
+   if(yl_bd) then
+    shift = gcy - 1
+    av(ix1:ix2, jy1 - shift:jy1, kz1:kz2, 2:3) = zero_dp
+   end if
+   if(yr_bd) then
+    shift = gcy - 1
+    av(ix1:ix2, jy2:jy2 + shift, kz1:kz2, 2:3) = zero_dp
+   end if
+   if(zl_bd) then
+    shift = gcz - 1
+    av(ix1:ix2, jy1:jy2, kz1 - shift:kz1, 2:3) = zero_dp
+   end if
+   if(zr_bd) then
+    shift = gcz - 1
+    av(ix1:ix2, jy2:jy2, kz2:kz2 + shift, 2:3) = zero_dp
+   end if
+
+   av(:, :, :, 1) = zero_dp
+
+   ! Enters the envelope field
+   call env_amp_prepare(env_in, av, spl_in, spr_in)
+   ! Computes av(:, :, :, 1) = |A|^2/2 at t^{n+1/2}
+   if (improved_envelope) then
+    call env_divergence_correction(env_in(:, :, :, 1:2)/omega_0, av(:, :, :, 1))
+   end if
+
+   if (n_envs == 2) then
+    ! ================================================================
+    ! When summing more than one envelope field NO OVERLAP is assumed
+    ! Between the pulses, otherwise interference terms are neglected.
+    ! There are no problems if they share the same frequency
+    ! ================================================================
+    ! Enters the envelope field
+    call env_amp_prepare(env1_in, av, spl_in, spr_in)
+    ! Computes av(:, :, :, 1) = |A|^2/2 at t^{n+1/2}
+    if (improved_envelope) then
+     call env_divergence_correction(env1_in(:, :, :, 1:2)/omega_1, av(:, :, :, 1))
+    end if
+   end if
+
+   if (prl) call fill_ebfield_yzxbdsdata(av, 1, 1, spr_in, spl_in)
+  end subroutine
+  !========================
+
+  subroutine compute_ponderomotive_term_midtime(env_in, av, omega_0, spl_in, spr_in, env1_in, omega_1)
+   !! Subroutine that computes the additional term in the ponderomotive gamma using
+   !! vector potential at time t + 1/2
+   real (dp), intent (in) :: env_in(:, :, :, :)
+   real (dp), intent (inout) :: av(:, :, :, :)
+   real (dp), intent(in) :: omega_0
+   real (dp), intent (in), optional :: env1_in(:, :, :, :)
+   real (dp), intent(in), optional :: omega_1
+   integer, intent(in) :: spl_in, spr_in
+   integer :: shift, n_envs
+
+   n_envs = 1
+   if ( PRESENT(env1_in) ) then
+    n_envs = 2
+    if ( .not. PRESENT(omega_1) ) then
+     call write_warning(text='Warning, omega_1 not given in compute_ponderomotive')
+    end if
+   end if
+   !===================
+   ! Need to put zero current on boundary cells as a boundary condition
+   if(xl_bd) then
+    shift = gcx - 1
+    av(ix1 - shift:ix1, jy1:jy2, kz1:kz2, 2:3) = zero_dp
+   end if
+   if(xr_bd) then
+    shift = gcx - 1
+    av(ix2:ix2 + shift, jy1:jy2, kz1:kz2, 2:3) = zero_dp
+   end if
+   if(yl_bd) then
+    shift = gcy - 1
+    av(ix1:ix2, jy1 - shift:jy1, kz1:kz2, 2:3) = zero_dp
+   end if
+   if(yr_bd) then
+    shift = gcy - 1
+    av(ix1:ix2, jy2:jy2 + shift, kz1:kz2, 2:3) = zero_dp
+   end if
+   if(zl_bd) then
+    shift = gcz - 1
+    av(ix1:ix2, jy1:jy2, kz1 - shift:kz1, 2:3) = zero_dp
+   end if
+   if(zr_bd) then
+    shift = gcz - 1
+    av(ix1:ix2, jy2:jy2, kz2:kz2 + shift, 2:3) = zero_dp
+   end if
+
+   av(:, :, :, 1) = zero_dp
+
+   ! Enters the envelope field
+   call env_fields_average(env_in, av, omega_0, spl_in, spr_in)
+   ! Computes av(:, :, :, 1) = |A|^2/2 at t^{n+1/2}
+   ! av(:, :, :, 2:3) the real and imaginary part of A^{n+1/2}
+   if (improved_envelope) then
+    call env_divergence_correction(av(:, :, :, 2:3), av(:, :, :, 1))
+   end if
+
+   if (n_envs == 2) then
+    ! ================================================================
+    ! When summing more than one envelope field NO OVERLAP is assumed
+    ! Between the pulses, otherwise interference terms are neglected.
+    ! There are no problems if they share the same frequency
+    ! ================================================================
+    ! Enters the envelope field
+    call env_fields_average(env1_in, av, omega_1, spl_in, spr_in)
+    ! Computes av(:, :, :, 1) = |A|^2/2 at t^{n+1/2}
+    ! av(:, :, :, 2:3) the real and imaginary part of A^{n+1/2}
+    if (improved_envelope) then
+     call env_divergence_correction(av(:, :, :, 2:3), av(:, :, :, 1))
+    end if
+   end if
+
+   if (prl) call fill_ebfield_yzxbdsdata(av, 1, 1, spr_in, spl_in)
+  end subroutine
+
+  !========================
+  subroutine env_divergence_correction(env_in, av)
+   !! Adds a correction to take into account the O(\eps)
+   !! component to the divergence of A according to the 
+   !! Coulomb gauge div(A) = 0
+   real (dp), intent (in) :: env_in(:, :, :, :)
+   real (dp), intent (inout) :: av(:, :, :)
+   real (dp) :: ay1, ay2, shy, shp, shm
+   real (dp) :: AA, const1, const2
+   integer :: i, j, k, i01, i02, j01, j02, k01, k02, ic, jj
+   real (dp), parameter :: a_hcd = 13./12., b_hcd = -1./24.
+   !========================================
+   ! Receive in input av(:, :, : 1) = |a|^2/2,
+   ! adds to that the term
+   ! |dy a|^2/(2 k0^2) where y is the polarization direction.
+   ! In ALaDyn's units, omega_0 = k0
+   !========================================
+   ! In env_in(:, :, :, 1:2) it receives the real and imaginary part of the envelope
+   ! already divided by k0
+   !========================================
+
+   if (der_ord<4) then
+    ay1 = dy_inv
+    ay2 = 0.
+   else
+    ay1 = dy_inv*a_hcd
+    ay2 = dy_inv*b_hcd
+   end if
+   i01 = ix1
+   i02 = ix2
+   j01 = jy1
+   j02 = jy2
+   k01 = kz1
+   k02 = kz2
+
+   !=========================================================
+   ! Compute the derivative along y (polarization direction)
+   ! and adds it to the av(:, :, :, 1) component
+   !=========================================================
+   select case(der_ord)
+   case(2:3)
+   do k = k01, k02
+    do j = j01, j02
+     jj = j - gcy + 1
+     shy = loc_yg(jj, 3, imody)*0.5*ay1
+     do i = i01, i02
+      do ic = 1, 2
+       AA = shy*(env_in(i, j + 1, k, ic) - env_in(i, j - 1, k, ic))
+       av(i, j, k) = av(i, j, k) + AA*AA*0.5
+      end do
+     end do
+    end do
+   end do
+   case(4)
+   if (der_ord == 4) then
+    do k = k01, k02
+     do j = j01, j02
+      jj = j - gcy + 1
+      shy = loc_yg(jj, 4, imody)*ay1
+      shp = loc_yg(jj + 1, 4, imody)*ay2
+      shm = loc_yg(jj - 1, 4, imody)*ay2
+      const1 = shy - shp
+      const2 = shm - shy
+      do i = i01, i02
+       do ic = 1, 2
+        AA = shp*env_in(i, j + 2, k, ic) + const1*env_in(i, j + 1, k, ic) + const2*env_in(i, j, k, ic) - &
+        shm*env_in(i, j - 1, k, ic)
+        av(i, j, k) = av(i, j, k) + AA*AA*0.5
+       end do
+      end do
+     end do
+    end do
+   end if
+   case default
+    call write_warning(text='Warning, wrong der_ord in env_divergence_correction')
+   end select
+
+  end subroutine
+
+  !========================
+  subroutine envelope_gradient(av, spl_in, spr_in)
+   !! Performes the input field gradient and then
+   !! applies the boundary conditions
+   real (dp), intent (inout) :: av(:, :, :, :)
+   integer, intent (in) :: spl_in, spr_in
+
+   !========================================
+   ! INPUT
+   ! In av(:, :, :, 1) enters the field.
+   ! OUTPUT
+   ! In av(:, :, :, 2:4) computes the gradient of the
+   ! input field along the x, y and z directions.
+   ! Input field is untouched.
+   !========================================
+   ! Field can either be
+   ! 1) |a|^2/2 for the standard envelope approximation
+   ! 2) |a|^2/2 + |dy a|^2/(2 k0^2) for the improved envelope approximation
+   ! When more than one laser pulse is present, previous terms are summed
+   ! over all the fields
+   !========================================
+   call gradient(av)
+   
+   !========================================
+   ! Fills ghost cells with the computed gradient
+   !========================================
+   if (prl) call fill_ebfield_yzxbdsdata(av, 2, curr_ndim + 1, spr_in, &
+     spl_in)
+
+  end subroutine
+
+  !========================
+  subroutine gradient(envg)
+   real (dp), intent (inout) :: envg(:, :, :, :)
    integer :: i, j, k, i01, i02, j01, j02, k01, k02
    real(dp) :: ax1, ax2, ay1, ay2, az1, az2, shz, shy, shp, shm
    real(dp), parameter :: a_hcd = 13./12., b_hcd = -1./24.
    !=== second or fourth order central flux derivatives
    !==========================
    ! Enters envg(1)= |A|^2/2 exit grad|A|^2/2
-
+   ! Boundary conditions have already been applied in env_bds
    if (der_ord < 4) then
     ax1 = dx_inv
     ay1 = dy_inv
@@ -455,143 +773,75 @@
    k01 = kz1
    k02 = kz2
    !================
-   if (xl_bd) then
-    i = ix1
-    do k = kz1, kz2
-     do j = jy1, jy2
-      envg(i, j, k, 2) = dx_inv*(envg(i + 1, j, k, 1) - envg(i, j, k, 1)) !at i+1/2
-     end do
-    end do
-    i01 = ix1 + 1
-   endif
-   if (xr_bd) then
-    do k = kz1, kz2
-     do j = jy1, jy2
-      i = ix2 - 1
-      envg(i, j, k, 2) = dx_inv*(envg(i + 1, j, k, 1) - envg(i, j, k, 1))
-      envg(i + 1, j, k, 2) = dx_inv*(2.*envg(i, j, k, 1) - 3.*envg(i - 1, j, k, 1) + &
-                                     envg(i - 2, j, k, 1))
-     end do
-    end do
-    i02 = ix2 - 2
-   endif
-   do k = kz1, kz2
-    do j = jy1, jy2
-     do i = i01, i02
-      envg(i, j, k, 2) = ax1*(envg(i + 1, j, k, 1) - envg(i, j, k, 1)) !at i+1/2
+   do k = k01, k02
+    do j = j01, j02
+     do i = i01, i02 
+       envg(i, j, k, 2) = ax1*(envg(i + 1, j, k, 1) - envg(i, j, k, 1)) !at i+1/2
      end do
     end do
    end do
    if (der_ord == 4) then
-    do k = kz1, kz2
-     do j = jy1, jy2
+    do k = k01, k02
+     do j = j01, j02
       do i = i01, i02
-       envg(i, j, k, 2) = envg(i, j, k, 2) + ax2*(envg(i + 2, j, k, 1) - envg(i + 1, j, k, 1) + &
-                                                  envg(i, j, k, 1) - envg(i - 1, j, k, 1))
+       envg(i, j, k, 2) = envg(i, j, k, 2) + ax2*(envg(i + 2, j, k, 1) - envg(i &
+         + 1, j, k, 1) + envg(i, j, k, 1) - envg(i - 1, j, k, 1))
       end do
      end do
     end do
    end if
-   if (yr_bd) then
-    do k = kz1, kz2
-     j = jy2
-     shy = loc_yg(j - 2, 4, imody)*dy_inv
-     do i = ix1, ix2
-      envg(i, j, k, 3) = shy*(2.*envg(i, j, k, 1) - 3.*envg(i, j - 1, k, 1) + envg(i &
-                                                                                   , j - 2, k, 1))
-     end do
-     j = jy2 - 1
-     shy = loc_yg(j - 2, 4, imody)*dy_inv
-     do i = ix1, ix2
-      envg(i, j, k, 3) = shy*(envg(i, j + 1, k, 1) - envg(i, j, k, 1))
-     end do
-    end do
-    j02 = jy2 - 2
-   end if
-   !===================
-   if (yl_bd) then
-    j = jy1
-    shy = loc_yg(j - 2, 4, imody)*dy_inv
-    do k = kz1, kz2
-     do i = ix1, ix2
-      envg(i, j, k, 3) = shy*(envg(i, j + 1, k, 1) - envg(i, j, k, 1))
-     end do
-    end do
-    j01 = jy1 + 1
-   end if
-   do k = kz1, kz2
+   do k = k01, k02
     do j = j01, j02
-     shy = loc_yg(j - 2, 4, imody)*ay1
-     do i = ix1, ix2
+     shy = loc_yg(j - gcy + 1, 4, imody)*ay1
+     do i = i01, i02
       envg(i, j, k, 3) = shy*(envg(i, j + 1, k, 1) - envg(i, j, k, 1))
      end do
     end do
    end do
    if (der_ord == 4) then
-    do k = kz1, kz2
+    do k = k01, k02
      do j = j01, j02
-      shp = loc_yg(j - 1, 4, imody)*ay2
-      shm = loc_yg(j - 3, 4, imody)*ay2
-      do i = ix1, ix2
-       envg(i, j, k, 3) = envg(i, j, k, 3) + shp*(envg(i, j + 2, k, 1) - envg(i, j + 1, k, 1)) + &
-                          shm*(envg(i, j, k, 1) - envg(i, j - 1, k, 1))
+      shp = loc_yg(j - gcy + 2, 4, imody)*ay2
+      shm = loc_yg(j - gcy, 4, imody)*ay2
+      do i = i01, i02
+       envg(i, j, k, 3) = envg(i, j, k, 3) + shp*(envg(i, j + 2, k, 1) - envg(i &
+         , j + 1, k, 1)) + shm*(envg(i, j, k, 1) - envg(i, j - 1, k, 1))
       end do
      end do
     end do
    end if
    if (ndim == 2) return
-   if (zr_bd) then
-    k = kz2
-    shz = loc_zg(k - 2, 4, imodz)*dz_inv
-    do j = jy1, jy2
-     do i = ix1, ix2
-      envg(i, j, k + 1, 1) = 2.*envg(i, j, k, 1) - envg(i, j, k - 1, 1)
-      envg(i, j, k, 4) = shz*(envg(i, j, k + 1, 1) - envg(i, j, k, 1))
-     end do
-    end do
-    k02 = kz2 - 1
-   end if
-   if (zl_bd) then
-    k = kz1
-    shz = loc_zg(k - 2, 4, imodz)*dz_inv
-    do j = jy1, jy2
-     do i = ix1, ix2
-      envg(i, j, k - 1, 1) = 2.*envg(i, j, k, 1) - envg(i, j, k + 1, 1)
-      envg(i, j, k, 4) = shz*(envg(i, j, k + 1, 1) - envg(i, j, k, 1))
-     end do
-    end do
-    k01 = kz1 + 1
-   end if
    !==================
    do k = k01, k02
-    shz = loc_zg(k - 2, 4, imodz)*az1
-    do j = jy1, jy2
-     do i = ix1, ix2
+    shz = loc_zg(k - gcz + 1, 4, imodz)*az1
+    do j = j01, j02
+     do i = i01, i02
       envg(i, j, k, 4) = shz*(envg(i, j, k + 1, 1) - envg(i, j, k, 1))
      end do
     end do
    end do
    if (der_ord == 4) then
     do k = k01, k02
-     shp = loc_zg(k - 1, 4, imodz)*az2
-     shm = loc_zg(k - 3, 4, imodz)*az2
-     do j = jy1, jy2
-      do i = ix1, ix2
-       envg(i, j, k, 4) = envg(i, j, k, 4) + shp*(envg(i, j, k + 2, 1) - envg(i, j, k + 1, 1)) + &
-                          shm*(envg(i, j, k, 1) - envg(i, j, k - 1, 1))
+     shp = loc_zg(k - gcz + 2, 4, imodz)*az2
+     shm = loc_zg(k - gcz, 4, imodz)*az2
+     do j = j01, j02
+      do i = i01, i02
+       envg(i, j, k, 4) = envg(i, j, k, 4) + shp*(envg(i, j, k + 2, 1) - envg(i &
+         , j, k + 1, 1)) + shm*(envg(i, j, k, 1) - envg(i, j, k - 1, 1))
       end do
      end do
     end do
    end if
   end subroutine
+
   !====================================
   subroutine env_maxw_solve(curr, evf, om0, dtl)
    real(dp), intent(inout) :: curr(:, :, :, :), evf(:, :, :, :)
    real(dp), intent(in) :: om0, dtl
    integer :: i, j, k, ic
-   real(dp) :: dt2, dx1_inv, dhx1_inv, aph_opt(2)
-   real(dp) :: kfact, k2_fact, skfact
-   real(dp), dimension(0:2), parameter :: LDER = [1.0, -4.0, 3.0]
+   real (dp) :: dt2, dx1_inv, dhx1_inv, aph_opt(2)
+   real (dp) :: kfact, k2_fact, skfact
+   !real (dp), dimension (0:2), parameter :: LDER = [ 1.0, -4.0, 3.0 ]
    !==========================
    ! EXPLICIT INTEGRATION of Maxwell ENVELOPE EVOLUTION EQUATION
    ! See: D.Terzani P. Londrillo " A fast and accurate numerical
@@ -642,16 +892,24 @@
     end do
    end do
 
+   !Also keeping the ghost cells
+   do k = kz1 - gcz + 1, kz2 + gcz - 1
+    do j = jy1 - gcy + 1, jy2 + gcy - 1
+     do i = ix1 - gcx + 1, ix2 + gcx - 1
+      evf(i, j, k, 3) = evf(i, j, k, 1) !A^{n}=> A^{n-1}
+      evf(i, j, k, 4) = evf(i, j, k, 2)
+     end do
+    end do
+   end do
+   
    !====================
    !curr(1)=F_R=dt2*S_R+2*A_R^n-A_R^{n-1}-kfact*A_I^{n-1}
    !curr(2)=F_I=dt2*S_I+2*A_I^n-A_I^{n-1}+kfact*A_R^{n-1}
    do k = kz1, kz2
     do j = jy1, jy2
      do i = ix1, ix2
-      evf(i, j, k, 3) = evf(i, j, k, 1) !A^{n}=> A^{n-1}
-      evf(i, j, k, 4) = evf(i, j, k, 2)
-      evf(i, j, k, 1) = k2_fact*(curr(i, j, k, 1) - kfact*curr(i, j, k, 2))
-      evf(i, j, k, 2) = k2_fact*(curr(i, j, k, 2) + kfact*curr(i, j, k, 1))
+      evf(i, j, k, 1) = k2_fact*(curr(i,j,k,1)-kfact*curr(i,j,k,2))
+      evf(i, j, k, 2) = k2_fact*(curr(i,j,k,2)+kfact*curr(i,j,k,1))
      end do
     end do
    end do
@@ -762,7 +1020,7 @@
        do j = jy1, jy2
         do i = ix1, ix2
          curr(i, j, k, ic) = curr(i, j, k, ic) + evf(i, j, k, ic1) - &
-                             adv*(evf(i + 1, j, k, ic) - evf(i - 1, j, k, ic))
+           adv*(evf(i + 1, j, k, ic) - evf(i - 1, j, k, ic))
         end do
         do i = ix1, ix2
          evf(i, j, k, ic1) = evf(i, j, k, ic)
@@ -786,8 +1044,8 @@
        do j = jy1, jy2
         do i = ix1, ix2
          curr(i, j, k, ic) = curr(i, j, k, ic) + evf(i, j, k, ic1) - &
-                             an*(evf(i + 1, j, k, ic) - evf(i - 1, j, k, ic)) - &
-                             bn*(evf(i + 2, j, k, ic) - evf(i - 2, j, k, ic))
+           an*(evf(i + 1, j, k, ic) - evf(i - 1, j, k, ic)) - &
+           bn*(evf(i + 2, j, k, ic) - evf(i - 2, j, k, ic))
         end do
         do i = ix1, ix2
          evf(i, j, k, ic1) = evf(i, j, k, ic)
@@ -863,7 +1121,7 @@
   !==========================================
   subroutine env_bds(ef, ptrght, ptlft, init_ic, end_ic)
    !! Boundary conditions for the envelope field.
-   !! Empirically set to be continuous with continuous first derivative.
+   !! Empirically set to be zero.
 
    real(dp), intent(inout) :: ef(:, :, :, :)
    integer, intent(in) :: ptlft, ptrght
@@ -872,7 +1130,7 @@
    real(dp) :: shx, shy, shz, smy, smz, alpha
    integer :: i, j, k, iic, i1, i2, j1, j2, k1, k2, point
    integer :: comp1, comp2
-   integer, dimension(1, 2):: COEFF
+   !integer, dimension(:, :), allocatable :: COEFF
    integer :: stenc
 
    COEFF_2(1, :) = [3, -3, 1]
@@ -887,10 +1145,10 @@
 
    if (present(init_ic)) then
     comp1 = init_ic
-   endif
+   end if
    if (present(end_ic)) then
     comp2 = end_ic
-   endif
+   end if
    j1 = jy1
    j2 = jy2
    k1 = kz1
@@ -899,8 +1157,8 @@
    i2 = ix2
 
    shx = dx_inv
-   stenc = 1
-   COEFF = TRANSPOSE(COEFF_0)
+   stenc = 3
+   !COEFF = - TRANSPOSE( COEFF_2 )
 
    if (xl_bd) then
     if (ibx == 0) then
@@ -909,7 +1167,8 @@
        do j = j1, j2
         do point = ptlft, 1, -1
          i = i1 - point
-         ef(i, j, k, iic) = DOT_PRODUCT(COEFF(1:stenc, point), ef(i1:(i1 + stenc - 1), j, k, iic))
+         ef(i, j, k, iic) = zero_dp
+         !ef(i, j, k, iic) = DOT_PRODUCT(COEFF(1:stenc, point), ef(i1:(i1+stenc-1), j, k, iic))
         end do
        end do
       end do
@@ -936,7 +1195,8 @@
        do j = j1, j2
         do point = 1, ptrght
          i = i2 + point
-         ef(i, j, k, iic) = DOT_PRODUCT(COEFF(1:stenc, point), ef(i2:(i2 - stenc + 1), j, k, iic))
+         ef(i, j, k, iic) = zero_dp
+         !ef(i, j, k, iic) = DOT_PRODUCT(COEFF(1:stenc, point), ef(i2:(i2-stenc+1):-1, j, k, iic))
         end do
        end do
       end do
@@ -961,13 +1221,12 @@
    if (yl_bd) then
     if (iby == 0) then
      do j = j1 - ptlft, j1 - 1
-      shy = loc_yg(j1 - 2, 4, imody)
-      smy = loc_yg(j1 - 1, 4, imody)
+      shy = loc_yg(j1 - gcy + 1, 4, imody)
+      smy = loc_yg(j1 - gcy + 2, 4, imody)
       alpha = shy/smy
-      ef(i1:i2, j, k1:k2, comp1:comp2) = alpha*(ef(i1:i2, j1 + 2, k1:k2, comp1:comp2) - &
-                                                ef(i1:i2, j1 + 1, k1:k2, comp1:comp2)) - &
-                                         2*ef(i1:i2, j1 + 1, k1:k2, comp1:comp2) + &
-                                         3*ef(i1:i2, j1, k1:k2, comp1:comp2)
+      ef(i1:i2, j, k1:k2, comp1:comp2) = zero_dp !alpha*(ef(i1:i2, j1+2, k1:k2, comp1:comp2) - &
+      !ef(i1:i2, j1+1, k1:k2, comp1:comp2)) - 2*ef(i1:i2, j1+1, k1:k2, comp1:comp2) + &
+      !3*ef(i1:i2, j1, k1:k2, comp1:comp2)
      end do
     end if
     if (iby == 1) then
@@ -986,14 +1245,13 @@
 
    if (yr_bd) then
     if (iby == 0) then
-     do j = j2 + 1, j2 + ptrght
-      shy = loc_yg(j2 - 1, 4, imody)
-      smy = loc_yg(j2 - 2, 4, imody)
+     do j = j2 +1, j2 + ptrght
+      shy = loc_yg(j2 - gcy + 2, 4, imody)
+      smy = loc_yg(j2 - gcy + 1, 4, imody)
       alpha = shy/smy
-      ef(i1:i2, j, k1:k2, comp1:comp2) = alpha*(ef(i1:i2, j2 - 2, k1:k2, comp1:comp2) - &
-                                                ef(i1:i2, j2 - 1, k1:k2, comp1:comp2)) - &
-                                         2*ef(i1:i2, j2 - 1, k1:k2, comp1:comp2) + &
-                                         3*ef(i1:i2, j2, k1:k2, comp1:comp2)
+      ef(i1:i2, j, k1:k2, comp1:comp2) = zero_dp !alpha*(ef(i1:i2, j2-2, k1:k2, comp1:comp2) - &
+      !ef(i1:i2, j2-1, k1:k2, comp1:comp2)) - 2*ef(i1:i2, j2-1, k1:k2, comp1:comp2) + &
+      !3*ef(i1:i2, j2, k1:k2, comp1:comp2)
      end do
     end if
     if (iby == 1) then
@@ -1015,13 +1273,12 @@
    if (zl_bd) then
     if (ibz == 0) then
      do k = k1 - ptlft, k1 - 1
-      shz = loc_zg(k1 - 2, 4, imodz)
-      smz = loc_zg(k1 - 1, 4, imodz)
+      shz = loc_zg(k1 - gcz + 1, 4, imodz)
+      smz = loc_zg(k1 - gcz + 2, 4, imodz)
       alpha = shz/smz
-      ef(i1:i2, j1:j2, k, comp1:comp2) = alpha*(ef(i1:i2, j1:j2, k1 + 2, comp1:comp2) - &
-                                                ef(i1:i2, j1:j2, k1 + 1, comp1:comp2)) - &
-                                         2*ef(i1:i2, j1:j2, k1 + 1, comp1:comp2) + &
-                                         3*ef(i1:i2, j1:j2, k1, comp1:comp2)
+      ef(i1:i2, j1:j2, k, comp1:comp2) = zero_dp !alpha*(ef(i1:i2, j1:j2, k1+2, comp1:comp2) - &
+      !ef(i1:i2, j1:j2, k1+1, comp1:comp2)) - 2*ef(i1:i2, j1:j2, k1+1, comp1:comp2) + &
+      !3*ef(i1:i2, j1:j2, k1, comp1:comp2)
      end do
     end if
     if (ibz == 1) then
@@ -1041,13 +1298,12 @@
    if (zr_bd) then
     if (ibz == 0) then
      do k = k2 + 1, k2 + ptrght
-      shz = loc_zg(k2 - 1, 4, imodz)
-      smz = loc_zg(k2 - 2, 4, imodz)
+      shz = loc_zg(k2 - gcz + 2, 4, imodz)
+      smz = loc_zg(k2 - gcz + 1, 4, imodz)
       alpha = shz/smz
-      ef(i1:i2, j1:j2, k, comp1:comp2) = alpha*(ef(i1:i2, j1:j2, k2 - 2, comp1:comp2) - &
-                                                ef(i1:i2, j1:j2, k2 - 1, comp1:comp2)) - &
-                                         2*ef(i1:i2, j1:j2, k2 - 1, comp1:comp2) + &
-                                         3*ef(i1:i2, j1:j2, k2, comp1:comp2)
+      ef(i1:i2, j1:j2, k, comp1:comp2) = zero_dp !alpha*(ef(i1:i2, j1:j2, k2-2, comp1:comp2) - &
+      !ef(i1:i2, j1:j2, k2-1, comp1:comp2)) - 2*ef(i1:i2, j1:j2, k2-1, comp1:comp2) + &
+      !3*ef(i1:i2, j1:j2, k2, comp1:comp2)
      end do
     end if
     if (ibz == 1) then
@@ -1091,10 +1347,10 @@
    ! boundaries for E_t=rotB
    !========================
    ! aphx centered as Ey at ii=1
-   ii = 1
+   ii = ix1 - gcx + 1
    if (xl_bd) then
-    if (ibx < 2) then
-     aphx = loc_xg(1, 3, imodx)*dx_inv*dtl
+    if (ibx<2) then
+     aphx = loc_xg(ii, 3, imodx)*dx_inv*dtl
      do k = kz1, kz2
       do j = jy1, jy2
        ef(ix1 - 1, j, k, nfield) = -(2.*ef(ix1, j, k, 2) + (1.-aphx)*ef(ix1, j, k &
@@ -1123,8 +1379,8 @@
    !========================
    !==============================
    ! aphy centered as Ex j=1 (the Bz derivative)
-   ii = 1
-   if (iby < 2) then
+   ii = jy1 - gcy + 1
+   if (iby<2) then
     if (yl_bd) then
      select case (imbd)
      case (0)
@@ -1173,8 +1429,8 @@
    !at z=-Lz minim. reflection (d/dt-d/dz)^{p-1}(By+Ex)=0
    ! first order p=1 By=-Ex at z=-Lz and equal time
    !==============================
-   ii = 1
-   if (ibz < 2) then
+   ii = kz1 - gcz + 1
+   if (ibz<2) then
     if (zl_bd) then
      select case (imbd)
      case (0)
@@ -1227,7 +1483,7 @@
    ! aphx centered as Bz nx+1/2
    if (ibx < 2) then
     if (xr_bd) then
-     ii = ix2 - 2
+     ii = ix2 - gcx + 1
      select case (ibx)
      case (0)
       aphx = loc_xg(ii, 4, imodx)*dx_inv*dtl
@@ -1278,7 +1534,7 @@
     if (yr_bd) then
      select case (imbd)
      case (0)
-      ii = jy2 - 2
+      ii = jy2 - gcy + 1
       aphy = loc_yg(ii, 4, imody)*dy_inv*dtl
       do k = kz1, kz2
        do i = ix1, ix2
@@ -1331,7 +1587,7 @@
     if (zr_bd) then
      select case (imbd)
      case (0)
-      ii = loc_zgrid(imodz)%ng != kz2-2
+      ii = kz2 - gcz + 1
       aphz = loc_zg(ii, 4, imodz)*dz_inv*dtl
       do j = jy1, jy2
        do i = ix1, ix2
@@ -1434,7 +1690,7 @@
    !=================================
    do k = kz1, kz2
     do j = jy1, jy2
-     jj = j - 2
+     jj = j - gcy + 1
      sdhy = loc_yg(jj, 4, imody)*aphy
      do i = ix1, ix2
       ef(i, j, k, nfield) = ef(i, j, k, nfield) - &
@@ -1447,10 +1703,10 @@
    if (nfield < 6) return
    if (ndim == 3) then
     do k = kz1, kz2
-     kk = k - 2
+     kk = k - gcz + 1
      sdhz = loc_zg(kk, 4, imodz)*aphz
      do j = jy1, jy2
-      jj = j - 2
+      jj = j - gcy + 1
       sdhy = loc_yg(jj, 4, imody)*aphy
       do i = ix1, ix2
        ef(i, j, k, 4) = ef(i, j, k, 4) - sdhy*(ef(i, j + 1, k, 3) - ef(i, j, k, 3) &
@@ -1465,7 +1721,7 @@
    else
     k = 1
     do j = jy1, jy2
-     jj = j - 2
+     jj = j - gcy + 1
      sdhy = loc_yg(jj, 4, imody)*aphy
      do i = ix1, ix2
       ef(i, j, k, 4) = ef(i, j, k, 4) - sdhy*(ef(i, j + 1, k, 3) - ef(i, j, k, 3))
@@ -1504,7 +1760,7 @@
    !=========================== NDIM > 1
    do k = kz1, kz2
     do j = jy1, jy2
-     jj = j - 2
+     jj = j - gcy + 1
      sdy = loc_yg(jj, 3, imody)*aphy
      do i = ix1, ix2
       ii = i - 2
@@ -1519,10 +1775,10 @@
    if (nfield < 6) return
    if (ndim == 3) then
     do k = kz1, kz2
-     kk = k - 2
+     kk = k - gcz + 1
      sdz = aphz*loc_zg(kk, 3, imodz)
      do j = jy1, jy2
-      jj = j - 2
+      jj = j - gcy + 1
       sdy = aphy*loc_yg(jj, 3, imody)
       do i = ix1, ix2
        ii = i - 2
@@ -1538,7 +1794,7 @@
    else
     k = 1
     do j = jy1, jy2
-     jj = j - 2
+     jj = j - gcy + 1
      sdy = aphy*loc_yg(jj, 3, imody)
      do i = ix1, ix2
       ii = i - 2
@@ -1562,12 +1818,6 @@
    real(dp) :: aphx, aphy, aphz
    integer :: i, j, k, ic, i01, i02, j01, j02, k01, k02, fcomp_tot
    real(dp) :: shy, shz
-   real(dp) :: dw(3), sl(2), sr(2), omgl(2), vv, s0
-   real(dp), parameter :: EPS = 1.e-06
-
-   real(dp), dimension(2), parameter :: W03 = [1./3., 2./3.]
-   real(dp), dimension(3), parameter :: LDER = [0.5, -2., 1.5]
-   real(dp), dimension(3), parameter :: RDER = [-1.5, 2., -0.5]
 
    ! Fourth order derivatives
    !real(dp), dimension(4), parameter :: LDER4 = [ 1./6., -1., 0.5, &
@@ -1605,7 +1855,8 @@
        var(i, ic) = flx(i, j, k, ic)
       end do
      end do
-     call weno3_nc(fcomp_tot, i01 - 2, i02 + 2, xl_bd, xr_bd)
+     call density_flux(var, ww0, fcomp, aphx, xl_bd, xr_bd, i01 - 2, i02 + 2)
+     call momentum_flux(var, ww0, fcomp, xl_bd, xr_bd, i01 - 2, i02 + 2)
      do ic = 1, fcomp !var=momenta
       do i = i01, i02
        ef(i, j, k, ic) = ef(i, j, k, ic) - aphx*ww0(i, ic)
@@ -1624,10 +1875,11 @@
      do j = j01 - 2, j02 + 2
       var(j, fcomp + 1) = flx(i, j, k, fcomp + 2)
      end do
-     call weno3_nc(fcomp + 1, j01 - 2, j02 + 2, yl_bd, yr_bd) !rec[flux][j01-1,j02+1]
+     call density_flux(var, ww0, fcomp, aphy, yl_bd, yr_bd, j01 - 2, j02 + 2)
+     call momentum_flux(var, ww0, fcomp, yl_bd, yr_bd, j01 - 2, j02 + 2)
      do ic = 1, fcomp
       do j = j01, j02
-       shy = aphy*loc_yg(j - 2, 3, imody)
+       shy = aphy*loc_yg(j - gcy + 1, 3, imody)
        ef(i, j, k, ic) = ef(i, j, k, ic) - shy*ww0(j, ic)
       end do
      end do
@@ -1645,127 +1897,316 @@
      do k = k01 - 2, k02 + 2
       var(k, ic) = flx(i, j, k, fcomp + 3)
      end do
-     call weno3_nc(fcomp + 1, k01 - 2, k02 + 2, zl_bd, zr_bd)
+     call density_flux(var, ww0, fcomp, aphz, zl_bd, zr_bd, k01 - 2, k02 + 2)
+     call momentum_flux(var, ww0, fcomp, zl_bd, zr_bd, k01 - 2, k02 + 2)
      do ic = 1, fcomp
       do k = k01, k02
-       shz = aphz*loc_zg(k - 2, 3, imodz)
+       shz = aphz*loc_zg(k - gcz + 1, 3, imodz)
        ef(i, j, k, ic) = ef(i, j, k, ic) - shz*ww0(k, ic)
       end do
      end do
     end do
    end do
-   !=================================
-  contains
-   subroutine weno3_nc(nc, i1, np, lbd, rbd)
-    integer, intent(in) :: nc, i1, np
-    logical, intent(in) :: lbd, rbd
-    !  enter data [i1,np]
-    integer :: ii, iic
+  end subroutine
 
-    !=======ENTER DATA [i1,np]
-    !wl_{i+1/2}  uses stencil [i-1,i,i+1] in range [i=i1+1,np-1]
-    !wr_{i+1/2}  uses stencil [i,i+1,i+2] in range [i=i1,np-2]
-    !            common interior points [i1+1,np-2
-    !            Dw first derivative in range[i1+2,np-2]
-    !            L-Boundary    Dw^r[i1+1] uses the [i1:i1+3] stencil for v<0
-    !            R-Boundary    Dw^L[np-1] uses the [np-3:np1] stencil
-    !===========================================
+  !=================================
+  subroutine density_flux( var_in, ww0_in, fcomp_in, aph, lbd, rbd, i1, np )
+   real(dp), intent(inout), dimension(:, :) :: var_in, ww0_in
+   real(dp), intent(in) :: aph
+   logical, intent(in) :: lbd, rbd
+   integer, intent(in) :: fcomp_in, i1, np
+   real(dp) :: vv
+   real(dp), allocatable, dimension(:) :: thetap, thetam, fluxlf, flux, &
+    uplus, uminus, ulfp, ulfm, flux_tmp
+   real(dp), allocatable, dimension(:, :) :: var_in_tmp
+   integer :: iic, ii, nc, lb, ub, lb1, ub1, jj
+   logical, allocatable, dimension(:) :: dens_maskp, dens_maskm
+   real(dp), parameter :: EPS_P = 1.e-03
+
+   nc = fcomp_in + 1
+   iic = nc - 1
+   do ii = i1, np
+    var_in(ii, nc+1) = var_in(ii, iic)*var_in(ii, nc) !in den array var_in(nc+1) => den*v
+   end do
+
+   !===================================
+   !upwind boundary derivatives
+   if (lbd) then
+
+    iic = nc
+    ii = i1
+    ww0_in(ii, iic) = 0.0
+    vv = var_in(ii, nc)
+    if (vv<0.0) ww0_in(ii, iic) = var_in(ii+1, nc+1) - var_in(ii, nc+1)
+    ii = i1 + 1
+    vv = var_in(ii, nc)
+    ww0_in(ii, iic) = var_in(ii, nc+1) - var_in(ii-1, nc+1)
+    if (vv<0.0) ww0_in(ii, iic) = dot_product(RDER(1:3), var_in(ii:ii+2,nc+1))
+
+   end if
+
+   if (rbd) then
+
+    iic = nc
+    ii = np - 1
+    vv = var_in(ii, nc)
+    ww0_in(ii, iic) = var_in(ii+1, nc+1) - var_in(ii, nc+1)
+    if (vv>0.0) ww0_in(ii, iic) = dot_product(LDER(1:3), var_in(ii-2:ii,nc+1))
+    ii = np
+    vv = var_in(ii, nc)
+    ww0_in(ii, iic) = 0.0
+    if (vv>0.0) ww0_in(ii, iic) = var_in(ii, nc+1) - var_in(ii-1, nc+1)
+
+   end if
+
+   !===================================
+   ! weno3_nc returns in wl and wr the interpolation
+   ! on the left and right stencil respectively
+   !
+   call weno3_nc(var_in, nc - 1, nc, i1, np)
+   
+   !===================================
+   ! LxF flux for density variable
+   !   F=nv=> 1/2(F_L+F_R)-|V_{max}|(den_R-den_L)]
+   
+   if (density_limiter) then
+    !==========================================
+    ! Density flux limiter as described in
+    ! Hu et al., "Positivity-preserving method 
+    ! for high-order conservative
+    ! schemes solving compressible Euler equations.", 
+    ! JCP 242 (2013).
+    ! Still in beta, should be validated.
+    !==========================================
 
     iic = nc - 1
-    do ii = i1, np
-     var(ii, nc + 1) = var(ii, iic)*var(ii, nc) !in den array var(nc+1) => den*v
+    lb = i1
+    ub = np
+    lb1 = i1 + 1
+    ub1 = np - 2
+    allocate( thetam(lb:ub), source = one_dp )
+    allocate( thetap(lb:ub), source = one_dp )
+    allocate( flux(lb:ub), source = ww0_in(lb:ub, iic) )
+    allocate( fluxlf(lb:ub), source = ww0_in(lb:ub, iic) )
+    allocate( uplus(lb1:ub1), uminus(lb1:ub1), ulfp(lb1:ub1), ulfm(lb1:ub1), &
+     flux_tmp(lb:ub), var_in_tmp(lb:ub, iic:nc) )
+    allocate( dens_maskp(lb1:ub1), source=.false.)
+    allocate( dens_maskm(lb1:ub1), source=.false.)
+    !===================================
+    ! Max on the velocity in the surrounding of the point.
+    ! For a more robust (diffusive) LxF, use max on all the domain
+    vv = maxval(abs(var_in(lb1:ub1, nc)))
+    !===================================
+    ! In flux returns F_i based on reconstructed solution
+    call lxf_flux( flux(lb:ub), wr(lb:ub, iic:nc), wl(lb:ub, iic:nc), vv )
+    ! Flux_tmp temporarily stores the shifted real flux
+    flux_tmp(lb:ub) = EOSHIFT(flux(lb:ub), -1)
+    ! Computing U_i^+= U_i - 2*(dt/dx)*F_{i+1/2}
+    uplus(lb1:ub1) = var_in(lb1:ub1, iic) - 2*aph*flux(lb1:ub1)
+    ! Computing U_i^-= U_i + 2*(dt/dx)*F_{i-1/2}
+    uminus(lb1:ub1) = var_in(lb1:ub1, iic) + 2*aph*flux_tmp(lb1:ub1)
+
+    dens_maskp(lb1:ub1) = uplus(lb1:ub1) < EPS_P
+    dens_maskm(lb1:ub1) = uminus(lb1:ub1) < EPS_P
+
+    if (ANY(dens_maskp .or. dens_maskm)) then
+     !===================================
+     ! In fluxlf returns F_i based on the piecewise solution
+     do jj = iic, nc
+      do ii = lb, ub
+       var_in_tmp(ii, jj) = var_in(ii + 1, jj)
+      end do
+     end do
+     call lxf_flux( fluxlf(lb:ub), var_in_tmp(lb:ub, iic:nc), var_in(lb:ub, iic:nc), vv, &
+      (dens_maskp .or. dens_maskm))
+     flux_tmp(lb:ub) = EOSHIFT(fluxlf(lb:ub), -1)
+     where( dens_maskp )
+      ! Computing U_i^+LF= U_i - 2*(dt/dx)*F_{i+1/2}^LF
+      ulfp(lb1:ub1) = var_in(lb1:ub1, iic) - 2*aph*fluxlf(lb1:ub1)
+      thetap(lb1:ub1) = (EPS_P - ulfp(lb1:ub1))/(uplus(lb1:ub1) - ulfp(lb1:ub1))
+     end where
+     if (ANY(thetap > 1) .or. ANY(thetap < 0)) then
+      write( 6, *) 'Warning, thetap not admissible'
+     end if
+
+     where( dens_maskm )
+     ! Computing U_i^-LF= U_i + 2*(dt/dx)*F_{i-1/2}^LF
+      
+      ulfm(lb1:ub1) = var_in(lb1:ub1, iic) + 2*aph*flux_tmp(lb1:ub1)
+      thetam(lb1:ub1) = (EPS_P - ulfm(lb1:ub1))/(uminus(lb1:ub1) - ulfm(lb1:ub1))
+     end where
+     if (ANY(thetam > 1) .or. ANY(thetam < 0)) then
+      write( 6, *) 'Warning, thetam not admissible'
+     end if
+     ! In thetap the min between each thetap and thetam is stored
+     thetap(lb:ub) = MERGE( thetap, thetam, thetap < thetam)
+    end if
+    where( thetap(lb1:ub1) < 1 )
+     flux(lb1:ub1) = (1 - thetap(lb1:ub1))*fluxlf(lb1:ub1) + &
+      thetap(lb1:ub1)*flux(lb1:ub1)
+    end where
+    do ii = lb1 + 1, ub1
+     ww0_in(ii, iic) = flux(ii) - flux(ii-1)
     end do
-    !================= reconstruct nc primitives (Px,Py,Pz,Den,V)
+
+   else
+    iic = nc - 1
+    lb1 = i1 + 1
+    ub1 = np - 2
+    lb = i1
+    ub = np
+    allocate( flux(lb:ub), source = ww0_in(lb:ub, iic) )
+    !===================================
+    ! Max on the velocity in the surrounding of the point.
+    ! For a more robust (diffusive) LxF, use max on all the domain
+    vv = maxval(abs(var_in(lb1:ub1, nc)))
+    !===================================
+    ! In flux returns F_i based on reconstructed solution
+    call lxf_flux( flux(lb:ub), wr(lb:ub, iic:nc), wl(lb:ub, iic:nc), vv )
+    do ii = lb1 + 1, ub1
+     ww0_in(ii, iic) = flux(ii) - flux(ii-1)
+    end do
+   end if
+   var_in(lb:ub, iic) = flux(lb:ub)
+
+   ! if ( allocated(thetap) ) deallocate(thetap)
+   ! if ( allocated(thetam) ) deallocate(thetam)
+   ! if ( allocated(flux) ) deallocate(flux)
+   ! if ( allocated(fluxlf) ) deallocate(fluxlf)
+   ! if ( allocated(uplus) ) deallocate(uplus)
+   ! if ( allocated(uminus) ) deallocate(uminus)
+   ! if ( allocated(ulfp) ) deallocate(ulfp)
+   ! if ( allocated(ulfm) ) deallocate(ulfm)
+   ! if ( allocated(dens_maskm) ) deallocate(dens_maskm)
+   ! if ( allocated(dens_maskp) ) deallocate(dens_maskp)
+  end subroutine
+  !=================================
+
+  subroutine momentum_flux( var_in, ww0_in, fcomp_in, lbd, rbd, i1, np )
+   real(dp), intent(inout), dimension(:, :) :: var_in, ww0_in
+   logical, intent(in) :: lbd, rbd
+   integer, intent(in) :: fcomp_in, i1, np
+   real(dp) :: vv, s0
+   integer :: iic, ii, nc
+
+   nc = fcomp_in - 1
+   !===================================
+   !upwind boundary derivatives
+   if (lbd) then
+
     do iic = 1, nc
-     do ii = i1 + 1, np - 1
-      dw(1) = var(ii, iic) - var(ii - 1, iic) !DW_{i-1/2}
-      dw(2) = var(ii + 1, iic) - var(ii, iic) !DW_{i+1/2}
-      omgl(1) = 1./(dw(1)*dw(1) + EPS)
-      omgl(2) = 1./(dw(2)*dw(2) + EPS)
-      omgl(:) = omgl(:)*omgl(:)
-      sl(1) = W03(1)*omgl(1)
-      sl(2) = W03(2)*omgl(2)
-      sr(1) = W03(2)*omgl(1)
-      sr(2) = W03(1)*omgl(2)
-      s0 = sl(1) + sl(2)
-      wl(ii, iic) = var(ii, iic) + 0.5*(dw(1)*sl(1) + dw(2)*sl(2))/s0
-      s0 = sr(1) + sr(2)
-      wr(ii - 1, iic) = var(ii, iic) - 0.5*(dw(1)*sr(1) + dw(2)*sr(2))/s0
-     end do
-    end do
-    !===================================
-    !upwind boundary derivatives
-    if (lbd) then
-     do iic = 1, nc - 2
-      ii = i1
-      ww0(ii, iic) = 0.0
-      vv = var(ii, nc)
-      if (vv < 0.0) ww0(ii, iic) = vv*(var(ii + 1, iic) - var(ii, iic))
-      ii = i1 + 1
-      vv = var(ii, nc)
-      ww0(ii, iic) = vv*(var(ii, iic) - var(ii - 1, iic))
-      if (vv < 0.0) ww0(ii, iic) = vv*dot_product(RDER(1:3), var(ii:ii + 2, iic))
-     end do
-     iic = nc - 1
      ii = i1
-     ww0(ii, iic) = 0.0
-     vv = var(ii, nc)
-     if (vv < 0.0) ww0(ii, iic) = var(ii + 1, nc + 1) - var(ii, nc + 1)
+     ww0_in(ii, iic) = 0.0
+     vv = var_in(ii, fcomp_in + 1)
+     if (vv<0.0) ww0_in(ii, iic) = vv*(var_in(ii+1,iic)-var_in(ii,iic))
      ii = i1 + 1
-     vv = var(ii, nc)
-     ww0(ii, iic) = var(ii, nc + 1) - var(ii - 1, nc + 1)
-     if (vv < 0.0) ww0(ii, iic) = dot_product(RDER(1:3), var(ii:ii + 2, nc + 1))
-    end if
-    if (rbd) then
-     do iic = 1, nc - 2
-      ii = np - 1
-      vv = var(ii, nc)
-      ww0(ii, iic) = vv*(var(ii + 1, iic) - var(ii, iic))
-      if (vv > 0.0) ww0(ii, iic) = vv*dot_product(LDER(1:3), var(ii - 2:ii, iic))
-      ii = np
-      vv = var(ii, nc)
-      ww0(ii, iic) = 0.0
-      if (vv > 0.0) ww0(ii, iic) = vv*(var(ii, iic) - var(ii - 1, iic))
-     end do
-     iic = nc - 1
-     ii = np - 1
-     vv = var(ii, nc)
-     ww0(ii, iic) = var(ii + 1, nc + 1) - var(ii, nc + 1)
-     if (vv > 0.0) ww0(ii, iic) = dot_product(LDER(1:3), var(ii - 2:ii, nc + 1))
-     ii = np
-     vv = var(ii, nc)
-     ww0(ii, iic) = 0.0
-     if (vv > 0.0) ww0(ii, iic) = var(ii, nc + 1) - var(ii - 1, nc + 1)
-    end if
-    !===================================
-    !   UPWINDING at interior points
-    !          Momenta
-    do iic = 1, nc - 2
-     do ii = i1 + 1, np - 2
-      vv = wr(ii, nc) + wl(ii, nc)
-      s0 = sign(one_dp, vv) !s0=1*sign(vv)
-      var(ii, iic) = max(0., s0)*wl(ii, iic) - min(0., s0)*wr(ii, iic)
-     end do
-     do ii = i1 + 2, np - 2
-      ww0(ii, iic) = var(ii, nc)*(var(ii, iic) - var(ii - 1, iic))
-     end do
+     vv = var_in(ii, fcomp_in + 1)
+     ww0_in(ii, iic) = vv*(var_in(ii,iic)-var_in(ii-1,iic))
+     if (vv<0.0) ww0_in(ii, iic) = vv*dot_product(RDER(1:3), var_in(ii:ii+2,iic))
     end do
-    ! LxF flux for density variable
-    !   F=nv=> 1/2(F_L+F_R)-|V_{max}|(den_R-den_L)]
-    iic = nc - 1
+
+   end if
+
+   if (rbd) then
+
+    do iic = 1, nc
+     ii = np - 1
+     vv = var_in(ii, fcomp_in + 1)
+     ww0_in(ii, iic) = vv*(var_in(ii+1,iic)-var_in(ii,iic))
+     if (vv>0.0) ww0_in(ii, iic) = vv*dot_product(LDER(1:3), var_in(ii-2:ii,iic))
+     ii = np
+     vv = var_in(ii, fcomp_in + 1)
+     ww0_in(ii, iic) = 0.0
+     if (vv>0.0) ww0_in(ii, iic) = vv*(var_in(ii,iic)-var_in(ii-1,iic))
+    end do
+
+   end if
+
+   !===================================
+   ! weno3_nc returns in wl and wr the interpolation
+   ! on the left and right stencil respectively
+   !
+   call weno3_nc(var_in, 1, nc, i1, np)
+   !===================================
+   !   UPWINDING at interior points
+   !          Momenta
+   do iic = 1, nc
     do ii = i1 + 1, np - 2
-     dw(1) = var(ii - 1, nc)
-     dw(2) = var(ii, nc)
-     dw(3) = var(ii + 1, nc)
-     vv = maxval(abs(dw(1:3)))
-     var(ii, iic) = wr(ii, nc)*wr(ii, iic) + wl(ii, nc)*wl(ii, iic) - &
-                    vv*(wr(ii, iic) - wl(ii, iic))
-     var(ii, iic) = 0.5*var(ii, iic)
+     vv = wr(ii, fcomp_in + 1) + wl(ii, fcomp_in + 1)
+     s0 = sign(one_dp, vv) !s0=1*sign(vv)
+     var_in(ii, iic) = max(0., s0)*wl(ii, iic) - min(0., s0)*wr(ii, iic)
     end do
     do ii = i1 + 2, np - 2
-     ww0(ii, iic) = var(ii, iic) - var(ii - 1, iic)
+     ww0_in(ii, iic) = var_in(ii, fcomp_in + 1)*(var_in(ii,iic)-var_in(ii-1,iic))
     end do
-   end subroutine
+   end do
+
+  end subroutine
+  !=================================
+  subroutine weno3_nc( var_in, cmp_min, cmp_max, i1, np )
+   real(dp), intent(in), dimension(:, :) :: var_in
+   integer, intent (in) :: cmp_min, cmp_max, i1, np
+   !  enter data [i1,np]  
+   integer :: ii, iic
+   real(dp) :: dw(2), sl(2), sr(2), omgl(2), s0
+   real(dp), dimension(2), parameter :: W03 = [ 1./4., 3./4. ]
+   !De-comment the optimized coefficient to substitute W03
+   !real(dp), dimension(2), parameter :: W03_OPT = [ 1./3., 2./3. ]
+
+   !=======ENTER DATA [i1,np]
+   !wl_{i+1/2}  uses stencil [i-1,i,i+1] in range [i=i1+1,np-1] 
+   !wr_{i+1/2}  uses stencil [i,i+1,i+2] in range [i=i1,np-2] 
+   !            common interior points [i1+1,np-2
+   !            Dw first derivative in range[i1+2,np-2]
+   !            L-Boundary    Dw^r[i1+1] uses the [i1:i1+3] stencil for v<0
+   !            R-Boundary    Dw^L[np-1] uses the [np-3:np1] stencil
+   !===========================================
+   !================= reconstruct nc primitives (Px,Py,Pz,Den,V)
+   do iic = cmp_min, cmp_max
+    do ii = i1 + 1, np - 1
+     dw(1) = var_in(ii, iic) - var_in(ii-1, iic) !DW_{i-1/2}
+     dw(2) = var_in(ii+1, iic) - var_in(ii, iic) !DW_{i+1/2}
+     omgl(1) = 1./(dw(1)*dw(1)+EPS)
+     omgl(2) = 1./(dw(2)*dw(2)+EPS)
+     omgl(:) = omgl(:) * omgl(:)
+     sl(1) = W03(1)*omgl(1)
+     sl(2) = W03(2)*omgl(2)
+     sr(1) = W03(2)*omgl(1)
+     sr(2) = W03(1)*omgl(2)
+     s0 = sl(1) + sl(2)
+     wl(ii, iic) = var_in(ii, iic) + 0.5*(dw(1)*sl(1)+dw(2)*sl(2))/s0
+     s0 = sr(1) + sr(2)
+     wr(ii-1, iic) = var_in(ii, iic) - 0.5*(dw(1)*sr(1)+dw(2)*sr(2))/s0
+    end do
+   end do
   end subroutine
 !====================================
+
+  subroutine lxf_flux(flx_in, wr_in, wl_in, vv, mask_in )
+   real(dp), intent(out), dimension(:) :: flx_in
+   real(dp), intent(in), dimension(:, :) :: wr_in, wl_in
+   real(dp), intent(in) :: vv
+   logical, intent(in), dimension(:), optional :: mask_in
+   integer :: dens_cmp, vel_cmp , lb, ub
+   logical, allocatable, dimension(:) :: mask
+   dens_cmp = 1
+   vel_cmp = dens_cmp + 1
+   lb = 1
+   ub = SIZE(flx_in)
+   if ( present(mask_in) ) then
+    allocate(mask(lb:ub), source=mask_in)
+   else
+    allocate(mask(lb:ub), source=.true.)
+   end if
+
+   where ( mask )
+
+    flx_in(lb:ub) = wr_in(lb:ub, vel_cmp)*wr_in(lb:ub, dens_cmp) + &
+      wl_in(lb:ub, vel_cmp)*wl_in(lb:ub, dens_cmp) - &
+      vv*(wr_in(lb:ub, dens_cmp)-wl_in(lb:ub, dens_cmp))
+    flx_in(lb:ub) = 0.5*flx_in(lb:ub)
+
+   end where
+
+  end subroutine
  end module
