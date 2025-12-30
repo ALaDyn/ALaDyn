@@ -1,3 +1,6 @@
 [submodule "third_party/json-fortran/json-fortran_source"]
 	path = third_party/json-fortran/json-fortran_source
 	url = https://github.com/jacobwilliams/json-fortran.git
+[submodule "cmake"]
+	path = cmake
+	url = https://github.com/cenit/ccm

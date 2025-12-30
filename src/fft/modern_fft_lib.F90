@@ -34,6 +34,12 @@
   !! Array for the FFT along y
   real(C_DOUBLE), pointer :: in3_1d(:)
   !! Array for the FFT along z
+  real(C_DOUBLE), pointer :: in1_1d_out(:)
+  !! Array for the FFT along x
+  real(C_DOUBLE), pointer :: in2_1d_out(:)
+  !! Array for the FFT along y
+  real(C_DOUBLE), pointer :: in3_1d_out(:)
+  !! Array for the FFT along z
   type(C_PTR) :: data1_sc, data2_sc, data3_sc
   !! C Pointers assigned to the arrays
 
@@ -200,28 +206,34 @@
     call c_f_pointer(data1_sc, in1_1d, [n1])
 
     in1_1d(:) = zero_dp
-    plan1_s = fftw_plan_r2r_1d(n1, in1_1d, in1_1d, FFTW_RODFT00, &
-                               FFTW_ESTIMATE)
-    plan1_c = fftw_plan_r2r_1d(n1, in1_1d, in1_1d, FFTW_REDFT00, &
-                               FFTW_ESTIMATE)
+    plan1_s = fftw_plan_r2r_1d( n1, in1_1d, in1_1d_out, FFTW_RODFT00, &
+     FFTW_ESTIMATE)
+    in1_1d(:) = in1_1d_out(:)
+    plan1_c = fftw_plan_r2r_1d( n1, in1_1d, in1_1d_out, FFTW_REDFT00, &
+     FFTW_ESTIMATE)
+    in1_1d(:) = in1_1d_out(:)
 
     data2_sc = fftw_alloc_complex(int(n2, C_SIZE_T))
     call c_f_pointer(data2_sc, in2_1d, [n2])
 
     in2_1d(:) = zero_dp
-    plan2_s = fftw_plan_r2r_1d(n2, in2_1d, in2_1d, FFTW_RODFT00, &
-                               FFTW_ESTIMATE)
-    plan2_c = fftw_plan_r2r_1d(n2, in2_1d, in2_1d, FFTW_REDFT00, &
-                               FFTW_ESTIMATE)
-
-    data3_sc = fftw_alloc_complex(int(n3, C_SIZE_T))
+    plan2_s = fftw_plan_r2r_1d( n2, in2_1d, in2_1d_out, FFTW_RODFT00, &
+     FFTW_ESTIMATE)
+    in2_1d(:) = in2_1d_out(:)
+    plan2_c = fftw_plan_r2r_1d( n2, in2_1d, in2_1d_out, FFTW_REDFT00, &
+     FFTW_ESTIMATE)
+    in2_1d(:) = in2_1d_out(:)
+    
+    data3_sc = fftw_alloc_complex(int( n3, C_SIZE_T))
     call c_f_pointer(data3_sc, in3_1d, [n3])
 
     in3_1d(:) = zero_dp
-    plan3_s = fftw_plan_r2r_1d(n3, in3_1d, in3_1d, FFTW_RODFT00, &
-                               FFTW_ESTIMATE)
-    plan3_c = fftw_plan_r2r_1d(n3, in3_1d, in3_1d, FFTW_RODFT00, &
-                               FFTW_ESTIMATE)
+    plan3_s = fftw_plan_r2r_1d( n3, in3_1d, in3_1d_out, FFTW_RODFT00, &
+     FFTW_ESTIMATE)
+    in3_1d(:) = in3_1d_out(:)
+    plan3_c = fftw_plan_r2r_1d( n3, in3_1d, in3_1d_out, FFTW_RODFT00, &
+     FFTW_ESTIMATE)
+    in3_1d(:) = in3_1d_out(:)
 
    end select
   end subroutine
@@ -274,7 +286,7 @@
         w1_re(ix) = cfhx(ix)*w(ix, iy, iz)
        end do
        call fftw_execute_dft_r2c(plan1, w1_re, w1_cplx)
-       w1_st(1:n1) = w1_cplx(1:n1)
+       w1_st(1:n1) = real(w1_cplx(1:n1), dp)
        do ix = 1, n1
         w1_re(ix) = sfhx(ix)*w(ix, iy, iz)
        end do
@@ -282,8 +294,8 @@
        do ix = 1, n1/2
         i2 = 2*ix
         i1 = i2 - 1
-        w(i1, iy, iz) = sc*(w1_st(i1) + w1_cplx(i2))
-        w(i2, iy, iz) = sc*(w1_st(i2) - w1_cplx(i1))
+        w(i1, iy, iz) = sc*(w1_st(i1) + real(w1_cplx(i2), dp))
+        w(i2, iy, iz) = sc*(w1_st(i2) - real(w1_cplx(i1), dp))
        end do
       end do
      end do
@@ -324,13 +336,13 @@
         end do
         call fftw_execute_dft_r2c(plan2, w2_re, w2_cplx)
         do iy = 1, n2
-         cw(ii, iy) = sc*w2_cplx(iy)
+         cw(ii, iy) = sc*real(w2_cplx(iy), dp)
          w2_re(iy) = sfhy(iy)*w(ii, iy, iz)
         end do
         call fftw_execute_dft_r2c(plan2, w2_re, w2_cplx)
         do iy = 1, n2/2
-         cw(ii, 2*iy - 1) = cw(ii, 2*iy - 1) + sc*w2_cplx(2*iy)
-         cw(ii, 2*iy) = cw(ii, 2*iy) - sc*w2_cplx(2*iy - 1)
+         cw(ii, 2*iy-1) = cw(ii, 2*iy-1) + sc*real(w2_cplx(2*iy), dp)
+         cw(ii, 2*iy) = cw(ii, 2*iy) - sc*real(w2_cplx(2*iy-1), dp)
         end do
        end do
       end do
@@ -404,13 +416,13 @@
         end do
         call fftw_execute_dft_r2c(plan3, w3_re, w3_cplx)
         do iz = 1, n3
-         cw(ii, iz) = sc*w3_cplx(iz)
+         cw(ii, iz) = sc*real(w3_cplx(iz), dp)
          w3_re(iz) = sfhz(iz)*w(ii, iy, iz)
         end do
         call fftw_execute_dft_r2c(plan3, w3_re, w3_cplx)
         do iz = 1, n3/2
-         cw(ii, 2*iz - 1) = cw(ii, 2*iz - 1) + sc*w3_cplx(2*iz)
-         cw(ii, 2*iz) = cw(ii, 2*iz) - sc*w3_cplx(2*iz - 1)
+         cw(ii, 2*iz-1) = cw(ii, 2*iz-1) + sc*real(w3_cplx(2*iz), dp)
+         cw(ii, 2*iz) = cw(ii, 2*iz) - sc*real(w3_cplx(2*iz-1), dp)
         end do
        end do
       end do
@@ -497,7 +509,7 @@
         i2 = 2*ix
         i1 = 2*ix - 1
         w(i1, iy, iz) = sc*real(w1_cplx(ix))
-        w(i2, iy, iz) = sc*imag(w1_cplx(ix))
+        w(i2, iy, iz) = sc*aimag(w1_cplx(ix))
        end do
       end do
      end do
@@ -509,7 +521,7 @@
        do ix = 1, n1_tr/2
         i2 = 2*ix
         i1 = 2*ix - 1
-        w1_cplx(ix) = cmplx(w(i1, iy, iz), w(i2, iy, iz))
+        w1_cplx(ix) = cmplx(w(i1, iy, iz), w(i2, iy, iz), KIND=dp)
        end do
        call fftw_execute_dft_c2r(iplan1, w1_cplx, w1_re)
        w(1:n1, iy, iz) = w1_re(1:n1)
@@ -530,12 +542,12 @@
         j2 = 2*iy
         j1 = 2*iy - 1
         cw(i1, j1) = sc*real(w2_cplx(iy))
-        cw(i1, j2) = sc*imag(w2_cplx(iy))
+        cw(i1, j2) = sc*aimag(w2_cplx(iy))
        end do
        w2_re(1:n2) = w(i2, 1:n2, iz)
        call fftw_execute_dft_r2c(plan2, w2_re, w2_cplx)
        do iy = 1, n2
-        cw(i2, iy) = sc*w2_cplx(iy)
+        cw(i2, iy) = sc*real(w2_cplx(iy), dp)
        end do
       end do
       !=========== reordering as 2D fft
@@ -602,12 +614,12 @@
        end do
        call fftw_execute_dft_r2c(plan3, w3_re, w3_cplx)
        do iz = 1, n3
-        cw(i1, iz) = sc*w3_cplx(iz)
+        cw(i1, iz) = sc*real(w3_cplx(iz), dp)
         w3_re(iz) = w(i2, iy, iz)
        end do
        call fftw_execute_dft_r2c(plan3, w3_re, w3_cplx)
        do iz = 1, n3
-        cw(i2, iz) = sc*w3_cplx(iz)
+        cw(i2, iz) = sc*real(w3_cplx(iz), dp)
        end do
       end do
       !=========== reordering as 2D fft

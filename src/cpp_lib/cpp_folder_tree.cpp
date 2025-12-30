@@ -19,18 +19,6 @@
  *  along with ALaDyn.  If not, see <http://www.gnu.org/licenses/>.                                    *
  ******************************************************************************************************/
 
-#if defined(USE_BOOST)
-#include <boost/filesystem.hpp>
-#include <cstring>
-
-extern "C" {
-void create_folder_(char* folderName, size_t len)
-{
-  std::string fname(folderName, 0, len);
-  boost::filesystem::create_directories(fname);
-}
-}
-#elif defined(USE_FILESYSTEM)
 #include <filesystem>
 
 extern "C" {
@@ -38,22 +26,18 @@ void create_folder_(char* folderName, size_t len) {
   std::string fname(folderName, 0, len);
   std::filesystem::create_directories(fname);
 }
-}
-#elif defined(_WIN32)
-#include <direct.h>
-#include <stdio.h>
 
-extern "C"
-{
-void create_folder_(char* folderName, size_t len) {
-  if (_mkdir(folderName) != 0) {
-    printf("Problem creating directory %s!\n", folderName);
+void check_folder_empty_(int* isempty, char* folderName, size_t len) {
+  std::string fname(folderName, 0, len);
+  // Trim trailing whitespace (Fortran strings may be padded)
+  fname.erase(fname.find_last_not_of(" \t\n\r") + 1);
+
+  if (!std::filesystem::exists(fname) || !std::filesystem::is_directory(fname)) {
+    *isempty = 1; // Treat non-existent or non-directory as empty
+    return;
   }
-}
-}
-#else
 
-extern "C" {
-void create_folder_(char* folderName, size_t len) {}
+  // Check if directory is empty
+  *isempty = std::filesystem::is_empty(fname) ? 1 : 0;
 }
-#endif
+}

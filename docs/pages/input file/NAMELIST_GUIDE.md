@@ -46,6 +46,8 @@ With those parameters, the full box size (in μm) is: `Lx = nx / k0`, `Ly = yx_r
  ibz              = 0,
  ibeam            = 1
  density_limiter  = .false.,
+ pusher           = 1,
+ n_substeps       = 1,
 /
 ```
 
@@ -83,6 +85,10 @@ With those parameters, the full box size (in μm) is: `Lx = nx / k0`, `Ly = yx_r
   + `2` For Envelope-fluid LWFA model (model_id = 4). Code solves Euler equations for plasma density with the laser described as an envelope.
 + `density_limiter` (default is false) bool variable that activates the density flux limiter in the fluid equations.
 This enforces density positivity. **WARNING** Still in beta, use is not recommended
++ `pusher` determines which particle pusher scheme is employed, default is `1`
+  + `1` Huguera push
+  + `2` Boris push
++ `n_substeps` number of substeps the particle pusher has to be divided into every time cycle
 
 ## TARGET_DESCRIPTION namelist block
 
@@ -140,6 +146,7 @@ This enforces density positivity. **WARNING** Still in beta, use is not recommen
  np1              = 1.0,
  np2              = 10.0,
  r_c              = 0.0,
+ transverse_dist  = 0,
 /
 ```
 
@@ -180,35 +187,47 @@ Copper    (atomic_number = 29) - mass_number = 63.54
 + `np_per_zc(i)`: the same as `np_per_xc`, this describes the number of particles per cell along z directions
 + `concentration(i)`: concentration of the *i-th* ion species. The sum of all the concentrations must be 1 to result in a consistent description.
 + `dmodel_id=1`
-    + `lpx(1)` is the length [μm] of the upstream layer (foam or preplasma), having density `n1/nc`
-    + `lpx(2)` is the length [μm] of the ramp (linear or exponential depending on the `mdl`) connecting the upstream layer with the central one (made with bulk particles)
-    + `lpx(3)` is the length [μm] of the central layer (bulk), having density `n2/nc`
-    + `lpx(4)` is the length [μm] of the ramp (linear), connecting the bulk with the contaminants (made with bulk particles)
-    + `lpx(5)` is the length [μm] of the downstream layer (contaminants), having density `n3/nc`
-    + `lpx(7)` is the offset [μm] between the end of the laser and the beginning of the target (if zero, the target starts right at the end of the laser pulse). In the gaussian case, the end of the pulse is defined as the center position + the FWHM. The offset is calculated *before* laser rotation, so mind the transverse size if `incid_angle ≠ 0`, in order to avoid laser initialization *inside the target*.
-    + `n0_ref` is the density in the central layer (bulk)
-    + *LWFA* case: density is in units of critical density
-        + If `nsp=1`, `n_over_nc` is the plasma density
-        + If `nsp>1`, `n_over_nc` is the density of the neutral gas, *e.g.* the gas jet density before the plasma formation.
-        If the background atoms are already ionized, the initial plasma density is computed accordingly.
-    + `np1` is the density in the upstream layer (foam/preplasma)
-    + `np2` is the density in the downstream layer (contaminants)
+  + `lpx(1)` is the length [μm] of the upstream layer (foam or preplasma), having density `n1/nc`
+  + `lpx(2)` is the length [μm] of the ramp (linear or exponential depending on the `mdl`) connecting the upstream layer with the central one(made with bulk particles)
+  + `lpx(3)` is the length [μm] of the central layer (bulk), having density `n2/nc`
+  + `lpx(4)` is the length [μm] of the ramp (linear), connecting the bulk with the contaminants (made with bulk particles)
+  + `lpx(5)` is the length [μm] of the downstream layer (contaminants), having density `n3/nc`
+  + `lpx(7)` is the offset [μm] between the end of the laser and the beginning of the target (if zero, the target starts right at the end ofthe laser pulse). In the gaussian case, the end of the pulse is defined as the center position + the FWHM. The offset is calculated *before*laser rotation, so mind the transverse size if `incid_angle ≠ 0`, in order to avoid laser initialization *inside the target*.
+  + `n0_ref` is the density in the central layer (bulk)
+  + *LWFA* case: density is in units of critical density
+    + If `nsp=1`, `n_over_nc` is the plasma density
+    + If `nsp>1`, `n_over_nc` is the density of the neutral gas, *e.g.* the gas jet density before the plasma formation.
+    If the background atoms are already ionized, the initial plasma density is computed accordingly.
+  + `np1` is the density in the upstream layer (foam/preplasma)
+  + `np2` is the density in the downstream layer (contaminants)
 + `dmodel_id=4` (Ramps are all `cos^2`)
-    + `lpx(1)` is the length [μm] of the upramp to the plateau
-    + `lpx(2)` is the length [μm] of the first plateau (plasma bulk) with density `n_over_nc`
-    + `lpx(3)` is the length [μm] of the connecting ramp from the first plateau to the second one
-    + `lpx(4)` is the length [μm] of the second plateau (plasma bulk) with density `np1*n_over_nc`
-    + `lpx(5)` is the length [μm] of the connecting ramp from the second plateau to the third one
-    + `lpx(6)` is the length [μm] of the third plateau (plasma bulk) with density `np2*n_over_nc`
-    + `lpx(7)` is the offset [μm] between the end of the laser and the beginning of the target (if zero, the target starts right at the end of the laser pulse). In the gaussian case, the end of the pulse is defined as the center position + the FWHM. The offset is calculated *before* laser rotation, so mind the transverse size if `incid_angle ≠ 0`, in order to avoid laser initialization *inside the target*.
-    + `n0_ref` is the density of the first plateau
-    + `np1` is the density of the second plateau
-    + `np2` is the density of the third plateau
+  + `lpx(1)` is the length [μm] of the upramp to the plateau
+  + `lpx(2)` is the length [μm] of the first plateau (plasma bulk) with density `n_over_nc`
+  + `lpx(3)` is the length [μm] of the connecting ramp from the first plateau to the second one
+  + `lpx(4)` is the length [μm] of the second plateau (plasma bulk) with density `np1*n_over_nc`
+  + `lpx(5)` is the length [μm] of the connecting ramp from the second plateau to the third one
+  + `lpx(6)` is the length [μm] of the third plateau (plasma bulk) with density `np2*n_over_nc`
+  + `lpx(7)` is the offset [μm] between the end of the laser and the beginning of the target (if zero, the target starts right at the end ofthe laser pulse). In the gaussian case, the end of the pulse is defined as the center position + the FWHM. The offset is calculated *before*laser rotation, so mind the transverse size if `incid_angle ≠ 0`, in order to avoid laser initialization *inside the target*.
+  + `n0_ref` is the density of the first plateau
+  + `np1` is the density of the second plateau
+  + `np2` is the density of the third plateau
 + `lpy(1)` defines the wire size [μm].
 + `lpy(2)` defines the distance [μm] between wires (interwire size).
 + `n0_ref` is the reference density in units of `n_0=1e18 cm^-3`. Code equations are normalized to that density.
 + `r_c` is the plasma channel depth ==> `n/n_over_nc = 1 + w0_y^2*lambda_0^2/(r_c^2 *\pi ^2 *n_over_nc)(y^2+z^2)/w0_y^2`, where `w0_y` is the laser waist. If `r_c`=`w0_y` the channel is matched
-
++ `transverse_dist` is the transverse distribution type for macroparticles.
+  + If `transverse_dist = 0`, the distribution is uniform
+  + If `transverse_dist = 1`, the macroparticle per cell number decreases from the center to the sides of the box.
+  The decreasing function is defined as
+  \[ (N - 1)*\exp(-r/L) + 1 \] where N is the macroparticle's number per cell
+  and the particle number decreases in the last
+  \( \Delta= \text{ny_targ}/3\) target cells.
+  The parameter \(L\) is defined to ensure that on the sides there is 1 p.p.c..
+  This option is convenient to unload the cpus and the memory by reducing the number of particles where an high number is
+  not required. Be careful to choose a box that is large enough to diminish the particle number in the actual sides and not
+  in the central part of the box.
+  With this option on, it is normal to have spikes in the density where the particles number changes, but such effect should be
+  mitigated by the dynamics.
 ## LASER namelist block
 
 ```fortran
@@ -220,11 +239,11 @@ Copper    (atomic_number = 29) - mass_number = 63.54
  tau_fwhm       = 33.0,
  w0_y           = 6.2,
  a0             = 3.0,
- incid_angle    = 0.0, 
+ incid_angle    = 0.0,
  lam0           = 0.8,
- y0_cent         = 0.0, 
+ y0_cent         = 0.0,
  z0_cent         = 0.0,
- Enable_ionization(0) = .true. 
+ Enable_ionization(0) = .true.,
  lp_delay       = 20.59,
  lp_offset      = 0,
  t1_lp          = 200.0,
@@ -232,7 +251,7 @@ Copper    (atomic_number = 29) - mass_number = 63.54
  w1_y           = 3.5,
  a1             = 0.45,
  lam1           = 0.4,
- y1_cent         = 0.0, 
+ y1_cent         = 0.0,
  z1_cent         = 0.0,
  Enable_ionization(1) = .true.,
  Symmetrization_pulse=.true.,
@@ -367,30 +386,29 @@ Copper    (atomic_number = 29) - mass_number = 63.54
 
 ```fortran
 &TRACKING
- P_tracking     = .true.,
+ P_tracking       = .true.,
  nkjump           = 1,
- tkjump           = 4,
+ every_track      = 4,
  txmin            = 55.,
  txmax            = 75.,
  tymin            = -80.,
  tymax            = 80.,
  tzmin            = -20.,
  tzmax            = 20.,
- t_in             = 0.,
- t_out            = 200.,
+ a_on_particles   = .true.
 /
 ```
+
 + `P_tracking` logical flag: if true the particle tracking is enabled
 + `nkjump` a tracked particle every `nkjump` is written in the output file
-+ `tkjump` a snapshot of the tracked particles phase space is taken every `tkjump` timestep
++ `every_track` a snapshot of the tracked particles phase space is taken every `enery_track` timestep
 + `txmin` to select particles with initial longitudinal coordinate `x > txmin` to be tracked
 + `txmax` to select particles with initial longitudinal coordinate `x < txmax` to be tracked
 + `tymin` to select particles with initial transverse coordinate `y > tymin` to be tracked
 + `tymax` to select particles with initial transverse coordinate `y < tymax` to be tracked
 + `tzmin` to select particles with initial transverse coordinate `z > tzmin` to be tracked
 + `tzmax` to select particles with initial transverse coordinate `z < tzmax` to be tracked
-+ `t_in` initial tracking time
-+ `t_out` final tracking time
++ `a_on_particles` if true, the vector potential is interpolated over the particles position
 
 ## MPIPARAMS namelist block
 
@@ -405,4 +423,4 @@ Copper    (atomic_number = 29) - mass_number = 63.54
 + `nprocx` defines the number of processor the simulation will be splitted along the `x` coordinate
 + `nprocy` defines the number of processor the simulation will be splitted along the `y` coordinate
 + `nprocz` defines the number of processor the simulation will be splitted along the `z` coordinate
-  + mind that usually we do not split along `x` and we use the same number of processor along `y` and `z` (for 3D simulations) or we define `nprocz=1` explicitly for 2D simulations. No guarantees are given if you want to explore other configurations (that *should* work anyway).
+  + mind that usually we define `nprocz=1` explicitly for 2D simulations

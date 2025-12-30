@@ -79,7 +79,7 @@
       flx(i + 1, j, k, 1) = flx(i, j, k, 1)
      end do
     end do
-   endif
+   end if
    do k = kz1, kz2
     do j = jy1, jy2
      do i = ix1, ix2

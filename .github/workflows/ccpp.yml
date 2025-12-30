@@ -1,0 +1,163 @@
+name: ALaDyn Continuous Integration
+
+on:
+  pull_request:
+  push:
+  workflow_dispatch:
+    inputs:
+      debug_enabled:
+        type: boolean
+        description: 'Run the build with tmate debugging enabled (https://github.com/marketplace/actions/debugging-with-tmate)'
+        required: false
+        default: false
+  schedule:
+    - cron: '0 6 * * *'
+
+env:
+  VCPKG_BINARY_SOURCES: 'clear;nuget,vcpkgbinarycache,readwrite'
+  VCPKG_FORCE_DOWNLOADED_BINARIES: "TRUE"
+
+jobs:
+  ubuntu-vcpkg:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Setup tmate session
+      uses: mxschmitt/action-tmate@v3
+      if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.debug_enabled }}
+
+    - uses: lukka/get-cmake@latest
+
+    - name: Update apt & install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y yasm nasm openmpi-bin libopenmpi-dev mono-devel gfortran
+
+    - name: Clean downloads
+      run: sudo apt-get clean
+
+    - name: 'Setup vcpkg and NuGet artifacts backend'
+      shell: bash
+      run: >
+        git clone --depth 1 https://github.com/microsoft/vcpkg ;
+        ./vcpkg/bootstrap-vcpkg.sh ;
+        mono $(./vcpkg/vcpkg fetch nuget | tail -n 1) sources add
+        -Name "vcpkgbinarycache"
+        -Source http://93.49.111.10:5555/v3/index.json
+        -AllowInsecureConnections
+
+    - name: Setup NuGet API key if found
+      shell: bash
+      env:
+        BAGET_API_KEY: ${{ secrets.BAGET_API_KEY }}
+      if: env.BAGET_API_KEY != null
+      run: >
+        mono $(./vcpkg/vcpkg fetch nuget | tail -n 1)
+        setapikey ${{ secrets.BAGET_API_KEY }}
+        -Source http://93.49.111.10:5555/v3/index.json
+
+    - name: 'Build'
+      shell: pwsh
+      run: ${{ github.workspace }}/cmake/build.ps1 -UseVCPKG -DoNotUpdateVCPKG -DisableInteractive -DoNotUpdateTOOL -EnableTEST
+
+    - name: 'Run Tests'
+      shell: bash
+      run: |
+        cd build_release
+        ctest --output-on-failure --timeout 300
+
+
+  ubuntu-plain:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Setup tmate session
+      uses: mxschmitt/action-tmate@v3
+      if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.debug_enabled }}
+
+    - uses: lukka/get-cmake@latest
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y gfortran openmpi-bin libopenmpi-dev libfftw3-dev libfftw3-mpi-dev
+
+    - name: 'Build with plain CMake'
+      shell: bash
+      run: |
+        mkdir -p build
+        cd build
+        cmake .. -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON
+        cmake --build . --parallel
+        cmake --install .
+
+    - name: 'Run Tests'
+      shell: bash
+      run: |
+        cd build
+        ctest --output-on-failure --timeout 300
+
+  osx-vcpkg:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Setup tmate session
+      uses: mxschmitt/action-tmate@v3
+      if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.debug_enabled }}
+
+    - name: Install dependencies
+      shell: bash
+      run: |
+        brew install libomp yasm nasm pkg-config automake autoconf-archive mono open-mpi gcc
+        # Set up gfortran symlink for CMake to find
+        GFORTRAN_PATH=$(brew --prefix gcc)/bin/gfortran-$(brew list --versions gcc | awk '{print $2}' | cut -d. -f1)
+        if [ -f "$GFORTRAN_PATH" ]; then
+          sudo ln -sf "$GFORTRAN_PATH" /usr/local/bin/gfortran
+          echo "FC=/usr/local/bin/gfortran" >> $GITHUB_ENV
+          which gfortran
+          gfortran --version
+        else
+          echo "Warning: gfortran not found at expected location"
+          ls -la $(brew --prefix gcc)/bin/gfortran*
+        fi
+
+    - uses: lukka/get-cmake@latest
+
+    - name: 'Setup vcpkg and NuGet artifacts backend'
+      shell: bash
+      run: >
+        git clone --depth 1 https://github.com/microsoft/vcpkg ;
+        ./vcpkg/bootstrap-vcpkg.sh ;
+        mono $(./vcpkg/vcpkg fetch nuget | tail -n 1) sources add
+        -Name "vcpkgbinarycache"
+        -Source http://93.49.111.10:5555/v3/index.json
+        -AllowInsecureConnections
+
+    - name: Setup NuGet API key if found
+      shell: bash
+      env:
+        BAGET_API_KEY: ${{ secrets.BAGET_API_KEY }}
+      if: env.BAGET_API_KEY != null
+      run: >
+        mono $(./vcpkg/vcpkg fetch nuget | tail -n 1)
+        setapikey ${{ secrets.BAGET_API_KEY }}
+        -Source http://93.49.111.10:5555/v3/index.json
+
+    - name: 'Build'
+      shell: pwsh
+      run: ${{ github.workspace }}/cmake/build.ps1 -UseVCPKG -DoNotUpdateVCPKG -DisableInteractive -DoNotUpdateTOOL -EnableTEST
+
+    - name: 'Run Tests'
+      shell: bash
+      run: |
+        cd build_release
+        ctest --output-on-failure --timeout 300

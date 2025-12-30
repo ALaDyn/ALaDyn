@@ -49,6 +49,8 @@ module sim_params_types
   integer :: ibz             = 0
   integer :: ibeam           = 1
   logical :: density_limiter = .false.
+  integer :: pusher          = 1
+  integer :: n_substeps      = 1
  end type
 
  type targ_description_parameters_t
@@ -57,6 +59,7 @@ module sim_params_types
   integer                             :: nsb                = 0
   integer                             :: ionz_lev           = 0
   integer                             :: ionz_model         = 1
+  integer                             :: transverse_dist     = 0
   integer,  allocatable, dimension(:) :: ion_min
   integer,  allocatable, dimension(:) :: ion_max
   integer,  allocatable, dimension(:) :: atomic_number
@@ -86,7 +89,7 @@ module sim_params_types
   real(dp)                            :: a0 = zero_dp
   real(dp)                            :: lam0 = one_dp
   real(dp), allocatable, dimension(:) :: lp_delay
-  real(dp), allocatable, dimension(:) :: lp_offset
+  real(dp)                            :: lp_offset = zero_dp
   real(dp)                            :: t1_lp = zero_dp
   real(dp)                            :: tau1_fwhm = zero_dp
   real(dp)                            :: w1_y = zero_dp
@@ -100,6 +103,7 @@ module sim_params_types
   real(dp)                            :: y1_cent = zero_dp
   real(dp)                            :: z1_cent = zero_dp
   real(dp)                            :: incid_angle = zero_dp
+  logical                             :: improved_envelope = .false.
  end type
 
  type beam_parameters_t
@@ -155,7 +159,7 @@ module sim_params_types
  type tracking_parameters_t
  !! Container with the tracking parameters
   logical  :: p_tracking = .false.
-  integer  :: tkjump = 1
+  integer  :: every_track = 1
   integer  :: nkjump = 1
   real(dp) :: txmin  = zero_dp
   real(dp) :: txmax  = zero_dp
@@ -165,6 +169,7 @@ module sim_params_types
   real(dp) :: tzmax  = zero_dp
   real(dp) :: t_in   = zero_dp
   real(dp) :: t_out  = one_dp
+  logical  :: a_on_particles = .false.
  end type
 
  type mpi_parameters_t

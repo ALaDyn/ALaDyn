@@ -66,7 +66,9 @@
     stretch = .true.
     ny_stretch = nint(real(ny, dp)*1.5*size_of_stretch_along_y) !set to ny/4
    end if
-   nz_stretch = ny_stretch
+   if (ndim == 3) then
+    nz_stretch = ny_stretch
+   end if
    loc_nyc_max = loc_ygr_max
    loc_nzc_max = loc_zgr_max
    loc_nxc_max = loc_xgr_max
@@ -75,17 +77,19 @@
    gvol = 1.
    dx = 1./k0
    call set_grid(nx, ny, nz, ibx, nx_stretch, ny_stretch, k0, yx_rat, &
-                 zx_rat)
+     zx_rat, sh_ix, sh_iy, sh_iz)
    dt = cfl*dx
+   ! dt always assumes cubic cells so that doesn't depend on transverse
+   ! resolution
    select case (ndim)
    case (1)
     dt = cfl/sqrt(dx_inv*dx_inv)
     gvol_inv = dx_inv*dx_inv*dx_inv
    case (2)
-    dt = cfl/sqrt(dx_inv*dx_inv + dy_inv*dy_inv)
+    dt = cfl*dx/sqrt(2.)
     gvol_inv = dx_inv*dy_inv*dy_inv
    case (3)
-    dt = cfl/sqrt(dx_inv*dx_inv + dy_inv*dy_inv + dz_inv*dz_inv)
+    dt = cfl*dx/sqrt(3.)
     gvol_inv = dx_inv*dy_inv*dz_inv
    end select
    gvol = 1./gvol_inv
@@ -128,6 +132,8 @@
    relativistic = .false.
    ions = .false.
    envelope = .false.
+   p_polar = .false.
+   s_polar = .false.
    circ_lp = .false.
    plane_wave = .false.
    Two_color = .false.
@@ -142,6 +148,8 @@
    if (iby == 2) plane_wave = .true.
    mod_ord = 1
    if (model_id < 3) lin_lp = .true.
+   if (model_id == 1) p_polar = .true.
+   if (model_id == 2) s_polar = .true.
    if (model_id == 3) circ_lp = .true.
    if (model_id == 4) then
     mod_ord = 2
@@ -156,7 +164,7 @@
     curr_ndim = ndim
     nbfield = 6
    end if
-   if (circ_lp) then
+   if ( s_polar .or. circ_lp ) then
     nfield = 6
     curr_ndim = 3
    end if
@@ -305,6 +313,10 @@
     c2_fact = lam0*lam0/(r_c*r_c)
     chann_fact = c1_fact*c2_fact/(pi*pi*n_over_nc)
    end if
+   !============================================================
+   ! Set if particle number per cell is decreasing transversally
+   !============================================================
+   decreasing_transverse = (transverse_dist == 1)
    !========== Laser parameters
    lp_intensity = 1.37*(a0/lam0)*(a0/lam0) !in units 10^18 W/cm^2
    lp_rad = w0_y*sqrt(2.*log(2.)) !FWHM focal spot
@@ -343,6 +355,9 @@
    lpvol = el_lp*el_lp*el_lp
    if (nsb > 0) inject_beam = .true.
    !=====================
+   nb_over_np = zero_dp
+   gam0 = one_dp
+   b_charge = zero_dp
    if (inject_beam) then
     !ON input phase space coordinates, beam size,
     !         total macro-particle number nb_tot(1), total charge (pC)

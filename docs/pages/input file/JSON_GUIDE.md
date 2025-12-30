@@ -157,7 +157,8 @@ This enforces density positivity. **WARNING** This feature is in beta, use is no
     "n0_ref": 100.0,
     "np1": 1.0,
     "np2": 10.0,
-    "r_c": 0.0
+    "r_c": 0.0,
+    "transverse_dist": 0
 }
 ```
 
@@ -225,6 +226,19 @@ Copper    (atomic_number = 29) - mass_number = 63.54
 + `lpy(2)` defines the distance \( [\mu m] \) between wires (interwire size).
 + `n0_ref` is the reference density in units of `n_0=1e18 cm^-3`. Code equations are normalized to that density.
 + `r_c` is the plasma channel depth ==> `n/n_over_nc = 1 + w0_y^2*lambda_0^2/(r_c^2 *\pi ^2 *n_over_nc)(y^2+z^2)/w0_y^2`, where `w0_y` is the laser waist. If `r_c`=`w0_y` the channel is matched
++ `transverse_dist` is the transverse distribution type for macroparticles.
+  + If `transverse_dist = 0`, the distribution is uniform
+  + If `transverse_dist = 1`, the macroparticle per cell number decreases from the center to the sides of the box.
+  The decreasing function is defined as
+  \[ (N - 1)*\exp(-r/L) + 1 \] where N is the macroparticle's number per cell
+  and the particle number decreases in the last
+  \( \Delta= \text{ny_targ}/3\) target cells.
+  The parameter \(L\) is defined to ensure that on the sides there is 1 p.p.c..
+  This option is convenient to unload the cpus and the memory by reducing the number of particles where an high number is
+  not required. Be careful to choose a box that is large enough to diminish the particle number in the actual sides and not
+  in the central part of the box.
+  With this option on, it is normal to have spikes in the density where the particles number changes, but such effect should be
+  mitigated by the dynamics.
 @warning
 It is recommendend to fill the arrays with the different properties with the same number of
 elements as the number of species declared.
@@ -361,7 +375,7 @@ In fact, when left empty, they are filled with some default value that might be 
     "new_sim": 0,
     "id_new": 0,
     "dump": 0,
-    "L_env_modulus": true
+    "l_env_modulus": true
 }
 ```
 
@@ -392,7 +406,7 @@ In fact, when left empty, they are filled with some default value that might be 
 + `dump`
   + `1`: each processor will dump a binary file for every `nout` in order to  enable restart
   + `0`: dumps are suppressed
-+ `L_env_modulus` logical flag, only if `model_id=4`: if true the code generates the absolute value of the laser envelope amplitude, otherwise gives the real and imaginary part in two separate files
++ `l_env_modulus` logical flag, only if `model_id=4`: if true the code generates the absolute value of the laser envelope amplitude, otherwise gives the real and imaginary part in two separate files
 
 ## TRACKING namelist block (now disabled)
 

@@ -42,15 +42,15 @@
 
    namelist /grid/nx, ny, nz, ny_targ, k0, yx_rat, zx_rat
    namelist /simulation/lpf_ord, der_ord, str_flag, iform, model_id, &
-     dmodel_id, ibx, iby, ibz, ibeam, density_limiter
+     dmodel_id, ibx, iby, ibz, ibeam, density_limiter, pusher, n_substeps
    namelist /target_description/nsp, nsb, ionz_lev, ionz_model, ion_min, &
      ion_max, atomic_number, mass_number, t0_pl, ppc, np_per_xc, &
-     np_per_yc, np_per_zc, concentration, lpx, lpy, n0_ref, np1, np2, &
+     np_per_yc, np_per_zc, concentration, transverse_dist, lpx, lpy, n0_ref, np1, np2, &
      r_c, l_disable_rng_seed
    namelist /laser/g_prof, nb_laser, t0_lp, xc_lp, tau_fwhm, w0_y, a0, &
      lam0, lp_delay, lp_offset, t1_lp, tau1_fwhm, w1_y, a1, lam1, &
      symmetrization_pulse, a_symm_rat, enable_ionization, y0_cent, &
-     z0_cent, y1_cent, z1_cent, incid_angle
+     z0_cent, y1_cent, z1_cent, incid_angle, improved_envelope
    namelist /beam_inject/nb_1, xc_1, gam_1, sxb_1, syb_1, epsy_1, &
      epsz_1, dg_1, charge_1, ap1_twiss,bt1_twiss,t_inject
    namelist /moving_window/w_sh, wi_time, wf_time, w_speed
@@ -58,8 +58,8 @@
      gam_min, xp0_out, xp1_out, yp_out, tmax, cfl, new_sim, id_new, &
      dump, l_force_singlefile_output, time_interval_dumps, &
      l_print_j_on_grid, l_first_output_on_restart, l_env_modulus
-   namelist /tracking/tkjump, nkjump, txmin, txmax, tymin, tymax, tzmin, &
-     tzmax, t_in, t_out, p_tracking
+   namelist /tracking/every_track, nkjump, txmin, txmax, tymin, tymax, tzmin, &
+     tzmax, t_in, t_out, p_tracking, a_on_particles
    namelist /mpiparams/nprocx, nprocy, nprocz
 
    !--- reading grid parameters ---!
@@ -75,6 +75,8 @@
 
    !--- reading sim parameters ---!
    density_limiter = .false.
+   pusher = 1
+   n_substeps = 1
    open (nml_iounit, file=input_namelist_filename, status='old')
    read (nml_iounit, simulation, iostat=nml_ierr)
    nml_error_message = 'SIMULATION'
@@ -91,6 +93,7 @@
    concentration(:) = zero_dp
    concentration(1) = one_dp
    n0_ref = 1.
+   transverse_dist = 0
    open (nml_iounit, file=input_namelist_filename, status='old')
    read (nml_iounit, target_description, iostat=nml_ierr)
    nml_error_message = 'TARGET_DESCRIPTION'
@@ -103,6 +106,7 @@
    symmetrization_pulse = .false.
    a_symm_rat = 0.
    enable_ionization(:) = .true.
+   improved_envelope = .false.
    y0_cent(:) = zero_dp
    z0_cent(:) = zero_dp
    y1_cent = zero_dp
@@ -154,6 +158,11 @@
    close (nml_iounit)
    if (nml_ierr > 0) call print_at_screen_nml_error
 
+
+   !--- reading tracking parameters ---!
+   p_tracking = .false.
+   a_on_particles = .false.
+   every_track = 1
    open (nml_iounit, file=input_namelist_filename, status='old')
    read (nml_iounit, tracking, iostat=nml_ierr)
    nml_error_message = 'TRACKING'
@@ -181,22 +190,22 @@
    !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
    namelist /grid/nx, ny, nz, ny_targ, k0, yx_rat, zx_rat
    namelist /simulation/lpf_ord, der_ord, str_flag, iform, model_id, &
-     dmodel_id, ibx, iby, ibz, ibeam, density_limiter
+     dmodel_id, ibx, iby, ibz, ibeam, density_limiter, pusher, n_substeps
    namelist /target_description/nsp, nsb, ionz_lev, ionz_model, ion_min, &
      ion_max, atomic_number, mass_number, t0_pl, ppc, np_per_xc, &
-     np_per_yc, np_per_zc, concentration, lpx, lpy, n0_ref, np1, np2, &
+     np_per_yc, np_per_zc, concentration, transverse_dist, lpx, lpy, n0_ref, np1, np2, &
      r_c
    namelist /laser/g_prof, nb_laser, t0_lp, xc_lp, tau_fwhm, w0_y, a0, &
      lam0, lp_delay, lp_offset, t1_lp, tau1_fwhm, w1_y, a1, lam1, &
      symmetrization_pulse, a_symm_rat, enable_ionization, y0_cent, &
-     z0_cent, y1_cent, z1_cent, incid_angle
+     z0_cent, y1_cent, z1_cent, incid_angle, improved_envelope
    namelist /moving_window/w_sh, wi_time, wf_time, w_speed
    namelist /output/nouts, iene, nvout, nden, ncurr, npout, nbout, jump, pjump, &
      gam_min, xp0_out, xp1_out, yp_out, tmax, cfl, new_sim, id_new, &
      dump, l_force_singlefile_output, time_interval_dumps, &
      l_print_j_on_grid, l_first_output_on_restart, l_env_modulus
-   namelist /tracking/tkjump, nkjump, txmin, txmax, tymin, tymax, tzmin, &
-     tzmax, t_in, t_out, p_tracking
+   namelist /tracking/every_track, nkjump, txmin, txmax, tymin, tymax, tzmin, &
+     tzmax, t_in, t_out, p_tracking, a_on_particles
    namelist /mpiparams/nprocx, nprocy, nprocz
    namelist /number_bunches/n_bunches, l_particles, &
      l_intdiagnostics_pwfa, l_intdiagnostics_classic, &
@@ -216,7 +225,7 @@
    write (nml_iounit, nml=laser, err=110)
    write (nml_iounit, nml=moving_window, err=110)
    write (nml_iounit, nml=output, err=110)
-   if (p_tracking) write (nml_iounit, nml=tracking, err=110)
+   if (ANY(p_tracking)) write (nml_iounit, nml=tracking, err=110)
    write (nml_iounit, nml=mpiparams, err=110)
    write (nml_iounit, nml=number_bunches, err=110)
    write (nml_iounit, nml=bunches, err=110)

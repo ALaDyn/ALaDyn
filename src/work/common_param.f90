@@ -41,8 +41,9 @@
   real(dp) :: k0, yx_rat, zx_rat
   integer :: ibx, iby, ibz, ibeam
   integer :: lpf_ord, der_ord, str_flag, iform, model_id, dmodel_id
+  integer :: pusher, n_substeps
   integer :: nsp, nsb, ionz_lev, ionz_model, ion_min(ref_nlayer), &
-             ion_max(ref_nlayer)
+             ion_max(ref_nlayer), transverse_dist
   integer :: atomic_number(ref_nlayer), n_mol_atoms(ref_nlayer)
   integer :: nb_laser, nb_1, np_per_xc(ref_nlayer), &
              np_per_yc(ref_nlayer)
@@ -61,18 +62,27 @@
   real(dp) :: tnow, tmax, tscale, dt_loc, dt, cfl
   logical :: initial_time
   !====================
-  integer :: tkjump, nkjump, track_tot_nstep
-  real(dp) :: txmin, txmax, tymin, tymax, tzmin, tzmax, t_in, t_out
+  ! TRACKING
+  !====================
+  integer :: every_track(ref_nspec), nkjump(ref_nspec), track_tot_nstep
+  real (dp) :: txmin(ref_nspec), txmax(ref_nspec)
+  real (dp) :: tymin(ref_nspec), tymax(ref_nspec)
+  real (dp) :: tzmin(ref_nspec), tzmax(ref_nspec)
+  real (dp) :: t_in(ref_nspec), t_out(ref_nspec)
+  logical ::  p_tracking(ref_nspec), a_on_particles(ref_nspec)
+  !====================
+  ! END TRACKING
+  !====================
   integer :: nprocx, nprocy, nprocz
-  logical :: g_prof, p_tracking, comoving
+  logical :: g_prof, comoving
   logical :: beam, hybrid, wake, envelope, solid_target
   logical :: ionization, ions
   logical :: part, stretch, channel, inject_beam
-  logical :: lp_active, lp_inject, plane_wave, lin_lp, circ_lp, &
-             relativistic, Two_color
+  logical :: lp_active, lp_inject, plane_wave, p_polar, s_polar, &
+    lin_lp, circ_lp, relativistic, Two_color, improved_envelope
   logical :: enable_ionization(2), symmetrization_pulse
   logical :: charge_cons, high_gamma, test
-  logical :: density_limiter
+  logical :: density_limiter, decreasing_transverse
 
   integer :: nx_loc, ny_loc, nz_loc, npty, nptz, nptx_max, ncmp_max, &
              nx_alloc
@@ -112,9 +122,14 @@
   integer :: ndim, curr_ndim, nj_dim, nd2, nfield, nbfield, nfcomp, &
              mod_ord, w_sh
   real(dp) :: macro_charge
-
+  
   real(dp) :: energy_in_targ
   integer(kind=8) :: nptot_global
+  !==================
+  ! PARTICLE PUSHER
+  !==================
+  integer, parameter :: HIGUERA = 1
+  integer, parameter :: BORIS = 2
 
  end module
 
