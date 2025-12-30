@@ -2,7 +2,7 @@ title: How to build
 
 # How to build the code
 
-ALaDyn is built using **CMake** (minimum version 3.15) and can optionally use **vcpkg** for dependency management.
+ALaDyn is built using **CMake** (minimum version 3.19) and can optionally use **vcpkg** for dependency management.
 
 ## Quick Start
 
@@ -20,14 +20,14 @@ git submodule update --init --recursive
 
 ## Supported Platforms
 
-We support running ALaDyn only on **x86-64 CPUs** with **64-bit operating systems**.
+We support running ALaDyn only on **64-bit operating systems**.
 Supported compilers: **GNU (gfortran)**, **Intel (ifort)**
 
 ## Dependencies
 
 - **MPI** (OpenMPI or MPICH)
 - **FFTW3** (or Intel MKL)
-- **CMake** (>= 3.15)
+- **CMake** (>= 3.19)
 - **PowerShell** (for the recommended build script)
 
 ## Building with vcpkg (Recommended)

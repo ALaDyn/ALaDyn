@@ -157,6 +157,13 @@
   end subroutine
   !==================
   subroutine fluid_alloc(n1, n2, n3, fcomp, ndm, lp, fsize)
+   !! Allocates fluid arrays for momentum-density evolution
+   !! For higher-order Adams-Bashforth integration:
+   !! - AB2 (default): uses up0 to store F^{n-1}
+   !! - AB3: uses up0 for F^{n-1}, up1 for F^{n-2}
+   !! - AB4: uses up0 for F^{n-1}, up1 for F^{n-2}, up2 for F^{n-3}
+
+   use common_param, only: ab_order
 
    integer, intent(in) :: n1, n2, n3, fcomp, ndm, lp
    integer, intent(inout) :: fsize
@@ -177,9 +184,15 @@
    up0 = 0.0
    fluid_yz_profile = 0.0
    fsize = fsize + ng*(2*fcomp + flcomp) + n2p*n3p
-   if (lp > 2) then
+   ! Allocate historical arrays based on Adams-Bashforth order
+   if (ab_order >= 3 .or. lp > 2) then
     allocate (up1(n1p, n2p, n3p, fcomp), stat=allocstatus)
     up1 = 0.0
+    fsize = fsize + ng*fcomp
+   end if
+   if (ab_order >= 4) then
+    allocate (up2(n1p, n2p, n3p, fcomp), stat=allocstatus)
+    up2 = 0.0
     fsize = fsize + ng*fcomp
    end if
   end subroutine

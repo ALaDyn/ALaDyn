@@ -12,10 +12,10 @@ from aladyn_config import ALaDynConfig
 
 def format_fortran_value(value: Any) -> str:
     """Format a Python value for Fortran namelist.
-    
+
     Args:
         value: Python value to format
-        
+
     Returns:
         Fortran-formatted string
     """
@@ -35,7 +35,7 @@ def format_fortran_value(value: Any) -> str:
 
 def write_namelist_section(file, section_name: str, params: dict, indent: int = 2):
     """Write a namelist section to file.
-    
+
     Args:
         file: File object to write to
         section_name: Name of the namelist section
@@ -43,7 +43,7 @@ def write_namelist_section(file, section_name: str, params: dict, indent: int = 
         indent: Number of spaces for indentation
     """
     file.write(f"&{section_name.upper()}\n")
-    
+
     # Configuration for array parameter slicing
     ARRAY_SLICE_CONFIG = {
         'ion_min': (3, lambda v: all(x == 1 for x in v[:3])),
@@ -62,14 +62,14 @@ def write_namelist_section(file, section_name: str, params: dict, indent: int = 
         'z0_cent': (1, None),
         'Enable_ionization': (2, None),
     }
-    
+
     # Find maximum parameter name length for alignment
     max_len = max(len(name) for name in params) if params else 0
-    
+
     for name, value in params.items():
         if value is None:
             continue
-        
+
         # Special handling for arrays
         if isinstance(value, list):
             # Check if this is a known array parameter
@@ -83,29 +83,29 @@ def write_namelist_section(file, section_name: str, params: dict, indent: int = 
                 formatted_value = format_fortran_value(value)
         else:
             formatted_value = format_fortran_value(value)
-        
+
         # Write with proper formatting
         indent_str = ' ' * indent
         spaces = ' ' * (max_len - len(name) + 1)
         file.write(f"{indent_str}{name}{spaces}= {formatted_value},\n")
-    
+
     file.write("/\n\n")
 
 
 def config_to_namelist(config: ALaDynConfig, output_file: str = "input.nml"):
     """Convert ALaDyn Python configuration to Fortran namelist file.
-    
+
     Args:
         config: ALaDynConfig object with simulation parameters
         output_file: Output filename for the namelist
-    
+
     Raises:
         IOError: If the file cannot be written
         ValueError: If the configuration is invalid
     """
     # Validate configuration
     config.validate()
-    
+
     try:
         with open(output_file, 'w') as f:
             # Write header comment
@@ -113,7 +113,7 @@ def config_to_namelist(config: ALaDynConfig, output_file: str = "input.nml"):
             f.write("! ALaDyn input file\n")
             f.write("! Generated from Python configuration\n")
             f.write("!\n\n")
-            
+
             # GRID section
             grid_params = {
                 'nx': config.grid.nx,
@@ -125,7 +125,7 @@ def config_to_namelist(config: ALaDynConfig, output_file: str = "input.nml"):
                 'zx_rat': config.grid.zx_rat,
             }
             write_namelist_section(f, 'GRID', grid_params)
-        
+
             # SIMULATION section
             sim_params = {
                 'LPf_ord': config.simulation.LPf_ord,
@@ -140,7 +140,7 @@ def config_to_namelist(config: ALaDynConfig, output_file: str = "input.nml"):
                 'ibeam': config.simulation.ibeam,
             }
             write_namelist_section(f, 'SIMULATION', sim_params)
-        
+
             # TARGET_DESCRIPTION section
             target_params = {
                 'nsp': config.target.nsp,
@@ -153,7 +153,7 @@ def config_to_namelist(config: ALaDynConfig, output_file: str = "input.nml"):
                 'mass_number': config.target.mass_number,
                 't0_pl': config.target.t0_pl,
             }
-        
+
             # Add ppc or np_per_xc/yc/zc depending on what's used
             if any(p >= 1 for p in config.target.ppc):
                 target_params['ppc'] = config.target.ppc
@@ -162,7 +162,7 @@ def config_to_namelist(config: ALaDynConfig, output_file: str = "input.nml"):
                 target_params['np_per_yc'] = config.target.np_per_yc
                 if config.grid.nz > 1:
                     target_params['np_per_zc'] = config.target.np_per_zc
-        
+
             target_params.update({
                 'concentration': config.target.concentration,
                 'lpx': config.target.lpx,
@@ -172,12 +172,12 @@ def config_to_namelist(config: ALaDynConfig, output_file: str = "input.nml"):
                 'np2': config.target.np2,
                 'r_c': config.target.r_c,
             })
-        
+
             if config.target.l_disable_rng_seed:
                 target_params['l_disable_rng_seed'] = config.target.l_disable_rng_seed
-        
+
             write_namelist_section(f, 'TARGET_DESCRIPTION', target_params)
-        
+
             # LASER section
             laser_params = {
                 'G_prof': config.laser.G_prof,
@@ -194,7 +194,7 @@ def config_to_namelist(config: ALaDynConfig, output_file: str = "input.nml"):
                 'Enable_ionization': config.laser.Enable_ionization,
                 'lp_delay': config.laser.lp_delay,
             }
-        
+
             # Add second laser parameters if used
             if config.laser.a1 > 0:
                 laser_params.update({
@@ -207,15 +207,15 @@ def config_to_namelist(config: ALaDynConfig, output_file: str = "input.nml"):
                     'y1_cent': config.laser.y1_cent,
                     'z1_cent': config.laser.z1_cent,
                 })
-        
+
             if config.laser.Symmetrization_pulse:
                 laser_params.update({
                     'Symmetrization_pulse': config.laser.Symmetrization_pulse,
                     'a_symm_rat': config.laser.a_symm_rat,
                 })
-        
+
             write_namelist_section(f, 'LASER', laser_params)
-        
+
             # BEAM_INJECT section (if beam is configured)
             if config.beam is not None and config.target.nsb > 0:
                 beam_params = {
@@ -233,7 +233,7 @@ def config_to_namelist(config: ALaDynConfig, output_file: str = "input.nml"):
                     't_inject': config.beam.t_inject,
                 }
                 write_namelist_section(f, 'BEAM_INJECT', beam_params)
-        
+
             # MOVING_WINDOW section
             window_params = {
                 'w_sh': config.moving_window.w_sh,
@@ -242,7 +242,7 @@ def config_to_namelist(config: ALaDynConfig, output_file: str = "input.nml"):
                 'w_speed': config.moving_window.w_speed,
             }
             write_namelist_section(f, 'MOVING_WINDOW', window_params)
-        
+
             # OUTPUT section
             output_params = {
                 'nouts': config.output.nouts,
@@ -265,11 +265,10 @@ def config_to_namelist(config: ALaDynConfig, output_file: str = "input.nml"):
                 'L_env_modulus': config.output.L_env_modulus,
             }
             write_namelist_section(f, 'OUTPUT', output_params)
-        
+
             # TRACKING section (if tracking is enabled)
             if config.tracking is not None and config.tracking.p_tracking:
                 tracking_params = {
-                    'tkjump': config.tracking.tkjump,
                     'nkjump': config.tracking.nkjump,
                     'txmin': config.tracking.txmin,
                     'txmax': config.tracking.txmax,
@@ -282,7 +281,7 @@ def config_to_namelist(config: ALaDynConfig, output_file: str = "input.nml"):
                     'p_tracking': config.tracking.p_tracking,
                 }
                 write_namelist_section(f, 'TRACKING', tracking_params)
-        
+
             # MPIPARAMS section
             mpi_params = {
                 'nprocx': config.mpi.nprocx,
@@ -290,34 +289,34 @@ def config_to_namelist(config: ALaDynConfig, output_file: str = "input.nml"):
                 'nprocz': config.mpi.nprocz,
             }
             write_namelist_section(f, 'MPIPARAMS', mpi_params)
-    
+
     except IOError as e:
         raise IOError(f"Failed to write namelist file '{output_file}': {e}")
-    
+
     print(f"Namelist file written to: {output_file}")
     print(config.summary())
 
 
 if __name__ == "__main__":
     import sys
-    
+
     if len(sys.argv) > 1:
         # Load configuration from Python file
         config_file = sys.argv[1]
         output_file = sys.argv[2] if len(sys.argv) > 2 else "input.nml"
-        
+
         # Import the configuration
         import importlib.util
         spec = importlib.util.spec_from_file_location("user_config", config_file)
-        
+
         try:
             if spec is None or spec.loader is None:
                 print(f"Error: Could not load configuration module from '{config_file}'")
                 sys.exit(1)
-            
+
             user_config = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(user_config)
-            
+
         except FileNotFoundError:
             print(f"Error: Configuration file '{config_file}' not found")
             sys.exit(1)
@@ -333,7 +332,7 @@ if __name__ == "__main__":
         except Exception as e:
             print(f"Error: Unexpected error while loading '{config_file}': {e}")
             sys.exit(1)
-        
+
         # Convert to namelist
         if hasattr(user_config, 'config'):
             try:

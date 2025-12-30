@@ -44,7 +44,8 @@ With those parameters, the full box size (in μm) is: `Lx = nx / k0`, `Ly = yx_r
  ibx              = 0,
  iby              = 0,
  ibz              = 0,
- ibeam            = 1
+ ab_order         = 2,
+ ibeam            = 1,
  density_limiter  = .false.,
  pusher           = 1,
  n_substeps       = 1,
@@ -83,8 +84,12 @@ With those parameters, the full box size (in μm) is: `Lx = nx / k0`, `Ly = yx_r
   + `0`
   + `1`
   + `2` For Envelope-fluid LWFA model (model_id = 4). Code solves Euler equations for plasma density with the laser described as an envelope.
++ `ab_order` is the Adams-Bashforth order for fluid integration in hybrid/envelope models (default: 2):
+  + `2` Adams-Bashforth 2nd order (standard, backward compatible)
+  + `3` Adams-Bashforth 3rd order (reduced numerical dissipation)
+  + `4` Adams-Bashforth 4th order (lowest numerical dissipation, recommended for long-time simulations)
 + `density_limiter` (default is false) bool variable that activates the density flux limiter in the fluid equations.
-This enforces density positivity. **WARNING** Still in beta, use is not recommended
+  This enforces density positivity. **WARNING** Still in beta, use is not recommended
 + `pusher` determines which particle pusher scheme is employed, default is `1`
   + `1` Huguera push
   + `2` Boris push

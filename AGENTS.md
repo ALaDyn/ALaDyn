@@ -59,7 +59,7 @@ The cmake submodule contains:
 
 ## Build System
 
-- **CMake** (minimum version 3.15) is used for building
+- **CMake** (minimum version 3.19) is used for building
 - **vcpkg** is the preferred package manager for dependencies
 - Supported compilers: GNU (gfortran), Intel (ifort), PGI
 

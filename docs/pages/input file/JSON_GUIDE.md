@@ -414,7 +414,6 @@ In fact, when left empty, they are filled with some default value that might be 
 "tracking": {
     "P_tracking": true,
     "nkjump": 1,
-    "tkjump": 4,
     "txmin": 55,
     "txmax": 75,
     "tymin": -80,
@@ -428,7 +427,6 @@ In fact, when left empty, they are filled with some default value that might be 
 
 + `P_tracking` logical flag: if true the particle tracking is enabled
 + `nkjump` a tracked particle every `nkjump` is written in the output file
-+ `tkjump` a snapshot of the tracked particles phase space is taken every `tkjump` timestep
 + `txmin` to select particles with initial longitudinal coordinate `x > txmin` to be tracked
 + `txmax` to select particles with initial longitudinal coordinate `x < txmax` to be tracked
 + `tymin` to select particles with initial transverse coordinate `y > tymin` to be tracked

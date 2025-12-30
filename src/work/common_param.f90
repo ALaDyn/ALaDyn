@@ -27,7 +27,7 @@
  module common_param
   use precision_def
   use sim_params_types
-  
+
   implicit none
 
   integer, parameter :: ref_nlayer = 6, ref_nlas = 8, &
@@ -41,6 +41,8 @@
   real(dp) :: k0, yx_rat, zx_rat
   integer :: ibx, iby, ibz, ibeam
   integer :: lpf_ord, der_ord, str_flag, iform, model_id, dmodel_id
+  integer :: ab_order  ! Adams-Bashforth order for fluid integration (2, 3, or 4)
+  integer :: ab_startup  ! Startup step counter for higher-order AB schemes
   integer :: pusher, n_substeps
   integer :: nsp, nsb, ionz_lev, ionz_model, ion_min(ref_nlayer), &
              ion_max(ref_nlayer), transverse_dist
@@ -122,7 +124,7 @@
   integer :: ndim, curr_ndim, nj_dim, nd2, nfield, nbfield, nfcomp, &
              mod_ord, w_sh
   real(dp) :: macro_charge
-  
+
   real(dp) :: energy_in_targ
   integer(kind=8) :: nptot_global
   !==================
@@ -132,4 +134,3 @@
   integer, parameter :: BORIS = 2
 
  end module
-

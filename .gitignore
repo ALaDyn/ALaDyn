@@ -64,6 +64,7 @@ fftw*/
 
 #FORD documentations
 html/*
+vcpkg/
 
 #JSON-Fortran installed
 json-fortran_locals

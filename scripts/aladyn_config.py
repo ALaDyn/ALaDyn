@@ -40,7 +40,7 @@ def _check_numpy_available():
 @dataclass
 class GridConfig:
     """Grid configuration parameters.
-    
+
     Attributes:
         nx: Number of grid points in x direction
         ny: Number of grid points in y direction
@@ -57,7 +57,7 @@ class GridConfig:
     k0: float = 50.0
     yx_rat: float = 1.0
     zx_rat: float = 1.0
-    
+
     def __post_init__(self):
         """Validate grid parameters."""
         if self.nx <= 0 or self.ny <= 0 or self.nz <= 0:
@@ -71,7 +71,7 @@ class GridConfig:
 @dataclass
 class SimulationConfig:
     """Simulation configuration parameters.
-    
+
     Attributes:
         LPf_ord: Integration scheme order (2 for leap-frog, 4 for RK4)
         der_ord: Order of finite difference scheme (2, 3, or 4)
@@ -94,7 +94,7 @@ class SimulationConfig:
     iby: int = 0
     ibz: int = 0
     ibeam: int = 0
-    
+
     def __post_init__(self):
         """Validate simulation parameters."""
         if self.LPf_ord not in [2, 4]:
@@ -110,7 +110,7 @@ class SimulationConfig:
 @dataclass
 class TargetConfig:
     """Target description parameters.
-    
+
     Attributes:
         nsp: Number of species
         nsb: Number of bunches
@@ -160,7 +160,7 @@ class TargetConfig:
 @dataclass
 class LaserConfig:
     """Laser configuration parameters.
-    
+
     Attributes:
         G_prof: Use Gaussian profile
         nb_laser: Number of lasers
@@ -209,7 +209,7 @@ class LaserConfig:
     z1_cent: float = 0.0
     Symmetrization_pulse: bool = False
     a_symm_rat: float = 0.0
-    
+
     def __post_init__(self):
         """Validate laser parameters."""
         if self.a0 < 0:
@@ -221,7 +221,7 @@ class LaserConfig:
 @dataclass
 class BeamConfig:
     """Beam injection configuration parameters.
-    
+
     Attributes:
         nb_1: Number of beam particles (in units of 100000)
         xc_1: Beam center position in x
@@ -253,7 +253,7 @@ class BeamConfig:
 @dataclass
 class MovingWindowConfig:
     """Moving window configuration parameters.
-    
+
     Attributes:
         w_sh: Window shift (number of cells)
         wi_time: Initial time for window movement
@@ -269,7 +269,7 @@ class MovingWindowConfig:
 @dataclass
 class OutputConfig:
     """Output configuration parameters.
-    
+
     Attributes:
         nouts: Number of output types
         iene: Energy output interval
@@ -321,9 +321,8 @@ class OutputConfig:
 @dataclass
 class TrackingConfig:
     """Particle tracking configuration parameters.
-    
+
     Attributes:
-        tkjump: Tracking time jump
         nkjump: Tracking particle jump
         txmin: Tracking window minimum x
         txmax: Tracking window maximum x
@@ -335,7 +334,6 @@ class TrackingConfig:
         t_out: Tracking end time
         p_tracking: Enable tracking
     """
-    tkjump: int = 1
     nkjump: int = 1
     txmin: float = 0.0
     txmax: float = 0.0
@@ -351,7 +349,7 @@ class TrackingConfig:
 @dataclass
 class MPIConfig:
     """MPI configuration parameters.
-    
+
     Attributes:
         nprocx: Number of processors in x
         nprocy: Number of processors in y
@@ -365,7 +363,7 @@ class MPIConfig:
 @dataclass
 class ALaDynConfig:
     """Complete ALaDyn simulation configuration.
-    
+
     This class combines all configuration sections and provides methods
     for validation and conversion to Fortran namelist format.
     """
@@ -378,38 +376,38 @@ class ALaDynConfig:
     mpi: MPIConfig
     beam: Optional[BeamConfig] = None
     tracking: Optional[TrackingConfig] = None
-    
+
     # Optional: custom plasma density function (requires NumPy)
     custom_density_function: Optional[Callable] = None
-    
+
     def validate(self) -> bool:
         """Validate the entire configuration.
-        
+
         Returns:
             True if configuration is valid
-            
+
         Raises:
             ValueError: If configuration is invalid
         """
         # Grid validation
         if self.grid.nx % self.mpi.nprocx != 0:
             print(f"Warning: nx ({self.grid.nx}) is not divisible by nprocx ({self.mpi.nprocx})")
-        
+
         if self.grid.ny % self.mpi.nprocy != 0:
             print(f"Warning: ny ({self.grid.ny}) is not divisible by nprocy ({self.mpi.nprocy})")
-        
+
         if self.grid.nz > 1 and self.grid.nz % self.mpi.nprocz != 0:
             print(f"Warning: nz ({self.grid.nz}) is not divisible by nprocz ({self.mpi.nprocz})")
-        
+
         # Check CFL condition
         if self.output.cfl > 1.0:
             print(f"Warning: CFL ({self.output.cfl}) > 1.0 may cause instability")
-        
+
         return True
-    
+
     def summary(self) -> str:
         """Generate a human-readable summary of the configuration.
-        
+
         Returns:
             Formatted string with configuration summary
         """
@@ -419,7 +417,7 @@ class ALaDynConfig:
         Lx = self.grid.nx * dx
         Ly = self.grid.ny * dy
         Lz = self.grid.nz * dz
-        
+
         # Map for laser polarization
         laser_pol_map = {
             1: 'p-polarized',
@@ -427,7 +425,7 @@ class ALaDynConfig:
             3: 'circular',
             4: 'envelope'
         }
-        
+
         summary = f"""
 ALaDyn Configuration Summary
 ============================

@@ -42,7 +42,7 @@
 
    namelist /grid/nx, ny, nz, ny_targ, k0, yx_rat, zx_rat
    namelist /simulation/lpf_ord, der_ord, str_flag, iform, model_id, &
-     dmodel_id, ibx, iby, ibz, ibeam, density_limiter, pusher, n_substeps
+     dmodel_id, ibx, iby, ibz, ibeam, ab_order, density_limiter, pusher, n_substeps
    namelist /target_description/nsp, nsb, ionz_lev, ionz_model, ion_min, &
      ion_max, atomic_number, mass_number, t0_pl, ppc, np_per_xc, &
      np_per_yc, np_per_zc, concentration, transverse_dist, lpx, lpy, n0_ref, np1, np2, &
@@ -74,6 +74,8 @@
    call consistency_check_grid
 
    !--- reading sim parameters ---!
+   ab_order = 2  ! Default to AB2 for backward compatibility
+   ab_startup = 0  ! Initialize startup counter
    density_limiter = .false.
    pusher = 1
    n_substeps = 1
@@ -190,7 +192,7 @@
    !CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
    namelist /grid/nx, ny, nz, ny_targ, k0, yx_rat, zx_rat
    namelist /simulation/lpf_ord, der_ord, str_flag, iform, model_id, &
-     dmodel_id, ibx, iby, ibz, ibeam, density_limiter, pusher, n_substeps
+     dmodel_id, ibx, iby, ibz, ibeam, ab_order, density_limiter, pusher, n_substeps
    namelist /target_description/nsp, nsb, ionz_lev, ionz_model, ion_min, &
      ion_max, atomic_number, mass_number, t0_pl, ppc, np_per_xc, &
      np_per_yc, np_per_zc, concentration, transverse_dist, lpx, lpy, n0_ref, np1, np2, &
