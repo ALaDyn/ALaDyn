@@ -260,7 +260,6 @@ include_directories(
   ${FFTW_INCLUDE_DIR}
   ${MKL_INCLUDE_DIR}
   ${MKL_FFTW_INCLUDE_DIR}
-  ${Boost_INCLUDE_DIR}
 )
 
 if(FFTW_MPI_FOUND)
@@ -316,12 +315,6 @@ endif()
 if(MPI_LIBRARIES)
   target_link_libraries(ALaDyn PRIVATE
     ${MPI_LIBRARIES}
-  )
-endif()
-
-if(Boost_LIBRARIES)
-  target_link_libraries(ALaDyn PRIVATE
-    ${Boost_LIBRARIES}
   )
 endif()
 

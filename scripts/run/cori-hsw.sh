@@ -10,7 +10,5 @@
 
 module load PrgEnv-intel
 module swap craype-${CRAY_CPU_TARGET} craype-haswell
-module load boost
 
 srun -n 320 ./ALaDyn >> opic.txt 2>> epic.txt
-
