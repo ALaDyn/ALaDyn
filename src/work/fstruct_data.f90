@@ -37,4 +37,7 @@
   real(dp), allocatable :: pot(:, :, :, :), fluid_x_profile(:), &
                            fluid_yz_profile(:, :)
   real(dp), allocatable :: aux1(:), aux2(:)
+  !=========================================
+  type(memory_pool_t), pointer :: mp => null()
+  !! Pointer to the array memory pool
  end module

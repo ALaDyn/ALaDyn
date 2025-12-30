@@ -58,7 +58,7 @@
      gam_min, xp0_out, xp1_out, yp_out, tmax, cfl, new_sim, id_new, &
      dump, l_force_singlefile_output, time_interval_dumps, &
      l_print_j_on_grid, l_first_output_on_restart, l_env_modulus
-   namelist /tracking/every_track, tkjump, nkjump, txmin, txmax, tymin, tymax, tzmin, &
+   namelist /tracking/every_track, nkjump, txmin, txmax, tymin, tymax, tzmin, &
      tzmax, t_in, t_out, p_tracking, a_on_particles
    namelist /mpiparams/nprocx, nprocy, nprocz
 
@@ -206,7 +206,7 @@
      gam_min, xp0_out, xp1_out, yp_out, tmax, cfl, new_sim, id_new, &
      dump, l_force_singlefile_output, time_interval_dumps, &
      l_print_j_on_grid, l_first_output_on_restart, l_env_modulus
-   namelist /tracking/every_track, tkjump, nkjump, txmin, txmax, tymin, tymax, tzmin, &
+   namelist /tracking/every_track, nkjump, txmin, txmax, tymin, tymax, tzmin, &
      tzmax, t_in, t_out, p_tracking, a_on_particles
    namelist /mpiparams/nprocx, nprocy, nprocz
    namelist /number_bunches/n_bunches, l_particles, &
