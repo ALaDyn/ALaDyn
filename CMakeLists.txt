@@ -242,10 +242,13 @@ else()
   find_package(FFTW REQUIRED OPTIONAL_COMPONENTS MPI)
 endif()
 
-set(jsonfortran-GNU_DIR ${JFORTRAN_LOCALS_PATH}/jsonfortran-gnu-8.1.0/cmake)
-set(jsonfortran-Intel_DIR ${JFORTRAN_LOCALS_PATH}/jsonfortran-intel-8.1.0/cmake)
+file(READ "${CMAKE_CURRENT_SOURCE_DIR}/third_party/json-fortran/json-fortran_source/.VERSION" JSONFORTRAN_VERSION)
+string(STRIP "${JSONFORTRAN_VERSION}" JSONFORTRAN_VERSION)
+string(TOLOWER ${CMAKE_Fortran_COMPILER_ID} COMPILER_ID_LOWER)
+
+message(STATUS "ALaDyn: JSON-Fortran path: ${JFORTRAN_LOCALS_PATH}/jsonfortran-${COMPILER_ID_LOWER}-${JSONFORTRAN_VERSION}")
 if(JSON_FORTRAN_SUPPORT)
-  find_package ( jsonfortran-${CMAKE_Fortran_COMPILER_ID} 8.1.0 REQUIRED)
+  find_package ( jsonfortran-${CMAKE_Fortran_COMPILER_ID} ${JSONFORTRAN_VERSION} REQUIRED HINTS ${JFORTRAN_LOCALS_PATH}/jsonfortran-${COMPILER_ID_LOWER}-${JSONFORTRAN_VERSION} )
 endif()
 
 string(APPEND CMAKE_CXX_COMPILE_FLAGS " ${MPI_COMPILE_FLAGS}")
@@ -326,7 +329,7 @@ endif()
 
 if(jsonfortran-${CMAKE_Fortran_COMPILER_ID}_FOUND)
   target_link_libraries(ALaDyn PRIVATE
-    jsonfortran-static
+    jsonfortran-${COMPILER_ID_LOWER}::jsonfortran-static
   )
 endif()
 
