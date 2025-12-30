@@ -214,8 +214,6 @@
    lzf = lorentz_fact(1)*unit_charge(1)*dt_loc
    fdim = size(u, 4)
    fldim = size(flx, 4)
-   abf_0 = -0.5
-   abf_1 = 1.5
    !fldim = 2*curr_ndim + 1 !(five or seven components)
    !================== Enter
    ! flx[Px,Py,Pz,den,vx,vy,vz]^n fldim components
